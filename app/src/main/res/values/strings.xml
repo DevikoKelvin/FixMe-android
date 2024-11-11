@@ -1,0 +1,23 @@
+<resources>
+    <string name="app_name">FixMe</string>
+    <string name="username_title">Username</string>
+    <string name="password_title">Password</string>
+
+    <string name="login_text">LOGIN</string>
+    <string name="main_menu">Main Menu</string>
+    <string name="welcome_message">Welcome, </string>
+    <string name="logout_text">Log Out</string>
+
+    <string name="change_password_title">Change Password</string>
+    <string name="password_minimum_char_error">Password must be at least 4 characters!</string>
+    <string name="password_not_match_error">Password didn\'t match! Please check again.</string>
+    <string name="new_password_title">New Password</string>
+    <string name="confirm_password_title">Confirm Password</string>
+    <string name="save_settings">SAVE</string>
+
+    <string name="make_submission_title">Make a Submission</string>
+
+    <string name="submission_list_title">Submission List</string>
+
+    <string name="submission_history_title">Submission History</string>
+</resources>
