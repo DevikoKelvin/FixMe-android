@@ -68,75 +68,79 @@ class LoginActivity : AppCompatActivity() {
             usernameFieldLayout.error = null
             passwordFieldLayout.error = null
 
-            InitAPI.getAPI.login(username, password)
-                .enqueue(object : Callback<LoginResponse> {
-                    override fun onResponse(
-                        call: Call<LoginResponse?>,
-                        response: Response<LoginResponse?>
-                    ) {
-                        when (response.body()?.code) {
-                            0 -> {
-                                showSnackBar(
-                                    "Wrong password. Please try again!",
-                                    true,
-                                    username,
-                                    password
-                                )
-                                passwordFieldLayout.error = "Wrong password"
-                            }
-
-                            1 -> {
-                                var realUser =
-                                    username.subSequence(0, 1).toString()
-                                        .uppercase() + username.subSequence(
-                                        1,
-                                        username.length
-                                    ).toString().lowercase()
-                                showSnackBar("Login successful!", true, username, password)
-                                UserDataHelper(this@LoginActivity)
-                                    .setUserData(
-                                        response.body()?.idUser!!.toInt(), realUser,
-                                        response.body()?.hakAkses!!.toInt()
+            try {
+                InitAPI.getAPI.login(username, password)
+                    .enqueue(object : Callback<LoginResponse> {
+                        override fun onResponse(
+                            call: Call<LoginResponse?>,
+                            response: Response<LoginResponse?>
+                        ) {
+                            when (response.body()?.code) {
+                                0 -> {
+                                    showSnackBar(
+                                        "Wrong password. Please try again!",
+                                        true,
+                                        username,
+                                        password
                                     )
-                                Handler(mainLooper).postDelayed({
-                                    showSnackBar("Welcome, $realUser!", true, username, password)
-                                    Handler(mainLooper).postDelayed({
-                                        startActivity(
-                                            Intent(
-                                                this@LoginActivity,
-                                                MainActivity::class.java
-                                            )
-                                        ).also {
-                                            finish()
-                                        }
-                                    }, 2000)
-                                }, 2000)
-                            }
+                                    passwordFieldLayout.error = "Wrong password"
+                                }
 
-                            2 -> {
-                                showSnackBar(
-                                    "User not found. Please contact the IT department.",
-                                    true,
-                                    username,
-                                    password
-                                )
+                                1 -> {
+                                    var realUser =
+                                        username.subSequence(0, 1).toString()
+                                            .uppercase() + username.subSequence(
+                                            1,
+                                            username.length
+                                        ).toString().lowercase()
+                                    showSnackBar("Login successful!", true, username, password)
+                                    UserDataHelper(this@LoginActivity)
+                                        .setUserData(
+                                            response.body()?.idUser!!.toInt(), realUser,
+                                            response.body()?.hakAkses!!.toInt()
+                                        )
+                                    Handler(mainLooper).postDelayed({
+                                        showSnackBar("Welcome, $realUser!", true, username, password)
+                                        Handler(mainLooper).postDelayed({
+                                            startActivity(
+                                                Intent(
+                                                    this@LoginActivity,
+                                                    MainActivity::class.java
+                                                )
+                                            ).also {
+                                                finish()
+                                            }
+                                        }, 2000)
+                                    }, 2000)
+                                }
+
+                                2 -> {
+                                    showSnackBar(
+                                        "User not found. Please contact the IT department.",
+                                        true,
+                                        username,
+                                        password
+                                    )
+                                }
                             }
                         }
-                    }
 
-                    override fun onFailure(
-                        call: Call<LoginResponse?>,
-                        throwable: Throwable
-                    ) {
-                        throwable.printStackTrace()
-                        showSnackBar(
-                            "Something went wrong. Please try again!",
-                            false,
-                            username,
-                            password
-                        )
-                    }
-                })
+                        override fun onFailure(
+                            call: Call<LoginResponse?>,
+                            throwable: Throwable
+                        ) {
+                            throwable.printStackTrace()
+                            showSnackBar(
+                                "Something went wrong. Please try again!",
+                                false,
+                                username,
+                                password
+                            )
+                        }
+                    })
+            } catch (exception: Exception) {
+                exception.printStackTrace()
+            }
         }
     }
 

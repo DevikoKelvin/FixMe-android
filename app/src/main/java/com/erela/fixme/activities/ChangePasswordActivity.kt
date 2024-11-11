@@ -108,52 +108,61 @@ class ChangePasswordActivity : AppCompatActivity() {
                             "Please check your password or confirmation password and make sure all requirement meets"
                         ).show()
                 } else {
-                    InitAPI.getAPI.changePassword(userData.id, confirmPasswordField.text.toString())
-                        .enqueue(object : Callback<ChangePasswordResponse> {
-                            override fun onResponse(
-                                call: Call<ChangePasswordResponse?>,
-                                response: Response<ChangePasswordResponse?>
-                            ) {
-                                if (response.body() != null) {
-                                    if (response.body()?.code == 1) {
-                                        CustomToast.getInstance(this@ChangePasswordActivity)
-                                            .setBackgroundColor(
-                                                getColor(R.color.custom_toast_background_success)
-                                            )
-                                            .setFontColor(
-                                                getColor(R.color.custom_toast_font_success)
-                                            )
-                                            .setMessage("Setting saved!")
-                                            .show()
-                                        finish()
-                                    } else
-                                        CustomToast.getInstance(this@ChangePasswordActivity)
-                                            .setBackgroundColor(
-                                                getColor(R.color.custom_toast_background_failed)
-                                            )
-                                            .setFontColor(
-                                                getColor(R.color.custom_toast_font_failed)
-                                            )
-                                            .setMessage(
-                                                "Please check your password or confirmation password and make sure all requirement meets"
-                                            ).show()
+                    try {
+                        InitAPI.getAPI.changePassword(
+                            userData.id, confirmPasswordField.text.toString()
+                        )
+                            .enqueue(object : Callback<ChangePasswordResponse> {
+                                override fun onResponse(
+                                    call: Call<ChangePasswordResponse?>,
+                                    response: Response<ChangePasswordResponse?>
+                                ) {
+                                    if (response.body() != null) {
+                                        if (response.body()?.code == 1) {
+                                            CustomToast.getInstance(this@ChangePasswordActivity)
+                                                .setBackgroundColor(
+                                                    getColor(
+                                                        R.color.custom_toast_background_success
+                                                    )
+                                                )
+                                                .setFontColor(
+                                                    getColor(R.color.custom_toast_font_success)
+                                                )
+                                                .setMessage("Setting saved!")
+                                                .show()
+                                            finish()
+                                        } else
+                                            CustomToast.getInstance(this@ChangePasswordActivity)
+                                                .setBackgroundColor(
+                                                    getColor(R.color.custom_toast_background_failed)
+                                                )
+                                                .setFontColor(
+                                                    getColor(R.color.custom_toast_font_failed)
+                                                )
+                                                .setMessage(
+                                                    "Please check your password or confirmation password and make sure all requirement meets"
+                                                ).show()
+                                    }
                                 }
-                            }
 
-                            override fun onFailure(
-                                call: Call<ChangePasswordResponse?>,
-                                throwable: Throwable
-                            ) {
-                                CustomToast.getInstance(this@ChangePasswordActivity)
-                                    .setBackgroundColor(
-                                        getColor(R.color.custom_toast_background_failed)
-                                    )
-                                    .setFontColor(getColor(R.color.custom_toast_font_failed))
-                                    .setMessage(
-                                        "Something went wrong, please try again later"
-                                    ).show()
-                            }
-                        })
+                                override fun onFailure(
+                                    call: Call<ChangePasswordResponse?>,
+                                    throwable: Throwable
+                                ) {
+                                    throwable.printStackTrace()
+                                    CustomToast.getInstance(this@ChangePasswordActivity)
+                                        .setBackgroundColor(
+                                            getColor(R.color.custom_toast_background_failed)
+                                        )
+                                        .setFontColor(getColor(R.color.custom_toast_font_failed))
+                                        .setMessage(
+                                            "Something went wrong, please try again later"
+                                        ).show()
+                                }
+                            })
+                    } catch (exception: Exception) {
+                        exception.printStackTrace()
+                    }
                 }
             }
         }

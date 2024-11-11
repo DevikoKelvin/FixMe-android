@@ -8,6 +8,10 @@
     <string name="welcome_message">Welcome, </string>
     <string name="logout_text">Log Out</string>
 
+    <string name="notification_title">Notification / Inbox</string>
+    <string name="inbox_sent">Sent</string>
+    <string name="inbox_read">Read</string>
+
     <string name="change_password_title">Change Password</string>
     <string name="password_minimum_char_error">Password must be at least 4 characters!</string>
     <string name="password_not_match_error">Password didn\'t match! Please check again.</string>

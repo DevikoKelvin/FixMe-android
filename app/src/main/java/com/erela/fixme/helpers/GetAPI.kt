@@ -1,6 +1,7 @@
 package com.erela.fixme.helpers
 
 import com.erela.fixme.objects.ChangePasswordResponse
+import com.erela.fixme.objects.InboxResponse
 import com.erela.fixme.objects.LoginResponse
 import retrofit2.http.Field
 import retrofit2.http.FormUrlEncoded
@@ -21,4 +22,10 @@ interface GetAPI {
         @Field("id_user") id: Int,
         @Field("passw") password: String
     ): Call<ChangePasswordResponse>
+
+    @FormUrlEncoded
+    @POST("showinbox")
+    fun showInbox(
+        @Field("id_user") id: Int
+    ): Call<List<InboxResponse>>
 }

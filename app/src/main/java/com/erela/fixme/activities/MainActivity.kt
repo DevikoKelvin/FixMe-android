@@ -1,5 +1,6 @@
 package com.erela.fixme.activities
 
+import android.animation.Animator
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.content.SharedPreferences
@@ -33,6 +34,18 @@ class MainActivity : AppCompatActivity() {
             usernameText.text = "${userData.username}!"
 
             notificationButton.setOnClickListener {
+                notificationAnimation.playAnimation()
+                notificationAnimation.addAnimatorListener(object : Animator.AnimatorListener {
+                    override fun onAnimationStart(animation: Animator) {}
+
+                    override fun onAnimationEnd(animation: Animator) {
+                        startActivity(Intent(this@MainActivity, NotificationActivity::class.java))
+                    }
+
+                    override fun onAnimationCancel(animation: Animator) {}
+
+                    override fun onAnimationRepeat(animation: Animator) {}
+                })
             }
 
             changePasswordMenu.setOnClickListener {
