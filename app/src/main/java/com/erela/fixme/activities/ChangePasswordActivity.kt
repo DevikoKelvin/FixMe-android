@@ -115,16 +115,25 @@ class ChangePasswordActivity : AppCompatActivity() {
                                 response: Response<ChangePasswordResponse?>
                             ) {
                                 if (response.body() != null) {
-                                    if (response.body()?.code == 1)
+                                    if (response.body()?.code == 1) {
                                         CustomToast.getInstance(this@ChangePasswordActivity)
-                                            .setBackgroundColor(getColor(R.color.custom_toast_background_success))
-                                            .setFontColor(getColor(R.color.custom_toast_font_success))
+                                            .setBackgroundColor(
+                                                getColor(R.color.custom_toast_background_success)
+                                            )
+                                            .setFontColor(
+                                                getColor(R.color.custom_toast_font_success)
+                                            )
                                             .setMessage("Setting saved!")
                                             .show()
-                                    else
+                                        finish()
+                                    } else
                                         CustomToast.getInstance(this@ChangePasswordActivity)
-                                            .setBackgroundColor(getColor(R.color.custom_toast_background_failed))
-                                            .setFontColor(getColor(R.color.custom_toast_font_failed))
+                                            .setBackgroundColor(
+                                                getColor(R.color.custom_toast_background_failed)
+                                            )
+                                            .setFontColor(
+                                                getColor(R.color.custom_toast_font_failed)
+                                            )
                                             .setMessage(
                                                 "Please check your password or confirmation password and make sure all requirement meets"
                                             ).show()
@@ -136,7 +145,9 @@ class ChangePasswordActivity : AppCompatActivity() {
                                 throwable: Throwable
                             ) {
                                 CustomToast.getInstance(this@ChangePasswordActivity)
-                                    .setBackgroundColor(getColor(R.color.custom_toast_background_failed))
+                                    .setBackgroundColor(
+                                        getColor(R.color.custom_toast_background_failed)
+                                    )
                                     .setFontColor(getColor(R.color.custom_toast_font_failed))
                                     .setMessage(
                                         "Something went wrong, please try again later"
