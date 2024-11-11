@@ -31,7 +31,7 @@ class NotificationActivity : AppCompatActivity() {
         init()
     }
 
-    fun init() {
+    private fun init() {
         binding.apply {
             loadingBar.visibility = View.VISIBLE
             backButton.setOnClickListener {
