@@ -35,17 +35,7 @@ class MainActivity : AppCompatActivity() {
 
             notificationButton.setOnClickListener {
                 notificationAnimation.playAnimation()
-                notificationAnimation.addAnimatorListener(object : Animator.AnimatorListener {
-                    override fun onAnimationStart(animation: Animator) {}
-
-                    override fun onAnimationEnd(animation: Animator) {
-                        startActivity(Intent(this@MainActivity, NotificationActivity::class.java))
-                    }
-
-                    override fun onAnimationCancel(animation: Animator) {}
-
-                    override fun onAnimationRepeat(animation: Animator) {}
-                })
+                startActivity(Intent(this@MainActivity, NotificationActivity::class.java))
             }
 
             changePasswordMenu.setOnClickListener {
