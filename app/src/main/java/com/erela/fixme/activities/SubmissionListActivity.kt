@@ -150,7 +150,5 @@ class SubmissionListActivity : AppCompatActivity(), SubmissionRvAdapter.OnSubmis
         }
     }
 
-    override fun onSubmissionClick(data: SubmissionListResponse) {
-
-    }
+    override fun onSubmissionClick(data: SubmissionListResponse) {}
 }
