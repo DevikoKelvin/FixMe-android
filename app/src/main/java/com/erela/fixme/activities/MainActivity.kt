@@ -40,6 +40,7 @@ class MainActivity : AppCompatActivity() {
             }
 
             submissionListMenu.setOnClickListener {
+                startActivity(Intent(this@MainActivity, SubmissionListActivity::class.java))
             }
 
             logOutButton.setOnClickListener {

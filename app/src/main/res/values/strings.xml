@@ -22,6 +22,9 @@
     <string name="make_submission_title">Make a Submission</string>
 
     <string name="submission_list_title">Submission List</string>
+    <string name="department_title">Department</string>
+    <string name="machine_code">Machine Code:</string>
+    <string name="machine_name">Machine Name:</string>
 
     <string name="submission_history_title">Submission History</string>
 </resources>

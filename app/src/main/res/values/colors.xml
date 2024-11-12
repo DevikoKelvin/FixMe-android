@@ -21,4 +21,11 @@
     <color name="custom_toast_font_failed">#FF3D00</color>
     <color name="custom_toast_font_warning">#FFB573</color>
     <color name="custom_toast_default_background">#CC000000</color>
+
+    <color name="status_rejected">#EF9A9A</color>
+    <color name="status_pending">#505050</color>
+    <color name="status_approved">#A5D6A7</color>
+    <color name="status_on_progress">#FFCC80</color>
+    <color name="status_done">#81D4FA</color>
+    <color name="status_on_trial">#B39DDB</color>
 </resources>

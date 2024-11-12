@@ -1,6 +1,5 @@
 package com.erela.fixme.adapters
 
-import com.erela.fixme.R
 import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
@@ -18,7 +17,11 @@ class InboxRvAdapter(val context: Context, val data: ArrayList<InboxResponse>) :
     override fun onCreateViewHolder(
         parent: ViewGroup, viewType: Int
     ): ViewHolder = ViewHolder(
-        LayoutInflater.from(context).inflate(R.layout.list_item_inbox, parent, false)
+        ListItemInboxBinding.inflate(
+            LayoutInflater.from(parent.context),
+            parent,
+            false
+        ).root
     )
 
     override fun onBindViewHolder(
