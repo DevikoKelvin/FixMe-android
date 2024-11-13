@@ -9,7 +9,9 @@ import java.util.concurrent.TimeUnit
 
 object InitAPI {
     // Local IP
-    private const val BASE_URL = "http://192.168.3.245/fixme/apimobile2/"
+    const val MAIN_URL = "http://192.168.3.245/fixme"
+    const val BASE_URL = "$MAIN_URL/apimobile2/"
+    const val IMAGE_URL = "$MAIN_URL/assets/upload/"
 
     private val client = OkHttpClient().newBuilder()
         .addInterceptor(HttpLoggingInterceptor().apply {

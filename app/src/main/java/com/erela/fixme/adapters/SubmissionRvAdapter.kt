@@ -2,6 +2,7 @@ package com.erela.fixme.adapters
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,9 +10,15 @@ import androidx.core.content.res.ResourcesCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.erela.fixme.R
 import com.erela.fixme.databinding.ListItemSubmissionBinding
+import com.erela.fixme.helpers.InitAPI
 import com.erela.fixme.helpers.UserDataHelper
+import com.erela.fixme.helpers.UsernameFormatHelper
 import com.erela.fixme.objects.SubmissionListResponse
 import com.erela.fixme.objects.UserData
+import com.erela.fixme.objects.UserListResponse
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 class SubmissionRvAdapter(val context: Context, val data: ArrayList<SubmissionListResponse>) :
     RecyclerView.Adapter<SubmissionRvAdapter.ViewHolder>() {
@@ -36,10 +43,45 @@ class SubmissionRvAdapter(val context: Context, val data: ArrayList<SubmissionLi
                 val item = data[position]
 
                 submissionName.text = item.judulKasus
-                inputTime.text = item.setTglinput
+                inputDate.text = item.setTglinput
                 submissionDescription.text = item.keterangan
                 machineCode.text = item.kodeMesin
                 machineName.text = item.namaMesin
+                submissionLocation.text = item.lokasi?.uppercase()
+                reportedBy.text = ""
+                try {
+                    InitAPI.getAPI.getUserList()
+                        .enqueue(object : Callback<List<UserListResponse>> {
+                            override fun onResponse(
+                                call: Call<List<UserListResponse>?>,
+                                response: Response<List<UserListResponse>?>
+                            ) {
+                                if (response.isSuccessful) {
+                                    if (response.body() != null) {
+                                        for (i in 0 until response.body()!!.size) {
+                                            if (item.idUser == response.body()?.get(i)?.idUser) {
+                                                reportedBy.text =
+                                                    UsernameFormatHelper.getRealUsername(
+                                                        response.body()?.get(i)?.usern.toString()
+                                                    )
+                                            }
+                                        }
+                                    }
+                                } else {
+                                    Log.e("ERROR", response.message())
+                                }
+                            }
+
+                            override fun onFailure(
+                                call: Call<List<UserListResponse>?>,
+                                throwable: Throwable
+                            ) {
+                                throwable.printStackTrace()
+                            }
+                        })
+                } catch (exception: Exception) {
+                    exception.printStackTrace()
+                }
 
                 when (item.stsGaprojects) {
                     0.toString() -> {

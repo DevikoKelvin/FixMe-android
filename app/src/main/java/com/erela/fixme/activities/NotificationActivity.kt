@@ -19,7 +19,7 @@ class NotificationActivity : AppCompatActivity() {
     private lateinit var binding: ActivityNotificationBinding
     private lateinit var userData: UserData
     private lateinit var adapter: InboxRvAdapter
-    private lateinit var inboxArrayList: ArrayList<InboxResponse>
+    private var inboxArrayList: ArrayList<InboxResponse> = ArrayList()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -33,11 +33,28 @@ class NotificationActivity : AppCompatActivity() {
 
     private fun init() {
         binding.apply {
-            loadingBar.visibility = View.VISIBLE
             backButton.setOnClickListener {
                 onBackPressedDispatcher.onBackPressed()
             }
 
+            adapter = InboxRvAdapter(applicationContext, inboxArrayList)
+            rvInbox.layoutManager = LinearLayoutManager(applicationContext)
+            rvInbox.adapter = adapter
+
+            getNotification()
+
+            swipeRefresh.setOnRefreshListener {
+                inboxArrayList.clear()
+                adapter.notifyDataSetChanged()
+                getNotification()
+                swipeRefresh.isRefreshing = false
+            }
+        }
+    }
+
+    private fun getNotification() {
+        binding.apply {
+            loadingBar.visibility = View.VISIBLE
             try {
                 InitAPI.getAPI.showInbox(userData.id)
                     .enqueue(object : Callback<List<InboxResponse>> {
@@ -47,15 +64,12 @@ class NotificationActivity : AppCompatActivity() {
                         ) {
                             if (response.isSuccessful) {
                                 loadingBar.visibility = View.GONE
-                                inboxArrayList = ArrayList()
                                 for (i in 0 until response.body()?.size.toString().toInt()) {
                                     inboxArrayList.add(
                                         response.body()!![i]
                                     )
                                 }
-                                adapter = InboxRvAdapter(applicationContext, inboxArrayList)
-                                rvInbox.layoutManager = LinearLayoutManager(applicationContext)
-                                rvInbox.adapter = adapter
+                                adapter.notifyDataSetChanged()
                             } else {
                                 loadingBar.visibility = View.GONE
                             }

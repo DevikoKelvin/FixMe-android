@@ -2,7 +2,7 @@ package com.erela.fixme.objects
 
 import com.google.gson.annotations.SerializedName
 
-data class SubmissionListResponse(
+data class SubmissionDetailResponse(
     @field:SerializedName("usern_approve")
     val usernApprove: String? = null,
     @field:SerializedName("keterangan")
@@ -11,8 +11,6 @@ data class SubmissionListResponse(
     val usernUserDone: Any? = null,
     @field:SerializedName("id_gaprojects")
     val idGaprojects: String? = null,
-    @field:SerializedName("id_user")
-    val idUser: String? = null,
     @field:SerializedName("id_user_end")
     val idUserEnd: String? = null,
     @field:SerializedName("kode_mesin")
@@ -29,6 +27,8 @@ data class SubmissionListResponse(
     val usernUserEnd: String? = null,
     @field:SerializedName("foto_gaprojects")
     val fotoGaprojects: List<FotoGaprojectsItem?>? = null,
+    @field:SerializedName("id_user")
+    val idUser: String? = null,
     @field:SerializedName("dept")
     val dept: String? = null,
     @field:SerializedName("set_tglinput")
@@ -55,6 +55,8 @@ data class SubmissionListResponse(
     val tglWaktuPengerjaan: String? = null,
     @field:SerializedName("usern_cancel")
     val usernCancel: String? = null,
+    @field:SerializedName("gaprojects_detail")
+    val gaprojectsDetail: List<Any?>? = null,
     @field:SerializedName("tgl_waktu_done")
     val tglWaktuDone: Any? = null
 )

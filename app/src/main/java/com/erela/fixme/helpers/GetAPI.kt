@@ -1,17 +1,22 @@
 package com.erela.fixme.helpers
 
 import com.erela.fixme.objects.ChangePasswordResponse
-import com.erela.fixme.objects.DepartmentListResponseItem
+import com.erela.fixme.objects.DepartmentListResponse
 import com.erela.fixme.objects.InboxResponse
 import com.erela.fixme.objects.LoginResponse
+import com.erela.fixme.objects.SubmissionDetailResponse
 import com.erela.fixme.objects.SubmissionListResponse
+import com.erela.fixme.objects.UserListResponse
+import retrofit2.Call
 import retrofit2.http.Field
 import retrofit2.http.FormUrlEncoded
-import retrofit2.http.POST
-import retrofit2.Call
 import retrofit2.http.GET
+import retrofit2.http.POST
 
 interface GetAPI {
+    @GET("getusers")
+    fun getUserList(): Call<List<UserListResponse>>
+
     @FormUrlEncoded
     @POST("checklogin")
     fun login(
@@ -33,7 +38,7 @@ interface GetAPI {
     ): Call<List<InboxResponse>>
 
     @GET("depttuj")
-    fun getDepartmentList(): Call <List<DepartmentListResponseItem>>
+    fun getDepartmentList(): Call <List<DepartmentListResponse>>
 
     @FormUrlEncoded
     @POST("listpengajuan")
@@ -41,4 +46,10 @@ interface GetAPI {
         @Field("id_user") id: Int,
         @Field("dept") department: String
     ): Call<List<SubmissionListResponse>>
+
+    @FormUrlEncoded
+    @POST("detailpengajuan")
+    fun getSubmissionDetail(
+        @Field("id") submissionID : String
+    ): Call<List<SubmissionDetailResponse>>
 }

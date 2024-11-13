@@ -37,6 +37,7 @@ class MainActivity : AppCompatActivity() {
             }
 
             makeSubmissionMenu.setOnClickListener {
+                startActivity(Intent(this@MainActivity, CreateSubmissionActivity::class.java))
             }
 
             submissionListMenu.setOnClickListener {

@@ -20,11 +20,34 @@
     <string name="save_settings">SAVE</string>
 
     <string name="make_submission_title">Make a Submission</string>
+    <string name="case_title">Case Title</string>
+    <string name="location">Location</string>
+    <string name="department_destination">Destination Department</string>
+    <string name="case_description">Description</string>
+    <string name="report_time_and_date">Report Date and Time</string>
+    <string name="actual_time_and_date">Actual Date and Time</string>
+    <string name="pick_a_date">Pick a Date</string>
+    <string name="pick_a_time">Pick a Time</string>
+    <string name="attach_photo">Attach Photo</string>
+    <string name="choose_file">Choose file</string>
 
     <string name="submission_list_title">Submission List</string>
     <string name="department_title">Department</string>
     <string name="machine_code">Machine Code:</string>
     <string name="machine_name">Machine Name:</string>
+    <string name="reported_by">Reported by:</string>
+    <string name="submission_detail_title">Submission Detail</string>
+    <string name="submission_description">Description</string>
+    <string name="submission_report">Report:</string>
+    <string name="submission_actual">Actual:</string>
+    <string name="submission_working">Working:</string>
+    <string name="action_text">Action</string>
+    <string name="action_approve">Approve</string>
+    <string name="action_reject">Reject</string>
+    <string name="action_on_progress">On Progress</string>
+    <string name="action_on_trial">On Trial</string>
+    <string name="action_done">Done</string>
+    <string name="action_question">What would you do?</string>
 
     <string name="submission_history_title">Submission History</string>
 </resources>

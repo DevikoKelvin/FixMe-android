@@ -11,6 +11,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.erela.fixme.databinding.ActivityLoginBinding
 import com.erela.fixme.helpers.InitAPI
 import com.erela.fixme.helpers.UserDataHelper
+import com.erela.fixme.helpers.UsernameFormatHelper
 import com.erela.fixme.objects.LoginResponse
 import com.erela.fixme.objects.UserData
 import com.google.android.material.snackbar.Snackbar
@@ -87,20 +88,21 @@ class LoginActivity : AppCompatActivity() {
                                 }
 
                                 1 -> {
-                                    var realUser =
-                                        username.subSequence(0, 1).toString()
-                                            .uppercase() + username.subSequence(
-                                            1,
-                                            username.length
-                                        ).toString().lowercase()
                                     showSnackBar("Login successful!", true, username, password)
                                     UserDataHelper(this@LoginActivity)
                                         .setUserData(
-                                            response.body()?.idUser!!.toInt(), realUser,
+                                            response.body()?.idUser!!.toInt(),
+                                            UsernameFormatHelper.getRealUsername(username),
                                             response.body()?.hakAkses!!.toInt()
                                         )
                                     Handler(mainLooper).postDelayed({
-                                        showSnackBar("Welcome, $realUser!", true, username, password)
+                                        showSnackBar(
+                                            "Welcome, ${
+                                                UsernameFormatHelper.getRealUsername(
+                                                    username
+                                                )
+                                            }!", true, username, password
+                                        )
                                         Handler(mainLooper).postDelayed({
                                             startActivity(
                                                 Intent(

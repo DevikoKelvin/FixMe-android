@@ -3,6 +3,11 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"
+        android:maxSdkVersion="32" />
+    <uses-permission android:name="android.permission.READ_MEDIA_IMAGES" />
+    <uses-permission android:name="android.permission.READ_MEDIA_VIDEO" />
+    <uses-permission android:name="android.permission.READ_MEDIA_VISUAL_USER_SELECTED" />
 
     <application
         android:allowBackup="true"
@@ -15,6 +20,12 @@
         android:theme="@style/Theme.FixMe"
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
+        <activity
+            android:name=".activities.CreateSubmissionActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activities.SubmissionDetailActivity"
+            android:exported="false" />
         <activity
             android:name=".activities.SubmissionListActivity"
             android:exported="false" />

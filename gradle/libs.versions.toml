@@ -13,6 +13,8 @@ retrofit = "2.11.0"
 converterGson = "2.11.0"
 loggingInterceptor = "5.0.0-alpha.14"
 lottie = "6.4.0"
+glide = "4.16.0"
+swipeRefreshLayout = "1.1.0"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -28,6 +30,8 @@ retrofit = { group = "com.squareup.retrofit2", name = "retrofit", version.ref = 
 converter-gson = { group = "com.squareup.retrofit2", name = "converter-gson", version.ref = "converterGson" }
 logging-interceptor = { group = "com.squareup.okhttp3", name = "logging-interceptor", version.ref = "loggingInterceptor" }
 lottie = { group = "com.airbnb.android", name = "lottie", version.ref = "lottie" }
+glide = { group = "com.github.bumptech.glide", name = "glide", version.ref = "glide" }
+swipeRefreshLayout = { group = "androidx.swiperefreshlayout", name = "swiperefreshlayout", version.ref = "swipeRefreshLayout" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

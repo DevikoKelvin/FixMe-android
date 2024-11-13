@@ -35,7 +35,7 @@
                 tools:text="PINTU AUTOCLAVE ECHUNG D-14 TIDAK DAPAT MENUTUP" />
 
             <TextView
-                android:id="@+id/inputTime"
+                android:id="@+id/inputDate"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textColor="@color/white"
@@ -106,11 +106,42 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:orientation="horizontal"
-            android:paddingHorizontal="16dp">
+            android:paddingHorizontal="16dp"
+            tools:ignore="UseCompoundDrawables">
 
             <ImageView
                 android:layout_width="21dp"
-                android:layout_height="21dp" />
+                android:layout_height="21dp"
+                android:src="@drawable/location_icon"
+                tools:ignore="ContentDescription" />
+
+            <TextView
+                android:id="@+id/submissionLocation"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="4dp"
+                tools:text="Erela HQ" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:orientation="horizontal"
+            android:paddingHorizontal="16dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:text="@string/reported_by" />
+
+            <TextView
+                android:id="@+id/reportedBy"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="4dp"
+                android:textStyle="bold"
+                tools:text="Hendrick" />
         </LinearLayout>
 
         <com.google.android.material.card.MaterialCardView

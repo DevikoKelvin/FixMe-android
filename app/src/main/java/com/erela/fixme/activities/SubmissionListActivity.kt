@@ -1,5 +1,6 @@
 package com.erela.fixme.activities
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.util.Log
 import android.view.View
@@ -12,7 +13,7 @@ import com.erela.fixme.adapters.SubmissionRvAdapter
 import com.erela.fixme.databinding.ActivitySubmissionListBinding
 import com.erela.fixme.helpers.InitAPI
 import com.erela.fixme.helpers.UserDataHelper
-import com.erela.fixme.objects.DepartmentListResponseItem
+import com.erela.fixme.objects.DepartmentListResponse
 import com.erela.fixme.objects.SubmissionListResponse
 import com.erela.fixme.objects.UserData
 import retrofit2.Call
@@ -23,8 +24,8 @@ class SubmissionListActivity : AppCompatActivity(), SubmissionRvAdapter.OnSubmis
     private lateinit var binding: ActivitySubmissionListBinding
     private lateinit var adapter: SubmissionRvAdapter
     private lateinit var userData: UserData
-    private lateinit var selectedDepartment: String
-    private lateinit var submissionArrayList: ArrayList<SubmissionListResponse>
+    private var selectedDepartment: String = ""
+    private var submissionArrayList: ArrayList<SubmissionListResponse> = ArrayList()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -35,19 +36,39 @@ class SubmissionListActivity : AppCompatActivity(), SubmissionRvAdapter.OnSubmis
         init()
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     private fun init() {
         binding.apply {
             backButton.setOnClickListener {
                 onBackPressedDispatcher.onBackPressed()
             }
 
+            adapter = SubmissionRvAdapter(
+                this@SubmissionListActivity,
+                submissionArrayList
+            ).also {
+                it.onSubmissionClickListener(
+                    this@SubmissionListActivity
+                )
+            }
+            rvSubmission.layoutManager =
+                LinearLayoutManager(applicationContext)
+            rvSubmission.adapter = adapter
+
+            swipeRefresh.setOnRefreshListener {
+                submissionArrayList.clear()
+                adapter.notifyDataSetChanged()
+                getSubmissionList()
+                swipeRefresh.isRefreshing = false
+            }
+
             loadingBar.visibility = View.VISIBLE
             try {
                 InitAPI.getAPI.getDepartmentList()
-                    .enqueue(object : Callback<List<DepartmentListResponseItem>> {
+                    .enqueue(object : Callback<List<DepartmentListResponse>> {
                         override fun onResponse(
-                            call: Call<List<DepartmentListResponseItem>>,
-                            response: Response<List<DepartmentListResponseItem>>
+                            call: Call<List<DepartmentListResponse>>,
+                            response: Response<List<DepartmentListResponse>>
                         ) {
                             loadingBar.visibility = View.GONE
                             if (response.isSuccessful) {
@@ -59,13 +80,13 @@ class SubmissionListActivity : AppCompatActivity(), SubmissionRvAdapter.OnSubmis
                                             response.body()!![i].namaDept.toString()
                                         )
                                     }
-                                    val adapter = ArrayAdapter(
+                                    val dropdownAdapter = ArrayAdapter(
                                         this@SubmissionListActivity,
                                         R.layout.department_dropdown_item,
                                         R.id.dropdownItemText,
                                         data
                                     )
-                                    departmentDropdown.adapter = adapter
+                                    departmentDropdown.adapter = dropdownAdapter
                                     departmentDropdown.onItemSelectedListener =
                                         object : AdapterView.OnItemSelectedListener {
                                             override fun onItemSelected(
@@ -78,6 +99,8 @@ class SubmissionListActivity : AppCompatActivity(), SubmissionRvAdapter.OnSubmis
                                                     ""
                                                 else
                                                     data[position]
+                                                submissionArrayList.clear()
+                                                adapter.notifyDataSetChanged()
                                                 getSubmissionList()
                                             }
 
@@ -86,12 +109,12 @@ class SubmissionListActivity : AppCompatActivity(), SubmissionRvAdapter.OnSubmis
                                     Log.e("Department List", response.body().toString())
                                 }
                             } else {
-                                Log.e("ERROR", "Code: 500")
+                                Log.e("ERROR", response.message())
                             }
                         }
 
                         override fun onFailure(
-                            call: Call<List<DepartmentListResponseItem>>,
+                            call: Call<List<DepartmentListResponse>>,
                             throwable: Throwable
                         ) {
                             loadingBar.visibility = View.GONE
@@ -109,40 +132,38 @@ class SubmissionListActivity : AppCompatActivity(), SubmissionRvAdapter.OnSubmis
         binding.apply {
             loadingBar.visibility = View.VISIBLE
             try {
-                InitAPI.getAPI.getSubmissionList(userData.id, selectedDepartment)
-                    .enqueue(object : Callback<List<SubmissionListResponse>> {
-                        override fun onResponse(
-                            call: Call<List<SubmissionListResponse>>,
-                            response: Response<List<SubmissionListResponse>>
-                        ) {
-                            loadingBar.visibility = View.GONE
-                            if (response.isSuccessful) {
-                                if (response.body() != null) {
-                                    submissionArrayList = ArrayList()
-                                    for (i in 0 until response.body()!!.size) {
-                                        submissionArrayList.add(response.body()!![i])
+                if (selectedDepartment != "") {
+                    InitAPI.getAPI.getSubmissionList(userData.id, selectedDepartment)
+                        .enqueue(object : Callback<List<SubmissionListResponse>> {
+                            @SuppressLint("NotifyDataSetChanged")
+                            override fun onResponse(
+                                call: Call<List<SubmissionListResponse>>,
+                                response: Response<List<SubmissionListResponse>>
+                            ) {
+                                loadingBar.visibility = View.GONE
+                                if (response.isSuccessful) {
+                                    if (response.body() != null) {
+                                        submissionArrayList.clear()
+                                        for (i in 0 until response.body()!!.size) {
+                                            submissionArrayList.add(response.body()!![i])
+                                        }
+                                        adapter.notifyDataSetChanged()
                                     }
-                                    adapter = SubmissionRvAdapter(
-                                        this@SubmissionListActivity,
-                                        submissionArrayList
-                                    ).also {
-                                        it.onSubmissionClickListener(this@SubmissionListActivity)
-                                    }
-                                    rvSubmission.layoutManager =
-                                        LinearLayoutManager(applicationContext)
-                                    rvSubmission.adapter = adapter
                                 }
                             }
-                        }
 
-                        override fun onFailure(
-                            call: Call<List<SubmissionListResponse>>,
-                            throwable: Throwable
-                        ) {
-                            loadingBar.visibility = View.GONE
-                            throwable.printStackTrace()
-                        }
-                    })
+                            override fun onFailure(
+                                call: Call<List<SubmissionListResponse>>,
+                                throwable: Throwable
+                            ) {
+                                loadingBar.visibility = View.GONE
+                                throwable.printStackTrace()
+                            }
+                        })
+                } else {
+                    loadingBar.visibility = View.GONE
+                    submissionArrayList.clear()
+                }
             } catch (exception: Exception) {
                 loadingBar.visibility = View.GONE
                 exception.printStackTrace()
@@ -150,5 +171,7 @@ class SubmissionListActivity : AppCompatActivity(), SubmissionRvAdapter.OnSubmis
         }
     }
 
-    override fun onSubmissionClick(data: SubmissionListResponse) {}
+    override fun onSubmissionClick(data: SubmissionListResponse) {
+        SubmissionDetailActivity.initiate(this@SubmissionListActivity, data.idGaprojects.toString())
+    }
 }
