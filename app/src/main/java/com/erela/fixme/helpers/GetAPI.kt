@@ -4,14 +4,23 @@ import com.erela.fixme.objects.ChangePasswordResponse
 import com.erela.fixme.objects.DepartmentListResponse
 import com.erela.fixme.objects.InboxResponse
 import com.erela.fixme.objects.LoginResponse
+import com.erela.fixme.objects.NotificationResponse
 import com.erela.fixme.objects.SubmissionDetailResponse
 import com.erela.fixme.objects.SubmissionListResponse
+import com.erela.fixme.objects.SubmitSubmissionResponse
 import com.erela.fixme.objects.UserListResponse
+import okhttp3.MultipartBody
+import okhttp3.RequestBody
 import retrofit2.Call
 import retrofit2.http.Field
 import retrofit2.http.FormUrlEncoded
 import retrofit2.http.GET
+import retrofit2.http.Headers
+import retrofit2.http.Multipart
 import retrofit2.http.POST
+import retrofit2.http.PUT
+import retrofit2.http.Part
+import retrofit2.http.PartMap
 
 interface GetAPI {
     @GET("getusers")
@@ -38,7 +47,7 @@ interface GetAPI {
     ): Call<List<InboxResponse>>
 
     @GET("depttuj")
-    fun getDepartmentList(): Call <List<DepartmentListResponse>>
+    fun getDepartmentList(): Call<List<DepartmentListResponse>>
 
     @FormUrlEncoded
     @POST("listpengajuan")
@@ -50,6 +59,19 @@ interface GetAPI {
     @FormUrlEncoded
     @POST("detailpengajuan")
     fun getSubmissionDetail(
-        @Field("id") submissionID : String
+        @Field("id") submissionID: String
     ): Call<List<SubmissionDetailResponse>>
+
+    @Multipart
+    @POST("pengajuansave")
+    fun submitSubmission(
+        @PartMap() partMap: MutableMap<String, RequestBody>,
+        @Part photo: MutableList<MultipartBody.Part>?
+    ): Call<SubmitSubmissionResponse>
+
+    @Multipart
+    @POST("pengajuansave")
+    fun submitSubmissionNoAttachment(
+        @PartMap() partMap: MutableMap<String, RequestBody>
+    ): Call<SubmitSubmissionResponse>
 }

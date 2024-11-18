@@ -71,10 +71,12 @@ class CustomToast(private val context: Context) : Toast(context) {
         }
 
         Toast(context).also {
-            it.duration = duration
-            it.setGravity(gravity or Gravity.FILL_HORIZONTAL, 100, 20)
-            it.view = binding.root
-            it.show()
+            with(it) {
+                duration = duration
+                setGravity(this@CustomToast.gravity or Gravity.FILL_HORIZONTAL, 100, 20)
+                view = binding.root
+                show()
+            }
         }
     }
 }

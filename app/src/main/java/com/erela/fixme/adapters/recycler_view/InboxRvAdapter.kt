@@ -1,4 +1,4 @@
-package com.erela.fixme.adapters
+package com.erela.fixme.adapters.recycler_view
 
 import android.content.Context
 import android.view.LayoutInflater

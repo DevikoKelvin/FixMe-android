@@ -1,4 +1,4 @@
-package com.erela.fixme.adapters
+package com.erela.fixme.adapters.recycler_view
 
 import android.annotation.SuppressLint
 import android.content.Context
@@ -68,6 +68,7 @@ class SubmissionRvAdapter(val context: Context, val data: ArrayList<SubmissionLi
                                         }
                                     }
                                 } else {
+                                    reportedBy.text = "Can't retrieve Reporter's name"
                                     Log.e("ERROR", response.message())
                                 }
                             }
@@ -76,10 +77,14 @@ class SubmissionRvAdapter(val context: Context, val data: ArrayList<SubmissionLi
                                 call: Call<List<UserListResponse>?>,
                                 throwable: Throwable
                             ) {
+                                reportedBy.text = "Can't retrieve Reporter's name"
+                                Log.e("ERROR", throwable.toString())
                                 throwable.printStackTrace()
                             }
                         })
                 } catch (exception: Exception) {
+                    reportedBy.text = "Can't retrieve Reporter's name"
+                    Log.e("ERROR", exception.toString())
                     exception.printStackTrace()
                 }
 

@@ -30,6 +30,9 @@
     <string name="pick_a_time">Pick a Time</string>
     <string name="attach_photo">Attach Photo</string>
     <string name="choose_file">Choose file</string>
+    <string name="manage_attachment">Manage attachment</string>
+    <string name="see_photo">See Photo</string>
+    <string name="delete_photo">Delete Photo</string>
 
     <string name="submission_list_title">Submission List</string>
     <string name="department_title">Department</string>

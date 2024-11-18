@@ -1,6 +1,7 @@
 package com.erela.fixme.helpers
 
 import com.erela.fixme.BuildConfig
+import com.google.gson.GsonBuilder
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
@@ -10,9 +11,12 @@ import java.util.concurrent.TimeUnit
 object InitAPI {
     // Local IP
     const val MAIN_URL = "http://192.168.3.245/fixme"
+    const val SOCKET_URL = "https://ntfy.sh/erela_pengaduan001/"
+
+    // Hendrick Local IP
+    const val MAIN_URL2 = "http://192.168.3.109:88/fixme"
     const val BASE_URL = "$MAIN_URL/apimobile2/"
     const val IMAGE_URL = "$MAIN_URL/assets/upload/"
-
     private val client = OkHttpClient().newBuilder()
         .addInterceptor(HttpLoggingInterceptor().apply {
             level = if (BuildConfig.DEBUG)
@@ -27,7 +31,7 @@ object InitAPI {
     private fun getInstance(): Retrofit = Retrofit.Builder()
         .baseUrl(BASE_URL)
         .client(client)
-        .addConverterFactory(GsonConverterFactory.create())
+        .addConverterFactory(GsonConverterFactory.create(GsonBuilder().setLenient().create()))
         .build()
 
     val getAPI: GetAPI = getInstance().create(GetAPI::class.java)

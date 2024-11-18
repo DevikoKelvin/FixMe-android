@@ -8,10 +8,10 @@
             <InsightsFilterSettings>
               <option name="connection">
                 <ConnectionSetting>
-                  <option name="appId" value="PLACEHOLDER" />
-                  <option name="mobileSdkAppId" value="" />
-                  <option name="projectId" value="" />
-                  <option name="projectNumber" value="" />
+                  <option name="appId" value="com.erela.fixme" />
+                  <option name="mobileSdkAppId" value="1:807188400647:android:ec116e9fc95101c8ff78a2" />
+                  <option name="projectId" value="fixme-7b819" />
+                  <option name="projectNumber" value="807188400647" />
                 </ConnectionSetting>
               </option>
               <option name="signal" value="SIGNAL_UNSPECIFIED" />

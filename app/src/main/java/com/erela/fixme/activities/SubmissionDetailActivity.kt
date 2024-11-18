@@ -1,5 +1,6 @@
 package com.erela.fixme.activities
 
+import android.annotation.SuppressLint
 import com.erela.fixme.R
 import android.content.Context
 import android.content.Intent
@@ -7,18 +8,17 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.content.res.ResourcesCompat
 import com.bumptech.glide.Glide
+import com.erela.fixme.adapters.pager.ImageCarouselPagerAdapter
 import com.erela.fixme.bottom_sheets.SubmissionActionBottomSheet
 import com.erela.fixme.custom_views.CustomToast
 import com.erela.fixme.databinding.ActivitySubmissionDetailBinding
 import com.erela.fixme.helpers.Base64Helper
 import com.erela.fixme.helpers.InitAPI
-import com.erela.fixme.helpers.UserDataHelper
 import com.erela.fixme.helpers.UsernameFormatHelper
+import com.erela.fixme.objects.FotoGaprojectsItem
 import com.erela.fixme.objects.SubmissionDetailResponse
-import com.erela.fixme.objects.UserData
 import com.erela.fixme.objects.UserListResponse
 import retrofit2.Call
 import retrofit2.Callback
@@ -26,6 +26,8 @@ import retrofit2.Response
 
 class SubmissionDetailActivity : AppCompatActivity() {
     private lateinit var binding: ActivitySubmissionDetailBinding
+    private lateinit var imageData: ArrayList<FotoGaprojectsItem>
+    private lateinit var imageCarouselAdapter: ImageCarouselPagerAdapter
     private lateinit var detailId: String
 
     companion object {
@@ -65,6 +67,7 @@ class SubmissionDetailActivity : AppCompatActivity() {
             try {
                 InitAPI.getAPI.getSubmissionDetail(detailId)
                     .enqueue(object : Callback<List<SubmissionDetailResponse>> {
+                        @SuppressLint("SetTextI18n")
                         override fun onResponse(
                             call: Call<List<SubmissionDetailResponse>?>,
                             response: Response<List<SubmissionDetailResponse>?>
@@ -79,23 +82,47 @@ class SubmissionDetailActivity : AppCompatActivity() {
                                         imageContainer.visibility = View.GONE
                                     } else {
                                         imageContainer.visibility = View.VISIBLE
-                                        val imageData = data.fotoGaprojects[0]
-                                        if (Base64Helper.isBase64Encoded(
-                                                imageData?.foto.toString()
+                                        imageData = ArrayList()
+                                        if (data.fotoGaprojects.size > 1) {
+                                            imageCarouselHolder.visibility = View.VISIBLE
+                                            circleIndicator.visibility = View.VISIBLE
+                                            submissionImage.visibility = View.GONE
+                                            for (i in 0 until data.fotoGaprojects.size) {
+                                                imageData.add(
+                                                    data.fotoGaprojects[i]!!
+                                                )
+                                            }
+                                            imageCarouselAdapter = ImageCarouselPagerAdapter(
+                                                this@SubmissionDetailActivity, imageData,
+                                                this@SubmissionDetailActivity
                                             )
-                                        ) {
-                                            val decodedImageURL = Base64Helper.decodeBase64(
-                                                imageData?.foto.toString()
+                                            imageCarouselHolder.adapter = imageCarouselAdapter
+                                            circleIndicator.setViewPager(imageCarouselHolder)
+                                            imageCarouselAdapter.registerDataSetObserver(
+                                                circleIndicator.dataSetObserver
                                             )
-                                            Glide.with(applicationContext)
-                                                .load(decodedImageURL)
-                                                .placeholder(R.drawable.image_placeholder)
-                                                .into(submissionImage)
                                         } else {
-                                            Glide.with(applicationContext)
-                                                .load(InitAPI.IMAGE_URL + imageData?.foto)
-                                                .placeholder(R.drawable.image_placeholder)
-                                                .into(submissionImage)
+                                            imageCarouselHolder.visibility = View.GONE
+                                            circleIndicator.visibility = View.GONE
+                                            submissionImage.visibility = View.VISIBLE
+                                            val image = data.fotoGaprojects[0]
+                                            if (Base64Helper.isBase64Encoded(
+                                                    image?.foto.toString()
+                                                )
+                                            ) {
+                                                val decodedImageURL = Base64Helper.decodeBase64(
+                                                    image?.foto.toString()
+                                                )
+                                                Glide.with(applicationContext)
+                                                    .load(decodedImageURL)
+                                                    .placeholder(R.drawable.image_placeholder)
+                                                    .into(submissionImage)
+                                            } else {
+                                                Glide.with(applicationContext)
+                                                    .load(InitAPI.IMAGE_URL + image?.foto)
+                                                    .placeholder(R.drawable.image_placeholder)
+                                                    .into(submissionImage)
+                                            }
                                         }
                                     }
                                     submissionName.text = data.judulKasus
@@ -185,8 +212,10 @@ class SubmissionDetailActivity : AppCompatActivity() {
                                         }
                                     }
                                     submissionDescription.text = data.keterangan
-                                    machineCode.text = data.kodeMesin
-                                    machineName.text = data.namaMesin
+                                    machineCode.text =
+                                        if (data.kodeMesin == "" || data.kodeMesin == null) data.kodeMesin else "-"
+                                    machineName.text =
+                                        if (data.namaMesin == "" || data.namaMesin == null) data.namaMesin else "-"
                                     try {
                                         InitAPI.getAPI.getUserList()
                                             .enqueue(object : Callback<List<UserListResponse>> {
@@ -210,6 +239,7 @@ class SubmissionDetailActivity : AppCompatActivity() {
                                                             }
                                                         }
                                                     } else {
+                                                        user.text = "Can't retrieve Reporter's name"
                                                         Log.e("ERROR", response.message())
                                                     }
                                                 }
@@ -218,16 +248,21 @@ class SubmissionDetailActivity : AppCompatActivity() {
                                                     call: Call<List<UserListResponse>?>,
                                                     throwable: Throwable
                                                 ) {
+                                                    user.text = "Can't retrieve Reporter's name"
+                                                    Log.e("ERROR", throwable.toString())
                                                     throwable.printStackTrace()
                                                 }
                                             })
                                     } catch (exception: Exception) {
+                                        user.text = "Can't retrieve Reporter's name"
+                                        Log.e("ERROR", exception.toString())
                                         exception.printStackTrace()
                                     }
                                     department.text = data.dept
                                     inputTime.text = data.tglInput
                                     location.text = data.lokasi
-                                    reportTime.text = data.tglWaktuStart
+                                    reportTime.text =
+                                        if (data.tglWaktuStart == "" || data.tglWaktuStart == null) data.tglWaktuStart else "-"
                                     actualTime.text = if (data.tglWaktuActual != ""
                                         || data.tglWaktuActual != "0000-00-00 00:00:00"
                                         || data.tglWaktuActual != null
@@ -265,8 +300,8 @@ class SubmissionDetailActivity : AppCompatActivity() {
                                     )
                                     .setMessage("Failed to get submission detail")
                                     .show()
+                                Log.e("ERROR", response.message())
                                 finish()
-                                Log.e("Submission Detail", response.message())
                             }
                         }
 
@@ -274,7 +309,6 @@ class SubmissionDetailActivity : AppCompatActivity() {
                             call: Call<List<SubmissionDetailResponse>?>,
                             throwable: Throwable
                         ) {
-                            throwable.printStackTrace()
                             CustomToast.getInstance(applicationContext)
                                 .setBackgroundColor(
                                     ResourcesCompat.getColor(
@@ -288,11 +322,28 @@ class SubmissionDetailActivity : AppCompatActivity() {
                                 )
                                 .setMessage("Something went wrong, please try again later")
                                 .show()
+                            throwable.printStackTrace()
+                            Log.e("ERROR", throwable.toString())
                             finish()
                         }
                     })
             } catch (exception: Exception) {
+                CustomToast.getInstance(applicationContext)
+                    .setBackgroundColor(
+                        ResourcesCompat.getColor(
+                            resources, R.color.custom_toast_background_failed, theme
+                        )
+                    )
+                    .setFontColor(
+                        ResourcesCompat.getColor(
+                            resources, R.color.custom_toast_font_failed, theme
+                        )
+                    )
+                    .setMessage("Something went wrong, please try again later")
+                    .show()
                 exception.printStackTrace()
+                Log.e("ERROR", exception.toString())
+                finish()
             }
         }
     }

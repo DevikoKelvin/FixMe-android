@@ -1,6 +1,10 @@
 [versions]
+# Plugins
 agp = "8.7.2"
 kotlin = "1.9.24"
+googleServices = "4.4.2"
+
+# Dependencies
 coreKtx = "1.13.1"
 junit = "4.13.2"
 junitVersion = "1.2.1"
@@ -9,12 +13,17 @@ appcompat = "1.7.0"
 material = "1.12.0"
 activity = "1.9.3"
 constraintlayout = "2.2.0"
+
+# Third-party Dependencies
+firebaseBom = "33.6.0"
 retrofit = "2.11.0"
+okhttp3 = "4.12.0"
 converterGson = "2.11.0"
 loggingInterceptor = "5.0.0-alpha.14"
 lottie = "6.4.0"
 glide = "4.16.0"
 swipeRefreshLayout = "1.1.0"
+circleIndicator = "2.1.6"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -26,14 +35,20 @@ material = { group = "com.google.android.material", name = "material", version.r
 androidx-activity = { group = "androidx.activity", name = "activity", version.ref = "activity" }
 androidx-constraintlayout = { group = "androidx.constraintlayout", name = "constraintlayout", version.ref = "constraintlayout" }
 
+# Third-party Libraries
+firebase-bom = { group = "com.google.firebase", name = "firebase-bom", version.ref = "firebaseBom" }
+firebase-messaging = { module = "com.google.firebase:firebase-messaging" }
+firebase-analytics = { module = "com.google.firebase:firebase-analytics" }
+okhttp3 = { group = "com.squareup.okhttp3", name = "okhttp", version.ref = "okhttp3" }
 retrofit = { group = "com.squareup.retrofit2", name = "retrofit", version.ref = "retrofit" }
 converter-gson = { group = "com.squareup.retrofit2", name = "converter-gson", version.ref = "converterGson" }
 logging-interceptor = { group = "com.squareup.okhttp3", name = "logging-interceptor", version.ref = "loggingInterceptor" }
 lottie = { group = "com.airbnb.android", name = "lottie", version.ref = "lottie" }
 glide = { group = "com.github.bumptech.glide", name = "glide", version.ref = "glide" }
 swipeRefreshLayout = { group = "androidx.swiperefreshlayout", name = "swiperefreshlayout", version.ref = "swipeRefreshLayout" }
+circleIndicator = { group = "me.relex", name = "circleIndicator", version.ref = "circleIndicator" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
-
+google-services = { id = "com.google.gms.google-services", version.ref = "googleServices" }

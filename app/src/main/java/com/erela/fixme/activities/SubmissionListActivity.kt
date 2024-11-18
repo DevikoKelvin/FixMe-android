@@ -7,9 +7,12 @@ import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.erela.fixme.R
-import com.erela.fixme.adapters.SubmissionRvAdapter
+import com.erela.fixme.activities.CreateSubmissionActivity
+import com.erela.fixme.adapters.recycler_view.SubmissionRvAdapter
+import com.erela.fixme.custom_views.CustomToast
 import com.erela.fixme.databinding.ActivitySubmissionListBinding
 import com.erela.fixme.helpers.InitAPI
 import com.erela.fixme.helpers.UserDataHelper
@@ -109,7 +112,22 @@ class SubmissionListActivity : AppCompatActivity(), SubmissionRvAdapter.OnSubmis
                                     Log.e("Department List", response.body().toString())
                                 }
                             } else {
+                                CustomToast.getInstance(applicationContext)
+                                    .setMessage("Something went wrong, please try again.")
+                                    .setFontColor(
+                                        ContextCompat.getColor(
+                                            this@SubmissionListActivity,
+                                            R.color.custom_toast_font_failed
+                                        )
+                                    )
+                                    .setBackgroundColor(
+                                        ContextCompat.getColor(
+                                            this@SubmissionListActivity,
+                                            R.color.custom_toast_background_failed
+                                        )
+                                    ).show()
                                 Log.e("ERROR", response.message())
+                                finish()
                             }
                         }
 
@@ -117,12 +135,43 @@ class SubmissionListActivity : AppCompatActivity(), SubmissionRvAdapter.OnSubmis
                             call: Call<List<DepartmentListResponse>>,
                             throwable: Throwable
                         ) {
+                            Log.e("ERROR", throwable.toString())
                             loadingBar.visibility = View.GONE
+                            CustomToast.getInstance(applicationContext)
+                                .setMessage("Something went wrong, please try again.")
+                                .setFontColor(
+                                    ContextCompat.getColor(
+                                        this@SubmissionListActivity,
+                                        R.color.custom_toast_font_failed
+                                    )
+                                )
+                                .setBackgroundColor(
+                                    ContextCompat.getColor(
+                                        this@SubmissionListActivity,
+                                        R.color.custom_toast_background_failed
+                                    )
+                                ).show()
                             throwable.printStackTrace()
+                            finish()
                         }
                     })
             } catch (exception: Exception) {
                 loadingBar.visibility = View.GONE
+                CustomToast.getInstance(applicationContext)
+                    .setMessage("Something went wrong, please try again.")
+                    .setFontColor(
+                        ContextCompat.getColor(
+                            this@SubmissionListActivity,
+                            R.color.custom_toast_font_failed
+                        )
+                    )
+                    .setBackgroundColor(
+                        ContextCompat.getColor(
+                            this@SubmissionListActivity,
+                            R.color.custom_toast_background_failed
+                        )
+                    ).show()
+                Log.e("ERROR", exception.toString())
                 exception.printStackTrace()
             }
         }
@@ -149,6 +198,23 @@ class SubmissionListActivity : AppCompatActivity(), SubmissionRvAdapter.OnSubmis
                                         }
                                         adapter.notifyDataSetChanged()
                                     }
+                                } else {
+                                    loadingBar.visibility = View.GONE
+                                    CustomToast.getInstance(applicationContext)
+                                        .setMessage("Something went wrong, please try again.")
+                                        .setFontColor(
+                                            ContextCompat.getColor(
+                                                this@SubmissionListActivity,
+                                                R.color.custom_toast_font_failed
+                                            )
+                                        )
+                                        .setBackgroundColor(
+                                            ContextCompat.getColor(
+                                                this@SubmissionListActivity,
+                                                R.color.custom_toast_background_failed
+                                            )
+                                        ).show()
+                                    Log.e("ERROR", response.message())
                                 }
                             }
 
@@ -157,6 +223,20 @@ class SubmissionListActivity : AppCompatActivity(), SubmissionRvAdapter.OnSubmis
                                 throwable: Throwable
                             ) {
                                 loadingBar.visibility = View.GONE
+                                CustomToast.getInstance(applicationContext)
+                                    .setMessage("Something went wrong, please try again.")
+                                    .setFontColor(
+                                        ContextCompat.getColor(
+                                            this@SubmissionListActivity,
+                                            R.color.custom_toast_font_failed
+                                        )
+                                    )
+                                    .setBackgroundColor(
+                                        ContextCompat.getColor(
+                                            this@SubmissionListActivity,
+                                            R.color.custom_toast_background_failed
+                                        )
+                                    ).show()
                                 throwable.printStackTrace()
                             }
                         })
@@ -166,6 +246,20 @@ class SubmissionListActivity : AppCompatActivity(), SubmissionRvAdapter.OnSubmis
                 }
             } catch (exception: Exception) {
                 loadingBar.visibility = View.GONE
+                CustomToast.getInstance(applicationContext)
+                    .setMessage("Something went wrong, please try again.")
+                    .setFontColor(
+                        ContextCompat.getColor(
+                            this@SubmissionListActivity,
+                            R.color.custom_toast_font_failed
+                        )
+                    )
+                    .setBackgroundColor(
+                        ContextCompat.getColor(
+                            this@SubmissionListActivity,
+                            R.color.custom_toast_background_failed
+                        )
+                    ).show()
                 exception.printStackTrace()
             }
         }
