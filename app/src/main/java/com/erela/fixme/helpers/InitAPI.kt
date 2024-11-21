@@ -10,7 +10,7 @@ import java.util.concurrent.TimeUnit
 
 object InitAPI {
     // Local IP
-    const val MAIN_URL = "http://192.168.3.245/fixme"
+    const val MAIN_URL = "http://192.168.3.109:88/fixme"
     const val SOCKET_URL = "wss://ntfy.sh/erela_pengaduan001/ws"
     const val BASE_URL = "$MAIN_URL/apimobile2/"
     const val IMAGE_URL = "$MAIN_URL/assets/upload/"
