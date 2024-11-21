@@ -185,7 +185,7 @@ class ImageZoomHelper(activity: Activity, view: View) : ScaleGestureDetector.OnS
     private fun hideSystemUI() {
         // mTargetContainer.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LAYOUT_STABLE
         //     or View.SYSTEM_UI_FLAG_HIDE_NAVIGATION // hide nav bar
-        //     or View.SYSTEM_UI_FLAG_FULLSCREEN // hide status bar
+        //     or View.SYSTEM_UI_FLAG_FULLSCREEN // hide approve bar
     }
 
     private fun showSystemUI() {

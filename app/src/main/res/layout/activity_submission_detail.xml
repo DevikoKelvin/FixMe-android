@@ -54,9 +54,8 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_marginTop="8dp"
-        android:layout_marginBottom="8dp"
         android:visibility="gone"
-        app:layout_constraintBottom_toTopOf="@+id/buttonContainer"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/toolBar">
@@ -180,11 +179,13 @@
                     android:orientation="vertical">
 
                     <TextView
+                        android:id="@+id/machineCodeText"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/machine_code" />
 
                     <TextView
+                        android:id="@+id/machineNameText"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/machine_name" />
@@ -307,6 +308,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="16dp"
+                android:layout_marginBottom="75dp"
                 android:orientation="horizontal">
 
                 <ImageView
@@ -380,23 +382,53 @@
         </LinearLayout>
     </ScrollView>
 
-    <LinearLayout
+    <RelativeLayout
         android:id="@+id/buttonContainer"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:visibility="gone"
+        android:visibility="visible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent">
 
         <com.google.android.material.card.MaterialCardView
-            android:id="@+id/onProgressButton"
-            android:layout_width="0dp"
+            android:id="@+id/statusMessageContainer"
+            android:layout_width="match_parent"
             android:layout_height="46dp"
-            android:layout_gravity="center_vertical"
-            android:layout_margin="16dp"
-            android:layout_weight="1"
+            android:layout_alignParentStart="true"
+            android:layout_centerVertical="true"
+            android:layout_marginHorizontal="16dp"
+            android:layout_marginVertical="16dp"
+            android:layout_toStartOf="@+id/editButton"
+            android:visibility="gone"
+            app:cardBackgroundColor="@color/custom_toast_background_soft_blue"
+            app:cardCornerRadius="50dp"
+            app:cardElevation="4dp"
+            app:strokeWidth="0dp">
+
+            <TextView
+                android:id="@+id/statusMessage"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:drawablePadding="4dp"
+                android:textAlignment="center"
+                android:textColor="@color/custom_toast_background_normal_dark_gray"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                tools:ignore="UseCompatTextViewDrawableXml"
+                tools:text="Waiting for action from hendrick" />
+        </com.google.android.material.card.MaterialCardView>
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/onProgressButton"
+            android:layout_width="match_parent"
+            android:layout_height="46dp"
+            android:layout_alignParentStart="true"
+            android:layout_centerVertical="true"
+            android:layout_marginHorizontal="16dp"
+            android:layout_marginVertical="16dp"
+            android:layout_toStartOf="@+id/editButton"
             android:visibility="gone"
             app:cardBackgroundColor="@color/custom_toast_font_normal_gray"
             app:cardCornerRadius="50dp"
@@ -418,12 +450,13 @@
 
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/actionButton"
-            android:layout_width="0dp"
+            android:layout_width="match_parent"
             android:layout_height="46dp"
-            android:layout_gravity="center_vertical"
-            android:layout_marginStart="16dp"
-            android:layout_marginEnd="16dp"
-            android:layout_weight="1"
+            android:layout_alignParentStart="true"
+            android:layout_centerVertical="true"
+            android:layout_marginHorizontal="16dp"
+            android:layout_marginVertical="16dp"
+            android:layout_toStartOf="@+id/editButton"
             android:visibility="gone"
             app:cardBackgroundColor="@color/button_color"
             app:cardCornerRadius="50dp"
@@ -444,6 +477,8 @@
             android:id="@+id/editButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
             android:layout_marginTop="16dp"
             android:layout_marginEnd="16dp"
             android:layout_marginBottom="16dp"
@@ -452,7 +487,7 @@
             app:backgroundTint="@color/custom_toast_background_success"
             app:fabSize="normal"
             tools:ignore="ContentDescription" />
-    </LinearLayout>
+    </RelativeLayout>
 
     <ProgressBar
         android:id="@+id/loadingBar"

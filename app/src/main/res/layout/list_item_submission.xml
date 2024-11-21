@@ -66,11 +66,13 @@
                 android:orientation="vertical">
 
                 <TextView
+                    android:id="@+id/machineCodeText"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/machine_code" />
 
                 <TextView
+                    android:id="@+id/machineNameText"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/machine_name" />

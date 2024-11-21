@@ -11,8 +11,9 @@ import com.erela.fixme.objects.SubmissionDetailResponse
 import com.google.android.material.bottomsheet.BottomSheetDialog
 
 class SubmissionActionBottomSheet(context: Context, val data: SubmissionDetailResponse) :
-    BottomSheetDialog(context) {
+    BottomSheetDialog(context), UpdateStatusBottomSheet.OnUpdateSuccessListener {
     private lateinit var binding: BsSubmissionActionBinding
+    private lateinit var onUpdateSuccessListener: OnUpdateSuccessListener
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -33,6 +34,24 @@ class SubmissionActionBottomSheet(context: Context, val data: SubmissionDetailRe
                 1.toString() -> {
                     onTrialDoneButtonContainer.visibility = View.GONE
                     approveRejectButtonContainer.visibility = View.VISIBLE
+                    approveButton.setOnClickListener {
+                        val bottomSheet = UpdateStatusBottomSheet(context, data, true).also { bottomSheet ->
+                            with(bottomSheet) {
+                                setOnUpdateSuccessListener(this@SubmissionActionBottomSheet)
+                            }
+                        }
+                        if (bottomSheet.window != null)
+                            bottomSheet.show()
+                    }
+                    rejectButton.setOnClickListener {
+                        val bottomSheet = UpdateStatusBottomSheet(context, data, false).also { bottomSheet ->
+                            with(bottomSheet) {
+                                setOnUpdateSuccessListener(this@SubmissionActionBottomSheet)
+                            }
+                        }
+                        if (bottomSheet.window != null)
+                            bottomSheet.show()
+                    }
                 }
                 // Approved
                 2.toString() -> {
@@ -41,5 +60,18 @@ class SubmissionActionBottomSheet(context: Context, val data: SubmissionDetailRe
                 }
             }
         }
+    }
+
+    fun onUpdateSuccessListener(onUpdateSuccessListener: OnUpdateSuccessListener) {
+        this.onUpdateSuccessListener = onUpdateSuccessListener
+    }
+
+    override fun onUpdateSuccess() {
+        onUpdateSuccessListener.onUpdateSuccess()
+        dismiss()
+    }
+
+    interface OnUpdateSuccessListener {
+        fun onUpdateSuccess()
     }
 }

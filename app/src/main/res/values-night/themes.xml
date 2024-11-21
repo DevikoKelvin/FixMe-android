@@ -4,6 +4,8 @@
         <!-- Customize your dark theme here. -->
         <item name="android:statusBarColor">@android:color/white</item>
         <item name="android:windowLightStatusBar">true</item>
+        <item name="colorPrimary">@color/button_color</item>
+        <item name="colorSecondary">@color/white</item>
         <!-- <item name="colorPrimary">@color/my_dark_primary</item> -->
     </style>
 </resources>

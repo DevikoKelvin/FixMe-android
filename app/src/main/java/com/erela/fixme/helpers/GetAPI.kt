@@ -5,9 +5,12 @@ import com.erela.fixme.objects.DepartmentListResponse
 import com.erela.fixme.objects.InboxResponse
 import com.erela.fixme.objects.LoginResponse
 import com.erela.fixme.objects.NotificationResponse
+import com.erela.fixme.objects.StarconnectUserResponse
 import com.erela.fixme.objects.SubmissionDetailResponse
 import com.erela.fixme.objects.SubmissionListResponse
 import com.erela.fixme.objects.SubmitSubmissionResponse
+import com.erela.fixme.objects.UpdateStatusResponse
+import com.erela.fixme.objects.UserDetailResponse
 import com.erela.fixme.objects.UserListResponse
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
@@ -25,6 +28,18 @@ import retrofit2.http.PartMap
 interface GetAPI {
     @GET("getusers")
     fun getUserList(): Call<List<UserListResponse>>
+
+    @FormUrlEncoded
+    @POST("getuserdetail")
+    fun getUserDetail(
+        @Field("id_user") idUser: Int
+    ): Call<List<UserDetailResponse>>
+
+    @FormUrlEncoded
+    @POST("getuserfromstarconnect")
+    fun getUserFromStarConnect(
+        @Field("id_user") idUser: Int
+    ): Call<StarconnectUserResponse>
 
     @FormUrlEncoded
     @POST("checklogin")
@@ -74,4 +89,16 @@ interface GetAPI {
     fun submitSubmissionNoAttachment(
         @PartMap() partMap: MutableMap<String, RequestBody>
     ): Call<SubmitSubmissionResponse>
+
+    @FormUrlEncoded
+    @POST("statusupdate")
+    fun updateSubmissionStatus(
+        @Field("id_user") userId: Int,
+        @Field("id") detailSubmissionId: Int,
+        @Field("sts") status: Int,
+        @Field("keterangan") description: String,
+        @Field("user_end") targetUserId: Int,
+        @Field("tgl_pengerjaan") workingDate: String,
+        @Field("waktu_pengerjaan") workingTime: String
+    ): Call<UpdateStatusResponse>
 }

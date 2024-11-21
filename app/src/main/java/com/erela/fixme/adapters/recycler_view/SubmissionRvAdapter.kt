@@ -15,6 +15,7 @@ import com.erela.fixme.helpers.UserDataHelper
 import com.erela.fixme.helpers.UsernameFormatHelper
 import com.erela.fixme.objects.SubmissionListResponse
 import com.erela.fixme.objects.UserData
+import com.erela.fixme.objects.UserDetailResponse
 import com.erela.fixme.objects.UserListResponse
 import retrofit2.Call
 import retrofit2.Callback
@@ -45,27 +46,34 @@ class SubmissionRvAdapter(val context: Context, val data: ArrayList<SubmissionLi
                 submissionName.text = item.judulKasus
                 inputDate.text = item.setTglinput
                 submissionDescription.text = item.keterangan
-                machineCode.text = item.kodeMesin
-                machineName.text = item.namaMesin
+                machineCodeText.text = "${context.getString(R.string.machine_code)}:"
+                machineNameText.text = "${context.getString(R.string.machine_name)}:"
+                machineCode.text = if (item.kodeMesin != null) {
+                     if (item.kodeMesin.isNotEmpty()) item.kodeMesin else "-"
+                } else {
+                    "-"
+                }
+
+                machineName.text = if (item.namaMesin != null) {
+                    if (item.namaMesin.isNotEmpty()) item.namaMesin else "-"
+                } else {
+                    "-"
+                }
                 submissionLocation.text = item.lokasi?.uppercase()
                 reportedBy.text = ""
                 try {
-                    InitAPI.getAPI.getUserList()
-                        .enqueue(object : Callback<List<UserListResponse>> {
+                    InitAPI.getAPI.getUserDetail(item.idUser!!.toInt())
+                        .enqueue(object : Callback<List<UserDetailResponse>> {
                             override fun onResponse(
-                                call: Call<List<UserListResponse>?>,
-                                response: Response<List<UserListResponse>?>
+                                call: Call<List<UserDetailResponse>?>,
+                                response: Response<List<UserDetailResponse>?>
                             ) {
                                 if (response.isSuccessful) {
                                     if (response.body() != null) {
-                                        for (i in 0 until response.body()!!.size) {
-                                            if (item.idUser == response.body()?.get(i)?.idUser) {
-                                                reportedBy.text =
-                                                    UsernameFormatHelper.getRealUsername(
-                                                        response.body()?.get(i)?.usern.toString()
-                                                    )
-                                            }
-                                        }
+                                        reportedBy.text =
+                                            UsernameFormatHelper.getRealUsername(
+                                                response.body()?.get(0)?.usern.toString()
+                                            )
                                     }
                                 } else {
                                     reportedBy.text = "Can't retrieve Reporter's name"
@@ -74,7 +82,7 @@ class SubmissionRvAdapter(val context: Context, val data: ArrayList<SubmissionLi
                             }
 
                             override fun onFailure(
-                                call: Call<List<UserListResponse>?>,
+                                call: Call<List<UserDetailResponse>?>,
                                 throwable: Throwable
                             ) {
                                 reportedBy.text = "Can't retrieve Reporter's name"

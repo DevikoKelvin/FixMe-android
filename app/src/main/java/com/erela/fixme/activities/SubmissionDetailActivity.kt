@@ -8,6 +8,7 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
 import com.bumptech.glide.Glide
 import com.erela.fixme.adapters.pager.ImageCarouselPagerAdapter
@@ -16,19 +17,27 @@ import com.erela.fixme.custom_views.CustomToast
 import com.erela.fixme.databinding.ActivitySubmissionDetailBinding
 import com.erela.fixme.helpers.Base64Helper
 import com.erela.fixme.helpers.InitAPI
+import com.erela.fixme.helpers.UserDataHelper
 import com.erela.fixme.helpers.UsernameFormatHelper
 import com.erela.fixme.objects.FotoGaprojectsItem
+import com.erela.fixme.objects.StarconnectUserResponse
 import com.erela.fixme.objects.SubmissionDetailResponse
-import com.erela.fixme.objects.UserListResponse
+import com.erela.fixme.objects.UserData
+import com.erela.fixme.objects.UserDetailResponse
+import org.json.JSONException
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import kotlin.math.PI
 
-class SubmissionDetailActivity : AppCompatActivity() {
+class SubmissionDetailActivity : AppCompatActivity(),
+    SubmissionActionBottomSheet.OnUpdateSuccessListener {
     private lateinit var binding: ActivitySubmissionDetailBinding
     private lateinit var imageData: ArrayList<FotoGaprojectsItem>
     private lateinit var imageCarouselAdapter: ImageCarouselPagerAdapter
     private lateinit var detailId: String
+    private lateinit var userData: UserData
+    private lateinit var userDetail: UserDetailResponse
 
     companion object {
         const val DETAIL_ID = "DETAIL_ID"
@@ -49,6 +58,8 @@ class SubmissionDetailActivity : AppCompatActivity() {
         binding = ActivitySubmissionDetailBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        userData = UserDataHelper(applicationContext).getUserData()
+
         init()
     }
 
@@ -62,7 +73,6 @@ class SubmissionDetailActivity : AppCompatActivity() {
 
             loadingBar.visibility = View.VISIBLE
             contentScrollContainer.visibility = View.GONE
-            buttonContainer.visibility = View.GONE
 
             try {
                 InitAPI.getAPI.getSubmissionDetail(detailId)
@@ -74,10 +84,10 @@ class SubmissionDetailActivity : AppCompatActivity() {
                         ) {
                             loadingBar.visibility = View.GONE
                             contentScrollContainer.visibility = View.VISIBLE
-                            buttonContainer.visibility = View.VISIBLE
                             if (response.isSuccessful) {
                                 if (response.body() != null) {
                                     val data = response.body()!![0]
+                                    Log.e("DATA", data.toString())
                                     if (data.fotoGaprojects!!.isEmpty()) {
                                         imageContainer.visibility = View.GONE
                                     } else {
@@ -138,10 +148,23 @@ class SubmissionDetailActivity : AppCompatActivity() {
                                                 )
                                             )
                                             submissionStatusText.text = "Rejected"
-                                            buttonContainer.visibility = View.GONE
-                                            actionButton.visibility = View.VISIBLE
-                                            editButton.visibility = View.VISIBLE
+                                            actionButton.visibility = View.GONE
+                                            editButton.visibility = View.GONE
                                             onProgressButton.visibility = View.GONE
+                                            statusMessageContainer.visibility = View.VISIBLE
+                                            statusMessageContainer.setCardBackgroundColor(
+                                                ContextCompat.getColor(
+                                                    this@SubmissionDetailActivity,
+                                                    R.color.custom_toast_font_failed
+                                                )
+                                            )
+                                            statusMessage.text = "Rejected by ${data.usernCancel}"
+                                            statusMessage.setTextColor(
+                                                ContextCompat.getColor(
+                                                    this@SubmissionDetailActivity,
+                                                    R.color.white
+                                                )
+                                            )
                                         }
                                         // Pending
                                         1.toString() -> {
@@ -153,10 +176,6 @@ class SubmissionDetailActivity : AppCompatActivity() {
                                                 )
                                             )
                                             submissionStatusText.text = "Pending"
-                                            buttonContainer.visibility = View.VISIBLE
-                                            actionButton.visibility = View.VISIBLE
-                                            editButton.visibility = View.VISIBLE
-                                            onProgressButton.visibility = View.GONE
                                         }
                                         // Approved
                                         2.toString() -> {
@@ -168,6 +187,24 @@ class SubmissionDetailActivity : AppCompatActivity() {
                                                 )
                                             )
                                             submissionStatusText.text = "Approved"
+                                            actionButton.visibility = View.GONE
+                                            editButton.visibility = View.GONE
+                                            onProgressButton.visibility = View.GONE
+                                            statusMessageContainer.visibility = View.VISIBLE
+                                            statusMessageContainer.setCardBackgroundColor(
+                                                ContextCompat.getColor(
+                                                    this@SubmissionDetailActivity,
+                                                    R.color.custom_toast_background_soft_blue
+                                                )
+                                            )
+                                            statusMessage.text =
+                                                "Approved by ${data.usernApprove}\nWaiting for action from ${data.usernUserEnd}"
+                                            statusMessage.setTextColor(
+                                                ContextCompat.getColor(
+                                                    this@SubmissionDetailActivity,
+                                                    R.color.black
+                                                )
+                                            )
                                         }
                                         // On-Progress
                                         3.toString() -> {
@@ -179,7 +216,6 @@ class SubmissionDetailActivity : AppCompatActivity() {
                                                 )
                                             )
                                             submissionStatusText.text = "On Progress"
-                                            buttonContainer.visibility = View.VISIBLE
                                             actionButton.visibility = View.GONE
                                             editButton.visibility = View.GONE
                                             onProgressButton.visibility = View.VISIBLE
@@ -194,10 +230,24 @@ class SubmissionDetailActivity : AppCompatActivity() {
                                                 )
                                             )
                                             submissionStatusText.text = "Done"
-                                            buttonContainer.visibility = View.GONE
-                                            actionButton.visibility = View.VISIBLE
-                                            editButton.visibility = View.VISIBLE
+                                            actionButton.visibility = View.GONE
+                                            editButton.visibility = View.GONE
                                             onProgressButton.visibility = View.GONE
+                                            statusMessageContainer.visibility = View.VISIBLE
+                                            statusMessageContainer.setCardBackgroundColor(
+                                                ContextCompat.getColor(
+                                                    this@SubmissionDetailActivity,
+                                                    R.color.custom_toast_font_success
+                                                )
+                                            )
+                                            statusMessage.text =
+                                                "This issue is done by ${data.usernUserDone}"
+                                            statusMessage.setTextColor(
+                                                ContextCompat.getColor(
+                                                    this@SubmissionDetailActivity,
+                                                    R.color.white
+                                                )
+                                            )
                                         }
                                         // On-Trial
                                         31.toString() -> {
@@ -209,34 +259,57 @@ class SubmissionDetailActivity : AppCompatActivity() {
                                                 )
                                             )
                                             submissionStatusText.text = "On Trial"
+                                            actionButton.visibility = View.GONE
+                                            editButton.visibility = View.GONE
+                                            onProgressButton.visibility = View.GONE
+                                            statusMessageContainer.visibility = View.VISIBLE
+                                            statusMessageContainer.setCardBackgroundColor(
+                                                ContextCompat.getColor(
+                                                    this@SubmissionDetailActivity,
+                                                    R.color.custom_toast_background_warning
+                                                )
+                                            )
+                                            statusMessage.text =
+                                                "The fix is under trial. Wait until it done."
+                                            statusMessage.setTextColor(
+                                                ContextCompat.getColor(
+                                                    this@SubmissionDetailActivity,
+                                                    R.color.black
+                                                )
+                                            )
                                         }
                                     }
                                     submissionDescription.text = data.keterangan
-                                    machineCode.text =
-                                        if (data.kodeMesin == "" || data.kodeMesin == null) data.kodeMesin else "-"
-                                    machineName.text =
-                                        if (data.namaMesin == "" || data.namaMesin == null) data.namaMesin else "-"
+                                    machineCodeText.text = "${getString(R.string.machine_code)}:"
+                                    machineNameText.text = "${getString(R.string.machine_name)}:"
+                                    machineCode.text = if (data.kodeMesin != null) {
+                                        if (data.kodeMesin.isNotEmpty()) data.kodeMesin else "-"
+                                    } else "-"
+                                    machineName.text = if (data.namaMesin != null) {
+                                        if (data.namaMesin.isNotEmpty()) data.namaMesin else "-"
+                                    } else "-"
                                     try {
-                                        InitAPI.getAPI.getUserList()
-                                            .enqueue(object : Callback<List<UserListResponse>> {
+                                        InitAPI.getAPI.getUserDetail(data.idUser!!.toInt())
+                                            .enqueue(object : Callback<List<UserDetailResponse>> {
                                                 override fun onResponse(
-                                                    call: Call<List<UserListResponse>?>,
-                                                    response: Response<List<UserListResponse>?>
+                                                    call: Call<List<UserDetailResponse>?>,
+                                                    response: Response<List<UserDetailResponse>?>
                                                 ) {
                                                     if (response.isSuccessful) {
                                                         if (response.body() != null) {
-                                                            for (i in 0 until response.body()!!.size) {
-                                                                if (data.idUser == response.body()
-                                                                        ?.get(i)?.idUser
-                                                                ) {
-                                                                    user.text =
-                                                                        UsernameFormatHelper.getRealUsername(
-                                                                            response.body()?.get(
-                                                                                i
-                                                                            )?.usern.toString()
-                                                                        )
-                                                                }
-                                                            }
+                                                            userDetail = UserDetailResponse(
+                                                                response.body()!![0].stsAktif,
+                                                                response.body()!![0].usern,
+                                                                response.body()!![0].hakAkses,
+                                                                response.body()!![0].idUser,
+                                                                response.body()!![0].idUserStarconnect,
+                                                                response.body()!![0].passw
+                                                            )
+                                                            user.text =
+                                                                UsernameFormatHelper.getRealUsername(
+                                                                    userDetail.usern.toString()
+                                                                )
+                                                            actionCondition(data, userDetail)
                                                         }
                                                     } else {
                                                         user.text = "Can't retrieve Reporter's name"
@@ -245,7 +318,7 @@ class SubmissionDetailActivity : AppCompatActivity() {
                                                 }
 
                                                 override fun onFailure(
-                                                    call: Call<List<UserListResponse>?>,
+                                                    call: Call<List<UserDetailResponse>?>,
                                                     throwable: Throwable
                                                 ) {
                                                     user.text = "Can't retrieve Reporter's name"
@@ -261,29 +334,28 @@ class SubmissionDetailActivity : AppCompatActivity() {
                                     department.text = data.dept
                                     inputTime.text = data.tglInput
                                     location.text = data.lokasi
-                                    reportTime.text =
-                                        if (data.tglWaktuStart == "" || data.tglWaktuStart == null) data.tglWaktuStart else "-"
-                                    actualTime.text = if (data.tglWaktuActual != ""
-                                        || data.tglWaktuActual != "0000-00-00 00:00:00"
-                                        || data.tglWaktuActual != null
-                                    ) {
-                                        data.tglWaktuActual
-                                    } else
+                                    reportTime.text = if (data.tglWaktuStart != null) {
+                                        if (data.tglWaktuStart == "") "-" else data.tglWaktuStart
+                                    } else {
                                         "-"
-                                    workingTime.text = if (data.tglWaktuPengerjaan != ""
-                                        || data.tglWaktuPengerjaan != "0000-00-00 00:00:00"
-                                        || data.tglWaktuPengerjaan != null
-                                    ) {
-                                        data.tglWaktuPengerjaan
-                                    } else
+                                    }
+
+                                    actualTime.text = if (data.tglWaktuActual != null) {
+                                        if (data.tglWaktuActual.contains(
+                                                "0000-00-00"
+                                            ) || data.tglWaktuActual == ""
+                                        ) "-" else data.tglWaktuActual
+                                    } else {
                                         "-"
-                                    actionButton.setOnClickListener {
-                                        val bottomSheet = SubmissionActionBottomSheet(
-                                            this@SubmissionDetailActivity, data
-                                        )
-                                        if (bottomSheet.window != null) {
-                                            bottomSheet.show()
-                                        }
+                                    }
+
+                                    workingTime.text = if (data.tglWaktuPengerjaan != null) {
+                                        if (data.tglWaktuPengerjaan.contains(
+                                                "0000-00-00"
+                                            ) || data.tglWaktuPengerjaan == ""
+                                        ) "-" else data.tglWaktuPengerjaan
+                                    } else {
+                                        "-"
                                     }
                                 }
                             } else {
@@ -346,5 +418,127 @@ class SubmissionDetailActivity : AppCompatActivity() {
                 finish()
             }
         }
+    }
+
+    private fun actionCondition(data: SubmissionDetailResponse, userDetail: UserDetailResponse) {
+        binding.apply {
+            InitAPI.getAPI.getUserFromStarConnect(data.idUser!!.toInt())
+                .enqueue(object : Callback<StarconnectUserResponse> {
+                    override fun onResponse(
+                        call: Call<StarconnectUserResponse?>,
+                        response: Response<StarconnectUserResponse?>
+                    ) {
+                        try {
+                            if (response.isSuccessful) {
+                                if (response.body() != null) {
+                                    Log.e("Response", response.body().toString())
+                                    when (data.stsGaprojects) {
+                                        1.toString() -> {
+                                            if (response.body()?.mEMORG!!.contains(
+                                                    data.dept.toString()
+                                                )
+                                            ) {
+                                                if (data.idUser.toInt() == userData.id) {
+                                                    actionButton.visibility = View.GONE
+                                                    editButton.visibility = View.VISIBLE
+                                                    onProgressButton.visibility = View.GONE
+                                                } else {
+                                                    if (userDetail.hakAkses!!.toInt() < 2) {
+                                                        actionButton.visibility = View.VISIBLE
+                                                        editButton.visibility = View.GONE
+                                                        onProgressButton.visibility = View.GONE
+                                                    }
+                                                }
+                                            } else {
+                                                if (data.idUser.toInt() == userData.id) {
+                                                    actionButton.visibility = View.GONE
+                                                    editButton.visibility = View.VISIBLE
+                                                    onProgressButton.visibility = View.GONE
+                                                } else {
+                                                    if (userDetail.hakAkses!!.toInt() < 2) {
+                                                        actionButton.visibility = View.GONE
+                                                        editButton.visibility = View.GONE
+                                                        onProgressButton.visibility = View.GONE
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                    actionButton.setOnClickListener {
+                                        val bottomSheet = SubmissionActionBottomSheet(
+                                            this@SubmissionDetailActivity, data
+                                        ).also { bottomSheet ->
+                                            with(bottomSheet) {
+                                                onUpdateSuccessListener(
+                                                    this@SubmissionDetailActivity
+                                                )
+                                            }
+                                        }
+                                        if (bottomSheet.window != null) {
+                                            bottomSheet.show()
+                                        }
+                                    }
+                                }
+                            } else {
+                                CustomToast.getInstance(applicationContext)
+                                    .setBackgroundColor(
+                                        ResourcesCompat.getColor(
+                                            resources, R.color.custom_toast_background_failed, theme
+                                        )
+                                    )
+                                    .setFontColor(
+                                        ResourcesCompat.getColor(
+                                            resources, R.color.custom_toast_font_failed, theme
+                                        )
+                                    )
+                                    .setMessage("Something went wrong, please try again later")
+                                    .show()
+                                Log.e("ERROR", response.message())
+                            }
+                        } catch (jsonException: JSONException) {
+                            CustomToast.getInstance(applicationContext)
+                                .setBackgroundColor(
+                                    ResourcesCompat.getColor(
+                                        resources, R.color.custom_toast_background_failed, theme
+                                    )
+                                )
+                                .setFontColor(
+                                    ResourcesCompat.getColor(
+                                        resources, R.color.custom_toast_font_failed, theme
+                                    )
+                                )
+                                .setMessage("Something went wrong, please try again later")
+                                .show()
+                            jsonException.printStackTrace()
+                            Log.e("ERROR", jsonException.toString())
+                        }
+                    }
+
+                    override fun onFailure(
+                        call: Call<StarconnectUserResponse?>,
+                        throwable: Throwable
+                    ) {
+                        CustomToast.getInstance(applicationContext)
+                            .setBackgroundColor(
+                                ResourcesCompat.getColor(
+                                    resources, R.color.custom_toast_background_failed, theme
+                                )
+                            )
+                            .setFontColor(
+                                ResourcesCompat.getColor(
+                                    resources, R.color.custom_toast_font_failed, theme
+                                )
+                            )
+                            .setMessage("Something went wrong, please try again later")
+                            .show()
+                        throwable.printStackTrace()
+                        Log.e("ERROR", throwable.toString())
+                    }
+                })
+        }
+    }
+
+    override fun onUpdateSuccess() {
+        init()
     }
 }

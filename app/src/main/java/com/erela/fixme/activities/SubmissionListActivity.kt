@@ -10,8 +10,8 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.erela.fixme.R
-import com.erela.fixme.activities.CreateSubmissionActivity
 import com.erela.fixme.adapters.recycler_view.SubmissionRvAdapter
+import com.erela.fixme.bottom_sheets.SubmissionListFilterBottomSheet
 import com.erela.fixme.custom_views.CustomToast
 import com.erela.fixme.databinding.ActivitySubmissionListBinding
 import com.erela.fixme.helpers.InitAPI
@@ -27,6 +27,7 @@ class SubmissionListActivity : AppCompatActivity(), SubmissionRvAdapter.OnSubmis
     private lateinit var binding: ActivitySubmissionListBinding
     private lateinit var adapter: SubmissionRvAdapter
     private lateinit var userData: UserData
+    private var selectedFilter = -1
     private var selectedDepartment: String = ""
     private var submissionArrayList: ArrayList<SubmissionListResponse> = ArrayList()
 
@@ -102,6 +103,8 @@ class SubmissionListActivity : AppCompatActivity(), SubmissionRvAdapter.OnSubmis
                                                     ""
                                                 else
                                                     data[position]
+                                                if (selectedDepartment == "")
+                                                    filterListButton.visibility = View.GONE
                                                 submissionArrayList.clear()
                                                 adapter.notifyDataSetChanged()
                                                 getSubmissionList()
@@ -109,7 +112,6 @@ class SubmissionListActivity : AppCompatActivity(), SubmissionRvAdapter.OnSubmis
 
                                             override fun onNothingSelected(p0: AdapterView<*>?) {}
                                         }
-                                    Log.e("Department List", response.body().toString())
                                 }
                             } else {
                                 CustomToast.getInstance(applicationContext)
@@ -192,11 +194,30 @@ class SubmissionListActivity : AppCompatActivity(), SubmissionRvAdapter.OnSubmis
                                 loadingBar.visibility = View.GONE
                                 if (response.isSuccessful) {
                                     if (response.body() != null) {
-                                        submissionArrayList.clear()
-                                        for (i in 0 until response.body()!!.size) {
-                                            submissionArrayList.add(response.body()!![i])
+                                        filterList(response.body(), selectedFilter)
+                                        filterListButton.visibility = View.VISIBLE
+                                        filterListButton.setOnClickListener {
+                                            val bottomSheet = SubmissionListFilterBottomSheet(
+                                                this@SubmissionListActivity, selectedFilter
+                                            ).also {
+                                                with(it) {
+                                                    setOnFilterListener(object :
+                                                        SubmissionListFilterBottomSheet.OnFilterListener {
+                                                        override fun onFilter(
+                                                            filter: Int,
+                                                            selectedFilter: Int
+                                                        ) {
+                                                            filterList(response.body(), filter)
+                                                            this@SubmissionListActivity.selectedFilter =
+                                                                selectedFilter
+                                                        }
+                                                    })
+                                                }
+                                            }
+
+                                            if (bottomSheet.window != null)
+                                                bottomSheet.show()
                                         }
-                                        adapter.notifyDataSetChanged()
                                     }
                                 } else {
                                     loadingBar.visibility = View.GONE
@@ -261,6 +282,34 @@ class SubmissionListActivity : AppCompatActivity(), SubmissionRvAdapter.OnSubmis
                         )
                     ).show()
                 exception.printStackTrace()
+            }
+        }
+    }
+
+    @SuppressLint("NotifyDataSetChanged")
+    private fun filterList(submissionList: List<SubmissionListResponse>?, filter: Int) {
+        binding.apply {
+            if (filter == -1) {
+                submissionArrayList.clear()
+                for (i in 0 until submissionList!!.size) {
+                    submissionArrayList.add(submissionList[i])
+                }
+            } else {
+                submissionArrayList.clear()
+                for (i in 0 until submissionList!!.size) {
+                    if (submissionList[i].stsGaprojects == filter.toString()) {
+                        submissionArrayList.add(submissionList[i])
+                    }
+                }
+            }
+            adapter.notifyDataSetChanged()
+            emptyListAnimation.playAnimation()
+            if (adapter.itemCount == 0) {
+                rvSubmission.visibility == View.GONE
+                emptyListContainer.visibility = View.VISIBLE
+            } else {
+                rvSubmission.visibility == View.VISIBLE
+                emptyListContainer.visibility = View.GONE
             }
         }
     }

@@ -25,6 +25,7 @@
     <string name="department_destination">Destination Department</string>
     <string name="case_description">Description</string>
     <string name="report_time_and_date">Report Date and Time</string>
+    <string name="start_work_time_and_date">Start of Work Date and Time</string>
     <string name="actual_time_and_date">Actual Date and Time</string>
     <string name="pick_a_date">Pick a Date</string>
     <string name="pick_a_time">Pick a Time</string>
@@ -36,8 +37,17 @@
 
     <string name="submission_list_title">Submission List</string>
     <string name="department_title">Department</string>
-    <string name="machine_code">Machine Code:</string>
-    <string name="machine_name">Machine Name:</string>
+    <string name="filter_list_title">Filter Submission List</string>
+    <string name="filter_list">Filter Submission List by</string>
+    <string name="pending">Pending</string>
+    <string name="rejected">Rejected</string>
+    <string name="approved">Approved</string>
+    <string name="on_progress">On Progress</string>
+    <string name="on_trial">On Trial</string>
+    <string name="done">Done</string>
+    <string name="clear_filter">Clear filter</string>
+    <string name="machine_code">Machine Code</string>
+    <string name="machine_name">Machine Name</string>
     <string name="reported_by">Reported by:</string>
     <string name="submission_detail_title">Submission Detail</string>
     <string name="submission_description">Description</string>
@@ -51,6 +61,7 @@
     <string name="action_on_trial">On Trial</string>
     <string name="action_done">Done</string>
     <string name="action_question">What would you do?</string>
+    <string name="update_status">Update Status</string>
 
     <string name="submission_history_title">Submission History</string>
 </resources>

@@ -22,7 +22,7 @@ class SplashScreenActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         binding.apply {
-            if (!foregroundServiceRunning()) {
+            /*if (!foregroundServiceRunning()) {
                 startForegroundService(
                     Intent(this@SplashScreenActivity, ForegroundServicesHelper::class.java)
                 )
@@ -30,7 +30,7 @@ class SplashScreenActivity : AppCompatActivity() {
                 stopService(
                     Intent(this@SplashScreenActivity, ForegroundServicesHelper::class.java)
                 )
-            }
+            }*/
 
             Handler(mainLooper).postDelayed({
                 erelaMotoSplash.visibility = View.VISIBLE
