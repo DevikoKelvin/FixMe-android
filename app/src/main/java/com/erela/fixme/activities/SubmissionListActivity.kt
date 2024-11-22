@@ -88,7 +88,7 @@ class SubmissionListActivity : AppCompatActivity(), SubmissionRvAdapter.OnSubmis
                                         this@SubmissionListActivity,
                                         R.layout.department_dropdown_item,
                                         R.id.dropdownItemText,
-                                        data
+                                        data.distinct()
                                     )
                                     departmentDropdown.adapter = dropdownAdapter
                                     departmentDropdown.onItemSelectedListener =
@@ -103,8 +103,11 @@ class SubmissionListActivity : AppCompatActivity(), SubmissionRvAdapter.OnSubmis
                                                     ""
                                                 else
                                                     data[position]
-                                                if (selectedDepartment == "")
+                                                if (selectedDepartment == "") {
                                                     filterListButton.visibility = View.GONE
+                                                    rvSubmission.visibility = View.VISIBLE
+                                                    emptyListContainer.visibility = View.GONE
+                                                }
                                                 submissionArrayList.clear()
                                                 adapter.notifyDataSetChanged()
                                                 getSubmissionList()
@@ -304,10 +307,14 @@ class SubmissionListActivity : AppCompatActivity(), SubmissionRvAdapter.OnSubmis
             }
             adapter.notifyDataSetChanged()
             emptyListAnimation.playAnimation()
-            Log.e("Adapter Item Count", adapter.itemCount.toString())
             if (adapter.itemCount == 0) {
-                rvSubmission.visibility = View.GONE
-                emptyListContainer.visibility = View.VISIBLE
+                if (selectedDepartment == "") {
+                    rvSubmission.visibility = View.VISIBLE
+                    emptyListContainer.visibility = View.GONE
+                } else {
+                    rvSubmission.visibility = View.GONE
+                    emptyListContainer.visibility = View.VISIBLE
+                }
             } else {
                 rvSubmission.visibility = View.VISIBLE
                 emptyListContainer.visibility = View.GONE

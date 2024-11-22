@@ -98,7 +98,7 @@ class CreateSubmissionActivity : AppCompatActivity() {
                                         this@CreateSubmissionActivity,
                                         R.layout.department_dropdown_item,
                                         R.id.dropdownItemText,
-                                        data
+                                        data.distinct()
                                     )
                                     departmentDropdown.adapter = dropdownAdapter
                                     departmentDropdown.onItemSelectedListener =
@@ -121,7 +121,7 @@ class CreateSubmissionActivity : AppCompatActivity() {
                                                             R.color.form_field_stroke
                                                         )
                                                 }
-                                                if (position == 1 || position == 4) {
+                                                if (position == 1) {
                                                     machineCodeFieldLayout.visibility = View.VISIBLE
                                                     machineNameFieldLayout.visibility = View.VISIBLE
                                                 } else {
