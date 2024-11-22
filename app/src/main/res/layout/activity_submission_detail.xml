@@ -382,6 +382,33 @@
         </LinearLayout>
     </ScrollView>
 
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/seeProgressButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:visibility="gone"
+        app:cardBackgroundColor="@android:color/transparent"
+        app:cardElevation="0dp"
+        app:contentPaddingBottom="4dp"
+        app:contentPaddingLeft="8dp"
+        app:contentPaddingRight="8dp"
+        app:contentPaddingTop="4dp"
+        app:layout_constraintBottom_toTopOf="@+id/buttonContainer"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:strokeWidth="0dp">
+
+        <TextView
+            android:id="@+id/progressTextMessage"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="@string/see_progress"
+            android:textSize="14sp"
+            android:textStyle="bold" />
+    </com.google.android.material.card.MaterialCardView>
+
     <RelativeLayout
         android:id="@+id/buttonContainer"
         android:layout_width="match_parent"
@@ -436,12 +463,14 @@
             app:strokeWidth="0dp">
 
             <TextView
+                android:id="@+id/onProgressText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:drawableStart="@drawable/baseline_timelapse_24"
                 android:drawablePadding="4dp"
-                android:text="@string/action_on_progress"
+                android:text="@string/message_on_progress"
+                android:textAlignment="center"
                 android:textColor="@color/custom_toast_background_normal_dark_gray"
                 android:textSize="14sp"
                 android:textStyle="bold"

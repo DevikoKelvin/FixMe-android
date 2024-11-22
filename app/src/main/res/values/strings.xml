@@ -57,7 +57,11 @@
     <string name="action_text">Action</string>
     <string name="action_approve">Approve</string>
     <string name="action_reject">Reject</string>
-    <string name="action_on_progress">On Progress</string>
+    <string name="message_on_progress">On Progress</string>
+    <string name="action_on_progress">Start Progress Now</string>
+    <string name="see_progress">See Progress</string>
+    <string name="progress_tracking">Progress Tracking</string>
+    <string name="create_new_progress">Create New Progress</string>
     <string name="action_on_trial">On Trial</string>
     <string name="action_done">Done</string>
     <string name="action_question">What would you do?</string>

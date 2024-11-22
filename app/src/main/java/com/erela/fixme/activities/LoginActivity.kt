@@ -88,6 +88,8 @@ class LoginActivity : AppCompatActivity() {
         binding.apply {
             usernameFieldLayout.error = null
             passwordFieldLayout.error = null
+            loginText.visibility = View.GONE
+            loadingBar.visibility = View.VISIBLE
 
             try {
                 InitAPI.getAPI.login(username, password)

@@ -304,11 +304,12 @@ class SubmissionListActivity : AppCompatActivity(), SubmissionRvAdapter.OnSubmis
             }
             adapter.notifyDataSetChanged()
             emptyListAnimation.playAnimation()
+            Log.e("Adapter Item Count", adapter.itemCount.toString())
             if (adapter.itemCount == 0) {
-                rvSubmission.visibility == View.GONE
+                rvSubmission.visibility = View.GONE
                 emptyListContainer.visibility = View.VISIBLE
             } else {
-                rvSubmission.visibility == View.VISIBLE
+                rvSubmission.visibility = View.VISIBLE
                 emptyListContainer.visibility = View.GONE
             }
         }

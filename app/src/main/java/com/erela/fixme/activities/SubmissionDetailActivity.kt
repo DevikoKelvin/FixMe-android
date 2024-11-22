@@ -12,6 +12,7 @@ import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
 import com.bumptech.glide.Glide
 import com.erela.fixme.adapters.pager.ImageCarouselPagerAdapter
+import com.erela.fixme.bottom_sheets.ProgressTrackingBottomSheet
 import com.erela.fixme.bottom_sheets.SubmissionActionBottomSheet
 import com.erela.fixme.custom_views.CustomToast
 import com.erela.fixme.databinding.ActivitySubmissionDetailBinding
@@ -150,6 +151,7 @@ class SubmissionDetailActivity : AppCompatActivity(),
                                             submissionStatusText.text = "Rejected"
                                             actionButton.visibility = View.GONE
                                             editButton.visibility = View.GONE
+                                            seeProgressButton.visibility = View.GONE
                                             onProgressButton.visibility = View.GONE
                                             statusMessageContainer.visibility = View.VISIBLE
                                             statusMessageContainer.setCardBackgroundColor(
@@ -176,6 +178,7 @@ class SubmissionDetailActivity : AppCompatActivity(),
                                                 )
                                             )
                                             submissionStatusText.text = "Pending"
+                                            seeProgressButton.visibility = View.GONE
                                         }
                                         // Approved
                                         2.toString() -> {
@@ -187,24 +190,33 @@ class SubmissionDetailActivity : AppCompatActivity(),
                                                 )
                                             )
                                             submissionStatusText.text = "Approved"
-                                            actionButton.visibility = View.GONE
-                                            editButton.visibility = View.GONE
-                                            onProgressButton.visibility = View.GONE
-                                            statusMessageContainer.visibility = View.VISIBLE
-                                            statusMessageContainer.setCardBackgroundColor(
-                                                ContextCompat.getColor(
-                                                    this@SubmissionDetailActivity,
-                                                    R.color.custom_toast_background_soft_blue
+                                            if (userData.id == data.idUserEnd?.toInt()) {
+                                                actionButton.visibility = View.VISIBLE
+                                                editButton.visibility = View.GONE
+                                                seeProgressButton.visibility = View.GONE
+                                                onProgressButton.visibility = View.GONE
+                                                statusMessageContainer.visibility = View.GONE
+                                            } else {
+                                                actionButton.visibility = View.GONE
+                                                editButton.visibility = View.GONE
+                                                seeProgressButton.visibility = View.GONE
+                                                onProgressButton.visibility = View.GONE
+                                                statusMessageContainer.visibility = View.VISIBLE
+                                                statusMessageContainer.setCardBackgroundColor(
+                                                    ContextCompat.getColor(
+                                                        this@SubmissionDetailActivity,
+                                                        R.color.custom_toast_background_soft_blue
+                                                    )
                                                 )
-                                            )
-                                            statusMessage.text =
-                                                "Approved by ${data.usernApprove}\nWaiting for action from ${data.usernUserEnd}"
-                                            statusMessage.setTextColor(
-                                                ContextCompat.getColor(
-                                                    this@SubmissionDetailActivity,
-                                                    R.color.black
+                                                statusMessage.text =
+                                                    "Approved by ${data.usernApprove}\nWaiting for action from ${data.usernUserEnd}"
+                                                statusMessage.setTextColor(
+                                                    ContextCompat.getColor(
+                                                        this@SubmissionDetailActivity,
+                                                        R.color.black
+                                                    )
                                                 )
-                                            )
+                                            }
                                         }
                                         // On-Progress
                                         3.toString() -> {
@@ -218,7 +230,18 @@ class SubmissionDetailActivity : AppCompatActivity(),
                                             submissionStatusText.text = "On Progress"
                                             actionButton.visibility = View.GONE
                                             editButton.visibility = View.GONE
+                                            seeProgressButton.visibility = View.GONE
                                             onProgressButton.visibility = View.VISIBLE
+                                            onProgressText.text =
+                                                "On Progress by ${data.usernUserEnd}.\nClick to see progress."
+                                            onProgressButton.setOnClickListener {
+                                                val bottomSheet = ProgressTrackingBottomSheet(
+                                                    this@SubmissionDetailActivity, data
+                                                )
+
+                                                if (bottomSheet.window != null)
+                                                    bottomSheet.show()
+                                            }
                                         }
                                         // Done
                                         4.toString() -> {
@@ -232,6 +255,7 @@ class SubmissionDetailActivity : AppCompatActivity(),
                                             submissionStatusText.text = "Done"
                                             actionButton.visibility = View.GONE
                                             editButton.visibility = View.GONE
+                                            seeProgressButton.visibility = View.GONE
                                             onProgressButton.visibility = View.GONE
                                             statusMessageContainer.visibility = View.VISIBLE
                                             statusMessageContainer.setCardBackgroundColor(
@@ -241,13 +265,21 @@ class SubmissionDetailActivity : AppCompatActivity(),
                                                 )
                                             )
                                             statusMessage.text =
-                                                "This issue is done by ${data.usernUserDone}"
+                                                "This issue is done by ${data.usernUserDone}.\nClick to see progress"
                                             statusMessage.setTextColor(
                                                 ContextCompat.getColor(
                                                     this@SubmissionDetailActivity,
                                                     R.color.white
                                                 )
                                             )
+                                            statusMessageContainer.setOnClickListener {
+                                                val bottomSheet = ProgressTrackingBottomSheet(
+                                                    this@SubmissionDetailActivity, data
+                                                )
+
+                                                if (bottomSheet.window != null)
+                                                    bottomSheet.show()
+                                            }
                                         }
                                         // On-Trial
                                         31.toString() -> {
@@ -261,6 +293,7 @@ class SubmissionDetailActivity : AppCompatActivity(),
                                             submissionStatusText.text = "On Trial"
                                             actionButton.visibility = View.GONE
                                             editButton.visibility = View.GONE
+                                            seeProgressButton.visibility = View.GONE
                                             onProgressButton.visibility = View.GONE
                                             statusMessageContainer.visibility = View.VISIBLE
                                             statusMessageContainer.setCardBackgroundColor(
@@ -270,13 +303,21 @@ class SubmissionDetailActivity : AppCompatActivity(),
                                                 )
                                             )
                                             statusMessage.text =
-                                                "The fix is under trial. Wait until it done."
+                                                "The fix is under trial. Wait until it done.\nClick to see progress."
                                             statusMessage.setTextColor(
                                                 ContextCompat.getColor(
                                                     this@SubmissionDetailActivity,
                                                     R.color.black
                                                 )
                                             )
+                                            statusMessageContainer.setOnClickListener {
+                                                val bottomSheet = ProgressTrackingBottomSheet(
+                                                    this@SubmissionDetailActivity, data
+                                                )
+
+                                                if (bottomSheet.window != null)
+                                                    bottomSheet.show()
+                                            }
                                         }
                                     }
                                     submissionDescription.text = data.keterangan

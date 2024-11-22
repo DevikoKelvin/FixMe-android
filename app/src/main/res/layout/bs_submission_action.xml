@@ -26,14 +26,35 @@
         android:textSize="18sp"
         android:textStyle="bold" />
 
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/startProgressButton"
+        android:layout_width="match_parent"
+        android:layout_height="46dp"
+        android:layout_marginHorizontal="16dp"
+        android:layout_marginVertical="24dp"
+        android:visibility="gone"
+        app:cardBackgroundColor="@color/button_color"
+        app:cardCornerRadius="50dp"
+        app:strokeWidth="0dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="@string/action_on_progress"
+            android:textColor="@color/white"
+            android:textSize="16sp"
+            android:textStyle="bold" />
+    </com.google.android.material.card.MaterialCardView>
+
     <LinearLayout
         android:id="@+id/onTrialDoneButtonContainer"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:visibility="gone"
         android:layout_marginHorizontal="16dp"
         android:layout_marginVertical="24dp"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:visibility="gone">
 
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/onTrialButton"
