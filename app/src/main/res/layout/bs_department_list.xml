@@ -22,15 +22,15 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="16dp"
-        android:text="@string/manage_attachment"
+        android:text="@string/department_destination"
         android:textAlignment="center"
         android:textSize="18sp"
         android:textStyle="bold" />
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/attachmentRv"
+        android:id="@+id/rvDepartmentList"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginVertical="16dp"
-        tools:listitem="@layout/list_item_attachment" />
+        tools:listitem="@layout/list_item_department" />
 </LinearLayout>

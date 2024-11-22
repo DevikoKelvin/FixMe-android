@@ -86,7 +86,7 @@ class SubmissionListActivity : AppCompatActivity(), SubmissionRvAdapter.OnSubmis
                                     }
                                     val dropdownAdapter = ArrayAdapter(
                                         this@SubmissionListActivity,
-                                        R.layout.department_dropdown_item,
+                                        R.layout.general_dropdown_item,
                                         R.id.dropdownItemText,
                                         data.distinct()
                                     )

@@ -1,9 +1,11 @@
 package com.erela.fixme.helpers
 
+import com.erela.fixme.objects.CategoryListResponse
 import com.erela.fixme.objects.ChangePasswordResponse
 import com.erela.fixme.objects.DepartmentListResponse
 import com.erela.fixme.objects.InboxResponse
 import com.erela.fixme.objects.LoginResponse
+import com.erela.fixme.objects.MaterialListResponse
 import com.erela.fixme.objects.NotificationResponse
 import com.erela.fixme.objects.StarconnectUserResponse
 import com.erela.fixme.objects.SubmissionDetailResponse
@@ -63,6 +65,12 @@ interface GetAPI {
 
     @GET("depttuj")
     fun getDepartmentList(): Call<List<DepartmentListResponse>>
+
+    @GET("getkategorilist")
+    fun getCategoryList(): Call<List<CategoryListResponse>>
+
+    @GET("getmateriallist")
+    fun getMaterialList(): Call<List<MaterialListResponse>>
 
     @FormUrlEncoded
     @POST("listpengajuan")

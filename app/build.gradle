@@ -6,12 +6,13 @@ plugins {
 
 android {
     namespace 'com.erela.fixme'
-    compileSdk 34
+    compileSdk 35
 
     defaultConfig {
         applicationId "com.erela.fixme"
         minSdk 26
-        targetSdk 34
+        //noinspection EditedTargetSdkVersion
+        targetSdk 35
         versionCode 2
         versionName "2.0"
 
@@ -51,6 +52,7 @@ dependencies {
     implementation libs.swipeRefreshLayout
 
     // 3rd-party
+    implementation libs.flexbox
     implementation libs.lottie
     implementation libs.glide
     implementation libs.circleIndicator

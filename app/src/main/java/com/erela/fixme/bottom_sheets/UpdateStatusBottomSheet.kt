@@ -17,7 +17,6 @@ import android.widget.ArrayAdapter
 import android.widget.TimePicker
 import androidx.core.content.ContextCompat
 import com.erela.fixme.R
-import com.erela.fixme.activities.CreateSubmissionActivity
 import com.erela.fixme.custom_views.CustomToast
 import com.erela.fixme.databinding.BsUpdateStatusBinding
 import com.erela.fixme.helpers.InitAPI
@@ -141,7 +140,7 @@ class UpdateStatusBottomSheet(
                                     }
                                     val dropdownAdapter = ArrayAdapter(
                                         context,
-                                        R.layout.department_dropdown_item,
+                                        R.layout.general_dropdown_item,
                                         R.id.dropdownItemText,
                                         data
                                     )
@@ -275,7 +274,7 @@ class UpdateStatusBottomSheet(
                                         )
                                         val dropdownAdapter = ArrayAdapter(
                                             context,
-                                            R.layout.department_dropdown_item,
+                                            R.layout.general_dropdown_item,
                                             R.id.dropdownItemText,
                                             data
                                         )

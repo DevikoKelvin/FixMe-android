@@ -1,5 +1,6 @@
 package com.erela.fixme.activities
 
+import android.annotation.SuppressLint
 import android.app.DatePickerDialog
 import android.app.TimePickerDialog
 import android.content.ClipData
@@ -23,12 +24,14 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import com.erela.fixme.R
+import com.erela.fixme.bottom_sheets.DepartmentListBottomSheet
 import com.erela.fixme.bottom_sheets.ManagePhotoBottomSheet
 import com.erela.fixme.custom_views.CustomToast
 import com.erela.fixme.databinding.ActivityCreateSubmissionBinding
 import com.erela.fixme.helpers.InitAPI
 import com.erela.fixme.helpers.PermissionHelper
 import com.erela.fixme.helpers.UserDataHelper
+import com.erela.fixme.objects.CategoryListResponse
 import com.erela.fixme.objects.DepartmentListResponse
 import com.erela.fixme.objects.SubmitSubmissionResponse
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
@@ -50,7 +53,9 @@ import java.util.Locale
 
 class CreateSubmissionActivity : AppCompatActivity() {
     private lateinit var binding: ActivityCreateSubmissionBinding
-    private var selectedDepartment: String = ""
+    private val arrayMaterial = ArrayList<Int>()
+    private var selectedCategory: Int = 0
+    private var selectedDepartment: Int = 0
     val imageArrayUri = ArrayList<Uri>()
     private var calendar = Calendar.getInstance()
     private var isFormEmpty = arrayOf(
@@ -78,76 +83,11 @@ class CreateSubmissionActivity : AppCompatActivity() {
                 onBackPressedDispatcher.onBackPressed()
             }
 
-            try {
-                InitAPI.getAPI.getDepartmentList()
-                    .enqueue(object : Callback<List<DepartmentListResponse>> {
-                        override fun onResponse(
-                            call: Call<List<DepartmentListResponse>>,
-                            response: Response<List<DepartmentListResponse>>
-                        ) {
-                            if (response.isSuccessful) {
-                                if (response.body() != null) {
-                                    val data: ArrayList<String> = ArrayList()
-                                    data.add("Select Department")
-                                    for (i in 0 until response.body()!!.size) {
-                                        data.add(
-                                            response.body()!![i].namaDept.toString()
-                                        )
-                                    }
-                                    val dropdownAdapter = ArrayAdapter(
-                                        this@CreateSubmissionActivity,
-                                        R.layout.department_dropdown_item,
-                                        R.id.dropdownItemText,
-                                        data.distinct()
-                                    )
-                                    departmentDropdown.adapter = dropdownAdapter
-                                    departmentDropdown.onItemSelectedListener =
-                                        object : AdapterView.OnItemSelectedListener {
-                                            override fun onItemSelected(
-                                                parent: AdapterView<*>?,
-                                                view: View?,
-                                                position: Int,
-                                                id: Long
-                                            ) {
-                                                selectedDepartment = if (position == 0)
-                                                    ""
-                                                else
-                                                    data[position]
-                                                isFormEmpty[2] = selectedDepartment != ""
-                                                if (selectedDepartment != "") {
-                                                    departmentDropdownLayout.strokeColor =
-                                                        ContextCompat.getColor(
-                                                            this@CreateSubmissionActivity,
-                                                            R.color.form_field_stroke
-                                                        )
-                                                }
-                                                if (position == 1) {
-                                                    machineCodeFieldLayout.visibility = View.VISIBLE
-                                                    machineNameFieldLayout.visibility = View.VISIBLE
-                                                } else {
-                                                    machineCodeFieldLayout.visibility = View.GONE
-                                                    machineNameFieldLayout.visibility = View.GONE
-                                                }
-                                            }
+            machineCodeFieldLayout.visibility = View.GONE
+            machineNameFieldLayout.visibility = View.GONE
 
-                                            override fun onNothingSelected(p0: AdapterView<*>?) {}
-                                        }
-                                }
-                            } else {
-                                Log.e("ERROR", response.message())
-                            }
-                        }
-
-                        override fun onFailure(
-                            call: Call<List<DepartmentListResponse>>,
-                            throwable: Throwable
-                        ) {
-                            throwable.printStackTrace()
-                        }
-                    })
-            } catch (exception: Exception) {
-                exception.printStackTrace()
-            }
+            getDepartmentList()
+            getCategoryList()
 
             reportDateButton.setOnClickListener {
                 reportDateButton.strokeColor = ContextCompat.getColor(
@@ -190,59 +130,7 @@ class CreateSubmissionActivity : AppCompatActivity() {
                 ).show()
             }
 
-            actualDateButton.setOnClickListener {
-                DatePickerDialog(
-                    this@CreateSubmissionActivity,
-                    { _, year, month, dayOfMonth ->
-                        val selectedDate = Calendar.getInstance()
-                        selectedDate.set(year, month, dayOfMonth)
-                        val dateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
-                        val formattedDate = dateFormat.format(selectedDate.time)
-                        actualDateText.text = formattedDate
-                    }, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH),
-                    calendar.get(Calendar.DAY_OF_MONTH)
-                ).show()
-            }
-
-            actualTimeButton.setOnClickListener {
-                TimePickerDialog(
-                    this@CreateSubmissionActivity,
-                    object : TimePickerDialog.OnTimeSetListener {
-                        override fun onTimeSet(
-                            view: TimePicker?, hourOfDay: Int,
-                            minute: Int
-                        ) {
-                            val selectedTime = Calendar.getInstance()
-                            selectedTime.set(Calendar.HOUR_OF_DAY, hourOfDay)
-                            selectedTime.set(Calendar.MINUTE, minute)
-                            val timeFormat = SimpleDateFormat("HH:mm", Locale.getDefault())
-                            val formattedTime = timeFormat.format(selectedTime.time)
-                            actualTimeText.text = formattedTime
-                        }
-                    }, calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE), true
-                ).show()
-            }
-
             chooseFileButton.setOnClickListener {
-                /*if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
-                    if (PermissionHelper.isPermissionGranted(
-                            this@CreateSubmissionActivity,
-                            PermissionHelper.READ_MEDIA_VISUAL_USER_SELECTED
-                        )
-                    ) {
-                        openGallery()
-                    } else {
-                        ActivityCompat.requestPermissions(
-                            this@CreateSubmissionActivity,
-                            arrayOf(PermissionHelper.READ_MEDIA_VISUAL_USER_SELECTED),
-                            PermissionHelper.REQUEST_CODE
-                        )
-                        PermissionHelper.requestPermission(
-                            this@CreateSubmissionActivity,
-                            arrayOf(PermissionHelper.READ_MEDIA_VISUAL_USER_SELECTED)
-                        )
-                    }
-                } else*/
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
                     if (PermissionHelper.isPermissionGranted(
                             this@CreateSubmissionActivity,
@@ -336,10 +224,10 @@ class CreateSubmissionActivity : AppCompatActivity() {
                 ) {
                     if (s!!.isEmpty()) {
                         descriptionFieldLayout.error = "Description"
-                        isFormEmpty[3] = false
+                        isFormEmpty[4] = false
                     } else {
                         descriptionFieldLayout.error = null
-                        isFormEmpty[3] = true
+                        isFormEmpty[4] = true
                     }
                 }
 
@@ -423,12 +311,16 @@ class CreateSubmissionActivity : AppCompatActivity() {
                         )
                         put("judul_kasus", createPartFromString(caseTitleField.text.toString())!!)
                         put("lokasi", createPartFromString(locationField.text.toString())!!)
-                        put("dept_tujuan", createPartFromString(selectedDepartment)!!)
+                        put("departemen", createPartFromString(selectedDepartment.toString())!!)
+                        put("kategori", createPartFromString("")!!)
                         put("kode_mesin", createPartFromString(machineCodeField.text.toString())!!)
                         put("nama_mesin", createPartFromString(machineNameField.text.toString())!!)
                         put("keterangan", createPartFromString(descriptionField.text.toString())!!)
                         put("tgl_lapor", createPartFromString(reportDateText.text.toString())!!)
-                        put("tgl_actual", createPartFromString(actualDateText.text.toString())!!)
+                        put("waktu_lapor", createPartFromString(reportTimeText.text.toString())!!)
+                        for (i in 0 until arrayMaterial.size) {
+                            put("material[$i]", createPartFromString("material")!!)
+                        }
                     }
                     var photoFiles: MutableList<MultipartBody.Part> = ArrayList()
                     if (imageArrayUri.isNotEmpty()) {
@@ -541,7 +433,7 @@ class CreateSubmissionActivity : AppCompatActivity() {
         var validated = 0
         var isFormValid = false
         binding.apply {
-            isFormEmpty[4] =
+            isFormEmpty[7] =
                 reportDateText.text != "Pick a Date" && reportTimeText.text != "Pick a Time"
             for (i in 0 until isFormEmpty.size) {
                 if (isFormEmpty[i] != false)
@@ -567,22 +459,22 @@ class CreateSubmissionActivity : AppCompatActivity() {
                     R.color.custom_toast_font_failed
                 )
 
-            if (selectedDepartment == "")
+            if (selectedDepartment == 0)
                 departmentDropdownLayout.strokeColor = ContextCompat.getColor(
                     this@CreateSubmissionActivity,
                     R.color.custom_toast_font_failed
                 )
             else {
-                if (selectedDepartment == "Engineering" || selectedDepartment == "Utility") {
+                if (selectedDepartment >= 1 && selectedDepartment <= 8) {
                     if (machineCodeField.text!!.isEmpty()) {
                         machineCodeFieldLayout.error = "Enter the Machine Code!"
                     }
                     if (machineNameField.text!!.isEmpty()) {
                         machineNameFieldLayout.error = "Enter the Machine Name!"
                     }
-                    isFormValid = validated == 7
+                    isFormValid = validated == 8
                 } else {
-                    isFormValid = validated == 5
+                    isFormValid = validated == 6
                 }
             }
         }
@@ -661,6 +553,226 @@ class CreateSubmissionActivity : AppCompatActivity() {
                 }, "Select Picture"
             )
         )
+    }
+
+    private fun getDepartmentList() {
+        binding.apply {
+            try {
+                InitAPI.getAPI.getDepartmentList()
+                    .enqueue(object : Callback<List<DepartmentListResponse>> {
+                        override fun onResponse(
+                            call: Call<List<DepartmentListResponse>>,
+                            response: Response<List<DepartmentListResponse>>
+                        ) {
+                            if (response.isSuccessful) {
+                                if (response.body() != null) {
+                                    departmentDropdownLayout.setOnClickListener {
+                                        val departmentBottomSheet = DepartmentListBottomSheet(
+                                            this@CreateSubmissionActivity,
+                                            response.body()!!
+                                        ).also {
+                                            with(it) {
+                                                onDepartmentClickListener(object :
+                                                    DepartmentListBottomSheet.OnDepartmentClickListener {
+                                                    @SuppressLint("SetTextI18n")
+                                                    override fun onDepartmentClick(
+                                                        data: DepartmentListResponse
+                                                    ) {
+                                                        selectedDepartment = data.idDept!!.toInt()
+                                                        selectedDepartmentText.text =
+                                                            "${data.namaDept}\n\"${data.subDept}\""
+                                                        isFormEmpty[2] = selectedDepartment != 0
+                                                        if (selectedDepartment != 0) {
+                                                            departmentDropdownLayout.strokeColor =
+                                                                ContextCompat.getColor(
+                                                                    this@CreateSubmissionActivity,
+                                                                    R.color.form_field_stroke
+                                                                )
+                                                        }
+                                                        if (selectedDepartmentText.text.contains(
+                                                                "Engineering"
+                                                            )
+                                                        ) {
+                                                            machineCodeFieldLayout.visibility =
+                                                                View.VISIBLE
+                                                            machineNameFieldLayout.visibility =
+                                                                View.VISIBLE
+                                                        } else {
+                                                            machineCodeFieldLayout.visibility =
+                                                                View.GONE
+                                                            machineNameFieldLayout.visibility =
+                                                                View.GONE
+                                                        }
+                                                    }
+                                                })
+                                            }
+                                        }
+
+                                        if (departmentBottomSheet.window != null)
+                                            departmentBottomSheet.show()
+                                    }
+                                }
+                            } else {
+                                Log.e("ERROR", response.message())
+                                CustomToast.getInstance(applicationContext)
+                                    .setMessage("Something went wrong, please try again.")
+                                    .setFontColor(
+                                        ContextCompat.getColor(
+                                            this@CreateSubmissionActivity,
+                                            R.color.custom_toast_font_failed
+                                        )
+                                    )
+                                    .setBackgroundColor(
+                                        ContextCompat.getColor(
+                                            this@CreateSubmissionActivity,
+                                            R.color.custom_toast_background_failed
+                                        )
+                                    ).show()
+                                finish()
+                            }
+                        }
+
+                        override fun onFailure(
+                            call: Call<List<DepartmentListResponse>>,
+                            throwable: Throwable
+                        ) {
+                            throwable.printStackTrace()
+                            CustomToast.getInstance(applicationContext)
+                                .setMessage("Something went wrong, please try again.")
+                                .setFontColor(
+                                    ContextCompat.getColor(
+                                        this@CreateSubmissionActivity,
+                                        R.color.custom_toast_font_failed
+                                    )
+                                )
+                                .setBackgroundColor(
+                                    ContextCompat.getColor(
+                                        this@CreateSubmissionActivity,
+                                        R.color.custom_toast_background_failed
+                                    )
+                                ).show()
+                            finish()
+                        }
+                    })
+            } catch (exception: Exception) {
+                exception.printStackTrace()
+                CustomToast.getInstance(applicationContext)
+                    .setMessage("Something went wrong, please try again.")
+                    .setFontColor(
+                        ContextCompat.getColor(
+                            this@CreateSubmissionActivity,
+                            R.color.custom_toast_font_failed
+                        )
+                    )
+                    .setBackgroundColor(
+                        ContextCompat.getColor(
+                            this@CreateSubmissionActivity,
+                            R.color.custom_toast_background_failed
+                        )
+                    ).show()
+                finish()
+            }
+        }
+    }
+
+    private fun getCategoryList() {
+        binding.apply {
+            try {
+                InitAPI.getAPI.getCategoryList()
+                    .enqueue(object : Callback<List<CategoryListResponse>> {
+                        override fun onResponse(
+                            call: Call<List<CategoryListResponse>?>,
+                            response: Response<List<CategoryListResponse>?>
+                        ) {
+                            if (response.isSuccessful) {
+                                if (response.body() != null) {
+                                    val data: ArrayList<String> = ArrayList()
+                                    data.add("Select Category")
+                                    val categoryList = response.body()
+                                    for (i in 0 until categoryList!!.size) {
+                                        data.add(
+                                            categoryList[i].namaKategori!!
+                                        )
+                                    }
+                                    val dropdownAdapter = ArrayAdapter(
+                                        this@CreateSubmissionActivity,
+                                        R.layout.general_dropdown_item,
+                                        R.id.dropdownItemText,
+                                        data.distinct()
+                                    )
+                                    categoryDropdown.adapter = dropdownAdapter
+                                    categoryDropdown.onItemSelectedListener =
+                                        object : AdapterView.OnItemSelectedListener {
+                                            override fun onItemSelected(
+                                                parent: AdapterView<*>?,
+                                                view: View?, position: Int,
+                                                id: Long
+                                            ) {
+                                                selectedCategory = if (position == 0)
+                                                    0
+                                                else
+                                                    categoryList[position - 1].idKategori!!.toInt()
+                                                isFormEmpty[3] = selectedCategory != 0
+                                                if (selectedCategory != 0) {
+                                                    categoryDropdownLayout.strokeColor =
+                                                        ContextCompat.getColor(
+                                                            this@CreateSubmissionActivity,
+                                                            R.color.form_field_stroke
+                                                        )
+                                                }
+                                            }
+
+                                            override fun onNothingSelected(
+                                                parent: AdapterView<*>?
+                                            ) {
+                                            }
+                                        }
+                                }
+                            } else {
+                                Log.e("ERROR", response.message())
+                                CustomToast.getInstance(applicationContext)
+                                    .setMessage("Something went wrong, please try again.")
+                                    .setFontColor(
+                                        ContextCompat.getColor(
+                                            this@CreateSubmissionActivity,
+                                            R.color.custom_toast_font_failed
+                                        )
+                                    )
+                                    .setBackgroundColor(
+                                        ContextCompat.getColor(
+                                            this@CreateSubmissionActivity,
+                                            R.color.custom_toast_background_failed
+                                        )
+                                    ).show()
+                                finish()
+                            }
+                        }
+
+                        override fun onFailure(
+                            call: Call<List<CategoryListResponse>?>,
+                            throwable: Throwable
+                        ) {
+                        }
+                    })
+            } catch (exception: Exception) {
+                exception.printStackTrace()
+                CustomToast.getInstance(applicationContext)
+                    .setMessage("Something went wrong, please try again.")
+                    .setFontColor(
+                        ContextCompat.getColor(
+                            this@CreateSubmissionActivity,
+                            R.color.custom_toast_font_failed
+                        )
+                    )
+                    .setBackgroundColor(
+                        ContextCompat.getColor(
+                            this@CreateSubmissionActivity,
+                            R.color.custom_toast_background_failed
+                        )
+                    ).show()
+                finish()
+            }
+        }
     }
 
     fun createMultipartBody(uri: Uri, multipartName: String): MultipartBody.Part {

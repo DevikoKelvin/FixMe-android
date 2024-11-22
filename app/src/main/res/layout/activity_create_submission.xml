@@ -46,7 +46,8 @@
             android:text="@string/make_submission_title"
             android:textColor="@color/black"
             android:textSize="16sp"
-            android:textStyle="bold" />
+            android:textStyle="bold"
+            tools:ignore="RelativeOverlap" />
 
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/submitButton"
@@ -164,8 +165,37 @@
                 app:strokeColor="@color/form_field_stroke"
                 app:strokeWidth="2dp">
 
+                <TextView
+                    android:id="@+id/selectedDepartmentText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginHorizontal="8dp"
+                    android:text="@string/department_destination"
+                    android:textSize="14sp" />
+            </com.google.android.material.card.MaterialCardView>
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/categoryDropdownLayout"
+                android:layout_width="match_parent"
+                android:layout_height="54dp"
+                android:layout_marginHorizontal="16dp"
+                android:layout_marginTop="8dp"
+                app:cardBackgroundColor="@android:color/transparent"
+                app:cardCornerRadius="50dp"
+                app:cardElevation="0dp"
+                app:contentPaddingBottom="2dp"
+                app:contentPaddingLeft="4dp"
+                app:contentPaddingRight="4dp"
+                app:contentPaddingTop="2dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/toolBar"
+                app:strokeColor="@color/form_field_stroke"
+                app:strokeWidth="2dp">
+
                 <Spinner
-                    android:id="@+id/departmentDropdown"
+                    android:id="@+id/categoryDropdown"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
@@ -311,73 +341,6 @@
 
                     <TextView
                         android:id="@+id/reportTimeText"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:gravity="center_vertical"
-                        android:paddingHorizontal="16dp"
-                        android:text="@string/pick_a_time" />
-                </com.google.android.material.card.MaterialCardView>
-            </LinearLayout>
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginHorizontal="16dp"
-                android:layout_marginTop="8dp"
-                android:text="@string/actual_time_and_date"
-                android:textSize="14sp"
-                android:textStyle="bold" />
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginHorizontal="16dp"
-                android:layout_marginTop="4dp"
-                android:orientation="horizontal">
-
-                <com.google.android.material.card.MaterialCardView
-                    android:id="@+id/actualDateButton"
-                    android:layout_width="match_parent"
-                    android:layout_height="54dp"
-                    android:layout_weight="1"
-                    app:cardBackgroundColor="@android:color/transparent"
-                    app:cardCornerRadius="50dp"
-                    app:cardElevation="0dp"
-                    app:strokeColor="@color/form_field_stroke"
-                    app:strokeWidth="2dp">
-
-                    <TextView
-                        android:id="@+id/actualDateText"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:gravity="center_vertical"
-                        android:paddingHorizontal="16dp"
-                        android:text="@string/pick_a_date" />
-                </com.google.android.material.card.MaterialCardView>
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_marginHorizontal="4dp"
-                    android:text="—"
-                    android:textSize="18sp"
-                    android:textStyle="bold"
-                    tools:ignore="HardcodedText" />
-
-                <com.google.android.material.card.MaterialCardView
-                    android:id="@+id/actualTimeButton"
-                    android:layout_width="match_parent"
-                    android:layout_height="54dp"
-                    android:layout_weight="1"
-                    app:cardBackgroundColor="@android:color/transparent"
-                    app:cardCornerRadius="50dp"
-                    app:cardElevation="0dp"
-                    app:strokeColor="@color/form_field_stroke"
-                    app:strokeWidth="2dp">
-
-                    <TextView
-                        android:id="@+id/actualTimeText"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:gravity="center_vertical"

@@ -22,7 +22,7 @@
     <string name="make_submission_title">Make a Submission</string>
     <string name="case_title">Case Title</string>
     <string name="location">Location</string>
-    <string name="department_destination">Destination Department</string>
+    <string name="department_destination">Select Destination Department</string>
     <string name="case_description">Description</string>
     <string name="report_time_and_date">Report Date and Time</string>
     <string name="start_work_time_and_date">Start of Work Date and Time</string>
