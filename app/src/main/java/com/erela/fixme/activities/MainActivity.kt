@@ -76,7 +76,7 @@ class MainActivity : AppCompatActivity() {
             })
             webSocketClient.connect()
 
-            usernameText.text = "${userData.username}!"
+            usernameText.text = "${userData.name}!"
 
             notificationButton.setOnClickListener {
                 notificationAnimation.playAnimation()

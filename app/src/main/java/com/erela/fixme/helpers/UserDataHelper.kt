@@ -6,14 +6,18 @@ import com.erela.fixme.objects.UserData
 class UserDataHelper(private val context: Context) {
     private val keyId = "key.id"
     private val keyUsername = "key.username"
+    private val keyName = "key.name"
     private val keyStatusPrev = "key.stat.prev"
+    private val keyIdDept = "key.id.dept"
 
-    fun setUserData(id: Int, username: String, privilege: Int) {
+    fun setUserData(id: Int, username: String, name: String, privilege: Int, idDept: Int) {
         SharedPreferencesHelper.getSharedPreferences(context).edit().also {
             it.apply {
                 putInt(keyId, id)
                 putString(keyUsername, username)
+                putString(keyName, name)
                 putInt(keyStatusPrev, privilege)
+                putInt(keyIdDept, idDept)
             }
         }.apply()
     }
@@ -25,7 +29,9 @@ class UserDataHelper(private val context: Context) {
                 userData = UserData(
                     getInt(keyId, 0),
                     getString(keyUsername, "").toString(),
-                    getInt(keyStatusPrev, 0)
+                    getString(keyName, "").toString(),
+                    getInt(keyStatusPrev, 0),
+                    getInt(keyIdDept, 0)
                 )
             }
         }

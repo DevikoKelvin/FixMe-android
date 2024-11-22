@@ -139,8 +139,10 @@ class LoginActivity : AppCompatActivity() {
                                             UserDataHelper(this@LoginActivity)
                                                 .setUserData(
                                                     response.body()?.idUser!!.toInt(),
-                                                    UsernameFormatHelper.getRealUsername(username),
-                                                    response.body()?.hakAkses!!.toInt()
+                                                    username,
+                                                    response.body()?.nama.toString(),
+                                                    response.body()?.hakAkses!!.toInt(),
+                                                    response.body()?.idDept!!.toInt()
                                                 )
                                             Handler(mainLooper).postDelayed({
                                                 CustomToast.getInstance(applicationContext)
