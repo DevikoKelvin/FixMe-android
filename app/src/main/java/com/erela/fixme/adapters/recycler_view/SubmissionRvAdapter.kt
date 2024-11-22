@@ -72,7 +72,7 @@ class SubmissionRvAdapter(val context: Context, val data: ArrayList<SubmissionLi
                                     if (response.body() != null) {
                                         reportedBy.text =
                                             UsernameFormatHelper.getRealUsername(
-                                                response.body()?.get(0)?.usern.toString()
+                                                response.body()?.get(0)?.nama.toString()
                                             )
                                     }
                                 } else {

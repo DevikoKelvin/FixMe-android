@@ -102,6 +102,7 @@ class LoginActivity : AppCompatActivity() {
                             loadingBar.visibility = View.GONE
                             if (response.isSuccessful) {
                                 if (response.body() != null) {
+                                    val name = response.body()?.nama!!.toString()
                                     when (response.body()?.code) {
                                         0 -> {
                                             CustomToast.getInstance(applicationContext)
@@ -140,7 +141,7 @@ class LoginActivity : AppCompatActivity() {
                                                 .setUserData(
                                                     response.body()?.idUser!!.toInt(),
                                                     username,
-                                                    response.body()?.nama.toString(),
+                                                    name,
                                                     response.body()?.hakAkses!!.toInt(),
                                                     response.body()?.idDept!!.toInt()
                                                 )
@@ -148,9 +149,7 @@ class LoginActivity : AppCompatActivity() {
                                                 CustomToast.getInstance(applicationContext)
                                                     .setMessage(
                                                         "Welcome, ${
-                                                            UsernameFormatHelper.getRealUsername(
-                                                                username
-                                                            )
+                                                            name
                                                         }!"
                                                     )
                                                     .setFontColor(

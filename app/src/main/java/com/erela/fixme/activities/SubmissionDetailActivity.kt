@@ -340,16 +340,15 @@ class SubmissionDetailActivity : AppCompatActivity(),
                                                         if (response.body() != null) {
                                                             userDetail = UserDetailResponse(
                                                                 response.body()!![0].stsAktif,
+                                                                response.body()!![0].nama,
                                                                 response.body()!![0].usern,
+                                                                response.body()!![0].idDept,
                                                                 response.body()!![0].hakAkses,
                                                                 response.body()!![0].idUser,
-                                                                response.body()!![0].idUserStarconnect,
-                                                                response.body()!![0].passw
+                                                                response.body()!![0].idUserStarconnect
                                                             )
                                                             user.text =
-                                                                UsernameFormatHelper.getRealUsername(
-                                                                    userDetail.usern.toString()
-                                                                )
+                                                                userDetail.nama
                                                             actionCondition(data, userDetail)
                                                         }
                                                     } else {
