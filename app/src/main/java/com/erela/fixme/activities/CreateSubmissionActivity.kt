@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.app.DatePickerDialog
 import android.app.TimePickerDialog
 import android.content.ClipData
+import android.content.ContentValues
 import android.content.Intent
 import android.content.pm.PackageManager.PERMISSION_GRANTED
 import android.graphics.Bitmap
@@ -11,6 +12,7 @@ import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import android.provider.MediaStore
 import android.provider.OpenableColumns
 import android.text.Editable
 import android.text.TextWatcher
@@ -20,10 +22,12 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.TimePicker
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+import androidx.core.content.FileProvider
 import com.erela.fixme.R
+import com.erela.fixme.adapters.recycler_view.SelectedMaterialsRvAdapters
+import com.erela.fixme.bottom_sheets.ChooseFileBottomSheet
 import com.erela.fixme.bottom_sheets.DepartmentListBottomSheet
 import com.erela.fixme.bottom_sheets.ManagePhotoBottomSheet
 import com.erela.fixme.custom_views.CustomToast
@@ -33,12 +37,17 @@ import com.erela.fixme.helpers.PermissionHelper
 import com.erela.fixme.helpers.UserDataHelper
 import com.erela.fixme.objects.CategoryListResponse
 import com.erela.fixme.objects.DepartmentListResponse
+import com.erela.fixme.objects.MaterialListResponse
 import com.erela.fixme.objects.SubmitSubmissionResponse
+import com.google.android.flexbox.FlexDirection
+import com.google.android.flexbox.FlexWrap
+import com.google.android.flexbox.FlexboxLayoutManager
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import okhttp3.RequestBody.Companion.asRequestBody
 import okhttp3.RequestBody.Companion.toRequestBody
+import org.json.JSONException
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -49,16 +58,22 @@ import java.io.InputStream
 import java.io.OutputStream
 import java.text.SimpleDateFormat
 import java.util.Calendar
+import java.util.Date
 import java.util.Locale
 
 class CreateSubmissionActivity : AppCompatActivity() {
     private lateinit var binding: ActivityCreateSubmissionBinding
-    private val arrayMaterial = ArrayList<Int>()
+    private var selectedDept: DepartmentListResponse? = null
     private var selectedCategory: Int = 0
     private var selectedDepartment: Int = 0
-    val imageArrayUri = ArrayList<Uri>()
+    private var selectedMaterialsArrayList: ArrayList<MaterialListResponse> = ArrayList()
+    private lateinit var materialAdapter: SelectedMaterialsRvAdapters
+    private val imageArrayUri = ArrayList<Uri>()
+    private var cameraCaptureFileName: String = ""
+    private lateinit var imageUri: Uri
     private var calendar = Calendar.getInstance()
     private var isFormEmpty = arrayOf(
+        false,
         false,
         false,
         false,
@@ -77,6 +92,7 @@ class CreateSubmissionActivity : AppCompatActivity() {
         formInput()
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     private fun init() {
         binding.apply {
             backButton.setOnClickListener {
@@ -130,40 +146,151 @@ class CreateSubmissionActivity : AppCompatActivity() {
                 ).show()
             }
 
-            chooseFileButton.setOnClickListener {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-                    if (PermissionHelper.isPermissionGranted(
-                            this@CreateSubmissionActivity,
-                            PermissionHelper.READ_MEDIA_IMAGES
-                        ) || PermissionHelper.isPermissionGranted(
-                            this@CreateSubmissionActivity,
-                            PermissionHelper.READ_MEDIA_VIDEO
-                        )
-                    ) {
-                        openGallery()
-                    } else {
-                        PermissionHelper.requestPermission(
-                            this@CreateSubmissionActivity,
-                            arrayOf(
-                                PermissionHelper.READ_MEDIA_IMAGES,
-                                PermissionHelper.READ_MEDIA_VIDEO
+            selectedMaterialsArrayList.add(
+                MaterialListResponse(
+                    null,
+                    null,
+                    "+",
+                    null,
+                    null,
+                    null
+                )
+            )
+
+            materialAdapter = SelectedMaterialsRvAdapters(
+                this@CreateSubmissionActivity, selectedMaterialsArrayList
+            ).also {
+                with(it) {
+                    setOnMaterialsSetListener(object :
+                        SelectedMaterialsRvAdapters.OnMaterialsSetListener {
+                        override fun onMaterialsSelected(
+                            data: MaterialListResponse
+                        ) {
+                            selectedMaterialsArrayList.remove(
+                                MaterialListResponse(
+                                    null,
+                                    null,
+                                    "+",
+                                    null,
+                                    null,
+                                    null
+                                )
                             )
-                        )
-                    }
-                } else {
-                    if (PermissionHelper.isPermissionGranted(
-                            this@CreateSubmissionActivity,
-                            PermissionHelper.READ_EXTERNAL_STORAGE
-                        )
-                    ) {
-                        openGallery()
-                    } else {
-                        PermissionHelper.requestPermission(
-                            this@CreateSubmissionActivity,
-                            arrayOf(PermissionHelper.READ_EXTERNAL_STORAGE)
-                        )
+                            selectedMaterialsArrayList.add(data)
+                            selectedMaterialsArrayList.add(
+                                MaterialListResponse(
+                                    null,
+                                    null,
+                                    "+",
+                                    null,
+                                    null,
+                                    null
+                                )
+                            )
+                            materialAdapter.notifyDataSetChanged()
+                        }
+
+                        override fun onMaterialsUnselected(
+                            data: MaterialListResponse
+                        ) {
+                            selectedMaterialsArrayList.remove(
+                                MaterialListResponse(
+                                    null,
+                                    null,
+                                    "+",
+                                    null,
+                                    null,
+                                    null
+                                )
+                            )
+                            selectedMaterialsArrayList.remove(data)
+                            selectedMaterialsArrayList.add(
+                                MaterialListResponse(
+                                    null,
+                                    null,
+                                    "+",
+                                    null,
+                                    null,
+                                    null
+                                )
+                            )
+                            materialAdapter.notifyDataSetChanged()
+                        }
+                    })
+                }
+            }
+            rvMaterials.adapter = materialAdapter
+            rvMaterials.layoutManager = FlexboxLayoutManager(
+                this@CreateSubmissionActivity, FlexDirection.ROW, FlexWrap.WRAP
+            )
+            materialAdapter.notifyDataSetChanged()
+
+            chooseFileButton.setOnClickListener {
+                val bottomSheet = ChooseFileBottomSheet(this@CreateSubmissionActivity).also {
+                    with(it) {
+                        setOnChooseFileListener(object :
+                            ChooseFileBottomSheet.OnChooseFileListener {
+                            override fun onOpenCameraClicked() {
+                                if (PermissionHelper.isPermissionGranted(
+                                        this@CreateSubmissionActivity,
+                                        PermissionHelper.CAMERA
+                                    )
+                                ) {
+                                    openCamera()
+                                } else {
+                                    PermissionHelper.requestPermission(
+                                        this@CreateSubmissionActivity,
+                                        arrayOf(PermissionHelper.CAMERA),
+                                        PermissionHelper.REQUEST_CODE_CAMERA
+                                    )
+                                }
+                                dismiss()
+                            }
+
+                            override fun onOpenGalleryClicked() {
+                                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                                    if (PermissionHelper.isPermissionGranted(
+                                            this@CreateSubmissionActivity,
+                                            PermissionHelper.READ_MEDIA_IMAGES
+                                        ) || PermissionHelper.isPermissionGranted(
+                                            this@CreateSubmissionActivity,
+                                            PermissionHelper.READ_MEDIA_VIDEO
+                                        )
+                                    ) {
+                                        openGallery()
+                                    } else {
+                                        PermissionHelper.requestPermission(
+                                            this@CreateSubmissionActivity,
+                                            arrayOf(
+                                                PermissionHelper.READ_MEDIA_IMAGES,
+                                                PermissionHelper.READ_MEDIA_VIDEO
+                                            ),
+                                            PermissionHelper.REQUEST_CODE_GALLERY
+                                        )
+                                    }
+                                } else {
+                                    if (PermissionHelper.isPermissionGranted(
+                                            this@CreateSubmissionActivity,
+                                            PermissionHelper.READ_EXTERNAL_STORAGE
+                                        )
+                                    ) {
+                                        openGallery()
+                                    } else {
+                                        PermissionHelper.requestPermission(
+                                            this@CreateSubmissionActivity,
+                                            arrayOf(PermissionHelper.READ_EXTERNAL_STORAGE),
+                                            PermissionHelper.REQUEST_CODE_GALLERY
+                                        )
+                                    }
+                                }
+                                dismiss()
+                            }
+                        })
                     }
                 }
+
+                if (bottomSheet.window != null)
+                    bottomSheet.show()
             }
         }
     }
@@ -286,7 +413,9 @@ class CreateSubmissionActivity : AppCompatActivity() {
                 loadingBar.visibility = View.VISIBLE
                 val imm = getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
                 imm.hideSoftInputFromWindow(currentFocus?.windowToken, 0)
-                if (!formCheck())
+                if (!formCheck()) {
+                    submitButton.visibility = View.VISIBLE
+                    loadingBar.visibility = View.GONE
                     CustomToast.getInstance(applicationContext)
                         .setMessage("Please make sure all fields in the form are filled in.")
                         .setBackgroundColor(
@@ -301,7 +430,15 @@ class CreateSubmissionActivity : AppCompatActivity() {
                                 R.color.custom_toast_font_failed
                             )
                         ).show()
-                else {
+                } else {
+                    var photoFiles: MutableList<MultipartBody.Part> = ArrayList()
+                    if (imageArrayUri.isNotEmpty()) {
+                        for (i in 0 until imageArrayUri.size) {
+                            photoFiles.add(
+                                createMultipartBody(imageArrayUri[i], "foto[$i]")
+                            )
+                        }
+                    }
                     val requestBodyMap: MutableMap<String, RequestBody> = mutableMapOf()
                     with(requestBodyMap) {
                         put(
@@ -312,30 +449,28 @@ class CreateSubmissionActivity : AppCompatActivity() {
                         put("judul_kasus", createPartFromString(caseTitleField.text.toString())!!)
                         put("lokasi", createPartFromString(locationField.text.toString())!!)
                         put("departemen", createPartFromString(selectedDepartment.toString())!!)
-                        put("kategori", createPartFromString("")!!)
+                        put("kategori", createPartFromString(selectedCategory.toString())!!)
                         put("kode_mesin", createPartFromString(machineCodeField.text.toString())!!)
                         put("nama_mesin", createPartFromString(machineNameField.text.toString())!!)
                         put("keterangan", createPartFromString(descriptionField.text.toString())!!)
                         put("tgl_lapor", createPartFromString(reportDateText.text.toString())!!)
                         put("waktu_lapor", createPartFromString(reportTimeText.text.toString())!!)
-                        for (i in 0 until arrayMaterial.size) {
-                            put("material[$i]", createPartFromString("material")!!)
+                        if (selectedMaterialsArrayList.size > 1) {
+                            for (i in 0 until selectedMaterialsArrayList.size - 1) {
+                                put(
+                                    "material[$i]",
+                                    createPartFromString(selectedMaterialsArrayList[i].idMaterial)!!
+                                )
+                            }
                         }
                     }
-                    var photoFiles: MutableList<MultipartBody.Part> = ArrayList()
-                    if (imageArrayUri.isNotEmpty()) {
-                        for (i in 0 until imageArrayUri.size) {
-                            photoFiles.add(
-                                createMultipartBody(imageArrayUri[i], "foto[$i]")
-                            )
-                        }
-                        Log.e("Photo Files", photoFiles.toString())
-                    }
-                    (if (imageArrayUri.isNotEmpty())
-                        InitAPI.getAPI.submitSubmission(requestBodyMap, photoFiles)
-                    else
-                        InitAPI.getAPI.submitSubmissionNoAttachment(requestBodyMap))
-                        .enqueue(object : Callback<SubmitSubmissionResponse> {
+
+                    try {
+                        (if (photoFiles.isNotEmpty()) {
+                            InitAPI.getAPI.submitSubmission(requestBodyMap, photoFiles)
+                        } else {
+                            InitAPI.getAPI.submitSubmissionNoAttachment(requestBodyMap)
+                        }).enqueue(object : Callback<SubmitSubmissionResponse> {
                             override fun onResponse(
                                 call: Call<SubmitSubmissionResponse?>,
                                 response: Response<SubmitSubmissionResponse?>
@@ -424,6 +559,26 @@ class CreateSubmissionActivity : AppCompatActivity() {
                                 throwable.printStackTrace()
                             }
                         })
+                    } catch (jsonException: JSONException) {
+                        submitButton.visibility = View.VISIBLE
+                        loadingBar.visibility = View.GONE
+                        CustomToast.getInstance(applicationContext)
+                            .setMessage("Something went wrong, please try again.")
+                            .setFontColor(
+                                ContextCompat.getColor(
+                                    this@CreateSubmissionActivity,
+                                    R.color.custom_toast_font_failed
+                                )
+                            )
+                            .setBackgroundColor(
+                                ContextCompat.getColor(
+                                    this@CreateSubmissionActivity,
+                                    R.color.custom_toast_background_failed
+                                )
+                            ).show()
+                        Log.e("ERROR", jsonException.toString())
+                        jsonException.printStackTrace()
+                    }
                 }
             }
         }
@@ -459,13 +614,19 @@ class CreateSubmissionActivity : AppCompatActivity() {
                     R.color.custom_toast_font_failed
                 )
 
+            if (selectedCategory == 0)
+                categoryDropdownLayout.strokeColor = ContextCompat.getColor(
+                    this@CreateSubmissionActivity,
+                    R.color.custom_toast_font_failed
+                )
+
             if (selectedDepartment == 0)
                 departmentDropdownLayout.strokeColor = ContextCompat.getColor(
                     this@CreateSubmissionActivity,
                     R.color.custom_toast_font_failed
                 )
             else {
-                if (selectedDepartment >= 1 && selectedDepartment <= 8) {
+                if (selectedDepartmentText.text.contains("Engineering")) {
                     if (machineCodeField.text!!.isEmpty()) {
                         machineCodeFieldLayout.error = "Enter the Machine Code!"
                     }
@@ -485,74 +646,100 @@ class CreateSubmissionActivity : AppCompatActivity() {
         requestCode: Int, permissions: Array<out String>, grantResults: IntArray
     ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        if (requestCode == PermissionHelper.REQUEST_CODE) {
+        if (requestCode == PermissionHelper.REQUEST_CODE_GALLERY) {
             if (grantResults.isNotEmpty()) {
                 if (grantResults[0] == PERMISSION_GRANTED) {
                     openGallery()
                 }
             }
         }
-    }
-
-    private val getResult =
-        registerForActivityResult(
-            ActivityResultContracts.StartActivityForResult()
-        ) {
-            with(it) {
-                binding.apply {
-                    if (resultCode == RESULT_OK && data != null) {
-                        if (data?.clipData != null) {
-                            val mClipData: ClipData = data?.clipData!!
-                            for (i in 0 until mClipData.itemCount) {
-                                val imageUrl: Uri = mClipData.getItemAt(i).uri
-                                imageArrayUri.add(imageUrl)
-                            }
-                        } else {
-                            val imageUrl: Uri? = data?.data
-                            if (imageUrl != null) {
-                                imageArrayUri.add(imageUrl)
-                            }
-                        }
-                    }
-                    manageAttachmentButton.setOnClickListener {
-                        val bottomSheet = ManagePhotoBottomSheet(
-                            this@CreateSubmissionActivity, imageArrayUri
-                        ).also {
-                            with(it) {
-                                setOnAttachmentActionListener(object :
-                                    ManagePhotoBottomSheet.OnAttachmentActionListener {
-                                    override fun onDeletePhoto(uri: Uri) {
-                                        imageArrayUri.remove(uri)
-                                        if (imageArrayUri.isEmpty()) {
-                                            manageAttachmentButton.visibility = View.GONE
-                                        }
-                                    }
-                                })
-                            }
-                        }
-
-                        if (bottomSheet.window != null)
-                            bottomSheet.show()
-                    }
-                    if (imageArrayUri.isNotEmpty()) {
-                        manageAttachmentButton.visibility = View.VISIBLE
-                    } else {
-                        manageAttachmentButton.visibility = View.GONE
-                    }
+        if (requestCode == PermissionHelper.REQUEST_CODE_CAMERA) {
+            if (grantResults.isNotEmpty()) {
+                if (grantResults[0] == PERMISSION_GRANTED) {
+                    openCamera()
                 }
             }
         }
+    }
 
     private fun openGallery() {
-        getResult.launch(
-            Intent.createChooser(
-                Intent().also {
-                    it.type = "image/*"
-                    it.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true)
-                    it.action = Intent.ACTION_GET_CONTENT
-                }, "Select Picture"
-            )
-        )
+        startActivityForResult(Intent().also {
+            it.type = "image/*"
+            it.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true)
+            it.action = Intent.ACTION_GET_CONTENT
+        }, PermissionHelper.REQUEST_CODE_GALLERY)
+    }
+
+    @SuppressLint("MissingSuperCall")
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        binding.apply {
+            if (resultCode == RESULT_OK) {
+                if (requestCode == PermissionHelper.REQUEST_CODE_CAMERA) {
+                    Log.e("Camera capture result", imageUri.toString())
+                    imageArrayUri.add(imageUri)
+                }
+                if (requestCode == PermissionHelper.REQUEST_CODE_GALLERY) {
+                    if (data?.clipData != null) {
+                        val mClipData: ClipData = data.clipData!!
+                        for (i in 0 until mClipData.itemCount) {
+                            val imageUrl: Uri = mClipData.getItemAt(i).uri
+                            imageArrayUri.add(imageUrl)
+                        }
+                    } else {
+                        val imageUrl: Uri? = data?.data
+                        if (imageUrl != null) {
+                            imageArrayUri.add(imageUrl)
+                        }
+                    }
+                }
+
+                manageAttachmentButton.setOnClickListener {
+                    val bottomSheet = ManagePhotoBottomSheet(
+                        this@CreateSubmissionActivity, imageArrayUri
+                    ).also {
+                        with(it) {
+                            setOnAttachmentActionListener(object :
+                                ManagePhotoBottomSheet.OnAttachmentActionListener {
+                                override fun onDeletePhoto(uri: Uri) {
+                                    imageArrayUri.remove(uri)
+                                    if (imageArrayUri.isEmpty()) {
+                                        manageAttachmentButton.visibility = View.GONE
+                                    }
+                                }
+                            })
+                        }
+                    }
+
+                    if (bottomSheet.window != null)
+                        bottomSheet.show()
+                }
+                if (imageArrayUri.isNotEmpty()) {
+                    manageAttachmentButton.visibility = View.VISIBLE
+                } else {
+                    manageAttachmentButton.visibility = View.GONE
+                }
+            }
+        }
+    }
+
+    private fun openCamera() {
+        val timeStamp = SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(Date())
+        cameraCaptureFileName = "FixMe_Capture_$timeStamp.jpg"
+        imageUri = contentResolver.insert(
+            MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
+            ContentValues().also {
+                with(it) {
+                    put(MediaStore.Images.Media.TITLE, cameraCaptureFileName)
+                    put(MediaStore.Images.Media.DESCRIPTION, "Image capture by camera")
+                }
+            }
+        )!!
+
+        startActivityForResult(Intent(MediaStore.ACTION_IMAGE_CAPTURE).also {
+            with(it) {
+                putExtra(MediaStore.EXTRA_OUTPUT, imageUri)
+            }
+        }, PermissionHelper.REQUEST_CODE_CAMERA)
     }
 
     private fun getDepartmentList() {
@@ -569,7 +756,8 @@ class CreateSubmissionActivity : AppCompatActivity() {
                                     departmentDropdownLayout.setOnClickListener {
                                         val departmentBottomSheet = DepartmentListBottomSheet(
                                             this@CreateSubmissionActivity,
-                                            response.body()!!
+                                            response.body()!!,
+                                            selectedDept
                                         ).also {
                                             with(it) {
                                                 onDepartmentClickListener(object :
@@ -579,6 +767,8 @@ class CreateSubmissionActivity : AppCompatActivity() {
                                                         data: DepartmentListResponse
                                                     ) {
                                                         selectedDepartment = data.idDept!!.toInt()
+                                                        this@CreateSubmissionActivity.selectedDept =
+                                                            data
                                                         selectedDepartmentText.text =
                                                             "${data.namaDept}\n\"${data.subDept}\""
                                                         isFormEmpty[2] = selectedDepartment != 0
@@ -603,6 +793,7 @@ class CreateSubmissionActivity : AppCompatActivity() {
                                                             machineNameFieldLayout.visibility =
                                                                 View.GONE
                                                         }
+                                                        dismiss()
                                                     }
                                                 })
                                             }

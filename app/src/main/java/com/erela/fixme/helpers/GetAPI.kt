@@ -35,7 +35,7 @@ interface GetAPI {
     @POST("getuserdetail")
     fun getUserDetail(
         @Field("id_user") idUser: Int
-    ): Call<List<UserDetailResponse>>
+    ): Call<UserDetailResponse>
 
     @FormUrlEncoded
     @POST("getuserfromstarconnect")
@@ -88,14 +88,14 @@ interface GetAPI {
     @Multipart
     @POST("pengajuansave")
     fun submitSubmission(
-        @PartMap() partMap: MutableMap<String, RequestBody>,
-        @Part photo: MutableList<MultipartBody.Part>?
+        @PartMap partMap: MutableMap<String, RequestBody>,
+        @Part foto: MutableList<MultipartBody.Part>
     ): Call<SubmitSubmissionResponse>
 
     @Multipart
     @POST("pengajuansave")
     fun submitSubmissionNoAttachment(
-        @PartMap() partMap: MutableMap<String, RequestBody>
+        @PartMap partMap: MutableMap<String, RequestBody>
     ): Call<SubmitSubmissionResponse>
 
     @FormUrlEncoded

@@ -149,16 +149,17 @@
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/departmentDropdownLayout"
                 android:layout_width="match_parent"
-                android:layout_height="54dp"
+                android:layout_height="wrap_content"
                 android:layout_marginHorizontal="16dp"
                 android:layout_marginTop="8dp"
+                android:minHeight="54dp"
                 app:cardBackgroundColor="@android:color/transparent"
                 app:cardCornerRadius="50dp"
                 app:cardElevation="0dp"
-                app:contentPaddingBottom="4dp"
+                app:contentPaddingBottom="8dp"
                 app:contentPaddingLeft="8dp"
                 app:contentPaddingRight="8dp"
-                app:contentPaddingTop="4dp"
+                app:contentPaddingTop="8dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/toolBar"
@@ -348,6 +349,25 @@
                         android:text="@string/pick_a_time" />
                 </com.google.android.material.card.MaterialCardView>
             </LinearLayout>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="16dp"
+                android:layout_marginTop="8dp"
+                android:text="@string/materials"
+                android:textSize="14sp"
+                android:textStyle="bold" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rvMaterials"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="16dp"
+                android:layout_marginTop="4dp"
+                app:layoutManager="com.google.android.flexbox.FlexboxLayoutManager"
+                tools:itemCount="2"
+                tools:listitem="@layout/list_item_selected_materials" />
 
             <TextView
                 android:layout_width="wrap_content"

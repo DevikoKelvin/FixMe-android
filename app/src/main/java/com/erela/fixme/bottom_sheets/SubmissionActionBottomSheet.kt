@@ -36,7 +36,7 @@ class SubmissionActionBottomSheet(context: Context, val data: SubmissionDetailRe
         binding.apply {
             when (data.stsGaprojects) {
                 // Pending
-                1.toString() -> {
+                1 -> {
                     startProgressButton.visibility = View.GONE
                     onTrialDoneButtonContainer.visibility = View.GONE
                     approveRejectButtonContainer.visibility = View.VISIBLE
@@ -62,7 +62,7 @@ class SubmissionActionBottomSheet(context: Context, val data: SubmissionDetailRe
                     }
                 }
                 // Approved
-                2.toString() -> {
+                2 -> {
                     startProgressButton.visibility = View.VISIBLE
                     onTrialDoneButtonContainer.visibility = View.GONE
                     approveRejectButtonContainer.visibility = View.GONE

@@ -7,54 +7,58 @@ data class SubmissionListResponse(
     val usernApprove: String? = null,
     @field:SerializedName("keterangan")
     val keterangan: String? = null,
+    @field:SerializedName("tgl_waktu_trial_start")
+    val tglWaktuTrialStart: String? = null,
     @field:SerializedName("usern_user_done")
-    val usernUserDone: Any? = null,
+    val usernUserDone: String? = null,
     @field:SerializedName("id_gaprojects")
-    val idGaprojects: String? = null,
-    @field:SerializedName("id_user")
-    val idUser: String? = null,
-    @field:SerializedName("id_user_end")
-    val idUserEnd: String? = null,
+    val idGaprojects: Int? = null,
+    @field:SerializedName("id_dept_tujuan")
+    val idDeptTujuan: Int? = null,
     @field:SerializedName("kode_mesin")
     val kodeMesin: String? = null,
     @field:SerializedName("id_approved")
-    val idApproved: String? = null,
-    @field:SerializedName("tgl_waktu_end")
-    val tglWaktuEnd: Any? = null,
-    @field:SerializedName("tgl_waktu_start")
-    val tglWaktuStart: String? = null,
+    val idApproved: Int? = null,
+    @field:SerializedName("id_user_approve")
+    val idUserApprove: Int? = null,
     @field:SerializedName("sts_gaprojects")
     val stsGaprojects: String? = null,
     @field:SerializedName("usern_user_end")
     val usernUserEnd: String? = null,
     @field:SerializedName("foto_gaprojects")
     val fotoGaprojects: List<FotoGaprojectsItem?>? = null,
-    @field:SerializedName("dept")
-    val dept: String? = null,
+    @field:SerializedName("id_user")
+    val idUser: Int? = null,
     @field:SerializedName("set_tglinput")
     val setTglinput: String? = null,
     @field:SerializedName("nama_mesin")
     val namaMesin: String? = null,
+    @field:SerializedName("tgl_waktu_lapor")
+    val tglWaktuLapor: String? = null,
     @field:SerializedName("tgl_input")
     val tglInput: String? = null,
     @field:SerializedName("ket_approved")
     val ketApproved: String? = null,
     @field:SerializedName("set_waktuinput")
     val setWaktuinput: String? = null,
+    @field:SerializedName("tgl_waktu_trial_end")
+    val tglWaktuTrialEnd: String? = null,
     @field:SerializedName("lokasi")
     val lokasi: String? = null,
+    @field:SerializedName("tgl_waktu_kerja_start")
+    val tglWaktuKerjaStart: String? = null,
+    @field:SerializedName("tgl_waktu_kerja_end")
+    val tglWaktuKerjaEnd: String? = null,
     @field:SerializedName("tglwaktu_approved")
     val tglwaktuApproved: String? = null,
     @field:SerializedName("judul_kasus")
     val judulKasus: String? = null,
-    @field:SerializedName("tgl_waktu_actual")
-    val tglWaktuActual: String? = null,
     @field:SerializedName("id_user_done")
-    val idUserDone: Any? = null,
-    @field:SerializedName("tgl_waktu_pengerjaan")
-    val tglWaktuPengerjaan: String? = null,
+    val idUserDone: Int? = null,
     @field:SerializedName("usern_cancel")
     val usernCancel: String? = null,
+    @field:SerializedName("dept_tujuan")
+    val deptTujuan: String? = null,
     @field:SerializedName("tgl_waktu_done")
-    val tglWaktuDone: Any? = null
+    val tglWaktuDone: String? = null
 )

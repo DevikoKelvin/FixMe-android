@@ -253,21 +253,21 @@ class UpdateStatusBottomSheet(
                 val data: ArrayList<String> = ArrayList()
                 try {
                     InitAPI.getAPI.getUserDetail(dataDetail.idUser!!.toInt())
-                        .enqueue(object : Callback<List<UserDetailResponse>> {
+                        .enqueue(object : Callback<UserDetailResponse> {
                             override fun onResponse(
-                                call: Call<List<UserDetailResponse>?>,
-                                response: Response<List<UserDetailResponse>?>
+                                call: Call<UserDetailResponse?>,
+                                response: Response<UserDetailResponse?>
                             ) {
                                 if (response.isSuccessful) {
                                     if (response.body() != null) {
                                         userDetail = UserDetailResponse(
-                                            response.body()!![0].stsAktif,
-                                            response.body()!![0].nama,
-                                            response.body()!![0].usern,
-                                            response.body()!![0].idDept,
-                                            response.body()!![0].hakAkses,
-                                            response.body()!![0].idUser,
-                                            response.body()!![0].idUserStarconnect
+                                            response.body()!!.stsAktif,
+                                            response.body()!!.nama,
+                                            response.body()!!.usern,
+                                            response.body()!!.idDept,
+                                            response.body()!!.hakAkses,
+                                            response.body()!!.idUser,
+                                            response.body()!!.idUserStarconnect
                                         )
                                         data.add(
                                             "${userDetail.usern} (ID: ${userDetail.idUser}, Starconnect ID: ${userDetail.idUserStarconnect})"
@@ -319,7 +319,7 @@ class UpdateStatusBottomSheet(
                             }
 
                             override fun onFailure(
-                                call: Call<List<UserDetailResponse>?>,
+                                call: Call<UserDetailResponse?>,
                                 throwable: Throwable
                             ) {
                                 CustomToast.getInstance(context)

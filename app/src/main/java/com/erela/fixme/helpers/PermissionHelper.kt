@@ -18,7 +18,11 @@ object PermissionHelper {
     @RequiresApi(Build.VERSION_CODES.UPSIDE_DOWN_CAKE)
     const val POST_NOTIFICATIONS = Manifest.permission.POST_NOTIFICATIONS
     const val READ_EXTERNAL_STORAGE = Manifest.permission.READ_EXTERNAL_STORAGE
-    const val REQUEST_CODE = 100
+
+    const val CAMERA = Manifest.permission.CAMERA
+    const val REQUEST_CODE_GALLERY = 100
+    const val REQUEST_CODE_CAMERA = 101
+    const val REQUEST_CODE_NOTIFICATION = 102
 
     fun isPermissionGranted(activity: Activity, permission: String): Boolean {
         return ContextCompat.checkSelfPermission(
@@ -26,7 +30,7 @@ object PermissionHelper {
         ) == PackageManager.PERMISSION_GRANTED
     }
 
-    fun requestPermission(activity: Activity, permissions: Array<String>) {
-        ActivityCompat.requestPermissions(activity, permissions, REQUEST_CODE)
+    fun requestPermission(activity: Activity, permissions: Array<String>, requestCode: Int) {
+        ActivityCompat.requestPermissions(activity, permissions, requestCode)
     }
 }

@@ -53,7 +53,8 @@ class MainActivity : AppCompatActivity() {
                 )
             ) {
                 PermissionHelper.requestPermission(
-                    this@MainActivity, arrayOf(PermissionHelper.POST_NOTIFICATIONS)
+                    this@MainActivity, arrayOf(PermissionHelper.POST_NOTIFICATIONS),
+                    PermissionHelper.REQUEST_CODE_NOTIFICATION
                 )
             }
 

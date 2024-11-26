@@ -140,7 +140,7 @@ class SubmissionDetailActivity : AppCompatActivity(),
                                     inputDate.text = data.setTglinput
                                     when (data.stsGaprojects) {
                                         // Rejected
-                                        0.toString() -> {
+                                        0 -> {
                                             submissionStatus.setCardBackgroundColor(
                                                 ResourcesCompat.getColor(
                                                     resources,
@@ -160,7 +160,7 @@ class SubmissionDetailActivity : AppCompatActivity(),
                                                     R.color.custom_toast_font_failed
                                                 )
                                             )
-                                            statusMessage.text = "Rejected by ${data.usernCancel}"
+                                            statusMessage.text = "Rejected by ${data.usernApprove}"
                                             statusMessage.setTextColor(
                                                 ContextCompat.getColor(
                                                     this@SubmissionDetailActivity,
@@ -169,7 +169,7 @@ class SubmissionDetailActivity : AppCompatActivity(),
                                             )
                                         }
                                         // Pending
-                                        1.toString() -> {
+                                        1 -> {
                                             submissionStatus.setCardBackgroundColor(
                                                 ResourcesCompat.getColor(
                                                     resources,
@@ -181,7 +181,7 @@ class SubmissionDetailActivity : AppCompatActivity(),
                                             seeProgressButton.visibility = View.GONE
                                         }
                                         // Approved
-                                        2.toString() -> {
+                                        2 -> {
                                             submissionStatus.setCardBackgroundColor(
                                                 ResourcesCompat.getColor(
                                                     resources,
@@ -190,7 +190,7 @@ class SubmissionDetailActivity : AppCompatActivity(),
                                                 )
                                             )
                                             submissionStatusText.text = "Approved"
-                                            if (userData.id == data.idUserEnd?.toInt()) {
+                                            /*if (userData.id == data.idUserEnd?.toInt()) {
                                                 actionButton.visibility = View.VISIBLE
                                                 editButton.visibility = View.GONE
                                                 seeProgressButton.visibility = View.GONE
@@ -216,10 +216,10 @@ class SubmissionDetailActivity : AppCompatActivity(),
                                                         R.color.black
                                                     )
                                                 )
-                                            }
+                                            }*/
                                         }
                                         // On-Progress
-                                        3.toString() -> {
+                                        3 -> {
                                             submissionStatus.setCardBackgroundColor(
                                                 ResourcesCompat.getColor(
                                                     resources,
@@ -244,7 +244,7 @@ class SubmissionDetailActivity : AppCompatActivity(),
                                             }
                                         }
                                         // Done
-                                        4.toString() -> {
+                                        4 -> {
                                             submissionStatus.setCardBackgroundColor(
                                                 ResourcesCompat.getColor(
                                                     resources,
@@ -282,7 +282,7 @@ class SubmissionDetailActivity : AppCompatActivity(),
                                             }
                                         }
                                         // On-Trial
-                                        31.toString() -> {
+                                        31 -> {
                                             submissionStatus.setCardBackgroundColor(
                                                 ResourcesCompat.getColor(
                                                     resources,
@@ -331,21 +331,21 @@ class SubmissionDetailActivity : AppCompatActivity(),
                                     } else "-"
                                     try {
                                         InitAPI.getAPI.getUserDetail(data.idUser!!.toInt())
-                                            .enqueue(object : Callback<List<UserDetailResponse>> {
+                                            .enqueue(object : Callback<UserDetailResponse> {
                                                 override fun onResponse(
-                                                    call: Call<List<UserDetailResponse>?>,
-                                                    response: Response<List<UserDetailResponse>?>
+                                                    call: Call<UserDetailResponse?>,
+                                                    response: Response<UserDetailResponse?>
                                                 ) {
                                                     if (response.isSuccessful) {
                                                         if (response.body() != null) {
                                                             userDetail = UserDetailResponse(
-                                                                response.body()!![0].stsAktif,
-                                                                response.body()!![0].nama,
-                                                                response.body()!![0].usern,
-                                                                response.body()!![0].idDept,
-                                                                response.body()!![0].hakAkses,
-                                                                response.body()!![0].idUser,
-                                                                response.body()!![0].idUserStarconnect
+                                                                response.body()!!.stsAktif,
+                                                                response.body()!!.nama,
+                                                                response.body()!!.usern,
+                                                                response.body()!!.idDept,
+                                                                response.body()!!.hakAkses,
+                                                                response.body()!!.idUser,
+                                                                response.body()!!.idUserStarconnect
                                                             )
                                                             user.text =
                                                                 userDetail.nama
@@ -358,7 +358,7 @@ class SubmissionDetailActivity : AppCompatActivity(),
                                                 }
 
                                                 override fun onFailure(
-                                                    call: Call<List<UserDetailResponse>?>,
+                                                    call: Call<UserDetailResponse?>,
                                                     throwable: Throwable
                                                 ) {
                                                     user.text = "Can't retrieve Reporter's name"
@@ -371,29 +371,29 @@ class SubmissionDetailActivity : AppCompatActivity(),
                                         Log.e("ERROR", exception.toString())
                                         exception.printStackTrace()
                                     }
-                                    department.text = data.dept
+                                    department.text = data.deptTujuan
                                     inputTime.text = data.tglInput
                                     location.text = data.lokasi
-                                    reportTime.text = if (data.tglWaktuStart != null) {
-                                        if (data.tglWaktuStart == "") "-" else data.tglWaktuStart
+                                    reportTime.text = if (data.tglWaktuLapor != null) {
+                                        if (data.tglWaktuLapor == "") "-" else data.tglWaktuLapor
                                     } else {
                                         "-"
                                     }
 
-                                    actualTime.text = if (data.tglWaktuActual != null) {
-                                        if (data.tglWaktuActual.contains(
+                                    startWork.text = if (data.tglWaktuKerjaStart != null) {
+                                        if (data.tglWaktuKerjaStart.contains(
                                                 "0000-00-00"
-                                            ) || data.tglWaktuActual == ""
-                                        ) "-" else data.tglWaktuActual
+                                            ) || data.tglWaktuKerjaStart == ""
+                                        ) "-" else data.tglWaktuKerjaStart
                                     } else {
                                         "-"
                                     }
 
-                                    workingTime.text = if (data.tglWaktuPengerjaan != null) {
-                                        if (data.tglWaktuPengerjaan.contains(
+                                    endWork.text = if (data.tglWaktuKerjaEnd != null) {
+                                        if (data.tglWaktuKerjaEnd.contains(
                                                 "0000-00-00"
-                                            ) || data.tglWaktuPengerjaan == ""
-                                        ) "-" else data.tglWaktuPengerjaan
+                                            ) || data.tglWaktuKerjaEnd == ""
+                                        ) "-" else data.tglWaktuKerjaEnd
                                     } else {
                                         "-"
                                     }
@@ -471,11 +471,10 @@ class SubmissionDetailActivity : AppCompatActivity(),
                         try {
                             if (response.isSuccessful) {
                                 if (response.body() != null) {
-                                    Log.e("Response", response.body().toString())
                                     when (data.stsGaprojects) {
-                                        1.toString() -> {
+                                        1 -> {
                                             if (response.body()?.mEMORG!!.contains(
-                                                    data.dept.toString()
+                                                    data.deptTujuan.toString()
                                                 )
                                             ) {
                                                 if (data.idUser.toInt() == userData.id) {

@@ -49,7 +49,7 @@ class SubmissionRvAdapter(val context: Context, val data: ArrayList<SubmissionLi
                 machineCodeText.text = "${context.getString(R.string.machine_code)}:"
                 machineNameText.text = "${context.getString(R.string.machine_name)}:"
                 machineCode.text = if (item.kodeMesin != null) {
-                     if (item.kodeMesin.isNotEmpty()) item.kodeMesin else "-"
+                    if (item.kodeMesin.isNotEmpty()) item.kodeMesin else "-"
                 } else {
                     "-"
                 }
@@ -62,18 +62,15 @@ class SubmissionRvAdapter(val context: Context, val data: ArrayList<SubmissionLi
                 submissionLocation.text = item.lokasi?.uppercase()
                 reportedBy.text = ""
                 try {
-                    InitAPI.getAPI.getUserDetail(item.idUser!!.toInt())
-                        .enqueue(object : Callback<List<UserDetailResponse>> {
+                    InitAPI.getAPI.getUserDetail(item.idUser!!)
+                        .enqueue(object : Callback<UserDetailResponse> {
                             override fun onResponse(
-                                call: Call<List<UserDetailResponse>?>,
-                                response: Response<List<UserDetailResponse>?>
+                                call: Call<UserDetailResponse?>,
+                                response: Response<UserDetailResponse?>
                             ) {
                                 if (response.isSuccessful) {
                                     if (response.body() != null) {
-                                        reportedBy.text =
-                                            UsernameFormatHelper.getRealUsername(
-                                                response.body()?.get(0)?.nama.toString()
-                                            )
+                                        reportedBy.text = response.body()?.nama
                                     }
                                 } else {
                                     reportedBy.text = "Can't retrieve Reporter's name"
@@ -82,7 +79,7 @@ class SubmissionRvAdapter(val context: Context, val data: ArrayList<SubmissionLi
                             }
 
                             override fun onFailure(
-                                call: Call<List<UserDetailResponse>?>,
+                                call: Call<UserDetailResponse?>,
                                 throwable: Throwable
                             ) {
                                 reportedBy.text = "Can't retrieve Reporter's name"

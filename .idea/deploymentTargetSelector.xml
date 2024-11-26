@@ -4,10 +4,10 @@
     <selectionStates>
       <SelectionState runConfigName="app">
         <option name="selectionMode" value="DROPDOWN" />
-        <DropdownSelection timestamp="2024-11-22T02:03:19.336791100Z">
+        <DropdownSelection timestamp="2024-11-25T09:32:25.860883Z">
           <Target type="DEFAULT_BOOT">
             <handle>
-              <DeviceId pluginId="LocalEmulator" identifier="path=C:\Users\vycro\.android\avd\Pixel_8_API_Baklava.avd" />
+              <DeviceId pluginId="PhysicalDevice" identifier="serial=F6AAF6S4WGQ4K7HA" />
             </handle>
           </Target>
         </DropdownSelection>

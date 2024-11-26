@@ -102,7 +102,7 @@ class SubmissionListActivity : AppCompatActivity(), SubmissionRvAdapter.OnSubmis
                                                 selectedDepartment = if (position == 0)
                                                     ""
                                                 else
-                                                    data[position]
+                                                    data.distinct()[position]
                                                 if (selectedDepartment == "") {
                                                     filterListButton.visibility = View.GONE
                                                     rvSubmission.visibility = View.VISIBLE

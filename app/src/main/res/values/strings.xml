@@ -26,11 +26,12 @@
     <string name="case_description">Description</string>
     <string name="report_time_and_date">Report Date and Time</string>
     <string name="start_work_time_and_date">Start of Work Date and Time</string>
-    <string name="actual_time_and_date">Actual Date and Time</string>
     <string name="pick_a_date">Pick a Date</string>
     <string name="pick_a_time">Pick a Time</string>
+    <string name="materials">Materials</string>
     <string name="attach_photo">Attach Photo</string>
     <string name="choose_file">Choose file</string>
+    <string name="choose_file_title">Choose file from...</string>
     <string name="manage_attachment">Manage attachment</string>
     <string name="see_photo">See Photo</string>
     <string name="delete_photo">Delete Photo</string>
@@ -52,9 +53,9 @@
 
     <string name="submission_detail_title">Submission Detail</string>
     <string name="submission_description">Description</string>
-    <string name="submission_report">Report:</string>
-    <string name="submission_actual">Actual:</string>
-    <string name="submission_working">Working:</string>
+    <string name="submission_report">Report time:</string>
+    <string name="submission_start_working">Work start time:</string>
+    <string name="submission_end_working">Work end time:</string>
     <string name="action_text">Action</string>
     <string name="action_approve">Approve</string>
     <string name="action_reject">Reject</string>
