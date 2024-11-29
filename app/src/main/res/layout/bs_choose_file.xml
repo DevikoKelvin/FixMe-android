@@ -41,19 +41,23 @@
             android:layout_marginHorizontal="8dp"
             android:layout_weight="1"
             app:cardBackgroundColor="@color/custom_toast_background_normal"
+            app:cardCornerRadius="16dp"
+            app:cardElevation="0dp"
             app:strokeWidth="0dp">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="vertical"
-                android:paddingVertical="16dp">
+                android:paddingVertical="16dp"
+                tools:ignore="UseCompoundDrawables">
 
                 <ImageView
                     android:layout_width="32dp"
                     android:layout_height="32dp"
                     android:layout_gravity="center"
-                    android:src="@drawable/camera_icon" />
+                    android:src="@drawable/camera_icon"
+                    tools:ignore="ContentDescription" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -74,19 +78,23 @@
             android:layout_marginHorizontal="8dp"
             android:layout_weight="1"
             app:cardBackgroundColor="@color/custom_toast_background_normal"
+            app:cardCornerRadius="16dp"
+            app:cardElevation="0dp"
             app:strokeWidth="0dp">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="vertical"
-                android:paddingVertical="16dp">
+                android:paddingVertical="16dp"
+                tools:ignore="UseCompoundDrawables">
 
                 <ImageView
                     android:layout_width="32dp"
                     android:layout_height="32dp"
                     android:layout_gravity="center"
-                    android:src="@drawable/gallery_icon" />
+                    android:src="@drawable/gallery_icon"
+                    tools:ignore="ContentDescription" />
 
                 <TextView
                     android:layout_width="wrap_content"
