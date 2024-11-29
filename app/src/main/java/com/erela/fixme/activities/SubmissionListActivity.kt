@@ -6,8 +6,11 @@ import android.util.Log
 import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
+import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.erela.fixme.R
 import com.erela.fixme.adapters.recycler_view.SubmissionRvAdapter
@@ -24,7 +27,9 @@ import retrofit2.Callback
 import retrofit2.Response
 
 class SubmissionListActivity : AppCompatActivity(), SubmissionRvAdapter.OnSubmissionClickListener {
-    private lateinit var binding: ActivitySubmissionListBinding
+    private val binding: ActivitySubmissionListBinding by lazy {
+        ActivitySubmissionListBinding.inflate(layoutInflater)
+    }
     private lateinit var adapter: SubmissionRvAdapter
     private lateinit var userData: UserData
     private var selectedFilter = -1
@@ -33,8 +38,15 @@ class SubmissionListActivity : AppCompatActivity(), SubmissionRvAdapter.OnSubmis
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivitySubmissionListBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        enableEdgeToEdge()
+        ViewCompat.setOnApplyWindowInsetsListener(binding.main) { v, insets ->
+            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
+            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
+            insets
+        }
+
         userData = UserDataHelper(this@SubmissionListActivity).getUserData()
 
         init()

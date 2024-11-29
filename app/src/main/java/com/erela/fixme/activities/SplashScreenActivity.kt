@@ -14,11 +14,12 @@ import com.erela.fixme.services.ForegroundServicesHelper
 
 @SuppressLint("CustomSplashScreen")
 class SplashScreenActivity : AppCompatActivity() {
-    private lateinit var binding: ActivitySplashScreenBinding
+    private val binding: ActivitySplashScreenBinding by lazy {
+        ActivitySplashScreenBinding.inflate(layoutInflater)
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivitySplashScreenBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
         binding.apply {

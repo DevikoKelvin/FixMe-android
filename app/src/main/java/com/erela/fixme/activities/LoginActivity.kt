@@ -9,8 +9,11 @@ import android.view.Gravity
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.FrameLayout
+import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
 import com.erela.fixme.activities.SubmissionListActivity
 import com.erela.fixme.custom_views.CustomToast
 import com.erela.fixme.databinding.ActivityLoginBinding
@@ -25,13 +28,22 @@ import retrofit2.Callback
 import retrofit2.Response
 
 class LoginActivity : AppCompatActivity() {
-    private lateinit var binding: ActivityLoginBinding
+    private val binding: ActivityLoginBinding by lazy {
+        ActivityLoginBinding.inflate(layoutInflater)
+    }
     private lateinit var userData: UserData
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityLoginBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        enableEdgeToEdge()
+        ViewCompat.setOnApplyWindowInsetsListener(binding.main) { v, insets ->
+            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
+            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
+            insets
+        }
+
         userData = UserDataHelper(this@LoginActivity).getUserData()
 
         init()

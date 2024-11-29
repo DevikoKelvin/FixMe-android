@@ -6,9 +6,13 @@ import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.net.Uri
 import android.os.Bundle
+import com.bumptech.glide.Glide
 import com.erela.fixme.databinding.DialogPhotoPreviewBinding
+import com.erela.fixme.helpers.InitAPI
 
-class PhotoPreviewDialog(context: Context, val imageUri: Uri) : Dialog(context) {
+class PhotoPreviewDialog(
+    context: Context, private val imageUri: Uri?, private val photoName: String?
+) : Dialog(context) {
     private lateinit var binding: DialogPhotoPreviewBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -27,7 +31,13 @@ class PhotoPreviewDialog(context: Context, val imageUri: Uri) : Dialog(context) 
             closeButton.setOnClickListener {
                 dismiss()
             }
-            photoView.setImageURI(imageUri)
+            if (photoName == null) {
+                photoView.setImageURI(imageUri)
+            } else {
+                Glide.with(context)
+                    .load(InitAPI.IMAGE_URL + photoName)
+                    .into(photoView)
+            }
         }
     }
 }

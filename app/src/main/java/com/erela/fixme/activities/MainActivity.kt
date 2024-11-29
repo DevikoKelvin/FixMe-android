@@ -7,16 +7,16 @@ import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.content.Intent
 import android.content.pm.PackageManager
-import android.content.pm.ServiceInfo
-import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
+import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
-import androidx.core.app.ServiceCompat.startForeground
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
 import com.erela.fixme.R
 import com.erela.fixme.databinding.ActivityMainBinding
 import com.erela.fixme.helpers.InitAPI
@@ -26,19 +26,27 @@ import com.erela.fixme.helpers.WebSocketClient
 import com.erela.fixme.objects.NotificationResponse
 import com.erela.fixme.objects.UserData
 import com.erela.fixme.services.ForegroundServicesHelper.Companion.CHANNEL_ID
-import com.erela.fixme.services.ForegroundServicesHelper.Companion.NOTIFICATION_ID
 import kotlinx.coroutines.DelicateCoroutinesApi
 import org.json.JSONObject
 
 class MainActivity : AppCompatActivity() {
-    private lateinit var binding: ActivityMainBinding
+    private val binding: ActivityMainBinding by lazy {
+        ActivityMainBinding.inflate(layoutInflater)
+    }
     private lateinit var userData: UserData
     private lateinit var webSocketClient: WebSocketClient
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        enableEdgeToEdge()
+        ViewCompat.setOnApplyWindowInsetsListener(binding.main) { v, insets ->
+            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
+            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
+            insets
+        }
+
         userData = UserDataHelper(this@MainActivity).getUserData()
 
         init()
@@ -89,7 +97,7 @@ class MainActivity : AppCompatActivity() {
             }
 
             makeSubmissionMenu.setOnClickListener {
-                startActivity(Intent(this@MainActivity, CreateSubmissionActivity::class.java))
+                startActivity(Intent(this@MainActivity, SubmissionFormActivity::class.java))
             }
 
             submissionListMenu.setOnClickListener {

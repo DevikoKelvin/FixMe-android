@@ -12,6 +12,7 @@ import com.erela.fixme.objects.SubmissionDetailResponse
 import com.erela.fixme.objects.SubmissionListResponse
 import com.erela.fixme.objects.SubmitSubmissionResponse
 import com.erela.fixme.objects.UpdateStatusResponse
+import com.erela.fixme.objects.UpdateSubmissionResponse
 import com.erela.fixme.objects.UserDetailResponse
 import com.erela.fixme.objects.UserListResponse
 import okhttp3.MultipartBody
@@ -89,7 +90,7 @@ interface GetAPI {
     @POST("pengajuansave")
     fun submitSubmission(
         @PartMap partMap: MutableMap<String, RequestBody>,
-        @Part foto: MutableList<MultipartBody.Part>
+        @Part foto: List<MultipartBody.Part>
     ): Call<SubmitSubmissionResponse>
 
     @Multipart
@@ -109,4 +110,17 @@ interface GetAPI {
         @Field("tgl_pengerjaan") workingDate: String,
         @Field("waktu_pengerjaan") workingTime: String
     ): Call<UpdateStatusResponse>
+
+    @Multipart
+    @POST("updatepengajuan")
+    fun updateSubmission(
+        @PartMap partMap: MutableMap<String, RequestBody>,
+        @Part foto: List<MultipartBody.Part>
+    ): Call<UpdateSubmissionResponse>
+
+    @Multipart
+    @POST("updatepengajuan")
+    fun updateSubmissionNoAttachment(
+        @PartMap partMap: MutableMap<String, RequestBody>
+    ): Call<UpdateSubmissionResponse>
 }

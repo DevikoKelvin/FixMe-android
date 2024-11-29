@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#FDFDFD"
-    tools:context=".activities.CreateSubmissionActivity">
+    tools:context=".activities.SubmissionFormActivity">
 
     <RelativeLayout
         android:id="@+id/toolBar"
@@ -40,6 +40,7 @@
         </com.google.android.material.card.MaterialCardView>
 
         <TextView
+            android:id="@+id/pageTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
@@ -287,74 +288,6 @@
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="16dp"
                 android:layout_marginTop="8dp"
-                android:text="@string/report_time_and_date"
-                android:textSize="14sp"
-                android:textStyle="bold" />
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginHorizontal="16dp"
-                android:layout_marginTop="4dp"
-                android:gravity="center"
-                android:orientation="horizontal">
-
-                <com.google.android.material.card.MaterialCardView
-                    android:id="@+id/reportDateButton"
-                    android:layout_width="match_parent"
-                    android:layout_height="54dp"
-                    android:layout_weight="1"
-                    app:cardBackgroundColor="@android:color/transparent"
-                    app:cardCornerRadius="50dp"
-                    app:cardElevation="0dp"
-                    app:strokeColor="@color/form_field_stroke"
-                    app:strokeWidth="2dp">
-
-                    <TextView
-                        android:id="@+id/reportDateText"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:gravity="center_vertical"
-                        android:paddingHorizontal="16dp"
-                        android:text="@string/pick_a_date" />
-                </com.google.android.material.card.MaterialCardView>
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_marginHorizontal="4dp"
-                    android:text="—"
-                    android:textSize="18sp"
-                    android:textStyle="bold"
-                    tools:ignore="HardcodedText" />
-
-                <com.google.android.material.card.MaterialCardView
-                    android:id="@+id/reportTimeButton"
-                    android:layout_width="match_parent"
-                    android:layout_height="54dp"
-                    android:layout_weight="1"
-                    app:cardBackgroundColor="@android:color/transparent"
-                    app:cardCornerRadius="50dp"
-                    app:cardElevation="0dp"
-                    app:strokeColor="@color/form_field_stroke"
-                    app:strokeWidth="2dp">
-
-                    <TextView
-                        android:id="@+id/reportTimeText"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:gravity="center_vertical"
-                        android:paddingHorizontal="16dp"
-                        android:text="@string/pick_a_time" />
-                </com.google.android.material.card.MaterialCardView>
-            </LinearLayout>
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginHorizontal="16dp"
-                android:layout_marginTop="8dp"
                 android:text="@string/materials"
                 android:textSize="14sp"
                 android:textStyle="bold" />
@@ -429,6 +362,31 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/manage_attachment"
+                        android:textColor="@color/black"
+                        android:textSize="12sp"
+                        android:textStyle="bold" />
+                </com.google.android.material.card.MaterialCardView>
+
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/manageOldAttachmentButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginStart="8dp"
+                    android:visibility="gone"
+                    app:cardBackgroundColor="@android:color/transparent"
+                    app:cardCornerRadius="50dp"
+                    app:cardElevation="0dp"
+                    app:contentPaddingBottom="8dp"
+                    app:contentPaddingLeft="16dp"
+                    app:contentPaddingRight="16dp"
+                    app:contentPaddingTop="8dp"
+                    app:strokeWidth="0dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/manage_old_attachment"
                         android:textColor="@color/black"
                         android:textSize="12sp"
                         android:textStyle="bold" />

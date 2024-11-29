@@ -4,8 +4,11 @@ import android.annotation.SuppressLint
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.erela.fixme.R
 import com.erela.fixme.activities.SubmissionListActivity
@@ -21,15 +24,23 @@ import retrofit2.Callback
 import retrofit2.Response
 
 class NotificationActivity : AppCompatActivity() {
-    private lateinit var binding: ActivityNotificationBinding
+    private val binding: ActivityNotificationBinding by lazy {
+        ActivityNotificationBinding.inflate(layoutInflater)
+    }
     private lateinit var userData: UserData
     private lateinit var adapter: InboxRvAdapter
     private var inboxArrayList: ArrayList<InboxResponse> = ArrayList()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityNotificationBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        enableEdgeToEdge()
+        ViewCompat.setOnApplyWindowInsetsListener(binding.main) { v, insets ->
+            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
+            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
+            insets
+        }
 
         userData = UserDataHelper(this@NotificationActivity).getUserData()
 

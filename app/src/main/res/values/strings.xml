@@ -31,8 +31,9 @@
     <string name="materials">Materials</string>
     <string name="attach_photo">Attach Photo</string>
     <string name="choose_file">Choose file</string>
-    <string name="choose_file_title">Choose file from...</string>
+    <string name="choose_file_title">Choose file from…</string>
     <string name="manage_attachment">Manage attachment</string>
+    <string name="manage_old_attachment">Manage old attachment</string>
     <string name="see_photo">See Photo</string>
     <string name="delete_photo">Delete Photo</string>
 
@@ -69,5 +70,5 @@
     <string name="action_question">What would you do?</string>
     <string name="update_status">Update Status</string>
 
-    <string name="submission_history_title">Submission History</string>
+    <string name="edit_submission_title">Edit Submission</string>
 </resources>

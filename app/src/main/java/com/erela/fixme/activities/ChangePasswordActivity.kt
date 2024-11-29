@@ -3,7 +3,10 @@ package com.erela.fixme.activities
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
 import com.erela.fixme.R
 import com.erela.fixme.custom_views.CustomToast
 import com.erela.fixme.databinding.ActivityChangePasswordBinding
@@ -16,15 +19,24 @@ import retrofit2.Callback
 import retrofit2.Response
 
 class ChangePasswordActivity : AppCompatActivity() {
-    private lateinit var binding: ActivityChangePasswordBinding
+    private val binding: ActivityChangePasswordBinding by lazy {
+        ActivityChangePasswordBinding.inflate(layoutInflater)
+    }
     private lateinit var userData: UserData
     private var passValid = false
     private var passMatch = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityChangePasswordBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        enableEdgeToEdge()
+        ViewCompat.setOnApplyWindowInsetsListener(binding.main) { v, insets ->
+            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
+            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
+            insets
+        }
+
         userData = UserDataHelper(this).getUserData()
 
         init()

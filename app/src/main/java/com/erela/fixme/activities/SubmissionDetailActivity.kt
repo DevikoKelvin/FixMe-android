@@ -7,9 +7,15 @@ import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import androidx.activity.enableEdgeToEdge
+import androidx.activity.result.ActivityResultCallback
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
 import com.bumptech.glide.Glide
 import com.erela.fixme.adapters.pager.ImageCarouselPagerAdapter
 import com.erela.fixme.bottom_sheets.ProgressTrackingBottomSheet
@@ -33,12 +39,21 @@ import kotlin.math.PI
 
 class SubmissionDetailActivity : AppCompatActivity(),
     SubmissionActionBottomSheet.OnUpdateSuccessListener {
-    private lateinit var binding: ActivitySubmissionDetailBinding
+    private val binding: ActivitySubmissionDetailBinding by lazy {
+        ActivitySubmissionDetailBinding.inflate(layoutInflater)
+    }
     private lateinit var imageData: ArrayList<FotoGaprojectsItem>
     private lateinit var imageCarouselAdapter: ImageCarouselPagerAdapter
     private lateinit var detailId: String
     private lateinit var userData: UserData
     private lateinit var userDetail: UserDetailResponse
+    val activityResultLauncher: ActivityResultLauncher<Intent> = registerForActivityResult(
+        ActivityResultContracts.StartActivityForResult()
+    ) {
+        if (it.resultCode == RESULT_OK) {
+            init()
+        }
+    }
 
     companion object {
         const val DETAIL_ID = "DETAIL_ID"
@@ -56,8 +71,14 @@ class SubmissionDetailActivity : AppCompatActivity(),
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivitySubmissionDetailBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        enableEdgeToEdge()
+        ViewCompat.setOnApplyWindowInsetsListener(binding.main) { v, insets ->
+            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
+            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
+            insets
+        }
 
         userData = UserDataHelper(applicationContext).getUserData()
 
@@ -178,7 +199,10 @@ class SubmissionDetailActivity : AppCompatActivity(),
                                                 )
                                             )
                                             submissionStatusText.text = "Pending"
+                                            actionButton.visibility = View.GONE
+                                            editButton.visibility = View.GONE
                                             seeProgressButton.visibility = View.GONE
+                                            onProgressButton.visibility = View.GONE
                                         }
                                         // Approved
                                         2 -> {
@@ -324,10 +348,10 @@ class SubmissionDetailActivity : AppCompatActivity(),
                                     machineCodeText.text = "${getString(R.string.machine_code)}:"
                                     machineNameText.text = "${getString(R.string.machine_name)}:"
                                     machineCode.text = if (data.kodeMesin != null) {
-                                        if (data.kodeMesin.isNotEmpty()) data.kodeMesin else "-"
+                                        data.kodeMesin.ifEmpty { "-" }
                                     } else "-"
                                     machineName.text = if (data.namaMesin != null) {
-                                        if (data.namaMesin.isNotEmpty()) data.namaMesin else "-"
+                                        data.namaMesin.ifEmpty { "-" }
                                     } else "-"
                                     try {
                                         InitAPI.getAPI.getUserDetail(data.idUser!!.toInt())
@@ -481,6 +505,29 @@ class SubmissionDetailActivity : AppCompatActivity(),
                                                     actionButton.visibility = View.GONE
                                                     editButton.visibility = View.VISIBLE
                                                     onProgressButton.visibility = View.GONE
+
+                                                    editButton.setOnClickListener {
+                                                        activityResultLauncher.launch(
+                                                            Intent(
+                                                                this@SubmissionDetailActivity,
+                                                                SubmissionFormActivity::class.java
+                                                            ).also {
+                                                                with(it) {
+                                                                    putExtra("data", data)
+                                                                }
+                                                            }
+                                                        )
+                                                        /*startActivity(
+                                                            Intent(
+                                                                this@SubmissionDetailActivity,
+                                                                SubmissionFormActivity::class.java
+                                                            ).also {
+                                                                with(it) {
+                                                                    putExtra("data", data)
+                                                                }
+                                                            }
+                                                        )*/
+                                                    }
                                                 } else {
                                                     if (userDetail.hakAkses!!.toInt() < 2) {
                                                         actionButton.visibility = View.VISIBLE
@@ -493,6 +540,29 @@ class SubmissionDetailActivity : AppCompatActivity(),
                                                     actionButton.visibility = View.GONE
                                                     editButton.visibility = View.VISIBLE
                                                     onProgressButton.visibility = View.GONE
+
+                                                    editButton.setOnClickListener {
+                                                        activityResultLauncher.launch(
+                                                            Intent(
+                                                                this@SubmissionDetailActivity,
+                                                                SubmissionFormActivity::class.java
+                                                            ).also {
+                                                                with(it) {
+                                                                    putExtra("data", data)
+                                                                }
+                                                            }
+                                                        )
+                                                        /*startActivity(
+                                                            Intent(
+                                                                this@SubmissionDetailActivity,
+                                                                SubmissionFormActivity::class.java
+                                                            ).also {
+                                                                with(it) {
+                                                                    putExtra("data", data)
+                                                                }
+                                                            }
+                                                        )*/
+                                                    }
                                                 } else {
                                                     if (userDetail.hakAkses!!.toInt() < 2) {
                                                         actionButton.visibility = View.GONE

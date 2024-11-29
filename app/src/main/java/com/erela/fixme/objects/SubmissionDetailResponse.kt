@@ -1,7 +1,10 @@
 package com.erela.fixme.objects
 
+import android.os.Parcelable
 import com.google.gson.annotations.SerializedName
+import kotlinx.parcelize.Parcelize
 
+@Parcelize
 data class SubmissionDetailResponse(
     @field:SerializedName("usern_approve")
     val usernApprove: String? = null,
@@ -47,6 +50,8 @@ data class SubmissionDetailResponse(
     val setWaktuinput: String? = null,
     @field:SerializedName("tgl_waktu_trial_end")
     val tglWaktuTrialEnd: String? = null,
+    @field:SerializedName("material")
+    val material: List<MaterialItem?>? = null,
     @field:SerializedName("lokasi")
     val lokasi: String? = null,
     @field:SerializedName("tgl_waktu_kerja_start")
@@ -63,4 +68,12 @@ data class SubmissionDetailResponse(
     val deptTujuan: String? = null,
     @field:SerializedName("tgl_waktu_done")
     val tglWaktuDone: String? = null
-)
+) : Parcelable
+
+@Parcelize
+data class MaterialItem(
+    @field:SerializedName("nama_material")
+    val namaMaterial: String? = null,
+    @field:SerializedName("id_material")
+    val idMaterial: Int? = null
+) : Parcelable
