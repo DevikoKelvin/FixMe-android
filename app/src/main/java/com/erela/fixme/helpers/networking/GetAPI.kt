@@ -1,4 +1,4 @@
-package com.erela.fixme.helpers
+package com.erela.fixme.helpers.networking
 
 import com.erela.fixme.objects.CategoryListResponse
 import com.erela.fixme.objects.ChangePasswordResponse

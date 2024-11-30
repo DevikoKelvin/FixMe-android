@@ -10,12 +10,11 @@ import androidx.core.content.res.ResourcesCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.erela.fixme.R
 import com.erela.fixme.databinding.ListItemSubmissionBinding
-import com.erela.fixme.helpers.InitAPI
+import com.erela.fixme.helpers.networking.InitAPI
 import com.erela.fixme.helpers.UserDataHelper
 import com.erela.fixme.objects.SubmissionListResponse
 import com.erela.fixme.objects.UserData
 import com.erela.fixme.objects.UserDetailResponse
-import com.erela.fixme.objects.UserListResponse
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response

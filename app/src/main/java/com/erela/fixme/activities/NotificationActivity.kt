@@ -14,7 +14,7 @@ import com.erela.fixme.R
 import com.erela.fixme.adapters.recycler_view.InboxRvAdapter
 import com.erela.fixme.custom_views.CustomToast
 import com.erela.fixme.databinding.ActivityNotificationBinding
-import com.erela.fixme.helpers.InitAPI
+import com.erela.fixme.helpers.networking.InitAPI
 import com.erela.fixme.helpers.UserDataHelper
 import com.erela.fixme.objects.InboxResponse
 import com.erela.fixme.objects.UserData

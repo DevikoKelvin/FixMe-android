@@ -7,6 +7,9 @@
     <string name="main_menu">Main Menu</string>
     <string name="welcome_message">Welcome, </string>
     <string name="logout_text">Log Out</string>
+    <string name="logout_confirmation_dialog_message">Are you sure you want to log out?</string>
+    <string name="logout_confirmation_yes">Yes</string>
+    <string name="cancel_confirmation">Cancel</string>
 
     <string name="notification_title">Notification / Inbox</string>
     <string name="inbox_sent">Sent</string>

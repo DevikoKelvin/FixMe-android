@@ -10,10 +10,9 @@ import android.os.Build
 import android.os.IBinder
 import android.util.Log
 import com.erela.fixme.R
-import com.erela.fixme.helpers.InitAPI
+import com.erela.fixme.helpers.networking.InitAPI
 import com.erela.fixme.helpers.WebSocketClient
 import com.erela.fixme.objects.NotificationResponse
-import kotlinx.coroutines.DelicateCoroutinesApi
 import org.json.JSONObject
 
 class ForegroundServicesHelper : Service() {

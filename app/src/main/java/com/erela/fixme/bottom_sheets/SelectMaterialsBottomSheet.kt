@@ -9,7 +9,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.erela.fixme.adapters.recycler_view.MaterialsRvAdapters
 import com.erela.fixme.databinding.BsSelectMaterialsBinding
-import com.erela.fixme.helpers.InitAPI
+import com.erela.fixme.helpers.networking.InitAPI
 import com.erela.fixme.objects.MaterialListResponse
 import com.erela.fixme.objects.SelectedMaterialList
 import com.google.android.material.bottomsheet.BottomSheetDialog

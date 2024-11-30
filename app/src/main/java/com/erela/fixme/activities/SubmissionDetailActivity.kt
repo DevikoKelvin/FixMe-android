@@ -8,7 +8,6 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import androidx.activity.enableEdgeToEdge
-import androidx.activity.result.ActivityResultCallback
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
@@ -23,7 +22,7 @@ import com.erela.fixme.bottom_sheets.SubmissionActionBottomSheet
 import com.erela.fixme.custom_views.CustomToast
 import com.erela.fixme.databinding.ActivitySubmissionDetailBinding
 import com.erela.fixme.helpers.Base64Helper
-import com.erela.fixme.helpers.InitAPI
+import com.erela.fixme.helpers.networking.InitAPI
 import com.erela.fixme.helpers.UserDataHelper
 import com.erela.fixme.objects.FotoGaprojectsItem
 import com.erela.fixme.objects.StarconnectUserResponse
@@ -34,7 +33,6 @@ import org.json.JSONException
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import kotlin.math.PI
 
 class SubmissionDetailActivity : AppCompatActivity(),
     SubmissionActionBottomSheet.OnUpdateSuccessListener {

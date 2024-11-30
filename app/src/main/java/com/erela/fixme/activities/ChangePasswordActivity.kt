@@ -10,7 +10,7 @@ import androidx.core.view.WindowInsetsCompat
 import com.erela.fixme.R
 import com.erela.fixme.custom_views.CustomToast
 import com.erela.fixme.databinding.ActivityChangePasswordBinding
-import com.erela.fixme.helpers.InitAPI
+import com.erela.fixme.helpers.networking.InitAPI
 import com.erela.fixme.helpers.UserDataHelper
 import com.erela.fixme.objects.ChangePasswordResponse
 import com.erela.fixme.objects.UserData

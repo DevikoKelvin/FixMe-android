@@ -8,7 +8,6 @@ import android.app.NotificationManager
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
-import android.util.Log
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
@@ -19,15 +18,12 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.erela.fixme.R
 import com.erela.fixme.databinding.ActivityMainBinding
-import com.erela.fixme.helpers.InitAPI
+import com.erela.fixme.dialogs.ConfirmationDialog
 import com.erela.fixme.helpers.PermissionHelper
 import com.erela.fixme.helpers.UserDataHelper
 import com.erela.fixme.helpers.WebSocketClient
-import com.erela.fixme.objects.NotificationResponse
 import com.erela.fixme.objects.UserData
 import com.erela.fixme.services.ForegroundServicesHelper.Companion.CHANNEL_ID
-import kotlinx.coroutines.DelicateCoroutinesApi
-import org.json.JSONObject
 
 class MainActivity : AppCompatActivity() {
     private val binding: ActivityMainBinding by lazy {
@@ -52,7 +48,6 @@ class MainActivity : AppCompatActivity() {
         init()
     }
 
-    @OptIn(DelicateCoroutinesApi::class)
     @SuppressLint("SetTextI18n")
     private fun init() {
         binding.apply {
@@ -105,13 +100,37 @@ class MainActivity : AppCompatActivity() {
             }
 
             logOutButton.setOnClickListener {
-                UserDataHelper(this@MainActivity).purgeUserData()
-                Toast.makeText(
-                    this@MainActivity, "Successfully logged out!", Toast.LENGTH_SHORT
-                ).show()
-                startActivity(Intent(this@MainActivity, LoginActivity::class.java)).also {
-                    finish()
-                }
+                val confirmationDialog =
+                    ConfirmationDialog(
+                        this@MainActivity,
+                        "Are you sure you want to log out?",
+                        "Yes"
+                    ).also {
+                        with(it) {
+                            setConfirmationDialogListener(object :
+                                ConfirmationDialog.ConfirmationDialogListener {
+                                override fun onConfirm() {
+                                    UserDataHelper(this@MainActivity).purgeUserData()
+                                    Toast.makeText(
+                                        this@MainActivity,
+                                        "Successfully logged out!",
+                                        Toast.LENGTH_SHORT
+                                    ).show()
+                                    startActivity(
+                                        Intent(
+                                            this@MainActivity,
+                                            LoginActivity::class.java
+                                        )
+                                    ).also {
+                                        finish()
+                                    }
+                                }
+                            })
+                        }
+                    }
+
+                if (confirmationDialog.window != null)
+                    confirmationDialog.show()
             }
         }
     }

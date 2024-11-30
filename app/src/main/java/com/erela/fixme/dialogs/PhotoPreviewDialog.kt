@@ -8,16 +8,17 @@ import android.net.Uri
 import android.os.Bundle
 import com.bumptech.glide.Glide
 import com.erela.fixme.databinding.DialogPhotoPreviewBinding
-import com.erela.fixme.helpers.InitAPI
+import com.erela.fixme.helpers.networking.InitAPI
 
 class PhotoPreviewDialog(
     context: Context, private val imageUri: Uri?, private val photoName: String?
 ) : Dialog(context) {
-    private lateinit var binding: DialogPhotoPreviewBinding
+    private val binding: DialogPhotoPreviewBinding by lazy {
+        DialogPhotoPreviewBinding.inflate(layoutInflater)
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = DialogPhotoPreviewBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
         window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))

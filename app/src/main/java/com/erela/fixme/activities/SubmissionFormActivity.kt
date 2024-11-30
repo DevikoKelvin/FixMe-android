@@ -33,7 +33,7 @@ import com.erela.fixme.bottom_sheets.ManageOldPhotoBottomSheet
 import com.erela.fixme.bottom_sheets.ManagePhotoBottomSheet
 import com.erela.fixme.custom_views.CustomToast
 import com.erela.fixme.databinding.ActivitySubmissionFormBinding
-import com.erela.fixme.helpers.InitAPI
+import com.erela.fixme.helpers.networking.InitAPI
 import com.erela.fixme.helpers.PermissionHelper
 import com.erela.fixme.helpers.UserDataHelper
 import com.erela.fixme.objects.CategoryListResponse
@@ -293,11 +293,11 @@ class SubmissionFormActivity : AppCompatActivity() {
                         if (prepareUpdateForm()) {
                             Log.e("Photo Files", photoFiles.toString())
                             try {
-                                (/*if (photoFiles.isNotEmpty()) {*/
+                                (if (photoFiles.isNotEmpty()) {
                                     InitAPI.getAPI.updateSubmission(requestBodyMap, photoFiles)
-                                /*} else {
+                                } else {
                                     InitAPI.getAPI.updateSubmissionNoAttachment(requestBodyMap)
-                                }*/).enqueue(object : Callback<UpdateSubmissionResponse> {
+                                }).enqueue(object : Callback<UpdateSubmissionResponse> {
                                     override fun onResponse(
                                         call: Call<UpdateSubmissionResponse>,
                                         response: Response<UpdateSubmissionResponse>

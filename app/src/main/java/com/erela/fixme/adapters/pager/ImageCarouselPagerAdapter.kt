@@ -5,16 +5,14 @@ import com.erela.fixme.R
 import android.app.Activity
 import android.content.Context
 import android.view.LayoutInflater
-import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
 import androidx.viewpager.widget.PagerAdapter
 import com.bumptech.glide.Glide
 import com.erela.fixme.custom_views.zoom_helper.ImageZoomHelper
 import com.erela.fixme.databinding.ViewImageCarouselBinding
 import com.erela.fixme.helpers.Base64Helper
-import com.erela.fixme.helpers.InitAPI
+import com.erela.fixme.helpers.networking.InitAPI
 import com.erela.fixme.objects.FotoGaprojectsItem
 
 class ImageCarouselPagerAdapter(
