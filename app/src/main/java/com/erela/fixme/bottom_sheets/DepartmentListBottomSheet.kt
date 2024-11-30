@@ -16,7 +16,7 @@ import com.google.android.material.bottomsheet.BottomSheetDialog
 
 class DepartmentListBottomSheet(
     context: Context, val data: List<DepartmentListResponse>,
-    var selectedDept: DepartmentListResponse?
+    private var selectedDept: DepartmentListResponse?
 ) :
     BottomSheetDialog(context) {
     private val binding: BsDepartmentListBinding by lazy {
@@ -42,9 +42,9 @@ class DepartmentListBottomSheet(
         binding.apply {
             val departmentList = ArrayList<String>()
             departmentList.add("Select Department")
-            for (i in 0 until data.size) {
+            for (element in data) {
                 departmentList.add(
-                    data[i].namaDept.toString()
+                    element.namaDept.toString()
                 )
             }
             val departmentAdapter = ArrayAdapter(
@@ -90,7 +90,7 @@ class DepartmentListBottomSheet(
         binding.apply {
             val subDepartmentList = ArrayList<String>()
             subDepartmentList.add("Select Sub Department")
-            for (i in 0 until data.size) {
+            for (i in data.indices) {
                 if (data[i].namaDept == selectedDepartment) {
                     subDepartmentList.add(
                         data[i].subDept.toString()
@@ -116,7 +116,7 @@ class DepartmentListBottomSheet(
                         parent: AdapterView<*>?, view: View?,
                         position: Int, id: Long
                     ) {
-                        for (i in 0 until data.size) {
+                        for (i in data.indices) {
                             if (data[i].subDept == subDepartmentList[position]) {
                                 selectedSubDepartment = data[i]
                             }

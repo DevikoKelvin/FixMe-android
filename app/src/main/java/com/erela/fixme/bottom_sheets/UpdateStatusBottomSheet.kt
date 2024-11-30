@@ -36,7 +36,7 @@ import java.util.Calendar
 import java.util.Locale
 
 class UpdateStatusBottomSheet(
-    context: Context, val dataDetail: SubmissionDetailResponse, val approve: Boolean
+    context: Context, private val dataDetail: SubmissionDetailResponse, private val approve: Boolean
 ) :
     BottomSheetDialog(context) {
     private lateinit var binding: BsUpdateStatusBinding
@@ -109,17 +109,12 @@ class UpdateStatusBottomSheet(
                 startWorkTimeButton.setOnClickListener {
                     TimePickerDialog(
                         context,
-                        object : TimePickerDialog.OnTimeSetListener {
-                            override fun onTimeSet(
-                                view: TimePicker?, hourOfDay: Int,
-                                minute: Int
-                            ) {
-                                val selectedTime = Calendar.getInstance()
-                                selectedTime.set(Calendar.HOUR_OF_DAY, hourOfDay)
-                                selectedTime.set(Calendar.MINUTE, minute)
-                                val formattedTime = timeFormat.format(selectedTime.time)
-                                startWorkTimeText.text = formattedTime
-                            }
+                        { _, hourOfDay, minute ->
+                            val selectedTime = Calendar.getInstance()
+                            selectedTime.set(Calendar.HOUR_OF_DAY, hourOfDay)
+                            selectedTime.set(Calendar.MINUTE, minute)
+                            val formattedTime = timeFormat.format(selectedTime.time)
+                            startWorkTimeText.text = formattedTime
                         }, calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE), true
                     ).show()
                 }
@@ -373,8 +368,8 @@ class UpdateStatusBottomSheet(
         var validated = 0
 
         binding.apply {
-            for (i in 0 until isFormEmpty.size) {
-                if (isFormEmpty[i] != false)
+            for (element in isFormEmpty) {
+                if (element)
                     validated++
             }
         }

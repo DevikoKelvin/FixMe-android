@@ -223,5 +223,5 @@ class ImageZoomHelper(activity: Activity, view: View) : ScaleGestureDetector.OnS
 
     override fun onLongPress(view: View) {}
 
-    override fun onTap(v: View) {}
+    override fun onTap(view: View) {}
 }

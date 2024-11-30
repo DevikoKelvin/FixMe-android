@@ -66,6 +66,7 @@
             android:layout_height="wrap_content"
             android:paddingHorizontal="16dp"
             android:paddingVertical="8dp"
+            android:textColor="@color/black"
             android:textSize="14sp"
             android:textStyle="bold"
             tools:text="Progress Description" />

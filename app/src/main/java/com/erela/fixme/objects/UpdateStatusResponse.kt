@@ -3,10 +3,8 @@ package com.erela.fixme.objects
 import com.google.gson.annotations.SerializedName
 
 data class UpdateStatusResponse(
-
-	@field:SerializedName("code")
-	val code: Int? = null,
-
-	@field:SerializedName("message")
-	val message: String? = null
+    @field:SerializedName("code")
+    val code: Int? = null,
+    @field:SerializedName("message")
+    val message: String? = null
 )

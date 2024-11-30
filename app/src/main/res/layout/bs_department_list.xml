@@ -24,6 +24,7 @@
         android:layout_marginHorizontal="16dp"
         android:text="@string/department_destination"
         android:textAlignment="center"
+        android:textColor="@color/black"
         android:textSize="18sp"
         android:textStyle="bold" />
 

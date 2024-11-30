@@ -66,7 +66,7 @@ class CustomToast(private val context: Context) : Toast(context) {
         binding.apply {
             toastRootLayout.setPadding(30, marginTop, 30, marginBottom)
             if (fontColor != 0) message.setTextColor(fontColor)
-            message.text = if (toastMessage.isNotEmpty()) toastMessage else ""
+            message.text = toastMessage.ifEmpty { "" }
             if (backgroundColor != 0) container.setBackgroundColor(backgroundColor)
         }
 

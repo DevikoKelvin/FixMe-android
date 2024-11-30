@@ -5,13 +5,12 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.erela.fixme.databinding.ListItemMaterialsBinding
-import com.erela.fixme.databinding.ListItemSelectedMaterialsBinding
 import com.erela.fixme.objects.MaterialListResponse
 import com.erela.fixme.objects.SelectedMaterialList
 
 class MaterialsRvAdapters(
-    val context: Context, val materialsList: List<SelectedMaterialList>,
-    val selectedMaterialsArrayList: ArrayList<MaterialListResponse>
+    val context: Context, private val materialsList: List<SelectedMaterialList>,
+    private val selectedMaterialsArrayList: ArrayList<MaterialListResponse>
 ) : RecyclerView.Adapter<MaterialsRvAdapters.ViewHolder>() {
     private lateinit var onMaterialsSetListener: OnMaterialsSetListener
 

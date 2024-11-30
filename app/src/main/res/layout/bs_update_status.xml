@@ -24,6 +24,7 @@
         android:layout_marginHorizontal="16dp"
         android:text="@string/update_status"
         android:textAlignment="center"
+        android:textColor="@color/black"
         android:textSize="18sp"
         android:textStyle="bold" />
 
@@ -69,6 +70,7 @@
         android:layout_marginHorizontal="16dp"
         android:layout_marginTop="8dp"
         android:text="@string/start_work_time_and_date"
+        android:textColor="@color/black"
         android:textSize="14sp"
         android:textStyle="bold" />
 
@@ -222,10 +224,10 @@
                 android:id="@+id/approveLoading"
                 android:layout_width="38dp"
                 android:layout_height="38dp"
-                android:visibility="gone"
-                android:indeterminateTint="@color/custom_toast_font_success"
                 android:layout_gravity="center_vertical"
-                android:layout_marginStart="4dp" />
+                android:layout_marginStart="4dp"
+                android:indeterminateTint="@color/custom_toast_font_success"
+                android:visibility="gone" />
         </com.google.android.material.card.MaterialCardView>
     </LinearLayout>
 </LinearLayout>

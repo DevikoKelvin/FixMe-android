@@ -12,7 +12,6 @@ import com.erela.fixme.R
 import com.erela.fixme.databinding.ListItemSubmissionBinding
 import com.erela.fixme.helpers.InitAPI
 import com.erela.fixme.helpers.UserDataHelper
-import com.erela.fixme.helpers.UsernameFormatHelper
 import com.erela.fixme.objects.SubmissionListResponse
 import com.erela.fixme.objects.UserData
 import com.erela.fixme.objects.UserDetailResponse
@@ -49,13 +48,13 @@ class SubmissionRvAdapter(val context: Context, val data: ArrayList<SubmissionLi
                 machineCodeText.text = "${context.getString(R.string.machine_code)}:"
                 machineNameText.text = "${context.getString(R.string.machine_name)}:"
                 machineCode.text = if (item.kodeMesin != null) {
-                    if (item.kodeMesin.isNotEmpty()) item.kodeMesin else "-"
+                    item.kodeMesin.ifEmpty { "-" }
                 } else {
                     "-"
                 }
 
                 machineName.text = if (item.namaMesin != null) {
-                    if (item.namaMesin.isNotEmpty()) item.namaMesin else "-"
+                    item.namaMesin.ifEmpty { "-" }
                 } else {
                     "-"
                 }

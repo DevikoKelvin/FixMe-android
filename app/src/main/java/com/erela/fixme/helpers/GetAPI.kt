@@ -6,7 +6,6 @@ import com.erela.fixme.objects.DepartmentListResponse
 import com.erela.fixme.objects.InboxResponse
 import com.erela.fixme.objects.LoginResponse
 import com.erela.fixme.objects.MaterialListResponse
-import com.erela.fixme.objects.NotificationResponse
 import com.erela.fixme.objects.StarconnectUserResponse
 import com.erela.fixme.objects.SubmissionDetailResponse
 import com.erela.fixme.objects.SubmissionListResponse
@@ -21,10 +20,8 @@ import retrofit2.Call
 import retrofit2.http.Field
 import retrofit2.http.FormUrlEncoded
 import retrofit2.http.GET
-import retrofit2.http.Headers
 import retrofit2.http.Multipart
 import retrofit2.http.POST
-import retrofit2.http.PUT
 import retrofit2.http.Part
 import retrofit2.http.PartMap
 
@@ -89,14 +86,14 @@ interface GetAPI {
     @Multipart
     @POST("pengajuansave")
     fun submitSubmission(
-        @PartMap partMap: MutableMap<String, RequestBody>,
-        @Part foto: List<MultipartBody.Part>
+        @PartMap submissionData: MutableMap<String, RequestBody>,
+        @Part foto: List<MultipartBody.Part?>
     ): Call<SubmitSubmissionResponse>
 
     @Multipart
     @POST("pengajuansave")
     fun submitSubmissionNoAttachment(
-        @PartMap partMap: MutableMap<String, RequestBody>
+        @PartMap submissionData: MutableMap<String, RequestBody>
     ): Call<SubmitSubmissionResponse>
 
     @FormUrlEncoded
@@ -114,13 +111,13 @@ interface GetAPI {
     @Multipart
     @POST("updatepengajuan")
     fun updateSubmission(
-        @PartMap partMap: MutableMap<String, RequestBody>,
-        @Part foto: List<MultipartBody.Part>
+        @PartMap submissionData: MutableMap<String, RequestBody>,
+        @Part foto: List<MultipartBody.Part?>
     ): Call<UpdateSubmissionResponse>
 
     @Multipart
     @POST("updatepengajuan")
     fun updateSubmissionNoAttachment(
-        @PartMap partMap: MutableMap<String, RequestBody>
+        @PartMap submissionData: MutableMap<String, RequestBody>
     ): Call<UpdateSubmissionResponse>
 }

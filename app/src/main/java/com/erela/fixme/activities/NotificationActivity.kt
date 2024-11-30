@@ -11,7 +11,6 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.erela.fixme.R
-import com.erela.fixme.activities.SubmissionListActivity
 import com.erela.fixme.adapters.recycler_view.InboxRvAdapter
 import com.erela.fixme.custom_views.CustomToast
 import com.erela.fixme.databinding.ActivityNotificationBinding

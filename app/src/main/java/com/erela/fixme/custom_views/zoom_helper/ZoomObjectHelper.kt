@@ -19,7 +19,7 @@ object ZoomObjectHelper {
     }
 
     interface DoubleTapListener {
-        fun onDoubleTap(view: View);
+        fun onDoubleTap(view: View)
     }
 
     interface LongPressListener {
@@ -63,9 +63,9 @@ object ZoomObjectHelper {
         return Point(x, y)
     }
 
-    fun viewMidPoint(point: PointF, v: View) {
+    /*fun viewMidPoint(point: PointF, v: View) {
         val x = v.width.toFloat()
         val y = v.height.toFloat()
         point.set(x / 2, y / 2)
-    }
+    }*/
 }

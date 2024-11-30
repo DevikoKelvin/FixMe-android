@@ -49,338 +49,359 @@
             android:textStyle="bold" />
     </RelativeLayout>
 
-    <ScrollView
-        android:id="@+id/contentScrollContainer"
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/swipeRefresh"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_marginTop="8dp"
-        android:visibility="visible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/toolBar">
 
-        <LinearLayout
+        <ScrollView
+            android:id="@+id/contentScrollContainer"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            tools:ignore="UselessLeaf">
-
-            <com.google.android.material.card.MaterialCardView
-                android:id="@+id/imageContainer"
-                android:layout_width="wrap_content"
-                android:layout_height="425dp"
-                android:layout_gravity="center"
-                android:layout_margin="8dp"
-                app:cardBackgroundColor="@color/white"
-                app:cardCornerRadius="16dp"
-                app:cardElevation="2dp">
-
-                <androidx.viewpager.widget.ViewPager
-                    android:id="@+id/imageCarouselHolder"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent" />
-
-                <me.relex.circleindicator.CircleIndicator
-                    android:id="@+id/circleIndicator"
-                    android:layout_width="match_parent"
-                    android:layout_height="36dp"
-                    android:layout_gravity="bottom"
-                    android:padding="5dp"
-                    app:ci_drawable="@drawable/circle_indicator_color"
-                    app:ci_height="5dp"
-                    app:ci_width="5dp" />
-
-                <ImageView
-                    android:id="@+id/submissionImage"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    tools:ignore="ContentDescription"
-                    tools:src="@drawable/image_placeholder" />
-            </com.google.android.material.card.MaterialCardView>
-
-            <TextView
-                android:id="@+id/submissionName"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginHorizontal="16dp"
-                android:textSize="16sp"
-                android:textStyle="bold"
-                tools:text="PINTU AUTOCLAVE ECHUNG D-14 TIDAK DAPAT MENUTUP" />
+            android:layout_height="0dp"
+            android:layout_marginTop="8dp"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/toolBar">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginHorizontal="16dp"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:id="@+id/inputDate"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_weight="1"
-                    android:textSize="14sp"
-                    tools:text="07 November 2024" />
+                android:orientation="vertical"
+                tools:ignore="UselessLeaf">
 
                 <com.google.android.material.card.MaterialCardView
-                    android:id="@+id/submissionStatus"
+                    android:id="@+id/imageContainer"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="end|center"
-                    android:layout_margin="4dp"
-                    app:cardBackgroundColor="@color/status_on_progress"
-                    app:cardCornerRadius="50dp"
-                    app:cardElevation="2dp"
-                    app:contentPadding="4dp"
-                    app:contentPaddingLeft="8dp"
-                    app:contentPaddingRight="8dp"
-                    app:strokeWidth="0dp">
-
-                    <TextView
-                        android:id="@+id/submissionStatusText"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textColor="@color/white"
-                        android:textSize="12sp"
-                        android:textStyle="bold"
-                        tools:text="On Progress" />
-                </com.google.android.material.card.MaterialCardView>
-            </LinearLayout>
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginHorizontal="16dp"
-                android:layout_marginTop="8dp"
-                android:text="@string/submission_description"
-                android:textSize="16sp"
-                android:textStyle="bold" />
-
-            <TextView
-                android:id="@+id/submissionDescription"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginHorizontal="16dp"
-                tools:text="@tools:sample/lorem/random" />
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginHorizontal="16dp"
-                android:layout_marginVertical="8dp"
-                android:orientation="horizontal"
-                tools:ignore="DisableBaselineAlignment">
-
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical">
-
-                    <TextView
-                        android:id="@+id/machineCodeText"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/machine_code" />
-
-                    <TextView
-                        android:id="@+id/machineNameText"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/machine_name" />
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="4dp"
-                    android:layout_weight="1"
-                    android:orientation="vertical">
-
-                    <TextView
-                        android:id="@+id/machineCode"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textColor="@color/black"
-                        android:textStyle="bold"
-                        tools:text="D-14" />
-
-                    <TextView
-                        android:id="@+id/machineName"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textColor="@color/black"
-                        android:textStyle="bold"
-                        tools:text="Autoclave E-Chung" />
-                </LinearLayout>
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginHorizontal="16dp"
-                android:orientation="horizontal"
-                tools:ignore="UseCompoundDrawables">
-
-                <ImageView
-                    android:layout_width="21dp"
-                    android:layout_height="21dp"
-                    android:src="@drawable/baseline_account_circle_24"
-                    tools:ignore="ContentDescription" />
-
-                <TextView
-                    android:id="@+id/user"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="4dp"
-                    android:layout_weight="1"
-                    tools:text="Hendrick" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginHorizontal="16dp"
-                android:orientation="horizontal"
-                tools:ignore="UseCompoundDrawables">
-
-                <ImageView
-                    android:layout_width="21dp"
-                    android:layout_height="21dp"
-                    android:src="@drawable/baseline_work_24"
-                    tools:ignore="ContentDescription" />
-
-                <TextView
-                    android:id="@+id/department"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="4dp"
-                    android:layout_weight="1"
-                    tools:text="Engineering" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginHorizontal="16dp"
-                android:orientation="horizontal"
-                tools:ignore="UseCompoundDrawables">
-
-                <ImageView
-                    android:layout_width="21dp"
-                    android:layout_height="21dp"
-                    android:src="@drawable/baseline_access_time_24"
-                    tools:ignore="ContentDescription" />
-
-                <TextView
-                    android:id="@+id/inputTime"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="4dp"
-                    android:layout_weight="1"
-                    tools:text="2024-07-15 11:02:03" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginHorizontal="16dp"
-                android:orientation="horizontal"
-                tools:ignore="UseCompoundDrawables">
-
-                <ImageView
-                    android:layout_width="21dp"
-                    android:layout_height="21dp"
-                    android:src="@drawable/baseline_location_on_24"
-                    tools:ignore="ContentDescription" />
-
-                <TextView
-                    android:id="@+id/location"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="4dp"
-                    android:layout_weight="1"
-                    tools:text="ERELA HQ" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginHorizontal="16dp"
-                android:layout_marginBottom="75dp"
-                android:orientation="horizontal">
-
-                <ImageView
-                    android:layout_width="21dp"
-                    android:layout_height="21dp"
+                    android:layout_height="425dp"
                     android:layout_gravity="center"
-                    android:src="@drawable/baseline_calendar_month_24"
-                    tools:ignore="ContentDescription" />
+                    android:layout_margin="8dp"
+                    app:cardBackgroundColor="@color/white"
+                    app:cardCornerRadius="16dp"
+                    app:cardElevation="2dp">
+
+                    <androidx.viewpager.widget.ViewPager
+                        android:id="@+id/imageCarouselHolder"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent" />
+
+                    <me.relex.circleindicator.CircleIndicator
+                        android:id="@+id/circleIndicator"
+                        android:layout_width="match_parent"
+                        android:layout_height="36dp"
+                        android:layout_gravity="bottom"
+                        android:padding="5dp"
+                        app:ci_drawable="@drawable/circle_indicator_color"
+                        app:ci_height="5dp"
+                        app:ci_width="5dp" />
+
+                    <ImageView
+                        android:id="@+id/submissionImage"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        tools:ignore="ContentDescription"
+                        tools:src="@drawable/image_placeholder" />
+                </com.google.android.material.card.MaterialCardView>
+
+                <TextView
+                    android:id="@+id/submissionName"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="16dp"
+                    android:layout_marginTop="16dp"
+                    android:textColor="@color/black"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    tools:text="PINTU AUTOCLAVE ECHUNG D-14 TIDAK DAPAT MENUTUP" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="4dp"
-                    android:orientation="vertical">
+                    android:layout_marginHorizontal="16dp"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/inputDate"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_weight="1"
+                        android:textSize="14sp"
+                        tools:text="07 November 2024" />
+
+                    <com.google.android.material.card.MaterialCardView
+                        android:id="@+id/submissionStatus"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="end|center"
+                        android:layout_margin="4dp"
+                        app:cardBackgroundColor="@color/status_on_progress"
+                        app:cardCornerRadius="50dp"
+                        app:cardElevation="2dp"
+                        app:contentPadding="4dp"
+                        app:contentPaddingLeft="8dp"
+                        app:contentPaddingRight="8dp"
+                        app:strokeWidth="0dp">
+
+                        <TextView
+                            android:id="@+id/submissionStatusText"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textColor="@color/white"
+                            android:textSize="12sp"
+                            android:textStyle="bold"
+                            tools:text="On Progress" />
+                    </com.google.android.material.card.MaterialCardView>
+                </LinearLayout>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="16dp"
+                    android:layout_marginTop="8dp"
+                    android:text="@string/submission_description"
+                    android:textColor="@color/black"
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/submissionDescription"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="16dp"
+                    android:textColor="@color/black"
+                    tools:text="@tools:sample/lorem/random" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="16dp"
+                    android:layout_marginVertical="8dp"
+                    android:orientation="horizontal"
+                    tools:ignore="DisableBaselineAlignment">
 
                     <LinearLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:orientation="horizontal">
+                        android:orientation="vertical">
 
                         <TextView
+                            android:id="@+id/machineCodeText"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="@string/submission_report" />
+                            android:text="@string/machine_code" />
 
                         <TextView
-                            android:id="@+id/reportTime"
+                            android:id="@+id/machineNameText"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginStart="4dp"
-                            tools:text="2024-07-15 10:44:00" />
+                            android:text="@string/machine_name" />
                     </LinearLayout>
 
                     <LinearLayout
-                        android:layout_width="wrap_content"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:orientation="horizontal">
+                        android:layout_marginStart="4dp"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
 
                         <TextView
+                            android:id="@+id/machineCode"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="@string/submission_start_working" />
+                            android:textColor="@color/black"
+                            android:textStyle="bold"
+                            tools:text="D-14" />
 
                         <TextView
-                            android:id="@+id/startWork"
+                            android:id="@+id/machineName"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginStart="4dp"
-                            tools:text="2024-07-15 10:44:00" />
+                            android:textColor="@color/black"
+                            android:textStyle="bold"
+                            tools:text="Autoclave E-Chung" />
                     </LinearLayout>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="16dp"
+                    android:orientation="horizontal"
+                    tools:ignore="UseCompoundDrawables">
+
+                    <ImageView
+                        android:layout_width="21dp"
+                        android:layout_height="21dp"
+                        android:src="@drawable/baseline_account_circle_24"
+                        tools:ignore="ContentDescription" />
+
+                    <TextView
+                        android:id="@+id/user"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="4dp"
+                        android:layout_weight="1"
+                        android:textColor="@color/black"
+                        tools:text="Hendrick" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="16dp"
+                    android:orientation="horizontal"
+                    tools:ignore="UseCompoundDrawables">
+
+                    <ImageView
+                        android:layout_width="21dp"
+                        android:layout_height="21dp"
+                        android:src="@drawable/baseline_work_24"
+                        tools:ignore="ContentDescription" />
+
+                    <TextView
+                        android:id="@+id/department"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="4dp"
+                        android:layout_weight="1"
+                        android:textColor="@color/black"
+                        tools:text="Engineering" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="16dp"
+                    android:orientation="horizontal"
+                    tools:ignore="UseCompoundDrawables">
+
+                    <ImageView
+                        android:layout_width="21dp"
+                        android:layout_height="21dp"
+                        android:src="@drawable/baseline_access_time_24"
+                        tools:ignore="ContentDescription" />
+
+                    <TextView
+                        android:id="@+id/inputTime"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="4dp"
+                        android:layout_weight="1"
+                        android:textColor="@color/black"
+                        tools:text="2024-07-15 11:02:03" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="16dp"
+                    android:orientation="horizontal"
+                    tools:ignore="UseCompoundDrawables">
+
+                    <ImageView
+                        android:layout_width="21dp"
+                        android:layout_height="21dp"
+                        android:src="@drawable/baseline_location_on_24"
+                        tools:ignore="ContentDescription" />
+
+                    <TextView
+                        android:id="@+id/location"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="4dp"
+                        android:layout_weight="1"
+                        android:textColor="@color/black"
+                        tools:text="ERELA HQ" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="16dp"
+                    android:layout_marginBottom="75dp"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:layout_width="21dp"
+                        android:layout_height="21dp"
+                        android:layout_gravity="center"
+                        android:src="@drawable/baseline_calendar_month_24"
+                        tools:ignore="ContentDescription" />
 
                     <LinearLayout
-                        android:layout_width="wrap_content"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="horizontal">
+                        android:layout_marginStart="4dp"
+                        android:orientation="vertical">
 
-                        <TextView
+                        <LinearLayout
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="@string/submission_end_working" />
+                            android:orientation="horizontal">
 
-                        <TextView
-                            android:id="@+id/endWork"
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/submission_report" />
+
+                            <TextView
+                                android:id="@+id/reportTime"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="4dp"
+                                android:textColor="@color/black"
+                                tools:text="2024-07-15 10:44:00" />
+                        </LinearLayout>
+
+                        <LinearLayout
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginStart="4dp"
-                            tools:text="2024-07-15 10:44:00" />
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/submission_start_working" />
+
+                            <TextView
+                                android:id="@+id/startWork"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="4dp"
+                                android:textColor="@color/black"
+                                tools:text="2024-07-15 10:44:00" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/submission_end_working" />
+
+                            <TextView
+                                android:id="@+id/endWork"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="4dp"
+                                android:textColor="@color/black"
+                                tools:text="2024-07-15 10:44:00" />
+                        </LinearLayout>
                     </LinearLayout>
                 </LinearLayout>
             </LinearLayout>
-        </LinearLayout>
-    </ScrollView>
+        </ScrollView>
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/seeProgressButton"

@@ -9,7 +9,6 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.erela.fixme.databinding.ListItemAttachmentBinding
 import com.erela.fixme.dialogs.PhotoPreviewDialog
-import com.erela.fixme.objects.FotoGaprojectsItem
 
 class AttachmentRvAdapter(private val context: Context, val data: ArrayList<Uri>) :
     RecyclerView.Adapter<AttachmentRvAdapter.ViewHolder>() {

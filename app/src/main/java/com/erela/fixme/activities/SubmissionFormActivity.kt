@@ -2,11 +2,10 @@ package com.erela.fixme.activities
 
 import android.annotation.SuppressLint
 import android.content.ClipData
+import android.content.ContentResolver
 import android.content.ContentValues
 import android.content.Intent
 import android.content.pm.PackageManager.PERMISSION_GRANTED
-import android.graphics.Bitmap
-import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
@@ -56,11 +55,9 @@ import org.json.JSONException
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import java.io.BufferedOutputStream
 import java.io.File
 import java.io.FileOutputStream
-import java.io.InputStream
-import java.io.OutputStream
+import java.io.IOException
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
@@ -80,7 +77,7 @@ class SubmissionFormActivity : AppCompatActivity() {
     private var deletedOldImageArray: ArrayList<Int> = ArrayList()
     private var cameraCaptureFileName: String = ""
     private lateinit var imageUri: Uri
-    private val photoFiles: ArrayList<MultipartBody.Part> = ArrayList()
+    private val photoFiles: ArrayList<MultipartBody.Part?> = ArrayList()
     private val requestBodyMap: MutableMap<String, RequestBody> = mutableMapOf()
     private var isFormEmpty = arrayOf(
         false,
@@ -98,10 +95,10 @@ class SubmissionFormActivity : AppCompatActivity() {
             if (resultCode == RESULT_OK) {
                 val imageUrl: Uri? = data?.data
                 if (imageUrl != null) {
-                    for (element in imageArrayUri) {
-                        if (element == imageUrl)
-                            return@registerForActivityResult
-                        else
+                    if (imageArrayUri.isEmpty())
+                        imageArrayUri.add(imageUrl)
+                    else {
+                        if (!imageArrayUri.contains(imageUrl))
                             imageArrayUri.add(imageUrl)
                     }
                 }
@@ -109,7 +106,6 @@ class SubmissionFormActivity : AppCompatActivity() {
             }
         }
     }
-
     private val galleryLauncher: ActivityResultLauncher<Intent> = registerForActivityResult(
         ActivityResultContracts.StartActivityForResult()
     ) {
@@ -119,20 +115,20 @@ class SubmissionFormActivity : AppCompatActivity() {
                     val mClipData: ClipData = data!!.clipData!!
                     for (i in 0 until mClipData.itemCount) {
                         val imageUrl: Uri = mClipData.getItemAt(i).uri
-                        for (element in imageArrayUri) {
-                            if (element == imageUrl)
-                                return@registerForActivityResult
-                            else
+                        if (imageArrayUri.isEmpty())
+                            imageArrayUri.add(imageUrl)
+                        else {
+                            if (!imageArrayUri.contains(imageUrl))
                                 imageArrayUri.add(imageUrl)
                         }
                     }
                 } else {
                     val imageUrl: Uri? = data?.data
                     if (imageUrl != null) {
-                        for (element in imageArrayUri) {
-                            if (element == imageUrl)
-                                return@registerForActivityResult
-                            else
+                        if (imageArrayUri.isEmpty())
+                            imageArrayUri.add(imageUrl)
+                        else {
+                            if (!imageArrayUri.contains(imageUrl))
                                 imageArrayUri.add(imageUrl)
                         }
                     }
@@ -178,7 +174,6 @@ class SubmissionFormActivity : AppCompatActivity() {
             }
 
             if (detail != null) {
-                Log.e("Detail Data", detail.toString())
                 pageTitle.text = getString(R.string.edit_submission_title)
                 caseTitleField.setText("${detail?.judulKasus}")
                 isFormEmpty[0] = true
@@ -298,11 +293,11 @@ class SubmissionFormActivity : AppCompatActivity() {
                         if (prepareUpdateForm()) {
                             Log.e("Photo Files", photoFiles.toString())
                             try {
-                                (if (photoFiles.isNotEmpty()) {
+                                (/*if (photoFiles.isNotEmpty()) {*/
                                     InitAPI.getAPI.updateSubmission(requestBodyMap, photoFiles)
-                                } else {
+                                /*} else {
                                     InitAPI.getAPI.updateSubmissionNoAttachment(requestBodyMap)
-                                }).enqueue(object : Callback<UpdateSubmissionResponse> {
+                                }*/).enqueue(object : Callback<UpdateSubmissionResponse> {
                                     override fun onResponse(
                                         call: Call<UpdateSubmissionResponse>,
                                         response: Response<UpdateSubmissionResponse>
@@ -638,9 +633,9 @@ class SubmissionFormActivity : AppCompatActivity() {
     private fun prepareUpdateForm(): Boolean {
         binding.apply {
             if (imageArrayUri.isNotEmpty()) {
-                for (i in 0 until imageArrayUri.size) {
+                for (element in imageArrayUri) {
                     photoFiles.add(
-                        createMultipartBody(imageArrayUri[i], "foto[]")
+                        createMultipartBody(element, "foto[]")
                     )
                 }
             }
@@ -713,9 +708,9 @@ class SubmissionFormActivity : AppCompatActivity() {
     private fun prepareSubmitForm(): Boolean {
         binding.apply {
             if (imageArrayUri.isNotEmpty()) {
-                for (i in 0 until imageArrayUri.size) {
+                for (element in imageArrayUri) {
                     photoFiles.add(
-                        createMultipartBody(imageArrayUri[i], "foto[]")
+                        createMultipartBody(element, "foto[]")
                     )
                 }
             }
@@ -1353,18 +1348,68 @@ class SubmissionFormActivity : AppCompatActivity() {
         }
     }
 
-    private fun createMultipartBody(uri: Uri, multipartName: String): MultipartBody.Part {
-        val documentImage =
+    private fun createMultipartBody(uri: Uri, multipartName: String): MultipartBody.Part? {
+        return try {
+            val file = File(getRealPathFromURI(uri)!!)
+            val requestBody = file.asRequestBody("image/*".toMediaTypeOrNull())
+            MultipartBody.Part.createFormData(multipartName, file.name, requestBody)
+        } catch (e: Exception) {
+            Log.e("createMultipartBody", "Error creating MultipartBody.Part", e)
+            null
+        }
+        /*val documentImage =
             BitmapFactory.decodeFile(getRealPathFromURI(uri))
         val file = File(getRealPathFromURI(uri))
         val os: OutputStream = BufferedOutputStream(FileOutputStream(file))
         documentImage.compress(Bitmap.CompressFormat.JPEG, 100, os)
         os.close()
-        val requestBody = file.asRequestBody("image/*".toMediaTypeOrNull())
-        return MultipartBody.Part.createFormData(multipartName, file.name, requestBody)
+        val requestBody = file.asRequestBody("image".toMediaTypeOrNull())
+        return MultipartBody.Part.createFormData(multipartName, file.name, requestBody)*/
     }
 
-    private fun getRealPathFromURI(uri: Uri): String {
+    private fun getRealPathFromURI(uri: Uri): String? {
+        val contentResolver = contentResolver
+        val fileName = getFileName(contentResolver, uri)
+
+        if (fileName != null) {
+            val file = File(cacheDir, fileName)
+            try {
+                val inputStream = contentResolver.openInputStream(uri)
+                val outputStream = FileOutputStream(file)
+                val buffer = ByteArray(4 * 1024)
+                var read: Int
+
+                while (inputStream!!.read(buffer).also { read = it } != -1) {
+                    outputStream.write(buffer, 0, read)
+                }
+
+                outputStream.flush()
+                outputStream.close()
+                inputStream.close()
+
+                return file.absolutePath
+            } catch (e: IOException) {
+                Log.e("getRealPathFromURI", "Error: ${e.message}")
+            }
+        }
+
+        return null
+    }
+
+    private fun getFileName(contentResolver: ContentResolver, uri: Uri): String? {
+        val cursor = contentResolver.query(uri, null, null, null, null)
+        if (cursor != null && cursor.moveToFirst()) {
+            val displayNameIndex = cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME)
+            if (displayNameIndex != -1) {
+                val fileName = cursor.getString(displayNameIndex)
+                cursor.close()
+                return fileName
+            }
+        }
+        cursor?.close()
+        return null
+    }
+    /*private fun getRealPathFromURI(uri: Uri): String {
         val returnCursor = contentResolver.query(uri, null, null, null, null)
         val nameIndex = returnCursor!!.getColumnIndex(OpenableColumns.DISPLAY_NAME)
         returnCursor.moveToFirst()
@@ -1392,8 +1437,7 @@ class SubmissionFormActivity : AppCompatActivity() {
             Log.e("Exception", e.message!!)
         }
         return file.path
-    }
-
+    }*/
     private fun createPartFromString(stringData: String?): RequestBody? {
         return stringData?.toRequestBody("text/plain".toMediaTypeOrNull())
     }

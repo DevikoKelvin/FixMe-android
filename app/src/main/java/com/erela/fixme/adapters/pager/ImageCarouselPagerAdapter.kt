@@ -24,29 +24,19 @@ class ImageCarouselPagerAdapter(
 ) : PagerAdapter() {
     private lateinit var binding: ViewImageCarouselBinding
 
-    companion object {
-        const val WITH_FULL_URL = 2
-    }
-
-    @SuppressLint("ClickableViewAccessibility")
+    @SuppressLint("ClickableViewAccessibility", "InflateParams")
     override fun instantiateItem(container: ViewGroup, position: Int): Any {
-        /*return super.instantiateItem(container, position)*/
-        val data = imageUrlArrayList[position]
-
         binding = ViewImageCarouselBinding.bind(
             LayoutInflater.from(context).inflate(R.layout.view_image_carousel, null)
         )
+        val data = imageUrlArrayList[position]
 
         binding.apply {
             val imageZoomHelper = ImageZoomHelper(activity, displayImage)
-            displayImage.setOnTouchListener(object : View.OnTouchListener {
-                override fun onTouch(
-                    v: View?, event: MotionEvent?
-                ): Boolean {
-                    imageZoomHelper.init(event!!)
-                    return true
-                }
-            })
+            displayImage.setOnTouchListener { _, event ->
+                imageZoomHelper.init(event!!)
+                true
+            }
 
             try {
                 if (Base64Helper.isBase64Encoded(data.foto.toString())) {

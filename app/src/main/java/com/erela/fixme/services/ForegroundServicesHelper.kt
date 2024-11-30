@@ -16,7 +16,6 @@ import com.erela.fixme.objects.NotificationResponse
 import kotlinx.coroutines.DelicateCoroutinesApi
 import org.json.JSONObject
 
-@OptIn(DelicateCoroutinesApi::class)
 class ForegroundServicesHelper : Service() {
     private lateinit var webSocketClient: WebSocketClient
 
@@ -35,8 +34,8 @@ class ForegroundServicesHelper : Service() {
                     override fun onMessage(message: String) {
                         Log.e("Message", message)
                         val jsonObject = JSONObject(message)
-                        val notification: NotificationResponse = NotificationResponse(
-                            jsonObject.getInt("expires") ?: null,
+                        val notification = NotificationResponse(
+                            jsonObject.getInt("expires"),
                             jsonObject.getString("topic"),
                             jsonObject.getString("id"),
                             jsonObject.getInt("time"),
@@ -80,27 +79,5 @@ class ForegroundServicesHelper : Service() {
                 NOTIFICATION_ID, notification, ServiceInfo.FOREGROUND_SERVICE_TYPE_REMOTE_MESSAGING
             )
         }
-        /*val notification =
-            NotificationCompat.Builder(this@ForegroundServicesHelper, CHANNEL_ID)
-                .setSmallIcon(R.drawable.fixme_logo)
-                .setContentTitle("Erela FixMe")
-                .setPriority(Notification.PRIORITY_DEFAULT)
-
-        if (ActivityCompat.checkSelfPermission(
-                this@ForegroundServicesHelper, Manifest.permission.POST_NOTIFICATIONS
-            ) != PackageManager.PERMISSION_GRANTED
-        ) {
-            return
-        } else {
-            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
-                startForeground(NOTIFICATION_ID, notification)
-            } else {
-                startForeground(
-                    NOTIFICATION_ID, notification, ServiceInfo.FOREGROUND_SERVICE_TYPE_REMOTE_MESSAGING
-                )
-            }
-        }
-        NotificationManagerCompat.from(this@ForegroundServicesHelper)
-            .notify(1, notification.build())*/
     }
 }

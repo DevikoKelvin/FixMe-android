@@ -25,7 +25,6 @@ import com.erela.fixme.databinding.ActivitySubmissionDetailBinding
 import com.erela.fixme.helpers.Base64Helper
 import com.erela.fixme.helpers.InitAPI
 import com.erela.fixme.helpers.UserDataHelper
-import com.erela.fixme.helpers.UsernameFormatHelper
 import com.erela.fixme.objects.FotoGaprojectsItem
 import com.erela.fixme.objects.StarconnectUserResponse
 import com.erela.fixme.objects.SubmissionDetailResponse
@@ -73,14 +72,21 @@ class SubmissionDetailActivity : AppCompatActivity(),
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
 
-        enableEdgeToEdge()
-        ViewCompat.setOnApplyWindowInsetsListener(binding.main) { v, insets ->
-            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
-            insets
-        }
+        binding.apply {
+            enableEdgeToEdge()
+            ViewCompat.setOnApplyWindowInsetsListener(main) { v, insets ->
+                val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
+                v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
+                insets
+            }
 
-        userData = UserDataHelper(applicationContext).getUserData()
+            userData = UserDataHelper(applicationContext).getUserData()
+
+            swipeRefresh.setOnRefreshListener {
+                init()
+                swipeRefresh.isRefreshing = false
+            }
+        }
 
         init()
     }

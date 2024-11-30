@@ -66,14 +66,14 @@ class MainActivity : AppCompatActivity() {
                 )
             }
 
-            webSocketClient = WebSocketClient.getInstance()
+            /*webSocketClient = WebSocketClient.getInstance()
             webSocketClient.setSocketUrl(InitAPI.SOCKET_URL)
             webSocketClient.setListener(object : WebSocketClient.SocketListener {
                 override fun onMessage(message: String) {
                     val jsonObject = JSONObject(message)
                     Log.e("Message", jsonObject.toString())
-                    val notification: NotificationResponse = NotificationResponse(
-                        jsonObject.getInt("expires") ?: null,
+                    val notification = NotificationResponse(
+                        jsonObject.getInt("expires"),
                         jsonObject.getString("topic"),
                         jsonObject.getString("id"),
                         jsonObject.getInt("time"),
@@ -83,7 +83,7 @@ class MainActivity : AppCompatActivity() {
                     showNotification(notification.message.toString())
                 }
             })
-            webSocketClient.connect()
+            webSocketClient.connect()*/
 
             usernameText.text = "${userData.name}!"
 
@@ -128,12 +128,6 @@ class MainActivity : AppCompatActivity() {
 
     private fun showNotification(message: String) {
         createNotification()
-        /*val notification = Notification.Builder(this, CHANNEL_ID)
-            .setContentText(message)
-            .setContentTitle("Erela FixMe")
-            .setSmallIcon(R.drawable.fixme_logo)
-            .setPriority(Notification.PRIORITY_DEFAULT)
-            .build()*/
         val notification =
             NotificationCompat.Builder(this@MainActivity, CHANNEL_ID)
                 .setContentText(message)
@@ -147,12 +141,5 @@ class MainActivity : AppCompatActivity() {
             return
         NotificationManagerCompat.from(this@MainActivity)
             .notify(1, notification.build())
-        /*if (Build.VERSION.SDK_INT < Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
-            startForeground(NOTIFICATION_ID, notification)
-        } else {
-            startForeground(
-                NOTIFICATION_ID, notification, ServiceInfo.FOREGROUND_SERVICE_TYPE_REMOTE_MESSAGING
-            )
-        }*/
     }
 }

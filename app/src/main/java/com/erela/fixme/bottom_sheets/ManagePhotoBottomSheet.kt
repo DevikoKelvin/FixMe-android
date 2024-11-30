@@ -9,9 +9,7 @@ import android.os.Bundle
 import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.erela.fixme.adapters.recycler_view.AttachmentRvAdapter
-import com.erela.fixme.adapters.recycler_view.OldAttachmentRvAdapter
 import com.erela.fixme.databinding.BsManagePhotoBinding
-import com.erela.fixme.objects.FotoGaprojectsItem
 import com.google.android.material.bottomsheet.BottomSheetDialog
 
 class ManagePhotoBottomSheet(context: Context, val imageArrayUri: ArrayList<Uri>) :

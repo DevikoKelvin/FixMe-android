@@ -19,7 +19,6 @@ import com.erela.fixme.custom_views.CustomToast
 import com.erela.fixme.databinding.ActivityLoginBinding
 import com.erela.fixme.helpers.InitAPI
 import com.erela.fixme.helpers.UserDataHelper
-import com.erela.fixme.helpers.UsernameFormatHelper
 import com.erela.fixme.objects.LoginResponse
 import com.erela.fixme.objects.UserData
 import com.google.android.material.snackbar.Snackbar

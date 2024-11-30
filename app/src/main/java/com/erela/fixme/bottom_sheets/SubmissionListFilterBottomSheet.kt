@@ -8,7 +8,8 @@ import android.view.ViewGroup
 import com.erela.fixme.databinding.BsSubmissionListFilterBinding
 import com.google.android.material.bottomsheet.BottomSheetDialog
 
-class SubmissionListFilterBottomSheet(context: Context, val selectedFilter: Int) : BottomSheetDialog(context) {
+class SubmissionListFilterBottomSheet(context: Context, private val selectedFilter: Int) :
+    BottomSheetDialog(context) {
     private lateinit var binding: BsSubmissionListFilterBinding
     private lateinit var onFilterListener: OnFilterListener
 
@@ -34,6 +35,7 @@ class SubmissionListFilterBottomSheet(context: Context, val selectedFilter: Int)
                     onProgressSelector.isChecked = false
                     onTrialSelector.isChecked = false
                 }
+
                 1 -> pendingSelector.isChecked = true
                 0 -> rejectedSelector.isChecked = true
                 2 -> approvedSelector.isChecked = true
