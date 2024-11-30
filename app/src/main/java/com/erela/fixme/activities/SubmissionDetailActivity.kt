@@ -91,6 +91,7 @@ class SubmissionDetailActivity : AppCompatActivity(),
         init()
     }
 
+    @SuppressLint("SetTextI18n")
     private fun init() {
         binding.apply {
             detailId = intent.getStringExtra(DETAIL_ID).toString()
@@ -105,7 +106,6 @@ class SubmissionDetailActivity : AppCompatActivity(),
             try {
                 InitAPI.getAPI.getSubmissionDetail(detailId)
                     .enqueue(object : Callback<List<SubmissionDetailResponse>> {
-                        @SuppressLint("SetTextI18n")
                         override fun onResponse(
                             call: Call<List<SubmissionDetailResponse>?>,
                             response: Response<List<SubmissionDetailResponse>?>
