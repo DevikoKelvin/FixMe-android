@@ -65,80 +65,24 @@
     </com.google.android.material.textfield.TextInputLayout>
 
     <TextView
+        android:id="@+id/selectSupervisorText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="16dp"
         android:layout_marginTop="8dp"
-        android:text="@string/start_work_time_and_date"
         android:textColor="@color/black"
         android:textSize="14sp"
-        android:textStyle="bold" />
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginHorizontal="16dp"
-        android:layout_marginTop="4dp"
-        android:gravity="center"
-        android:orientation="horizontal">
-
-        <com.google.android.material.card.MaterialCardView
-            android:id="@+id/startWorkDateButton"
-            android:layout_width="match_parent"
-            android:layout_height="54dp"
-            android:layout_weight="1"
-            app:cardBackgroundColor="@android:color/transparent"
-            app:cardCornerRadius="50dp"
-            app:cardElevation="0dp"
-            app:strokeColor="@color/form_field_stroke"
-            app:strokeWidth="2dp">
-
-            <TextView
-                android:id="@+id/startWorkDateText"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:gravity="center_vertical"
-                android:paddingHorizontal="16dp"
-                android:text="@string/pick_a_date" />
-        </com.google.android.material.card.MaterialCardView>
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginHorizontal="4dp"
-            android:text="—"
-            android:textSize="18sp"
-            android:textStyle="bold"
-            tools:ignore="HardcodedText" />
-
-        <com.google.android.material.card.MaterialCardView
-            android:id="@+id/startWorkTimeButton"
-            android:layout_width="match_parent"
-            android:layout_height="54dp"
-            android:layout_weight="1"
-            app:cardBackgroundColor="@android:color/transparent"
-            app:cardCornerRadius="50dp"
-            app:cardElevation="0dp"
-            app:strokeColor="@color/form_field_stroke"
-            app:strokeWidth="2dp">
-
-            <TextView
-                android:id="@+id/startWorkTimeText"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:gravity="center_vertical"
-                android:paddingHorizontal="16dp"
-                android:text="@string/pick_a_time" />
-        </com.google.android.material.card.MaterialCardView>
-    </LinearLayout>
+        android:textStyle="bold"
+        android:visibility="gone"
+        tools:text="@string/select_supervisor" />
 
     <com.google.android.material.card.MaterialCardView
-        android:id="@+id/userTargetDropdownLayout"
+        android:id="@+id/supervisorDropdownLayout"
         android:layout_width="match_parent"
         android:layout_height="54dp"
         android:layout_marginHorizontal="16dp"
         android:layout_marginTop="8dp"
+        android:visibility="gone"
         app:cardBackgroundColor="@android:color/transparent"
         app:cardCornerRadius="50dp"
         app:cardElevation="0dp"
@@ -153,15 +97,38 @@
         app:strokeWidth="2dp">
 
         <Spinner
-            android:id="@+id/userTargetDropdown"
+            android:id="@+id/supervisorDropdown"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             tools:listitem="@layout/support_simple_spinner_dropdown_item" />
     </com.google.android.material.card.MaterialCardView>
 
+    <TextView
+        android:id="@+id/selectTechniciansText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="16dp"
+        android:layout_marginTop="8dp"
+        android:textColor="@color/black"
+        android:textSize="14sp"
+        android:textStyle="bold"
+        android:visibility="gone"
+        tools:text="@string/select_technicians" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvTechnicians"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="16dp"
+        android:layout_marginTop="4dp"
+        android:visibility="gone"
+        app:layoutManager="com.google.android.flexbox.FlexboxLayoutManager"
+        tools:itemCount="2"
+        tools:listitem="@layout/list_item_selected_items" />
+
     <LinearLayout
-        android:id="@+id/approveRejectButtonContainer"
+        android:id="@+id/actionsButtonContainer"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="16dp"
@@ -227,6 +194,36 @@
                 android:layout_gravity="center_vertical"
                 android:layout_marginStart="4dp"
                 android:indeterminateTint="@color/custom_toast_font_success"
+                android:visibility="gone" />
+        </com.google.android.material.card.MaterialCardView>
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/deployTechButton"
+            android:layout_width="match_parent"
+            android:layout_height="46dp"
+            android:layout_marginVertical="8dp"
+            android:layout_weight="1"
+            android:visibility="gone"
+            app:cardBackgroundColor="@color/custom_toast_default_background"
+            app:cardCornerRadius="50dp"
+            app:strokeWidth="0dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="@string/action_deploy_tech"
+                android:textColor="@color/white"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+
+            <ProgressBar
+                android:id="@+id/deployTechLoading"
+                android:layout_width="38dp"
+                android:layout_height="38dp"
+                android:layout_gravity="center_vertical"
+                android:layout_marginStart="4dp"
+                android:indeterminateTint="@color/custom_toast_font_blue"
                 android:visibility="gone" />
         </com.google.android.material.card.MaterialCardView>
     </LinearLayout>

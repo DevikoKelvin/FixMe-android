@@ -10,6 +10,8 @@ import com.erela.fixme.objects.StarconnectUserResponse
 import com.erela.fixme.objects.SubmissionDetailResponse
 import com.erela.fixme.objects.SubmissionListResponse
 import com.erela.fixme.objects.SubmitSubmissionResponse
+import com.erela.fixme.objects.SupervisorListResponse
+import com.erela.fixme.objects.TechnicianListResponse
 import com.erela.fixme.objects.UpdateStatusResponse
 import com.erela.fixme.objects.UpdateSubmissionResponse
 import com.erela.fixme.objects.UserDetailResponse
@@ -120,4 +122,16 @@ interface GetAPI {
     fun updateSubmissionNoAttachment(
         @PartMap submissionData: MutableMap<String, RequestBody>
     ): Call<UpdateSubmissionResponse>
+
+    @FormUrlEncoded
+    @POST("setspv")
+    fun getSupervisorList(
+        @Field("id") id: Int
+    ): Call<List<SupervisorListResponse>>
+
+    @FormUrlEncoded
+    @POST("setteknisi")
+    fun getTechnicianList(
+        @Field("id") id: Int
+    ): Call<List<TechnicianListResponse>>
 }

@@ -29,7 +29,7 @@
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/imageContainer"
             android:layout_width="wrap_content"
-            android:layout_height="425dp"
+            android:layout_height="150dp"
             android:layout_gravity="center"
             app:cardBackgroundColor="@android:color/transparent"
             app:cardCornerRadius="0dp"
@@ -54,8 +54,9 @@
             <ImageView
                 android:id="@+id/submissionImage"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_gravity="center"
+                android:visibility="gone"
                 tools:ignore="ContentDescription"
                 tools:src="@drawable/image_placeholder" />
         </com.google.android.material.card.MaterialCardView>
@@ -65,10 +66,21 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:paddingHorizontal="16dp"
-            android:paddingVertical="8dp"
+            android:paddingVertical="4dp"
             android:textColor="@color/black"
             android:textSize="14sp"
             android:textStyle="bold"
             tools:text="Progress Description" />
+
+        <TextView
+            android:id="@+id/dateTimeText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:paddingHorizontal="16dp"
+            android:textAlignment="textEnd"
+            android:textSize="11sp"
+            android:textStyle="bold"
+            tools:text="2024-11-29 16:15:24" />
     </LinearLayout>
 </androidx.cardview.widget.CardView>

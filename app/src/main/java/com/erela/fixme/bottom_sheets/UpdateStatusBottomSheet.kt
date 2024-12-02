@@ -1,8 +1,6 @@
 package com.erela.fixme.bottom_sheets
 
 import android.annotation.SuppressLint
-import android.app.DatePickerDialog
-import android.app.TimePickerDialog
 import android.content.Context
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
@@ -21,6 +19,7 @@ import com.erela.fixme.databinding.BsUpdateStatusBinding
 import com.erela.fixme.helpers.networking.InitAPI
 import com.erela.fixme.helpers.UserDataHelper
 import com.erela.fixme.objects.SubmissionDetailResponse
+import com.erela.fixme.objects.SupervisorListResponse
 import com.erela.fixme.objects.UpdateStatusResponse
 import com.erela.fixme.objects.UserData
 import com.erela.fixme.objects.UserDetailResponse
@@ -30,32 +29,30 @@ import org.json.JSONException
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import java.text.SimpleDateFormat
-import java.util.Calendar
 import java.util.Locale
 
 class UpdateStatusBottomSheet(
-    context: Context, private val dataDetail: SubmissionDetailResponse, private val approve: Boolean
-) :
-    BottomSheetDialog(context) {
-    private lateinit var binding: BsUpdateStatusBinding
+    context: Context, private val dataDetail: SubmissionDetailResponse,
+    private val approve: Boolean, private val deployTech: Boolean
+) : BottomSheetDialog(context) {
+    private val binding: BsUpdateStatusBinding by lazy {
+        BsUpdateStatusBinding.inflate(layoutInflater)
+    }
+    private val userData: UserData by lazy {
+        UserDataHelper(context).getUserData()
+    }
     private lateinit var userDetail: UserDetailResponse
     private lateinit var onUpdateSuccessListener: OnUpdateSuccessListener
-    private lateinit var userData: UserData
-    private var targetUserId = 0
-    private var calendar = Calendar.getInstance()
+    private var idSupervisor = 0
+    private var techniciansList: ArrayList<Int> = ArrayList()
     private var isFormEmpty = arrayOf(
-        false,
         false,
         false
     )
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = BsUpdateStatusBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
-        userData = UserDataHelper(context).getUserData()
 
         window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
         window?.setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT)
@@ -82,215 +79,104 @@ class UpdateStatusBottomSheet(
 
                 override fun afterTextChanged(s: Editable?) {}
             })
-            approveRejectButtonContainer.visibility = View.VISIBLE
-            val dateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
-            val timeFormat = SimpleDateFormat("HH:mm", Locale.getDefault())
-            startWorkDateText.text = dateFormat.format(calendar.time)
-            startWorkTimeText.text = timeFormat.format(calendar.time)
-            isFormEmpty[1] = true
-            if (approve) {
-                approveButton.visibility = View.VISIBLE
-                rejectButton.visibility = View.GONE
-                descriptionField.setText("Approved!")
-                isFormEmpty[0] = true
-                startWorkDateButton.setOnClickListener {
-                    DatePickerDialog(
-                        context,
-                        { _, year, month, dayOfMonth ->
-                            val selectedDate = Calendar.getInstance()
-                            selectedDate.set(year, month, dayOfMonth)
-                            val formattedDate = dateFormat.format(selectedDate.time)
-                            startWorkDateText.text = formattedDate
-                        }, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH),
-                        calendar.get(Calendar.DAY_OF_MONTH)
-                    ).show()
-                }
-                startWorkTimeButton.setOnClickListener {
-                    TimePickerDialog(
-                        context,
-                        { _, hourOfDay, minute ->
-                            val selectedTime = Calendar.getInstance()
-                            selectedTime.set(Calendar.HOUR_OF_DAY, hourOfDay)
-                            selectedTime.set(Calendar.MINUTE, minute)
-                            val formattedTime = timeFormat.format(selectedTime.time)
-                            startWorkTimeText.text = formattedTime
-                        }, calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE), true
-                    ).show()
-                }
-                try {
-                    InitAPI.getAPI.getUserList().enqueue(object : Callback<List<UserListResponse>> {
-                        override fun onResponse(
-                            call: Call<List<UserListResponse>?>,
-                            response: Response<List<UserListResponse>?>
-                        ) {
-                            if (response.isSuccessful) {
-                                if (response.body() != null) {
-                                    val data: ArrayList<String> = ArrayList()
-                                    data.add("Select User")
-                                    for (i in 0 until response.body()!!.size) {
-                                        data.add(
-                                            "${response.body()!![i].usern} (ID: ${response.body()!![i].idUser}, Starconnect ID: ${response.body()!![i].idUserStarconnect})"
-                                        )
-                                    }
-                                    val dropdownAdapter = ArrayAdapter(
-                                        context,
-                                        R.layout.general_dropdown_item,
-                                        R.id.dropdownItemText,
-                                        data
-                                    )
-                                    userTargetDropdown.adapter = dropdownAdapter
-                                    userTargetDropdown.onItemSelectedListener =
-                                        object : AdapterView.OnItemSelectedListener {
-                                            override fun onItemSelected(
-                                                parent: AdapterView<*>?,
-                                                view: View?, position: Int,
-                                                id: Long
-                                            ) {
-                                                targetUserId =
-                                                    if (position == 0) 0 else response.body()!![position - 1].idUser!!.toInt()
-                                                Log.e("USER ID", "$targetUserId")
-                                                if (targetUserId == 0) {
-                                                    Log.e(
-                                                        "Selected User", "Invalid"
-                                                    )
-                                                    isFormEmpty[2] = false
-                                                } else {
-                                                    Log.e(
-                                                        "Selected User", "Valid"
-                                                    )
-                                                    isFormEmpty[2] = true
-                                                }
-                                                Log.e(
-                                                    "Selected User is valid?", "${isFormEmpty[2]}"
+
+            actionsButtonContainer.visibility = View.VISIBLE
+            if (!deployTech) {
+                if (approve) {
+                    selectSupervisorText.visibility = View.VISIBLE
+                    supervisorDropdownLayout.visibility = View.VISIBLE
+                    selectTechniciansText.visibility = View.GONE
+                    rvTechnicians.visibility = View.GONE
+                    approveButton.visibility = View.VISIBLE
+                    rejectButton.visibility = View.GONE
+                    deployTechButton.visibility = View.GONE
+                    descriptionField.setText("Approved!")
+                    isFormEmpty[0] = true
+                    try {
+                        InitAPI.getAPI.getSupervisorList(dataDetail.idGaprojects!!).enqueue(
+                            object : Callback<List<SupervisorListResponse>> {
+                                override fun onResponse(
+                                    call: Call<List<SupervisorListResponse>>,
+                                    response: Response<List<SupervisorListResponse>>
+                                ) {
+                                    if (response.isSuccessful) {
+                                        if (response.body() != null) {
+                                            val data: ArrayList<String> = ArrayList()
+                                            data.add("Select User")
+                                            for (i in 0 until response.body()!!.size) {
+                                                data.add(
+                                                    "Starconnect ID: ${response.body()!![i].idUserStarconnect}\n${
+                                                        response.body()!![i].namaUser?.uppercase(
+                                                            Locale.getDefault()
+                                                        )
+                                                    }"
                                                 )
                                             }
+                                            val dropdownAdapter = ArrayAdapter(
+                                                context,
+                                                R.layout.general_dropdown_item,
+                                                R.id.dropdownItemText,
+                                                data
+                                            )
+                                            supervisorDropdown.adapter = dropdownAdapter
+                                            supervisorDropdown.onItemSelectedListener =
+                                                object : AdapterView.OnItemSelectedListener {
+                                                    override fun onItemSelected(
+                                                        parent: AdapterView<*>?, view: View?,
+                                                        position: Int, id: Long
+                                                    ) {
+                                                        idSupervisor =
+                                                            if (position == 0) 0 else response.body()!![position - 1].idUser!!.toInt()
+                                                        Log.e("USER ID", "$idSupervisor")
+                                                        if (idSupervisor == 0) {
+                                                            Log.e(
+                                                                "Selected User", "Invalid"
+                                                            )
+                                                            isFormEmpty[2] = false
+                                                        } else {
+                                                            Log.e(
+                                                                "Selected User", "Valid"
+                                                            )
+                                                            isFormEmpty[2] = true
+                                                        }
+                                                        Log.e(
+                                                            "Selected User is valid?",
+                                                            "${isFormEmpty[2]}"
+                                                        )
+                                                    }
 
-                                            override fun onNothingSelected(
-                                                parent: AdapterView<*>?
-                                            ) {
-                                            }
+                                                    override fun onNothingSelected(
+                                                        parent: AdapterView<*>?
+                                                    ) {
+                                                    }
+                                                }
                                         }
-                                }
-                            } else {
-                                CustomToast.getInstance(context)
-                                    .setBackgroundColor(
-                                        ContextCompat.getColor(
-                                            context,
-                                            R.color.custom_toast_background_failed
-                                        )
-                                    )
-                                    .setFontColor(
-                                        ContextCompat.getColor(
-                                            context,
-                                            R.color.custom_toast_font_failed
-                                        )
-                                    )
-                                    .setMessage("Can't retrieve user list. Please try again later.")
-                                    .show()
-                                Log.e("ERROR", response.message())
-                                dismiss()
-                            }
-                        }
-
-                        override fun onFailure(
-                            call: Call<List<UserListResponse>?>,
-                            throwable: Throwable
-                        ) {
-                            CustomToast.getInstance(context)
-                                .setBackgroundColor(
-                                    ContextCompat.getColor(
-                                        context,
-                                        R.color.custom_toast_background_failed
-                                    )
-                                )
-                                .setFontColor(
-                                    ContextCompat.getColor(
-                                        context,
-                                        R.color.custom_toast_font_failed
-                                    )
-                                )
-                                .setMessage("Can't retrieve user list. Please try again later.")
-                                .show()
-                            Log.e("ERROR", throwable.toString())
-                            throwable.printStackTrace()
-                            dismiss()
-                        }
-                    })
-                } catch (exception: JSONException) {
-                    CustomToast.getInstance(context)
-                        .setBackgroundColor(
-                            ContextCompat.getColor(
-                                context,
-                                R.color.custom_toast_background_failed
-                            )
-                        )
-                        .setFontColor(
-                            ContextCompat.getColor(
-                                context,
-                                R.color.custom_toast_font_failed
-                            )
-                        )
-                        .setMessage("Can't retrieve user list. Please try again later.").show()
-                    exception.printStackTrace()
-                }
-                approveButton.setOnClickListener {
-                    executeUpdate(
-                        2, descriptionField.text.toString(), startWorkDateText.text.toString(),
-                        startWorkTimeText.text.toString(), targetUserId
-                    )
-                }
-            } else {
-                approveButton.visibility = View.GONE
-                rejectButton.visibility = View.VISIBLE
-                descriptionField.setText("Rejected!")
-                isFormEmpty[0] = true
-                val data: ArrayList<String> = ArrayList()
-                try {
-                    InitAPI.getAPI.getUserDetail(dataDetail.idUser!!.toInt())
-                        .enqueue(object : Callback<UserDetailResponse> {
-                            override fun onResponse(
-                                call: Call<UserDetailResponse?>,
-                                response: Response<UserDetailResponse?>
-                            ) {
-                                if (response.isSuccessful) {
-                                    if (response.body() != null) {
-                                        userDetail = UserDetailResponse(
-                                            response.body()!!.stsAktif,
-                                            response.body()!!.nama,
-                                            response.body()!!.usern,
-                                            response.body()!!.idDept,
-                                            response.body()!!.hakAkses,
-                                            response.body()!!.idUser,
-                                            response.body()!!.idUserStarconnect
-                                        )
-                                        data.add(
-                                            "${userDetail.usern} (ID: ${userDetail.idUser}, Starconnect ID: ${userDetail.idUserStarconnect})"
-                                        )
-                                        val dropdownAdapter = ArrayAdapter(
-                                            context,
-                                            R.layout.general_dropdown_item,
-                                            R.id.dropdownItemText,
-                                            data
-                                        )
-                                        userTargetDropdown.adapter = dropdownAdapter
-                                        userTargetDropdown.onItemSelectedListener =
-                                            object : AdapterView.OnItemSelectedListener {
-                                                override fun onItemSelected(
-                                                    parent: AdapterView<*>?,
-                                                    view: View?, position: Int,
-                                                    id: Long
-                                                ) {
-                                                    targetUserId = userDetail.idUser!!.toInt()
-                                                    isFormEmpty[2] = true
-                                                }
-
-                                                override fun onNothingSelected(
-                                                    parent: AdapterView<*>?
-                                                ) {
-                                                }
-                                            }
+                                    } else {
+                                        CustomToast.getInstance(context)
+                                            .setBackgroundColor(
+                                                ContextCompat.getColor(
+                                                    context,
+                                                    R.color.custom_toast_background_failed
+                                                )
+                                            )
+                                            .setFontColor(
+                                                ContextCompat.getColor(
+                                                    context,
+                                                    R.color.custom_toast_font_failed
+                                                )
+                                            )
+                                            .setMessage(
+                                                "Can't retrieve user list. Please try again later."
+                                            )
+                                            .show()
+                                        Log.e("ERROR", response.message())
+                                        dismiss()
                                     }
-                                } else {
+                                }
+
+                                override fun onFailure(
+                                    call: Call<List<SupervisorListResponse>>, throwable: Throwable
+                                ) {
                                     CustomToast.getInstance(context)
                                         .setBackgroundColor(
                                             ContextCompat.getColor(
@@ -306,59 +192,51 @@ class UpdateStatusBottomSheet(
                                         )
                                         .setMessage(
                                             "Can't retrieve user list. Please try again later."
-                                        ).show()
-                                    Log.e("ERROR", response.message())
+                                        )
+                                        .show()
+                                    Log.e("ERROR", throwable.toString())
+                                    throwable.printStackTrace()
                                     dismiss()
                                 }
                             }
-
-                            override fun onFailure(
-                                call: Call<UserDetailResponse?>,
-                                throwable: Throwable
-                            ) {
-                                CustomToast.getInstance(context)
-                                    .setBackgroundColor(
-                                        ContextCompat.getColor(
-                                            context,
-                                            R.color.custom_toast_background_failed
-                                        )
-                                    )
-                                    .setFontColor(
-                                        ContextCompat.getColor(
-                                            context,
-                                            R.color.custom_toast_font_failed
-                                        )
-                                    )
-                                    .setMessage("Can't retrieve user list. Please try again later.")
-                                    .show()
-                                Log.e("ERROR", throwable.toString())
-                                throwable.printStackTrace()
-                                dismiss()
-                            }
-                        })
-                } catch (exception: Exception) {
-                    CustomToast.getInstance(context)
-                        .setBackgroundColor(
-                            ContextCompat.getColor(
-                                context,
-                                R.color.custom_toast_background_failed
-                            )
                         )
-                        .setFontColor(
-                            ContextCompat.getColor(
-                                context,
-                                R.color.custom_toast_font_failed
+                    } catch (jsonException: JSONException) {
+                        CustomToast.getInstance(context)
+                            .setBackgroundColor(
+                                ContextCompat.getColor(
+                                    context,
+                                    R.color.custom_toast_background_failed
+                                )
                             )
-                        )
-                        .setMessage("Can't retrieve user list. Please try again later.").show()
-                    exception.printStackTrace()
+                            .setFontColor(
+                                ContextCompat.getColor(
+                                    context,
+                                    R.color.custom_toast_font_failed
+                                )
+                            )
+                            .setMessage("Can't retrieve user list. Please try again later.").show()
+                        jsonException.printStackTrace()
+                        dismiss()
+                    }
+                } else {
+                    selectSupervisorText.visibility = View.GONE
+                    supervisorDropdownLayout.visibility = View.GONE
+                    selectTechniciansText.visibility = View.GONE
+                    rvTechnicians.visibility = View.GONE
+                    approveButton.visibility = View.GONE
+                    rejectButton.visibility = View.VISIBLE
+                    deployTechButton.visibility = View.VISIBLE
+                    descriptionField.setText("Rejected!")
+                    isFormEmpty[0] = true
                 }
-            }
-            rejectButton.setOnClickListener {
-                executeUpdate(
-                    0, descriptionField.text.toString(), startWorkDateText.text.toString(),
-                    startWorkTimeText.text.toString(), targetUserId
-                )
+            } else {
+                selectSupervisorText.visibility = View.GONE
+                supervisorDropdownLayout.visibility = View.GONE
+                selectTechniciansText.visibility = View.VISIBLE
+                rvTechnicians.visibility = View.VISIBLE
+                approveButton.visibility = View.GONE
+                rejectButton.visibility = View.GONE
+                deployTechButton.visibility = View.GONE
             }
         }
     }
@@ -371,19 +249,29 @@ class UpdateStatusBottomSheet(
                 if (element)
                     validated++
             }
-        }
 
-        return validated == isFormEmpty.size
+            return if (!deployTech) {
+                if (approve)
+                    validated == isFormEmpty.size
+                else
+                    validated == 1
+            } else
+                validated == 1
+        }
     }
 
     private fun executeUpdate(
-        status: Int, description: String, workingDate: String, workingTime: String,
-        targetUserId: Int
+        description: String, selectedSupervisor: Int,
     ) {
         binding.apply {
-            when (status) {
-                0 -> rejectLoading.visibility = View.VISIBLE
-                2 -> approveLoading.visibility = View.VISIBLE
+            if (!deployTech) {
+                if (formCheck()) {
+                    if (approve) {
+                        try {
+                            
+                        }
+                    }
+                }
             }
             if (formCheck()) {
                 try {

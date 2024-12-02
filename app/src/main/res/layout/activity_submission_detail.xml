@@ -40,13 +40,14 @@
         </com.google.android.material.card.MaterialCardView>
 
         <TextView
+            android:id="@+id/detailTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            android:text="@string/submission_detail_title"
             android:textColor="@color/black"
             android:textSize="16sp"
-            android:textStyle="bold" />
+            android:textStyle="bold"
+            tools:text="@string/submission_detail_title" />
     </RelativeLayout>
 
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
@@ -442,12 +443,13 @@
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/statusMessageContainer"
             android:layout_width="match_parent"
-            android:layout_height="46dp"
+            android:layout_height="wrap_content"
             android:layout_alignParentStart="true"
             android:layout_centerVertical="true"
             android:layout_marginHorizontal="16dp"
             android:layout_marginVertical="16dp"
             android:layout_toStartOf="@+id/editButton"
+            android:minHeight="46dp"
             android:visibility="gone"
             app:cardBackgroundColor="@color/custom_toast_background_soft_blue"
             app:cardCornerRadius="50dp"
@@ -471,12 +473,13 @@
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/onProgressButton"
             android:layout_width="match_parent"
-            android:layout_height="46dp"
+            android:layout_height="wrap_content"
             android:layout_alignParentStart="true"
             android:layout_centerVertical="true"
             android:layout_marginHorizontal="16dp"
             android:layout_marginVertical="16dp"
             android:layout_toStartOf="@+id/editButton"
+            android:minHeight="46dp"
             android:visibility="gone"
             app:cardBackgroundColor="@color/custom_toast_font_normal_gray"
             app:cardCornerRadius="50dp"
@@ -501,12 +504,13 @@
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/actionButton"
             android:layout_width="match_parent"
-            android:layout_height="46dp"
+            android:layout_height="wrap_content"
             android:layout_alignParentStart="true"
             android:layout_centerVertical="true"
             android:layout_marginHorizontal="16dp"
             android:layout_marginVertical="16dp"
             android:layout_toStartOf="@+id/editButton"
+            android:minHeight="46dp"
             android:visibility="gone"
             app:cardBackgroundColor="@color/button_color"
             app:cardCornerRadius="50dp"

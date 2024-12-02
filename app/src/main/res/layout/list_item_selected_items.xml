@@ -38,11 +38,11 @@
         </com.google.android.material.card.MaterialCardView>
 
         <TextView
-            android:id="@+id/materialText"
+            android:id="@+id/itemText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
             android:textColor="@color/black"
-            tools:text="Bata" />
+            tools:text="Item" />
     </LinearLayout>
 </androidx.cardview.widget.CardView>

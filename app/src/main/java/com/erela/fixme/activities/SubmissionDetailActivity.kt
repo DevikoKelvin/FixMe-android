@@ -44,6 +44,7 @@ class SubmissionDetailActivity : AppCompatActivity(),
     private lateinit var detailId: String
     private lateinit var userData: UserData
     private lateinit var userDetail: UserDetailResponse
+    private var message: StringBuilder = StringBuilder()
     val activityResultLauncher: ActivityResultLauncher<Intent> = registerForActivityResult(
         ActivityResultContracts.StartActivityForResult()
     ) {
@@ -114,6 +115,7 @@ class SubmissionDetailActivity : AppCompatActivity(),
                                 if (response.body() != null) {
                                     val data = response.body()!![0]
                                     Log.e("DATA", data.toString())
+                                    detailTitle.text = data.nomorRequest
                                     if (data.fotoGaprojects!!.isEmpty()) {
                                         imageContainer.visibility = View.GONE
                                     } else {
@@ -218,7 +220,13 @@ class SubmissionDetailActivity : AppCompatActivity(),
                                                 )
                                             )
                                             submissionStatusText.text = "Approved"
-                                            /*if (userData.id == data.idUserEnd?.toInt()) {
+                                            var tech = false
+                                            for (i in 0 until data.usernUserTeknisi!!.size) {
+                                                if (data.usernUserTeknisi[i]?.idUser == userData.id)
+                                                    tech = true
+                                            }
+
+                                            if (tech) {
                                                 actionButton.visibility = View.VISIBLE
                                                 editButton.visibility = View.GONE
                                                 seeProgressButton.visibility = View.GONE
@@ -236,15 +244,73 @@ class SubmissionDetailActivity : AppCompatActivity(),
                                                         R.color.custom_toast_background_soft_blue
                                                     )
                                                 )
-                                                statusMessage.text =
-                                                    "Approved by ${data.usernApprove}\nWaiting for action from ${data.usernUserEnd}"
-                                                statusMessage.setTextColor(
-                                                    ContextCompat.getColor(
-                                                        this@SubmissionDetailActivity,
-                                                        R.color.black
-                                                    )
+                                                message = StringBuilder().append(
+                                                    "Approved by ${data.usernApprove}\nWaiting for action from "
                                                 )
-                                            }*/
+                                                if (data.usernUserTeknisi.isNotEmpty()) {
+                                                    for (i in 0 until data.usernUserTeknisi.size) {
+                                                        if (data.usernUserTeknisi.size > 1) {
+                                                            if (i < data.usernUserTeknisi.size - 1) {
+                                                                message.append(
+                                                                    "${data.usernUserTeknisi[i]?.namaUser} or "
+                                                                )
+                                                            } else {
+                                                                message.append(
+                                                                    "${data.usernUserTeknisi[i]?.namaUser}"
+                                                                )
+                                                            }
+                                                        } else
+                                                            message.append(
+                                                                "${data.usernUserTeknisi[i]?.namaUser}"
+                                                            )
+                                                    }
+                                                    statusMessage.text = message.toString()
+                                                    statusMessage.setTextColor(
+                                                        ContextCompat.getColor(
+                                                            this@SubmissionDetailActivity,
+                                                            R.color.black
+                                                        )
+                                                    )
+                                                } else {
+                                                    InitAPI.getAPI.getUserDetail(
+                                                        data.usernUserSpv?.get(0)?.idUser!!.toInt()
+                                                    ).enqueue(object :
+                                                        Callback<UserDetailResponse> {
+                                                        override fun onResponse(
+                                                            call1: Call<UserDetailResponse>,
+                                                            response1: Response<UserDetailResponse>
+                                                        ) {
+                                                            if (response1.isSuccessful) {
+                                                                if (response1.body() != null) {
+                                                                    message.append(
+                                                                        "${response1.body()!!.usern} to assign technicians"
+                                                                    )
+                                                                    statusMessage.text = message.toString()
+                                                                    statusMessage.setTextColor(
+                                                                        ContextCompat.getColor(
+                                                                            this@SubmissionDetailActivity,
+                                                                            R.color.black
+                                                                        )
+                                                                    )
+                                                                }
+                                                            } else {
+                                                                Log.e(
+                                                                    "ERROR ${response1.code()}",
+                                                                    response1.message()
+                                                                )
+                                                            }
+                                                        }
+
+                                                        override fun onFailure(
+                                                            call1: Call<UserDetailResponse>,
+                                                            throwable: Throwable
+                                                        ) {
+                                                            Log.e("ERROR", throwable.toString())
+                                                            throwable.printStackTrace()
+                                                        }
+                                                    })
+                                                }
+                                            }
                                         }
                                         // On-Progress
                                         3 -> {
@@ -260,10 +326,22 @@ class SubmissionDetailActivity : AppCompatActivity(),
                                             editButton.visibility = View.GONE
                                             seeProgressButton.visibility = View.GONE
                                             onProgressButton.visibility = View.VISIBLE
-                                            onProgressText.text =
-                                                "On Progress by ${data.usernUserEnd}.\nClick to see progress."
+                                            message = StringBuilder().append("On Progress by ")
+                                            for (i in 0 until data.usernUserTeknisi!!.size) {
+                                                if (i < data.usernUserTeknisi.size - 1) {
+                                                    message.append(
+                                                        "${data.usernUserTeknisi[i]?.namaUser}, "
+                                                    )
+                                                } else {
+                                                    message.append(
+                                                        "${data.usernUserTeknisi[i]?.namaUser}\nClick to see progress."
+                                                    )
+                                                }
+                                            }
+                                            onProgressText.text = message.toString()
                                             onProgressButton.setOnClickListener {
                                                 val bottomSheet = ProgressTrackingBottomSheet(
+                                                    this@SubmissionDetailActivity,
                                                     this@SubmissionDetailActivity, data
                                                 )
 
@@ -302,6 +380,7 @@ class SubmissionDetailActivity : AppCompatActivity(),
                                             )
                                             statusMessageContainer.setOnClickListener {
                                                 val bottomSheet = ProgressTrackingBottomSheet(
+                                                    this@SubmissionDetailActivity,
                                                     this@SubmissionDetailActivity, data
                                                 )
 
@@ -340,6 +419,7 @@ class SubmissionDetailActivity : AppCompatActivity(),
                                             )
                                             statusMessageContainer.setOnClickListener {
                                                 val bottomSheet = ProgressTrackingBottomSheet(
+                                                    this@SubmissionDetailActivity,
                                                     this@SubmissionDetailActivity, data
                                                 )
 
