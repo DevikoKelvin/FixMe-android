@@ -7,7 +7,7 @@ import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.erela.fixme.bottom_sheets.SelectMaterialsBottomSheet
-import com.erela.fixme.databinding.ListItemSelectedMaterialsBinding
+import com.erela.fixme.databinding.ListItemSelectedItemsBinding
 import com.erela.fixme.objects.MaterialListResponse
 
 class SelectedMaterialsRvAdapters(
@@ -19,7 +19,7 @@ class SelectedMaterialsRvAdapters(
     override fun onCreateViewHolder(
         parent: ViewGroup, viewType: Int
     ): ViewHolder = ViewHolder(
-        ListItemSelectedMaterialsBinding.inflate(
+        ListItemSelectedItemsBinding.inflate(
             android.view.LayoutInflater.from(parent.context), parent, false
         ).root
     )
@@ -31,7 +31,7 @@ class SelectedMaterialsRvAdapters(
         val item = selectedMaterialsArrayList[position]
         with(holder) {
             binding.apply {
-                materialText.text = item.namaMaterial
+                itemText.text = item.namaMaterial
                 if (position == selectedMaterialsArrayList.size - 1) {
                     materialContainer.setCardBackgroundColor(
                         ContextCompat.getColor(
@@ -75,7 +75,7 @@ class SelectedMaterialsRvAdapters(
     override fun getItemCount(): Int = selectedMaterialsArrayList.size
 
     inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-        val binding = ListItemSelectedMaterialsBinding.bind(view)
+        val binding = ListItemSelectedItemsBinding.bind(view)
     }
 
     fun setOnMaterialsSetListener(onMaterialsSetListener: OnMaterialsSetListener) {

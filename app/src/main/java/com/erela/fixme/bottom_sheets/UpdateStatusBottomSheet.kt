@@ -16,15 +16,16 @@ import androidx.core.content.ContextCompat
 import com.erela.fixme.R
 import com.erela.fixme.custom_views.CustomToast
 import com.erela.fixme.databinding.BsUpdateStatusBinding
-import com.erela.fixme.helpers.networking.InitAPI
 import com.erela.fixme.helpers.UserDataHelper
+import com.erela.fixme.helpers.networking.InitAPI
 import com.erela.fixme.objects.SubmissionDetailResponse
 import com.erela.fixme.objects.SupervisorListResponse
 import com.erela.fixme.objects.UpdateStatusResponse
 import com.erela.fixme.objects.UserData
-import com.erela.fixme.objects.UserDetailResponse
-import com.erela.fixme.objects.UserListResponse
 import com.google.android.material.bottomsheet.BottomSheetDialog
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import okhttp3.RequestBody
+import okhttp3.RequestBody.Companion.toRequestBody
 import org.json.JSONException
 import retrofit2.Call
 import retrofit2.Callback
@@ -41,7 +42,6 @@ class UpdateStatusBottomSheet(
     private val userData: UserData by lazy {
         UserDataHelper(context).getUserData()
     }
-    private lateinit var userDetail: UserDetailResponse
     private lateinit var onUpdateSuccessListener: OnUpdateSuccessListener
     private var idSupervisor = 0
     private var techniciansList: ArrayList<Int> = ArrayList()
@@ -218,6 +218,9 @@ class UpdateStatusBottomSheet(
                         jsonException.printStackTrace()
                         dismiss()
                     }
+                    approveButton.setOnClickListener {
+                        executeUpdate()
+                    }
                 } else {
                     selectSupervisorText.visibility = View.GONE
                     supervisorDropdownLayout.visibility = View.GONE
@@ -228,6 +231,9 @@ class UpdateStatusBottomSheet(
                     deployTechButton.visibility = View.VISIBLE
                     descriptionField.setText("Rejected!")
                     isFormEmpty[0] = true
+                    rejectButton.setOnClickListener {
+                        executeUpdate()
+                    }
                 }
             } else {
                 selectSupervisorText.visibility = View.GONE
@@ -237,6 +243,9 @@ class UpdateStatusBottomSheet(
                 approveButton.visibility = View.GONE
                 rejectButton.visibility = View.GONE
                 deployTechButton.visibility = View.GONE
+                deployTechButton.setOnClickListener {
+                    executeUpdate()
+                }
             }
         }
     }
@@ -260,83 +269,143 @@ class UpdateStatusBottomSheet(
         }
     }
 
-    private fun executeUpdate(
-        description: String, selectedSupervisor: Int,
-    ) {
+    private fun executeUpdate() {
         binding.apply {
+            approveLoading.visibility = View.VISIBLE
+            rejectLoading.visibility = View.VISIBLE
+            deployTechLoading.visibility = View.VISIBLE
             if (!deployTech) {
                 if (formCheck()) {
                     if (approve) {
                         try {
-                            
-                        }
-                    }
-                }
-            }
-            if (formCheck()) {
-                try {
-                    InitAPI.getAPI.updateSubmissionStatus(
-                        userData.id,
-                        dataDetail.idGaprojects!!.toInt(),
-                        status,
-                        description,
-                        targetUserId,
-                        workingDate,
-                        workingTime
-                    ).enqueue(object : Callback<UpdateStatusResponse> {
-                        override fun onResponse(
-                            call: Call<UpdateStatusResponse?>,
-                            response: Response<UpdateStatusResponse?>
-                        ) {
-                            when (status) {
-                                0 -> rejectLoading.visibility = View.GONE
-                                2 -> approveLoading.visibility = View.GONE
+                            val data: MutableMap<String, RequestBody> = mutableMapOf()
+                            with(data) {
+                                put("id_user", createPartFromString(userData.id.toString())!!)
+                                put(
+                                    "id_gaprojects",
+                                    createPartFromString(dataDetail.idGaprojects.toString())!!
+                                )
+                                put("keterangan", createPartFromString(descriptionField.text.toString())!!)
+                                put(
+                                    "supervisor[]", createPartFromString(
+                                        idSupervisor.toString()
+                                    )!!
+                                )
                             }
-                            if (response.isSuccessful) {
-                                if (response.body() != null) {
-                                    CustomToast.getInstance(context)
-                                        .setBackgroundColor(
-                                            ContextCompat.getColor(
-                                                context,
-                                                R.color.custom_toast_background_success
+                            InitAPI.getAPI.approveSubmission(data)
+                                .enqueue(object : Callback<UpdateStatusResponse> {
+                                    override fun onResponse(
+                                        call: Call<UpdateStatusResponse>,
+                                        response: Response<UpdateStatusResponse>
+                                    ) {
+                                        approveLoading.visibility = View.GONE
+                                        rejectLoading.visibility = View.GONE
+                                        deployTechLoading.visibility = View.GONE
+                                        if (response.isSuccessful) {
+                                            if (response.body() != null) {
+                                                val result = response.body()
+                                                if (result?.code == 1) {
+                                                    CustomToast.getInstance(context)
+                                                        .setBackgroundColor(
+                                                            ContextCompat.getColor(
+                                                                context,
+                                                                R.color.custom_toast_background_failed
+                                                            )
+                                                        )
+                                                        .setFontColor(
+                                                            ContextCompat.getColor(
+                                                                context,
+                                                                R.color.custom_toast_font_failed
+                                                            )
+                                                        )
+                                                        .setMessage(
+                                                            "Submission approved successfully."
+                                                        ).show()
+                                                    onUpdateSuccessListener.onApproved()
+                                                } else {
+                                                    CustomToast.getInstance(context)
+                                                        .setBackgroundColor(
+                                                            ContextCompat.getColor(
+                                                                context,
+                                                                R.color.custom_toast_background_failed
+                                                            )
+                                                        )
+                                                        .setFontColor(
+                                                            ContextCompat.getColor(
+                                                                context,
+                                                                R.color.custom_toast_font_failed
+                                                            )
+                                                        )
+                                                        .setMessage("Failed to approve submission.")
+                                                        .show()
+                                                }
+                                            } else {
+                                                CustomToast.getInstance(context)
+                                                    .setBackgroundColor(
+                                                        ContextCompat.getColor(
+                                                            context,
+                                                            R.color.custom_toast_background_failed
+                                                        )
+                                                    )
+                                                    .setFontColor(
+                                                        ContextCompat.getColor(
+                                                            context,
+                                                            R.color.custom_toast_font_failed
+                                                        )
+                                                    )
+                                                    .setMessage("Failed to approve submission.")
+                                                    .show()
+                                            }
+                                        } else {
+                                            CustomToast.getInstance(context)
+                                                .setBackgroundColor(
+                                                    ContextCompat.getColor(
+                                                        context,
+                                                        R.color.custom_toast_background_failed
+                                                    )
+                                                )
+                                                .setFontColor(
+                                                    ContextCompat.getColor(
+                                                        context,
+                                                        R.color.custom_toast_font_failed
+                                                    )
+                                                )
+                                                .setMessage("Failed to approve submission.").show()
+                                            Log.e(
+                                                "ERROR ${response.code()}",
+                                                response.message().toString()
                                             )
-                                        )
-                                        .setFontColor(
-                                            ContextCompat.getColor(
-                                                context,
-                                                R.color.custom_toast_font_success
-                                            )
-                                        )
-                                        .setMessage("Status updated!").show()
-                                    dismiss()
-                                    onUpdateSuccessListener.onUpdateSuccess()
-                                }
-                            } else {
-                                CustomToast.getInstance(context)
-                                    .setBackgroundColor(
-                                        ContextCompat.getColor(
-                                            context,
-                                            R.color.custom_toast_background_failed
-                                        )
-                                    )
-                                    .setFontColor(
-                                        ContextCompat.getColor(
-                                            context,
-                                            R.color.custom_toast_font_failed
-                                        )
-                                    )
-                                    .setMessage("Failed to update status").show()
-                            }
-                        }
+                                        }
+                                    }
 
-                        override fun onFailure(
-                            call: Call<UpdateStatusResponse?>,
-                            throwable: Throwable
-                        ) {
-                            when (status) {
-                                0 -> rejectLoading.visibility = View.GONE
-                                2 -> approveLoading.visibility = View.GONE
-                            }
+                                    override fun onFailure(
+                                        call: Call<UpdateStatusResponse>, throwable: Throwable
+                                    ) {
+                                        approveLoading.visibility = View.GONE
+                                        rejectLoading.visibility = View.GONE
+                                        deployTechLoading.visibility = View.GONE
+                                        CustomToast.getInstance(context)
+                                            .setBackgroundColor(
+                                                ContextCompat.getColor(
+                                                    context,
+                                                    R.color.custom_toast_background_failed
+                                                )
+                                            )
+                                            .setFontColor(
+                                                ContextCompat.getColor(
+                                                    context,
+                                                    R.color.custom_toast_font_failed
+                                                )
+                                            )
+                                            .setMessage("Failed to approve submission.").show()
+                                        Log.e("ERROR", throwable.message.toString())
+                                        throwable.printStackTrace()
+                                    }
+                                })
+                        } catch (jsonException: JSONException) {
+                            approveLoading.visibility = View.GONE
+                            rejectLoading.visibility = View.GONE
+                            deployTechLoading.visibility = View.GONE
                             CustomToast.getInstance(context)
                                 .setBackgroundColor(
                                     ContextCompat.getColor(
@@ -350,16 +419,269 @@ class UpdateStatusBottomSheet(
                                         R.color.custom_toast_font_failed
                                     )
                                 )
-                                .setMessage("Something went wrong, please try again later.").show()
-                            Log.e("ERROR", throwable.toString())
-                            throwable.printStackTrace()
+                                .setMessage("Failed to approve submission.").show()
+                            jsonException.printStackTrace()
                         }
-                    })
-                } catch (exception: Exception) {
-                    when (status) {
-                        0 -> rejectLoading.visibility = View.GONE
-                        2 -> approveLoading.visibility = View.GONE
+                    } else {
+                        try {
+                            InitAPI.getAPI.rejectSubmission(
+                                userData.id, dataDetail.idGaprojects!!, descriptionField.text.toString()
+                            ).enqueue(object : Callback<UpdateStatusResponse> {
+                                override fun onResponse(
+                                    call: Call<UpdateStatusResponse>,
+                                    response: Response<UpdateStatusResponse>
+                                ) {
+                                    approveLoading.visibility = View.GONE
+                                    rejectLoading.visibility = View.GONE
+                                    deployTechLoading.visibility = View.GONE
+                                    if (response.isSuccessful) {
+                                        if (response.body() != null) {
+                                            val result = response.body()
+                                            if (result?.code == 1) {
+                                                CustomToast.getInstance(context)
+                                                    .setBackgroundColor(
+                                                        ContextCompat.getColor(
+                                                            context,
+                                                            R.color.custom_toast_background_failed
+                                                        )
+                                                    )
+                                                    .setFontColor(
+                                                        ContextCompat.getColor(
+                                                            context,
+                                                            R.color.custom_toast_font_failed
+                                                        )
+                                                    )
+                                                    .setMessage(
+                                                        "Submission rejected successfully."
+                                                    ).show()
+                                                onUpdateSuccessListener.onRejected()
+                                            } else {
+                                                CustomToast.getInstance(context)
+                                                    .setBackgroundColor(
+                                                        ContextCompat.getColor(
+                                                            context,
+                                                            R.color.custom_toast_background_failed
+                                                        )
+                                                    )
+                                                    .setFontColor(
+                                                        ContextCompat.getColor(
+                                                            context,
+                                                            R.color.custom_toast_font_failed
+                                                        )
+                                                    )
+                                                    .setMessage("Failed to reject submission.")
+                                                    .show()
+                                            }
+                                        } else {
+                                            CustomToast.getInstance(context)
+                                                .setBackgroundColor(
+                                                    ContextCompat.getColor(
+                                                        context,
+                                                        R.color.custom_toast_background_failed
+                                                    )
+                                                )
+                                                .setFontColor(
+                                                    ContextCompat.getColor(
+                                                        context,
+                                                        R.color.custom_toast_font_failed
+                                                    )
+                                                )
+                                                .setMessage("Failed to reject submission.")
+                                                .show()
+                                        }
+                                    } else {
+                                        CustomToast.getInstance(context)
+                                            .setBackgroundColor(
+                                                ContextCompat.getColor(
+                                                    context,
+                                                    R.color.custom_toast_background_failed
+                                                )
+                                            )
+                                            .setFontColor(
+                                                ContextCompat.getColor(
+                                                    context,
+                                                    R.color.custom_toast_font_failed
+                                                )
+                                            )
+                                            .setMessage("Failed to reject submission.").show()
+                                        Log.e(
+                                            "ERROR ${response.code()}",
+                                            response.message().toString()
+                                        )
+                                    }
+                                }
+
+                                override fun onFailure(
+                                    call: Call<UpdateStatusResponse>, throwable: Throwable
+                                ) {
+                                    approveLoading.visibility = View.GONE
+                                    rejectLoading.visibility = View.GONE
+                                    deployTechLoading.visibility = View.GONE
+                                    CustomToast.getInstance(context)
+                                        .setBackgroundColor(
+                                            ContextCompat.getColor(
+                                                context,
+                                                R.color.custom_toast_background_failed
+                                            )
+                                        )
+                                        .setFontColor(
+                                            ContextCompat.getColor(
+                                                context,
+                                                R.color.custom_toast_font_failed
+                                            )
+                                        )
+                                        .setMessage("Failed to reject submission.").show()
+                                    Log.e("ERROR", throwable.message.toString())
+                                    throwable.printStackTrace()
+                                }
+                            })
+                        } catch (jsonException: JSONException) {
+                            approveLoading.visibility = View.GONE
+                            rejectLoading.visibility = View.GONE
+                            deployTechLoading.visibility = View.GONE
+                            CustomToast.getInstance(context)
+                                .setBackgroundColor(
+                                    ContextCompat.getColor(
+                                        context,
+                                        R.color.custom_toast_background_failed
+                                    )
+                                )
+                                .setFontColor(
+                                    ContextCompat.getColor(
+                                        context,
+                                        R.color.custom_toast_font_failed
+                                    )
+                                )
+                                .setMessage("Failed to reject submission.").show()
+                            jsonException.printStackTrace()
+                        }
                     }
+                }
+            } else {
+                try {
+                    val data: MutableMap<String, RequestBody> = mutableMapOf()
+                    with(data) {
+                        put("id_user", createPartFromString(userData.id.toString())!!)
+                        put(
+                            "id_gaprojects",
+                            createPartFromString(dataDetail.idGaprojects.toString())!!
+                        )
+                        put("user_teknisi[]", createPartFromString(techniciansList.toString())!!)
+                    }
+                    InitAPI.getAPI.deployTechnicians(data)
+                        .enqueue(object : Callback<UpdateStatusResponse> {
+                            override fun onResponse(
+                                call: Call<UpdateStatusResponse>,
+                                response: Response<UpdateStatusResponse>
+                            ) {
+                                approveLoading.visibility = View.GONE
+                                rejectLoading.visibility = View.GONE
+                                deployTechLoading.visibility = View.GONE
+                                if (response.isSuccessful) {
+                                    if (response.body() != null) {
+                                        val result = response.body()
+                                        if (result?.code == 1) {
+                                            CustomToast.getInstance(context)
+                                                .setBackgroundColor(
+                                                    ContextCompat.getColor(
+                                                        context,
+                                                        R.color.custom_toast_background_failed
+                                                    )
+                                                )
+                                                .setFontColor(
+                                                    ContextCompat.getColor(
+                                                        context,
+                                                        R.color.custom_toast_font_failed
+                                                    )
+                                                )
+                                                .setMessage(
+                                                    "Technicians successfully deployed!"
+                                                ).show()
+                                            onUpdateSuccessListener.onTechniciansDeployed()
+                                        } else {
+                                            CustomToast.getInstance(context)
+                                                .setBackgroundColor(
+                                                    ContextCompat.getColor(
+                                                        context,
+                                                        R.color.custom_toast_background_failed
+                                                    )
+                                                )
+                                                .setFontColor(
+                                                    ContextCompat.getColor(
+                                                        context,
+                                                        R.color.custom_toast_font_failed
+                                                    )
+                                                )
+                                                .setMessage("Failed to deploy technicians.")
+                                                .show()
+                                        }
+                                    } else {
+                                        CustomToast.getInstance(context)
+                                            .setBackgroundColor(
+                                                ContextCompat.getColor(
+                                                    context,
+                                                    R.color.custom_toast_background_failed
+                                                )
+                                            )
+                                            .setFontColor(
+                                                ContextCompat.getColor(
+                                                    context,
+                                                    R.color.custom_toast_font_failed
+                                                )
+                                            )
+                                            .setMessage("Failed to deploy technicians.")
+                                            .show()
+                                    }
+                                } else {
+                                    CustomToast.getInstance(context)
+                                        .setBackgroundColor(
+                                            ContextCompat.getColor(
+                                                context,
+                                                R.color.custom_toast_background_failed
+                                            )
+                                        )
+                                        .setFontColor(
+                                            ContextCompat.getColor(
+                                                context,
+                                                R.color.custom_toast_font_failed
+                                            )
+                                        )
+                                        .setMessage("Failed to deploy technicians.").show()
+                                    Log.e(
+                                        "ERROR ${response.code()}",
+                                        response.message().toString()
+                                    )
+                                }
+                            }
+
+                            override fun onFailure(
+                                call: Call<UpdateStatusResponse>, throwable: Throwable
+                            ) {
+                                approveLoading.visibility = View.GONE
+                                rejectLoading.visibility = View.GONE
+                                deployTechLoading.visibility = View.GONE
+                                CustomToast.getInstance(context)
+                                    .setBackgroundColor(
+                                        ContextCompat.getColor(
+                                            context,
+                                            R.color.custom_toast_background_failed
+                                        )
+                                    )
+                                    .setFontColor(
+                                        ContextCompat.getColor(
+                                            context,
+                                            R.color.custom_toast_font_failed
+                                        )
+                                    )
+                                    .setMessage("Failed to deploy technicians.").show()
+                                Log.e("ERROR", throwable.message.toString())
+                                throwable.printStackTrace()
+                            }
+                        })
+                } catch (jsonException: JSONException) {
+                    approveLoading.visibility = View.GONE
+                    rejectLoading.visibility = View.GONE
+                    deployTechLoading.visibility = View.GONE
                     CustomToast.getInstance(context)
                         .setBackgroundColor(
                             ContextCompat.getColor(
@@ -373,31 +695,15 @@ class UpdateStatusBottomSheet(
                                 R.color.custom_toast_font_failed
                             )
                         )
-                        .setMessage("Something went wrong, please try again later.").show()
-                    Log.e("ERROR", exception.toString())
-                    exception.printStackTrace()
+                        .setMessage("Failed to deploy technicians.").show()
+                    jsonException.printStackTrace()
                 }
-            } else {
-                when (status) {
-                    0 -> rejectLoading.visibility = View.GONE
-                    2 -> approveLoading.visibility = View.GONE
-                }
-                CustomToast.getInstance(context)
-                    .setMessage("Please make sure all fields in the form are filled in.")
-                    .setBackgroundColor(
-                        ContextCompat.getColor(
-                            context,
-                            R.color.custom_toast_background_failed
-                        )
-                    )
-                    .setFontColor(
-                        ContextCompat.getColor(
-                            context,
-                            R.color.custom_toast_font_failed
-                        )
-                    ).show()
             }
         }
+    }
+
+    private fun createPartFromString(stringData: String?): RequestBody? {
+        return stringData?.toRequestBody("text/plain".toMediaTypeOrNull())
     }
 
     fun setOnUpdateSuccessListener(listener: OnUpdateSuccessListener) {
@@ -405,6 +711,8 @@ class UpdateStatusBottomSheet(
     }
 
     interface OnUpdateSuccessListener {
-        fun onUpdateSuccess()
+        fun onApproved()
+        fun onRejected()
+        fun onTechniciansDeployed()
     }
 }

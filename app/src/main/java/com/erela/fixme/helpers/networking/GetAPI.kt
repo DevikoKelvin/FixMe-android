@@ -98,18 +98,6 @@ interface GetAPI {
         @PartMap submissionData: MutableMap<String, RequestBody>
     ): Call<SubmitSubmissionResponse>
 
-    @FormUrlEncoded
-    @POST("statusupdate")
-    fun updateSubmissionStatus(
-        @Field("id_user") userId: Int,
-        @Field("id") detailSubmissionId: Int,
-        @Field("sts") status: Int,
-        @Field("keterangan") description: String,
-        @Field("user_end") targetUserId: Int,
-        @Field("tgl_pengerjaan") workingDate: String,
-        @Field("waktu_pengerjaan") workingTime: String
-    ): Call<UpdateStatusResponse>
-
     @Multipart
     @POST("updatepengajuan")
     fun updateSubmission(
@@ -134,4 +122,28 @@ interface GetAPI {
     fun getTechnicianList(
         @Field("id") id: Int
     ): Call<List<TechnicianListResponse>>
+
+    @Multipart
+    @POST("statusapprove")
+    fun approveSubmission(
+        @PartMap data: MutableMap<String, RequestBody>
+        /*@Field("id_user") idUser: Int,
+        @Field("id_gaprojects") idGaProjects: Int,
+        @Field("keterangan") description: String,
+        @Field("user_supervisor[]") idSupervisor: Int*/
+    ): Call<UpdateStatusResponse>
+
+    @FormUrlEncoded
+    @POST("statusreject")
+    fun rejectSubmission(
+        @Field("id_user") idUser: Int,
+        @Field("id_gaprojects") idGaProjects: Int,
+        @Field("keterangan") description: String
+    ): Call<UpdateStatusResponse>
+
+    @Multipart
+    @POST("setupteknisi")
+    fun deployTechnicians(
+        @PartMap data: MutableMap<String, RequestBody>
+    ): Call<UpdateStatusResponse>
 }
