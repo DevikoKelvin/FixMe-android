@@ -4,7 +4,7 @@ import android.content.Context
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.erela.fixme.databinding.ListItemMaterialsBinding
+import com.erela.fixme.databinding.ListItemSelectionBinding
 import com.erela.fixme.objects.MaterialListResponse
 import com.erela.fixme.objects.SelectedMaterialList
 
@@ -17,7 +17,7 @@ class MaterialsRvAdapters(
     override fun onCreateViewHolder(
         parent: ViewGroup, viewType: Int
     ): ViewHolder = ViewHolder(
-        ListItemMaterialsBinding.inflate(
+        ListItemSelectionBinding.inflate(
             android.view.LayoutInflater.from(parent.context), parent, false
         ).root
     )
@@ -30,16 +30,16 @@ class MaterialsRvAdapters(
 
         with(holder) {
             binding.apply {
-                materialCheckboxText.text = item.material!!.namaMaterial
+                itemCheckboxText.text = item.material!!.namaMaterial
 
                 for (i in 0 until selectedMaterialsArrayList.size) {
                     if (selectedMaterialsArrayList[i].idMaterial == item.material.idMaterial) {
-                        materialCheckboxText.isChecked = true
+                        itemCheckboxText.isChecked = true
                         break
                     }
                 }
 
-                materialCheckboxText.setOnCheckedChangeListener { _, isChecked ->
+                itemCheckboxText.setOnCheckedChangeListener { _, isChecked ->
                     item.isSelected = isChecked
                     if (isChecked) {
                         onMaterialsSetListener.onMaterialsSelected(item.material)
@@ -54,7 +54,7 @@ class MaterialsRvAdapters(
     override fun getItemCount(): Int = materialsList.size
 
     inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-        val binding = ListItemMaterialsBinding.bind(view)
+        val binding = ListItemSelectionBinding.bind(view)
     }
 
     fun setOnMaterialsSetListener(onMaterialsSetListener: OnMaterialsSetListener) {

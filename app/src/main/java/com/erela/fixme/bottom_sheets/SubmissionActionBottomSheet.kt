@@ -14,20 +14,21 @@ import com.google.android.material.bottomsheet.BottomSheetDialog
 
 class SubmissionActionBottomSheet(context: Context, val data: SubmissionDetailResponse) :
     BottomSheetDialog(context), UpdateStatusBottomSheet.OnUpdateSuccessListener {
-    private lateinit var binding: BsSubmissionActionBinding
+    private val binding: BsSubmissionActionBinding by lazy {
+        BsSubmissionActionBinding.inflate(layoutInflater)
+    }
     private lateinit var onUpdateSuccessListener: OnUpdateSuccessListener
-    private lateinit var userData: UserData
+    private val userData: UserData by lazy {
+        UserDataHelper(context).getUserData()
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = BsSubmissionActionBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
         window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
         window?.setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT)
         setCancelable(true)
-
-        userData = UserDataHelper(context).getUserData()
 
         init()
     }
@@ -39,10 +40,15 @@ class SubmissionActionBottomSheet(context: Context, val data: SubmissionDetailRe
                 1 -> {
                     startProgressButton.visibility = View.GONE
                     onTrialDoneButtonContainer.visibility = View.GONE
-                    approveRejectButtonContainer.visibility = View.VISIBLE
+                    actionsButtonContainer.visibility = View.VISIBLE
+                    approveButton.visibility = View.VISIBLE
+                    rejectButton.visibility = View.VISIBLE
+                    deployTechButton.visibility = View.GONE
                     approveButton.setOnClickListener {
                         val bottomSheet =
-                            UpdateStatusBottomSheet(context, data, true).also { bottomSheet ->
+                            UpdateStatusBottomSheet(context, data, approve = true,
+                                deployTech = false
+                            ).also { bottomSheet ->
                                 with(bottomSheet) {
                                     setOnUpdateSuccessListener(this@SubmissionActionBottomSheet)
                                 }
@@ -52,7 +58,9 @@ class SubmissionActionBottomSheet(context: Context, val data: SubmissionDetailRe
                     }
                     rejectButton.setOnClickListener {
                         val bottomSheet =
-                            UpdateStatusBottomSheet(context, data, false).also { bottomSheet ->
+                            UpdateStatusBottomSheet(context, data, approve = false,
+                                deployTech = false
+                            ).also { bottomSheet ->
                                 with(bottomSheet) {
                                     setOnUpdateSuccessListener(this@SubmissionActionBottomSheet)
                                 }
@@ -63,9 +71,28 @@ class SubmissionActionBottomSheet(context: Context, val data: SubmissionDetailRe
                 }
                 // Approved
                 2 -> {
-                    startProgressButton.visibility = View.VISIBLE
-                    onTrialDoneButtonContainer.visibility = View.GONE
-                    approveRejectButtonContainer.visibility = View.GONE
+                    if (data.usernUserSpv!![0]?.idUser == userData.id) {
+                        actionsButtonContainer.visibility = View.VISIBLE
+                        approveButton.visibility = View.GONE
+                        rejectButton.visibility = View.GONE
+                        deployTechButton.visibility = View.VISIBLE
+                        deployTechButton.setOnClickListener {
+                            val bottomSheet =
+                                UpdateStatusBottomSheet(context, data, approve = false,
+                                    deployTech = true
+                                ).also { bottomSheet ->
+                                    with(bottomSheet) {
+                                        setOnUpdateSuccessListener(this@SubmissionActionBottomSheet)
+                                    }
+                                }
+                            if (bottomSheet.window != null)
+                                bottomSheet.show()
+                        }
+                    } else {
+                        actionsButtonContainer.visibility = View.GONE
+                        startProgressButton.visibility = View.VISIBLE
+                        onTrialDoneButtonContainer.visibility = View.GONE
+                    }
                 }
             }
         }
@@ -75,12 +102,22 @@ class SubmissionActionBottomSheet(context: Context, val data: SubmissionDetailRe
         this.onUpdateSuccessListener = onUpdateSuccessListener
     }
 
-    override fun onUpdateSuccess() {
+    interface OnUpdateSuccessListener {
+        fun onUpdateSuccess()
+    }
+
+    override fun onApproved() {
         onUpdateSuccessListener.onUpdateSuccess()
         dismiss()
     }
 
-    interface OnUpdateSuccessListener {
-        fun onUpdateSuccess()
+    override fun onRejected() {
+        onUpdateSuccessListener.onUpdateSuccess()
+        dismiss()
+    }
+
+    override fun onTechniciansDeployed() {
+        onUpdateSuccessListener.onUpdateSuccess()
+        dismiss()
     }
 }

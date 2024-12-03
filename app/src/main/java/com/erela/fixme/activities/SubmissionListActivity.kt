@@ -30,8 +30,10 @@ class SubmissionListActivity : AppCompatActivity(), SubmissionRvAdapter.OnSubmis
     private val binding: ActivitySubmissionListBinding by lazy {
         ActivitySubmissionListBinding.inflate(layoutInflater)
     }
+    private val userData: UserData by lazy {
+        UserDataHelper(this@SubmissionListActivity).getUserData()
+    }
     private lateinit var adapter: SubmissionRvAdapter
-    private lateinit var userData: UserData
     private var selectedFilter = -1
     private var selectedDepartment: String = ""
     private var submissionArrayList: ArrayList<SubmissionListResponse> = ArrayList()
@@ -46,8 +48,6 @@ class SubmissionListActivity : AppCompatActivity(), SubmissionRvAdapter.OnSubmis
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
-
-        userData = UserDataHelper(this@SubmissionListActivity).getUserData()
 
         init()
     }

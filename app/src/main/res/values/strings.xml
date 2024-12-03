@@ -63,6 +63,7 @@
     <string name="action_text">Action</string>
     <string name="action_approve">Approve</string>
     <string name="action_reject">Reject</string>
+    <string name="action_deploy">Deploy Technicians</string>
     <string name="action_deploy_tech">Deploy Technicians now!</string>
     <string name="message_on_progress">On Progress</string>
     <string name="action_on_progress">Start Progress Now</string>

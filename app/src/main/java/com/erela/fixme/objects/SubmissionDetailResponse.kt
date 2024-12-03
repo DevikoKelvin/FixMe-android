@@ -1,9 +1,8 @@
 package com.erela.fixme.objects
 
+import kotlinx.parcelize.Parcelize
 import android.os.Parcelable
 import com.google.gson.annotations.SerializedName
-import kotlinx.parcelize.Parcelize
-import java.io.Serial
 
 @Parcelize
 data class SubmissionDetailResponse(
@@ -13,6 +12,8 @@ data class SubmissionDetailResponse(
     val keterangan: String? = null,
     @field:SerializedName("name_user_done")
     val nameUserDone: String? = null,
+    @field:SerializedName("keterangan_reject")
+    val keteranganReject: String? = null,
     @field:SerializedName("tgl_waktu_trial_start")
     val tglWaktuTrialStart: String? = null,
     @field:SerializedName("usern_user_done")
@@ -31,6 +32,8 @@ data class SubmissionDetailResponse(
     val stsGaprojects: Int? = null,
     @field:SerializedName("nama_kategori")
     val namaKategori: String? = null,
+    @field:SerializedName("tgl_waktu_reject")
+    val tglWaktuReject: String? = null,
     @field:SerializedName("foto_gaprojects")
     val fotoGaprojects: List<FotoGaprojectsItem?>? = null,
     @field:SerializedName("id_kategori")
@@ -63,8 +66,12 @@ data class SubmissionDetailResponse(
     val tglWaktuKerjaEnd: String? = null,
     @field:SerializedName("tglwaktu_approved")
     val tglwaktuApproved: String? = null,
+    @field:SerializedName("progress")
+    val progress: List<ProgressItem?>? = null,
     @field:SerializedName("judul_kasus")
     val judulKasus: String? = null,
+    @field:SerializedName("id_user_reject")
+    val idUserReject: Int? = null,
     @field:SerializedName("id_user_done")
     val idUserDone: Int? = null,
     @field:SerializedName("usern_user_spv")
@@ -73,16 +80,8 @@ data class SubmissionDetailResponse(
     val deptTujuan: String? = null,
     @field:SerializedName("tgl_waktu_done")
     val tglWaktuDone: String? = null,
-    @field:SerializedName("progress")
-    val progress: List<ProgressItem?>? = null
-) : Parcelable
-
-@Parcelize
-data class MaterialItem(
-    @field:SerializedName("nama_material")
-    val namaMaterial: String? = null,
-    @field:SerializedName("id_material")
-    val idMaterial: Int? = null
+    @field:SerializedName("name_user_reject")
+    val nameUserReject: String? = null
 ) : Parcelable
 
 @Parcelize
@@ -102,6 +101,28 @@ data class UsernUserTeknisiItem(
 ) : Parcelable
 
 @Parcelize
+data class ProgressItem(
+    @field:SerializedName("keterangan")
+    val keterangan: String? = null,
+    @field:SerializedName("foto")
+    val foto: List<FotoItem?>? = null,
+    @field:SerializedName("usern")
+    val usern: String? = null,
+    @field:SerializedName("tgl")
+    val tgl: String? = null,
+    @field:SerializedName("waktu")
+    val waktu: String? = null,
+    @field:SerializedName("id_user")
+    val idUser: Int? = null,
+    @field:SerializedName("id_gaprojects_detail")
+    val idGaprojectsDetail: Int? = null,
+    @field:SerializedName("id_gaprojects")
+    val idGaprojects: Int? = null,
+    @field:SerializedName("tgl_waktu")
+    val tglWaktu: String? = null
+) : Parcelable
+
+@Parcelize
 data class UsernUserSpvItem(
     @field:SerializedName("id_table_supervisor")
     val idTableSupervisor: Int? = null,
@@ -116,29 +137,15 @@ data class UsernUserSpvItem(
 ) : Parcelable
 
 @Parcelize
-data class ProgressItem(
-    @field:SerializedName("id_gaprojects_detail")
-    val idGaprojectsDetail: Int? = null,
-    @field:SerializedName("id_gaprojects")
-    val idGaprojects: Int? = null,
-    @field:SerializedName("keterangan")
-    val keterangan: String? = null,
-    @field:SerializedName("id_user")
-    val idUser: Int? = null,
-    @field:SerializedName("usern")
-    val usern: String? = null,
-    @field:SerializedName("tgl_waktu")
-    val tglWaktu: String? = null,
-    @field:SerializedName("tgl")
-    val tgl: String? = null,
-    @field:SerializedName("waktu")
-    val waktu: String? = null,
+data class FotoItem(
     @field:SerializedName("foto")
-    val foto: List<Foto?>? = null
+    val foto: String? = null
 ) : Parcelable
 
 @Parcelize
-data class Foto(
-    @field:SerializedName("foto")
-    val foto: String? = null
+data class MaterialItem(
+    @field:SerializedName("nama_material")
+    val namaMaterial: String? = null,
+    @field:SerializedName("id_material")
+    val idMaterial: Int? = null
 ) : Parcelable

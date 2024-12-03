@@ -20,3 +20,8 @@ data class TechnicianListResponse(
     @field:SerializedName("nama_dept")
     val namaDept: String? = null
 )
+
+data class SelectedTechniciansList(
+    val technician: TechnicianListResponse? = null,
+    var isSelected: Boolean = false
+)

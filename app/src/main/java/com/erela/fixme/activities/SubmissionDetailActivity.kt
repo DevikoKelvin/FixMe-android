@@ -187,7 +187,8 @@ class SubmissionDetailActivity : AppCompatActivity(),
                                                     R.color.custom_toast_font_failed
                                                 )
                                             )
-                                            statusMessage.text = "Rejected by ${data.usernApprove}"
+                                            statusMessage.text =
+                                                "Rejected by ${data.nameUserReject}"
                                             statusMessage.setTextColor(
                                                 ContextCompat.getColor(
                                                     this@SubmissionDetailActivity,
@@ -221,9 +222,19 @@ class SubmissionDetailActivity : AppCompatActivity(),
                                             )
                                             submissionStatusText.text = "Approved"
                                             var tech = false
-                                            for (i in 0 until data.usernUserTeknisi!!.size) {
-                                                if (data.usernUserTeknisi[i]?.idUser == userData.id)
+                                            var spv = false
+                                            for (technician in data.usernUserTeknisi!!) {
+                                                if (technician?.idUser == userData.id) {
                                                     tech = true
+                                                    break
+                                                }
+                                            }
+
+                                            for (supervisor in data.usernUserSpv!!) {
+                                                if (supervisor?.idUser == userData.id) {
+                                                    spv = true
+                                                    break
+                                                }
                                             }
 
                                             if (tech) {
@@ -233,82 +244,94 @@ class SubmissionDetailActivity : AppCompatActivity(),
                                                 onProgressButton.visibility = View.GONE
                                                 statusMessageContainer.visibility = View.GONE
                                             } else {
-                                                actionButton.visibility = View.GONE
-                                                editButton.visibility = View.GONE
-                                                seeProgressButton.visibility = View.GONE
-                                                onProgressButton.visibility = View.GONE
-                                                statusMessageContainer.visibility = View.VISIBLE
-                                                statusMessageContainer.setCardBackgroundColor(
-                                                    ContextCompat.getColor(
-                                                        this@SubmissionDetailActivity,
-                                                        R.color.custom_toast_background_soft_blue
+                                                if (spv) {
+                                                    actionButton.visibility = View.VISIBLE
+                                                    editButton.visibility = View.GONE
+                                                    seeProgressButton.visibility = View.GONE
+                                                    onProgressButton.visibility = View.GONE
+                                                    statusMessageContainer.visibility = View.GONE
+                                                } else {
+                                                    actionButton.visibility = View.GONE
+                                                    editButton.visibility = View.GONE
+                                                    seeProgressButton.visibility = View.GONE
+                                                    onProgressButton.visibility = View.GONE
+                                                    statusMessageContainer.visibility = View.VISIBLE
+                                                    statusMessageContainer.setCardBackgroundColor(
+                                                        ContextCompat.getColor(
+                                                            this@SubmissionDetailActivity,
+                                                            R.color.custom_toast_background_soft_blue
+                                                        )
                                                     )
-                                                )
-                                                message = StringBuilder().append(
-                                                    "Approved by ${data.usernApprove}\nWaiting for action from "
-                                                )
-                                                if (data.usernUserTeknisi.isNotEmpty()) {
-                                                    for (i in 0 until data.usernUserTeknisi.size) {
-                                                        if (data.usernUserTeknisi.size > 1) {
-                                                            if (i < data.usernUserTeknisi.size - 1) {
-                                                                message.append(
-                                                                    "${data.usernUserTeknisi[i]?.namaUser} or "
-                                                                )
-                                                            } else {
+                                                    message = StringBuilder().append(
+                                                        "Approved by ${data.usernApprove}\nWaiting for action from "
+                                                    )
+                                                    if (data.usernUserTeknisi.isNotEmpty()) {
+                                                        for (i in 0 until data.usernUserTeknisi.size) {
+                                                            if (data.usernUserTeknisi.size > 1) {
+                                                                if (i < data.usernUserTeknisi.size - 1) {
+                                                                    message.append(
+                                                                        "${data.usernUserTeknisi[i]?.namaUser} or "
+                                                                    )
+                                                                } else {
+                                                                    message.append(
+                                                                        "${data.usernUserTeknisi[i]?.namaUser}"
+                                                                    )
+                                                                }
+                                                            } else
                                                                 message.append(
                                                                     "${data.usernUserTeknisi[i]?.namaUser}"
                                                                 )
-                                                            }
-                                                        } else
-                                                            message.append(
-                                                                "${data.usernUserTeknisi[i]?.namaUser}"
+                                                        }
+                                                        statusMessage.text = message.toString()
+                                                        statusMessage.setTextColor(
+                                                            ContextCompat.getColor(
+                                                                this@SubmissionDetailActivity,
+                                                                R.color.black
                                                             )
-                                                    }
-                                                    statusMessage.text = message.toString()
-                                                    statusMessage.setTextColor(
-                                                        ContextCompat.getColor(
-                                                            this@SubmissionDetailActivity,
-                                                            R.color.black
                                                         )
-                                                    )
-                                                } else {
-                                                    InitAPI.getAPI.getUserDetail(
-                                                        data.usernUserSpv?.get(0)?.idUser!!.toInt()
-                                                    ).enqueue(object :
-                                                        Callback<UserDetailResponse> {
-                                                        override fun onResponse(
-                                                            call1: Call<UserDetailResponse>,
-                                                            response1: Response<UserDetailResponse>
-                                                        ) {
-                                                            if (response1.isSuccessful) {
-                                                                if (response1.body() != null) {
-                                                                    message.append(
-                                                                        "${response1.body()!!.usern} to assign technicians"
-                                                                    )
-                                                                    statusMessage.text = message.toString()
-                                                                    statusMessage.setTextColor(
-                                                                        ContextCompat.getColor(
-                                                                            this@SubmissionDetailActivity,
-                                                                            R.color.black
+                                                    } else {
+                                                        InitAPI.getAPI.getUserDetail(
+                                                            data.usernUserSpv[0]?.idUser!!.toInt()
+                                                        ).enqueue(object :
+                                                            Callback<UserDetailResponse> {
+                                                            override fun onResponse(
+                                                                call1: Call<UserDetailResponse>,
+                                                                response1: Response<UserDetailResponse>
+                                                            ) {
+                                                                if (response1.isSuccessful) {
+                                                                    if (response1.body() != null) {
+                                                                        message.append(
+                                                                            "${response1.body()!!.usern} to assign technicians"
                                                                         )
+                                                                        statusMessage.text =
+                                                                            message.toString()
+                                                                        statusMessage.setTextColor(
+                                                                            ContextCompat.getColor(
+                                                                                this@SubmissionDetailActivity,
+                                                                                R.color.black
+                                                                            )
+                                                                        )
+                                                                    }
+                                                                } else {
+                                                                    Log.e(
+                                                                        "ERROR ${response1.code()}",
+                                                                        "User Detail SPV Response null | ${response1.message()}"
                                                                     )
                                                                 }
-                                                            } else {
-                                                                Log.e(
-                                                                    "ERROR ${response1.code()}",
-                                                                    response1.message()
-                                                                )
                                                             }
-                                                        }
 
-                                                        override fun onFailure(
-                                                            call1: Call<UserDetailResponse>,
-                                                            throwable: Throwable
-                                                        ) {
-                                                            Log.e("ERROR", throwable.toString())
-                                                            throwable.printStackTrace()
-                                                        }
-                                                    })
+                                                            override fun onFailure(
+                                                                call1: Call<UserDetailResponse>,
+                                                                throwable: Throwable
+                                                            ) {
+                                                                Log.e(
+                                                                    "ERROR",
+                                                                    "User Detail SPV Failure | $throwable"
+                                                                )
+                                                                throwable.printStackTrace()
+                                                            }
+                                                        })
+                                                    }
                                                 }
                                             }
                                         }
@@ -520,7 +543,10 @@ class SubmissionDetailActivity : AppCompatActivity(),
                                     )
                                     .setMessage("Failed to get submission detail")
                                     .show()
-                                Log.e("ERROR", response.message())
+                                Log.e(
+                                    "ERROR",
+                                    "Submission Detail Response null | ${response.message()}"
+                                )
                                 finish()
                             }
                         }
@@ -543,7 +569,7 @@ class SubmissionDetailActivity : AppCompatActivity(),
                                 .setMessage("Something went wrong, please try again later")
                                 .show()
                             throwable.printStackTrace()
-                            Log.e("ERROR", throwable.toString())
+                            Log.e("ERROR", "Submission Detail Failure | $throwable")
                             finish()
                         }
                     })
@@ -562,7 +588,7 @@ class SubmissionDetailActivity : AppCompatActivity(),
                     .setMessage("Something went wrong, please try again later")
                     .show()
                 exception.printStackTrace()
-                Log.e("ERROR", exception.toString())
+                Log.e("ERROR", "Submission Detail Exception | $exception")
                 finish()
             }
         }
@@ -601,16 +627,6 @@ class SubmissionDetailActivity : AppCompatActivity(),
                                                                 }
                                                             }
                                                         )
-                                                        /*startActivity(
-                                                            Intent(
-                                                                this@SubmissionDetailActivity,
-                                                                SubmissionFormActivity::class.java
-                                                            ).also {
-                                                                with(it) {
-                                                                    putExtra("data", data)
-                                                                }
-                                                            }
-                                                        )*/
                                                     }
                                                 } else {
                                                     if (userDetail.hakAkses!!.toInt() < 2) {
@@ -636,16 +652,6 @@ class SubmissionDetailActivity : AppCompatActivity(),
                                                                 }
                                                             }
                                                         )
-                                                        /*startActivity(
-                                                            Intent(
-                                                                this@SubmissionDetailActivity,
-                                                                SubmissionFormActivity::class.java
-                                                            ).also {
-                                                                with(it) {
-                                                                    putExtra("data", data)
-                                                                }
-                                                            }
-                                                        )*/
                                                     }
                                                 } else {
                                                     if (userDetail.hakAkses!!.toInt() < 2) {
@@ -686,7 +692,10 @@ class SubmissionDetailActivity : AppCompatActivity(),
                                     )
                                     .setMessage("Something went wrong, please try again later")
                                     .show()
-                                Log.e("ERROR", response.message())
+                                Log.e(
+                                    "ERROR",
+                                    "Starconnect User Response null | ${response.message()}"
+                                )
                             }
                         } catch (jsonException: JSONException) {
                             CustomToast.getInstance(applicationContext)
@@ -703,7 +712,7 @@ class SubmissionDetailActivity : AppCompatActivity(),
                                 .setMessage("Something went wrong, please try again later")
                                 .show()
                             jsonException.printStackTrace()
-                            Log.e("ERROR", jsonException.toString())
+                            Log.e("ERROR", "Starconnect User Exception | $jsonException")
                         }
                     }
 
@@ -725,7 +734,7 @@ class SubmissionDetailActivity : AppCompatActivity(),
                             .setMessage("Something went wrong, please try again later")
                             .show()
                         throwable.printStackTrace()
-                        Log.e("ERROR", throwable.toString())
+                        Log.e("ERROR", "Starconnect User Failure | $throwable")
                     }
                 })
         }

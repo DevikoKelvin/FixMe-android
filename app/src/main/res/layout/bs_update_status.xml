@@ -70,18 +70,19 @@
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="16dp"
         android:layout_marginTop="8dp"
+        android:text="@string/select_supervisor"
         android:textColor="@color/black"
         android:textSize="14sp"
         android:textStyle="bold"
-        android:visibility="gone"
-        tools:text="@string/select_supervisor" />
+        android:visibility="gone" />
 
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/supervisorDropdownLayout"
         android:layout_width="match_parent"
-        android:layout_height="54dp"
+        android:layout_height="wrap_content"
         android:layout_marginHorizontal="16dp"
         android:layout_marginTop="8dp"
+        android:minHeight="54dp"
         android:visibility="gone"
         app:cardBackgroundColor="@android:color/transparent"
         app:cardCornerRadius="50dp"
@@ -110,11 +111,11 @@
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="16dp"
         android:layout_marginTop="8dp"
+        android:text="@string/select_technicians"
         android:textColor="@color/black"
         android:textSize="14sp"
         android:textStyle="bold"
-        android:visibility="gone"
-        tools:text="@string/select_technicians" />
+        android:visibility="gone" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvTechnicians"

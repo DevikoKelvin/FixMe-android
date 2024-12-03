@@ -14,14 +14,19 @@ import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import androidx.core.content.ContextCompat
 import com.erela.fixme.R
+import com.erela.fixme.adapters.recycler_view.SelectedTechniciansRvAdapter
 import com.erela.fixme.custom_views.CustomToast
 import com.erela.fixme.databinding.BsUpdateStatusBinding
 import com.erela.fixme.helpers.UserDataHelper
 import com.erela.fixme.helpers.networking.InitAPI
 import com.erela.fixme.objects.SubmissionDetailResponse
 import com.erela.fixme.objects.SupervisorListResponse
+import com.erela.fixme.objects.TechnicianListResponse
 import com.erela.fixme.objects.UpdateStatusResponse
 import com.erela.fixme.objects.UserData
+import com.google.android.flexbox.FlexDirection
+import com.google.android.flexbox.FlexWrap
+import com.google.android.flexbox.FlexboxLayoutManager
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.RequestBody
@@ -43,8 +48,10 @@ class UpdateStatusBottomSheet(
         UserDataHelper(context).getUserData()
     }
     private lateinit var onUpdateSuccessListener: OnUpdateSuccessListener
-    private var idSupervisor = 0
     private var techniciansList: ArrayList<Int> = ArrayList()
+    private var selectedTechniciansArrayList: ArrayList<TechnicianListResponse> = ArrayList()
+    private lateinit var adapter: SelectedTechniciansRvAdapter
+    private var idSupervisor = 0
     private var isFormEmpty = arrayOf(
         false,
         false
@@ -61,7 +68,7 @@ class UpdateStatusBottomSheet(
         init()
     }
 
-    @SuppressLint("SetTextI18n")
+    @SuppressLint("SetTextI18n", "NotifyDataSetChanged")
     private fun init() {
         binding.apply {
             descriptionField.addTextChangedListener(object : TextWatcher {
@@ -132,16 +139,16 @@ class UpdateStatusBottomSheet(
                                                             Log.e(
                                                                 "Selected User", "Invalid"
                                                             )
-                                                            isFormEmpty[2] = false
+                                                            isFormEmpty[1] = false
                                                         } else {
                                                             Log.e(
                                                                 "Selected User", "Valid"
                                                             )
-                                                            isFormEmpty[2] = true
+                                                            isFormEmpty[1] = true
                                                         }
                                                         Log.e(
                                                             "Selected User is valid?",
-                                                            "${isFormEmpty[2]}"
+                                                            "${isFormEmpty[1]}"
                                                         )
                                                     }
 
@@ -228,7 +235,7 @@ class UpdateStatusBottomSheet(
                     rvTechnicians.visibility = View.GONE
                     approveButton.visibility = View.GONE
                     rejectButton.visibility = View.VISIBLE
-                    deployTechButton.visibility = View.VISIBLE
+                    deployTechButton.visibility = View.GONE
                     descriptionField.setText("Rejected!")
                     isFormEmpty[0] = true
                     rejectButton.setOnClickListener {
@@ -236,13 +243,101 @@ class UpdateStatusBottomSheet(
                     }
                 }
             } else {
+                descriptionFieldLayout.visibility = View.GONE
                 selectSupervisorText.visibility = View.GONE
                 supervisorDropdownLayout.visibility = View.GONE
                 selectTechniciansText.visibility = View.VISIBLE
                 rvTechnicians.visibility = View.VISIBLE
                 approveButton.visibility = View.GONE
                 rejectButton.visibility = View.GONE
-                deployTechButton.visibility = View.GONE
+                deployTechButton.visibility = View.VISIBLE
+                selectedTechniciansArrayList.add(
+                    TechnicianListResponse(
+                        null,
+                        null,
+                        null,
+                        null,
+                        "+",
+                        null,
+                        null,
+                        null
+                    )
+                )
+                adapter = SelectedTechniciansRvAdapter(
+                    context,
+                    dataDetail,
+                    selectedTechniciansArrayList
+                ).also {
+                    with(it) {
+                        setOnTechniciansSetListener(object :
+                            SelectedTechniciansRvAdapter.OnTechniciansSetListener {
+                            override fun onTechniciansSelected(data: TechnicianListResponse) {
+                                selectedTechniciansArrayList.remove(
+                                    TechnicianListResponse(
+                                        null,
+                                        null,
+                                        null,
+                                        null,
+                                        "+",
+                                        null,
+                                        null,
+                                        null
+                                    )
+                                )
+                                selectedTechniciansArrayList.add(data)
+                                selectedTechniciansArrayList.add(
+                                    TechnicianListResponse(
+                                        null,
+                                        null,
+                                        null,
+                                        null,
+                                        "+",
+                                        null,
+                                        null,
+                                        null
+                                    )
+                                )
+                                adapter.notifyDataSetChanged()
+                                Log.e("Technicians", selectedTechniciansArrayList.toString())
+                            }
+
+                            override fun onTechniciansUnselected(data: TechnicianListResponse) {
+                                selectedTechniciansArrayList.remove(
+                                    TechnicianListResponse(
+                                        null,
+                                        null,
+                                        null,
+                                        null,
+                                        "+",
+                                        null,
+                                        null,
+                                        null
+                                    )
+                                )
+                                selectedTechniciansArrayList.remove(data)
+                                selectedTechniciansArrayList.add(
+                                    TechnicianListResponse(
+                                        null,
+                                        null,
+                                        null,
+                                        null,
+                                        "+",
+                                        null,
+                                        null,
+                                        null
+                                    )
+                                )
+                                adapter.notifyDataSetChanged()
+                                Log.e("Technicians", selectedTechniciansArrayList.toString())
+                            }
+                        })
+                    }
+                }
+                rvTechnicians.adapter = adapter
+                rvTechnicians.layoutManager = FlexboxLayoutManager(
+                    context, FlexDirection.ROW, FlexWrap.WRAP
+                )
+                adapter.notifyDataSetChanged()
                 deployTechButton.setOnClickListener {
                     executeUpdate()
                 }
@@ -285,9 +380,12 @@ class UpdateStatusBottomSheet(
                                     "id_gaprojects",
                                     createPartFromString(dataDetail.idGaprojects.toString())!!
                                 )
-                                put("keterangan", createPartFromString(descriptionField.text.toString())!!)
                                 put(
-                                    "supervisor[]", createPartFromString(
+                                    "keterangan",
+                                    createPartFromString(descriptionField.text.toString())!!
+                                )
+                                put(
+                                    "user_supervisor[]", createPartFromString(
                                         idSupervisor.toString()
                                     )!!
                                 )
@@ -309,18 +407,19 @@ class UpdateStatusBottomSheet(
                                                         .setBackgroundColor(
                                                             ContextCompat.getColor(
                                                                 context,
-                                                                R.color.custom_toast_background_failed
+                                                                R.color.custom_toast_background_success
                                                             )
                                                         )
                                                         .setFontColor(
                                                             ContextCompat.getColor(
                                                                 context,
-                                                                R.color.custom_toast_font_failed
+                                                                R.color.custom_toast_font_success
                                                             )
                                                         )
                                                         .setMessage(
                                                             "Submission approved successfully."
                                                         ).show()
+                                                    dismiss()
                                                     onUpdateSuccessListener.onApproved()
                                                 } else {
                                                     CustomToast.getInstance(context)
@@ -338,6 +437,10 @@ class UpdateStatusBottomSheet(
                                                         )
                                                         .setMessage("Failed to approve submission.")
                                                         .show()
+                                                    Log.e(
+                                                        "ERROR ${result?.code}",
+                                                        result?.message.toString()
+                                                    )
                                                 }
                                             } else {
                                                 CustomToast.getInstance(context)
@@ -355,6 +458,10 @@ class UpdateStatusBottomSheet(
                                                     )
                                                     .setMessage("Failed to approve submission.")
                                                     .show()
+                                                Log.e(
+                                                    "ERROR ${response.code()}",
+                                                    response.message().toString()
+                                                )
                                             }
                                         } else {
                                             CustomToast.getInstance(context)
@@ -425,7 +532,8 @@ class UpdateStatusBottomSheet(
                     } else {
                         try {
                             InitAPI.getAPI.rejectSubmission(
-                                userData.id, dataDetail.idGaprojects!!, descriptionField.text.toString()
+                                userData.id, dataDetail.idGaprojects!!,
+                                descriptionField.text.toString()
                             ).enqueue(object : Callback<UpdateStatusResponse> {
                                 override fun onResponse(
                                     call: Call<UpdateStatusResponse>,
@@ -442,18 +550,19 @@ class UpdateStatusBottomSheet(
                                                     .setBackgroundColor(
                                                         ContextCompat.getColor(
                                                             context,
-                                                            R.color.custom_toast_background_failed
+                                                            R.color.custom_toast_background_success
                                                         )
                                                     )
                                                     .setFontColor(
                                                         ContextCompat.getColor(
                                                             context,
-                                                            R.color.custom_toast_font_failed
+                                                            R.color.custom_toast_font_success
                                                         )
                                                     )
                                                     .setMessage(
                                                         "Submission rejected successfully."
                                                     ).show()
+                                                dismiss()
                                                 onUpdateSuccessListener.onRejected()
                                             } else {
                                                 CustomToast.getInstance(context)
@@ -471,6 +580,10 @@ class UpdateStatusBottomSheet(
                                                     )
                                                     .setMessage("Failed to reject submission.")
                                                     .show()
+                                                Log.e(
+                                                    "ERROR ${result?.code}",
+                                                    result?.message.toString()
+                                                )
                                             }
                                         } else {
                                             CustomToast.getInstance(context)
@@ -488,6 +601,10 @@ class UpdateStatusBottomSheet(
                                                 )
                                                 .setMessage("Failed to reject submission.")
                                                 .show()
+                                            Log.e(
+                                                "ERROR ${response.code()}",
+                                                response.message().toString()
+                                            )
                                         }
                                     } else {
                                         CustomToast.getInstance(context)
@@ -566,7 +683,14 @@ class UpdateStatusBottomSheet(
                             "id_gaprojects",
                             createPartFromString(dataDetail.idGaprojects.toString())!!
                         )
-                        put("user_teknisi[]", createPartFromString(techniciansList.toString())!!)
+                        for (i in 0 until selectedTechniciansArrayList.size - 1) {
+                            put(
+                                "user_teknisi[]",
+                                createPartFromString(
+                                    selectedTechniciansArrayList[i].idUser.toString()
+                                )!!
+                            )
+                        }
                     }
                     InitAPI.getAPI.deployTechnicians(data)
                         .enqueue(object : Callback<UpdateStatusResponse> {
@@ -585,18 +709,19 @@ class UpdateStatusBottomSheet(
                                                 .setBackgroundColor(
                                                     ContextCompat.getColor(
                                                         context,
-                                                        R.color.custom_toast_background_failed
+                                                        R.color.custom_toast_background_success
                                                     )
                                                 )
                                                 .setFontColor(
                                                     ContextCompat.getColor(
                                                         context,
-                                                        R.color.custom_toast_font_failed
+                                                        R.color.custom_toast_font_success
                                                     )
                                                 )
                                                 .setMessage(
                                                     "Technicians successfully deployed!"
                                                 ).show()
+                                            dismiss()
                                             onUpdateSuccessListener.onTechniciansDeployed()
                                         } else {
                                             CustomToast.getInstance(context)
@@ -614,6 +739,9 @@ class UpdateStatusBottomSheet(
                                                 )
                                                 .setMessage("Failed to deploy technicians.")
                                                 .show()
+                                            Log.e(
+                                                "ERROR ${result?.code}", result?.message.toString()
+                                            )
                                         }
                                     } else {
                                         CustomToast.getInstance(context)
@@ -631,6 +759,10 @@ class UpdateStatusBottomSheet(
                                             )
                                             .setMessage("Failed to deploy technicians.")
                                             .show()
+                                        Log.e(
+                                            "ERROR ${response.code()}",
+                                            response.message().toString()
+                                        )
                                     }
                                 } else {
                                     CustomToast.getInstance(context)

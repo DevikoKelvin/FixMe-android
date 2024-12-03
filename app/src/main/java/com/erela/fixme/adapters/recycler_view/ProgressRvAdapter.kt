@@ -57,7 +57,7 @@ class ProgressRvAdapter(val context: Context, val activity: Activity, val data: 
                         imageCarouselHolder.visibility = View.GONE
                         circleIndicator.visibility = View.GONE
                         submissionImage.visibility = View.VISIBLE
-                        val image = item.foto[0]
+                        val image = item.foto[0]?.foto
                         Glide.with(context)
                             .load(InitAPI.IMAGE_URL + image)
                             .placeholder(R.drawable.image_placeholder)
