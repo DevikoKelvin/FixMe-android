@@ -35,8 +35,9 @@
     <string name="attach_photo">Attach Photo</string>
     <string name="choose_file">Choose file</string>
     <string name="choose_file_title">Choose file from…</string>
-    <string name="manage_attachment">Manage attachment</string>
-    <string name="manage_old_attachment">Manage old attachment</string>
+    <string name="manage_photo">Manage photo</string>
+    <string name="manage_old_photo">Manage old photo</string>
+    <string name="manage_new_photo">Manage new photo</string>
     <string name="see_photo">See Photo</string>
     <string name="delete_photo">Delete Photo</string>
 
@@ -70,8 +71,11 @@
     <string name="see_progress">See Progress</string>
     <string name="progress_tracking">Progress Tracking</string>
     <string name="create_new_progress">Create New Progress</string>
+    <string name="edit_progress">Edit Progress</string>
     <string name="action_on_trial">On Trial</string>
     <string name="action_done">Done</string>
+
+    <string name="repair_analysis">Repair Analysis</string>
 
     <string name="action_question">What would you do?</string>
     <string name="update_status">Update Status</string>

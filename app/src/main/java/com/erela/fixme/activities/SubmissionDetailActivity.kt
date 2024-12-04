@@ -35,7 +35,7 @@ import retrofit2.Callback
 import retrofit2.Response
 
 class SubmissionDetailActivity : AppCompatActivity(),
-    SubmissionActionBottomSheet.OnUpdateSuccessListener {
+    SubmissionActionBottomSheet.OnUpdateSuccessListener, ProgressTrackingBottomSheet.OnProgressTrackingListener {
     private val binding: ActivitySubmissionDetailBinding by lazy {
         ActivitySubmissionDetailBinding.inflate(layoutInflater)
     }
@@ -366,7 +366,11 @@ class SubmissionDetailActivity : AppCompatActivity(),
                                                 val bottomSheet = ProgressTrackingBottomSheet(
                                                     this@SubmissionDetailActivity,
                                                     this@SubmissionDetailActivity, data
-                                                )
+                                                ).also {
+                                                    with(it) {
+                                                        setOnProgressTrackingListener(this@SubmissionDetailActivity)
+                                                    }
+                                                }
 
                                                 if (bottomSheet.window != null)
                                                     bottomSheet.show()
@@ -405,7 +409,11 @@ class SubmissionDetailActivity : AppCompatActivity(),
                                                 val bottomSheet = ProgressTrackingBottomSheet(
                                                     this@SubmissionDetailActivity,
                                                     this@SubmissionDetailActivity, data
-                                                )
+                                                ).also {
+                                                    with(it) {
+                                                        setOnProgressTrackingListener(this@SubmissionDetailActivity)
+                                                    }
+                                                }
 
                                                 if (bottomSheet.window != null)
                                                     bottomSheet.show()
@@ -444,7 +452,11 @@ class SubmissionDetailActivity : AppCompatActivity(),
                                                 val bottomSheet = ProgressTrackingBottomSheet(
                                                     this@SubmissionDetailActivity,
                                                     this@SubmissionDetailActivity, data
-                                                )
+                                                ).also {
+                                                    with(it) {
+                                                        setOnProgressTrackingListener(this@SubmissionDetailActivity)
+                                                    }
+                                                }
 
                                                 if (bottomSheet.window != null)
                                                     bottomSheet.show()
@@ -742,5 +754,18 @@ class SubmissionDetailActivity : AppCompatActivity(),
 
     override fun onUpdateSuccess() {
         init()
+    }
+
+    override fun createProgressClicked() {
+        activityResultLauncher.launch(
+            Intent(
+                this@SubmissionDetailActivity,
+                ProgressFormActivity::class.java
+            ).also {
+                with (it) {
+                    putExtra("data", data)
+                }
+            }
+        )
     }
 }

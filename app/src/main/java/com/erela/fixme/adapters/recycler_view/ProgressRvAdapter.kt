@@ -14,7 +14,9 @@ import com.erela.fixme.databinding.ListItemProgressBinding
 import com.erela.fixme.helpers.networking.InitAPI
 import com.erela.fixme.objects.ProgressItem
 
-class ProgressRvAdapter(val context: Context, val activity: Activity, val data: List<ProgressItem?>?) :
+class ProgressRvAdapter(
+    val context: Context, val activity: Activity, val data: List<ProgressItem?>?
+) :
     RecyclerView.Adapter<ProgressRvAdapter.ViewHolder>() {
     private lateinit var imageCarouselAdapter: ImageCarouselPagerAdapter
 
@@ -53,7 +55,7 @@ class ProgressRvAdapter(val context: Context, val activity: Activity, val data: 
                         imageCarouselAdapter.registerDataSetObserver(
                             circleIndicator.dataSetObserver
                         )
-                    } else {
+                    } else if (item.foto.size == 1) {
                         imageCarouselHolder.visibility = View.GONE
                         circleIndicator.visibility = View.GONE
                         submissionImage.visibility = View.VISIBLE
@@ -62,6 +64,8 @@ class ProgressRvAdapter(val context: Context, val activity: Activity, val data: 
                             .load(InitAPI.IMAGE_URL + image)
                             .placeholder(R.drawable.image_placeholder)
                             .into(submissionImage)
+                    } else {
+                        imageContainer.visibility = View.GONE
                     }
                 }
             }

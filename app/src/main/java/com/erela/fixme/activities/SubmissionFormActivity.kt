@@ -41,7 +41,7 @@ import com.erela.fixme.objects.DepartmentListResponse
 import com.erela.fixme.objects.FotoGaprojectsItem
 import com.erela.fixme.objects.MaterialListResponse
 import com.erela.fixme.objects.SubmissionDetailResponse
-import com.erela.fixme.objects.SubmitSubmissionResponse
+import com.erela.fixme.objects.SubmitSubmissionAndCreateProgressResponse
 import com.erela.fixme.objects.UpdateSubmissionResponse
 import com.google.android.flexbox.FlexDirection
 import com.google.android.flexbox.FlexWrap
@@ -229,6 +229,7 @@ class SubmissionFormActivity : AppCompatActivity() {
                     prepareMaterials()
                 }
                 if (detail?.fotoGaprojects!!.isNotEmpty()) {
+                    manageAttachmentText.text = getString(R.string.manage_new_photo)
                     for (element in detail?.fotoGaprojects!!) {
                         if (element != null) {
                             oldImageArray.add(
@@ -419,8 +420,9 @@ class SubmissionFormActivity : AppCompatActivity() {
                 submitButton.setOnClickListener {
                     submitButton.visibility = View.GONE
                     loadingBar.visibility = View.VISIBLE
-                    val imm = getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
-                    imm.hideSoftInputFromWindow(currentFocus?.windowToken, 0)
+                    val inputMethodManager =
+                        getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
+                    inputMethodManager.hideSoftInputFromWindow(currentFocus?.windowToken, 0)
                     if (!formCheck()) {
                         submitButton.visibility = View.VISIBLE
                         loadingBar.visibility = View.GONE
@@ -446,10 +448,11 @@ class SubmissionFormActivity : AppCompatActivity() {
                                     InitAPI.getAPI.submitSubmission(requestBodyMap, photoFiles)
                                 } else {
                                     InitAPI.getAPI.submitSubmissionNoAttachment(requestBodyMap)
-                                }).enqueue(object : Callback<SubmitSubmissionResponse> {
+                                }).enqueue(object :
+                                    Callback<SubmitSubmissionAndCreateProgressResponse> {
                                     override fun onResponse(
-                                        call: Call<SubmitSubmissionResponse?>,
-                                        response: Response<SubmitSubmissionResponse?>
+                                        call: Call<SubmitSubmissionAndCreateProgressResponse?>,
+                                        response: Response<SubmitSubmissionAndCreateProgressResponse?>
                                     ) {
                                         submitButton.visibility = View.VISIBLE
                                         loadingBar.visibility = View.GONE
@@ -512,7 +515,7 @@ class SubmissionFormActivity : AppCompatActivity() {
                                     }
 
                                     override fun onFailure(
-                                        call: Call<SubmitSubmissionResponse?>,
+                                        call: Call<SubmitSubmissionAndCreateProgressResponse?>,
                                         throwable: Throwable
                                     ) {
                                         submitButton.visibility = View.VISIBLE
@@ -1409,6 +1412,7 @@ class SubmissionFormActivity : AppCompatActivity() {
         cursor?.close()
         return null
     }
+
     /*private fun getRealPathFromURI(uri: Uri): String {
         val returnCursor = contentResolver.query(uri, null, null, null, null)
         val nameIndex = returnCursor!!.getColumnIndex(OpenableColumns.DISPLAY_NAME)

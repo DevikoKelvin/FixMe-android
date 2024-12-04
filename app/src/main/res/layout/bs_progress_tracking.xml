@@ -14,7 +14,7 @@
         android:layout_width="75dp"
         android:layout_height="5dp"
         android:layout_gravity="center"
-        android:layout_marginVertical="18dp"
+        android:layout_marginTop="18dp"
         app:cardBackgroundColor="@color/custom_toast_font_normal_soft_gray"
         app:cardCornerRadius="50dp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -32,10 +32,7 @@
         android:textAlignment="center"
         android:textColor="@color/black"
         android:textSize="18sp"
-        android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/sliderDrawer" />
+        android:textStyle="bold" />
 
     <TextView
         android:id="@+id/progressWorkedBy"
@@ -44,9 +41,6 @@
         android:layout_marginHorizontal="16dp"
         android:textAlignment="center"
         android:textSize="14sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/progressTrackingTitle"
         tools:text="Progress is being worked on by hendrick" />
 
     <androidx.recyclerview.widget.RecyclerView
@@ -54,8 +48,6 @@
         android:layout_width="match_parent"
         android:layout_height="450dp"
         android:layout_marginTop="8dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/progressWorkedBy"
         tools:itemCount="2"
         tools:listitem="@layout/list_item_progress" />
 
@@ -68,9 +60,6 @@
         app:cardBackgroundColor="@color/button_color"
         app:cardCornerRadius="50dp"
         app:cardElevation="0dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
         app:strokeWidth="0dp">
 
         <TextView
@@ -82,9 +71,6 @@
             android:textAlignment="center"
             android:textColor="@color/white"
             android:textSize="14sp"
-            android:textStyle="bold"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/progressTrackingTitle" />
+            android:textStyle="bold" />
     </com.google.android.material.card.MaterialCardView>
 </LinearLayout>

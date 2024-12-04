@@ -2,16 +2,15 @@ package com.erela.fixme.bottom_sheets
 
 import android.annotation.SuppressLint
 import android.app.Activity
-import com.erela.fixme.R
 import android.content.Context
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.view.View
 import android.view.ViewGroup
-import android.widget.LinearLayout
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.erela.fixme.R
 import com.erela.fixme.adapters.recycler_view.ProgressRvAdapter
 import com.erela.fixme.databinding.BsProgressTrackingBinding
 import com.erela.fixme.helpers.UserDataHelper
@@ -19,7 +18,9 @@ import com.erela.fixme.objects.SubmissionDetailResponse
 import com.erela.fixme.objects.UserData
 import com.google.android.material.bottomsheet.BottomSheetDialog
 
-class ProgressTrackingBottomSheet(context: Context, val activity: Activity, val data: SubmissionDetailResponse) :
+class ProgressTrackingBottomSheet(
+    context: Context, val activity: Activity, val data: SubmissionDetailResponse
+) :
     BottomSheetDialog(context) {
     private val binding: BsProgressTrackingBinding by lazy {
         BsProgressTrackingBinding.inflate(layoutInflater)
@@ -28,6 +29,7 @@ class ProgressTrackingBottomSheet(context: Context, val activity: Activity, val 
         UserDataHelper(context).getUserData()
     }
     private lateinit var progressAdapter: ProgressRvAdapter
+    private lateinit var onProgressTrackingListener: OnProgressTrackingListener
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -56,9 +58,10 @@ class ProgressTrackingBottomSheet(context: Context, val activity: Activity, val 
             }
             progressWorkedBy.text = message.toString()
             progressAdapter = ProgressRvAdapter(context, activity, data.progress)
+            progressAdapter.itemCount
             rvProgress.adapter = progressAdapter
             rvProgress.layoutManager = LinearLayoutManager(context)
-            if (data.idUserApprove == userData.id) {
+            if (data.idUser == userData.id) {
                 progressActionButton.setCardBackgroundColor(
                     ContextCompat.getColor(
                         context, R.color.status_on_trial
@@ -66,6 +69,21 @@ class ProgressTrackingBottomSheet(context: Context, val activity: Activity, val 
                 )
                 progressActionText.setTextColor(ContextCompat.getColor(context, R.color.white))
                 progressActionText.text = "Start Trial"
+                progressActionButton.setOnClickListener {
+                }
+            } else if (userData.id == data.usernUserSpv!![0]?.idUser) {
+                /*for (i in 0 until data.progress!!.size) {
+                    if (data.progress[i])
+                }*/
+                progressActionButton.setCardBackgroundColor(
+                    ContextCompat.getColor(
+                        context, R.color.custom_toast_background_soft_blue
+                    )
+                )
+                progressActionText.setTextColor(
+                    ContextCompat.getColor(context, R.color.custom_toast_font_blue)
+                )
+                progressActionText.text = "Mark Ready for Trial"
                 progressActionButton.setOnClickListener {
                 }
             } else {
@@ -76,9 +94,16 @@ class ProgressTrackingBottomSheet(context: Context, val activity: Activity, val 
                                 context, R.color.button_color
                             )
                         )
-                        progressActionText.setTextColor(ContextCompat.getColor(context, R.color.white))
-                        progressActionText.text = context.getString(R.string.create_new_progress)
+                        progressActionText.setTextColor(
+                            ContextCompat.getColor(context, R.color.white)
+                        )
+                        progressActionText.text =
+                            if (progressAdapter.itemCount == 0) context.getString(
+                                R.string.action_on_progress
+                            ) else context.getString(R.string.create_new_progress)
                         progressActionButton.setOnClickListener {
+                            onProgressTrackingListener.createProgressClicked()
+                            dismiss()
                         }
                     } else {
                         progressActionButton.visibility = View.GONE
@@ -86,5 +111,13 @@ class ProgressTrackingBottomSheet(context: Context, val activity: Activity, val 
                 }
             }
         }
+    }
+
+    fun setOnProgressTrackingListener(onProgressTrackingListener: OnProgressTrackingListener) {
+        this.onProgressTrackingListener = onProgressTrackingListener
+    }
+
+    interface OnProgressTrackingListener {
+        fun createProgressClicked()
     }
 }

@@ -22,7 +22,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="16dp"
-        android:text="@string/manage_attachment"
+        android:text="@string/manage_photo"
         android:textAlignment="center"
         android:textColor="@color/black"
         android:textSize="18sp"

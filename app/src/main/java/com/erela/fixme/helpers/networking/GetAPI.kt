@@ -9,7 +9,7 @@ import com.erela.fixme.objects.MaterialListResponse
 import com.erela.fixme.objects.StarconnectUserResponse
 import com.erela.fixme.objects.SubmissionDetailResponse
 import com.erela.fixme.objects.SubmissionListResponse
-import com.erela.fixme.objects.SubmitSubmissionResponse
+import com.erela.fixme.objects.SubmitSubmissionAndCreateProgressResponse
 import com.erela.fixme.objects.SupervisorListResponse
 import com.erela.fixme.objects.TechnicianListResponse
 import com.erela.fixme.objects.UpdateStatusResponse
@@ -90,13 +90,13 @@ interface GetAPI {
     fun submitSubmission(
         @PartMap submissionData: MutableMap<String, RequestBody>,
         @Part foto: List<MultipartBody.Part?>
-    ): Call<SubmitSubmissionResponse>
+    ): Call<SubmitSubmissionAndCreateProgressResponse>
 
     @Multipart
     @POST("pengajuansave")
     fun submitSubmissionNoAttachment(
         @PartMap submissionData: MutableMap<String, RequestBody>
-    ): Call<SubmitSubmissionResponse>
+    ): Call<SubmitSubmissionAndCreateProgressResponse>
 
     @Multipart
     @POST("updatepengajuan")
@@ -127,10 +127,6 @@ interface GetAPI {
     @POST("statusapprove")
     fun approveSubmission(
         @PartMap data: MutableMap<String, RequestBody>
-        /*@Field("id_user") idUser: Int,
-        @Field("id_gaprojects") idGaProjects: Int,
-        @Field("keterangan") description: String,
-        @Field("user_supervisor[]") idSupervisor: Int*/
     ): Call<UpdateStatusResponse>
 
     @FormUrlEncoded
@@ -146,4 +142,17 @@ interface GetAPI {
     fun deployTechnicians(
         @PartMap data: MutableMap<String, RequestBody>
     ): Call<UpdateStatusResponse>
+
+    @Multipart
+    @POST("saveprogress")
+    fun createProgress(
+        @PartMap data: MutableMap<String, RequestBody>,
+        @Part foto: List<MultipartBody.Part?>
+    ): Call<SubmitSubmissionAndCreateProgressResponse>
+
+    @Multipart
+    @POST("saveprogress")
+    fun createProgressNoAttachment(
+        @PartMap data: MutableMap<String, RequestBody>
+    ): Call<SubmitSubmissionAndCreateProgressResponse>
 }

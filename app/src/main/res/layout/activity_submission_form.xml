@@ -362,9 +362,10 @@
                     app:strokeWidth="0dp">
 
                     <TextView
+                        android:id="@+id/manageAttachmentText"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/manage_attachment"
+                        android:text="@string/manage_photo"
                         android:textColor="@color/black"
                         android:textSize="12sp"
                         android:textStyle="bold" />
@@ -389,7 +390,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/manage_old_attachment"
+                        android:text="@string/manage_old_photo"
                         android:textColor="@color/black"
                         android:textSize="12sp"
                         android:textStyle="bold" />
