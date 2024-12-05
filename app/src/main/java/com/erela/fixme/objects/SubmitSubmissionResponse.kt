@@ -2,7 +2,7 @@ package com.erela.fixme.objects
 
 import com.google.gson.annotations.SerializedName
 
-data class SubmitSubmissionAndCreateProgressResponse(
+data class SubmitSubmissionResponse(
     @field:SerializedName("code")
     val code: Int? = null,
     @field:SerializedName("last_id")

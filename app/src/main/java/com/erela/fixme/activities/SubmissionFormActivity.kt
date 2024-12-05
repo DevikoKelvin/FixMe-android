@@ -41,7 +41,7 @@ import com.erela.fixme.objects.DepartmentListResponse
 import com.erela.fixme.objects.FotoGaprojectsItem
 import com.erela.fixme.objects.MaterialListResponse
 import com.erela.fixme.objects.SubmissionDetailResponse
-import com.erela.fixme.objects.SubmitSubmissionAndCreateProgressResponse
+import com.erela.fixme.objects.SubmitSubmissionResponse
 import com.erela.fixme.objects.UpdateSubmissionResponse
 import com.google.android.flexbox.FlexDirection
 import com.google.android.flexbox.FlexWrap
@@ -449,10 +449,10 @@ class SubmissionFormActivity : AppCompatActivity() {
                                 } else {
                                     InitAPI.getAPI.submitSubmissionNoAttachment(requestBodyMap)
                                 }).enqueue(object :
-                                    Callback<SubmitSubmissionAndCreateProgressResponse> {
+                                    Callback<SubmitSubmissionResponse> {
                                     override fun onResponse(
-                                        call: Call<SubmitSubmissionAndCreateProgressResponse?>,
-                                        response: Response<SubmitSubmissionAndCreateProgressResponse?>
+                                        call: Call<SubmitSubmissionResponse?>,
+                                        response: Response<SubmitSubmissionResponse?>
                                     ) {
                                         submitButton.visibility = View.VISIBLE
                                         loadingBar.visibility = View.GONE
@@ -515,7 +515,7 @@ class SubmissionFormActivity : AppCompatActivity() {
                                     }
 
                                     override fun onFailure(
-                                        call: Call<SubmitSubmissionAndCreateProgressResponse?>,
+                                        call: Call<SubmitSubmissionResponse?>,
                                         throwable: Throwable
                                     ) {
                                         submitButton.visibility = View.VISIBLE

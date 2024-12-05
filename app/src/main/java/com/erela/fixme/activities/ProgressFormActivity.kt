@@ -29,9 +29,10 @@ import com.erela.fixme.databinding.ActivityProgressFormBinding
 import com.erela.fixme.helpers.PermissionHelper
 import com.erela.fixme.helpers.UserDataHelper
 import com.erela.fixme.helpers.networking.InitAPI
+import com.erela.fixme.objects.CreateProgressResponse
 import com.erela.fixme.objects.FotoGaprojectsItem
 import com.erela.fixme.objects.SubmissionDetailResponse
-import com.erela.fixme.objects.SubmitSubmissionAndCreateProgressResponse
+import com.erela.fixme.objects.SubmitSubmissionResponse
 import com.erela.fixme.objects.UserData
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
@@ -282,10 +283,10 @@ class ProgressFormActivity : AppCompatActivity() {
                             } else {
                                 InitAPI.getAPI.createProgressNoAttachment(requestBodyMap)
                             }).enqueue(object :
-                                Callback<SubmitSubmissionAndCreateProgressResponse> {
+                                Callback<CreateProgressResponse> {
                                 override fun onResponse(
-                                    call: Call<SubmitSubmissionAndCreateProgressResponse>,
-                                    response: Response<SubmitSubmissionAndCreateProgressResponse>
+                                    call: Call<CreateProgressResponse>,
+                                    response: Response<CreateProgressResponse>
                                 ) {
                                     loadingBar.visibility = View.GONE
                                     if (response.isSuccessful) {
@@ -325,7 +326,7 @@ class ProgressFormActivity : AppCompatActivity() {
                                                     ).show()
                                                 Log.e(
                                                     "ERROR ${response.code()}",
-                                                    "Create Progress Response Code 0 | ${response.message()}"
+                                                    "Create Progress Response Code 0 | ${result?.message}"
                                                 )
                                             }
                                         } else {
@@ -345,7 +346,7 @@ class ProgressFormActivity : AppCompatActivity() {
                                                 ).show()
                                             Log.e(
                                                 "ERROR ${response.code()}",
-                                                "Create Progress Response null | ${response.message()}"
+                                                "Create Progress Response null | $response"
                                             )
                                         }
                                     } else {
@@ -365,13 +366,13 @@ class ProgressFormActivity : AppCompatActivity() {
                                             ).show()
                                         Log.e(
                                             "ERROR ${response.code()}",
-                                            "Create Progress Response Fail | ${response.message()}"
+                                            "Create Progress Response Fail | $response"
                                         )
                                     }
                                 }
 
                                 override fun onFailure(
-                                    call: Call<SubmitSubmissionAndCreateProgressResponse>,
+                                    call: Call<CreateProgressResponse>,
                                     throwable: Throwable
                                 ) {
                                     loadingBar.visibility = View.GONE
@@ -412,6 +413,23 @@ class ProgressFormActivity : AppCompatActivity() {
                             Log.e("ERROR", "Create Progress JSON Exception | $jsonException")
                             jsonException.printStackTrace()
                         }
+                    } else {
+                        loadingBar.visibility = View.GONE
+                        CustomToast.getInstance(applicationContext)
+                            .setMessage("Something went wrong, please try again.")
+                            .setFontColor(
+                                ContextCompat.getColor(
+                                    this@ProgressFormActivity,
+                                    R.color.custom_toast_font_failed
+                                )
+                            )
+                            .setBackgroundColor(
+                                ContextCompat.getColor(
+                                    this@ProgressFormActivity,
+                                    R.color.custom_toast_background_failed
+                                )
+                            ).show()
+                        Log.e("ERROR", "Submit form not prepared")
                     }
                 }
             }
