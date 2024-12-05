@@ -44,6 +44,7 @@ class SubmissionDetailActivity : AppCompatActivity(),
     private lateinit var detailId: String
     private lateinit var userData: UserData
     private lateinit var userDetail: UserDetailResponse
+    private lateinit var detailData: SubmissionDetailResponse
     private var message: StringBuilder = StringBuilder()
     val activityResultLauncher: ActivityResultLauncher<Intent> = registerForActivityResult(
         ActivityResultContracts.StartActivityForResult()
@@ -114,6 +115,7 @@ class SubmissionDetailActivity : AppCompatActivity(),
                             if (response.isSuccessful) {
                                 if (response.body() != null) {
                                     val data = response.body()!![0]
+                                    detailData = data
                                     Log.e("DATA", data.toString())
                                     detailTitle.text = data.nomorRequest
                                     if (data.fotoGaprojects!!.isEmpty()) {
@@ -763,7 +765,7 @@ class SubmissionDetailActivity : AppCompatActivity(),
                 ProgressFormActivity::class.java
             ).also {
                 with (it) {
-                    putExtra("data", data)
+                    putExtra("data", detailData)
                 }
             }
         )

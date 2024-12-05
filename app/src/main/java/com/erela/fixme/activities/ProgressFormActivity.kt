@@ -277,6 +277,7 @@ class ProgressFormActivity : AppCompatActivity() {
                         ).show()
                 } else {
                     if (prepareSubmitForm()) {
+                        Log.e("Photo Files", photoFiles.toString())
                         try {
                             (if (photoFiles.isNotEmpty()) {
                                 InitAPI.getAPI.createProgress(requestBodyMap, photoFiles)
@@ -517,9 +518,9 @@ class ProgressFormActivity : AppCompatActivity() {
     private fun prepareSubmitForm(): Boolean {
         binding.apply {
             if (imageArrayUri.isNotEmpty()) {
-                for (element in imageArrayUri) {
+                for (i in 0 until imageArrayUri.size) {
                     photoFiles.add(
-                        createMultipartBody(element, "foto[]")
+                        createMultipartBody(imageArrayUri[i], "foto[$i]")
                     )
                 }
             }
