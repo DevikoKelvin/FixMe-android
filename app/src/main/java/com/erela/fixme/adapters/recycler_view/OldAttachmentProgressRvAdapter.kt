@@ -7,14 +7,14 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.erela.fixme.databinding.ListItemAttachmentBinding
 import com.erela.fixme.dialogs.PhotoPreviewDialog
-import com.erela.fixme.objects.FotoGaprojectsItem
+import com.erela.fixme.objects.FotoItem
 
-class OldAttachmentRvAdapter(
-    private val context: Context, private val oldData: ArrayList<FotoGaprojectsItem>?
-) : RecyclerView.Adapter<OldAttachmentRvAdapter.ViewHolder>() {
+class OldAttachmentProgressRvAdapter(
+    private val context: Context, private val imageArray: MutableList<FotoItem>
+): RecyclerView.Adapter<OldAttachmentProgressRvAdapter.ViewHolder>() {
     private lateinit var onAttachmentItemActionListener: OnAttachmentItemActionListener
 
-    inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+    inner class ViewHolder(view: View): RecyclerView.ViewHolder(view) {
         val binding = ListItemAttachmentBinding.bind(view)
     }
 
@@ -24,14 +24,15 @@ class OldAttachmentRvAdapter(
         ).root
     )
 
-    override fun getItemCount(): Int = oldData!!.size
+    override fun getItemCount(): Int = imageArray.size
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val item = oldData!![position]
+        val item = imageArray[position]
 
         with(holder) {
             binding.apply {
                 fileName.text = item.foto
+
                 seePhotoButton.setOnClickListener {
                     val photoPreviewDialog = PhotoPreviewDialog(context, null, item.foto)
 
@@ -39,7 +40,7 @@ class OldAttachmentRvAdapter(
                         photoPreviewDialog.show()
                 }
                 deletePhotoButton.setOnClickListener {
-                    oldData.removeAt(position)
+                    imageArray.removeAt(position)
                     notifyItemRemoved(position)
                     onAttachmentItemActionListener.onDeleteOldPhoto(item)
                 }
@@ -54,6 +55,6 @@ class OldAttachmentRvAdapter(
     }
 
     interface OnAttachmentItemActionListener {
-        fun onDeleteOldPhoto(fotoGaProjectsItem: FotoGaprojectsItem)
+        fun onDeleteOldPhoto(photo: FotoItem)
     }
 }

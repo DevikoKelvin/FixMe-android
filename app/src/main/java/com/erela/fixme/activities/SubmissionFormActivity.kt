@@ -232,9 +232,7 @@ class SubmissionFormActivity : AppCompatActivity() {
                     manageAttachmentText.text = getString(R.string.manage_new_photo)
                     for (element in detail?.fotoGaprojects!!) {
                         if (element != null) {
-                            oldImageArray.add(
-                                element
-                            )
+                            oldImageArray.add(element)
                         }
                     }
                 }
@@ -246,7 +244,7 @@ class SubmissionFormActivity : AppCompatActivity() {
                         ).also {
                             with(it) {
                                 setOnAttachmentActionListener(object :
-                                    ManageOldPhotoBottomSheet.OnAttachmentActionListener {
+                                    ManageOldPhotoBottomSheet.OnSubmissionAttachmentActionListener {
                                     override fun onDeleteOldPhoto(
                                         fotoGaProjectsItem: FotoGaprojectsItem
                                     ) {

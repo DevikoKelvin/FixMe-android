@@ -14,4 +14,4 @@ data class FotoGaprojectsItem(
     val idGaprojects: Int? = null,
     @field:SerializedName("tgl_waktu")
     val tglWaktu: String? = null
-): Parcelable
+) : Parcelable

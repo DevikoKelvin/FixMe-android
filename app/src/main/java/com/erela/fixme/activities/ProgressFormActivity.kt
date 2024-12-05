@@ -23,6 +23,7 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.erela.fixme.R
 import com.erela.fixme.bottom_sheets.ChooseFileBottomSheet
+import com.erela.fixme.bottom_sheets.ManageOldPhotoBottomSheet
 import com.erela.fixme.bottom_sheets.ManagePhotoBottomSheet
 import com.erela.fixme.custom_views.CustomToast
 import com.erela.fixme.databinding.ActivityProgressFormBinding
@@ -31,6 +32,8 @@ import com.erela.fixme.helpers.UserDataHelper
 import com.erela.fixme.helpers.networking.InitAPI
 import com.erela.fixme.objects.CreateProgressResponse
 import com.erela.fixme.objects.FotoGaprojectsItem
+import com.erela.fixme.objects.FotoItem
+import com.erela.fixme.objects.ProgressItem
 import com.erela.fixme.objects.SubmissionDetailResponse
 import com.erela.fixme.objects.SubmitSubmissionResponse
 import com.erela.fixme.objects.UserData
@@ -58,8 +61,9 @@ class ProgressFormActivity : AppCompatActivity() {
         UserDataHelper(applicationContext).getUserData()
     }
     private var detail: SubmissionDetailResponse? = null
+    private var progressData: ProgressItem? = null
     private val imageArrayUri = ArrayList<Uri>()
-    private val oldImageArray = ArrayList<FotoGaprojectsItem>()
+    private val oldImageArray = ArrayList<FotoItem>()
     private var deletedOldImageArray: ArrayList<Int> = ArrayList()
     private var cameraCaptureFileName: String = ""
     private lateinit var imageUri: Uri
@@ -147,6 +151,55 @@ class ProgressFormActivity : AppCompatActivity() {
                 }
             } catch (nullPointerException: NullPointerException) {
                 null
+            }
+            progressData = try {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                    intent.getParcelableExtra("data", ProgressItem::class.java)!!
+                } else {
+                    intent.getParcelableExtra("data")
+                }
+            } catch (nullPointerException: NullPointerException) {
+                null
+            }
+
+            if (progressData != null) {
+                repairAnalysisField.setText(progressData?.analisa)
+                if (!progressData?.analisa.isNullOrEmpty())
+                    isFormEmpty[0] = true
+                descriptionField.setText(progressData?.keterangan)
+                if (!progressData?.keterangan.isNullOrEmpty())
+                    isFormEmpty[1] = true
+                if (progressData?.foto!!.isNotEmpty()) {
+                    manageAttachmentText.text = getString(R.string.manage_new_photo)
+                    for (photo in progressData?.foto!!) {
+                        if (photo != null) {
+                            oldImageArray.add(photo)
+                        }
+                    }
+                }
+                if (oldImageArray.isNotEmpty()) {
+                    manageOldAttachmentButton.visibility = View.VISIBLE
+                    manageOldAttachmentButton.setOnClickListener {
+                        val bottomSheet = ManageOldPhotoBottomSheet(
+                            this@ProgressFormActivity, oldImageArray
+                        ).also {
+                            with(it) {
+                                setOnProgressAttachmentActionListener(object :
+                                    ManageOldPhotoBottomSheet.OnProgressAttachmentActionListener {
+                                    override fun onDeleteOldPhoto(photo: FotoItem) {
+                                        deletedOldImageArray.add(photo.idFoto!!)
+                                        oldImageArray.remove(photo)
+                                        if (oldImageArray.isEmpty())
+                                            manageOldAttachmentButton.visibility = View.GONE
+                                    }
+                                })
+                            }
+                        }
+
+                        if (bottomSheet.window != null)
+                            bottomSheet.show()
+                    }
+                }
             }
 
             repairAnalysisField.addTextChangedListener(object : TextWatcher {
@@ -518,9 +571,9 @@ class ProgressFormActivity : AppCompatActivity() {
     private fun prepareSubmitForm(): Boolean {
         binding.apply {
             if (imageArrayUri.isNotEmpty()) {
-                for (i in 0 until imageArrayUri.size) {
+                for (element in imageArrayUri) {
                     photoFiles.add(
-                        createMultipartBody(imageArrayUri[i], "foto[$i]")
+                        createMultipartBody(element, "foto[]")
                     )
                 }
             }

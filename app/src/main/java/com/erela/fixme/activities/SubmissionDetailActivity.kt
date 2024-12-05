@@ -856,6 +856,7 @@ class SubmissionDetailActivity : AppCompatActivity(),
                                                             .setMessage(
                                                                 "Progress deleted successfully!"
                                                             ).show()
+                                                        init()
                                                     } else {
                                                         CustomToast.getInstance(applicationContext)
                                                             .setBackgroundColor(
@@ -970,7 +971,6 @@ class SubmissionDetailActivity : AppCompatActivity(),
                                 jsonException.printStackTrace()
                                 Log.e("ERROR", "Delete Progress Exception | $jsonException")
                             }
-                            init()
                         }
                     })
                 }
@@ -981,5 +981,15 @@ class SubmissionDetailActivity : AppCompatActivity(),
     }
 
     override fun onProgressEdited(data: ProgressItem) {
+        activityResultLauncher.launch(
+            Intent(
+                this@SubmissionDetailActivity,
+                ProgressFormActivity::class.java
+            ).also {
+                with(it) {
+                    putExtra("data", data)
+                }
+            }
+        )
     }
 }

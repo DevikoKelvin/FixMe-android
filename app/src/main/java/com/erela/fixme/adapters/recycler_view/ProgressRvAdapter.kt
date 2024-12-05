@@ -74,6 +74,13 @@ class ProgressRvAdapter(
                     }
                 }
 
+                imageContainer.setOnLongClickListener {
+                    if (userData.id == item?.idUser) {
+                        onItemHoldTapListener.onItemHoldTap(item)
+                    }
+                    true
+                }
+
                 itemView.setOnLongClickListener {
                     if (userData.id == item?.idUser) {
                         onItemHoldTapListener.onItemHoldTap(item)
