@@ -21,10 +21,15 @@ import com.erela.fixme.bottom_sheets.ProgressTrackingBottomSheet
 import com.erela.fixme.bottom_sheets.SubmissionActionBottomSheet
 import com.erela.fixme.custom_views.CustomToast
 import com.erela.fixme.databinding.ActivitySubmissionDetailBinding
+import com.erela.fixme.dialogs.ConfirmationDialog
+import com.erela.fixme.dialogs.LoadingDialog
+import com.erela.fixme.dialogs.ProgressOptionDialog
 import com.erela.fixme.helpers.Base64Helper
 import com.erela.fixme.helpers.networking.InitAPI
 import com.erela.fixme.helpers.UserDataHelper
+import com.erela.fixme.objects.DeleteProgressResponse
 import com.erela.fixme.objects.FotoGaprojectsItem
+import com.erela.fixme.objects.ProgressItem
 import com.erela.fixme.objects.StarconnectUserResponse
 import com.erela.fixme.objects.SubmissionDetailResponse
 import com.erela.fixme.objects.UserData
@@ -35,7 +40,10 @@ import retrofit2.Callback
 import retrofit2.Response
 
 class SubmissionDetailActivity : AppCompatActivity(),
-    SubmissionActionBottomSheet.OnUpdateSuccessListener, ProgressTrackingBottomSheet.OnProgressTrackingListener {
+    SubmissionActionBottomSheet.OnUpdateSuccessListener,
+    ProgressTrackingBottomSheet.OnProgressTrackingListener,
+    ProgressTrackingBottomSheet.OnProgressItemLongTapListener,
+    ProgressOptionDialog.OnProgressOptionDialogListener {
     private val binding: ActivitySubmissionDetailBinding by lazy {
         ActivitySubmissionDetailBinding.inflate(layoutInflater)
     }
@@ -45,6 +53,7 @@ class SubmissionDetailActivity : AppCompatActivity(),
     private lateinit var userData: UserData
     private lateinit var userDetail: UserDetailResponse
     private lateinit var detailData: SubmissionDetailResponse
+    private lateinit var progressTrackingBottomSheet: ProgressTrackingBottomSheet
     private var message: StringBuilder = StringBuilder()
     val activityResultLauncher: ActivityResultLauncher<Intent> = registerForActivityResult(
         ActivityResultContracts.StartActivityForResult()
@@ -365,17 +374,23 @@ class SubmissionDetailActivity : AppCompatActivity(),
                                             }
                                             onProgressText.text = message.toString()
                                             onProgressButton.setOnClickListener {
-                                                val bottomSheet = ProgressTrackingBottomSheet(
-                                                    this@SubmissionDetailActivity,
-                                                    this@SubmissionDetailActivity, data
-                                                ).also {
-                                                    with(it) {
-                                                        setOnProgressTrackingListener(this@SubmissionDetailActivity)
+                                                progressTrackingBottomSheet =
+                                                    ProgressTrackingBottomSheet(
+                                                        this@SubmissionDetailActivity,
+                                                        this@SubmissionDetailActivity, data
+                                                    ).also {
+                                                        with(it) {
+                                                            setOnProgressTrackingListener(
+                                                                this@SubmissionDetailActivity
+                                                            )
+                                                            setOnProgressItemLongTapListener(
+                                                                this@SubmissionDetailActivity
+                                                            )
+                                                        }
                                                     }
-                                                }
 
-                                                if (bottomSheet.window != null)
-                                                    bottomSheet.show()
+                                                if (progressTrackingBottomSheet.window != null)
+                                                    progressTrackingBottomSheet.show()
                                             }
                                         }
                                         // Done
@@ -408,17 +423,23 @@ class SubmissionDetailActivity : AppCompatActivity(),
                                                 )
                                             )
                                             statusMessageContainer.setOnClickListener {
-                                                val bottomSheet = ProgressTrackingBottomSheet(
-                                                    this@SubmissionDetailActivity,
-                                                    this@SubmissionDetailActivity, data
-                                                ).also {
-                                                    with(it) {
-                                                        setOnProgressTrackingListener(this@SubmissionDetailActivity)
+                                                progressTrackingBottomSheet =
+                                                    ProgressTrackingBottomSheet(
+                                                        this@SubmissionDetailActivity,
+                                                        this@SubmissionDetailActivity, data
+                                                    ).also {
+                                                        with(it) {
+                                                            setOnProgressTrackingListener(
+                                                                this@SubmissionDetailActivity
+                                                            )
+                                                            setOnProgressItemLongTapListener(
+                                                                this@SubmissionDetailActivity
+                                                            )
+                                                        }
                                                     }
-                                                }
 
-                                                if (bottomSheet.window != null)
-                                                    bottomSheet.show()
+                                                if (progressTrackingBottomSheet.window != null)
+                                                    progressTrackingBottomSheet.show()
                                             }
                                         }
                                         // On-Trial
@@ -451,17 +472,23 @@ class SubmissionDetailActivity : AppCompatActivity(),
                                                 )
                                             )
                                             statusMessageContainer.setOnClickListener {
-                                                val bottomSheet = ProgressTrackingBottomSheet(
-                                                    this@SubmissionDetailActivity,
-                                                    this@SubmissionDetailActivity, data
-                                                ).also {
-                                                    with(it) {
-                                                        setOnProgressTrackingListener(this@SubmissionDetailActivity)
+                                                progressTrackingBottomSheet =
+                                                    ProgressTrackingBottomSheet(
+                                                        this@SubmissionDetailActivity,
+                                                        this@SubmissionDetailActivity, data
+                                                    ).also {
+                                                        with(it) {
+                                                            setOnProgressTrackingListener(
+                                                                this@SubmissionDetailActivity
+                                                            )
+                                                            setOnProgressItemLongTapListener(
+                                                                this@SubmissionDetailActivity
+                                                            )
+                                                        }
                                                     }
-                                                }
 
-                                                if (bottomSheet.window != null)
-                                                    bottomSheet.show()
+                                                if (progressTrackingBottomSheet.window != null)
+                                                    progressTrackingBottomSheet.show()
                                             }
                                         }
                                     }
@@ -764,10 +791,195 @@ class SubmissionDetailActivity : AppCompatActivity(),
                 this@SubmissionDetailActivity,
                 ProgressFormActivity::class.java
             ).also {
-                with (it) {
+                with(it) {
                     putExtra("data", detailData)
                 }
             }
         )
+    }
+
+    override fun onLongTapListener(data: ProgressItem?) {
+        val dialog = ProgressOptionDialog(this@SubmissionDetailActivity, data!!).also {
+            with(it) {
+                setOnProgressOptionDialogListener(this@SubmissionDetailActivity)
+            }
+        }
+
+        if (dialog.window != null)
+            dialog.show()
+    }
+
+    override fun onProgressDeleted(data: ProgressItem) {
+        val confirmationDialog =
+            ConfirmationDialog(
+                this@SubmissionDetailActivity,
+                "Are you sure you want to delete this progress?",
+                "Yes"
+            ).also {
+                with(it) {
+                    setConfirmationDialogListener(object :
+                        ConfirmationDialog.ConfirmationDialogListener {
+                        override fun onConfirm() {
+                            progressTrackingBottomSheet.dismiss()
+                            val loadingDialog = LoadingDialog(this@SubmissionDetailActivity)
+                            if (loadingDialog.window != null)
+                                loadingDialog.show()
+                            try {
+                                InitAPI.getAPI.deleteProgress(
+                                    data.idGaprojectsDetail!!, userData.id
+                                )
+                                    .enqueue(object : Callback<DeleteProgressResponse> {
+                                        override fun onResponse(
+                                            call: Call<DeleteProgressResponse>,
+                                            response: Response<DeleteProgressResponse>
+                                        ) {
+                                            loadingDialog.dismiss()
+                                            if (response.isSuccessful) {
+                                                if (response.body() != null) {
+                                                    val result = response.body()
+                                                    if (result?.code == 1) {
+                                                        CustomToast.getInstance(applicationContext)
+                                                            .setBackgroundColor(
+                                                                ResourcesCompat.getColor(
+                                                                    resources,
+                                                                    R.color.custom_toast_background_success,
+                                                                    theme
+                                                                )
+                                                            )
+                                                            .setFontColor(
+                                                                ResourcesCompat.getColor(
+                                                                    resources,
+                                                                    R.color.custom_toast_font_success,
+                                                                    theme
+                                                                )
+                                                            )
+                                                            .setMessage(
+                                                                "Progress deleted successfully!"
+                                                            ).show()
+                                                    } else {
+                                                        CustomToast.getInstance(applicationContext)
+                                                            .setBackgroundColor(
+                                                                ResourcesCompat.getColor(
+                                                                    resources,
+                                                                    R.color.custom_toast_background_failed,
+                                                                    theme
+                                                                )
+                                                            )
+                                                            .setFontColor(
+                                                                ResourcesCompat.getColor(
+                                                                    resources,
+                                                                    R.color.custom_toast_font_failed,
+                                                                    theme
+                                                                )
+                                                            )
+                                                            .setMessage("Failed to delete progress")
+                                                            .show()
+                                                        Log.e(
+                                                            "ERROR ${response.code()}",
+                                                            "Delete Progress Response code 0 | ${response.message()}"
+                                                        )
+                                                    }
+                                                } else {
+                                                    CustomToast.getInstance(applicationContext)
+                                                        .setBackgroundColor(
+                                                            ResourcesCompat.getColor(
+                                                                resources,
+                                                                R.color.custom_toast_background_failed,
+                                                                theme
+                                                            )
+                                                        )
+                                                        .setFontColor(
+                                                            ResourcesCompat.getColor(
+                                                                resources,
+                                                                R.color.custom_toast_font_failed,
+                                                                theme
+                                                            )
+                                                        )
+                                                        .setMessage("Failed to delete progress")
+                                                        .show()
+                                                    Log.e(
+                                                        "ERROR ${response.code()}",
+                                                        "Delete Progress Response null | ${response.message()}"
+                                                    )
+                                                }
+                                            } else {
+                                                CustomToast.getInstance(applicationContext)
+                                                    .setBackgroundColor(
+                                                        ResourcesCompat.getColor(
+                                                            resources,
+                                                            R.color.custom_toast_background_failed,
+                                                            theme
+                                                        )
+                                                    )
+                                                    .setFontColor(
+                                                        ResourcesCompat.getColor(
+                                                            resources,
+                                                            R.color.custom_toast_font_failed, theme
+                                                        )
+                                                    )
+                                                    .setMessage("Failed to delete progress")
+                                                    .show()
+                                                Log.e(
+                                                    "ERROR ${response.code()}",
+                                                    "Delete Progress Response Fail | ${response.message()}"
+                                                )
+                                            }
+                                        }
+
+                                        override fun onFailure(
+                                            call: Call<DeleteProgressResponse>, throwable: Throwable
+                                        ) {
+                                            loadingDialog.dismiss()
+                                            CustomToast.getInstance(applicationContext)
+                                                .setBackgroundColor(
+                                                    ResourcesCompat.getColor(
+                                                        resources,
+                                                        R.color.custom_toast_background_failed,
+                                                        theme
+                                                    )
+                                                )
+                                                .setFontColor(
+                                                    ResourcesCompat.getColor(
+                                                        resources, R.color.custom_toast_font_failed,
+                                                        theme
+                                                    )
+                                                )
+                                                .setMessage(
+                                                    "Something went wrong, please try again later"
+                                                )
+                                                .show()
+                                            throwable.printStackTrace()
+                                            Log.e("ERROR", "Delete Progress Failure | $throwable")
+                                        }
+                                    })
+                            } catch (jsonException: JSONException) {
+                                loadingDialog.dismiss()
+                                CustomToast.getInstance(applicationContext)
+                                    .setBackgroundColor(
+                                        ResourcesCompat.getColor(
+                                            resources, R.color.custom_toast_background_failed, theme
+                                        )
+                                    )
+                                    .setFontColor(
+                                        ResourcesCompat.getColor(
+                                            resources, R.color.custom_toast_font_failed, theme
+                                        )
+                                    )
+                                    .setMessage("Something went wrong, please try again later")
+                                    .show()
+                                jsonException.printStackTrace()
+                                Log.e("ERROR", "Delete Progress Exception | $jsonException")
+                            }
+                            init()
+                        }
+                    })
+                }
+            }
+
+        if (confirmationDialog.window != null)
+            confirmationDialog.show()
+    }
+
+    override fun onProgressEdited(data: ProgressItem) {
     }
 }

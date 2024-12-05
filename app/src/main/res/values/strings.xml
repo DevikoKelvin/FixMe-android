@@ -39,7 +39,7 @@
     <string name="manage_old_photo">Manage old photo</string>
     <string name="manage_new_photo">Manage new photo</string>
     <string name="see_photo">See Photo</string>
-    <string name="delete_photo">Delete Photo</string>
+    <string name="delete">Delete</string>
 
     <string name="submission_list_title">Submission List</string>
     <string name="department_title">Department</string>

@@ -347,7 +347,7 @@ class ProgressFormActivity : AppCompatActivity() {
                                                 ).show()
                                             Log.e(
                                                 "ERROR ${response.code()}",
-                                                "Create Progress Response null | $response"
+                                                "Create Progress Response null | ${response.message()}"
                                             )
                                         }
                                     } else {
@@ -367,7 +367,7 @@ class ProgressFormActivity : AppCompatActivity() {
                                             ).show()
                                         Log.e(
                                             "ERROR ${response.code()}",
-                                            "Create Progress Response Fail | $response"
+                                            "Create Progress Response Fail | ${response.message()}"
                                         )
                                     }
                                 }

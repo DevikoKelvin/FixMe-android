@@ -11,14 +11,19 @@ import com.bumptech.glide.Glide
 import com.erela.fixme.R
 import com.erela.fixme.adapters.pager.ImageCarouselPagerAdapter
 import com.erela.fixme.databinding.ListItemProgressBinding
+import com.erela.fixme.helpers.UserDataHelper
 import com.erela.fixme.helpers.networking.InitAPI
 import com.erela.fixme.objects.ProgressItem
+import com.erela.fixme.objects.UserData
 
 class ProgressRvAdapter(
     val context: Context, val activity: Activity, val data: List<ProgressItem?>?
-) :
-    RecyclerView.Adapter<ProgressRvAdapter.ViewHolder>() {
+) : RecyclerView.Adapter<ProgressRvAdapter.ViewHolder>() {
     private lateinit var imageCarouselAdapter: ImageCarouselPagerAdapter
+    private lateinit var onItemHoldTapListener: OnItemHoldTapListener
+    private val userData: UserData by lazy {
+        UserDataHelper(context).getUserData()
+    }
 
     inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val binding = ListItemProgressBinding.bind(view)
@@ -68,7 +73,22 @@ class ProgressRvAdapter(
                         imageContainer.visibility = View.GONE
                     }
                 }
+
+                itemView.setOnLongClickListener {
+                    if (userData.id == item?.idUser) {
+                        onItemHoldTapListener.onItemHoldTap(item)
+                    }
+                    true
+                }
             }
         }
+    }
+
+    fun setOnItemHoldTapListener(onItemHoldTapListener: OnItemHoldTapListener) {
+        this.onItemHoldTapListener = onItemHoldTapListener
+    }
+
+    interface OnItemHoldTapListener {
+        fun onItemHoldTap(item: ProgressItem?)
     }
 }

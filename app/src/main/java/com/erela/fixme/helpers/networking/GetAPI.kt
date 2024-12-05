@@ -3,6 +3,7 @@ package com.erela.fixme.helpers.networking
 import com.erela.fixme.objects.CategoryListResponse
 import com.erela.fixme.objects.ChangePasswordResponse
 import com.erela.fixme.objects.CreateProgressResponse
+import com.erela.fixme.objects.DeleteProgressResponse
 import com.erela.fixme.objects.DepartmentListResponse
 import com.erela.fixme.objects.InboxResponse
 import com.erela.fixme.objects.LoginResponse
@@ -156,4 +157,11 @@ interface GetAPI {
     fun createProgressNoAttachment(
         @PartMap data: MutableMap<String, RequestBody>
     ): Call<CreateProgressResponse>
+
+    @FormUrlEncoded
+    @POST("delprogress")
+    fun deleteProgress(
+        @Field("id") idProgress: Int,
+        @Field("id_user") idUser: Int
+    ): Call<DeleteProgressResponse>
 }

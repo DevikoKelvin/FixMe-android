@@ -14,14 +14,14 @@ import com.erela.fixme.R
 import com.erela.fixme.adapters.recycler_view.ProgressRvAdapter
 import com.erela.fixme.databinding.BsProgressTrackingBinding
 import com.erela.fixme.helpers.UserDataHelper
+import com.erela.fixme.objects.ProgressItem
 import com.erela.fixme.objects.SubmissionDetailResponse
 import com.erela.fixme.objects.UserData
 import com.google.android.material.bottomsheet.BottomSheetDialog
 
 class ProgressTrackingBottomSheet(
     context: Context, val activity: Activity, val data: SubmissionDetailResponse
-) :
-    BottomSheetDialog(context) {
+) : BottomSheetDialog(context), ProgressRvAdapter.OnItemHoldTapListener {
     private val binding: BsProgressTrackingBinding by lazy {
         BsProgressTrackingBinding.inflate(layoutInflater)
     }
@@ -30,6 +30,7 @@ class ProgressTrackingBottomSheet(
     }
     private lateinit var progressAdapter: ProgressRvAdapter
     private lateinit var onProgressTrackingListener: OnProgressTrackingListener
+    private lateinit var onProgressItemLongTapListener: OnProgressItemLongTapListener
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -57,7 +58,11 @@ class ProgressTrackingBottomSheet(
                 }
             }
             progressWorkedBy.text = message.toString()
-            progressAdapter = ProgressRvAdapter(context, activity, data.progress)
+            progressAdapter = ProgressRvAdapter(context, activity, data.progress).also {
+                with(it) {
+                    setOnItemHoldTapListener(this@ProgressTrackingBottomSheet)
+                }
+            }
             progressAdapter.itemCount
             rvProgress.adapter = progressAdapter
             rvProgress.layoutManager = LinearLayoutManager(context)
@@ -117,7 +122,19 @@ class ProgressTrackingBottomSheet(
         this.onProgressTrackingListener = onProgressTrackingListener
     }
 
+    fun setOnProgressItemLongTapListener(onProgressItemLongTapListener: OnProgressItemLongTapListener) {
+        this.onProgressItemLongTapListener = onProgressItemLongTapListener
+    }
+
     interface OnProgressTrackingListener {
         fun createProgressClicked()
+    }
+
+    interface OnProgressItemLongTapListener {
+        fun onLongTapListener(data: ProgressItem?)
+    }
+
+    override fun onItemHoldTap(item: ProgressItem?) {
+        onProgressItemLongTapListener.onLongTapListener(item)
     }
 }

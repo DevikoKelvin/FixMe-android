@@ -29,7 +29,9 @@ class MainActivity : AppCompatActivity() {
     private val binding: ActivityMainBinding by lazy {
         ActivityMainBinding.inflate(layoutInflater)
     }
-    private lateinit var userData: UserData
+    private val userData: UserData by lazy {
+        UserDataHelper(this@MainActivity).getUserData()
+    }
     private lateinit var webSocketClient: WebSocketClient
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -42,8 +44,6 @@ class MainActivity : AppCompatActivity() {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
-
-        userData = UserDataHelper(this@MainActivity).getUserData()
 
         init()
     }
