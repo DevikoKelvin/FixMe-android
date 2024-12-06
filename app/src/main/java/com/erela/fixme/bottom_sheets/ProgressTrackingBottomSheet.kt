@@ -46,24 +46,25 @@ class ProgressTrackingBottomSheet(
     @SuppressLint("SetTextI18n")
     private fun init() {
         binding.apply {
+            if (data.stsGaprojects == 4)
+                progressActionButton.visibility = View.GONE
             val message = StringBuilder().append("Progress is being worked on by ")
             for (i in 0 until data.usernUserTeknisi!!.size) {
-                if (data.usernUserTeknisi.size == 1) {
-                    message.append("${data.usernUserTeknisi[i]?.namaUser}")
-                } else {
+                if (data.usernUserTeknisi.size == 1)
+                    message.append("${data.usernUserTeknisi[i]?.namaUser?.trimEnd()}")
+                else {
                     if (i < data.usernUserTeknisi.size - 1)
-                        message.append("${data.usernUserTeknisi[i]?.namaUser}, ")
+                        message.append("${data.usernUserTeknisi[i]?.namaUser?.trimEnd()}, ")
                     else
-                        message.append(" and ${data.usernUserTeknisi[i]?.namaUser}")
+                        message.append(" and ${data.usernUserTeknisi[i]?.namaUser?.trimEnd()}")
                 }
             }
             progressWorkedBy.text = message.toString()
-            progressAdapter = ProgressRvAdapter(context, activity, data.progress).also {
+            progressAdapter = ProgressRvAdapter(context, activity, data, data.progress).also {
                 with(it) {
                     setOnItemHoldTapListener(this@ProgressTrackingBottomSheet)
                 }
             }
-            progressAdapter.itemCount
             rvProgress.adapter = progressAdapter
             rvProgress.layoutManager = LinearLayoutManager(context)
             if (data.idUser == userData.id) {
@@ -77,20 +78,30 @@ class ProgressTrackingBottomSheet(
                 progressActionButton.setOnClickListener {
                 }
             } else if (userData.id == data.usernUserSpv!![0]?.idUser) {
-                /*for (i in 0 until data.progress!!.size) {
-                    if (data.progress[i])
-                }*/
-                progressActionButton.setCardBackgroundColor(
-                    ContextCompat.getColor(
-                        context, R.color.custom_toast_background_soft_blue
-                    )
-                )
-                progressActionText.setTextColor(
-                    ContextCompat.getColor(context, R.color.custom_toast_font_blue)
-                )
-                progressActionText.text = "Mark Ready for Trial"
-                progressActionButton.setOnClickListener {
+                var progressDone = 0
+                for (i in 0 until data.progress!!.size) {
+                    if (data.progress[i]?.stsDetail == 1)
+                        progressDone++
                 }
+                if (progressDone == data.progress.size) {
+                    if (data.stsGaprojects == 4)
+                        progressActionButton.visibility = View.GONE
+                    else {
+                        progressActionButton.visibility = View.VISIBLE
+                        progressActionButton.setCardBackgroundColor(
+                            ContextCompat.getColor(
+                                context, R.color.custom_toast_background_soft_blue
+                            )
+                        )
+                        progressActionText.setTextColor(
+                            ContextCompat.getColor(context, R.color.custom_toast_font_blue)
+                        )
+                        progressActionText.text = "Mark Ready for Trial"
+                        progressActionButton.setOnClickListener {
+                        }
+                    }
+                } else
+                    progressActionButton.visibility = View.GONE
             } else {
                 for (i in 0 until data.usernUserTeknisi.size) {
                     if (data.usernUserTeknisi[i]?.idUser == userData.id) {
@@ -110,9 +121,8 @@ class ProgressTrackingBottomSheet(
                             onProgressTrackingListener.createProgressClicked()
                             dismiss()
                         }
-                    } else {
+                    } else
                         progressActionButton.visibility = View.GONE
-                    }
                 }
             }
         }

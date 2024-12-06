@@ -67,13 +67,21 @@
     <string name="action_deploy">Deploy Technicians</string>
     <string name="action_deploy_tech">Deploy Technicians now!</string>
     <string name="message_on_progress">On Progress</string>
+    <string name="see_trial">See Trial History</string>
+    <string name="trial_tracking">Trial Tracking</string>
+    <string name="report_trial">Report Trial</string>
+    <string name="pass">Pass</string>
+    <string name="not_pass">Not Pass</string>
     <string name="action_on_progress">Start Progress Now</string>
     <string name="see_progress">See Progress</string>
     <string name="progress_tracking">Progress Tracking</string>
     <string name="create_new_progress">Create New Progress</string>
     <string name="edit_progress">Edit Progress</string>
-    <string name="action_on_trial">On Trial</string>
-    <string name="action_done">Done</string>
+    <string name="mark_progress_done">Mark This Progress as Done</string>
+    <string name="action_ready_trial">Ready to Trial!</string>
+    <string name="action_on_trial">Start Trial</string>
+    <string name="action_cancel">Cancel This Issue</string>
+    <string name="action_done">Done This Issue</string>
 
     <string name="repair_analysis">Repair Analysis</string>
 

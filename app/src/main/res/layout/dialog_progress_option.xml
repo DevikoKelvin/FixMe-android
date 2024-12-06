@@ -20,14 +20,13 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
             android:orientation="vertical">
 
             <TextView
                 android:id="@+id/messageText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginHorizontal="32dp"
+                android:layout_marginVertical="24dp"
                 android:text="@string/action_question"
                 android:textAlignment="center"
                 android:textColor="@color/black"
@@ -37,7 +36,6 @@
             <com.google.android.material.card.MaterialCardView
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
-                android:layout_marginTop="16dp"
                 app:cardBackgroundColor="@color/custom_toast_font_normal_soft_gray"
                 app:cardElevation="0dp"
                 app:strokeWidth="0dp" />
@@ -46,6 +44,33 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
+
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/doneButton"
+                    android:layout_width="match_parent"
+                    android:layout_height="56dp"
+                    android:layout_weight="1"
+                    app:cardBackgroundColor="@android:color/transparent"
+                    app:cardCornerRadius="0dp"
+                    app:cardElevation="0dp">
+
+                    <TextView
+                        android:id="@+id/doneButtonText"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="center"
+                        android:text="@string/mark_progress_done"
+                        android:textColor="@color/custom_toast_font_success"
+                        android:textSize="14sp"
+                        android:textStyle="bold" />
+                </com.google.android.material.card.MaterialCardView>
+
+                <com.google.android.material.card.MaterialCardView
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    app:cardBackgroundColor="@color/custom_toast_font_normal_soft_gray"
+                    app:cardElevation="0dp"
+                    app:strokeWidth="0dp" />
 
                 <com.google.android.material.card.MaterialCardView
                     android:id="@+id/editButton"
@@ -57,6 +82,7 @@
                     app:cardElevation="0dp">
 
                     <TextView
+                        android:id="@+id/editButtonText"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:gravity="center"

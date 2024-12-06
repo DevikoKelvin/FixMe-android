@@ -34,6 +34,8 @@ data class SubmissionDetailResponse(
     val nomorRequest: String? = null,
     @field:SerializedName("sts_gaprojects")
     val stsGaprojects: Int? = null,
+    @field:SerializedName("user_nama_approve")
+    val userNamaApprove: String? = null,
     @field:SerializedName("nama_kategori")
     val namaKategori: String? = null,
     @field:SerializedName("tgl_waktu_reject")
@@ -99,29 +101,13 @@ data class MaterialItem(
 ) : Parcelable
 
 @Parcelize
-data class UsernUserSpvItem(
-    @field:SerializedName("id_table_supervisor")
-    val idTableSupervisor: Int? = null,
-    @field:SerializedName("dept_user")
-    val deptUser: String? = null,
-    @field:SerializedName("id_user")
-    val idUser: Int? = null,
-    @field:SerializedName("nama_user")
-    val namaUser: String? = null,
+data class FotoItem(
+    @field:SerializedName("foto")
+    val foto: String? = null,
+    @field:SerializedName("id_foto")
+    val idFoto: Int? = null,
     @field:SerializedName("tgl_waktu")
     val tglWaktu: String? = null
-) : Parcelable
-
-@Parcelize
-data class TrialItem(
-    @field:SerializedName("keterangan")
-    val keterangan: String? = null,
-    @field:SerializedName("id_gaprojects_ket_trial")
-    val idGaprojectsKetTrial: Int? = null,
-    @field:SerializedName("tgl_waktu")
-    val tglWaktu: String? = null,
-    @field:SerializedName("status")
-    val status: Int? = null
 ) : Parcelable
 
 @Parcelize
@@ -150,6 +136,8 @@ data class ProgressItem(
     val tgl: String? = null,
     @field:SerializedName("waktu")
     val waktu: String? = null,
+    @field:SerializedName("nama_user_progress")
+    val namaUserProgress: String? = null,
     @field:SerializedName("tgl_waktu_done")
     val tglWaktuDone: String? = null,
     @field:SerializedName("sts_detail")
@@ -157,13 +145,15 @@ data class ProgressItem(
 ) : Parcelable
 
 @Parcelize
-data class FotoItem(
-    @field:SerializedName("foto")
-    val foto: String? = null,
-    @field:SerializedName("id_foto")
-    val idFoto: Int? = null,
+data class TrialItem(
+    @field:SerializedName("keterangan")
+    val keterangan: String? = null,
+    @field:SerializedName("id_gaprojects_ket_trial")
+    val idGaprojectsKetTrial: Int? = null,
     @field:SerializedName("tgl_waktu")
-    val tglWaktu: String? = null
+    val tglWaktu: String? = null,
+    @field:SerializedName("status")
+    val status: Int? = null
 ) : Parcelable
 
 @Parcelize
@@ -178,6 +168,20 @@ data class UsernUserTeknisiItem(
     val namaUser: String? = null,
     @field:SerializedName("id_user_spv")
     val idUserSpv: Int? = null,
+    @field:SerializedName("tgl_waktu")
+    val tglWaktu: String? = null
+) : Parcelable
+
+@Parcelize
+data class UsernUserSpvItem(
+    @field:SerializedName("id_table_supervisor")
+    val idTableSupervisor: Int? = null,
+    @field:SerializedName("dept_user")
+    val deptUser: String? = null,
+    @field:SerializedName("id_user")
+    val idUser: Int? = null,
+    @field:SerializedName("nama_user")
+    val namaUser: String? = null,
     @field:SerializedName("tgl_waktu")
     val tglWaktu: String? = null
 ) : Parcelable

@@ -6,6 +6,8 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
+import androidx.core.content.res.ResourcesCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.erela.fixme.R
@@ -14,10 +16,11 @@ import com.erela.fixme.databinding.ListItemProgressBinding
 import com.erela.fixme.helpers.UserDataHelper
 import com.erela.fixme.helpers.networking.InitAPI
 import com.erela.fixme.objects.ProgressItem
+import com.erela.fixme.objects.SubmissionDetailResponse
 import com.erela.fixme.objects.UserData
 
 class ProgressRvAdapter(
-    val context: Context, val activity: Activity, val data: List<ProgressItem?>?
+    val context: Context, val activity: Activity, val detail: SubmissionDetailResponse, val data: List<ProgressItem?>?
 ) : RecyclerView.Adapter<ProgressRvAdapter.ViewHolder>() {
     private lateinit var imageCarouselAdapter: ImageCarouselPagerAdapter
     private lateinit var onItemHoldTapListener: OnItemHoldTapListener
@@ -41,7 +44,11 @@ class ProgressRvAdapter(
         with(holder) {
             binding.apply {
                 if (item != null) {
-                    usernameText.text = item.usern
+                    usernameText.background = if (item.stsDetail == 1)
+                        ContextCompat.getDrawable(context, R.color.status_approved)
+                    else
+                        ContextCompat.getDrawable(context, R.color.highlight_blue)
+                    usernameText.text = item.namaUserProgress?.trimEnd()
                     progressDescription.text = item.keterangan
                     dateTimeText.text = item.tglWaktu
                     if (item.foto?.size!! > 1) {
@@ -69,22 +76,28 @@ class ProgressRvAdapter(
                             .load(InitAPI.IMAGE_URL + image)
                             .placeholder(R.drawable.image_placeholder)
                             .into(submissionImage)
-                    } else {
+                    } else
                         imageContainer.visibility = View.GONE
-                    }
                 }
 
-                imageContainer.setOnLongClickListener {
-                    if (userData.id == item?.idUser) {
-                        onItemHoldTapListener.onItemHoldTap(item)
-                    }
+                imageCarouselHolder.setOnLongClickListener {
+                    if (userData.id == item?.idUser)
+                        if (detail.stsGaprojects == 3)
+                            onItemHoldTapListener.onItemHoldTap(item)
+                    true
+                }
+
+                submissionImage.setOnLongClickListener {
+                    if (userData.id == item?.idUser)
+                        if (detail.stsGaprojects == 3)
+                            onItemHoldTapListener.onItemHoldTap(item)
                     true
                 }
 
                 itemView.setOnLongClickListener {
-                    if (userData.id == item?.idUser) {
-                        onItemHoldTapListener.onItemHoldTap(item)
-                    }
+                    if (userData.id == item?.idUser)
+                        if (detail.stsGaprojects == 3)
+                            onItemHoldTapListener.onItemHoldTap(item)
                     true
                 }
             }

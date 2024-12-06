@@ -86,6 +86,8 @@ class ManageOldPhotoBottomSheet(context: Context) : BottomSheetDialog(context) {
                             })
                         }
                     }
+                attachmentRv.adapter = progressAdapter
+                attachmentRv.layoutManager = LinearLayoutManager(context)
             }
         }
     }

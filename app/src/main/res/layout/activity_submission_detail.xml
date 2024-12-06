@@ -440,35 +440,78 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent">
 
-        <com.google.android.material.card.MaterialCardView
-            android:id="@+id/statusMessageContainer"
+        <LinearLayout
+            android:id="@+id/messageAndTrialButtonContainer"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentStart="true"
             android:layout_centerVertical="true"
-            android:layout_marginHorizontal="16dp"
-            android:layout_marginVertical="16dp"
+            android:layout_marginEnd="16dp"
             android:layout_toStartOf="@+id/editButton"
-            android:minHeight="46dp"
-            android:visibility="gone"
-            app:cardBackgroundColor="@color/custom_toast_background_soft_blue"
-            app:cardCornerRadius="50dp"
-            app:cardElevation="4dp"
-            app:strokeWidth="0dp">
+            android:orientation="horizontal"
+            android:visibility="gone">
 
-            <TextView
-                android:id="@+id/statusMessage"
-                android:layout_width="wrap_content"
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/statusMessageContainer"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:drawablePadding="4dp"
-                android:textAlignment="center"
-                android:textColor="@color/custom_toast_background_normal_dark_gray"
-                android:textSize="14sp"
-                android:textStyle="bold"
-                tools:ignore="UseCompatTextViewDrawableXml"
-                tools:text="Waiting for action from hendrick" />
-        </com.google.android.material.card.MaterialCardView>
+                android:layout_marginVertical="16dp"
+                android:layout_marginStart="16dp"
+                android:layout_weight="1"
+                android:minHeight="46dp"
+                android:visibility="visible"
+                app:cardBackgroundColor="@color/custom_toast_background_soft_blue"
+                app:cardCornerRadius="50dp"
+                app:cardElevation="4dp"
+                app:strokeWidth="0dp">
+
+                <TextView
+                    android:id="@+id/statusMessage"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:drawablePadding="4dp"
+                    android:textAlignment="center"
+                    android:textColor="@color/custom_toast_background_normal_dark_gray"
+                    android:textSize="14sp"
+                    android:textStyle="bold"
+                    tools:text="Waiting for action from hendrick\nClick to see progress" />
+            </com.google.android.material.card.MaterialCardView>
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/seeTrialContainer"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginVertical="16dp"
+                android:layout_marginStart="16dp"
+                android:minHeight="46dp"
+                android:visibility="gone"
+                app:cardBackgroundColor="@color/status_on_trial"
+                app:cardCornerRadius="50dp"
+                app:cardElevation="4dp"
+                app:contentPaddingLeft="16dp"
+                app:contentPaddingRight="16dp"
+                app:strokeWidth="0dp">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:src="@drawable/baseline_rule_24" />
+
+                <!--<TextView
+                    android:id="@+id/seeTrialMessage"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:drawablePadding="4dp"
+                    android:text="@string/see_trial"
+                    android:textAlignment="center"
+                    android:textColor="@color/white"
+                    android:textSize="14sp"
+                    android:textStyle="bold" />-->
+            </com.google.android.material.card.MaterialCardView>
+        </LinearLayout>
 
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/onProgressButton"
