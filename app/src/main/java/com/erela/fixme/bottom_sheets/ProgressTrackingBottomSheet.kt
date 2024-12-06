@@ -91,7 +91,7 @@ class ProgressTrackingBottomSheet(
                     if (data.progress[i]?.stsDetail == 1)
                         progressDone++
                 }
-                if (progressDone == data.progress.size) {
+                if (progressDone == data.progress.size && data.progress.isNotEmpty()) {
                     when (data.stsGaprojects) {
                         4 -> progressActionButton.visibility = View.GONE
                         30 -> progressActionButton.visibility = View.GONE

@@ -379,11 +379,11 @@ class SubmissionDetailActivity : AppCompatActivity(),
                                                         )
                                                     else
                                                         message.append(
-                                                            "${data.usernUserTeknisi[i]?.namaUser?.trimEnd()}\nClick to see progress."
+                                                            "${data.usernUserTeknisi[i]?.namaUser?.trimEnd()}\nClick to see progress"
                                                         )
                                                 } else
                                                     message.append(
-                                                        "${data.usernUserTeknisi[i]?.namaUser?.trimEnd()}\nClick to see progress."
+                                                        "${data.usernUserTeknisi[i]?.namaUser?.trimEnd()}\nClick to see progress"
                                                     )
                                             }
                                             onProgressText.text = message.toString()
@@ -421,23 +421,28 @@ class SubmissionDetailActivity : AppCompatActivity(),
                                             editButton.visibility = View.GONE
                                             seeProgressButton.visibility = View.GONE
                                             onProgressButton.visibility = View.VISIBLE
-                                            message = StringBuilder().append("On Progress by ")
-                                            for (i in 0 until data.usernUserTeknisi!!.size) {
-                                                if (data.usernUserTeknisi.size > 1) {
-                                                    if (i < data.usernUserTeknisi.size - 1)
-                                                        message.append(
-                                                            "${data.usernUserTeknisi[i]?.namaUser?.trimEnd()}, "
-                                                        )
-                                                    else
-                                                        message.append(
-                                                            "${data.usernUserTeknisi[i]?.namaUser?.trimEnd()}\nClick to see progress."
-                                                        )
-                                                } else
-                                                    message.append(
-                                                        "${data.usernUserTeknisi[i]?.namaUser?.trimEnd()}\nClick to see progress."
-                                                    )
-                                            }
+                                            message =
+                                                StringBuilder().append("Progress marked as done by ")
+                                            message.append("${data.usernUserSpv!![0]?.namaUser?.trimEnd()}\nClick to see progress")
                                             onProgressText.text = message.toString()
+                                            onProgressText.setTextColor(
+                                                ContextCompat.getColor(
+                                                    this@SubmissionDetailActivity,
+                                                    R.color.black
+                                                )
+                                            )
+                                            onProgressText.setCompoundDrawables(
+                                                null,
+                                                null,
+                                                null,
+                                                null
+                                            )
+                                            onProgressButton.setCardBackgroundColor(
+                                                ContextCompat.getColor(
+                                                    this@SubmissionDetailActivity,
+                                                    R.color.status_progress_done
+                                                )
+                                            )
                                             onProgressButton.setOnClickListener {
                                                 progressTrackingBottomSheet =
                                                     ProgressTrackingBottomSheet(
@@ -557,7 +562,7 @@ class SubmissionDetailActivity : AppCompatActivity(),
                                                 )
                                             )
                                             statusMessage.text =
-                                                "The fix is under trial. Wait until it done.\nClick to see progress."
+                                                "The fix is under trial. Wait until it done.\nClick to see progress"
                                             statusMessage.setTextColor(
                                                 ContextCompat.getColor(
                                                     this@SubmissionDetailActivity,
