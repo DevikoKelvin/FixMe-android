@@ -22,7 +22,7 @@ data class SubmissionListResponse(
     @field:SerializedName("id_user_approve")
     val idUserApprove: Int? = null,
     @field:SerializedName("sts_gaprojects")
-    val stsGaprojects: String? = null,
+    val stsGaprojects: Int? = null,
     @field:SerializedName("usern_user_end")
     val usernUserEnd: String? = null,
     @field:SerializedName("foto_gaprojects")

@@ -32,7 +32,7 @@ import com.erela.fixme.helpers.PermissionHelper
 import com.erela.fixme.helpers.UserDataHelper
 import com.erela.fixme.helpers.networking.InitAPI
 import com.erela.fixme.objects.CreateProgressResponse
-import com.erela.fixme.objects.DeleteEditDoneProgressResponse
+import com.erela.fixme.objects.GenericSimpleResponse
 import com.erela.fixme.objects.FotoItem
 import com.erela.fixme.objects.ProgressItem
 import com.erela.fixme.objects.SubmissionDetailResponse
@@ -337,10 +337,10 @@ class ProgressFormActivity : AppCompatActivity() {
                                     InitAPI.getAPI.editProgress(requestBodyMap, photoFiles)
                                 } else {
                                     InitAPI.getAPI.editProgressNoAttachment(requestBodyMap)
-                                }).enqueue(object : Callback<DeleteEditDoneProgressResponse> {
+                                }).enqueue(object : Callback<GenericSimpleResponse> {
                                     override fun onResponse(
-                                        call: Call<DeleteEditDoneProgressResponse>,
-                                        response: Response<DeleteEditDoneProgressResponse>
+                                        call: Call<GenericSimpleResponse>,
+                                        response: Response<GenericSimpleResponse>
                                     ) {
                                         loadingBar.visibility = View.GONE
                                         if (response.isSuccessful) {
@@ -428,7 +428,7 @@ class ProgressFormActivity : AppCompatActivity() {
                                     }
 
                                     override fun onFailure(
-                                        call: Call<DeleteEditDoneProgressResponse>,
+                                        call: Call<GenericSimpleResponse>,
                                         throwable: Throwable
                                     ) {
                                         loadingBar.visibility = View.GONE
@@ -788,7 +788,7 @@ class ProgressFormActivity : AppCompatActivity() {
             }
             with(requestBodyMap) {
                 put("id_user", createPartFromString(userData.id.toString())!!)
-                put("id_gaprojects", createPartFromString(detail?.idGaprojects.toString())!!)
+                put("id_gaprojects", createPartFromString(progressData?.idGaprojects.toString())!!)
                 put(
                     "id_gaprojects_detail",
                     createPartFromString(progressData?.idGaprojectsDetail.toString())!!

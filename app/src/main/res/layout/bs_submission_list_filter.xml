@@ -67,6 +67,14 @@
             android:textStyle="bold" />
 
         <RadioButton
+            android:id="@+id/progressDoneSelector"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/progress_done"
+            android:textColor="@color/status_progress_done"
+            android:textStyle="bold" />
+
+        <RadioButton
             android:id="@+id/onTrialSelector"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

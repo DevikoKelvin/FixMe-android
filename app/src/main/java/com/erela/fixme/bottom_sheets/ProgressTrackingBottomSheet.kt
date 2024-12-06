@@ -46,8 +46,6 @@ class ProgressTrackingBottomSheet(
     @SuppressLint("SetTextI18n")
     private fun init() {
         binding.apply {
-            if (data.stsGaprojects == 4)
-                progressActionButton.visibility = View.GONE
             val message = StringBuilder().append("Progress is being worked on by ")
             for (i in 0 until data.usernUserTeknisi!!.size) {
                 if (data.usernUserTeknisi.size == 1)
@@ -68,14 +66,24 @@ class ProgressTrackingBottomSheet(
             rvProgress.adapter = progressAdapter
             rvProgress.layoutManager = LinearLayoutManager(context)
             if (data.idUser == userData.id) {
-                progressActionButton.setCardBackgroundColor(
-                    ContextCompat.getColor(
-                        context, R.color.status_on_trial
-                    )
-                )
-                progressActionText.setTextColor(ContextCompat.getColor(context, R.color.white))
-                progressActionText.text = "Start Trial"
-                progressActionButton.setOnClickListener {
+                when (data.stsGaprojects) {
+                    3 -> progressActionButton.visibility = View.GONE
+                    4 -> progressActionButton.visibility = View.GONE
+                    /*30 -> progressActionButton.visibility = View.GONE*/
+                    31 -> progressActionButton.visibility = View.GONE
+                    else -> {
+                        progressActionButton.visibility = View.VISIBLE
+                        progressActionButton.setCardBackgroundColor(
+                            ContextCompat.getColor(
+                                context, R.color.status_on_trial
+                            )
+                        )
+                        progressActionText.setTextColor(ContextCompat.getColor(context, R.color.white))
+                        progressActionText.text = "Start Trial"
+                        progressActionButton.setOnClickListener {
+                            onProgressTrackingListener.startTrialClicked()
+                        }
+                    }
                 }
             } else if (userData.id == data.usernUserSpv!![0]?.idUser) {
                 var progressDone = 0
@@ -84,20 +92,24 @@ class ProgressTrackingBottomSheet(
                         progressDone++
                 }
                 if (progressDone == data.progress.size) {
-                    if (data.stsGaprojects == 4)
-                        progressActionButton.visibility = View.GONE
-                    else {
-                        progressActionButton.visibility = View.VISIBLE
-                        progressActionButton.setCardBackgroundColor(
-                            ContextCompat.getColor(
-                                context, R.color.custom_toast_background_soft_blue
+                    when (data.stsGaprojects) {
+                        4 -> progressActionButton.visibility = View.GONE
+                        30 -> progressActionButton.visibility = View.GONE
+                        31 -> progressActionButton.visibility = View.GONE
+                        else -> {
+                            progressActionButton.visibility = View.VISIBLE
+                            progressActionButton.setCardBackgroundColor(
+                                ContextCompat.getColor(
+                                    context, R.color.custom_toast_background_soft_blue
+                                )
                             )
-                        )
-                        progressActionText.setTextColor(
-                            ContextCompat.getColor(context, R.color.custom_toast_font_blue)
-                        )
-                        progressActionText.text = "Mark Ready for Trial"
-                        progressActionButton.setOnClickListener {
+                            progressActionText.setTextColor(
+                                ContextCompat.getColor(context, R.color.custom_toast_font_blue)
+                            )
+                            progressActionText.text = "Mark Ready for Trial"
+                            progressActionButton.setOnClickListener {
+                                onProgressTrackingListener.readyForTrialClicked()
+                            }
                         }
                     }
                 } else
@@ -119,7 +131,6 @@ class ProgressTrackingBottomSheet(
                             ) else context.getString(R.string.create_new_progress)
                         progressActionButton.setOnClickListener {
                             onProgressTrackingListener.createProgressClicked()
-                            dismiss()
                         }
                     } else
                         progressActionButton.visibility = View.GONE
@@ -138,6 +149,8 @@ class ProgressTrackingBottomSheet(
 
     interface OnProgressTrackingListener {
         fun createProgressClicked()
+        fun readyForTrialClicked()
+        fun startTrialClicked()
     }
 
     interface OnProgressItemLongTapListener {

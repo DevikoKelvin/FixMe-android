@@ -49,8 +49,10 @@
     <string name="rejected">Rejected</string>
     <string name="approved">Approved</string>
     <string name="on_progress">On Progress</string>
+    <string name="progress_done">Progress Done</string>
     <string name="on_trial">On Trial</string>
     <string name="done">Done</string>
+    <string name="canceled">Canceled</string>
     <string name="clear_filter">Clear filter</string>
     <string name="machine_code">Machine Code</string>
     <string name="machine_name">Machine Name</string>

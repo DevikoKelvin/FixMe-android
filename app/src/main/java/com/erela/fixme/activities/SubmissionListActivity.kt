@@ -312,7 +312,7 @@ class SubmissionListActivity : AppCompatActivity(), SubmissionRvAdapter.OnSubmis
             } else {
                 submissionArrayList.clear()
                 for (i in 0 until submissionList!!.size) {
-                    if (submissionList[i].stsGaprojects == filter.toString()) {
+                    if (submissionList[i].stsGaprojects == filter) {
                         submissionArrayList.add(submissionList[i])
                     }
                 }

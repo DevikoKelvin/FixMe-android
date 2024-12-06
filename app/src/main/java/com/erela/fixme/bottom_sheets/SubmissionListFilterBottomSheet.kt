@@ -40,6 +40,7 @@ class SubmissionListFilterBottomSheet(context: Context, private val selectedFilt
                 0 -> rejectedSelector.isChecked = true
                 2 -> approvedSelector.isChecked = true
                 3 -> onProgressSelector.isChecked = true
+                30 -> progressDoneSelector.isChecked = true
                 31 -> onTrialSelector.isChecked = true
                 4 -> doneSelector.isChecked = true
             }
@@ -66,6 +67,11 @@ class SubmissionListFilterBottomSheet(context: Context, private val selectedFilt
 
             onProgressSelector.setOnClickListener {
                 onFilterListener.onFilter(3, 3)
+                dismiss()
+            }
+
+            progressDoneSelector.setOnClickListener {
+                onFilterListener.onFilter(30, 30)
                 dismiss()
             }
 

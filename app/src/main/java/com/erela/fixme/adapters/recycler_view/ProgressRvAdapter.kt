@@ -82,21 +82,21 @@ class ProgressRvAdapter(
 
                 imageCarouselHolder.setOnLongClickListener {
                     if (userData.id == item?.idUser)
-                        if (detail.stsGaprojects == 3)
+                        if (detail.stsGaprojects == 3 && item.stsDetail == 0)
                             onItemHoldTapListener.onItemHoldTap(item)
                     true
                 }
 
                 submissionImage.setOnLongClickListener {
                     if (userData.id == item?.idUser)
-                        if (detail.stsGaprojects == 3)
+                        if (detail.stsGaprojects == 3 && item.stsDetail == 0)
                             onItemHoldTapListener.onItemHoldTap(item)
                     true
                 }
 
                 itemView.setOnLongClickListener {
                     if (userData.id == item?.idUser)
-                        if (detail.stsGaprojects == 3)
+                        if (detail.stsGaprojects == 3 && item.stsDetail == 0)
                             onItemHoldTapListener.onItemHoldTap(item)
                     true
                 }

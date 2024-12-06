@@ -92,7 +92,7 @@ class SubmissionRvAdapter(val context: Context, val data: ArrayList<SubmissionLi
                 }
 
                 when (item.stsGaprojects) {
-                    0.toString() -> {
+                    0 -> {
                         submissionStatus.setCardBackgroundColor(
                             ResourcesCompat.getColor(
                                 context.resources,
@@ -103,7 +103,7 @@ class SubmissionRvAdapter(val context: Context, val data: ArrayList<SubmissionLi
                         submissionStatusText.text = "Rejected"
                     }
 
-                    1.toString() -> {
+                    1 -> {
                         submissionStatus.setCardBackgroundColor(
                             ResourcesCompat.getColor(
                                 context.resources,
@@ -114,7 +114,7 @@ class SubmissionRvAdapter(val context: Context, val data: ArrayList<SubmissionLi
                         submissionStatusText.text = "Pending"
                     }
 
-                    2.toString() -> {
+                    2 -> {
                         submissionStatus.setCardBackgroundColor(
                             ResourcesCompat.getColor(
                                 context.resources,
@@ -125,7 +125,7 @@ class SubmissionRvAdapter(val context: Context, val data: ArrayList<SubmissionLi
                         submissionStatusText.text = "Approved"
                     }
 
-                    3.toString() -> {
+                    3 -> {
                         submissionStatus.setCardBackgroundColor(
                             ResourcesCompat.getColor(
                                 context.resources,
@@ -136,7 +136,18 @@ class SubmissionRvAdapter(val context: Context, val data: ArrayList<SubmissionLi
                         submissionStatusText.text = "On Progress"
                     }
 
-                    4.toString() -> {
+                    30 -> {
+                        submissionStatus.setCardBackgroundColor(
+                            ResourcesCompat.getColor(
+                                context.resources,
+                                R.color.status_progress_done,
+                                context.theme
+                            )
+                        )
+                        submissionStatusText.text = "Progress Done"
+                    }
+
+                    4 -> {
                         submissionStatus.setCardBackgroundColor(
                             ResourcesCompat.getColor(
                                 context.resources,
@@ -147,7 +158,7 @@ class SubmissionRvAdapter(val context: Context, val data: ArrayList<SubmissionLi
                         submissionStatusText.text = "Done"
                     }
 
-                    31.toString() -> {
+                    31 -> {
                         submissionStatus.setCardBackgroundColor(
                             ResourcesCompat.getColor(
                                 context.resources,

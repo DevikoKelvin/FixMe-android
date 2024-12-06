@@ -3,7 +3,7 @@ package com.erela.fixme.helpers.networking
 import com.erela.fixme.objects.CategoryListResponse
 import com.erela.fixme.objects.ChangePasswordResponse
 import com.erela.fixme.objects.CreateProgressResponse
-import com.erela.fixme.objects.DeleteEditDoneProgressResponse
+import com.erela.fixme.objects.GenericSimpleResponse
 import com.erela.fixme.objects.DepartmentListResponse
 import com.erela.fixme.objects.InboxResponse
 import com.erela.fixme.objects.LoginResponse
@@ -163,25 +163,39 @@ interface GetAPI {
     fun deleteProgress(
         @Field("id") idProgress: Int,
         @Field("id_user") idUser: Int
-    ): Call<DeleteEditDoneProgressResponse>
+    ): Call<GenericSimpleResponse>
 
     @Multipart
     @POST("updateprogress")
     fun editProgress(
         @PartMap data: MutableMap<String, RequestBody>,
         @Part foto: List<MultipartBody.Part?>
-    ): Call<DeleteEditDoneProgressResponse>
+    ): Call<GenericSimpleResponse>
 
     @Multipart
     @POST("updateprogress")
     fun editProgressNoAttachment(
         @PartMap data: MutableMap<String, RequestBody>
-    ): Call<DeleteEditDoneProgressResponse>
+    ): Call<GenericSimpleResponse>
 
     @FormUrlEncoded
     @POST("progressdone")
     fun markProgressDone(
         @Field("id") id: Int,
         @Field("id_user") idUser: Int
-    ): Call<DeleteEditDoneProgressResponse>
+    ): Call<GenericSimpleResponse>
+
+    @FormUrlEncoded
+    @POST("progressdonetrial")
+    fun markAsReadyForTrial(
+        @Field("id") idGaProjects: Int,
+        @Field("id_user") idUser: Int
+    ): Call<GenericSimpleResponse>
+
+    @FormUrlEncoded
+    @POST("stsontrial")
+    fun startTrial(
+        @Field("id") idGaProjects: Int,
+        @Field("id_user") idUser: Int
+    ): Call<GenericSimpleResponse>
 }

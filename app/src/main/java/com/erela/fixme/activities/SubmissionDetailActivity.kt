@@ -28,7 +28,7 @@ import com.erela.fixme.dialogs.ProgressOptionDialog
 import com.erela.fixme.helpers.Base64Helper
 import com.erela.fixme.helpers.networking.InitAPI
 import com.erela.fixme.helpers.UserDataHelper
-import com.erela.fixme.objects.DeleteEditDoneProgressResponse
+import com.erela.fixme.objects.GenericSimpleResponse
 import com.erela.fixme.objects.FotoGaprojectsItem
 import com.erela.fixme.objects.ProgressItem
 import com.erela.fixme.objects.StarconnectUserResponse
@@ -407,6 +407,57 @@ class SubmissionDetailActivity : AppCompatActivity(),
                                                     progressTrackingBottomSheet.show()
                                             }
                                         }
+                                        // Progress Done
+                                        30 -> {
+                                            submissionStatus.setCardBackgroundColor(
+                                                ResourcesCompat.getColor(
+                                                    resources,
+                                                    R.color.status_progress_done,
+                                                    theme
+                                                )
+                                            )
+                                            submissionStatusText.text = "Progress Done"
+                                            actionButton.visibility = View.GONE
+                                            editButton.visibility = View.GONE
+                                            seeProgressButton.visibility = View.GONE
+                                            onProgressButton.visibility = View.VISIBLE
+                                            message = StringBuilder().append("On Progress by ")
+                                            for (i in 0 until data.usernUserTeknisi!!.size) {
+                                                if (data.usernUserTeknisi.size > 1) {
+                                                    if (i < data.usernUserTeknisi.size - 1)
+                                                        message.append(
+                                                            "${data.usernUserTeknisi[i]?.namaUser?.trimEnd()}, "
+                                                        )
+                                                    else
+                                                        message.append(
+                                                            "${data.usernUserTeknisi[i]?.namaUser?.trimEnd()}\nClick to see progress."
+                                                        )
+                                                } else
+                                                    message.append(
+                                                        "${data.usernUserTeknisi[i]?.namaUser?.trimEnd()}\nClick to see progress."
+                                                    )
+                                            }
+                                            onProgressText.text = message.toString()
+                                            onProgressButton.setOnClickListener {
+                                                progressTrackingBottomSheet =
+                                                    ProgressTrackingBottomSheet(
+                                                        this@SubmissionDetailActivity,
+                                                        this@SubmissionDetailActivity, data
+                                                    ).also {
+                                                        with(it) {
+                                                            setOnProgressTrackingListener(
+                                                                this@SubmissionDetailActivity
+                                                            )
+                                                            setOnProgressItemLongTapListener(
+                                                                this@SubmissionDetailActivity
+                                                            )
+                                                        }
+                                                    }
+
+                                                if (progressTrackingBottomSheet.window != null)
+                                                    progressTrackingBottomSheet.show()
+                                            }
+                                        }
                                         // Done
                                         4 -> {
                                             submissionStatus.setCardBackgroundColor(
@@ -468,7 +519,6 @@ class SubmissionDetailActivity : AppCompatActivity(),
                                                                 /*activityResultLauncher.launch(
                                                                     Intent(
                                                                         this@SubmissionDetailActivity,
-                                                                        ProgressFormActivity::class.java
                                                                     ).also { int ->
                                                                         with(int) {
                                                                             putExtra("data", detailData)
@@ -535,6 +585,29 @@ class SubmissionDetailActivity : AppCompatActivity(),
                                             }
                                             seeTrialContainer.visibility = View.VISIBLE
                                             seeTrialContainer.setOnClickListener {
+                                                val trialBottomSheet = TrialTrackingBottomSheet(
+                                                    this@SubmissionDetailActivity, data
+                                                ).also {
+                                                    with(it) {
+                                                        setOnTrialTrackingListener(object :
+                                                            TrialTrackingBottomSheet.OnTrialTrackingListener {
+                                                            override fun reportTrialClicked() {
+                                                                /*activityResultLauncher.launch(
+                                                                    Intent(
+                                                                        this@SubmissionDetailActivity,
+                                                                    ).also { int ->
+                                                                        with(int) {
+                                                                            putExtra("data", detailData)
+                                                                        }
+                                                                    }
+                                                                )*/
+                                                            }
+                                                        })
+                                                    }
+                                                }
+
+                                                if (trialBottomSheet.window != null)
+                                                    trialBottomSheet.show()
                                             }
                                         }
                                     }
@@ -832,6 +905,7 @@ class SubmissionDetailActivity : AppCompatActivity(),
     }
 
     override fun createProgressClicked() {
+        progressTrackingBottomSheet.dismiss()
         activityResultLauncher.launch(
             Intent(
                 this@SubmissionDetailActivity,
@@ -842,6 +916,349 @@ class SubmissionDetailActivity : AppCompatActivity(),
                 }
             }
         )
+    }
+
+    override fun readyForTrialClicked() {
+        val confirmationDialog =
+            ConfirmationDialog(
+                this@SubmissionDetailActivity,
+                "Are you sure you want to mark this issue ready for trial?",
+                "Yes"
+            ).also {
+                with(it) {
+                    setConfirmationDialogListener(object :
+                        ConfirmationDialog.ConfirmationDialogListener {
+                        override fun onConfirm() {
+                            progressTrackingBottomSheet.dismiss()
+                            val loadingDialog = LoadingDialog(this@SubmissionDetailActivity)
+                            if (loadingDialog.window != null)
+                                loadingDialog.show()
+                            try {
+                                InitAPI.getAPI.markAsReadyForTrial(
+                                    detailData.idGaprojects!!,
+                                    userData.id
+                                )
+                                    .enqueue(object :
+                                        Callback<GenericSimpleResponse> {
+                                        override fun onResponse(
+                                            call: Call<GenericSimpleResponse>,
+                                            response: Response<GenericSimpleResponse>
+                                        ) {
+                                            loadingDialog.dismiss()
+                                            if (response.isSuccessful) {
+                                                if (response.body() != null) {
+                                                    val result = response.body()
+                                                    if (result?.code == 1) {
+                                                        CustomToast.getInstance(applicationContext)
+                                                            .setBackgroundColor(
+                                                                ResourcesCompat.getColor(
+                                                                    resources,
+                                                                    R.color.custom_toast_background_success,
+                                                                    theme
+                                                                )
+                                                            )
+                                                            .setFontColor(
+                                                                ResourcesCompat.getColor(
+                                                                    resources,
+                                                                    R.color.custom_toast_font_success,
+                                                                    theme
+                                                                )
+                                                            )
+                                                            .setMessage(
+                                                                "Issue marked as ready for Trial!"
+                                                            ).show()
+                                                        init()
+                                                    } else {
+                                                        CustomToast.getInstance(applicationContext)
+                                                            .setBackgroundColor(
+                                                                ResourcesCompat.getColor(
+                                                                    resources,
+                                                                    R.color.custom_toast_background_failed,
+                                                                    theme
+                                                                )
+                                                            )
+                                                            .setFontColor(
+                                                                ResourcesCompat.getColor(
+                                                                    resources,
+                                                                    R.color.custom_toast_font_failed,
+                                                                    theme
+                                                                )
+                                                            )
+                                                            .setMessage("Failed to mark as ready for Trial")
+                                                            .show()
+                                                        Log.e(
+                                                            "ERROR ${response.code()}",
+                                                            "Mark Ready Trial Response code 0 | ${response.message()}"
+                                                        )
+                                                    }
+                                                } else {
+                                                    CustomToast.getInstance(applicationContext)
+                                                        .setBackgroundColor(
+                                                            ResourcesCompat.getColor(
+                                                                resources,
+                                                                R.color.custom_toast_background_failed,
+                                                                theme
+                                                            )
+                                                        )
+                                                        .setFontColor(
+                                                            ResourcesCompat.getColor(
+                                                                resources,
+                                                                R.color.custom_toast_font_failed,
+                                                                theme
+                                                            )
+                                                        )
+                                                        .setMessage("Failed to mark as ready for trial")
+                                                        .show()
+                                                    Log.e(
+                                                        "ERROR ${response.code()}",
+                                                        "Mark Ready Trial Response null | ${response.message()}"
+                                                    )
+                                                }
+                                            } else {
+                                                CustomToast.getInstance(applicationContext)
+                                                    .setBackgroundColor(
+                                                        ResourcesCompat.getColor(
+                                                            resources,
+                                                            R.color.custom_toast_background_failed,
+                                                            theme
+                                                        )
+                                                    )
+                                                    .setFontColor(
+                                                        ResourcesCompat.getColor(
+                                                            resources,
+                                                            R.color.custom_toast_font_failed, theme
+                                                        )
+                                                    )
+                                                    .setMessage("Failed to mark as ready for trial")
+                                                    .show()
+                                                Log.e(
+                                                    "ERROR ${response.code()}",
+                                                    "Mark Ready Trial Response Fail | ${response.message()}"
+                                                )
+                                            }
+                                        }
+
+                                        override fun onFailure(
+                                            call: Call<GenericSimpleResponse>,
+                                            throwable: Throwable
+                                        ) {
+                                            loadingDialog.dismiss()
+                                            CustomToast.getInstance(applicationContext)
+                                                .setBackgroundColor(
+                                                    ResourcesCompat.getColor(
+                                                        resources,
+                                                        R.color.custom_toast_background_failed,
+                                                        theme
+                                                    )
+                                                )
+                                                .setFontColor(
+                                                    ResourcesCompat.getColor(
+                                                        resources, R.color.custom_toast_font_failed,
+                                                        theme
+                                                    )
+                                                )
+                                                .setMessage(
+                                                    "Something went wrong, please try again later"
+                                                )
+                                                .show()
+                                            throwable.printStackTrace()
+                                            Log.e("ERROR", "Mark Ready Trial Failure | $throwable")
+                                        }
+                                    })
+                            } catch (jsonException: JSONException) {
+                                loadingDialog.dismiss()
+                                CustomToast.getInstance(applicationContext)
+                                    .setBackgroundColor(
+                                        ResourcesCompat.getColor(
+                                            resources, R.color.custom_toast_background_failed, theme
+                                        )
+                                    )
+                                    .setFontColor(
+                                        ResourcesCompat.getColor(
+                                            resources, R.color.custom_toast_font_failed, theme
+                                        )
+                                    )
+                                    .setMessage("Something went wrong, please try again later")
+                                    .show()
+                                jsonException.printStackTrace()
+                                Log.e("ERROR", "Mark Ready Trial Exception | $jsonException")
+                            }
+                        }
+                    })
+                }
+            }
+        if (confirmationDialog.window != null)
+            confirmationDialog.show()
+    }
+
+    override fun startTrialClicked() {
+        val confirmationDialog =
+            ConfirmationDialog(
+                this@SubmissionDetailActivity,
+                "Are you sure you want to start trial?",
+                "Yes"
+            ).also {
+                with(it) {
+                    setConfirmationDialogListener(object :
+                        ConfirmationDialog.ConfirmationDialogListener {
+                        override fun onConfirm() {
+                            progressTrackingBottomSheet.dismiss()
+                            val loadingDialog = LoadingDialog(this@SubmissionDetailActivity)
+                            if (loadingDialog.window != null)
+                                loadingDialog.show()
+                            try {
+                                InitAPI.getAPI.startTrial(detailData.idGaprojects!!, userData.id)
+                                    .enqueue(object :
+                                        Callback<GenericSimpleResponse> {
+                                        override fun onResponse(
+                                            call: Call<GenericSimpleResponse>,
+                                            response: Response<GenericSimpleResponse>
+                                        ) {
+                                            loadingDialog.dismiss()
+                                            if (response.isSuccessful) {
+                                                if (response.body() != null) {
+                                                    val result = response.body()
+                                                    if (result?.code == 1) {
+                                                        CustomToast.getInstance(applicationContext)
+                                                            .setBackgroundColor(
+                                                                ResourcesCompat.getColor(
+                                                                    resources,
+                                                                    R.color.custom_toast_background_success,
+                                                                    theme
+                                                                )
+                                                            )
+                                                            .setFontColor(
+                                                                ResourcesCompat.getColor(
+                                                                    resources,
+                                                                    R.color.custom_toast_font_success,
+                                                                    theme
+                                                                )
+                                                            )
+                                                            .setMessage(
+                                                                "Trial started!"
+                                                            ).show()
+                                                        init()
+                                                    } else {
+                                                        CustomToast.getInstance(applicationContext)
+                                                            .setBackgroundColor(
+                                                                ResourcesCompat.getColor(
+                                                                    resources,
+                                                                    R.color.custom_toast_background_failed,
+                                                                    theme
+                                                                )
+                                                            )
+                                                            .setFontColor(
+                                                                ResourcesCompat.getColor(
+                                                                    resources,
+                                                                    R.color.custom_toast_font_failed,
+                                                                    theme
+                                                                )
+                                                            )
+                                                            .setMessage("Failed to start Trial")
+                                                            .show()
+                                                        Log.e(
+                                                            "ERROR ${response.code()}",
+                                                            "Start Trial Response code 0 | ${response.message()}"
+                                                        )
+                                                    }
+                                                } else {
+                                                    CustomToast.getInstance(applicationContext)
+                                                        .setBackgroundColor(
+                                                            ResourcesCompat.getColor(
+                                                                resources,
+                                                                R.color.custom_toast_background_failed,
+                                                                theme
+                                                            )
+                                                        )
+                                                        .setFontColor(
+                                                            ResourcesCompat.getColor(
+                                                                resources,
+                                                                R.color.custom_toast_font_failed,
+                                                                theme
+                                                            )
+                                                        )
+                                                        .setMessage("Failed to start trial")
+                                                        .show()
+                                                    Log.e(
+                                                        "ERROR ${response.code()}",
+                                                        "Start Trial Response null | ${response.message()}"
+                                                    )
+                                                }
+                                            } else {
+                                                CustomToast.getInstance(applicationContext)
+                                                    .setBackgroundColor(
+                                                        ResourcesCompat.getColor(
+                                                            resources,
+                                                            R.color.custom_toast_background_failed,
+                                                            theme
+                                                        )
+                                                    )
+                                                    .setFontColor(
+                                                        ResourcesCompat.getColor(
+                                                            resources,
+                                                            R.color.custom_toast_font_failed, theme
+                                                        )
+                                                    )
+                                                    .setMessage("Failed to start trial")
+                                                    .show()
+                                                Log.e(
+                                                    "ERROR ${response.code()}",
+                                                    "Start Trial Response Fail | ${response.message()}"
+                                                )
+                                            }
+                                        }
+
+                                        override fun onFailure(
+                                            call: Call<GenericSimpleResponse>,
+                                            throwable: Throwable
+                                        ) {
+                                            loadingDialog.dismiss()
+                                            CustomToast.getInstance(applicationContext)
+                                                .setBackgroundColor(
+                                                    ResourcesCompat.getColor(
+                                                        resources,
+                                                        R.color.custom_toast_background_failed,
+                                                        theme
+                                                    )
+                                                )
+                                                .setFontColor(
+                                                    ResourcesCompat.getColor(
+                                                        resources, R.color.custom_toast_font_failed,
+                                                        theme
+                                                    )
+                                                )
+                                                .setMessage(
+                                                    "Something went wrong, please try again later"
+                                                )
+                                                .show()
+                                            throwable.printStackTrace()
+                                            Log.e("ERROR", "Start Trial Failure | $throwable")
+                                        }
+                                    })
+                            } catch (jsonException: JSONException) {
+                                loadingDialog.dismiss()
+                                CustomToast.getInstance(applicationContext)
+                                    .setBackgroundColor(
+                                        ResourcesCompat.getColor(
+                                            resources, R.color.custom_toast_background_failed, theme
+                                        )
+                                    )
+                                    .setFontColor(
+                                        ResourcesCompat.getColor(
+                                            resources, R.color.custom_toast_font_failed, theme
+                                        )
+                                    )
+                                    .setMessage("Something went wrong, please try again later")
+                                    .show()
+                                jsonException.printStackTrace()
+                                Log.e("ERROR", "Start Trial Exception | $jsonException")
+                            }
+                        }
+                    })
+                }
+            }
+        if (confirmationDialog.window != null)
+            confirmationDialog.show()
     }
 
     override fun onLongTapListener(data: ProgressItem?) {
@@ -874,10 +1291,11 @@ class SubmissionDetailActivity : AppCompatActivity(),
                                 InitAPI.getAPI.deleteProgress(
                                     data.idGaprojectsDetail!!, userData.id
                                 )
-                                    .enqueue(object : Callback<DeleteEditDoneProgressResponse> {
+                                    .enqueue(object :
+                                        Callback<GenericSimpleResponse> {
                                         override fun onResponse(
-                                            call: Call<DeleteEditDoneProgressResponse>,
-                                            response: Response<DeleteEditDoneProgressResponse>
+                                            call: Call<GenericSimpleResponse>,
+                                            response: Response<GenericSimpleResponse>
                                         ) {
                                             loadingDialog.dismiss()
                                             if (response.isSuccessful) {
@@ -974,7 +1392,7 @@ class SubmissionDetailActivity : AppCompatActivity(),
                                         }
 
                                         override fun onFailure(
-                                            call: Call<DeleteEditDoneProgressResponse>,
+                                            call: Call<GenericSimpleResponse>,
                                             throwable: Throwable
                                         ) {
                                             loadingDialog.dismiss()
@@ -1059,10 +1477,11 @@ class SubmissionDetailActivity : AppCompatActivity(),
                             try {
                                 InitAPI.getAPI.markProgressDone(
                                     data.idGaprojectsDetail!!, userData.id
-                                ).enqueue(object : Callback<DeleteEditDoneProgressResponse> {
+                                ).enqueue(object :
+                                    Callback<GenericSimpleResponse> {
                                     override fun onResponse(
-                                        call: Call<DeleteEditDoneProgressResponse>,
-                                        response: Response<DeleteEditDoneProgressResponse>
+                                        call: Call<GenericSimpleResponse>,
+                                        response: Response<GenericSimpleResponse>
                                     ) {
                                         loadingDialog.dismiss()
                                         if (response.isSuccessful) {
@@ -1161,7 +1580,7 @@ class SubmissionDetailActivity : AppCompatActivity(),
                                     }
 
                                     override fun onFailure(
-                                        call: Call<DeleteEditDoneProgressResponse>,
+                                        call: Call<GenericSimpleResponse>,
                                         throwable: Throwable
                                     ) {
                                         loadingDialog.dismiss()
