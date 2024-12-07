@@ -19,10 +19,10 @@ import com.erela.fixme.custom_views.CustomToast
 import com.erela.fixme.databinding.BsUpdateStatusBinding
 import com.erela.fixme.helpers.UserDataHelper
 import com.erela.fixme.helpers.networking.InitAPI
+import com.erela.fixme.objects.GenericSimpleResponse
 import com.erela.fixme.objects.SubmissionDetailResponse
 import com.erela.fixme.objects.SupervisorListResponse
 import com.erela.fixme.objects.TechnicianListResponse
-import com.erela.fixme.objects.UpdateStatusResponse
 import com.erela.fixme.objects.UserData
 import com.google.android.flexbox.FlexDirection
 import com.google.android.flexbox.FlexWrap
@@ -391,10 +391,10 @@ class UpdateStatusBottomSheet(
                                 )
                             }
                             InitAPI.getAPI.approveSubmission(data)
-                                .enqueue(object : Callback<UpdateStatusResponse> {
+                                .enqueue(object : Callback<GenericSimpleResponse> {
                                     override fun onResponse(
-                                        call: Call<UpdateStatusResponse>,
-                                        response: Response<UpdateStatusResponse>
+                                        call: Call<GenericSimpleResponse>,
+                                        response: Response<GenericSimpleResponse>
                                     ) {
                                         approveLoading.visibility = View.GONE
                                         rejectLoading.visibility = View.GONE
@@ -486,7 +486,7 @@ class UpdateStatusBottomSheet(
                                     }
 
                                     override fun onFailure(
-                                        call: Call<UpdateStatusResponse>, throwable: Throwable
+                                        call: Call<GenericSimpleResponse>, throwable: Throwable
                                     ) {
                                         approveLoading.visibility = View.GONE
                                         rejectLoading.visibility = View.GONE
@@ -534,10 +534,10 @@ class UpdateStatusBottomSheet(
                             InitAPI.getAPI.rejectSubmission(
                                 userData.id, dataDetail.idGaprojects!!,
                                 descriptionField.text.toString()
-                            ).enqueue(object : Callback<UpdateStatusResponse> {
+                            ).enqueue(object : Callback<GenericSimpleResponse> {
                                 override fun onResponse(
-                                    call: Call<UpdateStatusResponse>,
-                                    response: Response<UpdateStatusResponse>
+                                    call: Call<GenericSimpleResponse>,
+                                    response: Response<GenericSimpleResponse>
                                 ) {
                                     approveLoading.visibility = View.GONE
                                     rejectLoading.visibility = View.GONE
@@ -629,7 +629,7 @@ class UpdateStatusBottomSheet(
                                 }
 
                                 override fun onFailure(
-                                    call: Call<UpdateStatusResponse>, throwable: Throwable
+                                    call: Call<GenericSimpleResponse>, throwable: Throwable
                                 ) {
                                     approveLoading.visibility = View.GONE
                                     rejectLoading.visibility = View.GONE
@@ -693,10 +693,10 @@ class UpdateStatusBottomSheet(
                         }
                     }
                     InitAPI.getAPI.deployTechnicians(data)
-                        .enqueue(object : Callback<UpdateStatusResponse> {
+                        .enqueue(object : Callback<GenericSimpleResponse> {
                             override fun onResponse(
-                                call: Call<UpdateStatusResponse>,
-                                response: Response<UpdateStatusResponse>
+                                call: Call<GenericSimpleResponse>,
+                                response: Response<GenericSimpleResponse>
                             ) {
                                 approveLoading.visibility = View.GONE
                                 rejectLoading.visibility = View.GONE
@@ -787,7 +787,7 @@ class UpdateStatusBottomSheet(
                             }
 
                             override fun onFailure(
-                                call: Call<UpdateStatusResponse>, throwable: Throwable
+                                call: Call<GenericSimpleResponse>, throwable: Throwable
                             ) {
                                 approveLoading.visibility = View.GONE
                                 rejectLoading.visibility = View.GONE

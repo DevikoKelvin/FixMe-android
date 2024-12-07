@@ -31,7 +31,7 @@ import com.erela.fixme.databinding.ActivityProgressFormBinding
 import com.erela.fixme.helpers.PermissionHelper
 import com.erela.fixme.helpers.UserDataHelper
 import com.erela.fixme.helpers.networking.InitAPI
-import com.erela.fixme.objects.CreateProgressResponse
+import com.erela.fixme.objects.CreationResponse
 import com.erela.fixme.objects.GenericSimpleResponse
 import com.erela.fixme.objects.FotoItem
 import com.erela.fixme.objects.ProgressItem
@@ -513,10 +513,10 @@ class ProgressFormActivity : AppCompatActivity() {
                                 } else {
                                     InitAPI.getAPI.createProgressNoAttachment(requestBodyMap)
                                 }).enqueue(object :
-                                    Callback<CreateProgressResponse> {
+                                    Callback<CreationResponse> {
                                     override fun onResponse(
-                                        call: Call<CreateProgressResponse>,
-                                        response: Response<CreateProgressResponse>
+                                        call: Call<CreationResponse>,
+                                        response: Response<CreationResponse>
                                     ) {
                                         loadingBar.visibility = View.GONE
                                         if (response.isSuccessful) {
@@ -604,7 +604,7 @@ class ProgressFormActivity : AppCompatActivity() {
                                     }
 
                                     override fun onFailure(
-                                        call: Call<CreateProgressResponse>,
+                                        call: Call<CreationResponse>,
                                         throwable: Throwable
                                     ) {
                                         loadingBar.visibility = View.GONE

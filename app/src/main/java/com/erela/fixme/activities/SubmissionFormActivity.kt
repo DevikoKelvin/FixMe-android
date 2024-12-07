@@ -37,12 +37,12 @@ import com.erela.fixme.helpers.networking.InitAPI
 import com.erela.fixme.helpers.PermissionHelper
 import com.erela.fixme.helpers.UserDataHelper
 import com.erela.fixme.objects.CategoryListResponse
+import com.erela.fixme.objects.CreationResponse
 import com.erela.fixme.objects.DepartmentListResponse
 import com.erela.fixme.objects.FotoGaprojectsItem
+import com.erela.fixme.objects.GenericSimpleResponse
 import com.erela.fixme.objects.MaterialListResponse
 import com.erela.fixme.objects.SubmissionDetailResponse
-import com.erela.fixme.objects.SubmitSubmissionResponse
-import com.erela.fixme.objects.UpdateSubmissionResponse
 import com.google.android.flexbox.FlexDirection
 import com.google.android.flexbox.FlexWrap
 import com.google.android.flexbox.FlexboxLayoutManager
@@ -296,10 +296,10 @@ class SubmissionFormActivity : AppCompatActivity() {
                                     InitAPI.getAPI.updateSubmission(requestBodyMap, photoFiles)
                                 } else {
                                     InitAPI.getAPI.updateSubmissionNoAttachment(requestBodyMap)
-                                }).enqueue(object : Callback<UpdateSubmissionResponse> {
+                                }).enqueue(object : Callback<GenericSimpleResponse> {
                                     override fun onResponse(
-                                        call: Call<UpdateSubmissionResponse>,
-                                        response: Response<UpdateSubmissionResponse>
+                                        call: Call<GenericSimpleResponse>,
+                                        response: Response<GenericSimpleResponse>
                                     ) {
                                         submitButton.visibility = View.VISIBLE
                                         loadingBar.visibility = View.GONE
@@ -364,7 +364,7 @@ class SubmissionFormActivity : AppCompatActivity() {
                                     }
 
                                     override fun onFailure(
-                                        call: Call<UpdateSubmissionResponse>, throwable: Throwable
+                                        call: Call<GenericSimpleResponse>, throwable: Throwable
                                     ) {
                                         submitButton.visibility = View.VISIBLE
                                         loadingBar.visibility = View.GONE
@@ -447,10 +447,10 @@ class SubmissionFormActivity : AppCompatActivity() {
                                 } else {
                                     InitAPI.getAPI.submitSubmissionNoAttachment(requestBodyMap)
                                 }).enqueue(object :
-                                    Callback<SubmitSubmissionResponse> {
+                                    Callback<CreationResponse> {
                                     override fun onResponse(
-                                        call: Call<SubmitSubmissionResponse?>,
-                                        response: Response<SubmitSubmissionResponse?>
+                                        call: Call<CreationResponse?>,
+                                        response: Response<CreationResponse?>
                                     ) {
                                         submitButton.visibility = View.VISIBLE
                                         loadingBar.visibility = View.GONE
@@ -513,7 +513,7 @@ class SubmissionFormActivity : AppCompatActivity() {
                                     }
 
                                     override fun onFailure(
-                                        call: Call<SubmitSubmissionResponse?>,
+                                        call: Call<CreationResponse?>,
                                         throwable: Throwable
                                     ) {
                                         submitButton.visibility = View.VISIBLE

@@ -12,7 +12,7 @@ import com.erela.fixme.custom_views.CustomToast
 import com.erela.fixme.databinding.ActivityChangePasswordBinding
 import com.erela.fixme.helpers.networking.InitAPI
 import com.erela.fixme.helpers.UserDataHelper
-import com.erela.fixme.objects.ChangePasswordResponse
+import com.erela.fixme.objects.GenericSimpleResponse
 import com.erela.fixme.objects.UserData
 import retrofit2.Call
 import retrofit2.Callback
@@ -124,10 +124,10 @@ class ChangePasswordActivity : AppCompatActivity() {
                         InitAPI.getAPI.changePassword(
                             userData.id, confirmPasswordField.text.toString()
                         )
-                            .enqueue(object : Callback<ChangePasswordResponse> {
+                            .enqueue(object : Callback<GenericSimpleResponse> {
                                 override fun onResponse(
-                                    call: Call<ChangePasswordResponse?>,
-                                    response: Response<ChangePasswordResponse?>
+                                    call: Call<GenericSimpleResponse?>,
+                                    response: Response<GenericSimpleResponse?>
                                 ) {
                                     if (response.body() != null) {
                                         if (response.body()?.code == 1) {
@@ -158,7 +158,7 @@ class ChangePasswordActivity : AppCompatActivity() {
                                 }
 
                                 override fun onFailure(
-                                    call: Call<ChangePasswordResponse?>,
+                                    call: Call<GenericSimpleResponse?>,
                                     throwable: Throwable
                                 ) {
                                     throwable.printStackTrace()

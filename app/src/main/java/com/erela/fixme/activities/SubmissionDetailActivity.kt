@@ -18,6 +18,7 @@ import androidx.core.view.WindowInsetsCompat
 import com.bumptech.glide.Glide
 import com.erela.fixme.adapters.pager.ImageCarouselPagerAdapter
 import com.erela.fixme.bottom_sheets.ProgressTrackingBottomSheet
+import com.erela.fixme.bottom_sheets.ReportTrialBottomSheet
 import com.erela.fixme.bottom_sheets.SubmissionActionBottomSheet
 import com.erela.fixme.bottom_sheets.TrialTrackingBottomSheet
 import com.erela.fixme.custom_views.CustomToast
@@ -41,10 +42,10 @@ import retrofit2.Callback
 import retrofit2.Response
 
 class SubmissionDetailActivity : AppCompatActivity(),
-    SubmissionActionBottomSheet.OnUpdateSuccessListener,
-    ProgressTrackingBottomSheet.OnProgressTrackingListener,
-    ProgressTrackingBottomSheet.OnProgressItemLongTapListener,
-    ProgressOptionDialog.OnProgressOptionDialogListener {
+                                 SubmissionActionBottomSheet.OnUpdateSuccessListener,
+                                 ProgressTrackingBottomSheet.OnProgressTrackingListener,
+                                 ProgressTrackingBottomSheet.OnProgressItemLongTapListener,
+                                 ProgressOptionDialog.OnProgressOptionDialogListener {
     private val binding: ActivitySubmissionDetailBinding by lazy {
         ActivitySubmissionDetailBinding.inflate(layoutInflater)
     }
@@ -66,7 +67,6 @@ class SubmissionDetailActivity : AppCompatActivity(),
 
     companion object {
         const val DETAIL_ID = "DETAIL_ID"
-
         fun initiate(context: Context, detailId: String) {
             context.startActivity(
                 Intent(
@@ -100,7 +100,6 @@ class SubmissionDetailActivity : AppCompatActivity(),
 
         init()
     }
-
     @SuppressLint("SetTextI18n")
     private fun init() {
         binding.apply {
@@ -521,15 +520,26 @@ class SubmissionDetailActivity : AppCompatActivity(),
                                                         setOnTrialTrackingListener(object :
                                                             TrialTrackingBottomSheet.OnTrialTrackingListener {
                                                             override fun reportTrialClicked() {
-                                                                /*activityResultLauncher.launch(
-                                                                    Intent(
+                                                                val reportTrialBs =
+                                                                    ReportTrialBottomSheet(
                                                                         this@SubmissionDetailActivity,
-                                                                    ).also { int ->
-                                                                        with(int) {
-                                                                            putExtra("data", detailData)
+                                                                        detailData
+                                                                    ).also { reportTrial ->
+                                                                        with(reportTrial) {
+                                                                            setOnReportTrialSuccessListener(
+                                                                                object :
+                                                                                    ReportTrialBottomSheet.OnReportTrialSuccessListener {
+                                                                                    override fun reportTrialSuccess() {
+                                                                                        it.dismiss()
+                                                                                        init()
+                                                                                    }
+                                                                                }
+                                                                            )
                                                                         }
                                                                     }
-                                                                )*/
+
+                                                                if (reportTrialBs.window != null)
+                                                                    reportTrialBs.show()
                                                             }
                                                         })
                                                     }
@@ -597,15 +607,26 @@ class SubmissionDetailActivity : AppCompatActivity(),
                                                         setOnTrialTrackingListener(object :
                                                             TrialTrackingBottomSheet.OnTrialTrackingListener {
                                                             override fun reportTrialClicked() {
-                                                                /*activityResultLauncher.launch(
-                                                                    Intent(
+                                                                val reportTrialBs =
+                                                                    ReportTrialBottomSheet(
                                                                         this@SubmissionDetailActivity,
-                                                                    ).also { int ->
-                                                                        with(int) {
-                                                                            putExtra("data", detailData)
+                                                                        detailData
+                                                                    ).also { reportTrial ->
+                                                                        with(reportTrial) {
+                                                                            setOnReportTrialSuccessListener(
+                                                                                object :
+                                                                                    ReportTrialBottomSheet.OnReportTrialSuccessListener {
+                                                                                    override fun reportTrialSuccess() {
+                                                                                        it.dismiss()
+                                                                                        init()
+                                                                                    }
+                                                                                }
+                                                                            )
                                                                         }
                                                                     }
-                                                                )*/
+
+                                                                if (reportTrialBs.window != null)
+                                                                    reportTrialBs.show()
                                                             }
                                                         })
                                                     }
