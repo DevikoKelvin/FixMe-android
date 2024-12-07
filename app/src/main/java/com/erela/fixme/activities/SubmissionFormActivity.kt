@@ -180,11 +180,11 @@ class SubmissionFormActivity : AppCompatActivity() {
                 locationField.setText("${detail?.lokasi}")
                 isFormEmpty[1] = true
                 selectedDepartment = detail?.idDeptTujuan!!.toInt()
-                isFormEmpty[2] = true
                 getDepartmentList()
+                isFormEmpty[2] = true
                 selectedCategory = detail?.idKategori!!.toInt()
-                isFormEmpty[3] = true
                 getCategoryList()
+                Log.e("Machine Code", detail?.kodeMesin!!)
                 isFormEmpty[4] = detail?.kodeMesin!!.isNotEmpty()
                 machineCodeField.setText("${detail?.kodeMesin}".ifEmpty { "" })
                 isFormEmpty[5] = detail?.namaMesin!!.isNotEmpty()
@@ -818,10 +818,10 @@ class SubmissionFormActivity : AppCompatActivity() {
                 ) {
                     if (s!!.isEmpty()) {
                         descriptionFieldLayout.error = "Description"
-                        isFormEmpty[4] = false
+                        isFormEmpty[6] = false
                     } else {
                         descriptionFieldLayout.error = null
-                        isFormEmpty[4] = true
+                        isFormEmpty[6] = true
                     }
                 }
 
@@ -841,10 +841,10 @@ class SubmissionFormActivity : AppCompatActivity() {
                     ) {
                         if (s!!.isEmpty()) {
                             machineCodeFieldLayout.error = "Enter the Machine Code!"
-                            isFormEmpty[5] = false
+                            isFormEmpty[4] = false
                         } else {
                             machineCodeFieldLayout.error = null
-                            isFormEmpty[5] = true
+                            isFormEmpty[4] = true
                         }
                     }
 
@@ -865,10 +865,10 @@ class SubmissionFormActivity : AppCompatActivity() {
                     ) {
                         if (s!!.isEmpty()) {
                             machineNameFieldLayout.error = "Enter the Machine Name!"
-                            isFormEmpty[6] = false
+                            isFormEmpty[5] = false
                         } else {
                             machineNameFieldLayout.error = null
-                            isFormEmpty[6] = true
+                            isFormEmpty[5] = true
                         }
                     }
 
@@ -917,6 +917,10 @@ class SubmissionFormActivity : AppCompatActivity() {
                     isFormValid = validated == 7
                 } else
                     isFormValid = validated == 5
+            }
+
+            for (i in isFormEmpty.indices) {
+                Log.e("Field $i", isFormEmpty[i].toString())
             }
         }
         Log.e("Form Valid | Validated", "$isFormValid | $validated")
@@ -1202,6 +1206,9 @@ class SubmissionFormActivity : AppCompatActivity() {
                                                     0
                                                 else
                                                     categoryList[position - 1].idKategori!!.toInt()
+                                                Log.e(
+                                                    "Selected Category", selectedCategory.toString()
+                                                )
                                                 isFormEmpty[3] = selectedCategory != 0
                                                 if (selectedCategory != 0) {
                                                     categoryDropdownLayout.strokeColor =
