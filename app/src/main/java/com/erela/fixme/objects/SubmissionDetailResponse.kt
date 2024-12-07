@@ -3,6 +3,7 @@ package com.erela.fixme.objects
 import kotlinx.parcelize.Parcelize
 import android.os.Parcelable
 import com.google.gson.annotations.SerializedName
+import java.io.Serial
 
 @Parcelize
 data class SubmissionDetailResponse(
@@ -46,6 +47,8 @@ data class SubmissionDetailResponse(
     val idKategori: Int? = null,
     @field:SerializedName("id_user")
     val idUser: Int? = null,
+    @field:SerializedName("nama_user_buat")
+    val namaUserBuat: String? = null,
     @field:SerializedName("set_tglinput")
     val setTglinput: String? = null,
     @field:SerializedName("nama_mesin")

@@ -55,7 +55,7 @@ class TrialRvAdapter(
                             )
                         )
                     }
-                    usernameText.text = detail.usernUserSpv?.get(0)!!.namaUser?.trimEnd()
+                    usernameText.text = detail.namaUserBuat?.trimEnd()
                     progressDescription.text = item.keterangan
                     dateTimeText.text = item.tglWaktu
                     imageContainer.visibility = View.GONE

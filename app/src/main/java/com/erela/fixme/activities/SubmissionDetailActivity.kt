@@ -663,8 +663,7 @@ class SubmissionDetailActivity : AppCompatActivity(),
                                                                 response.body()!!.idUser,
                                                                 response.body()!!.idUserStarconnect
                                                             )
-                                                            user.text =
-                                                                userDetail.nama?.trimEnd()
+                                                            user.text = data.namaUserBuat?.trimEnd()
                                                             actionCondition(data, userDetail)
                                                         }
                                                     } else {
@@ -1742,7 +1741,8 @@ class SubmissionDetailActivity : AppCompatActivity(),
                                                             .setFontColor(
                                                                 ResourcesCompat.getColor(
                                                                     resources,
-                                                                    R.color.custom_toast_font_failed, theme
+                                                                    R.color.custom_toast_font_failed,
+                                                                    theme
                                                                 )
                                                             )
                                                             .setMessage("Failed to mark as done")
@@ -1764,7 +1764,8 @@ class SubmissionDetailActivity : AppCompatActivity(),
                                                         .setFontColor(
                                                             ResourcesCompat.getColor(
                                                                 resources,
-                                                                R.color.custom_toast_font_failed, theme
+                                                                R.color.custom_toast_font_failed,
+                                                                theme
                                                             )
                                                         )
                                                         .setMessage("Failed to mark as done")
