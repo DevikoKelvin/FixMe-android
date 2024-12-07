@@ -4,7 +4,9 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
+import com.erela.fixme.R
 import com.erela.fixme.databinding.ListItemProgressBinding
 import com.erela.fixme.helpers.UserDataHelper
 import com.erela.fixme.objects.SubmissionDetailResponse
@@ -14,11 +16,6 @@ import com.erela.fixme.objects.UserData
 class TrialRvAdapter(
     val context: Context, private val detail: SubmissionDetailResponse, val data: List<TrialItem?>?
 ) : RecyclerView.Adapter<TrialRvAdapter.ViewHolder>() {
-    /*private lateinit var onItemHoldTapListener: OnItemHoldTapListener*/
-    private val userData: UserData by lazy {
-        UserDataHelper(context).getUserData()
-    }
-
     inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val binding = ListItemProgressBinding.bind(view)
     }
@@ -35,25 +32,35 @@ class TrialRvAdapter(
         with(holder) {
             binding.apply {
                 if (item != null) {
+                    if (item.status == 1) {
+                        usernameText.setBackgroundColor(
+                            ContextCompat.getColor(
+                                context, R.color.custom_toast_background_failed
+                            )
+                        )
+                        usernameText.setTextColor(
+                            ContextCompat.getColor(
+                                context, R.color.custom_toast_font_failed
+                            )
+                        )
+                    } else {
+                        usernameText.setBackgroundColor(
+                            ContextCompat.getColor(
+                                context, R.color.custom_toast_background_success
+                            )
+                        )
+                        usernameText.setTextColor(
+                            ContextCompat.getColor(
+                                context, R.color.custom_toast_font_success
+                            )
+                        )
+                    }
                     usernameText.text = detail.usernUserSpv?.get(0)!!.namaUser?.trimEnd()
                     progressDescription.text = item.keterangan
                     dateTimeText.text = item.tglWaktu
                     imageContainer.visibility = View.GONE
                 }
-                /*itemView.setOnLongClickListener {
-                    if (userData.id == item?.idUser) {
-                        onItemHoldTapListener.onItemHoldTap(item)
-                    }
-                    true
-                }*/
             }
         }
     }
-    /*fun setOnItemHoldTapListener(onItemHoldTapListener: OnItemHoldTapListener) {
-        this.onItemHoldTapListener = onItemHoldTapListener
-    }
-
-    interface OnItemHoldTapListener {
-        fun onItemHoldTap(item: TrialItem?)
-    }*/
 }

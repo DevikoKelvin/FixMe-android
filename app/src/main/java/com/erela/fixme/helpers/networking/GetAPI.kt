@@ -203,4 +203,11 @@ interface GetAPI {
         @Field("keterangan") description: String,
         @Field("status") status: Int
     ): Call<CreationResponse>
+
+    @FormUrlEncoded
+    @POST("stsfinish")
+    fun markIssueDone(
+        @Field("id") idGaProjects: Int,
+        @Field("id_user") idUser: Int
+    ): Call<GenericSimpleResponse>
 }

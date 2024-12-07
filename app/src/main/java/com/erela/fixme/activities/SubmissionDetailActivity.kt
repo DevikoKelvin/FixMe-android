@@ -42,10 +42,11 @@ import retrofit2.Callback
 import retrofit2.Response
 
 class SubmissionDetailActivity : AppCompatActivity(),
-                                 SubmissionActionBottomSheet.OnUpdateSuccessListener,
-                                 ProgressTrackingBottomSheet.OnProgressTrackingListener,
-                                 ProgressTrackingBottomSheet.OnProgressItemLongTapListener,
-                                 ProgressOptionDialog.OnProgressOptionDialogListener {
+    SubmissionActionBottomSheet.OnUpdateSuccessListener,
+    ProgressTrackingBottomSheet.OnProgressTrackingListener,
+    ProgressTrackingBottomSheet.OnProgressItemLongTapListener,
+    ProgressOptionDialog.OnProgressOptionDialogListener,
+    TrialTrackingBottomSheet.OnTrialTrackingListener {
     private val binding: ActivitySubmissionDetailBinding by lazy {
         ActivitySubmissionDetailBinding.inflate(layoutInflater)
     }
@@ -100,6 +101,7 @@ class SubmissionDetailActivity : AppCompatActivity(),
 
         init()
     }
+
     @SuppressLint("SetTextI18n")
     private fun init() {
         binding.apply {
@@ -191,7 +193,8 @@ class SubmissionDetailActivity : AppCompatActivity(),
                                             editButton.visibility = View.GONE
                                             seeProgressButton.visibility = View.GONE
                                             onProgressButton.visibility = View.GONE
-                                            messageAndTrialButtonContainer.visibility = View.VISIBLE
+                                            messageProgressAndTrialButtonContainer.visibility =
+                                                View.VISIBLE
                                             statusMessageContainer.visibility = View.VISIBLE
                                             statusMessageContainer.setCardBackgroundColor(
                                                 ContextCompat.getColor(
@@ -254,7 +257,7 @@ class SubmissionDetailActivity : AppCompatActivity(),
                                                 editButton.visibility = View.GONE
                                                 seeProgressButton.visibility = View.GONE
                                                 onProgressButton.visibility = View.GONE
-                                                messageAndTrialButtonContainer.visibility =
+                                                messageProgressAndTrialButtonContainer.visibility =
                                                     View.GONE
                                                 statusMessageContainer.visibility = View.GONE
                                             } else {
@@ -263,7 +266,7 @@ class SubmissionDetailActivity : AppCompatActivity(),
                                                     editButton.visibility = View.GONE
                                                     seeProgressButton.visibility = View.GONE
                                                     onProgressButton.visibility = View.GONE
-                                                    messageAndTrialButtonContainer.visibility =
+                                                    messageProgressAndTrialButtonContainer.visibility =
                                                         View.GONE
                                                     statusMessageContainer.visibility = View.GONE
                                                 } else {
@@ -271,7 +274,7 @@ class SubmissionDetailActivity : AppCompatActivity(),
                                                     editButton.visibility = View.GONE
                                                     seeProgressButton.visibility = View.GONE
                                                     onProgressButton.visibility = View.GONE
-                                                    messageAndTrialButtonContainer.visibility =
+                                                    messageProgressAndTrialButtonContainer.visibility =
                                                         View.VISIBLE
                                                     statusMessageContainer.visibility = View.VISIBLE
                                                     statusMessageContainer.setCardBackgroundColor(
@@ -405,6 +408,23 @@ class SubmissionDetailActivity : AppCompatActivity(),
                                                 if (progressTrackingBottomSheet.window != null)
                                                     progressTrackingBottomSheet.show()
                                             }
+                                            if (data.trial!!.isNotEmpty()) {
+                                                seeTrialContainer.visibility = View.VISIBLE
+                                                seeTrialContainer.setOnClickListener {
+                                                    val trialBottomSheet = TrialTrackingBottomSheet(
+                                                        this@SubmissionDetailActivity, data
+                                                    ).also {
+                                                        with(it) {
+                                                            setOnTrialTrackingListener(
+                                                                this@SubmissionDetailActivity
+                                                            )
+                                                        }
+                                                    }
+
+                                                    if (trialBottomSheet.window != null)
+                                                        trialBottomSheet.show()
+                                                }
+                                            }
                                         }
                                         // Progress Done
                                         30 -> {
@@ -421,8 +441,12 @@ class SubmissionDetailActivity : AppCompatActivity(),
                                             seeProgressButton.visibility = View.GONE
                                             onProgressButton.visibility = View.VISIBLE
                                             message =
-                                                StringBuilder().append("Progress marked as done by ")
-                                            message.append("${data.usernUserSpv!![0]?.namaUser?.trimEnd()}\nClick to see progress")
+                                                StringBuilder().append(
+                                                    "Progress marked as done by "
+                                                )
+                                            message.append(
+                                                "${data.usernUserSpv!![0]?.namaUser?.trimEnd()}\nClick to see progress"
+                                            )
                                             onProgressText.text = message.toString()
                                             onProgressText.setTextColor(
                                                 ContextCompat.getColor(
@@ -461,6 +485,23 @@ class SubmissionDetailActivity : AppCompatActivity(),
                                                 if (progressTrackingBottomSheet.window != null)
                                                     progressTrackingBottomSheet.show()
                                             }
+                                            if (data.trial!!.isNotEmpty()) {
+                                                seeTrialContainer.visibility = View.VISIBLE
+                                                seeTrialContainer.setOnClickListener {
+                                                    val trialBottomSheet = TrialTrackingBottomSheet(
+                                                        this@SubmissionDetailActivity, data
+                                                    ).also {
+                                                        with(it) {
+                                                            setOnTrialTrackingListener(
+                                                                this@SubmissionDetailActivity
+                                                            )
+                                                        }
+                                                    }
+
+                                                    if (trialBottomSheet.window != null)
+                                                        trialBottomSheet.show()
+                                                }
+                                            }
                                         }
                                         // Done
                                         4 -> {
@@ -476,7 +517,8 @@ class SubmissionDetailActivity : AppCompatActivity(),
                                             editButton.visibility = View.GONE
                                             seeProgressButton.visibility = View.GONE
                                             onProgressButton.visibility = View.GONE
-                                            messageAndTrialButtonContainer.visibility = View.VISIBLE
+                                            messageProgressAndTrialButtonContainer.visibility =
+                                                View.VISIBLE
                                             statusMessageContainer.visibility = View.VISIBLE
                                             statusMessageContainer.setCardBackgroundColor(
                                                 ContextCompat.getColor(
@@ -517,31 +559,9 @@ class SubmissionDetailActivity : AppCompatActivity(),
                                                     this@SubmissionDetailActivity, data
                                                 ).also {
                                                     with(it) {
-                                                        setOnTrialTrackingListener(object :
-                                                            TrialTrackingBottomSheet.OnTrialTrackingListener {
-                                                            override fun reportTrialClicked() {
-                                                                val reportTrialBs =
-                                                                    ReportTrialBottomSheet(
-                                                                        this@SubmissionDetailActivity,
-                                                                        detailData
-                                                                    ).also { reportTrial ->
-                                                                        with(reportTrial) {
-                                                                            setOnReportTrialSuccessListener(
-                                                                                object :
-                                                                                    ReportTrialBottomSheet.OnReportTrialSuccessListener {
-                                                                                    override fun reportTrialSuccess() {
-                                                                                        it.dismiss()
-                                                                                        init()
-                                                                                    }
-                                                                                }
-                                                                            )
-                                                                        }
-                                                                    }
-
-                                                                if (reportTrialBs.window != null)
-                                                                    reportTrialBs.show()
-                                                            }
-                                                        })
+                                                        setOnTrialTrackingListener(
+                                                            this@SubmissionDetailActivity
+                                                        )
                                                     }
                                                 }
 
@@ -563,7 +583,8 @@ class SubmissionDetailActivity : AppCompatActivity(),
                                             editButton.visibility = View.GONE
                                             seeProgressButton.visibility = View.GONE
                                             onProgressButton.visibility = View.GONE
-                                            messageAndTrialButtonContainer.visibility = View.VISIBLE
+                                            messageProgressAndTrialButtonContainer.visibility =
+                                                View.VISIBLE
                                             statusMessageContainer.visibility = View.VISIBLE
                                             statusMessageContainer.setCardBackgroundColor(
                                                 ContextCompat.getColor(
@@ -604,31 +625,9 @@ class SubmissionDetailActivity : AppCompatActivity(),
                                                     this@SubmissionDetailActivity, data
                                                 ).also {
                                                     with(it) {
-                                                        setOnTrialTrackingListener(object :
-                                                            TrialTrackingBottomSheet.OnTrialTrackingListener {
-                                                            override fun reportTrialClicked() {
-                                                                val reportTrialBs =
-                                                                    ReportTrialBottomSheet(
-                                                                        this@SubmissionDetailActivity,
-                                                                        detailData
-                                                                    ).also { reportTrial ->
-                                                                        with(reportTrial) {
-                                                                            setOnReportTrialSuccessListener(
-                                                                                object :
-                                                                                    ReportTrialBottomSheet.OnReportTrialSuccessListener {
-                                                                                    override fun reportTrialSuccess() {
-                                                                                        it.dismiss()
-                                                                                        init()
-                                                                                    }
-                                                                                }
-                                                                            )
-                                                                        }
-                                                                    }
-
-                                                                if (reportTrialBs.window != null)
-                                                                    reportTrialBs.show()
-                                                            }
-                                                        })
+                                                        setOnTrialTrackingListener(
+                                                            this@SubmissionDetailActivity
+                                                        )
                                                     }
                                                 }
 
@@ -1010,7 +1009,9 @@ class SubmissionDetailActivity : AppCompatActivity(),
                                                                     theme
                                                                 )
                                                             )
-                                                            .setMessage("Failed to mark as ready for Trial")
+                                                            .setMessage(
+                                                                "Failed to mark as ready for Trial"
+                                                            )
                                                             .show()
                                                         Log.e(
                                                             "ERROR ${response.code()}",
@@ -1033,7 +1034,9 @@ class SubmissionDetailActivity : AppCompatActivity(),
                                                                 theme
                                                             )
                                                         )
-                                                        .setMessage("Failed to mark as ready for trial")
+                                                        .setMessage(
+                                                            "Failed to mark as ready for trial"
+                                                        )
                                                         .show()
                                                     Log.e(
                                                         "ERROR ${response.code()}",
@@ -1649,6 +1652,195 @@ class SubmissionDetailActivity : AppCompatActivity(),
                                     .show()
                                 jsonException.printStackTrace()
                                 Log.e("ERROR", "Mark Progress Done Exception | $jsonException")
+                            }
+                        }
+                    })
+                }
+            }
+        if (confirmationDialog.window != null)
+            confirmationDialog.show()
+    }
+
+    override fun reportTrialClicked(bottomSheet: TrialTrackingBottomSheet) {
+        val reportTrialBs =
+            ReportTrialBottomSheet(
+                this@SubmissionDetailActivity,
+                detailData
+            ).also { reportTrial ->
+                with(reportTrial) {
+                    setOnReportTrialSuccessListener(
+                        object :
+                            ReportTrialBottomSheet.OnReportTrialSuccessListener {
+                            override fun reportTrialSuccess() {
+                                bottomSheet.dismiss()
+                                init()
+                            }
+                        }
+                    )
+                }
+            }
+
+        if (reportTrialBs.window != null)
+            reportTrialBs.show()
+    }
+
+    override fun markIssueDoneClicked(bottomSheet: TrialTrackingBottomSheet) {
+        val confirmationDialog =
+            ConfirmationDialog(
+                this@SubmissionDetailActivity,
+                "Are you sure you want to mark this as done?\n\nMake sure your issue are working properly",
+                "Yes"
+            ).also {
+                with(it) {
+                    setConfirmationDialogListener(object :
+                        ConfirmationDialog.ConfirmationDialogListener {
+                        override fun onConfirm() {
+                            bottomSheet.dismiss()
+                            val loadingDialog = LoadingDialog(this@SubmissionDetailActivity)
+                            if (loadingDialog.window != null)
+                                loadingDialog.show()
+                            try {
+                                InitAPI.getAPI.markIssueDone(detailData.idGaprojects!!, userData.id)
+                                    .enqueue(object : Callback<GenericSimpleResponse> {
+                                        override fun onResponse(
+                                            call: Call<GenericSimpleResponse>,
+                                            response: Response<GenericSimpleResponse>
+                                        ) {
+                                            loadingDialog.dismiss()
+                                            if (response.isSuccessful) {
+                                                if (response.body() != null) {
+                                                    val result = response.body()
+                                                    if (result?.code == 1) {
+                                                        CustomToast.getInstance(applicationContext)
+                                                            .setBackgroundColor(
+                                                                ResourcesCompat.getColor(
+                                                                    resources,
+                                                                    R.color.custom_toast_background_success,
+                                                                    theme
+                                                                )
+                                                            )
+                                                            .setFontColor(
+                                                                ResourcesCompat.getColor(
+                                                                    resources,
+                                                                    R.color.custom_toast_font_success,
+                                                                    theme
+                                                                )
+                                                            )
+                                                            .setMessage(
+                                                                "Marked as done successfully!"
+                                                            ).show()
+                                                        init()
+                                                    } else {
+                                                        CustomToast.getInstance(applicationContext)
+                                                            .setBackgroundColor(
+                                                                ResourcesCompat.getColor(
+                                                                    resources,
+                                                                    R.color.custom_toast_background_failed,
+                                                                    theme
+                                                                )
+                                                            )
+                                                            .setFontColor(
+                                                                ResourcesCompat.getColor(
+                                                                    resources,
+                                                                    R.color.custom_toast_font_failed, theme
+                                                                )
+                                                            )
+                                                            .setMessage("Failed to mark as done")
+                                                            .show()
+                                                        Log.e(
+                                                            "ERROR ${response.code()}",
+                                                            "Mark Done Response code 0 | ${response.message()}"
+                                                        )
+                                                    }
+                                                } else {
+                                                    CustomToast.getInstance(applicationContext)
+                                                        .setBackgroundColor(
+                                                            ResourcesCompat.getColor(
+                                                                resources,
+                                                                R.color.custom_toast_background_failed,
+                                                                theme
+                                                            )
+                                                        )
+                                                        .setFontColor(
+                                                            ResourcesCompat.getColor(
+                                                                resources,
+                                                                R.color.custom_toast_font_failed, theme
+                                                            )
+                                                        )
+                                                        .setMessage("Failed to mark as done")
+                                                        .show()
+                                                    Log.e(
+                                                        "ERROR ${response.code()}",
+                                                        "Mark Done Response null | ${response.message()}"
+                                                    )
+                                                }
+                                            } else {
+                                                CustomToast.getInstance(applicationContext)
+                                                    .setBackgroundColor(
+                                                        ResourcesCompat.getColor(
+                                                            resources,
+                                                            R.color.custom_toast_background_failed,
+                                                            theme
+                                                        )
+                                                    )
+                                                    .setFontColor(
+                                                        ResourcesCompat.getColor(
+                                                            resources,
+                                                            R.color.custom_toast_font_failed, theme
+                                                        )
+                                                    )
+                                                    .setMessage("Failed to mark as done")
+                                                    .show()
+                                                Log.e(
+                                                    "ERROR ${response.code()}",
+                                                    "Mark Done Fail | ${response.message()}"
+                                                )
+                                            }
+                                        }
+
+                                        override fun onFailure(
+                                            call: Call<GenericSimpleResponse>, throwable: Throwable
+                                        ) {
+                                            loadingDialog.dismiss()
+                                            CustomToast.getInstance(applicationContext)
+                                                .setBackgroundColor(
+                                                    ResourcesCompat.getColor(
+                                                        resources,
+                                                        R.color.custom_toast_background_failed,
+                                                        theme
+                                                    )
+                                                )
+                                                .setFontColor(
+                                                    ResourcesCompat.getColor(
+                                                        resources, R.color.custom_toast_font_failed,
+                                                        theme
+                                                    )
+                                                )
+                                                .setMessage(
+                                                    "Something went wrong, please try again later"
+                                                )
+                                                .show()
+                                            throwable.printStackTrace()
+                                            Log.e("ERROR", "Mark Done Failure | $throwable")
+                                        }
+                                    })
+                            } catch (jsonException: JSONException) {
+                                loadingDialog.dismiss()
+                                CustomToast.getInstance(applicationContext)
+                                    .setBackgroundColor(
+                                        ResourcesCompat.getColor(
+                                            resources, R.color.custom_toast_background_failed, theme
+                                        )
+                                    )
+                                    .setFontColor(
+                                        ResourcesCompat.getColor(
+                                            resources, R.color.custom_toast_font_failed, theme
+                                        )
+                                    )
+                                    .setMessage("Something went wrong, please try again later")
+                                    .show()
+                                jsonException.printStackTrace()
+                                Log.e("ERROR", "Mark Done Exception | $jsonException")
                             }
                         }
                     })

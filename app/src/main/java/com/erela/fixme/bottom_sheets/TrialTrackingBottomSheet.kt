@@ -1,12 +1,15 @@
 package com.erela.fixme.bottom_sheets
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.erela.fixme.R
 import com.erela.fixme.adapters.recycler_view.TrialRvAdapter
 import com.erela.fixme.databinding.BsTrialBinding
 import com.erela.fixme.helpers.UserDataHelper
@@ -20,8 +23,12 @@ class TrialTrackingBottomSheet(
     private val binding: BsTrialBinding by lazy {
         BsTrialBinding.inflate(layoutInflater)
     }
+    private val userData: UserData by lazy {
+        UserDataHelper(context).getUserData()
+    }
     private lateinit var trialAdapter: TrialRvAdapter
     private lateinit var onTrialTrackingListener: OnTrialTrackingListener
+    private var readyDone: Boolean = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -34,16 +41,57 @@ class TrialTrackingBottomSheet(
         init()
     }
 
+    @SuppressLint("SetTextI18n")
     private fun init() {
         binding.apply {
             trialAdapter = TrialRvAdapter(context, data, data.trial)
             rvTrial.adapter = trialAdapter
             rvTrial.layoutManager = LinearLayoutManager(context)
-            if (data.stsGaprojects == 4) {
+            if (data.stsGaprojects == 3 || data.stsGaprojects == 4 || data.stsGaprojects == 30) {
                 trialActionButton.visibility = View.GONE
-            }
-            trialActionButton.setOnClickListener {
-                onTrialTrackingListener.reportTrialClicked()
+            } else {
+                if (data.idUser == userData.id) {
+                    trialActionButton.visibility = View.VISIBLE
+                    for (element in data.trial!!) {
+                        if (element?.status == 0) {
+                            readyDone = true
+                            break
+                        }
+                    }
+                    if (readyDone) {
+                        trialActionButton.setCardBackgroundColor(
+                            ContextCompat.getColor(
+                                context, R.color.custom_toast_background_soft_blue
+                            )
+                        )
+                        trialActionText.text = "Mark as Done now!"
+                        trialActionText.setTextColor(
+                            ContextCompat.getColor(
+                                context, R.color.custom_toast_font_blue
+                            )
+                        )
+                        trialActionButton.setOnClickListener {
+                            onTrialTrackingListener.markIssueDoneClicked(this@TrialTrackingBottomSheet)
+                        }
+                    } else {
+                        trialActionButton.setCardBackgroundColor(
+                            ContextCompat.getColor(
+                                context, R.color.status_on_trial
+                            )
+                        )
+                        trialActionText.text = "Report Trial"
+                        trialActionText.setTextColor(
+                            ContextCompat.getColor(
+                                context, R.color.white
+                            )
+                        )
+                        trialActionButton.setOnClickListener {
+                            onTrialTrackingListener.reportTrialClicked(this@TrialTrackingBottomSheet)
+                        }
+                    }
+                } else {
+                    trialActionButton.visibility = View.GONE
+                }
             }
         }
     }
@@ -53,6 +101,7 @@ class TrialTrackingBottomSheet(
     }
 
     interface OnTrialTrackingListener {
-        fun reportTrialClicked()
+        fun reportTrialClicked(bottomSheet: TrialTrackingBottomSheet)
+        fun markIssueDoneClicked(bottomSheet: TrialTrackingBottomSheet)
     }
 }

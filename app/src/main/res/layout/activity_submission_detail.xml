@@ -441,7 +441,7 @@
         app:layout_constraintStart_toStartOf="parent">
 
         <LinearLayout
-            android:id="@+id/messageAndTrialButtonContainer"
+            android:id="@+id/messageProgressAndTrialButtonContainer"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentStart="true"
@@ -449,7 +449,7 @@
             android:layout_marginEnd="16dp"
             android:layout_toStartOf="@+id/editButton"
             android:orientation="horizontal"
-            android:visibility="gone">
+            android:visibility="visible">
 
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/statusMessageContainer"
@@ -459,7 +459,7 @@
                 android:layout_marginStart="16dp"
                 android:layout_weight="1"
                 android:minHeight="46dp"
-                android:visibility="visible"
+                android:visibility="gone"
                 app:cardBackgroundColor="@color/custom_toast_background_soft_blue"
                 app:cardCornerRadius="50dp"
                 app:cardElevation="4dp"
@@ -476,6 +476,35 @@
                     android:textSize="14sp"
                     android:textStyle="bold"
                     tools:text="Waiting for action from hendrick\nClick to see progress" />
+            </com.google.android.material.card.MaterialCardView>
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/onProgressButton"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginVertical="16dp"
+                android:layout_marginStart="16dp"
+                android:layout_weight="1"
+                android:minHeight="46dp"
+                android:visibility="gone"
+                app:cardBackgroundColor="@color/custom_toast_font_normal_gray"
+                app:cardCornerRadius="50dp"
+                app:cardElevation="4dp"
+                app:strokeWidth="0dp">
+
+                <TextView
+                    android:id="@+id/onProgressText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:drawableStart="@drawable/baseline_timelapse_24"
+                    android:drawablePadding="4dp"
+                    android:text="@string/message_on_progress"
+                    android:textAlignment="center"
+                    android:textColor="@color/custom_toast_background_normal_dark_gray"
+                    android:textSize="14sp"
+                    android:textStyle="bold"
+                    tools:ignore="UseCompatTextViewDrawableXml" />
             </com.google.android.material.card.MaterialCardView>
 
             <com.google.android.material.card.MaterialCardView
@@ -500,37 +529,6 @@
                     android:src="@drawable/baseline_rule_24" />
             </com.google.android.material.card.MaterialCardView>
         </LinearLayout>
-
-        <com.google.android.material.card.MaterialCardView
-            android:id="@+id/onProgressButton"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentStart="true"
-            android:layout_centerVertical="true"
-            android:layout_marginHorizontal="16dp"
-            android:layout_marginVertical="16dp"
-            android:layout_toStartOf="@+id/editButton"
-            android:minHeight="46dp"
-            android:visibility="gone"
-            app:cardBackgroundColor="@color/custom_toast_font_normal_gray"
-            app:cardCornerRadius="50dp"
-            app:cardElevation="4dp"
-            app:strokeWidth="0dp">
-
-            <TextView
-                android:id="@+id/onProgressText"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:drawableStart="@drawable/baseline_timelapse_24"
-                android:drawablePadding="4dp"
-                android:text="@string/message_on_progress"
-                android:textAlignment="center"
-                android:textColor="@color/custom_toast_background_normal_dark_gray"
-                android:textSize="14sp"
-                android:textStyle="bold"
-                tools:ignore="UseCompatTextViewDrawableXml" />
-        </com.google.android.material.card.MaterialCardView>
 
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/actionButton"
