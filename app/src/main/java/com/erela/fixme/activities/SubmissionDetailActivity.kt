@@ -191,7 +191,6 @@ class SubmissionDetailActivity : AppCompatActivity(),
                                             submissionStatusText.text = "Rejected"
                                             actionButton.visibility = View.GONE
                                             editButton.visibility = View.GONE
-                                            seeProgressButton.visibility = View.GONE
                                             onProgressButton.visibility = View.GONE
                                             messageProgressAndTrialButtonContainer.visibility =
                                                 View.VISIBLE
@@ -223,7 +222,6 @@ class SubmissionDetailActivity : AppCompatActivity(),
                                             submissionStatusText.text = "Pending"
                                             actionButton.visibility = View.GONE
                                             editButton.visibility = View.GONE
-                                            seeProgressButton.visibility = View.GONE
                                             onProgressButton.visibility = View.GONE
                                         }
                                         // Approved
@@ -255,7 +253,6 @@ class SubmissionDetailActivity : AppCompatActivity(),
                                             if (tech) {
                                                 actionButton.visibility = View.VISIBLE
                                                 editButton.visibility = View.GONE
-                                                seeProgressButton.visibility = View.GONE
                                                 onProgressButton.visibility = View.GONE
                                                 messageProgressAndTrialButtonContainer.visibility =
                                                     View.GONE
@@ -264,7 +261,6 @@ class SubmissionDetailActivity : AppCompatActivity(),
                                                 if (spv) {
                                                     actionButton.visibility = View.VISIBLE
                                                     editButton.visibility = View.GONE
-                                                    seeProgressButton.visibility = View.GONE
                                                     onProgressButton.visibility = View.GONE
                                                     messageProgressAndTrialButtonContainer.visibility =
                                                         View.GONE
@@ -272,7 +268,6 @@ class SubmissionDetailActivity : AppCompatActivity(),
                                                 } else {
                                                     actionButton.visibility = View.GONE
                                                     editButton.visibility = View.GONE
-                                                    seeProgressButton.visibility = View.GONE
                                                     onProgressButton.visibility = View.GONE
                                                     messageProgressAndTrialButtonContainer.visibility =
                                                         View.VISIBLE
@@ -370,7 +365,9 @@ class SubmissionDetailActivity : AppCompatActivity(),
                                             submissionStatusText.text = "On Progress"
                                             actionButton.visibility = View.GONE
                                             editButton.visibility = View.GONE
-                                            seeProgressButton.visibility = View.GONE
+                                            messageProgressAndTrialButtonContainer.visibility =
+                                                View.VISIBLE
+                                            statusMessageContainer.visibility = View.GONE
                                             onProgressButton.visibility = View.VISIBLE
                                             message = StringBuilder().append("On Progress by ")
                                             for (i in 0 until data.usernUserTeknisi!!.size) {
@@ -438,7 +435,6 @@ class SubmissionDetailActivity : AppCompatActivity(),
                                             submissionStatusText.text = "Progress Done"
                                             actionButton.visibility = View.GONE
                                             editButton.visibility = View.GONE
-                                            seeProgressButton.visibility = View.GONE
                                             onProgressButton.visibility = View.VISIBLE
                                             message =
                                                 StringBuilder().append(
@@ -515,7 +511,6 @@ class SubmissionDetailActivity : AppCompatActivity(),
                                             submissionStatusText.text = "Done"
                                             actionButton.visibility = View.GONE
                                             editButton.visibility = View.GONE
-                                            seeProgressButton.visibility = View.GONE
                                             onProgressButton.visibility = View.GONE
                                             messageProgressAndTrialButtonContainer.visibility =
                                                 View.VISIBLE
@@ -581,7 +576,6 @@ class SubmissionDetailActivity : AppCompatActivity(),
                                             submissionStatusText.text = "On Trial"
                                             actionButton.visibility = View.GONE
                                             editButton.visibility = View.GONE
-                                            seeProgressButton.visibility = View.GONE
                                             onProgressButton.visibility = View.GONE
                                             messageProgressAndTrialButtonContainer.visibility =
                                                 View.VISIBLE

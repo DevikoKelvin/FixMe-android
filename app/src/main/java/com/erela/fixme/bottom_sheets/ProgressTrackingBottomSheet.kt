@@ -117,6 +117,11 @@ class ProgressTrackingBottomSheet(
             } else {
                 for (i in 0 until data.usernUserTeknisi.size) {
                     if (data.usernUserTeknisi[i]?.idUser == userData.id) {
+                        when (data.stsGaprojects) {
+                            4 -> progressActionButton.visibility = View.GONE
+                            30 -> progressActionButton.visibility = View.GONE
+                            31 -> progressActionButton.visibility = View.GONE
+                        }
                         progressActionButton.setCardBackgroundColor(
                             ContextCompat.getColor(
                                 context, R.color.button_color
