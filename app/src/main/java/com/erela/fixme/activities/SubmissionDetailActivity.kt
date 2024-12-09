@@ -220,8 +220,6 @@ class SubmissionDetailActivity : AppCompatActivity(),
                                                 )
                                             )
                                             submissionStatusText.text = "Pending"
-                                            actionButton.visibility = View.GONE
-                                            editButton.visibility = View.GONE
                                             onProgressButton.visibility = View.GONE
                                         }
                                         // Approved
@@ -807,7 +805,7 @@ class SubmissionDetailActivity : AppCompatActivity(),
                                                         )
                                                     }
                                                 } else {
-                                                    if (userDetail.hakAkses!!.toInt() < 2) {
+                                                    if (userData.privilege < 2) {
                                                         actionButton.visibility = View.VISIBLE
                                                         editButton.visibility = View.GONE
                                                         onProgressButton.visibility = View.GONE
@@ -832,7 +830,7 @@ class SubmissionDetailActivity : AppCompatActivity(),
                                                         )
                                                     }
                                                 } else {
-                                                    if (userDetail.hakAkses!!.toInt() < 2) {
+                                                    if (userData.privilege < 2) {
                                                         actionButton.visibility = View.GONE
                                                         editButton.visibility = View.GONE
                                                         onProgressButton.visibility = View.GONE

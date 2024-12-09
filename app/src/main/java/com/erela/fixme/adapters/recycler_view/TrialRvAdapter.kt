@@ -59,6 +59,7 @@ class TrialRvAdapter(
                     progressDescription.text = item.keterangan
                     dateTimeText.text = item.tglWaktu
                     imageContainer.visibility = View.GONE
+                    circleIndicator.visibility = View.GONE
                 }
             }
         }

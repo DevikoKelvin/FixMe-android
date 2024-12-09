@@ -6,9 +6,11 @@ import android.content.ContentResolver
 import android.content.ContentValues
 import android.content.Intent
 import android.content.pm.PackageManager.PERMISSION_GRANTED
+import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import android.os.Environment
 import android.provider.MediaStore
 import android.provider.OpenableColumns
 import android.text.Editable
@@ -23,6 +25,7 @@ import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+import androidx.core.content.FileProvider
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.erela.fixme.R
@@ -93,14 +96,11 @@ class SubmissionFormActivity : AppCompatActivity() {
     ) {
         with(it) {
             if (resultCode == RESULT_OK) {
-                val imageUrl: Uri? = data?.data
-                if (imageUrl != null) {
-                    if (imageArrayUri.isEmpty())
-                        imageArrayUri.add(imageUrl)
-                    else {
-                        if (!imageArrayUri.contains(imageUrl))
-                            imageArrayUri.add(imageUrl)
-                    }
+                if (imageArrayUri.isEmpty()) {
+                    imageArrayUri.add(imageUri)
+                } else {
+                    if (!imageArrayUri.contains(imageUri))
+                        imageArrayUri.add(imageUri)
                 }
                 setManageAttachment()
             }
@@ -1365,14 +1365,6 @@ class SubmissionFormActivity : AppCompatActivity() {
             Log.e("createMultipartBody", "Error creating MultipartBody.Part", e)
             null
         }
-        /*val documentImage =
-            BitmapFactory.decodeFile(getRealPathFromURI(uri))
-        val file = File(getRealPathFromURI(uri))
-        val os: OutputStream = BufferedOutputStream(FileOutputStream(file))
-        documentImage.compress(Bitmap.CompressFormat.JPEG, 100, os)
-        os.close()
-        val requestBody = file.asRequestBody("image".toMediaTypeOrNull())
-        return MultipartBody.Part.createFormData(multipartName, file.name, requestBody)*/
     }
 
     private fun getRealPathFromURI(uri: Uri): String? {
@@ -1418,35 +1410,6 @@ class SubmissionFormActivity : AppCompatActivity() {
         return null
     }
 
-    /*private fun getRealPathFromURI(uri: Uri): String {
-        val returnCursor = contentResolver.query(uri, null, null, null, null)
-        val nameIndex = returnCursor!!.getColumnIndex(OpenableColumns.DISPLAY_NAME)
-        returnCursor.moveToFirst()
-        val name = returnCursor.getString(nameIndex)
-        val file = File(filesDir, name)
-        try {
-            val inputStream: InputStream? = contentResolver.openInputStream(uri)
-            val outputStream = FileOutputStream(file)
-            var read = 0
-            val maxBufferSize = 1 * 1024 * 1024
-            val bytesAvailable: Int = inputStream?.available() ?: 0
-            //int bufferSize = 1024;
-            val bufferSize = bytesAvailable.coerceAtMost(maxBufferSize)
-            val buffers = ByteArray(bufferSize)
-            while (inputStream?.read(buffers).also {
-                    if (it != null) {
-                        read = it
-                    }
-                } != -1) {
-                outputStream.write(buffers, 0, read)
-            }
-            inputStream?.close()
-            outputStream.close()
-        } catch (e: java.lang.Exception) {
-            Log.e("Exception", e.message!!)
-        }
-        return file.path
-    }*/
     private fun createPartFromString(stringData: String?): RequestBody? {
         return stringData?.toRequestBody("text/plain".toMediaTypeOrNull())
     }

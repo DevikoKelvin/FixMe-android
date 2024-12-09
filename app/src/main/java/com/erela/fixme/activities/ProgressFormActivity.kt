@@ -78,14 +78,11 @@ class ProgressFormActivity : AppCompatActivity() {
     ) {
         with(it) {
             if (resultCode == RESULT_OK) {
-                val imageUrl: Uri? = data?.data
-                if (imageUrl != null) {
-                    if (imageArrayUri.isEmpty())
-                        imageArrayUri.add(imageUrl)
-                    else {
-                        if (!imageArrayUri.contains(imageUrl))
-                            imageArrayUri.add(imageUrl)
-                    }
+                if (imageArrayUri.isEmpty()) {
+                    imageArrayUri.add(imageUri)
+                } else {
+                    if (!imageArrayUri.contains(imageUri))
+                        imageArrayUri.add(imageUri)
                 }
                 setManageAttachment()
             }

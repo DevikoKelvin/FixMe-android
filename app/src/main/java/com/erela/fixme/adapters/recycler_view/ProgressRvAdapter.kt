@@ -76,8 +76,10 @@ class ProgressRvAdapter(
                             .load(InitAPI.IMAGE_URL + image)
                             .placeholder(R.drawable.image_placeholder)
                             .into(submissionImage)
-                    } else
+                    } else {
                         imageContainer.visibility = View.GONE
+                        circleIndicator.visibility = View.GONE
+                    }
                 }
 
                 imageCarouselHolder.setOnLongClickListener {

@@ -29,7 +29,7 @@
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/imageContainer"
             android:layout_width="wrap_content"
-            android:layout_height="150dp"
+            android:layout_height="250dp"
             android:layout_gravity="center"
             app:cardBackgroundColor="@android:color/transparent"
             app:cardCornerRadius="0dp"
@@ -41,16 +41,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent" />
 
-            <me.relex.circleindicator.CircleIndicator
-                android:id="@+id/circleIndicator"
-                android:layout_width="match_parent"
-                android:layout_height="36dp"
-                android:layout_gravity="bottom"
-                android:padding="5dp"
-                app:ci_drawable="@drawable/circle_indicator_color"
-                app:ci_height="5dp"
-                app:ci_width="5dp" />
-
             <ImageView
                 android:id="@+id/submissionImage"
                 android:layout_width="match_parent"
@@ -60,6 +50,16 @@
                 tools:ignore="ContentDescription"
                 tools:src="@drawable/image_placeholder" />
         </com.google.android.material.card.MaterialCardView>
+
+        <me.relex.circleindicator.CircleIndicator
+            android:id="@+id/circleIndicator"
+            android:layout_width="match_parent"
+            android:layout_height="36dp"
+            android:layout_gravity="bottom"
+            android:padding="5dp"
+            app:ci_drawable="@drawable/circle_indicator_color"
+            app:ci_height="5dp"
+            app:ci_width="5dp" />
 
         <TextView
             android:id="@+id/progressDescription"
