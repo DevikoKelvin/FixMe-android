@@ -13,6 +13,7 @@ import androidx.core.content.res.ResourcesCompat
 import com.erela.fixme.R
 import com.erela.fixme.custom_views.CustomToast
 import com.erela.fixme.databinding.BsReportTrialBinding
+import com.erela.fixme.dialogs.ConfirmationDialog
 import com.erela.fixme.helpers.UserDataHelper
 import com.erela.fixme.helpers.networking.InitAPI
 import com.erela.fixme.objects.CreationResponse
@@ -76,162 +77,177 @@ class ReportTrialBottomSheet(context: Context, private val detail: SubmissionDet
 
     private fun executeReportTrial(pass: Boolean) {
         binding.apply {
-            if (pass) {
-                passLoading.visibility = View.VISIBLE
-                notPassLoading.visibility = View.GONE
-            } else {
-                passLoading.visibility = View.GONE
-                notPassLoading.visibility = View.VISIBLE
-            }
-            try {
-                InitAPI.getAPI.reportTrial(
-                    userData.id,
-                    detail.idGaprojects!!,
-                    descriptionField.text.toString(),
-                    if (pass) 0 else 1
-                ).enqueue(object : Callback<CreationResponse> {
-                    override fun onResponse(
-                        call: Call<CreationResponse>, response: Response<CreationResponse>
-                    ) {
-                        passLoading.visibility = View.GONE
-                        notPassLoading.visibility = View.GONE
-                        if (response.isSuccessful) {
-                            if (response.body() != null) {
-                                val result = response.body()
-                                if (result?.code == 1) {
-                                    CustomToast.getInstance(context)
-                                        .setBackgroundColor(
-                                            ResourcesCompat.getColor(
-                                                context.resources,
-                                                R.color.custom_toast_background_success,
-                                                context.theme
-                                            )
-                                        )
-                                        .setFontColor(
-                                            ResourcesCompat.getColor(
-                                                context.resources,
-                                                R.color.custom_toast_font_success,
-                                                context.theme
-                                            )
-                                        )
-                                        .setMessage("Trial report successfully submitted!")
-                                        .show()
-                                    onReportTrialSuccessListener.reportTrialSuccess()
-                                    dismiss()
-                                } else {
-                                    CustomToast.getInstance(context)
-                                        .setBackgroundColor(
-                                            ResourcesCompat.getColor(
-                                                context.resources,
-                                                R.color.custom_toast_background_failed,
-                                                context.theme
-                                            )
-                                        )
-                                        .setFontColor(
-                                            ResourcesCompat.getColor(
-                                                context.resources,
-                                                R.color.custom_toast_font_failed,
-                                                context.theme
-                                            )
-                                        )
-                                        .setMessage("Failed to report the trial")
-                                        .show()
-                                    Log.e(
-                                        "ERROR ${response.code()}",
-                                        "Report Trial Response code 0 | ${response.message()}"
-                                    )
-                                }
+            val confirmationDialog = ConfirmationDialog(
+                context,
+                if (pass) "Are you sure you want to report this trial as passed?" else "Are you sure you want to report this trial as failed?",
+                "Yes"
+            ).also {
+                with(it) {
+                    setConfirmationDialogListener(object : ConfirmationDialog.ConfirmationDialogListener {
+                        override fun onConfirm() {
+                            if (pass) {
+                                passLoading.visibility = View.VISIBLE
+                                notPassLoading.visibility = View.GONE
                             } else {
+                                passLoading.visibility = View.GONE
+                                notPassLoading.visibility = View.VISIBLE
+                            }
+                            try {
+                                InitAPI.getAPI.reportTrial(
+                                    userData.id,
+                                    detail.idGaprojects!!,
+                                    descriptionField.text.toString(),
+                                    if (pass) 0 else 1
+                                ).enqueue(object : Callback<CreationResponse> {
+                                    override fun onResponse(
+                                        call: Call<CreationResponse>, response: Response<CreationResponse>
+                                    ) {
+                                        passLoading.visibility = View.GONE
+                                        notPassLoading.visibility = View.GONE
+                                        if (response.isSuccessful) {
+                                            if (response.body() != null) {
+                                                val result = response.body()
+                                                if (result?.code == 1) {
+                                                    CustomToast.getInstance(context)
+                                                        .setBackgroundColor(
+                                                            ResourcesCompat.getColor(
+                                                                context.resources,
+                                                                R.color.custom_toast_background_success,
+                                                                context.theme
+                                                            )
+                                                        )
+                                                        .setFontColor(
+                                                            ResourcesCompat.getColor(
+                                                                context.resources,
+                                                                R.color.custom_toast_font_success,
+                                                                context.theme
+                                                            )
+                                                        )
+                                                        .setMessage("Trial report successfully submitted!")
+                                                        .show()
+                                                    onReportTrialSuccessListener.reportTrialSuccess()
+                                                    dismiss()
+                                                } else {
+                                                    CustomToast.getInstance(context)
+                                                        .setBackgroundColor(
+                                                            ResourcesCompat.getColor(
+                                                                context.resources,
+                                                                R.color.custom_toast_background_failed,
+                                                                context.theme
+                                                            )
+                                                        )
+                                                        .setFontColor(
+                                                            ResourcesCompat.getColor(
+                                                                context.resources,
+                                                                R.color.custom_toast_font_failed,
+                                                                context.theme
+                                                            )
+                                                        )
+                                                        .setMessage("Failed to report the trial")
+                                                        .show()
+                                                    Log.e(
+                                                        "ERROR ${response.code()}",
+                                                        "Report Trial Response code 0 | ${response.message()}"
+                                                    )
+                                                }
+                                            } else {
+                                                CustomToast.getInstance(context)
+                                                    .setBackgroundColor(
+                                                        ResourcesCompat.getColor(
+                                                            context.resources,
+                                                            R.color.custom_toast_background_failed,
+                                                            context.theme
+                                                        )
+                                                    )
+                                                    .setFontColor(
+                                                        ResourcesCompat.getColor(
+                                                            context.resources,
+                                                            R.color.custom_toast_font_failed,
+                                                            context.theme
+                                                        )
+                                                    )
+                                                    .setMessage("Failed to report the trial")
+                                                    .show()
+                                                Log.e(
+                                                    "ERROR ${response.code()}",
+                                                    "Report Trial Response null | ${response.message()}"
+                                                )
+                                            }
+                                        } else {
+                                            CustomToast.getInstance(context)
+                                                .setBackgroundColor(
+                                                    ResourcesCompat.getColor(
+                                                        context.resources,
+                                                        R.color.custom_toast_background_failed,
+                                                        context.theme
+                                                    )
+                                                )
+                                                .setFontColor(
+                                                    ResourcesCompat.getColor(
+                                                        context.resources,
+                                                        R.color.custom_toast_font_failed,
+                                                        context.theme
+                                                    )
+                                                )
+                                                .setMessage("Failed to report the trial")
+                                                .show()
+                                            Log.e(
+                                                "ERROR ${response.code()}",
+                                                "Report Trial Fail | ${response.message()}"
+                                            )
+                                        }
+                                    }
+
+                                    override fun onFailure(call: Call<CreationResponse>, throwable: Throwable) {
+                                        passLoading.visibility = View.GONE
+                                        notPassLoading.visibility = View.GONE
+                                        CustomToast.getInstance(context)
+                                            .setBackgroundColor(
+                                                ResourcesCompat.getColor(
+                                                    context.resources,
+                                                    R.color.custom_toast_background_failed,
+                                                    context.theme
+                                                )
+                                            )
+                                            .setFontColor(
+                                                ResourcesCompat.getColor(
+                                                    context.resources,
+                                                    R.color.custom_toast_font_failed,
+                                                    context.theme
+                                                )
+                                            )
+                                            .setMessage("Something went wrong, please try again later")
+                                            .show()
+                                        throwable.printStackTrace()
+                                        Log.e("ERROR", "Report Trial Failure | $throwable")
+                                    }
+                                })
+                            } catch (jsonException: JSONException) {
+                                passLoading.visibility = View.GONE
+                                notPassLoading.visibility = View.GONE
                                 CustomToast.getInstance(context)
                                     .setBackgroundColor(
                                         ResourcesCompat.getColor(
-                                            context.resources,
-                                            R.color.custom_toast_background_failed,
-                                            context.theme
+                                            context.resources, R.color.custom_toast_background_failed, context.theme
                                         )
                                     )
                                     .setFontColor(
                                         ResourcesCompat.getColor(
-                                            context.resources,
-                                            R.color.custom_toast_font_failed,
-                                            context.theme
+                                            context.resources, R.color.custom_toast_font_failed, context.theme
                                         )
                                     )
-                                    .setMessage("Failed to report the trial")
+                                    .setMessage("Something went wrong, please try again later")
                                     .show()
-                                Log.e(
-                                    "ERROR ${response.code()}",
-                                    "Report Trial Response null | ${response.message()}"
-                                )
+                                jsonException.printStackTrace()
+                                Log.e("ERROR", "Report Trial Exception | $jsonException")
                             }
-                        } else {
-                            CustomToast.getInstance(context)
-                                .setBackgroundColor(
-                                    ResourcesCompat.getColor(
-                                        context.resources,
-                                        R.color.custom_toast_background_failed,
-                                        context.theme
-                                    )
-                                )
-                                .setFontColor(
-                                    ResourcesCompat.getColor(
-                                        context.resources,
-                                        R.color.custom_toast_font_failed,
-                                        context.theme
-                                    )
-                                )
-                                .setMessage("Failed to report the trial")
-                                .show()
-                            Log.e(
-                                "ERROR ${response.code()}",
-                                "Report Trial Fail | ${response.message()}"
-                            )
                         }
-                    }
-
-                    override fun onFailure(call: Call<CreationResponse>, throwable: Throwable) {
-                        passLoading.visibility = View.GONE
-                        notPassLoading.visibility = View.GONE
-                        CustomToast.getInstance(context)
-                            .setBackgroundColor(
-                                ResourcesCompat.getColor(
-                                    context.resources,
-                                    R.color.custom_toast_background_failed,
-                                    context.theme
-                                )
-                            )
-                            .setFontColor(
-                                ResourcesCompat.getColor(
-                                    context.resources,
-                                    R.color.custom_toast_font_failed,
-                                    context.theme
-                                )
-                            )
-                            .setMessage("Something went wrong, please try again later")
-                            .show()
-                        throwable.printStackTrace()
-                        Log.e("ERROR", "Report Trial Failure | $throwable")
-                    }
-                })
-            } catch (jsonException: JSONException) {
-                passLoading.visibility = View.GONE
-                notPassLoading.visibility = View.GONE
-                CustomToast.getInstance(context)
-                    .setBackgroundColor(
-                        ResourcesCompat.getColor(
-                            context.resources, R.color.custom_toast_background_failed, context.theme
-                        )
-                    )
-                    .setFontColor(
-                        ResourcesCompat.getColor(
-                            context.resources, R.color.custom_toast_font_failed, context.theme
-                        )
-                    )
-                    .setMessage("Something went wrong, please try again later")
-                    .show()
-                jsonException.printStackTrace()
-                Log.e("ERROR", "Report Trial Exception | $jsonException")
+                    })
+                }
             }
+
+            if (confirmationDialog.window != null)
+                confirmationDialog.show()
         }
     }
 
