@@ -17,6 +17,7 @@ import com.github.tutorialsandroid.appxupdater.AppUpdater
 import com.github.tutorialsandroid.appxupdater.AppUpdaterUtils
 import com.github.tutorialsandroid.appxupdater.enums.AppUpdaterError
 import com.github.tutorialsandroid.appxupdater.enums.UpdateFrom
+import com.github.tutorialsandroid.appxupdater.objects.Update
 
 class SettingsActivity : AppCompatActivity() {
     private val binding: ActivitySettingsBinding by lazy {
@@ -53,10 +54,8 @@ class SettingsActivity : AppCompatActivity() {
                     with(it) {
                         setUpdateFrom(UpdateFrom.GITHUB)
                         setGitHubUserAndRepo("DevikoKelvin", "FixMe-android")
-                        withListener(object : AppUpdaterUtils.AppUpdaterListener {
-                            override fun onSuccess(
-                                latestVersion: String?, isUpdateAvailable: Boolean?
-                            ) {
+                        withListener(object : AppUpdaterUtils.UpdateListener {
+                            override fun onSuccess(update: Update?, isUpdateAvailable: Boolean?) {
                                 if (isUpdateAvailable == true) {
                                     Log.e("Update Available", isUpdateAvailable.toString())
                                     checkDownloadInstallText.text =
@@ -69,7 +68,7 @@ class SettingsActivity : AppCompatActivity() {
                                         )
                                     )
                                     newAppVersionText.text =
-                                        "Detected new app version: $latestVersion"
+                                        "Detected new app version: ${update?.latestVersion}"
                                     newAppVersionText.visibility = View.VISIBLE
                                 } else {
                                     CustomToast.getInstance(applicationContext)
