@@ -99,6 +99,10 @@ class MainActivity : AppCompatActivity() {
                 startActivity(Intent(this@MainActivity, SubmissionListActivity::class.java))
             }
 
+            settingsMenu.setOnClickListener {
+                startActivity(Intent(this@MainActivity, SettingsActivity::class.java))
+            }
+
             logOutButton.setOnClickListener {
                 val confirmationDialog =
                     ConfirmationDialog(

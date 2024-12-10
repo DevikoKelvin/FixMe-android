@@ -1,8 +1,6 @@
 [versions]
 # Plugins
 agp = "8.7.3"
-cameraCore = "1.4.0"
-cameraCamera2 = "1.4.0"
 kotlin = "1.9.24"
 googleServices = "4.4.2"
 
@@ -27,6 +25,7 @@ lottie = "6.4.0"
 glide = "4.16.0"
 swipeRefreshLayout = "1.1.0"
 circleIndicator = "2.1.6"
+appxupdater = "v2.0.20"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -37,9 +36,6 @@ androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version
 material = { group = "com.google.android.material", name = "material", version.ref = "material" }
 androidx-activity = { group = "androidx.activity", name = "activity", version.ref = "activity" }
 androidx-constraintlayout = { group = "androidx.constraintlayout", name = "constraintlayout", version.ref = "constraintlayout" }
-androidx-camera-core = { module = "androidx.camera:camera-core", version.ref = "cameraCore" }
-androidx-camera-camera2 = { module = "androidx.camera:camera-camera2", version.ref = "cameraCamera2" }
-androidx-camera-view = { module = "androidx.camera:camera-view", version.ref = "cameraCore" }
 
 # Third-party Libraries
 firebase-bom = { group = "com.google.firebase", name = "firebase-bom", version.ref = "firebaseBom" }
@@ -54,6 +50,7 @@ lottie = { group = "com.airbnb.android", name = "lottie", version.ref = "lottie"
 glide = { group = "com.github.bumptech.glide", name = "glide", version.ref = "glide" }
 swipeRefreshLayout = { group = "androidx.swiperefreshlayout", name = "swiperefreshlayout", version.ref = "swipeRefreshLayout" }
 circleIndicator = { group = "me.relex", name = "circleIndicator", version.ref = "circleIndicator" }
+appxupdater = { module = "com.github.TutorialsAndroid:AppXUpdater", version.ref = "appxupdater" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

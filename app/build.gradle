@@ -15,9 +15,11 @@ android {
         //noinspection EditedTargetSdkVersion
         targetSdk 35
         versionCode 1
-        versionName "1.0"
+        versionName "1.0.2"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+
+        buildConfigField("String", "APP_UPDATE_URL", APP_UPDATE_URL)
     }
 
     buildTypes {
@@ -51,9 +53,6 @@ dependencies {
     implementation libs.androidx.activity
     implementation libs.androidx.constraintlayout
     implementation libs.swipeRefreshLayout
-    implementation(libs.androidx.camera.core)
-    implementation(libs.androidx.camera.camera2)
-    implementation(libs.androidx.camera.view)
 
     // 3rd-party
     implementation libs.flexbox
@@ -67,6 +66,7 @@ dependencies {
     implementation libs.okhttp3
     implementation libs.converter.gson
     implementation libs.logging.interceptor
+    implementation libs.appxupdater
 
     // Testing
     testImplementation libs.junit
