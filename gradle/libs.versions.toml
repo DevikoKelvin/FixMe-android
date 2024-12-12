@@ -16,12 +16,14 @@ constraintlayout = "2.2.0"
 
 # Third-party Dependencies
 firebaseBom = "33.7.0"
+firebaseMessaging="24.1.0"
+firebaseAnalytic="22.1.2"
 retrofit = "2.11.0"
-okhttp3 = "4.12.0"
+okhttp3 = "5.0.0-alpha.14"
 converterGson = "2.11.0"
 loggingInterceptor = "5.0.0-alpha.14"
 flexbox = "3.0.0"
-lottie = "6.4.0"
+lottie = "6.6.1"
 glide = "4.16.0"
 swipeRefreshLayout = "1.1.0"
 circleIndicator = "2.1.6"
@@ -39,8 +41,8 @@ androidx-constraintlayout = { group = "androidx.constraintlayout", name = "const
 
 # Third-party Libraries
 firebase-bom = { group = "com.google.firebase", name = "firebase-bom", version.ref = "firebaseBom" }
-firebase-messaging = { module = "com.google.firebase:firebase-messaging" }
-firebase-analytics = { module = "com.google.firebase:firebase-analytics" }
+firebase-messaging = { module = "com.google.firebase:firebase-messaging", version.ref = "firebaseMessaging" }
+firebase-analytics = { module = "com.google.firebase:firebase-analytics", version.ref = "firebaseAnalytic" }
 okhttp3 = { group = "com.squareup.okhttp3", name = "okhttp", version.ref = "okhttp3" }
 retrofit = { group = "com.squareup.retrofit2", name = "retrofit", version.ref = "retrofit" }
 converter-gson = { group = "com.squareup.retrofit2", name = "converter-gson", version.ref = "converterGson" }
