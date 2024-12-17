@@ -24,7 +24,6 @@ class SettingsActivity : AppCompatActivity() {
         ActivitySettingsBinding.inflate(layoutInflater)
     }
     private lateinit var currentAppVersion: String
-    private val updateUrl: String = BuildConfig.APP_UPDATE_URL
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
