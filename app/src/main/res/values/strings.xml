@@ -82,7 +82,10 @@
     <string name="mark_progress_done">Mark This Progress as Done</string>
     <string name="action_ready_trial">Ready to Trial!</string>
     <string name="action_on_trial">Start Trial</string>
-    <string name="action_cancel">Cancel This Issue</string>
+    <string name="more_options">More</string>
+    <string name="action_edit">Edit</string>
+    <string name="action_cancel">Cancel</string>
+    <string name="action_cancel_this_issue">Cancel This Issue</string>
     <string name="action_done">Done This Issue</string>
 
     <string name="repair_analysis">Repair Analysis</string>

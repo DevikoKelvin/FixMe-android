@@ -21,6 +21,7 @@ import com.erela.fixme.bottom_sheets.ProgressTrackingBottomSheet
 import com.erela.fixme.bottom_sheets.ReportTrialBottomSheet
 import com.erela.fixme.bottom_sheets.SubmissionActionBottomSheet
 import com.erela.fixme.bottom_sheets.TrialTrackingBottomSheet
+import com.erela.fixme.bottom_sheets.UpdateStatusBottomSheet
 import com.erela.fixme.custom_views.CustomToast
 import com.erela.fixme.databinding.ActivitySubmissionDetailBinding
 import com.erela.fixme.dialogs.ConfirmationDialog
@@ -42,11 +43,11 @@ import retrofit2.Callback
 import retrofit2.Response
 
 class SubmissionDetailActivity : AppCompatActivity(),
-    SubmissionActionBottomSheet.OnUpdateSuccessListener,
-    ProgressTrackingBottomSheet.OnProgressTrackingListener,
-    ProgressTrackingBottomSheet.OnProgressItemLongTapListener,
-    ProgressOptionDialog.OnProgressOptionDialogListener,
-    TrialTrackingBottomSheet.OnTrialTrackingListener {
+                                 SubmissionActionBottomSheet.OnUpdateSuccessListener,
+                                 ProgressTrackingBottomSheet.OnProgressTrackingListener,
+                                 ProgressTrackingBottomSheet.OnProgressItemLongTapListener,
+                                 ProgressOptionDialog.OnProgressOptionDialogListener,
+                                 TrialTrackingBottomSheet.OnTrialTrackingListener {
     private val binding: ActivitySubmissionDetailBinding by lazy {
         ActivitySubmissionDetailBinding.inflate(layoutInflater)
     }
@@ -54,10 +55,10 @@ class SubmissionDetailActivity : AppCompatActivity(),
     private lateinit var imageCarouselAdapter: ImageCarouselPagerAdapter
     private lateinit var detailId: String
     private lateinit var userData: UserData
-    private lateinit var userDetail: UserDetailResponse
     private lateinit var detailData: SubmissionDetailResponse
     private lateinit var progressTrackingBottomSheet: ProgressTrackingBottomSheet
     private var message: StringBuilder = StringBuilder()
+    private var isFabVisible = false
     val activityResultLauncher: ActivityResultLauncher<Intent> = registerForActivityResult(
         ActivityResultContracts.StartActivityForResult()
     ) {
@@ -105,6 +106,12 @@ class SubmissionDetailActivity : AppCompatActivity(),
     @SuppressLint("SetTextI18n")
     private fun init() {
         binding.apply {
+            isFabVisible = false
+            actionSelfButton.extend()
+            editButton.hide()
+            editButton.shrink()
+            cancelButton.hide()
+            cancelButton.shrink()
             detailId = intent.getStringExtra(DETAIL_ID).toString()
 
             backButton.setOnClickListener {
@@ -190,7 +197,7 @@ class SubmissionDetailActivity : AppCompatActivity(),
                                             )
                                             submissionStatusText.text = "Rejected"
                                             actionButton.visibility = View.GONE
-                                            editButton.visibility = View.GONE
+                                            actionSelfButton.visibility = View.GONE
                                             onProgressButton.visibility = View.GONE
                                             messageProgressAndTrialButtonContainer.visibility =
                                                 View.VISIBLE
@@ -250,7 +257,7 @@ class SubmissionDetailActivity : AppCompatActivity(),
 
                                             if (tech) {
                                                 actionButton.visibility = View.VISIBLE
-                                                editButton.visibility = View.GONE
+                                                actionSelfButton.visibility = View.GONE
                                                 onProgressButton.visibility = View.GONE
                                                 messageProgressAndTrialButtonContainer.visibility =
                                                     View.GONE
@@ -258,14 +265,14 @@ class SubmissionDetailActivity : AppCompatActivity(),
                                             } else {
                                                 if (spv) {
                                                     actionButton.visibility = View.VISIBLE
-                                                    editButton.visibility = View.GONE
+                                                    actionSelfButton.visibility = View.GONE
                                                     onProgressButton.visibility = View.GONE
                                                     messageProgressAndTrialButtonContainer.visibility =
                                                         View.GONE
                                                     statusMessageContainer.visibility = View.GONE
                                                 } else {
                                                     actionButton.visibility = View.GONE
-                                                    editButton.visibility = View.GONE
+                                                    actionSelfButton.visibility = View.GONE
                                                     onProgressButton.visibility = View.GONE
                                                     messageProgressAndTrialButtonContainer.visibility =
                                                         View.VISIBLE
@@ -362,7 +369,7 @@ class SubmissionDetailActivity : AppCompatActivity(),
                                             )
                                             submissionStatusText.text = "On Progress"
                                             actionButton.visibility = View.GONE
-                                            editButton.visibility = View.GONE
+                                            actionSelfButton.visibility = View.GONE
                                             messageProgressAndTrialButtonContainer.visibility =
                                                 View.VISIBLE
                                             statusMessageContainer.visibility = View.GONE
@@ -432,7 +439,7 @@ class SubmissionDetailActivity : AppCompatActivity(),
                                             )
                                             submissionStatusText.text = "Progress Done"
                                             actionButton.visibility = View.GONE
-                                            editButton.visibility = View.GONE
+                                            actionSelfButton.visibility = View.GONE
                                             onProgressButton.visibility = View.VISIBLE
                                             message =
                                                 StringBuilder().append(
@@ -508,7 +515,7 @@ class SubmissionDetailActivity : AppCompatActivity(),
                                             )
                                             submissionStatusText.text = "Done"
                                             actionButton.visibility = View.GONE
-                                            editButton.visibility = View.GONE
+                                            actionSelfButton.visibility = View.GONE
                                             onProgressButton.visibility = View.GONE
                                             messageProgressAndTrialButtonContainer.visibility =
                                                 View.VISIBLE
@@ -562,6 +569,45 @@ class SubmissionDetailActivity : AppCompatActivity(),
                                                     trialBottomSheet.show()
                                             }
                                         }
+                                        // Canceled
+                                        5 -> {
+                                            submissionStatus.setCardBackgroundColor(
+                                                ResourcesCompat.getColor(
+                                                    resources,
+                                                    R.color.custom_toast_background_failed,
+                                                    theme
+                                                )
+                                            )
+                                            submissionStatusText.text = "Canceled"
+                                            submissionStatusText.setTextColor(
+                                                ContextCompat.getColor(
+                                                    this@SubmissionDetailActivity,
+                                                    R.color.black
+                                                )
+                                            )
+                                            actionButton.visibility = View.GONE
+                                            actionSelfButton.visibility = View.GONE
+                                            onProgressButton.visibility = View.GONE
+                                            messageProgressAndTrialButtonContainer.visibility =
+                                                View.VISIBLE
+                                            statusMessageContainer.visibility = View.VISIBLE
+                                            statusMessageContainer.setCardBackgroundColor(
+                                                ContextCompat.getColor(
+                                                    this@SubmissionDetailActivity,
+                                                    R.color.custom_toast_background_failed
+                                                )
+                                            )
+                                            statusMessage.text = if (userData.id == data.idUser)
+                                                "Canceled by You"
+                                            else
+                                                "Canceled by the reporter, ${data.namaUserBuat?.trimEnd()}"
+                                            statusMessage.setTextColor(
+                                                ContextCompat.getColor(
+                                                    this@SubmissionDetailActivity,
+                                                    R.color.black
+                                                )
+                                            )
+                                        }
                                         // On-Trial
                                         31 -> {
                                             submissionStatus.setCardBackgroundColor(
@@ -573,7 +619,7 @@ class SubmissionDetailActivity : AppCompatActivity(),
                                             )
                                             submissionStatusText.text = "On Trial"
                                             actionButton.visibility = View.GONE
-                                            editButton.visibility = View.GONE
+                                            actionSelfButton.visibility = View.GONE
                                             onProgressButton.visibility = View.GONE
                                             messageProgressAndTrialButtonContainer.visibility =
                                                 View.VISIBLE
@@ -637,7 +683,9 @@ class SubmissionDetailActivity : AppCompatActivity(),
                                     machineName.text = if (data.namaMesin != null) {
                                         data.namaMesin.ifEmpty { "-" }
                                     } else "-"
-                                    try {
+                                    user.text = data.namaUserBuat?.trimEnd()
+                                    actionCondition(data)
+                                    /*try {
                                         InitAPI.getAPI.getUserDetail(data.idUser!!.toInt())
                                             .enqueue(object : Callback<UserDetailResponse> {
                                                 override fun onResponse(
@@ -677,7 +725,7 @@ class SubmissionDetailActivity : AppCompatActivity(),
                                         user.text = "Can't retrieve Reporter's name"
                                         Log.e("ERROR", exception.toString())
                                         exception.printStackTrace()
-                                    }
+                                    }*/
                                     department.text = data.deptTujuan
                                     inputTime.text = data.tglInput
                                     location.text = data.lokasi
@@ -770,7 +818,7 @@ class SubmissionDetailActivity : AppCompatActivity(),
         }
     }
 
-    private fun actionCondition(data: SubmissionDetailResponse, userDetail: UserDetailResponse) {
+    private fun actionCondition(data: SubmissionDetailResponse) {
         binding.apply {
             InitAPI.getAPI.getUserFromStarConnect(data.idUser!!.toInt())
                 .enqueue(object : Callback<StarconnectUserResponse> {
@@ -789,54 +837,95 @@ class SubmissionDetailActivity : AppCompatActivity(),
                                             ) {
                                                 if (data.idUser.toInt() == userData.id) {
                                                     actionButton.visibility = View.GONE
-                                                    editButton.visibility = View.VISIBLE
+                                                    actionSelfButton.visibility = View.VISIBLE
+                                                    actionSelfButton.extend()
                                                     onProgressButton.visibility = View.GONE
-
-                                                    editButton.setOnClickListener {
-                                                        activityResultLauncher.launch(
-                                                            Intent(
-                                                                this@SubmissionDetailActivity,
-                                                                SubmissionFormActivity::class.java
-                                                            ).also {
-                                                                with(it) {
-                                                                    putExtra("data", data)
-                                                                }
-                                                            }
-                                                        )
-                                                    }
                                                 } else {
                                                     if (userData.privilege < 2) {
                                                         actionButton.visibility = View.VISIBLE
-                                                        editButton.visibility = View.GONE
+                                                        actionSelfButton.visibility = View.GONE
                                                         onProgressButton.visibility = View.GONE
                                                     }
                                                 }
                                             } else {
                                                 if (data.idUser.toInt() == userData.id) {
                                                     actionButton.visibility = View.GONE
-                                                    editButton.visibility = View.VISIBLE
+                                                    actionSelfButton.visibility = View.VISIBLE
+                                                    actionSelfButton.extend()
                                                     onProgressButton.visibility = View.GONE
-
-                                                    editButton.setOnClickListener {
-                                                        activityResultLauncher.launch(
-                                                            Intent(
-                                                                this@SubmissionDetailActivity,
-                                                                SubmissionFormActivity::class.java
-                                                            ).also {
-                                                                with(it) {
-                                                                    putExtra("data", data)
-                                                                }
-                                                            }
-                                                        )
-                                                    }
                                                 } else {
                                                     if (userData.privilege < 2) {
                                                         actionButton.visibility = View.GONE
-                                                        editButton.visibility = View.GONE
+                                                        actionSelfButton.visibility = View.GONE
                                                         onProgressButton.visibility = View.GONE
                                                     }
                                                 }
                                             }
+                                        }
+                                    }
+
+                                    actionSelfButton.setOnClickListener {
+                                        if (!isFabVisible) {
+                                            actionSelfButton.shrink()
+                                            editButton.show()
+                                            editButton.extend()
+                                            cancelButton.show()
+                                            cancelButton.extend()
+
+                                            editButton.setOnClickListener {
+                                                activityResultLauncher.launch(
+                                                    Intent(
+                                                        this@SubmissionDetailActivity,
+                                                        SubmissionFormActivity::class.java
+                                                    ).also {
+                                                        with(it) {
+                                                            putExtra("data", data)
+                                                        }
+                                                    }
+                                                )
+                                            }
+
+                                            cancelButton.setOnClickListener {
+                                                actionSelfButton.extend()
+                                                editButton.hide()
+                                                editButton.shrink()
+                                                cancelButton.hide()
+                                                cancelButton.shrink()
+                                                isFabVisible = false
+                                                val bottomSheet = UpdateStatusBottomSheet(
+                                                    this@SubmissionDetailActivity,
+                                                    data,
+                                                    approve = false,
+                                                    cancel = true,
+                                                    deployTech = false
+                                                ).also { bs ->
+                                                    with(bs) {
+                                                        setOnUpdateSuccessListener(object : UpdateStatusBottomSheet.OnUpdateSuccessListener {
+                                                            override fun onApproved() {}
+
+                                                            override fun onRejected() {}
+
+                                                            override fun onCanceled() {
+                                                                init()
+                                                            }
+
+                                                            override fun onTechniciansDeployed() {}
+                                                        })
+                                                    }
+                                                }
+
+                                                if (bottomSheet.window != null)
+                                                    bottomSheet.show()
+                                            }
+
+                                            isFabVisible = true
+                                        } else {
+                                            actionSelfButton.extend()
+                                            editButton.hide()
+                                            editButton.shrink()
+                                            cancelButton.hide()
+                                            cancelButton.shrink()
+                                            isFabVisible = false
                                         }
                                     }
                                     actionButton.setOnClickListener {

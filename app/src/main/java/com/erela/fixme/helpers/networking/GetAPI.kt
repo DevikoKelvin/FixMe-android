@@ -210,4 +210,12 @@ interface GetAPI {
         @Field("id") idGaProjects: Int,
         @Field("id_user") idUser: Int
     ): Call<GenericSimpleResponse>
+
+    @FormUrlEncoded
+    @POST("statuscancel")
+    fun cancelSubmission(
+        @Field("id_user") idUser: Int,
+        @Field("id_gaprojects") idGaProjects: Int,
+        @Field("keterangan") description: String
+    ): Call<GenericSimpleResponse>
 }

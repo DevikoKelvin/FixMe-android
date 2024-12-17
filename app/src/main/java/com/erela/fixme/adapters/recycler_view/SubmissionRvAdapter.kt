@@ -101,6 +101,13 @@ class SubmissionRvAdapter(val context: Context, val data: ArrayList<SubmissionLi
                             )
                         )
                         submissionStatusText.text = "Rejected"
+                        submissionStatusText.setTextColor(
+                            ResourcesCompat.getColor(
+                                context.resources,
+                                R.color.white,
+                                context.theme
+                            )
+                        )
                     }
 
                     1 -> {
@@ -112,6 +119,13 @@ class SubmissionRvAdapter(val context: Context, val data: ArrayList<SubmissionLi
                             )
                         )
                         submissionStatusText.text = "Pending"
+                        submissionStatusText.setTextColor(
+                            ResourcesCompat.getColor(
+                                context.resources,
+                                R.color.white,
+                                context.theme
+                            )
+                        )
                     }
 
                     2 -> {
@@ -123,6 +137,13 @@ class SubmissionRvAdapter(val context: Context, val data: ArrayList<SubmissionLi
                             )
                         )
                         submissionStatusText.text = "Approved"
+                        submissionStatusText.setTextColor(
+                            ResourcesCompat.getColor(
+                                context.resources,
+                                R.color.white,
+                                context.theme
+                            )
+                        )
                     }
 
                     3 -> {
@@ -134,6 +155,13 @@ class SubmissionRvAdapter(val context: Context, val data: ArrayList<SubmissionLi
                             )
                         )
                         submissionStatusText.text = "On Progress"
+                        submissionStatusText.setTextColor(
+                            ResourcesCompat.getColor(
+                                context.resources,
+                                R.color.white,
+                                context.theme
+                            )
+                        )
                     }
 
                     30 -> {
@@ -145,6 +173,13 @@ class SubmissionRvAdapter(val context: Context, val data: ArrayList<SubmissionLi
                             )
                         )
                         submissionStatusText.text = "Progress Done"
+                        submissionStatusText.setTextColor(
+                            ResourcesCompat.getColor(
+                                context.resources,
+                                R.color.white,
+                                context.theme
+                            )
+                        )
                     }
 
                     4 -> {
@@ -156,6 +191,31 @@ class SubmissionRvAdapter(val context: Context, val data: ArrayList<SubmissionLi
                             )
                         )
                         submissionStatusText.text = "Done"
+                        submissionStatusText.setTextColor(
+                            ResourcesCompat.getColor(
+                                context.resources,
+                                R.color.white,
+                                context.theme
+                            )
+                        )
+                    }
+
+                    5 -> {
+                        submissionStatus.setCardBackgroundColor(
+                            ResourcesCompat.getColor(
+                                context.resources,
+                                R.color.custom_toast_background_failed,
+                                context.theme
+                            )
+                        )
+                        submissionStatusText.text = "Canceled"
+                        submissionStatusText.setTextColor(
+                            ResourcesCompat.getColor(
+                                context.resources,
+                                R.color.custom_toast_font_failed,
+                                context.theme
+                            )
+                        )
                     }
 
                     31 -> {
@@ -167,6 +227,13 @@ class SubmissionRvAdapter(val context: Context, val data: ArrayList<SubmissionLi
                             )
                         )
                         submissionStatusText.text = "On Trial"
+                        submissionStatusText.setTextColor(
+                            ResourcesCompat.getColor(
+                                context.resources,
+                                R.color.white,
+                                context.theme
+                            )
+                        )
                     }
                 }
 

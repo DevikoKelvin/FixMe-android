@@ -156,13 +156,6 @@ class SubmissionFormActivity : AppCompatActivity() {
     @SuppressLint("NotifyDataSetChanged")
     private fun init() {
         binding.apply {
-            backButton.setOnClickListener {
-                onBackPressedDispatcher.onBackPressed()
-            }
-
-            machineCodeFieldLayout.visibility = View.GONE
-            machineNameFieldLayout.visibility = View.GONE
-
             detail = try {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
                     intent.getParcelableExtra("data", SubmissionDetailResponse::class.java)!!
@@ -172,6 +165,16 @@ class SubmissionFormActivity : AppCompatActivity() {
             } catch (nullPointerException: NullPointerException) {
                 null
             }
+
+            backButton.setOnClickListener {
+                onBackPressedDispatcher.onBackPressed()
+                if (detail != null) {
+                    setResult(RESULT_OK)
+                }
+            }
+
+            machineCodeFieldLayout.visibility = View.GONE
+            machineNameFieldLayout.visibility = View.GONE
 
             if (detail != null) {
                 pageTitle.text = getString(R.string.edit_submission_title)

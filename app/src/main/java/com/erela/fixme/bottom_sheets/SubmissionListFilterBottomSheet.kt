@@ -30,6 +30,7 @@ class SubmissionListFilterBottomSheet(context: Context, private val selectedFilt
             when (selectedFilter) {
                 -1 -> {
                     pendingSelector.isChecked = false
+                    canceledSelector.isChecked = false
                     rejectedSelector.isChecked = false
                     approvedSelector.isChecked = false
                     onProgressSelector.isChecked = false
@@ -37,12 +38,13 @@ class SubmissionListFilterBottomSheet(context: Context, private val selectedFilt
                 }
 
                 1 -> pendingSelector.isChecked = true
+                5 -> canceledSelector.isChecked = true
                 0 -> rejectedSelector.isChecked = true
                 2 -> approvedSelector.isChecked = true
                 3 -> onProgressSelector.isChecked = true
                 30 -> progressDoneSelector.isChecked = true
-                31 -> onTrialSelector.isChecked = true
                 4 -> doneSelector.isChecked = true
+                31 -> onTrialSelector.isChecked = true
             }
 
             clearFilterButton.setOnClickListener {
@@ -52,6 +54,11 @@ class SubmissionListFilterBottomSheet(context: Context, private val selectedFilt
 
             pendingSelector.setOnClickListener {
                 onFilterListener.onFilter(1, 1)
+                dismiss()
+            }
+
+            canceledSelector.setOnClickListener {
+                onFilterListener.onFilter(5, 5)
                 dismiss()
             }
 

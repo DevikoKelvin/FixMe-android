@@ -46,8 +46,8 @@ class SubmissionActionBottomSheet(context: Context, val data: SubmissionDetailRe
                     deployTechButton.visibility = View.GONE
                     approveButton.setOnClickListener {
                         val bottomSheet =
-                            UpdateStatusBottomSheet(context, data, approve = true,
-                                deployTech = false
+                            UpdateStatusBottomSheet(
+                                context, data, approve = true, cancel = false, deployTech = false
                             ).also { bottomSheet ->
                                 with(bottomSheet) {
                                     setOnUpdateSuccessListener(this@SubmissionActionBottomSheet)
@@ -58,8 +58,8 @@ class SubmissionActionBottomSheet(context: Context, val data: SubmissionDetailRe
                     }
                     rejectButton.setOnClickListener {
                         val bottomSheet =
-                            UpdateStatusBottomSheet(context, data, approve = false,
-                                deployTech = false
+                            UpdateStatusBottomSheet(
+                                context, data, approve = false, cancel = false, deployTech = false
                             ).also { bottomSheet ->
                                 with(bottomSheet) {
                                     setOnUpdateSuccessListener(this@SubmissionActionBottomSheet)
@@ -78,7 +78,11 @@ class SubmissionActionBottomSheet(context: Context, val data: SubmissionDetailRe
                         deployTechButton.visibility = View.VISIBLE
                         deployTechButton.setOnClickListener {
                             val bottomSheet =
-                                UpdateStatusBottomSheet(context, data, approve = false,
+                                UpdateStatusBottomSheet(
+                                    context,
+                                    data,
+                                    approve = false,
+                                    cancel = false,
                                     deployTech = true
                                 ).also { bottomSheet ->
                                     with(bottomSheet) {
@@ -112,6 +116,11 @@ class SubmissionActionBottomSheet(context: Context, val data: SubmissionDetailRe
     }
 
     override fun onRejected() {
+        onUpdateSuccessListener.onUpdateSuccess()
+        dismiss()
+    }
+
+    override fun onCanceled() {
         onUpdateSuccessListener.onUpdateSuccess()
         dismiss()
     }

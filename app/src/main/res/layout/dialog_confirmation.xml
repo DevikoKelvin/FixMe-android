@@ -32,7 +32,7 @@
                 android:textColor="@color/black"
                 android:textSize="18sp"
                 android:textStyle="bold"
-                tools:text="@string/logout_confirmation_dialog_message" />
+                tools:text="@tools:sample/lorem" />
 
             <com.google.android.material.card.MaterialCardView
                 android:layout_width="match_parent"

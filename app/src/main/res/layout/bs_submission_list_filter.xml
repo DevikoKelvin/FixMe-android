@@ -43,6 +43,14 @@
             android:textStyle="bold" />
 
         <RadioButton
+            android:id="@+id/canceledSelector"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/canceled"
+            android:textColor="@color/custom_toast_font_failed"
+            android:textStyle="bold" />
+
+        <RadioButton
             android:id="@+id/rejectedSelector"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
