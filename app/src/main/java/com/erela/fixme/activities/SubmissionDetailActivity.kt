@@ -374,6 +374,21 @@ class SubmissionDetailActivity : AppCompatActivity(),
                                                 View.VISIBLE
                                             statusMessageContainer.visibility = View.GONE
                                             onProgressButton.visibility = View.VISIBLE
+                                            onProgressText.setCompoundDrawables(
+                                                ContextCompat.getDrawable(
+                                                    this@SubmissionDetailActivity,
+                                                    R.drawable.baseline_timelapse_24
+                                                ),
+                                                null,
+                                                null,
+                                                null
+                                            )
+                                            onProgressButton.setCardBackgroundColor(
+                                                ContextCompat.getColor(
+                                                    this@SubmissionDetailActivity,
+                                                    R.color.custom_toast_font_normal_gray
+                                                )
+                                            )
                                             message = StringBuilder().append("On Progress by ")
                                             for (i in 0 until data.usernUserTeknisi!!.size) {
                                                 if (data.usernUserTeknisi.size > 1) {
@@ -1752,6 +1767,7 @@ class SubmissionDetailActivity : AppCompatActivity(),
                         object :
                             ReportTrialBottomSheet.OnReportTrialSuccessListener {
                             override fun reportTrialSuccess() {
+                                dismiss()
                                 bottomSheet.dismiss()
                                 init()
                             }
@@ -1775,6 +1791,7 @@ class SubmissionDetailActivity : AppCompatActivity(),
                     setConfirmationDialogListener(object :
                         ConfirmationDialog.ConfirmationDialogListener {
                         override fun onConfirm() {
+                            dismiss()
                             bottomSheet.dismiss()
                             val loadingDialog = LoadingDialog(this@SubmissionDetailActivity)
                             if (loadingDialog.window != null)
