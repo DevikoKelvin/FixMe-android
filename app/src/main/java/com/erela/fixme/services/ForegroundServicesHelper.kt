@@ -5,18 +5,16 @@ import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.Service
 import android.content.Intent
-import android.content.pm.ServiceInfo
-import android.os.Build
 import android.os.IBinder
 import android.util.Log
+import androidx.core.app.NotificationCompat
 import com.erela.fixme.R
-import com.erela.fixme.helpers.networking.InitAPI
-import com.erela.fixme.helpers.WebSocketClient
-import com.erela.fixme.objects.NotificationResponse
-import org.json.JSONObject
+import com.pusher.client.Pusher
+import com.pusher.client.PusherOptions
 
 class ForegroundServicesHelper : Service() {
-    private lateinit var webSocketClient: WebSocketClient
+    private lateinit var pusher: Pusher
+    private var data: String? = null
 
     companion object {
         const val CHANNEL_ID = "Foreground Service ID"
@@ -27,24 +25,20 @@ class ForegroundServicesHelper : Service() {
         Thread {
             while (true) {
                 Log.e("SERVICES", "Service is running..")
-                webSocketClient = WebSocketClient.getInstance()
-                webSocketClient.setSocketUrl(InitAPI.SOCKET_URL)
-                webSocketClient.setListener(object : WebSocketClient.SocketListener {
-                    override fun onMessage(message: String) {
-                        Log.e("Message", message)
-                        val jsonObject = JSONObject(message)
-                        val notification = NotificationResponse(
-                            jsonObject.getInt("expires"),
-                            jsonObject.getString("topic"),
-                            jsonObject.getString("id"),
-                            jsonObject.getInt("time"),
-                            jsonObject.getString("event"),
-                            jsonObject.getString("message") ?: null
-                        )
-                        showNotification(notification.message.toString())
-                    }
-                })
-                webSocketClient.connect()
+                pusher = Pusher("f8229f5de3071d56fadf", PusherOptions().setCluster("ap1"))
+                pusher.connect()
+                val channel = pusher.subscribe("my-channel")
+                channel.bind("my-event") { event ->
+                    Log.e("Event", event.data.toString())
+                    data = event.data
+                }
+                if (data != null) {
+                    val notification = createNotification(data!!)
+                    startForeground(NOTIFICATION_ID, notification)
+                } else {
+                    val notification = createNotification("Service is running.")
+                    startForeground(NOTIFICATION_ID, notification)
+                }
                 Thread.sleep(30000)
             }
         }.start()
@@ -53,30 +47,40 @@ class ForegroundServicesHelper : Service() {
 
     override fun onBind(intent: Intent?): IBinder? = null
 
-    private fun createNotification() {
-        getSystemService(NotificationManager::class.java).createNotificationChannel(
-            NotificationChannel(
-                CHANNEL_ID, "Erela FixMe", NotificationManager.IMPORTANCE_DEFAULT
-            ).also {
-                it.description = "Description"
-            }
-        )
-    }
+    /*override fun onCreate() {
+        super.onCreate()
 
-    private fun showNotification(message: String) {
-        createNotification()
-        val notification = Notification.Builder(this, CHANNEL_ID)
-            .setContentText(message)
-            .setContentTitle("Erela FixMe")
-            .setSmallIcon(R.drawable.fixme_logo)
-            .setPriority(Notification.PRIORITY_DEFAULT)
-            .build()
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
+        pusher = Pusher("f8229f5de3071d56fadf", PusherOptions().setCluster("ap1"))
+        pusher.connect()
+        val channel = pusher.subscribe("my-channel")
+        channel.bind("my-event") { event ->
+            Log.e("Event", event.data.toString())
+            data = event.data
+        }
+        if (data != null) {
+            val notification = createNotification(data!!)
             startForeground(NOTIFICATION_ID, notification)
         } else {
-            startForeground(
-                NOTIFICATION_ID, notification, ServiceInfo.FOREGROUND_SERVICE_TYPE_REMOTE_MESSAGING
-            )
+            val notification = createNotification("Service is running.")
+            startForeground(NOTIFICATION_ID, notification)
         }
+    }*/
+
+    private fun createNotification(message: String): Notification {
+        val channel = NotificationChannel(
+            CHANNEL_ID,
+            "Erela FixMe",
+            NotificationManager.IMPORTANCE_HIGH
+        )
+        val notificationManager = getSystemService(NotificationManager::class.java)
+        notificationManager.createNotificationChannel(channel)
+        val notificationBuilder = NotificationCompat.Builder(this, CHANNEL_ID)
+            .setContentTitle("Erela FixMe")
+            .setContentText(message)
+            .setSmallIcon(R.drawable.fixme_logo)
+            .setAutoCancel(true)
+            .setOnlyAlertOnce(true)
+
+        return notificationBuilder.build()
     }
 }

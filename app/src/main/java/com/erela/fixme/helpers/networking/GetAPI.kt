@@ -2,8 +2,8 @@ package com.erela.fixme.helpers.networking
 
 import com.erela.fixme.objects.CategoryListResponse
 import com.erela.fixme.objects.CreationResponse
-import com.erela.fixme.objects.GenericSimpleResponse
 import com.erela.fixme.objects.DepartmentListResponse
+import com.erela.fixme.objects.GenericSimpleResponse
 import com.erela.fixme.objects.InboxResponse
 import com.erela.fixme.objects.LoginResponse
 import com.erela.fixme.objects.MaterialListResponse
@@ -13,7 +13,6 @@ import com.erela.fixme.objects.SubmissionListResponse
 import com.erela.fixme.objects.SupervisorListResponse
 import com.erela.fixme.objects.TechnicianListResponse
 import com.erela.fixme.objects.UserDetailResponse
-import com.erela.fixme.objects.UserListResponse
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import retrofit2.Call
@@ -26,9 +25,6 @@ import retrofit2.http.Part
 import retrofit2.http.PartMap
 
 interface GetAPI {
-    @GET("getusers")
-    fun getUserList(): Call<List<UserListResponse>>
-
     @FormUrlEncoded
     @POST("getuserdetail")
     fun getUserDetail(

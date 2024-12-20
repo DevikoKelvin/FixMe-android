@@ -5,7 +5,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.erela.fixme.databinding.ListItemSelectionBinding
-import com.erela.fixme.objects.MaterialListResponse
 import com.erela.fixme.objects.SelectedTechniciansList
 import com.erela.fixme.objects.TechnicianListResponse
 

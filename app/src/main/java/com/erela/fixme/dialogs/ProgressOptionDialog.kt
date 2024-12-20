@@ -5,8 +5,6 @@ import android.content.Context
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
-import androidx.core.content.ContextCompat
-import com.erela.fixme.R
 import com.erela.fixme.databinding.DialogProgressOptionBinding
 import com.erela.fixme.objects.ProgressItem
 

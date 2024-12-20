@@ -110,7 +110,7 @@ class LoginActivity : AppCompatActivity() {
                             loadingBar.visibility = View.GONE
                             if (response.isSuccessful) {
                                 if (response.body() != null) {
-                                    val name = response.body()?.nama!!.toString()
+                                    val name = response.body()?.nama!!.toString().trimEnd()
                                     when (response.body()?.code) {
                                         0 -> {
                                             CustomToast.getInstance(applicationContext)
@@ -250,9 +250,9 @@ class LoginActivity : AppCompatActivity() {
                                 Snackbar.LENGTH_SHORT
                             ).also {
                                 with(it) {
-                                    setAction("Retry", View.OnClickListener {
+                                    setAction("Retry") {
                                         checkLogin(username, password)
-                                    })
+                                    }
                                 }
                             }.show()
                         }
@@ -267,9 +267,9 @@ class LoginActivity : AppCompatActivity() {
                     Snackbar.LENGTH_SHORT
                 ).also {
                     with(it) {
-                        setAction("Retry", View.OnClickListener {
+                        setAction("Retry") {
                             checkLogin(username, password)
-                        })
+                        }
                     }
                 }.show()
                 exception.printStackTrace()

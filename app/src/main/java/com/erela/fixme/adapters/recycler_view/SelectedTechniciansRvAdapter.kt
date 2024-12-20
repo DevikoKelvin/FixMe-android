@@ -6,7 +6,6 @@ import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.erela.fixme.R
-import com.erela.fixme.bottom_sheets.SelectMaterialsBottomSheet
 import com.erela.fixme.bottom_sheets.SelectTechniciansBottomSheet
 import com.erela.fixme.databinding.ListItemSelectedItemsBinding
 import com.erela.fixme.objects.SubmissionDetailResponse

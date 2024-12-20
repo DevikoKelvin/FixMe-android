@@ -32,7 +32,7 @@ class InboxRvAdapter(val context: Context, val data: ArrayList<InboxResponse>) :
 
         with(holder) {
             binding.apply {
-                usernameText.text = userData.username
+                usernameText.text = userData.name
                 notificationContent.text = item.actions?.replaceFirstChar {
                     if (it.isLowerCase()) it.uppercase() else it.toString()
                 }

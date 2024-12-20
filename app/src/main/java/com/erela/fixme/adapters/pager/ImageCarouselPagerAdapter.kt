@@ -1,15 +1,14 @@
 package com.erela.fixme.adapters.pager
 
 import android.annotation.SuppressLint
-import com.erela.fixme.R
 import android.app.Activity
 import android.content.Context
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.viewpager.widget.PagerAdapter
 import com.bumptech.glide.Glide
+import com.erela.fixme.R
 import com.erela.fixme.custom_views.zoom_helper.ImageZoomHelper
 import com.erela.fixme.databinding.ViewImageCarouselBinding
 import com.erela.fixme.helpers.Base64Helper

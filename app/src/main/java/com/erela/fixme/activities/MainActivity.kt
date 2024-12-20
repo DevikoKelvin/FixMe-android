@@ -1,29 +1,18 @@
 package com.erela.fixme.activities
 
-import android.Manifest
 import android.annotation.SuppressLint
-import android.app.Notification
-import android.app.NotificationChannel
-import android.app.NotificationManager
 import android.content.Intent
-import android.content.pm.PackageManager
 import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.app.ActivityCompat
-import androidx.core.app.NotificationCompat
-import androidx.core.app.NotificationManagerCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
-import com.erela.fixme.R
 import com.erela.fixme.databinding.ActivityMainBinding
 import com.erela.fixme.dialogs.ConfirmationDialog
 import com.erela.fixme.helpers.PermissionHelper
 import com.erela.fixme.helpers.UserDataHelper
-import com.erela.fixme.helpers.WebSocketClient
 import com.erela.fixme.objects.UserData
-import com.erela.fixme.services.ForegroundServicesHelper.Companion.CHANNEL_ID
 
 class MainActivity : AppCompatActivity() {
     private val binding: ActivityMainBinding by lazy {
@@ -32,7 +21,6 @@ class MainActivity : AppCompatActivity() {
     private val userData: UserData by lazy {
         UserDataHelper(this@MainActivity).getUserData()
     }
-    private lateinit var webSocketClient: WebSocketClient
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -48,7 +36,7 @@ class MainActivity : AppCompatActivity() {
         init()
     }
 
-    @SuppressLint("SetTextI18n")
+    @SuppressLint("SetTextI18n", "InlinedApi")
     private fun init() {
         binding.apply {
             if (!PermissionHelper.isPermissionGranted(
@@ -61,7 +49,17 @@ class MainActivity : AppCompatActivity() {
                 )
             }
 
-            /*webSocketClient = WebSocketClient.getInstance()
+            /*if (!isServiceRunning(ForegroundServicesHelper::class.java)) {
+                lifecycleScope.launch {
+                    withContext(Dispatchers.IO) {
+                        ContextCompat.startForegroundService(
+                            this@MainActivity,
+                            Intent(this@MainActivity, ForegroundServicesHelper::class.java)
+                        )
+                    }
+                }
+            }
+            webSocketClient = WebSocketClient.getInstance()
             webSocketClient.setSocketUrl(InitAPI.SOCKET_URL)
             webSocketClient.setListener(object : WebSocketClient.SocketListener {
                 override fun onMessage(message: String) {
@@ -139,30 +137,13 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun createNotification() {
-        getSystemService(NotificationManager::class.java).createNotificationChannel(
-            NotificationChannel(
-                "CHANNEL_ID", "FixMe", NotificationManager.IMPORTANCE_DEFAULT
-            ).also {
-                it.description = "Description"
+    /*private fun isServiceRunning(serviceClass: Class<*>): Boolean {
+        val manager = getSystemService(ACTIVITY_SERVICE) as ActivityManager
+        for (service in manager.getRunningServices(Int.MAX_VALUE)) {
+            if (serviceClass.name == service.service.className) {
+                return true
             }
-        )
-    }
-
-    private fun showNotification(message: String) {
-        createNotification()
-        val notification =
-            NotificationCompat.Builder(this@MainActivity, CHANNEL_ID)
-                .setContentText(message)
-                .setSmallIcon(R.drawable.fixme_logo)
-                .setContentTitle("Erela FixMe")
-                .setPriority(Notification.PRIORITY_DEFAULT)
-        if (ActivityCompat.checkSelfPermission(
-                this@MainActivity, Manifest.permission.POST_NOTIFICATIONS
-            ) != PackageManager.PERMISSION_GRANTED
-        )
-            return
-        NotificationManagerCompat.from(this@MainActivity)
-            .notify(1, notification.build())
-    }
+        }
+        return false
+    }*/
 }

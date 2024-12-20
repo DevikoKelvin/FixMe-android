@@ -34,6 +34,14 @@
         android:theme="@style/Theme.FixMe"
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
+
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_icon"
+            android:resource="@drawable/erela_logo" />
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_color"
+            android:resource="@color/custom_toast_background_normal" />
+
         <activity
             android:name=".activities.SettingsActivity"
             android:exported="false" />
@@ -84,6 +92,15 @@
             android:name=".activities.MainActivity"
             android:exported="false"
             android:screenOrientation="portrait" />
+
+        <service
+            android:name=".services.FirebaseMessagingService"
+            android:exported="false"
+            tools:ignore="Instantiatable">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+            </intent-filter>
+        </service>
 
         <service
             android:name=".services.ForegroundServicesHelper"

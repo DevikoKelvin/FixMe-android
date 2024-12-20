@@ -8,10 +8,8 @@ import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.erela.fixme.R
 import com.erela.fixme.databinding.ListItemProgressBinding
-import com.erela.fixme.helpers.UserDataHelper
 import com.erela.fixme.objects.SubmissionDetailResponse
 import com.erela.fixme.objects.TrialItem
-import com.erela.fixme.objects.UserData
 
 class TrialRvAdapter(
     val context: Context, private val detail: SubmissionDetailResponse, val data: List<TrialItem?>?

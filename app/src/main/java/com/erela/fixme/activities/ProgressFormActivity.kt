@@ -749,7 +749,7 @@ class ProgressFormActivity : AppCompatActivity() {
             if (imageArrayUri.isNotEmpty()) {
                 for (element in imageArrayUri) {
                     photoFiles.add(
-                        createMultipartBody(element, "foto[]")
+                        createMultipartBody(element)
                     )
                 }
             }
@@ -779,7 +779,7 @@ class ProgressFormActivity : AppCompatActivity() {
             if (imageArrayUri.isNotEmpty()) {
                 for (element in imageArrayUri) {
                     photoFiles.add(
-                        createMultipartBody(element, "foto[]")
+                        createMultipartBody(element)
                     )
                 }
             }
@@ -818,11 +818,11 @@ class ProgressFormActivity : AppCompatActivity() {
             false
     }
 
-    private fun createMultipartBody(uri: Uri, multipartName: String): MultipartBody.Part? {
+    private fun createMultipartBody(uri: Uri): MultipartBody.Part? {
         return try {
             val file = File(getRealPathFromURI(uri)!!)
             val requestBody = file.asRequestBody("image/*".toMediaTypeOrNull())
-            MultipartBody.Part.createFormData(multipartName, file.name, requestBody)
+            MultipartBody.Part.createFormData("foto[]", file.name, requestBody)
         } catch (e: Exception) {
             Log.e("createMultipartBody", "Error creating MultipartBody.Part", e)
             null

@@ -2,12 +2,10 @@ package com.erela.fixme.adapters.recycler_view
 
 import android.app.Activity
 import android.content.Context
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
-import androidx.core.content.res.ResourcesCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.erela.fixme.R
@@ -20,7 +18,7 @@ import com.erela.fixme.objects.SubmissionDetailResponse
 import com.erela.fixme.objects.UserData
 
 class ProgressRvAdapter(
-    val context: Context, val activity: Activity, val detail: SubmissionDetailResponse, val data: List<ProgressItem?>?
+    val context: Context, val activity: Activity, private val detail: SubmissionDetailResponse, val data: List<ProgressItem?>?
 ) : RecyclerView.Adapter<ProgressRvAdapter.ViewHolder>() {
     private lateinit var imageCarouselAdapter: ImageCarouselPagerAdapter
     private lateinit var onItemHoldTapListener: OnItemHoldTapListener

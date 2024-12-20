@@ -15,7 +15,6 @@ import com.erela.fixme.BuildConfig
 import com.erela.fixme.R
 import com.erela.fixme.custom_views.CustomToast
 import com.erela.fixme.databinding.ActivitySettingsBinding
-import com.github.tutorialsandroid.appxupdater.AppUpdater
 import com.github.tutorialsandroid.appxupdater.AppUpdaterUtils
 import com.github.tutorialsandroid.appxupdater.enums.AppUpdaterError
 import com.github.tutorialsandroid.appxupdater.enums.UpdateFrom
