@@ -36,6 +36,7 @@ import com.erela.fixme.bottom_sheets.ManageOldPhotoBottomSheet
 import com.erela.fixme.bottom_sheets.ManagePhotoBottomSheet
 import com.erela.fixme.custom_views.CustomToast
 import com.erela.fixme.databinding.ActivitySubmissionFormBinding
+import com.erela.fixme.helpers.NotificationsHelper
 import com.erela.fixme.helpers.networking.InitAPI
 import com.erela.fixme.helpers.PermissionHelper
 import com.erela.fixme.helpers.UserDataHelper
@@ -153,6 +154,11 @@ class SubmissionFormActivity : AppCompatActivity() {
         formInput()
     }
 
+    override fun onResume() {
+        super.onResume()
+        NotificationsHelper.receiveNotifications(this)
+    }
+
     @SuppressLint("NotifyDataSetChanged")
     private fun init() {
         binding.apply {
@@ -187,7 +193,6 @@ class SubmissionFormActivity : AppCompatActivity() {
                 isFormEmpty[2] = true
                 selectedCategory = detail?.idKategori!!.toInt()
                 getCategoryList()
-                Log.e("Machine Code", detail?.kodeMesin!!)
                 isFormEmpty[4] = detail?.kodeMesin!!.isNotEmpty()
                 machineCodeField.setText("${detail?.kodeMesin}".ifEmpty { "" })
                 isFormEmpty[5] = detail?.namaMesin!!.isNotEmpty()
@@ -293,7 +298,6 @@ class SubmissionFormActivity : AppCompatActivity() {
                             ).show()
                     } else {
                         if (prepareUpdateForm()) {
-                            Log.e("Photo Files", photoFiles.toString())
                             try {
                                 (if (photoFiles.isNotEmpty()) {
                                     InitAPI.getAPI.updateSubmission(requestBodyMap, photoFiles)
@@ -306,7 +310,6 @@ class SubmissionFormActivity : AppCompatActivity() {
                                     ) {
                                         submitButton.visibility = View.VISIBLE
                                         loadingBar.visibility = View.GONE
-                                        Log.e("Response Update", response.body().toString())
                                         if (response.isSuccessful) {
                                             if (response.body() != null) {
                                                 if (response.body()?.code == 1) {
@@ -443,7 +446,6 @@ class SubmissionFormActivity : AppCompatActivity() {
                             ).show()
                     } else {
                         if (prepareSubmitForm()) {
-                            Log.e("Photo Files", photoFiles.toString())
                             try {
                                 (if (photoFiles.isNotEmpty()) {
                                     InitAPI.getAPI.submitSubmission(requestBodyMap, photoFiles)
@@ -921,12 +923,7 @@ class SubmissionFormActivity : AppCompatActivity() {
                 } else
                     isFormValid = validated == 5
             }
-
-            for (i in isFormEmpty.indices) {
-                Log.e("Field $i", isFormEmpty[i].toString())
-            }
         }
-        Log.e("Form Valid | Validated", "$isFormValid | $validated")
         return isFormValid
     }
 
@@ -1209,9 +1206,6 @@ class SubmissionFormActivity : AppCompatActivity() {
                                                     0
                                                 else
                                                     categoryList[position - 1].idKategori!!.toInt()
-                                                Log.e(
-                                                    "Selected Category", selectedCategory.toString()
-                                                )
                                                 isFormEmpty[3] = selectedCategory != 0
                                                 if (selectedCategory != 0) {
                                                     categoryDropdownLayout.strokeColor =

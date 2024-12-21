@@ -3,6 +3,7 @@ package com.erela.fixme.activities
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
@@ -10,9 +11,13 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.erela.fixme.databinding.ActivityMainBinding
 import com.erela.fixme.dialogs.ConfirmationDialog
+import com.erela.fixme.helpers.NotificationsHelper
 import com.erela.fixme.helpers.PermissionHelper
 import com.erela.fixme.helpers.UserDataHelper
 import com.erela.fixme.objects.UserData
+import com.google.android.gms.tasks.OnCompleteListener
+import com.google.firebase.messaging.FirebaseMessaging
+import com.pusher.pushnotifications.PushNotifications
 
 class MainActivity : AppCompatActivity() {
     private val binding: ActivityMainBinding by lazy {
@@ -36,6 +41,11 @@ class MainActivity : AppCompatActivity() {
         init()
     }
 
+    override fun onResume() {
+        super.onResume()
+        NotificationsHelper.receiveNotifications(this)
+    }
+
     @SuppressLint("SetTextI18n", "InlinedApi")
     private fun init() {
         binding.apply {
@@ -49,16 +59,19 @@ class MainActivity : AppCompatActivity() {
                 )
             }
 
-            /*if (!isServiceRunning(ForegroundServicesHelper::class.java)) {
-                lifecycleScope.launch {
-                    withContext(Dispatchers.IO) {
-                        ContextCompat.startForegroundService(
-                            this@MainActivity,
-                            Intent(this@MainActivity, ForegroundServicesHelper::class.java)
-                        )
-                    }
+            FirebaseMessaging.getInstance().token.addOnCompleteListener(OnCompleteListener { task ->
+                if (!task.isSuccessful) {
+                    Log.e("Firebase", "Fetching FCM registration token failed", task.exception)
+                    return@OnCompleteListener
+                } else {
+                    val token = task.result
+                    Log.e("Firebase", "token: $token")
                 }
-            }
+            })
+
+            PushNotifications.start(applicationContext, "66b9148d-50f4-4114-b258-e9e9485ce75c")
+            /*PushNotifications.addDeviceInterest("hello")
+
             webSocketClient = WebSocketClient.getInstance()
             webSocketClient.setSocketUrl(InitAPI.SOCKET_URL)
             webSocketClient.setListener(object : WebSocketClient.SocketListener {

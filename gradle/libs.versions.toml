@@ -19,6 +19,7 @@ firebaseCore = "21.1.1"
 firebaseBom = "33.7.0"
 firebaseMessaging="24.1.0"
 firebaseAnalytic="22.1.2"
+firebaseIid="21.1.0"
 retrofit = "2.11.0"
 okhttp3 = "5.0.0-alpha.14"
 converterGson = "2.11.0"
@@ -30,6 +31,7 @@ swipeRefreshLayout = "1.1.0"
 circleIndicator = "2.1.6"
 appxupdater = "v2.0.20"
 pusherJavaClient = "2.2.1"
+pushNotificationsAndroid = "1.9.0"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -46,6 +48,7 @@ firebase-core = { module = "com.google.firebase:firebase-core", version.ref = "f
 firebase-bom = { group = "com.google.firebase", name = "firebase-bom", version.ref = "firebaseBom" }
 firebase-messaging = { module = "com.google.firebase:firebase-messaging", version.ref = "firebaseMessaging" }
 firebase-analytics = { module = "com.google.firebase:firebase-analytics", version.ref = "firebaseAnalytic" }
+firebase-iid = { module = "com.google.firebase:firebase-iid", version.ref = "firebaseIid" }
 okhttp3 = { group = "com.squareup.okhttp3", name = "okhttp", version.ref = "okhttp3" }
 retrofit = { group = "com.squareup.retrofit2", name = "retrofit", version.ref = "retrofit" }
 converter-gson = { group = "com.squareup.retrofit2", name = "converter-gson", version.ref = "converterGson" }
@@ -57,6 +60,7 @@ swipeRefreshLayout = { group = "androidx.swiperefreshlayout", name = "swiperefre
 circleIndicator = { group = "me.relex", name = "circleIndicator", version.ref = "circleIndicator" }
 appxupdater = { module = "com.github.TutorialsAndroid:AppXUpdater", version.ref = "appxupdater" }
 pusher-java-client = { module = "com.pusher:pusher-java-client", version.ref = "pusherJavaClient" }
+push-notifications-android = { module = "com.pusher:push-notifications-android", version.ref = "pushNotificationsAndroid" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

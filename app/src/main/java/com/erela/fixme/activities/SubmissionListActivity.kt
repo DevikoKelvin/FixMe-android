@@ -17,6 +17,7 @@ import com.erela.fixme.adapters.recycler_view.SubmissionRvAdapter
 import com.erela.fixme.bottom_sheets.SubmissionListFilterBottomSheet
 import com.erela.fixme.custom_views.CustomToast
 import com.erela.fixme.databinding.ActivitySubmissionListBinding
+import com.erela.fixme.helpers.NotificationsHelper
 import com.erela.fixme.helpers.networking.InitAPI
 import com.erela.fixme.helpers.UserDataHelper
 import com.erela.fixme.objects.DepartmentListResponse
@@ -50,6 +51,11 @@ class SubmissionListActivity : AppCompatActivity(), SubmissionRvAdapter.OnSubmis
         }
 
         init()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        NotificationsHelper.receiveNotifications(this)
     }
 
     @SuppressLint("NotifyDataSetChanged")

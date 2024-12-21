@@ -9,6 +9,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.transition.AutoTransition
 import androidx.transition.TransitionManager
 import com.erela.fixme.databinding.ActivitySplashScreenBinding
+import com.erela.fixme.helpers.NotificationsHelper
 
 @SuppressLint("CustomSplashScreen")
 class SplashScreenActivity : AppCompatActivity() {
@@ -32,5 +33,10 @@ class SplashScreenActivity : AppCompatActivity() {
                 }, 1000)
             }, 2000)
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        NotificationsHelper.receiveNotifications(this)
     }
 }

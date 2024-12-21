@@ -10,6 +10,7 @@ import androidx.core.view.WindowInsetsCompat
 import com.erela.fixme.R
 import com.erela.fixme.custom_views.CustomToast
 import com.erela.fixme.databinding.ActivityChangePasswordBinding
+import com.erela.fixme.helpers.NotificationsHelper
 import com.erela.fixme.helpers.networking.InitAPI
 import com.erela.fixme.helpers.UserDataHelper
 import com.erela.fixme.objects.GenericSimpleResponse
@@ -40,6 +41,11 @@ class ChangePasswordActivity : AppCompatActivity() {
         userData = UserDataHelper(this).getUserData()
 
         init()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        NotificationsHelper.receiveNotifications(this)
     }
 
     private fun init() {

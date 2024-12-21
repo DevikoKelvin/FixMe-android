@@ -28,6 +28,7 @@ import com.erela.fixme.dialogs.ConfirmationDialog
 import com.erela.fixme.dialogs.LoadingDialog
 import com.erela.fixme.dialogs.ProgressOptionDialog
 import com.erela.fixme.helpers.Base64Helper
+import com.erela.fixme.helpers.NotificationsHelper
 import com.erela.fixme.helpers.networking.InitAPI
 import com.erela.fixme.helpers.UserDataHelper
 import com.erela.fixme.objects.GenericSimpleResponse
@@ -101,6 +102,11 @@ class SubmissionDetailActivity : AppCompatActivity(),
         }
 
         init()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        NotificationsHelper.receiveNotifications(this)
     }
 
     @SuppressLint("SetTextI18n")

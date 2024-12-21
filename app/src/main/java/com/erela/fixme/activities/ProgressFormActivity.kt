@@ -28,6 +28,7 @@ import com.erela.fixme.bottom_sheets.ManageOldPhotoBottomSheet
 import com.erela.fixme.bottom_sheets.ManagePhotoBottomSheet
 import com.erela.fixme.custom_views.CustomToast
 import com.erela.fixme.databinding.ActivityProgressFormBinding
+import com.erela.fixme.helpers.NotificationsHelper
 import com.erela.fixme.helpers.PermissionHelper
 import com.erela.fixme.helpers.UserDataHelper
 import com.erela.fixme.helpers.networking.InitAPI
@@ -132,6 +133,11 @@ class ProgressFormActivity : AppCompatActivity() {
         }
 
         init()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        NotificationsHelper.receiveNotifications(this)
     }
 
     @SuppressLint("SetTextI18n")
