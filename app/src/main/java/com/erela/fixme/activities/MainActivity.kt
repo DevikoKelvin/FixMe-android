@@ -41,11 +41,6 @@ class MainActivity : AppCompatActivity() {
         init()
     }
 
-    override fun onResume() {
-        super.onResume()
-        NotificationsHelper.receiveNotifications(this)
-    }
-
     @SuppressLint("SetTextI18n", "InlinedApi")
     private fun init() {
         binding.apply {
@@ -70,6 +65,7 @@ class MainActivity : AppCompatActivity() {
             })
 
             PushNotifications.start(applicationContext, "66b9148d-50f4-4114-b258-e9e9485ce75c")
+            NotificationsHelper.receiveNotifications(applicationContext, userData)
             /*PushNotifications.addDeviceInterest("hello")
 
             webSocketClient = WebSocketClient.getInstance()

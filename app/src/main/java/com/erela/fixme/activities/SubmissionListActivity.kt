@@ -53,17 +53,14 @@ class SubmissionListActivity : AppCompatActivity(), SubmissionRvAdapter.OnSubmis
         init()
     }
 
-    override fun onResume() {
-        super.onResume()
-        NotificationsHelper.receiveNotifications(this)
-    }
-
     @SuppressLint("NotifyDataSetChanged")
     private fun init() {
         binding.apply {
             backButton.setOnClickListener {
                 onBackPressedDispatcher.onBackPressed()
             }
+
+            /*NotificationsHelper.receiveNotifications()*/
 
             adapter = SubmissionRvAdapter(
                 this@SubmissionListActivity,

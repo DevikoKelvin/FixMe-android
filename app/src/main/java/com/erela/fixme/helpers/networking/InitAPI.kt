@@ -12,7 +12,6 @@ object InitAPI {
     // Local IP
     /*private const val MAIN_URL = "http://192.168.3.109:88/fixme"*/
     private const val MAIN_URL = "http://192.168.3.245/fixme"
-    const val SOCKET_URL = "wss://ntfy.sh/erela_pengaduan001/ws"
     private const val BASE_URL = "$MAIN_URL/apimobile/"
     const val IMAGE_URL = "$MAIN_URL/assets/upload/"
 

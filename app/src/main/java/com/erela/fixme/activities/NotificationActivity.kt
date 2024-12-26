@@ -47,17 +47,14 @@ class NotificationActivity : AppCompatActivity() {
         init()
     }
 
-    override fun onResume() {
-        super.onResume()
-        NotificationsHelper.receiveNotifications(this)
-    }
-
     @SuppressLint("NotifyDataSetChanged")
     private fun init() {
         binding.apply {
             backButton.setOnClickListener {
                 onBackPressedDispatcher.onBackPressed()
             }
+
+            /*NotificationsHelper.receiveNotifications()*/
 
             adapter = InboxRvAdapter(applicationContext, inboxArrayList)
             rvInbox.layoutManager = LinearLayoutManager(applicationContext)

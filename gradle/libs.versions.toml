@@ -30,7 +30,7 @@ glide = "4.16.0"
 swipeRefreshLayout = "1.1.0"
 circleIndicator = "2.1.6"
 appxupdater = "v2.0.20"
-pusherJavaClient = "2.2.1"
+pusherJavaClient = "2.4.2"
 pushNotificationsAndroid = "1.9.0"
 
 [libraries]

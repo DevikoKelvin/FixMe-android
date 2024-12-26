@@ -104,11 +104,6 @@ class SubmissionDetailActivity : AppCompatActivity(),
         init()
     }
 
-    override fun onResume() {
-        super.onResume()
-        NotificationsHelper.receiveNotifications(this)
-    }
-
     @SuppressLint("SetTextI18n")
     private fun init() {
         binding.apply {
@@ -123,6 +118,8 @@ class SubmissionDetailActivity : AppCompatActivity(),
             backButton.setOnClickListener {
                 onBackPressedDispatcher.onBackPressed()
             }
+
+            /*NotificationsHelper.receiveNotifications()*/
 
             loadingBar.visibility = View.VISIBLE
             contentScrollContainer.visibility = View.GONE
@@ -140,7 +137,7 @@ class SubmissionDetailActivity : AppCompatActivity(),
                                 if (response.body() != null) {
                                     val data = response.body()!![0]
                                     detailData = data
-                                    Log.e("DATA", data.toString())
+                                    /*Log.e("DATA", data.toString())*/
                                     detailTitle.text = data.nomorRequest
                                     if (data.fotoGaprojects!!.isEmpty()) {
                                         imageContainer.visibility = View.GONE

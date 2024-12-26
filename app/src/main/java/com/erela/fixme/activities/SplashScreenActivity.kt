@@ -21,6 +21,8 @@ class SplashScreenActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
 
+        /*NotificationsHelper.receiveNotifications()*/
+
         binding.apply {
             Handler(mainLooper).postDelayed({
                 erelaMotoSplash.visibility = View.VISIBLE
@@ -33,10 +35,5 @@ class SplashScreenActivity : AppCompatActivity() {
                 }, 1000)
             }, 2000)
         }
-    }
-
-    override fun onResume() {
-        super.onResume()
-        NotificationsHelper.receiveNotifications(this)
     }
 }

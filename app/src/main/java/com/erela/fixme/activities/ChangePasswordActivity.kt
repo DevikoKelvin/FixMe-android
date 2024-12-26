@@ -43,16 +43,13 @@ class ChangePasswordActivity : AppCompatActivity() {
         init()
     }
 
-    override fun onResume() {
-        super.onResume()
-        NotificationsHelper.receiveNotifications(this)
-    }
-
     private fun init() {
         binding.apply {
             backButton.setOnClickListener {
                 onBackPressedDispatcher.onBackPressed()
             }
+
+            /*NotificationsHelper.receiveNotifications()*/
 
             passwordField.addTextChangedListener(object : TextWatcher {
                 override fun beforeTextChanged(

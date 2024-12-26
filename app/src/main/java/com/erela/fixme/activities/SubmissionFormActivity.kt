@@ -6,11 +6,9 @@ import android.content.ContentResolver
 import android.content.ContentValues
 import android.content.Intent
 import android.content.pm.PackageManager.PERMISSION_GRANTED
-import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
-import android.os.Environment
 import android.provider.MediaStore
 import android.provider.OpenableColumns
 import android.text.Editable
@@ -25,7 +23,6 @@ import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
-import androidx.core.content.FileProvider
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.erela.fixme.R
@@ -154,11 +151,6 @@ class SubmissionFormActivity : AppCompatActivity() {
         formInput()
     }
 
-    override fun onResume() {
-        super.onResume()
-        NotificationsHelper.receiveNotifications(this)
-    }
-
     @SuppressLint("NotifyDataSetChanged")
     private fun init() {
         binding.apply {
@@ -178,6 +170,8 @@ class SubmissionFormActivity : AppCompatActivity() {
                     setResult(RESULT_OK)
                 }
             }
+
+            /*NotificationsHelper.receiveNotifications()*/
 
             machineCodeFieldLayout.visibility = View.GONE
             machineNameFieldLayout.visibility = View.GONE
