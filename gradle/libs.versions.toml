@@ -17,7 +17,6 @@ constraintlayout = "2.2.0"
 # Third-party Dependencies
 firebaseCore = "21.1.1"
 firebaseBom = "33.7.0"
-firebaseMessaging="24.1.0"
 firebaseAnalytic="22.1.2"
 firebaseIid="21.1.0"
 retrofit = "2.11.0"
@@ -46,7 +45,6 @@ androidx-constraintlayout = { group = "androidx.constraintlayout", name = "const
 # Third-party Libraries
 firebase-core = { module = "com.google.firebase:firebase-core", version.ref = "firebaseCore" }
 firebase-bom = { group = "com.google.firebase", name = "firebase-bom", version.ref = "firebaseBom" }
-firebase-messaging = { module = "com.google.firebase:firebase-messaging", version.ref = "firebaseMessaging" }
 firebase-analytics = { module = "com.google.firebase:firebase-analytics", version.ref = "firebaseAnalytic" }
 firebase-iid = { module = "com.google.firebase:firebase-iid", version.ref = "firebaseIid" }
 okhttp3 = { group = "com.squareup.okhttp3", name = "okhttp", version.ref = "okhttp3" }

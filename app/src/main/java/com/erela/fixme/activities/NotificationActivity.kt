@@ -14,9 +14,8 @@ import com.erela.fixme.R
 import com.erela.fixme.adapters.recycler_view.InboxRvAdapter
 import com.erela.fixme.custom_views.CustomToast
 import com.erela.fixme.databinding.ActivityNotificationBinding
-import com.erela.fixme.helpers.NotificationsHelper
-import com.erela.fixme.helpers.networking.InitAPI
 import com.erela.fixme.helpers.UserDataHelper
+import com.erela.fixme.helpers.networking.InitAPI
 import com.erela.fixme.objects.InboxResponse
 import com.erela.fixme.objects.UserData
 import retrofit2.Call
@@ -53,8 +52,6 @@ class NotificationActivity : AppCompatActivity() {
             backButton.setOnClickListener {
                 onBackPressedDispatcher.onBackPressed()
             }
-
-            /*NotificationsHelper.receiveNotifications()*/
 
             adapter = InboxRvAdapter(applicationContext, inboxArrayList)
             rvInbox.layoutManager = LinearLayoutManager(applicationContext)

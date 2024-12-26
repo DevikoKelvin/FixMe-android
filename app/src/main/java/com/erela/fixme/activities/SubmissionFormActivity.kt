@@ -33,10 +33,9 @@ import com.erela.fixme.bottom_sheets.ManageOldPhotoBottomSheet
 import com.erela.fixme.bottom_sheets.ManagePhotoBottomSheet
 import com.erela.fixme.custom_views.CustomToast
 import com.erela.fixme.databinding.ActivitySubmissionFormBinding
-import com.erela.fixme.helpers.NotificationsHelper
-import com.erela.fixme.helpers.networking.InitAPI
 import com.erela.fixme.helpers.PermissionHelper
 import com.erela.fixme.helpers.UserDataHelper
+import com.erela.fixme.helpers.networking.InitAPI
 import com.erela.fixme.objects.CategoryListResponse
 import com.erela.fixme.objects.CreationResponse
 import com.erela.fixme.objects.DepartmentListResponse
@@ -170,8 +169,6 @@ class SubmissionFormActivity : AppCompatActivity() {
                     setResult(RESULT_OK)
                 }
             }
-
-            /*NotificationsHelper.receiveNotifications()*/
 
             machineCodeFieldLayout.visibility = View.GONE
             machineNameFieldLayout.visibility = View.GONE

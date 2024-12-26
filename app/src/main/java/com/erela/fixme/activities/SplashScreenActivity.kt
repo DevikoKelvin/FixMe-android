@@ -9,7 +9,6 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.transition.AutoTransition
 import androidx.transition.TransitionManager
 import com.erela.fixme.databinding.ActivitySplashScreenBinding
-import com.erela.fixme.helpers.NotificationsHelper
 
 @SuppressLint("CustomSplashScreen")
 class SplashScreenActivity : AppCompatActivity() {
@@ -20,8 +19,6 @@ class SplashScreenActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
-
-        /*NotificationsHelper.receiveNotifications()*/
 
         binding.apply {
             Handler(mainLooper).postDelayed({

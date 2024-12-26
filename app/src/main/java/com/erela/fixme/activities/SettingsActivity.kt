@@ -15,7 +15,6 @@ import com.erela.fixme.BuildConfig
 import com.erela.fixme.R
 import com.erela.fixme.custom_views.CustomToast
 import com.erela.fixme.databinding.ActivitySettingsBinding
-import com.erela.fixme.helpers.NotificationsHelper
 import com.github.tutorialsandroid.appxupdater.AppUpdaterUtils
 import com.github.tutorialsandroid.appxupdater.enums.AppUpdaterError
 import com.github.tutorialsandroid.appxupdater.enums.UpdateFrom
@@ -49,23 +48,11 @@ class SettingsActivity : AppCompatActivity() {
                 onBackPressedDispatcher.onBackPressed()
             }
 
-            /*NotificationsHelper.receiveNotifications()*/
-
             currentAppVersion = BuildConfig.VERSION_NAME
             currentAppVersionText.text = "Current app version: $currentAppVersion"
 
             checkDownloadInstallButton.setOnClickListener {
-                /*if (checkDownloadInstallText.text == getString(R.string.download_update)) {
-                    val appUpdate = AppUpdater(this@SettingsActivity).also {
-                        with(it) {
-                            setUpdateFrom(UpdateFrom.GITHUB)
-                            setGitHubUserAndRepo("DevikoKelvin", "FixMe-android")
-                            showAppUpdated(true)
-                        }
-                    }
-
-                    appUpdate.start()
-                }*/if (downloadLink != null) {
+                if (downloadLink != null) {
                     startActivity(
                         Intent(
                             Intent.ACTION_VIEW, downloadLink!!.toUri()

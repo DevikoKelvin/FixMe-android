@@ -28,13 +28,12 @@ import com.erela.fixme.bottom_sheets.ManageOldPhotoBottomSheet
 import com.erela.fixme.bottom_sheets.ManagePhotoBottomSheet
 import com.erela.fixme.custom_views.CustomToast
 import com.erela.fixme.databinding.ActivityProgressFormBinding
-import com.erela.fixme.helpers.NotificationsHelper
 import com.erela.fixme.helpers.PermissionHelper
 import com.erela.fixme.helpers.UserDataHelper
 import com.erela.fixme.helpers.networking.InitAPI
 import com.erela.fixme.objects.CreationResponse
-import com.erela.fixme.objects.GenericSimpleResponse
 import com.erela.fixme.objects.FotoItem
+import com.erela.fixme.objects.GenericSimpleResponse
 import com.erela.fixme.objects.ProgressItem
 import com.erela.fixme.objects.SubmissionDetailResponse
 import com.erela.fixme.objects.UserData
@@ -141,8 +140,6 @@ class ProgressFormActivity : AppCompatActivity() {
             backButton.setOnClickListener {
                 onBackPressedDispatcher.onBackPressed()
             }
-
-            /*NotificationsHelper.receiveNotifications()*/
 
             detail = try {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {

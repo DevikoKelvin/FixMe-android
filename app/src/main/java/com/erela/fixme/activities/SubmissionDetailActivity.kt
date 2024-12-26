@@ -1,7 +1,6 @@
 package com.erela.fixme.activities
 
 import android.annotation.SuppressLint
-import com.erela.fixme.R
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
@@ -16,6 +15,7 @@ import androidx.core.content.res.ResourcesCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.bumptech.glide.Glide
+import com.erela.fixme.R
 import com.erela.fixme.adapters.pager.ImageCarouselPagerAdapter
 import com.erela.fixme.bottom_sheets.ProgressTrackingBottomSheet
 import com.erela.fixme.bottom_sheets.ReportTrialBottomSheet
@@ -28,11 +28,10 @@ import com.erela.fixme.dialogs.ConfirmationDialog
 import com.erela.fixme.dialogs.LoadingDialog
 import com.erela.fixme.dialogs.ProgressOptionDialog
 import com.erela.fixme.helpers.Base64Helper
-import com.erela.fixme.helpers.NotificationsHelper
-import com.erela.fixme.helpers.networking.InitAPI
 import com.erela.fixme.helpers.UserDataHelper
-import com.erela.fixme.objects.GenericSimpleResponse
+import com.erela.fixme.helpers.networking.InitAPI
 import com.erela.fixme.objects.FotoGaprojectsItem
+import com.erela.fixme.objects.GenericSimpleResponse
 import com.erela.fixme.objects.ProgressItem
 import com.erela.fixme.objects.StarconnectUserResponse
 import com.erela.fixme.objects.SubmissionDetailResponse
@@ -118,8 +117,6 @@ class SubmissionDetailActivity : AppCompatActivity(),
             backButton.setOnClickListener {
                 onBackPressedDispatcher.onBackPressed()
             }
-
-            /*NotificationsHelper.receiveNotifications()*/
 
             loadingBar.visibility = View.VISIBLE
             contentScrollContainer.visibility = View.GONE
@@ -231,6 +228,8 @@ class SubmissionDetailActivity : AppCompatActivity(),
                                             )
                                             submissionStatusText.text = "Pending"
                                             onProgressButton.visibility = View.GONE
+                                            messageProgressAndTrialButtonContainer.visibility =
+                                                View.GONE
                                         }
                                         // Approved
                                         2 -> {
@@ -458,6 +457,8 @@ class SubmissionDetailActivity : AppCompatActivity(),
                                             submissionStatusText.text = "Progress Done"
                                             actionButton.visibility = View.GONE
                                             actionSelfButton.visibility = View.GONE
+                                            messageProgressAndTrialButtonContainer.visibility =
+                                                View.VISIBLE
                                             onProgressButton.visibility = View.VISIBLE
                                             message =
                                                 StringBuilder().append(
@@ -703,47 +704,6 @@ class SubmissionDetailActivity : AppCompatActivity(),
                                     } else "-"
                                     user.text = data.namaUserBuat?.trimEnd()
                                     actionCondition(data)
-                                    /*try {
-                                        InitAPI.getAPI.getUserDetail(data.idUser!!.toInt())
-                                            .enqueue(object : Callback<UserDetailResponse> {
-                                                override fun onResponse(
-                                                    call: Call<UserDetailResponse?>,
-                                                    response: Response<UserDetailResponse?>
-                                                ) {
-                                                    if (response.isSuccessful) {
-                                                        if (response.body() != null) {
-                                                            userDetail = UserDetailResponse(
-                                                                response.body()!!.stsAktif,
-                                                                response.body()!!.nama,
-                                                                response.body()!!.usern,
-                                                                response.body()!!.idDept,
-                                                                response.body()!!.hakAkses,
-                                                                response.body()!!.idUser,
-                                                                response.body()!!.idUserStarconnect
-                                                            )
-                                                            user.text = data.namaUserBuat?.trimEnd()
-                                                            actionCondition(data, userDetail)
-                                                        }
-                                                    } else {
-                                                        user.text = "Can't retrieve Reporter's name"
-                                                        Log.e("ERROR", response.message())
-                                                    }
-                                                }
-
-                                                override fun onFailure(
-                                                    call: Call<UserDetailResponse?>,
-                                                    throwable: Throwable
-                                                ) {
-                                                    user.text = "Can't retrieve Reporter's name"
-                                                    Log.e("ERROR", throwable.toString())
-                                                    throwable.printStackTrace()
-                                                }
-                                            })
-                                    } catch (exception: Exception) {
-                                        user.text = "Can't retrieve Reporter's name"
-                                        Log.e("ERROR", exception.toString())
-                                        exception.printStackTrace()
-                                    }*/
                                     department.text = data.deptTujuan
                                     inputTime.text = data.tglInput
                                     location.text = data.lokasi
