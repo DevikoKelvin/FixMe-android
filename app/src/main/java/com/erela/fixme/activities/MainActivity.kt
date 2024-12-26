@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.app.ActivityManager
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
@@ -11,10 +12,16 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.erela.fixme.databinding.ActivityMainBinding
 import com.erela.fixme.dialogs.ConfirmationDialog
+import com.erela.fixme.helpers.NotificationsHelper
 import com.erela.fixme.helpers.PermissionHelper
 import com.erela.fixme.helpers.UserDataHelper
 import com.erela.fixme.objects.UserData
 import com.erela.fixme.services.NotificationService
+import com.pusher.client.Pusher
+import com.pusher.client.PusherOptions
+import com.pusher.client.connection.ConnectionEventListener
+import com.pusher.client.connection.ConnectionState
+import com.pusher.client.connection.ConnectionStateChange
 import com.pusher.pushnotifications.PushNotifications
 
 class MainActivity : AppCompatActivity() {
@@ -53,14 +60,11 @@ class MainActivity : AppCompatActivity() {
             }
 
             PushNotifications.start(applicationContext, "66b9148d-50f4-4114-b258-e9e9485ce75c")
-            /*if (!foregroundServiceRunning())
-                Intent(this@MainActivity, NotificationService::class.java).also {
-                    startForegroundService(it)
-                }*/
-            if (!isServiceRunning(NotificationService::class.java))
+            if (!isServiceRunning(NotificationService::class.java)) {
                 Intent(this@MainActivity, NotificationService::class.java).also {
                     startForegroundService(it)
                 }
+            }
             /*PushNotifications.addDeviceInterest("hello")*/
 
             usernameText.text = "${userData.name.trimEnd()}!"
@@ -126,16 +130,6 @@ class MainActivity : AppCompatActivity() {
                     confirmationDialog.show()
             }
         }
-    }
-
-    private fun foregroundServiceRunning(): Boolean {
-        val activityManager = getSystemService(ACTIVITY_SERVICE) as ActivityManager
-        for (service in activityManager.getRunningServices(Int.MAX_VALUE)) {
-            if (NotificationService::class.java.getName() == service.service.className) {
-                return true
-            }
-        }
-        return false
     }
 
     private fun isServiceRunning(serviceClass: Class<*>): Boolean {

@@ -22,40 +22,41 @@ object NotificationsHelper {
         options.setCluster("ap1")
         val pusher = Pusher("4ae6ab89bbc42534b759", options)
 
-        pusher.connect(object : ConnectionEventListener {
-            override fun onConnectionStateChange(change: ConnectionStateChange) {
-                Log.e(
-                    "PUSHER",
-                    "State changed from ${change.previousState} to ${change.currentState}"
-                )
-            }
-
-            override fun onError(message: String, code: String, e: Exception?) {
-                if (e != null) {
+        if (pusher.connection == null || pusher.connection.state == ConnectionState.DISCONNECTED) {
+            pusher.connect(object : ConnectionEventListener {
+                override fun onConnectionStateChange(change: ConnectionStateChange) {
                     Log.e(
                         "PUSHER",
-                        "There was a problem connecting! code ($code), message ($message), exception($e)"
-                    )
-                } else {
-                    Log.e(
-                        "PUSHER",
-                        "There was a problem connecting! code ($code), message ($message)"
+                        "State changed from ${change.previousState} to ${change.currentState}"
                     )
                 }
-            }
-        }, ConnectionState.ALL)
+
+                override fun onError(message: String, code: String, e: Exception?) {
+                    if (e != null) {
+                        Log.e(
+                            "PUSHER",
+                            "There was a problem connecting! code ($code), message ($message), exception($e)"
+                        )
+                    } else {
+                        Log.e(
+                            "PUSHER",
+                            "There was a problem connecting! code ($code), message ($message)"
+                        )
+                    }
+                }
+            }, ConnectionState.ALL)
+        }
+
         val channel = pusher.subscribe("my-channel")
         channel.bind("my-event") { event ->
             val pusherData = parseToJson(event.data)
-            Log.e("Logged In User", userData.id.toString())
-            Log.e("Pusher Data User", pusherData.idUser.toString())
             if (pusherData.idUser == userData.id) {
                 generateNotification(pusherData.message, context)
             }
         }
     }
 
-    private data class PusherData(
+    data class PusherData(
         @field:SerializedName("title")
         val title: String,
         @field:SerializedName("message")
