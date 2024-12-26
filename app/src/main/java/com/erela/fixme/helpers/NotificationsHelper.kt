@@ -22,7 +22,7 @@ object NotificationsHelper {
         options.setCluster("ap1")
         val pusher = Pusher("4ae6ab89bbc42534b759", options)
 
-        if (pusher.connection == null || pusher.connection.state == ConnectionState.DISCONNECTED) {
+        if (pusher.connection.state == ConnectionState.DISCONNECTED) {
             pusher.connect(object : ConnectionEventListener {
                 override fun onConnectionStateChange(change: ConnectionStateChange) {
                     Log.e(
@@ -35,18 +35,17 @@ object NotificationsHelper {
                     if (e != null) {
                         Log.e(
                             "PUSHER",
-                            "There was a problem connecting! code ($code), message ($message), exception($e)"
+                            "There was a problem connecting! code: $code, message: $message, exception: $e"
                         )
                     } else {
                         Log.e(
                             "PUSHER",
-                            "There was a problem connecting! code ($code), message ($message)"
+                            "There was a problem connecting! code: $code, message: $message"
                         )
                     }
                 }
-            }, ConnectionState.ALL)
+            }, ConnectionState.CONNECTED)
         }
-
         val channel = pusher.subscribe("my-channel")
         channel.bind("my-event") { event ->
             val pusherData = parseToJson(event.data)
