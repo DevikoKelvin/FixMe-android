@@ -4,7 +4,6 @@ import android.annotation.SuppressLint
 import android.app.ActivityManager
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
@@ -12,16 +11,10 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.erela.fixme.databinding.ActivityMainBinding
 import com.erela.fixme.dialogs.ConfirmationDialog
-import com.erela.fixme.helpers.NotificationsHelper
 import com.erela.fixme.helpers.PermissionHelper
 import com.erela.fixme.helpers.UserDataHelper
 import com.erela.fixme.objects.UserData
 import com.erela.fixme.services.NotificationService
-import com.pusher.client.Pusher
-import com.pusher.client.PusherOptions
-import com.pusher.client.connection.ConnectionEventListener
-import com.pusher.client.connection.ConnectionState
-import com.pusher.client.connection.ConnectionStateChange
 import com.pusher.pushnotifications.PushNotifications
 
 class MainActivity : AppCompatActivity() {
