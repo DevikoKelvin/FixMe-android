@@ -10,11 +10,9 @@ import android.text.TextWatcher
 import android.util.Log
 import android.view.View
 import android.view.ViewGroup
-import android.widget.AdapterView
-import android.widget.ArrayAdapter
 import androidx.core.content.ContextCompat
 import com.erela.fixme.R
-import com.erela.fixme.adapters.recycler_view.SelectedTechniciansRvAdapter
+import com.erela.fixme.adapters.recycler_view.SelectedSupervisorTechniciansRvAdapter
 import com.erela.fixme.custom_views.CustomToast
 import com.erela.fixme.databinding.BsUpdateStatusBinding
 import com.erela.fixme.dialogs.ConfirmationDialog
@@ -22,8 +20,7 @@ import com.erela.fixme.helpers.UserDataHelper
 import com.erela.fixme.helpers.networking.InitAPI
 import com.erela.fixme.objects.GenericSimpleResponse
 import com.erela.fixme.objects.SubmissionDetailResponse
-import com.erela.fixme.objects.SupervisorListResponse
-import com.erela.fixme.objects.TechnicianListResponse
+import com.erela.fixme.objects.SupervisorTechnicianListResponse
 import com.erela.fixme.objects.UserData
 import com.google.android.flexbox.FlexDirection
 import com.google.android.flexbox.FlexWrap
@@ -36,7 +33,6 @@ import org.json.JSONException
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import java.util.Locale
 
 class UpdateStatusBottomSheet(
     context: Context, private val dataDetail: SubmissionDetailResponse,
@@ -49,9 +45,10 @@ class UpdateStatusBottomSheet(
         UserDataHelper(context).getUserData()
     }
     private lateinit var onUpdateSuccessListener: OnUpdateSuccessListener
-    private var selectedTechniciansArrayList: ArrayList<TechnicianListResponse> = ArrayList()
-    private lateinit var adapter: SelectedTechniciansRvAdapter
-    private var idSupervisor = 0
+    private var selectedSupervisorsArrayList: ArrayList<SupervisorTechnicianListResponse> = ArrayList()
+    private var selectedTechniciansArrayList: ArrayList<SupervisorTechnicianListResponse> = ArrayList()
+    private lateinit var supervisorsRvAdapter: SelectedSupervisorTechniciansRvAdapter
+    private lateinit var techniciansRvAdapter: SelectedSupervisorTechniciansRvAdapter
     private var isFormEmpty = arrayOf(
         false,
         false
@@ -97,7 +94,7 @@ class UpdateStatusBottomSheet(
             if (!deployTech) {
                 if (cancel) {
                     selectSupervisorText.visibility = View.GONE
-                    supervisorDropdownLayout.visibility = View.GONE
+                    rvSupervisor.visibility = View.GONE
                     selectTechniciansText.visibility = View.GONE
                     rvTechnicians.visibility = View.GONE
                     approveButton.visibility = View.GONE
@@ -110,7 +107,7 @@ class UpdateStatusBottomSheet(
                 } else {
                     if (approve) {
                         selectSupervisorText.visibility = View.VISIBLE
-                        supervisorDropdownLayout.visibility = View.VISIBLE
+                        rvSupervisor.visibility = View.VISIBLE
                         selectTechniciansText.visibility = View.GONE
                         rvTechnicians.visibility = View.GONE
                         approveButton.visibility = View.VISIBLE
@@ -119,140 +116,105 @@ class UpdateStatusBottomSheet(
                         deployTechButton.visibility = View.GONE
                         descriptionField.setText("Approved!")
                         isFormEmpty[0] = true
-                        try {
-                            InitAPI.getAPI.getSupervisorList(dataDetail.idGaprojects!!).enqueue(
-                                object : Callback<List<SupervisorListResponse>> {
-                                    override fun onResponse(
-                                        call: Call<List<SupervisorListResponse>>,
-                                        response: Response<List<SupervisorListResponse>>
-                                    ) {
-                                        if (response.isSuccessful) {
-                                            if (response.body() != null) {
-                                                val data: ArrayList<String> = ArrayList()
-                                                data.add("Select User")
-                                                for (i in 0 until response.body()!!.size) {
-                                                    data.add(
-                                                        "Starconnect ID: ${response.body()!![i].idUserStarconnect}\n${
-                                                            response.body()!![i].namaUser?.uppercase(
-                                                                Locale.getDefault()
-                                                            )
-                                                        }"
-                                                    )
-                                                }
-                                                val dropdownAdapter = ArrayAdapter(
-                                                    context,
-                                                    R.layout.general_dropdown_item,
-                                                    R.id.dropdownItemText,
-                                                    data
-                                                )
-                                                supervisorDropdown.adapter = dropdownAdapter
-                                                supervisorDropdown.onItemSelectedListener =
-                                                    object : AdapterView.OnItemSelectedListener {
-                                                        override fun onItemSelected(
-                                                            parent: AdapterView<*>?, view: View?,
-                                                            position: Int, id: Long
-                                                        ) {
-                                                            idSupervisor =
-                                                                if (position == 0) 0 else response.body()!![position - 1].idUser!!.toInt()
-                                                            Log.e("USER ID", "$idSupervisor")
-                                                            if (idSupervisor == 0) {
-                                                                Log.e(
-                                                                    "Selected User", "Invalid"
-                                                                )
-                                                                isFormEmpty[1] = false
-                                                            } else {
-                                                                Log.e(
-                                                                    "Selected User", "Valid"
-                                                                )
-                                                                isFormEmpty[1] = true
-                                                            }
-                                                            Log.e(
-                                                                "Selected User is valid?",
-                                                                "${isFormEmpty[1]}"
-                                                            )
-                                                        }
-
-                                                        override fun onNothingSelected(
-                                                            parent: AdapterView<*>?
-                                                        ) {
-                                                        }
-                                                    }
-                                            }
-                                        } else {
-                                            CustomToast.getInstance(context)
-                                                .setBackgroundColor(
-                                                    ContextCompat.getColor(
-                                                        context,
-                                                        R.color.custom_toast_background_failed
-                                                    )
-                                                )
-                                                .setFontColor(
-                                                    ContextCompat.getColor(
-                                                        context,
-                                                        R.color.custom_toast_font_failed
-                                                    )
-                                                )
-                                                .setMessage(
-                                                    "Can't retrieve user list. Please try again later."
-                                                )
-                                                .show()
-                                            Log.e("ERROR", response.message())
-                                            dismiss()
-                                        }
-                                    }
-
-                                    override fun onFailure(
-                                        call: Call<List<SupervisorListResponse>>,
-                                        throwable: Throwable
-                                    ) {
-                                        CustomToast.getInstance(context)
-                                            .setBackgroundColor(
-                                                ContextCompat.getColor(
-                                                    context,
-                                                    R.color.custom_toast_background_failed
-                                                )
-                                            )
-                                            .setFontColor(
-                                                ContextCompat.getColor(
-                                                    context,
-                                                    R.color.custom_toast_font_failed
-                                                )
-                                            )
-                                            .setMessage(
-                                                "Can't retrieve user list. Please try again later."
-                                            )
-                                            .show()
-                                        Log.e("ERROR", throwable.toString())
-                                        throwable.printStackTrace()
-                                        dismiss()
-                                    }
-                                }
+                        selectedSupervisorsArrayList.add(
+                            SupervisorTechnicianListResponse(
+                                null,
+                                null,
+                                null,
+                                null,
+                                "+",
+                                null,
+                                null,
+                                null
                             )
-                        } catch (jsonException: JSONException) {
-                            CustomToast.getInstance(context)
-                                .setBackgroundColor(
-                                    ContextCompat.getColor(
-                                        context,
-                                        R.color.custom_toast_background_failed
-                                    )
-                                )
-                                .setFontColor(
-                                    ContextCompat.getColor(
-                                        context,
-                                        R.color.custom_toast_font_failed
-                                    )
-                                )
-                                .setMessage("Can't retrieve user list. Please try again later.")
-                                .show()
-                            jsonException.printStackTrace()
-                            dismiss()
+                        )
+                        supervisorsRvAdapter = SelectedSupervisorTechniciansRvAdapter(
+                            context,
+                            dataDetail,
+                            selectedSupervisorsArrayList,
+                            true
+                        ).also {
+                            with(it) {
+                                setOnSupervisorSetListener(object : SelectedSupervisorTechniciansRvAdapter.OnSupervisorSetListener {
+                                    override fun onSupervisorsSelected(
+                                        data: SupervisorTechnicianListResponse
+                                    ) {
+                                        selectedSupervisorsArrayList.remove(
+                                            SupervisorTechnicianListResponse(
+                                                null,
+                                                null,
+                                                null,
+                                                null,
+                                                "+",
+                                                null,
+                                                null,
+                                                null
+                                            )
+                                        )
+                                        selectedSupervisorsArrayList.add(data)
+                                        selectedSupervisorsArrayList.add(
+                                            SupervisorTechnicianListResponse(
+                                                null,
+                                                null,
+                                                null,
+                                                null,
+                                                "+",
+                                                null,
+                                                null,
+                                                null
+                                            )
+                                        )
+                                        supervisorsRvAdapter.notifyDataSetChanged()
+                                        if (supervisorsRvAdapter.itemCount > 1)
+                                            isFormEmpty[1] = true
+                                    }
+
+                                    override fun onSupervisorsUnselected(
+                                        data: SupervisorTechnicianListResponse
+                                    ) {
+                                        selectedSupervisorsArrayList.remove(
+                                            SupervisorTechnicianListResponse(
+                                                null,
+                                                null,
+                                                null,
+                                                null,
+                                                "+",
+                                                null,
+                                                null,
+                                                null
+                                            )
+                                        )
+                                        selectedSupervisorsArrayList.remove(data)
+                                        selectedSupervisorsArrayList.add(
+                                            SupervisorTechnicianListResponse(
+                                                null,
+                                                null,
+                                                null,
+                                                null,
+                                                "+",
+                                                null,
+                                                null,
+                                                null
+                                            )
+                                        )
+                                        supervisorsRvAdapter.notifyDataSetChanged()
+                                        if (supervisorsRvAdapter.itemCount == 1)
+                                            isFormEmpty[1] = false
+                                    }
+                                })
+                            }
                         }
+                        rvSupervisor.adapter = supervisorsRvAdapter
+                        rvSupervisor.layoutManager = FlexboxLayoutManager(
+                            context, FlexDirection.ROW, FlexWrap.WRAP
+                        )
+                        supervisorsRvAdapter.notifyDataSetChanged()
                         approveButton.setOnClickListener {
                             executeUpdate()
                         }
                     } else {
                         selectSupervisorText.visibility = View.GONE
-                        supervisorDropdownLayout.visibility = View.GONE
+                        rvSupervisor.visibility = View.GONE
                         selectTechniciansText.visibility = View.GONE
                         rvTechnicians.visibility = View.GONE
                         approveButton.visibility = View.GONE
@@ -269,14 +231,14 @@ class UpdateStatusBottomSheet(
             } else {
                 descriptionFieldLayout.visibility = View.GONE
                 selectSupervisorText.visibility = View.GONE
-                supervisorDropdownLayout.visibility = View.GONE
+                rvSupervisor.visibility = View.GONE
                 selectTechniciansText.visibility = View.VISIBLE
                 rvTechnicians.visibility = View.VISIBLE
                 approveButton.visibility = View.GONE
                 rejectButton.visibility = View.GONE
-                deployTechButton.visibility = View.VISIBLE
+                deployTechButton.visibility = View.GONE
                 selectedTechniciansArrayList.add(
-                    TechnicianListResponse(
+                    SupervisorTechnicianListResponse(
                         null,
                         null,
                         null,
@@ -287,17 +249,18 @@ class UpdateStatusBottomSheet(
                         null
                     )
                 )
-                adapter = SelectedTechniciansRvAdapter(
+                techniciansRvAdapter = SelectedSupervisorTechniciansRvAdapter(
                     context,
                     dataDetail,
-                    selectedTechniciansArrayList
+                    selectedTechniciansArrayList,
+                    false
                 ).also {
                     with(it) {
                         setOnTechniciansSetListener(object :
-                            SelectedTechniciansRvAdapter.OnTechniciansSetListener {
-                            override fun onTechniciansSelected(data: TechnicianListResponse) {
+                            SelectedSupervisorTechniciansRvAdapter.OnTechniciansSetListener {
+                            override fun onTechniciansSelected(data: SupervisorTechnicianListResponse) {
                                 selectedTechniciansArrayList.remove(
-                                    TechnicianListResponse(
+                                    SupervisorTechnicianListResponse(
                                         null,
                                         null,
                                         null,
@@ -310,7 +273,7 @@ class UpdateStatusBottomSheet(
                                 )
                                 selectedTechniciansArrayList.add(data)
                                 selectedTechniciansArrayList.add(
-                                    TechnicianListResponse(
+                                    SupervisorTechnicianListResponse(
                                         null,
                                         null,
                                         null,
@@ -321,13 +284,14 @@ class UpdateStatusBottomSheet(
                                         null
                                     )
                                 )
-                                adapter.notifyDataSetChanged()
-                                Log.e("Technicians", selectedTechniciansArrayList.toString())
+                                techniciansRvAdapter.notifyDataSetChanged()
+                                if (techniciansRvAdapter.itemCount > 1)
+                                    deployTechButton.visibility = View.VISIBLE
                             }
 
-                            override fun onTechniciansUnselected(data: TechnicianListResponse) {
+                            override fun onTechniciansUnselected(data: SupervisorTechnicianListResponse) {
                                 selectedTechniciansArrayList.remove(
-                                    TechnicianListResponse(
+                                    SupervisorTechnicianListResponse(
                                         null,
                                         null,
                                         null,
@@ -340,7 +304,7 @@ class UpdateStatusBottomSheet(
                                 )
                                 selectedTechniciansArrayList.remove(data)
                                 selectedTechniciansArrayList.add(
-                                    TechnicianListResponse(
+                                    SupervisorTechnicianListResponse(
                                         null,
                                         null,
                                         null,
@@ -351,17 +315,18 @@ class UpdateStatusBottomSheet(
                                         null
                                     )
                                 )
-                                adapter.notifyDataSetChanged()
-                                Log.e("Technicians", selectedTechniciansArrayList.toString())
+                                techniciansRvAdapter.notifyDataSetChanged()
+                                if (techniciansRvAdapter.itemCount == 1)
+                                    deployTechButton.visibility = View.GONE
                             }
                         })
                     }
                 }
-                rvTechnicians.adapter = adapter
+                rvTechnicians.adapter = techniciansRvAdapter
                 rvTechnicians.layoutManager = FlexboxLayoutManager(
                     context, FlexDirection.ROW, FlexWrap.WRAP
                 )
-                adapter.notifyDataSetChanged()
+                techniciansRvAdapter.notifyDataSetChanged()
                 deployTechButton.setOnClickListener {
                     executeUpdate()
                 }
@@ -577,11 +542,14 @@ class UpdateStatusBottomSheet(
                                         "keterangan",
                                         createPartFromString(descriptionField.text.toString())!!
                                     )
-                                    put(
-                                        "user_supervisor[]", createPartFromString(
-                                            idSupervisor.toString()
-                                        )!!
-                                    )
+                                    for (i in 0 until selectedSupervisorsArrayList.size - 1) {
+                                        put(
+                                            "user_supervisor[$i]",
+                                            createPartFromString(
+                                                selectedSupervisorsArrayList[i].idUser.toString()
+                                            )!!
+                                        )
+                                    }
                                 }
                                 InitAPI.getAPI.approveSubmission(data)
                                     .enqueue(object : Callback<GenericSimpleResponse> {
@@ -869,6 +837,9 @@ class UpdateStatusBottomSheet(
                         }
                     }
                 } else {
+                    approveLoading.visibility = View.GONE
+                    rejectLoading.visibility = View.GONE
+                    deployTechLoading.visibility = View.GONE
                     CustomToast.getInstance(context)
                         .setBackgroundColor(
                             ContextCompat.getColor(
@@ -883,6 +854,7 @@ class UpdateStatusBottomSheet(
                             )
                         )
                         .setMessage("Make sure all fields are filled.").show()
+                if (descriptionField.text.toString().isEmpty())
                     descriptionFieldLayout.error = "Make sure all fields are filled."
                 }
             } else {
@@ -896,7 +868,7 @@ class UpdateStatusBottomSheet(
                         )
                         for (i in 0 until selectedTechniciansArrayList.size - 1) {
                             put(
-                                "user_teknisi[]",
+                                "user_teknisi[$i]",
                                 createPartFromString(
                                     selectedTechniciansArrayList[i].idUser.toString()
                                 )!!

@@ -134,7 +134,7 @@ class SubmissionDetailActivity : AppCompatActivity(),
                                 if (response.body() != null) {
                                     val data = response.body()!![0]
                                     detailData = data
-                                    /*Log.e("DATA", data.toString())*/
+                                    Log.e("DATA", data.toString())
                                     detailTitle.text = data.nomorRequest
                                     if (data.fotoGaprojects!!.isEmpty()) {
                                         imageContainer.visibility = View.GONE
@@ -313,49 +313,37 @@ class SubmissionDetailActivity : AppCompatActivity(),
                                                             )
                                                         )
                                                     } else {
-                                                        InitAPI.getAPI.getUserDetail(
-                                                            data.usernUserSpv[0]?.idUser!!.toInt()
-                                                        ).enqueue(object :
-                                                            Callback<UserDetailResponse> {
-                                                            override fun onResponse(
-                                                                call1: Call<UserDetailResponse>,
-                                                                response1: Response<UserDetailResponse>
-                                                            ) {
-                                                                if (response1.isSuccessful) {
-                                                                    if (response1.body() != null) {
-                                                                        val result =
-                                                                            response1.body()!!
+                                                        if (data.usernUserSpv.isNotEmpty()) {
+                                                            for (i in 0 until data.usernUserSpv.size) {
+                                                                if (data.usernUserSpv.size > 1) {
+                                                                    if (i < data.usernUserSpv.size - 1) {
                                                                         message.append(
-                                                                            "${result.nama?.trimEnd()} to assign technicians"
+                                                                            "${data.usernUserSpv[i]?.namaUser?.trimEnd()} or "
                                                                         )
-                                                                        statusMessage.text =
-                                                                            message.toString()
-                                                                        statusMessage.setTextColor(
-                                                                            ContextCompat.getColor(
-                                                                                this@SubmissionDetailActivity,
-                                                                                R.color.black
-                                                                            )
+                                                                    } else {
+                                                                        message.append(
+                                                                            "${data.usernUserSpv[i]?.namaUser?.trimEnd()}"
                                                                         )
                                                                     }
-                                                                } else {
-                                                                    Log.e(
-                                                                        "ERROR ${response1.code()}",
-                                                                        "User Detail SPV Response null | ${response1.message()}"
+                                                                } else
+                                                                    message.append(
+                                                                        "${data.usernUserSpv[i]?.namaUser?.trimEnd()}"
                                                                     )
-                                                                }
                                                             }
-
-                                                            override fun onFailure(
-                                                                call1: Call<UserDetailResponse>,
-                                                                throwable: Throwable
-                                                            ) {
-                                                                Log.e(
-                                                                    "ERROR",
-                                                                    "User Detail SPV Failure | $throwable"
+                                                            message.append(
+                                                                " to assign technicians"
+                                                            )
+                                                            statusMessage.text =
+                                                                message.toString()
+                                                            statusMessage.setTextColor(
+                                                                ContextCompat.getColor(
+                                                                    this@SubmissionDetailActivity,
+                                                                    R.color.black
                                                                 )
-                                                                throwable.printStackTrace()
-                                                            }
-                                                        })
+                                                            )
+                                                        } else {
+                                                            Log.e("ERROR SPV", "SPV null")
+                                                        }
                                                     }
                                                 }
                                             }
@@ -798,22 +786,23 @@ class SubmissionDetailActivity : AppCompatActivity(),
 
     private fun actionCondition(data: SubmissionDetailResponse) {
         binding.apply {
-            InitAPI.getAPI.getUserFromStarConnect(data.idUser!!.toInt())
-                .enqueue(object : Callback<StarconnectUserResponse> {
-                    override fun onResponse(
-                        call: Call<StarconnectUserResponse?>,
-                        response: Response<StarconnectUserResponse?>
-                    ) {
-                        try {
+            try {
+                InitAPI.getAPI.getUserFromStarConnect(userData.id)
+                    .enqueue(object : Callback<StarconnectUserResponse> {
+                        override fun onResponse(
+                            call: Call<StarconnectUserResponse?>,
+                            response: Response<StarconnectUserResponse?>
+                        ) {
                             if (response.isSuccessful) {
                                 if (response.body() != null) {
+                                    val result = response.body()
                                     when (data.stsGaprojects) {
                                         1 -> {
-                                            if (response.body()?.mEMORG!!.contains(
+                                            if (result?.mEMORG!!.toString().contains(
                                                     data.deptTujuan.toString()
                                                 )
                                             ) {
-                                                if (data.idUser.toInt() == userData.id) {
+                                                if (data.idUser == userData.id) {
                                                     actionButton.visibility = View.GONE
                                                     actionSelfButton.visibility = View.VISIBLE
                                                     actionSelfButton.extend()
@@ -826,7 +815,7 @@ class SubmissionDetailActivity : AppCompatActivity(),
                                                     }
                                                 }
                                             } else {
-                                                if (data.idUser.toInt() == userData.id) {
+                                                if (data.idUser == userData.id) {
                                                     actionButton.visibility = View.GONE
                                                     actionSelfButton.visibility = View.VISIBLE
                                                     actionSelfButton.extend()
@@ -878,7 +867,8 @@ class SubmissionDetailActivity : AppCompatActivity(),
                                                     deployTech = false
                                                 ).also { bs ->
                                                     with(bs) {
-                                                        setOnUpdateSuccessListener(object : UpdateStatusBottomSheet.OnUpdateSuccessListener {
+                                                        setOnUpdateSuccessListener(object :
+                                                            UpdateStatusBottomSheet.OnUpdateSuccessListener {
                                                             override fun onApproved() {}
 
                                                             override fun onRejected() {}
@@ -940,7 +930,12 @@ class SubmissionDetailActivity : AppCompatActivity(),
                                     "Starconnect User Response null | ${response.message()}"
                                 )
                             }
-                        } catch (jsonException: JSONException) {
+                        }
+
+                        override fun onFailure(
+                            call: Call<StarconnectUserResponse?>,
+                            throwable: Throwable
+                        ) {
                             CustomToast.getInstance(applicationContext)
                                 .setBackgroundColor(
                                     ResourcesCompat.getColor(
@@ -954,32 +949,27 @@ class SubmissionDetailActivity : AppCompatActivity(),
                                 )
                                 .setMessage("Something went wrong, please try again later")
                                 .show()
-                            jsonException.printStackTrace()
-                            Log.e("ERROR", "Starconnect User Exception | $jsonException")
+                            throwable.printStackTrace()
+                            Log.e("ERROR", "Starconnect User Failure | $throwable")
                         }
-                    }
-
-                    override fun onFailure(
-                        call: Call<StarconnectUserResponse?>,
-                        throwable: Throwable
-                    ) {
-                        CustomToast.getInstance(applicationContext)
-                            .setBackgroundColor(
-                                ResourcesCompat.getColor(
-                                    resources, R.color.custom_toast_background_failed, theme
-                                )
-                            )
-                            .setFontColor(
-                                ResourcesCompat.getColor(
-                                    resources, R.color.custom_toast_font_failed, theme
-                                )
-                            )
-                            .setMessage("Something went wrong, please try again later")
-                            .show()
-                        throwable.printStackTrace()
-                        Log.e("ERROR", "Starconnect User Failure | $throwable")
-                    }
-                })
+                    })
+            } catch (jsonException: JSONException) {
+                CustomToast.getInstance(applicationContext)
+                    .setBackgroundColor(
+                        ResourcesCompat.getColor(
+                            resources, R.color.custom_toast_background_failed, theme
+                        )
+                    )
+                    .setFontColor(
+                        ResourcesCompat.getColor(
+                            resources, R.color.custom_toast_font_failed, theme
+                        )
+                    )
+                    .setMessage("Something went wrong, please try again later")
+                    .show()
+                jsonException.printStackTrace()
+                Log.e("ERROR", "Starconnect User Exception | $jsonException")
+            }
         }
     }
 

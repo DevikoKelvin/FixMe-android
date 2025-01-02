@@ -45,7 +45,7 @@ class NotificationService : Service() {
 
                 NotificationsHelper.receiveNotifications(applicationContext, userData)
                 try {
-                    Thread.sleep(2000)
+                    Thread.sleep(30000)
                 } catch (interruptedException: InterruptedException) {
                     interruptedException.printStackTrace()
                 }

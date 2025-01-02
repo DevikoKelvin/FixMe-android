@@ -4,6 +4,7 @@ import android.content.Context
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.view.ViewGroup
 import com.erela.fixme.databinding.BsSubmissionActionBinding
@@ -71,31 +72,35 @@ class SubmissionActionBottomSheet(context: Context, val data: SubmissionDetailRe
                 }
                 // Approved
                 2 -> {
-                    if (data.usernUserSpv!![0]?.idUser == userData.id) {
-                        actionsButtonContainer.visibility = View.VISIBLE
-                        approveButton.visibility = View.GONE
-                        rejectButton.visibility = View.GONE
-                        deployTechButton.visibility = View.VISIBLE
-                        deployTechButton.setOnClickListener {
-                            val bottomSheet =
-                                UpdateStatusBottomSheet(
-                                    context,
-                                    data,
-                                    approve = false,
-                                    cancel = false,
-                                    deployTech = true
-                                ).also { bottomSheet ->
-                                    with(bottomSheet) {
-                                        setOnUpdateSuccessListener(this@SubmissionActionBottomSheet)
+                    for (i in 0 until data.usernUserSpv!!.size) {
+                        if (data.usernUserSpv[i]?.idUser == userData.id) {
+                            actionsButtonContainer.visibility = View.VISIBLE
+                            startProgressButton.visibility = View.GONE
+                            approveButton.visibility = View.GONE
+                            rejectButton.visibility = View.GONE
+                            deployTechButton.visibility = View.VISIBLE
+                            deployTechButton.setOnClickListener {
+                                val bottomSheet =
+                                    UpdateStatusBottomSheet(
+                                        context,
+                                        data,
+                                        approve = false,
+                                        cancel = false,
+                                        deployTech = true
+                                    ).also { bottomSheet ->
+                                        with(bottomSheet) {
+                                            setOnUpdateSuccessListener(this@SubmissionActionBottomSheet)
+                                        }
                                     }
-                                }
-                            if (bottomSheet.window != null)
-                                bottomSheet.show()
+                                if (bottomSheet.window != null)
+                                    bottomSheet.show()
+                            }
+                            break
+                        } else {
+                            actionsButtonContainer.visibility = View.GONE
+                            startProgressButton.visibility = View.VISIBLE
+                            onTrialDoneButtonContainer.visibility = View.GONE
                         }
-                    } else {
-                        actionsButtonContainer.visibility = View.GONE
-                        startProgressButton.visibility = View.VISIBLE
-                        onTrialDoneButtonContainer.visibility = View.GONE
                     }
                 }
             }

@@ -43,9 +43,6 @@ import com.erela.fixme.objects.FotoGaprojectsItem
 import com.erela.fixme.objects.GenericSimpleResponse
 import com.erela.fixme.objects.MaterialListResponse
 import com.erela.fixme.objects.SubmissionDetailResponse
-import com.google.android.flexbox.FlexDirection
-import com.google.android.flexbox.FlexWrap
-import com.google.android.flexbox.FlexboxLayoutManager
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
@@ -70,8 +67,6 @@ class SubmissionFormActivity : AppCompatActivity() {
     private var selectedDept: DepartmentListResponse? = null
     private var selectedCategory: Int = 0
     private var selectedDepartment: Int = 0
-    private var selectedMaterialsArrayList: ArrayList<MaterialListResponse> = ArrayList()
-    private lateinit var materialAdapter: SelectedMaterialsRvAdapters
     private val imageArrayUri = ArrayList<Uri>()
     private val oldImageArray = ArrayList<FotoGaprojectsItem>()
     private var deletedOldImageArray: ArrayList<Int> = ArrayList()
@@ -190,43 +185,6 @@ class SubmissionFormActivity : AppCompatActivity() {
                 machineNameField.setText("${detail?.namaMesin}".ifEmpty { "" })
                 descriptionField.setText("${detail?.keterangan}")
                 isFormEmpty[6] = true
-                if (detail?.material!!.isNotEmpty()) {
-                    InitAPI.getAPI.getMaterialList().enqueue(
-                        object : Callback<List<MaterialListResponse>> {
-                            override fun onResponse(
-                                call: Call<List<MaterialListResponse>>,
-                                response: Response<List<MaterialListResponse>>
-                            ) {
-                                if (response.isSuccessful) {
-                                    if (response.body() != null) {
-                                        for (i in 0 until detail?.material!!.size) {
-                                            for (j in 0 until response.body()!!.size) {
-                                                if (detail?.material!![i]?.idMaterial == response.body()!![j].idMaterial?.toInt()) {
-                                                    selectedMaterialsArrayList.add(
-                                                        response.body()!![j]
-                                                    )
-                                                }
-                                            }
-                                        }
-                                        prepareMaterials()
-                                    }
-                                } else {
-                                    Log.e("ERROR", response.message())
-                                    prepareMaterials()
-                                }
-                            }
-
-                            override fun onFailure(
-                                call: Call<List<MaterialListResponse>>, throwable: Throwable
-                            ) {
-                                Log.e("ERROR", throwable.message.toString())
-                                throwable.printStackTrace()
-                                prepareMaterials()
-                            }
-                        })
-                } else {
-                    prepareMaterials()
-                }
                 if (detail?.fotoGaprojects!!.isNotEmpty()) {
                     manageAttachmentText.text = getString(R.string.manage_new_photo)
                     for (element in detail?.fotoGaprojects!!) {
@@ -410,7 +368,7 @@ class SubmissionFormActivity : AppCompatActivity() {
                 pageTitle.text = getString(R.string.make_submission_title)
                 getDepartmentList()
                 getCategoryList()
-                prepareMaterials()
+                /*prepareMaterials()*/
 
                 submitButton.setOnClickListener {
                     submitButton.visibility = View.GONE
@@ -670,16 +628,6 @@ class SubmissionFormActivity : AppCompatActivity() {
                     "keterangan",
                     createPartFromString(descriptionField.text.toString())!!
                 )
-                if (selectedMaterialsArrayList.size > 1) {
-                    for (i in 0 until selectedMaterialsArrayList.size - 1) {
-                        put(
-                            "material[$i]",
-                            createPartFromString(
-                                selectedMaterialsArrayList[i].idMaterial
-                            )!!
-                        )
-                    }
-                }
                 if (deletedOldImageArray.isNotEmpty()) {
                     for (element in deletedOldImageArray) {
                         put(
@@ -736,16 +684,6 @@ class SubmissionFormActivity : AppCompatActivity() {
                     "keterangan",
                     createPartFromString(descriptionField.text.toString())!!
                 )
-                if (selectedMaterialsArrayList.size > 1) {
-                    for (i in 0 until selectedMaterialsArrayList.size - 1) {
-                        put(
-                            "material[$i]",
-                            createPartFromString(
-                                selectedMaterialsArrayList[i].idMaterial
-                            )!!
-                        )
-                    }
-                }
             }
         }
 
@@ -1260,7 +1198,7 @@ class SubmissionFormActivity : AppCompatActivity() {
         }
     }
 
-    @SuppressLint("NotifyDataSetChanged")
+    /*@SuppressLint("NotifyDataSetChanged")
     private fun prepareMaterials() {
         binding.apply {
             selectedMaterialsArrayList.add(
@@ -1342,7 +1280,7 @@ class SubmissionFormActivity : AppCompatActivity() {
             )
             materialAdapter.notifyDataSetChanged()
         }
-    }
+    }*/
 
     private fun createMultipartBody(uri: Uri): MultipartBody.Part? {
         return try {

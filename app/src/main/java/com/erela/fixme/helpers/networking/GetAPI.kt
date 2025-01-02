@@ -10,8 +10,7 @@ import com.erela.fixme.objects.MaterialListResponse
 import com.erela.fixme.objects.StarconnectUserResponse
 import com.erela.fixme.objects.SubmissionDetailResponse
 import com.erela.fixme.objects.SubmissionListResponse
-import com.erela.fixme.objects.SupervisorListResponse
-import com.erela.fixme.objects.TechnicianListResponse
+import com.erela.fixme.objects.SupervisorTechnicianListResponse
 import com.erela.fixme.objects.UserDetailResponse
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
@@ -109,13 +108,13 @@ interface GetAPI {
     @POST("setspv")
     fun getSupervisorList(
         @Field("id") id: Int
-    ): Call<List<SupervisorListResponse>>
+    ): Call<List<SupervisorTechnicianListResponse>>
 
     @FormUrlEncoded
     @POST("setteknisi")
     fun getTechnicianList(
         @Field("id") id: Int
-    ): Call<List<TechnicianListResponse>>
+    ): Call<List<SupervisorTechnicianListResponse>>
 
     @Multipart
     @POST("statusapprove")

@@ -2,7 +2,7 @@ package com.erela.fixme.objects
 
 import com.google.gson.annotations.SerializedName
 
-data class SupervisorListResponse(
+data class SupervisorTechnicianListResponse(
     @field:SerializedName("sub_dept")
     val subDept: String? = null,
     @field:SerializedName("id_dept")
@@ -13,10 +13,15 @@ data class SupervisorListResponse(
     val singkatan: String? = null,
     @field:SerializedName("nama_user")
     val namaUser: String? = null,
-	@field:SerializedName("id_user")
-	val idUser: Int? = null,
+    @field:SerializedName("id_user")
+    val idUser: Int? = null,
     @field:SerializedName("id_user_starconnect")
     val idUserStarconnect: Int? = null,
     @field:SerializedName("nama_dept")
     val namaDept: String? = null
+)
+
+data class SelectedSupervisorTechniciansList(
+    val technician: SupervisorTechnicianListResponse? = null,
+    var isSelected: Boolean = false
 )

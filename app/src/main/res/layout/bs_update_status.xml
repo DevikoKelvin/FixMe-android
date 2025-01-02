@@ -76,14 +76,25 @@
         android:textStyle="bold"
         android:visibility="gone" />
 
-    <com.google.android.material.card.MaterialCardView
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvSupervisor"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="16dp"
+        android:layout_marginTop="4dp"
+        android:visibility="gone"
+        app:layoutManager="com.google.android.flexbox.FlexboxLayoutManager"
+        tools:itemCount="2"
+        tools:listitem="@layout/list_item_selected_items" />
+
+    <!--<com.google.android.material.card.MaterialCardView
         android:id="@+id/supervisorDropdownLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="16dp"
         android:layout_marginTop="8dp"
         android:minHeight="54dp"
-        android:visibility="gone"
+        android:visibility="visible"
         app:cardBackgroundColor="@android:color/transparent"
         app:cardCornerRadius="50dp"
         app:cardElevation="0dp"
@@ -103,7 +114,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             tools:listitem="@layout/support_simple_spinner_dropdown_item" />
-    </com.google.android.material.card.MaterialCardView>
+    </com.google.android.material.card.MaterialCardView>-->
 
     <TextView
         android:id="@+id/selectTechniciansText"

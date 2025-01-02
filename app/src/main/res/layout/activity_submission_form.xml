@@ -284,7 +284,7 @@
                     android:textSize="14sp" />
             </com.google.android.material.textfield.TextInputLayout>
 
-            <TextView
+            <!--<TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="16dp"
@@ -302,7 +302,7 @@
                 android:layout_marginTop="4dp"
                 app:layoutManager="com.google.android.flexbox.FlexboxLayoutManager"
                 tools:itemCount="2"
-                tools:listitem="@layout/list_item_selected_items" />
+                tools:listitem="@layout/list_item_selected_items" />-->
 
             <TextView
                 android:layout_width="wrap_content"

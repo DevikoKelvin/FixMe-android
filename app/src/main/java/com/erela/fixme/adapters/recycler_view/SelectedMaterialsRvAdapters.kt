@@ -33,14 +33,14 @@ class SelectedMaterialsRvAdapters(
             binding.apply {
                 itemText.text = item.namaMaterial
                 if (position == selectedMaterialsArrayList.size - 1) {
-                    materialContainer.setCardBackgroundColor(
+                    mainContainer.setCardBackgroundColor(
                         ContextCompat.getColor(
                             context,
                             R.color.custom_toast_background_success
                         )
                     )
                 } else {
-                    materialContainer.setCardBackgroundColor(
+                    mainContainer.setCardBackgroundColor(
                         ContextCompat.getColor(
                             context,
                             R.color.custom_toast_background_normal

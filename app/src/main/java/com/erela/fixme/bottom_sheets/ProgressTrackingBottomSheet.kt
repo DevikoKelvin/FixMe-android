@@ -6,6 +6,7 @@ import android.content.Context
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
@@ -51,10 +52,19 @@ class ProgressTrackingBottomSheet(
                 if (data.usernUserTeknisi.size == 1)
                     message.append("${data.usernUserTeknisi[i]?.namaUser?.trimEnd()}")
                 else {
-                    if (i < data.usernUserTeknisi.size - 1)
-                        message.append("${data.usernUserTeknisi[i]?.namaUser?.trimEnd()}, ")
-                    else
-                        message.append(" and ${data.usernUserTeknisi[i]?.namaUser?.trimEnd()}")
+                    if (data.usernUserTeknisi.size == 2) {
+                        if (i == 0)
+                            message.append("${data.usernUserTeknisi[i]?.namaUser?.trimEnd()} and ")
+                        else
+                            message.append("${data.usernUserTeknisi[i]?.namaUser?.trimEnd()}")
+                    } else {
+                        if (i < data.usernUserTeknisi.size - 1)
+                            message.append("${data.usernUserTeknisi[i]?.namaUser?.trimEnd()}, ")
+                        else if (i == data.usernUserTeknisi.size - 1)
+                            message.append("${data.usernUserTeknisi[i]?.namaUser?.trimEnd()}")
+                        else
+                            message.append(" and ${data.usernUserTeknisi[i]?.namaUser?.trimEnd()}")
+                    }
                 }
             }
             progressWorkedBy.text = message.toString()
@@ -68,51 +78,62 @@ class ProgressTrackingBottomSheet(
             if (data.idUser == userData.id) {
                 when (data.stsGaprojects) {
                     3 -> {
-                        if (userData.id == data.usernUserSpv!![0]?.idUser) {
-                            var progressDone = 0
-                            for (i in 0 until data.progress!!.size) {
-                                if (data.progress[i]?.stsDetail == 1)
-                                    progressDone++
-                            }
-                            if (progressDone == data.progress.size && data.progress.isNotEmpty()) {
-                                progressActionButton.visibility = View.VISIBLE
+                        for (i in 0 until data.usernUserTeknisi.size) {
+                            if (data.usernUserTeknisi[i]?.idUser == userData.id) {
+                                Log.e("Am I the Technicians?", "Yes")
                                 progressActionButton.setCardBackgroundColor(
                                     ContextCompat.getColor(
-                                        context, R.color.custom_toast_background_soft_blue
+                                        context, R.color.button_color
                                     )
                                 )
                                 progressActionText.setTextColor(
-                                    ContextCompat.getColor(
-                                        context, R.color.custom_toast_font_blue
-                                    )
+                                    ContextCompat.getColor(context, R.color.white)
                                 )
-                                progressActionText.text = "Mark Ready for Trial"
+                                progressActionText.text =
+                                    if (progressAdapter.itemCount == 0) context.getString(
+                                        R.string.action_on_progress
+                                    ) else context.getString(R.string.create_new_progress)
                                 progressActionButton.setOnClickListener {
-                                    onProgressTrackingListener.readyForTrialClicked()
+                                    onProgressTrackingListener.createProgressClicked()
                                 }
+                                break
                             } else {
+                                Log.e("Am I the Technicians?", "No")
                                 progressActionButton.visibility = View.GONE
                             }
-                        } else {
-                            for (i in 0 until data.usernUserTeknisi.size) {
-                                if (data.usernUserTeknisi[i]?.idUser == userData.id) {
+                        }
+
+                        for (i in 0 until data.usernUserSpv!!.size) {
+                            if (data.usernUserSpv[i]?.idUser == userData.id) {
+                                Log.e("Am I the Supervisors?", "Yes")
+                                var progressDone = 0
+                                for (j in 0 until data.progress!!.size) {
+                                    if (data.progress[j]?.stsDetail == 1)
+                                        progressDone++
+                                }
+                                if (progressDone == data.progress.size && data.progress.isNotEmpty()) {
+                                    progressActionButton.visibility = View.VISIBLE
                                     progressActionButton.setCardBackgroundColor(
                                         ContextCompat.getColor(
-                                            context, R.color.button_color
+                                            context, R.color.custom_toast_background_soft_blue
                                         )
                                     )
                                     progressActionText.setTextColor(
-                                        ContextCompat.getColor(context, R.color.white)
+                                        ContextCompat.getColor(
+                                            context, R.color.custom_toast_font_blue
+                                        )
                                     )
-                                    progressActionText.text =
-                                        if (progressAdapter.itemCount == 0) context.getString(
-                                            R.string.action_on_progress
-                                        ) else context.getString(R.string.create_new_progress)
+                                    progressActionText.text = "Mark Ready for Trial"
                                     progressActionButton.setOnClickListener {
-                                        onProgressTrackingListener.createProgressClicked()
+                                        onProgressTrackingListener.readyForTrialClicked()
                                     }
-                                } else
+                                } else {
                                     progressActionButton.visibility = View.GONE
+                                }
+                                break
+                            } else {
+                                Log.e("Am I the Supervisors?", "No")
+                                progressActionButton.visibility = View.GONE
                             }
                         }
                     }
