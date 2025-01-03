@@ -16,6 +16,7 @@ import com.erela.fixme.helpers.UserDataHelper
 import com.erela.fixme.objects.UserData
 import com.erela.fixme.services.NotificationService
 import com.pusher.pushnotifications.PushNotifications
+import java.time.LocalDateTime
 
 class MainActivity : AppCompatActivity() {
     private val binding: ActivityMainBinding by lazy {
@@ -59,7 +60,14 @@ class MainActivity : AppCompatActivity() {
                 }
             }
             /*PushNotifications.addDeviceInterest("hello")*/
-
+            val currentDateTime = LocalDateTime.now()
+            greetingText.text = "Good ${
+                when (currentDateTime.hour) {
+                    in 0 .. 11 -> "morning,"
+                    in 12 .. 18 -> "afternoon,"
+                    else -> "evening,"
+                }
+            }"
             usernameText.text = "${userData.name.trimEnd()}!"
 
             notificationButton.setOnClickListener {
