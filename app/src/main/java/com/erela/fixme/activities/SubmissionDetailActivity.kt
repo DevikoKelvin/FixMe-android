@@ -36,7 +36,6 @@ import com.erela.fixme.objects.ProgressItem
 import com.erela.fixme.objects.StarconnectUserResponse
 import com.erela.fixme.objects.SubmissionDetailResponse
 import com.erela.fixme.objects.UserData
-import com.erela.fixme.objects.UserDetailResponse
 import org.json.JSONException
 import retrofit2.Call
 import retrofit2.Callback
@@ -132,22 +131,21 @@ class SubmissionDetailActivity : AppCompatActivity(),
                             contentScrollContainer.visibility = View.VISIBLE
                             if (response.isSuccessful) {
                                 if (response.body() != null) {
-                                    val data = response.body()!![0]
-                                    detailData = data
-                                    Log.e("DATA", data.toString())
-                                    detailTitle.text = data.nomorRequest
-                                    if (data.fotoGaprojects!!.isEmpty()) {
+                                    detailData = response.body()!![0]
+                                    /*Log.e("DATA", detailData.toString())*/
+                                    detailTitle.text = "No. ${detailData.nomorRequest}"
+                                    if (detailData.fotoGaprojects!!.isEmpty()) {
                                         imageContainer.visibility = View.GONE
                                     } else {
                                         imageContainer.visibility = View.VISIBLE
                                         imageData = ArrayList()
-                                        if (data.fotoGaprojects.size > 1) {
+                                        if (detailData.fotoGaprojects!!.size > 1) {
                                             imageCarouselHolder.visibility = View.VISIBLE
                                             circleIndicator.visibility = View.VISIBLE
                                             submissionImage.visibility = View.GONE
-                                            for (i in 0 until data.fotoGaprojects.size) {
+                                            for (i in 0 until detailData.fotoGaprojects!!.size) {
                                                 imageData.add(
-                                                    data.fotoGaprojects[i]!!
+                                                    detailData.fotoGaprojects!![i]!!
                                                 )
                                             }
                                             imageCarouselAdapter = ImageCarouselPagerAdapter(
@@ -163,7 +161,7 @@ class SubmissionDetailActivity : AppCompatActivity(),
                                             imageCarouselHolder.visibility = View.GONE
                                             circleIndicator.visibility = View.GONE
                                             submissionImage.visibility = View.VISIBLE
-                                            val image = data.fotoGaprojects[0]
+                                            val image = detailData.fotoGaprojects!![0]
                                             if (Base64Helper.isBase64Encoded(
                                                     image?.foto.toString()
                                                 )
@@ -183,10 +181,9 @@ class SubmissionDetailActivity : AppCompatActivity(),
                                             }
                                         }
                                     }
-                                    submissionName.text = data.judulKasus
-                                    inputDate.text = data.setTglinput
-                                    when (data.stsGaprojects) {
-                                        // Rejected
+                                    submissionName.text = detailData.judulKasus
+                                    inputDate.text = detailData.setTglinput
+                                    when (detailData.stsGaprojects) {
                                         0 -> {
                                             submissionStatus.setCardBackgroundColor(
                                                 ResourcesCompat.getColor(
@@ -209,7 +206,7 @@ class SubmissionDetailActivity : AppCompatActivity(),
                                                 )
                                             )
                                             statusMessage.text =
-                                                "Rejected by ${data.nameUserReject?.trimEnd()}"
+                                                "Rejected by ${detailData.nameUserReject?.trimEnd()}"
                                             statusMessage.setTextColor(
                                                 ContextCompat.getColor(
                                                     this@SubmissionDetailActivity,
@@ -243,14 +240,14 @@ class SubmissionDetailActivity : AppCompatActivity(),
                                             submissionStatusText.text = "Approved"
                                             var tech = false
                                             var spv = false
-                                            for (technician in data.usernUserTeknisi!!) {
+                                            for (technician in detailData.usernUserTeknisi!!) {
                                                 if (technician?.idUser == userData.id) {
                                                     tech = true
                                                     break
                                                 }
                                             }
 
-                                            for (supervisor in data.usernUserSpv!!) {
+                                            for (supervisor in detailData.usernUserSpv!!) {
                                                 if (supervisor?.idUser == userData.id) {
                                                     spv = true
                                                     break
@@ -286,23 +283,23 @@ class SubmissionDetailActivity : AppCompatActivity(),
                                                         )
                                                     )
                                                     message = StringBuilder().append(
-                                                        "Approved by ${data.userNamaApprove?.trimEnd()}\nWaiting for action from "
+                                                        "Approved by ${detailData.userNamaApprove?.trimEnd()}\nWaiting for action from "
                                                     )
-                                                    if (data.usernUserTeknisi.isNotEmpty()) {
-                                                        for (i in 0 until data.usernUserTeknisi.size) {
-                                                            if (data.usernUserTeknisi.size > 1) {
-                                                                if (i < data.usernUserTeknisi.size - 1) {
+                                                    if (detailData.usernUserTeknisi!!.isNotEmpty()) {
+                                                        for (i in 0 until detailData.usernUserTeknisi!!.size) {
+                                                            if (detailData.usernUserTeknisi!!.size > 1) {
+                                                                if (i < detailData.usernUserTeknisi!!.size - 1) {
                                                                     message.append(
-                                                                        "${data.usernUserTeknisi[i]?.namaUser?.trimEnd()} or "
+                                                                        "${detailData.usernUserTeknisi!![i]?.namaUser?.trimEnd()} or "
                                                                     )
                                                                 } else {
                                                                     message.append(
-                                                                        "${data.usernUserTeknisi[i]?.namaUser?.trimEnd()}"
+                                                                        "${detailData.usernUserTeknisi!![i]?.namaUser?.trimEnd()}"
                                                                     )
                                                                 }
                                                             } else
                                                                 message.append(
-                                                                    "${data.usernUserTeknisi[i]?.namaUser?.trimEnd()}"
+                                                                    "${detailData.usernUserTeknisi!![i]?.namaUser?.trimEnd()}"
                                                                 )
                                                         }
                                                         statusMessage.text = message.toString()
@@ -313,21 +310,21 @@ class SubmissionDetailActivity : AppCompatActivity(),
                                                             )
                                                         )
                                                     } else {
-                                                        if (data.usernUserSpv.isNotEmpty()) {
-                                                            for (i in 0 until data.usernUserSpv.size) {
-                                                                if (data.usernUserSpv.size > 1) {
-                                                                    if (i < data.usernUserSpv.size - 1) {
+                                                        if (detailData.usernUserSpv!!.isNotEmpty()) {
+                                                            for (i in 0 until detailData.usernUserSpv!!.size) {
+                                                                if (detailData.usernUserSpv!!.size > 1) {
+                                                                    if (i < detailData.usernUserSpv!!.size - 1) {
                                                                         message.append(
-                                                                            "${data.usernUserSpv[i]?.namaUser?.trimEnd()} or "
+                                                                            "${detailData.usernUserSpv!![i]?.namaUser?.trimEnd()} or "
                                                                         )
                                                                     } else {
                                                                         message.append(
-                                                                            "${data.usernUserSpv[i]?.namaUser?.trimEnd()}"
+                                                                            "${detailData.usernUserSpv!![i]?.namaUser?.trimEnd()}"
                                                                         )
                                                                     }
                                                                 } else
                                                                     message.append(
-                                                                        "${data.usernUserSpv[i]?.namaUser?.trimEnd()}"
+                                                                        "${detailData.usernUserSpv!![i]?.namaUser?.trimEnd()}"
                                                                     )
                                                             }
                                                             message.append(
@@ -380,19 +377,19 @@ class SubmissionDetailActivity : AppCompatActivity(),
                                                 )
                                             )
                                             message = StringBuilder().append("On Progress by ")
-                                            for (i in 0 until data.usernUserTeknisi!!.size) {
-                                                if (data.usernUserTeknisi.size > 1) {
-                                                    if (i < data.usernUserTeknisi.size - 1)
+                                            for (i in 0 until detailData.usernUserTeknisi!!.size) {
+                                                if (detailData.usernUserTeknisi!!.size > 1) {
+                                                    if (i < detailData.usernUserTeknisi!!.size - 1)
                                                         message.append(
-                                                            "${data.usernUserTeknisi[i]?.namaUser?.trimEnd()}, "
+                                                            "${detailData.usernUserTeknisi!![i]?.namaUser?.trimEnd()}, "
                                                         )
                                                     else
                                                         message.append(
-                                                            "${data.usernUserTeknisi[i]?.namaUser?.trimEnd()}\nClick to see progress"
+                                                            "${detailData.usernUserTeknisi!![i]?.namaUser?.trimEnd()}\nClick to see progress"
                                                         )
                                                 } else
                                                     message.append(
-                                                        "${data.usernUserTeknisi[i]?.namaUser?.trimEnd()}\nClick to see progress"
+                                                        "${detailData.usernUserTeknisi!![i]?.namaUser?.trimEnd()}\nClick to see progress"
                                                     )
                                             }
                                             onProgressText.text = message.toString()
@@ -400,7 +397,7 @@ class SubmissionDetailActivity : AppCompatActivity(),
                                                 progressTrackingBottomSheet =
                                                     ProgressTrackingBottomSheet(
                                                         this@SubmissionDetailActivity,
-                                                        this@SubmissionDetailActivity, data
+                                                        this@SubmissionDetailActivity, detailData
                                                     ).also {
                                                         with(it) {
                                                             setOnProgressTrackingListener(
@@ -415,11 +412,11 @@ class SubmissionDetailActivity : AppCompatActivity(),
                                                 if (progressTrackingBottomSheet.window != null)
                                                     progressTrackingBottomSheet.show()
                                             }
-                                            if (data.trial!!.isNotEmpty()) {
+                                            if (detailData.trial!!.isNotEmpty()) {
                                                 seeTrialContainer.visibility = View.VISIBLE
                                                 seeTrialContainer.setOnClickListener {
                                                     val trialBottomSheet = TrialTrackingBottomSheet(
-                                                        this@SubmissionDetailActivity, data
+                                                        this@SubmissionDetailActivity, detailData
                                                     ).also {
                                                         with(it) {
                                                             setOnTrialTrackingListener(
@@ -453,7 +450,7 @@ class SubmissionDetailActivity : AppCompatActivity(),
                                                     "Progress marked as done by "
                                                 )
                                             message.append(
-                                                "${data.usernUserSpv!![0]?.namaUser?.trimEnd()}\nClick to see progress"
+                                                "${detailData.usernUserSpv!![0]?.namaUser?.trimEnd()}\nClick to see progress"
                                             )
                                             onProgressText.text = message.toString()
                                             onProgressText.setTextColor(
@@ -478,7 +475,7 @@ class SubmissionDetailActivity : AppCompatActivity(),
                                                 progressTrackingBottomSheet =
                                                     ProgressTrackingBottomSheet(
                                                         this@SubmissionDetailActivity,
-                                                        this@SubmissionDetailActivity, data
+                                                        this@SubmissionDetailActivity, detailData
                                                     ).also {
                                                         with(it) {
                                                             setOnProgressTrackingListener(
@@ -493,11 +490,11 @@ class SubmissionDetailActivity : AppCompatActivity(),
                                                 if (progressTrackingBottomSheet.window != null)
                                                     progressTrackingBottomSheet.show()
                                             }
-                                            if (data.trial!!.isNotEmpty()) {
+                                            if (detailData.trial!!.isNotEmpty()) {
                                                 seeTrialContainer.visibility = View.VISIBLE
                                                 seeTrialContainer.setOnClickListener {
                                                     val trialBottomSheet = TrialTrackingBottomSheet(
-                                                        this@SubmissionDetailActivity, data
+                                                        this@SubmissionDetailActivity, detailData
                                                     ).also {
                                                         with(it) {
                                                             setOnTrialTrackingListener(
@@ -534,7 +531,7 @@ class SubmissionDetailActivity : AppCompatActivity(),
                                                 )
                                             )
                                             statusMessage.text =
-                                                "Done by ${data.nameUserDone?.trimEnd()}\nClick to see progress"
+                                                "Done by ${detailData.nameUserDone?.trimEnd()}\nClick to see progress"
                                             statusMessage.setTextColor(
                                                 ContextCompat.getColor(
                                                     this@SubmissionDetailActivity,
@@ -545,7 +542,7 @@ class SubmissionDetailActivity : AppCompatActivity(),
                                                 progressTrackingBottomSheet =
                                                     ProgressTrackingBottomSheet(
                                                         this@SubmissionDetailActivity,
-                                                        this@SubmissionDetailActivity, data
+                                                        this@SubmissionDetailActivity, detailData
                                                     ).also {
                                                         with(it) {
                                                             setOnProgressTrackingListener(
@@ -563,7 +560,7 @@ class SubmissionDetailActivity : AppCompatActivity(),
                                             seeTrialContainer.visibility = View.VISIBLE
                                             seeTrialContainer.setOnClickListener {
                                                 val trialBottomSheet = TrialTrackingBottomSheet(
-                                                    this@SubmissionDetailActivity, data
+                                                    this@SubmissionDetailActivity, detailData
                                                 ).also {
                                                     with(it) {
                                                         setOnTrialTrackingListener(
@@ -604,10 +601,11 @@ class SubmissionDetailActivity : AppCompatActivity(),
                                                     R.color.custom_toast_background_failed
                                                 )
                                             )
-                                            statusMessage.text = if (userData.id == data.idUser)
-                                                "Canceled by You"
-                                            else
-                                                "Canceled by the reporter, ${data.namaUserBuat?.trimEnd()}"
+                                            statusMessage.text =
+                                                if (userData.id == detailData.idUser)
+                                                    "Canceled by You"
+                                                else
+                                                    "Canceled by the reporter, ${detailData.namaUserBuat?.trimEnd()}"
                                             statusMessage.setTextColor(
                                                 ContextCompat.getColor(
                                                     this@SubmissionDetailActivity,
@@ -649,7 +647,7 @@ class SubmissionDetailActivity : AppCompatActivity(),
                                                 progressTrackingBottomSheet =
                                                     ProgressTrackingBottomSheet(
                                                         this@SubmissionDetailActivity,
-                                                        this@SubmissionDetailActivity, data
+                                                        this@SubmissionDetailActivity, detailData
                                                     ).also {
                                                         with(it) {
                                                             setOnProgressTrackingListener(
@@ -667,7 +665,7 @@ class SubmissionDetailActivity : AppCompatActivity(),
                                             seeTrialContainer.visibility = View.VISIBLE
                                             seeTrialContainer.setOnClickListener {
                                                 val trialBottomSheet = TrialTrackingBottomSheet(
-                                                    this@SubmissionDetailActivity, data
+                                                    this@SubmissionDetailActivity, detailData
                                                 ).also {
                                                     with(it) {
                                                         setOnTrialTrackingListener(
@@ -681,42 +679,103 @@ class SubmissionDetailActivity : AppCompatActivity(),
                                             }
                                         }
                                     }
-                                    submissionDescription.text = data.keterangan
+                                    submissionDescription.text = detailData.keterangan
                                     machineCodeText.text = "${getString(R.string.machine_code)}:"
                                     machineNameText.text = "${getString(R.string.machine_name)}:"
-                                    machineCode.text = if (data.kodeMesin != null) {
-                                        data.kodeMesin.ifEmpty { "-" }
+                                    machineCode.text = if (detailData.kodeMesin != null) {
+                                        detailData.kodeMesin!!.ifEmpty { "-" }
                                     } else "-"
-                                    machineName.text = if (data.namaMesin != null) {
-                                        data.namaMesin.ifEmpty { "-" }
+                                    machineName.text = if (detailData.namaMesin != null) {
+                                        detailData.namaMesin!!.ifEmpty { "-" }
                                     } else "-"
-                                    user.text = data.namaUserBuat?.trimEnd()
-                                    actionCondition(data)
-                                    department.text = data.deptTujuan
-                                    inputTime.text = data.tglInput
-                                    location.text = data.lokasi
-                                    reportTime.text = if (data.tglWaktuLapor != null) {
-                                        if (data.tglWaktuLapor == "") "-" else data.tglWaktuLapor
+                                    user.text = detailData.namaUserBuat?.trimEnd()
+                                    actionCondition(detailData)
+                                    department.text = detailData.deptTujuan
+                                    inputTime.text = detailData.tglInput
+                                    location.text = detailData.lokasi
+                                    reportTime.text = if (detailData.tglWaktuLapor != null) {
+                                        if (detailData.tglWaktuLapor == "") "-" else detailData.tglWaktuLapor
                                     } else {
                                         "-"
                                     }
 
-                                    startWork.text = if (data.tglWaktuKerjaStart != null) {
-                                        if (data.tglWaktuKerjaStart.contains(
+                                    startWork.text = if (detailData.tglWaktuKerjaStart != null) {
+                                        if (detailData.tglWaktuKerjaStart!!.contains(
                                                 "0000-00-00"
-                                            ) || data.tglWaktuKerjaStart == ""
-                                        ) "-" else data.tglWaktuKerjaStart
+                                            ) || detailData.tglWaktuKerjaStart == ""
+                                        ) "-" else detailData.tglWaktuKerjaStart
                                     } else {
                                         "-"
                                     }
 
-                                    endWork.text = if (data.tglWaktuKerjaEnd != null) {
-                                        if (data.tglWaktuKerjaEnd.contains(
+                                    endWork.text = if (detailData.tglWaktuKerjaEnd != null) {
+                                        if (detailData.tglWaktuKerjaEnd!!.contains(
                                                 "0000-00-00"
-                                            ) || data.tglWaktuKerjaEnd == ""
-                                        ) "-" else data.tglWaktuKerjaEnd
+                                            ) || detailData.tglWaktuKerjaEnd == ""
+                                        ) "-" else detailData.tglWaktuKerjaEnd
                                     } else {
                                         "-"
+                                    }
+
+                                    userApprovedOrRejectedTitle.text = if (detailData
+                                        .userNamaApprove
+                                        == "" && detailData.nameUserReject == ""
+                                    ) {
+                                        "-"
+                                    } else {
+                                        if (detailData.userNamaApprove != "") {
+                                            "Approved by"
+                                        } else if (detailData.nameUserReject != "") {
+                                            "Rejected by"
+                                        } else {
+                                            "-"
+                                        }
+                                    }
+                                    
+                                    userApprovedOrRejected.text = if (detailData.userNamaApprove
+                                        == "" && detailData.nameUserReject == ""
+                                    ) {
+                                        "-"
+                                    } else {
+                                        if (detailData.userNamaApprove != "") {
+                                            detailData.userNamaApprove?.trimEnd()
+                                        } else if (detailData.nameUserReject != "") {
+                                            detailData.nameUserReject?.trimEnd()
+                                        } else {
+                                            "-"
+                                        }
+                                    }
+
+                                    userSupervisors.text = StringBuilder().also {
+                                        with(it) {
+                                            if (detailData.usernUserSpv!!.isEmpty()) {
+                                                append("-")
+                                            } else {
+                                                for (i in 0 until detailData.usernUserSpv!!.size) {
+                                                    if (i == detailData.usernUserSpv!!.size - 1) {
+                                                        append(detailData.usernUserSpv!![i]?.namaUser?.trimEnd())
+                                                    } else {
+                                                        append("${detailData.usernUserSpv!![i]?.namaUser?.trimEnd()}\n")
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+
+                                    userTechnicians.text = StringBuilder().also {
+                                        with(it) {
+                                            if (detailData.usernUserTeknisi!!.isEmpty()) {
+                                                append("-")
+                                            } else {
+                                                for (i in 0 until detailData.usernUserTeknisi!!.size) {
+                                                    if (i == detailData.usernUserTeknisi!!.size - 1) {
+                                                        append(detailData.usernUserTeknisi!![i]?.namaUser?.trimEnd())
+                                                    } else {
+                                                        append("${detailData.usernUserTeknisi!![i]?.namaUser?.trimEnd()}\n")
+                                                    }
+                                                }
+                                            }
+                                        }
                                     }
                                 }
                             } else {

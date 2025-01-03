@@ -32,6 +32,7 @@ class ProgressTrackingBottomSheet(
     private lateinit var progressAdapter: ProgressRvAdapter
     private lateinit var onProgressTrackingListener: OnProgressTrackingListener
     private lateinit var onProgressItemLongTapListener: OnProgressItemLongTapListener
+    private var tech = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -75,12 +76,15 @@ class ProgressTrackingBottomSheet(
             }
             rvProgress.adapter = progressAdapter
             rvProgress.layoutManager = LinearLayoutManager(context)
-            if (data.idUser == userData.id) {
-                when (data.stsGaprojects) {
-                    3 -> {
+
+            when (data.stsGaprojects) {
+                3 -> {
+                    if (data.idUser == userData.id) {
+                        Log.e("Am I the reporter?", "Yes")
                         for (i in 0 until data.usernUserTeknisi.size) {
                             if (data.usernUserTeknisi[i]?.idUser == userData.id) {
                                 Log.e("Am I the Technicians?", "Yes")
+                                progressActionButton.visibility = View.VISIBLE
                                 progressActionButton.setCardBackgroundColor(
                                     ContextCompat.getColor(
                                         context, R.color.button_color
@@ -96,6 +100,7 @@ class ProgressTrackingBottomSheet(
                                 progressActionButton.setOnClickListener {
                                     onProgressTrackingListener.createProgressClicked()
                                 }
+                                tech = true
                                 break
                             } else {
                                 Log.e("Am I the Technicians?", "No")
@@ -103,44 +108,106 @@ class ProgressTrackingBottomSheet(
                             }
                         }
 
-                        for (i in 0 until data.usernUserSpv!!.size) {
-                            if (data.usernUserSpv[i]?.idUser == userData.id) {
-                                Log.e("Am I the Supervisors?", "Yes")
-                                var progressDone = 0
-                                for (j in 0 until data.progress!!.size) {
-                                    if (data.progress[j]?.stsDetail == 1)
-                                        progressDone++
-                                }
-                                if (progressDone == data.progress.size && data.progress.isNotEmpty()) {
-                                    progressActionButton.visibility = View.VISIBLE
-                                    progressActionButton.setCardBackgroundColor(
-                                        ContextCompat.getColor(
-                                            context, R.color.custom_toast_background_soft_blue
-                                        )
-                                    )
-                                    progressActionText.setTextColor(
-                                        ContextCompat.getColor(
-                                            context, R.color.custom_toast_font_blue
-                                        )
-                                    )
-                                    progressActionText.text = "Mark Ready for Trial"
-                                    progressActionButton.setOnClickListener {
-                                        onProgressTrackingListener.readyForTrialClicked()
+                        if (!tech) {
+                            for (i in 0 until data.usernUserSpv!!.size) {
+                                if (data.usernUserSpv[i]?.idUser == userData.id) {
+                                    var progressDone = 0
+                                    for (j in 0 until data.progress!!.size) {
+                                        if (data.progress[j]?.stsDetail == 1)
+                                            progressDone++
                                     }
+                                    if (progressDone == data.progress.size && data.progress.isNotEmpty()) {
+                                        progressActionButton.visibility = View.VISIBLE
+                                        progressActionButton.setCardBackgroundColor(
+                                            ContextCompat.getColor(
+                                                context, R.color.custom_toast_background_soft_blue
+                                            )
+                                        )
+                                        progressActionText.setTextColor(
+                                            ContextCompat.getColor(
+                                                context, R.color.custom_toast_font_blue
+                                            )
+                                        )
+                                        progressActionText.text = "Mark Ready for Trial"
+                                        progressActionButton.setOnClickListener {
+                                            onProgressTrackingListener.readyForTrialClicked()
+                                        }
+                                    } else {
+                                        progressActionButton.visibility = View.GONE
+                                    }
+                                    break
                                 } else {
                                     progressActionButton.visibility = View.GONE
                                 }
+                            }
+                        }
+                    } else {
+                        Log.e("Am I the reporter?", "No")
+                        for (i in 0 until data.usernUserTeknisi.size) {
+                            if (data.usernUserTeknisi[i]?.idUser == userData.id) {
+                                Log.e("Am I the Technicians?", "Yes")
+                                progressActionButton.visibility = View.VISIBLE
+                                progressActionButton.setCardBackgroundColor(
+                                    ContextCompat.getColor(
+                                        context, R.color.button_color
+                                    )
+                                )
+                                progressActionText.setTextColor(
+                                    ContextCompat.getColor(context, R.color.white)
+                                )
+                                progressActionText.text =
+                                    if (progressAdapter.itemCount == 0) context.getString(
+                                        R.string.action_on_progress
+                                    ) else context.getString(R.string.create_new_progress)
+                                progressActionButton.setOnClickListener {
+                                    onProgressTrackingListener.createProgressClicked()
+                                }
+                                tech = true
                                 break
                             } else {
-                                Log.e("Am I the Supervisors?", "No")
+                                Log.e("Am I the Technicians?", "No")
                                 progressActionButton.visibility = View.GONE
                             }
                         }
+
+                        if (!tech) {
+                            for (i in 0 until data.usernUserSpv!!.size) {
+                                if (data.usernUserSpv[i]?.idUser == userData.id) {
+                                    var progressDone = 0
+                                    for (j in 0 until data.progress!!.size) {
+                                        if (data.progress[j]?.stsDetail == 1)
+                                            progressDone++
+                                    }
+                                    if (progressDone == data.progress.size && data.progress.isNotEmpty()) {
+                                        progressActionButton.visibility = View.VISIBLE
+                                        progressActionButton.setCardBackgroundColor(
+                                            ContextCompat.getColor(
+                                                context, R.color.custom_toast_background_soft_blue
+                                            )
+                                        )
+                                        progressActionText.setTextColor(
+                                            ContextCompat.getColor(context, R.color.custom_toast_font_blue)
+                                        )
+                                        progressActionText.text = "Mark Ready for Trial"
+                                        progressActionButton.setOnClickListener {
+                                            onProgressTrackingListener.readyForTrialClicked()
+                                        }
+                                    } else {
+                                        progressActionButton.visibility = View.GONE
+                                    }
+                                    break
+                                } else {
+                                    progressActionButton.visibility = View.GONE
+                                }
+                            }
+                        }
                     }
-                    4 -> progressActionButton.visibility = View.GONE
-                    /*30 -> progressActionButton.visibility = View.GONE*/
-                    31 -> progressActionButton.visibility = View.GONE
-                    else -> {
+                }
+                4 -> progressActionButton.visibility = View.GONE
+                /*30 -> progressActionButton.visibility = View.GONE*/
+                31 -> progressActionButton.visibility = View.GONE
+                else -> {
+                    if (data.idUser == userData.id) {
                         progressActionButton.visibility = View.VISIBLE
                         progressActionButton.setCardBackgroundColor(
                             ContextCompat.getColor(
@@ -153,61 +220,6 @@ class ProgressTrackingBottomSheet(
                             onProgressTrackingListener.startTrialClicked()
                         }
                     }
-                }
-            } else if (userData.id == data.usernUserSpv!![0]?.idUser) {
-                var progressDone = 0
-                for (i in 0 until data.progress!!.size) {
-                    if (data.progress[i]?.stsDetail == 1)
-                        progressDone++
-                }
-                if (progressDone == data.progress.size && data.progress.isNotEmpty()) {
-                    when (data.stsGaprojects) {
-                        4 -> progressActionButton.visibility = View.GONE
-                        30 -> progressActionButton.visibility = View.GONE
-                        31 -> progressActionButton.visibility = View.GONE
-                        else -> {
-                            progressActionButton.visibility = View.VISIBLE
-                            progressActionButton.setCardBackgroundColor(
-                                ContextCompat.getColor(
-                                    context, R.color.custom_toast_background_soft_blue
-                                )
-                            )
-                            progressActionText.setTextColor(
-                                ContextCompat.getColor(context, R.color.custom_toast_font_blue)
-                            )
-                            progressActionText.text = "Mark Ready for Trial"
-                            progressActionButton.setOnClickListener {
-                                onProgressTrackingListener.readyForTrialClicked()
-                            }
-                        }
-                    }
-                } else
-                    progressActionButton.visibility = View.GONE
-            } else {
-                for (i in 0 until data.usernUserTeknisi.size) {
-                    if (data.usernUserTeknisi[i]?.idUser == userData.id) {
-                        when (data.stsGaprojects) {
-                            4 -> progressActionButton.visibility = View.GONE
-                            30 -> progressActionButton.visibility = View.GONE
-                            31 -> progressActionButton.visibility = View.GONE
-                        }
-                        progressActionButton.setCardBackgroundColor(
-                            ContextCompat.getColor(
-                                context, R.color.button_color
-                            )
-                        )
-                        progressActionText.setTextColor(
-                            ContextCompat.getColor(context, R.color.white)
-                        )
-                        progressActionText.text =
-                            if (progressAdapter.itemCount == 0) context.getString(
-                                R.string.action_on_progress
-                            ) else context.getString(R.string.create_new_progress)
-                        progressActionButton.setOnClickListener {
-                            onProgressTrackingListener.createProgressClicked()
-                        }
-                    } else
-                        progressActionButton.visibility = View.GONE
                 }
             }
         }

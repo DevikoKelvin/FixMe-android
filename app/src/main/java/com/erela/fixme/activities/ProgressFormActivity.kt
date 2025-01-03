@@ -1,14 +1,10 @@
 package com.erela.fixme.activities
 
 import android.annotation.SuppressLint
-import android.content.ClipData
 import android.content.ContentResolver
-import android.content.ContentValues
-import android.content.Intent
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
-import android.provider.MediaStore
 import android.provider.OpenableColumns
 import android.text.Editable
 import android.text.TextWatcher
@@ -16,31 +12,22 @@ import android.util.Log
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import androidx.activity.enableEdgeToEdge
-import androidx.activity.result.ActivityResultLauncher
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.erela.fixme.R
-import com.erela.fixme.bottom_sheets.ChooseFileBottomSheet
-import com.erela.fixme.bottom_sheets.ManageOldPhotoBottomSheet
-import com.erela.fixme.bottom_sheets.ManagePhotoBottomSheet
 import com.erela.fixme.custom_views.CustomToast
 import com.erela.fixme.databinding.ActivityProgressFormBinding
-import com.erela.fixme.helpers.PermissionHelper
 import com.erela.fixme.helpers.UserDataHelper
 import com.erela.fixme.helpers.networking.InitAPI
 import com.erela.fixme.objects.CreationResponse
-import com.erela.fixme.objects.FotoItem
 import com.erela.fixme.objects.GenericSimpleResponse
 import com.erela.fixme.objects.ProgressItem
 import com.erela.fixme.objects.SubmissionDetailResponse
 import com.erela.fixme.objects.UserData
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
-import okhttp3.MultipartBody
 import okhttp3.RequestBody
-import okhttp3.RequestBody.Companion.asRequestBody
 import okhttp3.RequestBody.Companion.toRequestBody
 import org.json.JSONException
 import retrofit2.Call
@@ -49,9 +36,6 @@ import retrofit2.Response
 import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
-import java.text.SimpleDateFormat
-import java.util.Date
-import java.util.Locale
 
 class ProgressFormActivity : AppCompatActivity() {
     private val binding: ActivityProgressFormBinding by lazy {
@@ -62,18 +46,18 @@ class ProgressFormActivity : AppCompatActivity() {
     }
     private var detail: SubmissionDetailResponse? = null
     private var progressData: ProgressItem? = null
-    private val imageArrayUri = ArrayList<Uri>()
+    /*private val imageArrayUri = ArrayList<Uri>()
     private val oldImageArray = ArrayList<FotoItem>()
     private var deletedOldImageArray: ArrayList<Int> = ArrayList()
     private var cameraCaptureFileName: String = ""
     private lateinit var imageUri: Uri
-    private val photoFiles: ArrayList<MultipartBody.Part?> = ArrayList()
+    private val photoFiles: ArrayList<MultipartBody.Part?> = ArrayList()*/
     private val requestBodyMap: MutableMap<String, RequestBody> = mutableMapOf()
     private var isFormEmpty = arrayOf(
         false,
         false
     )
-    private val cameraLauncher: ActivityResultLauncher<Intent> = registerForActivityResult(
+    /*private val cameraLauncher: ActivityResultLauncher<Intent> = registerForActivityResult(
         ActivityResultContracts.StartActivityForResult()
     ) {
         with(it) {
@@ -118,7 +102,7 @@ class ProgressFormActivity : AppCompatActivity() {
                 setManageAttachment()
             }
         }
-    }
+    }*/
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -168,7 +152,7 @@ class ProgressFormActivity : AppCompatActivity() {
                 descriptionField.setText(progressData?.keterangan)
                 if (!progressData?.keterangan.isNullOrEmpty())
                     isFormEmpty[1] = true
-                if (progressData?.foto!!.isNotEmpty()) {
+                /*if (progressData?.foto!!.isNotEmpty()) {
                     manageAttachmentText.text = getString(R.string.manage_new_photo)
                     for (photo in progressData?.foto!!) {
                         if (photo != null) {
@@ -198,7 +182,7 @@ class ProgressFormActivity : AppCompatActivity() {
                         if (bottomSheet.window != null)
                             bottomSheet.show()
                     }
-                }
+                }*/
             }
 
             repairAnalysisField.addTextChangedListener(object : TextWatcher {
@@ -238,7 +222,7 @@ class ProgressFormActivity : AppCompatActivity() {
                 override fun afterTextChanged(s: Editable?) {}
             })
 
-            chooseFileButton.setOnClickListener {
+            /*chooseFileButton.setOnClickListener {
                 val bottomSheet = ChooseFileBottomSheet(this@ProgressFormActivity).also {
                     with(it) {
                         setOnChooseFileListener(object :
@@ -304,7 +288,7 @@ class ProgressFormActivity : AppCompatActivity() {
 
                 if (bottomSheet.window != null)
                     bottomSheet.show()
-            }
+            }*/
 
             progressActionButton.setOnClickListener {
                 loadingBar.visibility = View.VISIBLE
@@ -330,11 +314,11 @@ class ProgressFormActivity : AppCompatActivity() {
                     } else {
                         if (prepareEditForm()) {
                             try {
-                                (if (photoFiles.isNotEmpty()) {
+                                (/*if (photoFiles.isNotEmpty()) {
                                     InitAPI.getAPI.editProgress(requestBodyMap, photoFiles)
-                                } else {
+                                } else {*/
                                     InitAPI.getAPI.editProgressNoAttachment(requestBodyMap)
-                                }).enqueue(object : Callback<GenericSimpleResponse> {
+                                /*}*/).enqueue(object : Callback<GenericSimpleResponse> {
                                     override fun onResponse(
                                         call: Call<GenericSimpleResponse>,
                                         response: Response<GenericSimpleResponse>
@@ -505,11 +489,11 @@ class ProgressFormActivity : AppCompatActivity() {
                     } else {
                         if (prepareSubmitForm()) {
                             try {
-                                (if (photoFiles.isNotEmpty()) {
+                                (/*if (photoFiles.isNotEmpty()) {
                                     InitAPI.getAPI.createProgress(requestBodyMap, photoFiles)
-                                } else {
+                                } else {*/
                                     InitAPI.getAPI.createProgressNoAttachment(requestBodyMap)
-                                }).enqueue(object :
+                                /*}*/).enqueue(object :
                                     Callback<CreationResponse> {
                                     override fun onResponse(
                                         call: Call<CreationResponse>,
@@ -666,7 +650,7 @@ class ProgressFormActivity : AppCompatActivity() {
         }
     }
 
-    private fun setManageAttachment() {
+    /*private fun setManageAttachment() {
         binding.apply {
             manageAttachmentButton.setOnClickListener {
                 val bottomSheet = ManagePhotoBottomSheet(
@@ -699,7 +683,7 @@ class ProgressFormActivity : AppCompatActivity() {
     private fun openGallery() {
         galleryLauncher.launch(
             Intent().also {
-                it.type = "image/*"
+                it.type = "image*//*"
                 it.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true)
                 it.action = Intent.ACTION_GET_CONTENT
             }
@@ -726,7 +710,7 @@ class ProgressFormActivity : AppCompatActivity() {
                 }
             }
         )
-    }
+    }*/
 
     private fun formCheck(): Boolean {
         var validated = 0
@@ -746,13 +730,13 @@ class ProgressFormActivity : AppCompatActivity() {
 
     private fun prepareSubmitForm(): Boolean {
         binding.apply {
-            if (imageArrayUri.isNotEmpty()) {
+            /*if (imageArrayUri.isNotEmpty()) {
                 for (element in imageArrayUri) {
                     photoFiles.add(
                         createMultipartBody(element)
                     )
                 }
-            }
+            }*/
             with(requestBodyMap) {
                 put("id_user", createPartFromString(userData.id.toString())!!)
                 put("id_gaprojects", createPartFromString(detail?.idGaprojects.toString())!!)
@@ -765,24 +749,25 @@ class ProgressFormActivity : AppCompatActivity() {
             }
         }
 
-        return if (requestBodyMap.isNotEmpty()) {
+        return requestBodyMap.isNotEmpty()
+        /*return if (requestBodyMap.isNotEmpty()) {
             if (photoFiles.isNotEmpty())
                 true
             else
                 true
         } else
-            false
+            false*/
     }
 
     private fun prepareEditForm(): Boolean {
         binding.apply {
-            if (imageArrayUri.isNotEmpty()) {
+            /*if (imageArrayUri.isNotEmpty()) {
                 for (element in imageArrayUri) {
                     photoFiles.add(
                         createMultipartBody(element)
                     )
                 }
-            }
+            }*/
             with(requestBodyMap) {
                 put("id_user", createPartFromString(userData.id.toString())!!)
                 put("id_gaprojects", createPartFromString(progressData?.idGaprojects.toString())!!)
@@ -796,7 +781,7 @@ class ProgressFormActivity : AppCompatActivity() {
                 put(
                     "keterangan_perbaikan", createPartFromString(descriptionField.text.toString())!!
                 )
-                if (deletedOldImageArray.isNotEmpty()) {
+                /*if (deletedOldImageArray.isNotEmpty()) {
                     for (element in deletedOldImageArray) {
                         put(
                             "foto_old[]",
@@ -805,29 +790,31 @@ class ProgressFormActivity : AppCompatActivity() {
                             )!!
                         )
                     }
-                }
+                }*/
             }
         }
 
-        return if (requestBodyMap.isNotEmpty()) {
+        return requestBodyMap.isNotEmpty()
+
+        /*return if (requestBodyMap.isNotEmpty()) {
             if (photoFiles.isNotEmpty())
                 true
             else
                 true
         } else
-            false
+            false*/
     }
 
-    private fun createMultipartBody(uri: Uri): MultipartBody.Part? {
+    /*private fun createMultipartBody(uri: Uri): MultipartBody.Part? {
         return try {
             val file = File(getRealPathFromURI(uri)!!)
-            val requestBody = file.asRequestBody("image/*".toMediaTypeOrNull())
+            val requestBody = file.asRequestBody("image*//*".toMediaTypeOrNull())
             MultipartBody.Part.createFormData("foto[]", file.name, requestBody)
         } catch (e: Exception) {
             Log.e("createMultipartBody", "Error creating MultipartBody.Part", e)
             null
         }
-    }
+    }*/
 
     private fun getRealPathFromURI(uri: Uri): String? {
         val contentResolver = contentResolver

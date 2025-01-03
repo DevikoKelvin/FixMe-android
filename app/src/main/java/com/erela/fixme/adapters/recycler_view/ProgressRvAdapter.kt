@@ -47,6 +47,7 @@ class ProgressRvAdapter(
                     else
                         ContextCompat.getDrawable(context, R.color.highlight_blue)
                     usernameText.text = item.namaUserProgress?.trimEnd()
+                    progressAnalysis.text = item.analisa
                     progressDescription.text = item.keterangan
                     dateTimeText.text = item.tglWaktu
                     if (item.foto?.size!! > 1) {

@@ -5,6 +5,7 @@ import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -45,6 +46,7 @@ class SelectMaterialsBottomSheet(
 
     private fun init() {
         binding.apply {
+            loadingBar.visibility = View.VISIBLE
             try {
                 InitAPI.getAPI.getMaterialList()
                     .enqueue(object : Callback<List<MaterialListResponse>> {
@@ -52,6 +54,7 @@ class SelectMaterialsBottomSheet(
                             call: Call<List<MaterialListResponse>?>,
                             response: Response<List<MaterialListResponse>?>
                         ) {
+                            loadingBar.visibility = View.GONE
                             if (response.isSuccessful) {
                                 if (response.body() != null) {
                                     for (i in 0 until response.body()!!.size) {
@@ -117,6 +120,7 @@ class SelectMaterialsBottomSheet(
                             call: Call<List<MaterialListResponse>?>,
                             throwable: Throwable
                         ) {
+                            loadingBar.visibility = View.GONE
                             CustomToast.getInstance(context)
                                 .setBackgroundColor(
                                     ContextCompat.getColor(
@@ -138,6 +142,7 @@ class SelectMaterialsBottomSheet(
                         }
                     })
             } catch (jsonException: JSONException) {
+                loadingBar.visibility = View.GONE
                 CustomToast.getInstance(context)
                     .setBackgroundColor(
                         ContextCompat.getColor(

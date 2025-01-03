@@ -6,6 +6,7 @@ import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -52,6 +53,7 @@ class SelectSupervisorTechniciansBottomSheet(
     @SuppressLint("NotifyDataSetChanged")
     private fun init() {
         binding.apply {
+            loadingBar.visibility = View.VISIBLE
             try {
                 if (isForSupervisor) {
                     InitAPI.getAPI.getSupervisorList(detailData.idGaprojects!!).enqueue(
@@ -60,6 +62,7 @@ class SelectSupervisorTechniciansBottomSheet(
                                 call: Call<List<SupervisorTechnicianListResponse>>,
                                 response: Response<List<SupervisorTechnicianListResponse>>
                             ) {
+                                loadingBar.visibility = View.GONE
                                 if (response.isSuccessful) {
                                     if (response.body() != null) {
                                         for (i in 0 until response.body()!!.size) {
@@ -128,6 +131,7 @@ class SelectSupervisorTechniciansBottomSheet(
                                 call: Call<List<SupervisorTechnicianListResponse>>,
                                 throwable: Throwable
                             ) {
+                                loadingBar.visibility = View.GONE
                                 CustomToast.getInstance(context)
                                     .setBackgroundColor(
                                         ContextCompat.getColor(
@@ -156,6 +160,7 @@ class SelectSupervisorTechniciansBottomSheet(
                                 call: Call<List<SupervisorTechnicianListResponse>>,
                                 response: Response<List<SupervisorTechnicianListResponse>>
                             ) {
+                                loadingBar.visibility = View.GONE
                                 if (response.isSuccessful) {
                                     if (response.body() != null) {
                                         for (i in 0 until response.body()!!.size) {
@@ -223,6 +228,7 @@ class SelectSupervisorTechniciansBottomSheet(
                             override fun onFailure(
                                 call: Call<List<SupervisorTechnicianListResponse>>, throwable: Throwable
                             ) {
+                                loadingBar.visibility = View.GONE
                                 CustomToast.getInstance(context)
                                     .setBackgroundColor(
                                         ContextCompat.getColor(
@@ -246,6 +252,7 @@ class SelectSupervisorTechniciansBottomSheet(
                     )
                 }
             } catch (jsonException: JSONException) {
+                loadingBar.visibility = View.GONE
                 CustomToast.getInstance(context)
                     .setBackgroundColor(
                         ContextCompat.getColor(

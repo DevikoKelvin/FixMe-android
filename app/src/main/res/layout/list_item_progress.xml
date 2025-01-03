@@ -62,14 +62,25 @@
             app:ci_width="5dp" />
 
         <TextView
-            android:id="@+id/progressDescription"
+            android:id="@+id/progressAnalysis"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
             android:paddingHorizontal="16dp"
-            android:paddingVertical="4dp"
             android:textColor="@color/black"
             android:textSize="14sp"
             android:textStyle="bold"
+            tools:text="Progress Description" />
+
+        <TextView
+            android:id="@+id/progressDescription"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="2dp"
+            android:layout_marginBottom="4dp"
+            android:paddingHorizontal="16dp"
+            android:textColor="@color/black"
+            android:textSize="12sp"
             tools:text="Progress Description" />
 
         <TextView

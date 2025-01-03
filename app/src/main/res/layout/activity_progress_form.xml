@@ -118,7 +118,7 @@
                     android:textSize="14sp" />
             </com.google.android.material.textfield.TextInputLayout>
 
-            <TextView
+            <!--<TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="16dp"
@@ -209,7 +209,7 @@
                         android:textSize="12sp"
                         android:textStyle="bold" />
                 </com.google.android.material.card.MaterialCardView>
-            </LinearLayout>
+            </LinearLayout>-->
         </LinearLayout>
     </ScrollView>
 
