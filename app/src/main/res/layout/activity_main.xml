@@ -43,8 +43,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/main_menu"
-                android:textColor="@color/status_pending"
                 android:textAlignment="center"
+                android:textColor="@color/status_pending"
                 android:textSize="14sp" />
         </LinearLayout>
 
@@ -70,14 +70,34 @@
     </RelativeLayout>
 
     <LinearLayout
+        android:id="@+id/privilegeContainer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/toolbar_background_staff"
+        android:elevation="7dp"
+        app:layout_constraintEnd_toEndOf="@+id/toolBar"
+        app:layout_constraintStart_toStartOf="@+id/toolBar"
+        app:layout_constraintTop_toBottomOf="@+id/toolBar">
+
+        <TextView
+            android:id="@+id/privilegeText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="36dp"
+            android:layout_marginVertical="4dp"
+            android:textStyle="bold"
+            tools:text="Owner" />
+    </LinearLayout>
+
+    <LinearLayout
         android:id="@+id/contentContainer"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="16dp"
-        android:layout_marginVertical="32dp"
+        android:layout_marginTop="16dp"
         android:orientation="horizontal"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/toolBar"
+        app:layout_constraintTop_toBottomOf="@+id/privilegeContainer"
         tools:ignore="DisableBaselineAlignment">
 
         <LinearLayout

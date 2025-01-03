@@ -63,116 +63,78 @@ class MainActivity : AppCompatActivity() {
                 }
             }
             /*PushNotifications.addDeviceInterest("hello")*/
-            val window = window
-            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
-            window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
             when (userData.privilege) {
                 0 -> {
-                    window.statusBarColor =
-                        resources.getColor(R.color.custom_toast_default_background)
-                    toolBar.setBackgroundDrawable(
+                    privilegeContainer.setBackgroundDrawable(
                         ContextCompat.getDrawable(
                             applicationContext, R
                                 .drawable.toolbar_background_owner
                         )
                     )
-                    appNameTitle.setTextColor(
+                    privilegeText.text = "Owner"
+                    privilegeText.setTextColor(
                         ContextCompat.getColor(
                             applicationContext, R.color.white
-                        )
-                    )
-                    mainMenuTitle.setTextColor(
-                        ContextCompat.getColor(
-                            applicationContext,
-                            R.color.custom_toast_font_normal_soft_gray
                         )
                     )
                 }
 
                 1 -> {
-                    window.statusBarColor =
-                        resources.getColor(R.color.custom_toast_background_normal_dark_gray)
-                    toolBar.setBackgroundDrawable(
+                    privilegeContainer.setBackgroundDrawable(
                         ContextCompat.getDrawable(
                             applicationContext, R
                                 .drawable.toolbar_background_manager
                         )
                     )
-                    appNameTitle.setTextColor(
+                    privilegeText.text = "Manager/Assistant/Admin"
+                    privilegeText.setTextColor(
                         ContextCompat.getColor(
                             applicationContext, R.color.white
-                        )
-                    )
-                    mainMenuTitle.setTextColor(
-                        ContextCompat.getColor(
-                            applicationContext,
-                            R.color.custom_toast_background_normal
                         )
                     )
                 }
 
                 2 -> {
-                    window.statusBarColor =
-                        resources.getColor(R.color.custom_toast_background_success)
-                    toolBar.setBackgroundDrawable(
+                    privilegeContainer.setBackgroundDrawable(
                         ContextCompat.getDrawable(
                             applicationContext, R
                                 .drawable.toolbar_background_supervisor
                         )
                     )
-                    appNameTitle.setTextColor(
+                    privilegeText.text = "Supervisor"
+                    privilegeText.setTextColor(
                         ContextCompat.getColor(
                             applicationContext, R.color.black
-                        )
-                    )
-                    mainMenuTitle.setTextColor(
-                        ContextCompat.getColor(
-                            applicationContext,
-                            R.color.status_pending
                         )
                     )
                 }
 
                 3 -> {
-                    window.statusBarColor =
-                        resources.getColor(R.color.custom_toast_background_warning)
-                    toolBar.setBackgroundDrawable(
+                    privilegeContainer.setBackgroundDrawable(
                         ContextCompat.getDrawable(
                             applicationContext, R
                                 .drawable.toolbar_background_technician
                         )
                     )
-                    appNameTitle.setTextColor(
+                    privilegeText.text = "Technicians"
+                    privilegeText.setTextColor(
                         ContextCompat.getColor(
                             applicationContext, R.color.black
-                        )
-                    )
-                    mainMenuTitle.setTextColor(
-                        ContextCompat.getColor(
-                            applicationContext,
-                            R.color.status_pending
                         )
                     )
                 }
 
                 4 -> {
-                    window.statusBarColor =
-                        resources.getColor(R.color.white)
-                    toolBar.setBackgroundDrawable(
+                    privilegeContainer.setBackgroundDrawable(
                         ContextCompat.getDrawable(
                             applicationContext, R
                                 .drawable.toolbar_background_staff
                         )
                     )
-                    appNameTitle.setTextColor(
+                    privilegeText.text = "Staff/Reporter"
+                    privilegeText.setTextColor(
                         ContextCompat.getColor(
                             applicationContext, R.color.black
-                        )
-                    )
-                    mainMenuTitle.setTextColor(
-                        ContextCompat.getColor(
-                            applicationContext,
-                            R.color.status_pending
                         )
                     )
                 }
