@@ -731,7 +731,7 @@ class SubmissionDetailActivity : AppCompatActivity(),
                                             "-"
                                         }
                                     }
-                                    
+
                                     userApprovedOrRejected.text = if (detailData.userNamaApprove
                                         == "" && detailData.nameUserReject == ""
                                     ) {

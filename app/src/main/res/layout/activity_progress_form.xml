@@ -118,6 +118,27 @@
                     android:textSize="14sp" />
             </com.google.android.material.textfield.TextInputLayout>
 
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="16dp"
+                android:layout_marginTop="8dp"
+                android:text="@string/materials"
+                android:textColor="@color/black"
+                android:textSize="14sp"
+                android:textStyle="bold" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rvMaterials"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="16dp"
+                android:layout_marginTop="4dp"
+                android:layout_marginBottom="75dp"
+                app:layoutManager="com.google.android.flexbox.FlexboxLayoutManager"
+                tools:itemCount="2"
+                tools:listitem="@layout/list_item_selected_items" />
+
             <!--<TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

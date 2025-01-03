@@ -26,7 +26,6 @@ import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.erela.fixme.R
-import com.erela.fixme.adapters.recycler_view.SelectedMaterialsRvAdapters
 import com.erela.fixme.bottom_sheets.ChooseFileBottomSheet
 import com.erela.fixme.bottom_sheets.DepartmentListBottomSheet
 import com.erela.fixme.bottom_sheets.ManageOldPhotoBottomSheet
@@ -41,7 +40,6 @@ import com.erela.fixme.objects.CreationResponse
 import com.erela.fixme.objects.DepartmentListResponse
 import com.erela.fixme.objects.FotoGaprojectsItem
 import com.erela.fixme.objects.GenericSimpleResponse
-import com.erela.fixme.objects.MaterialListResponse
 import com.erela.fixme.objects.SubmissionDetailResponse
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
@@ -65,6 +63,8 @@ class SubmissionFormActivity : AppCompatActivity() {
     }
     private var detail: SubmissionDetailResponse? = null
     private var selectedDept: DepartmentListResponse? = null
+    /*private var selectedMaterialsArrayList: ArrayList<MaterialListResponse> = ArrayList()
+    private lateinit var materialAdapter: SelectedMaterialsRvAdapters*/
     private var selectedCategory: Int = 0
     private var selectedDepartment: Int = 0
     private val imageArrayUri = ArrayList<Uri>()

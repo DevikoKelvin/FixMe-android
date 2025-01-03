@@ -1,11 +1,8 @@
 package com.erela.fixme.activities
 
 import android.annotation.SuppressLint
-import android.content.ContentResolver
-import android.net.Uri
 import android.os.Build
 import android.os.Bundle
-import android.provider.OpenableColumns
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
@@ -17,15 +14,20 @@ import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.erela.fixme.R
+import com.erela.fixme.adapters.recycler_view.SelectedMaterialsRvAdapters
 import com.erela.fixme.custom_views.CustomToast
 import com.erela.fixme.databinding.ActivityProgressFormBinding
 import com.erela.fixme.helpers.UserDataHelper
 import com.erela.fixme.helpers.networking.InitAPI
 import com.erela.fixme.objects.CreationResponse
 import com.erela.fixme.objects.GenericSimpleResponse
+import com.erela.fixme.objects.MaterialListResponse
 import com.erela.fixme.objects.ProgressItem
 import com.erela.fixme.objects.SubmissionDetailResponse
 import com.erela.fixme.objects.UserData
+import com.google.android.flexbox.FlexDirection
+import com.google.android.flexbox.FlexWrap
+import com.google.android.flexbox.FlexboxLayoutManager
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.RequestBody
 import okhttp3.RequestBody.Companion.toRequestBody
@@ -33,9 +35,6 @@ import org.json.JSONException
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import java.io.File
-import java.io.FileOutputStream
-import java.io.IOException
 
 class ProgressFormActivity : AppCompatActivity() {
     private val binding: ActivityProgressFormBinding by lazy {
@@ -46,6 +45,8 @@ class ProgressFormActivity : AppCompatActivity() {
     }
     private var detail: SubmissionDetailResponse? = null
     private var progressData: ProgressItem? = null
+    private var selectedMaterialsArrayList: ArrayList<MaterialListResponse> = ArrayList()
+    private lateinit var materialAdapter: SelectedMaterialsRvAdapters
     /*private val imageArrayUri = ArrayList<Uri>()
     private val oldImageArray = ArrayList<FotoItem>()
     private var deletedOldImageArray: ArrayList<Int> = ArrayList()
@@ -184,6 +185,8 @@ class ProgressFormActivity : AppCompatActivity() {
                     }
                 }*/
             }
+
+            prepareMaterials()
 
             repairAnalysisField.addTextChangedListener(object : TextWatcher {
                 override fun beforeTextChanged(
@@ -650,6 +653,90 @@ class ProgressFormActivity : AppCompatActivity() {
         }
     }
 
+    @SuppressLint("NotifyDataSetChanged")
+    private fun prepareMaterials() {
+        binding.apply {
+            selectedMaterialsArrayList.add(
+                MaterialListResponse(
+                    null,
+                    null,
+                    "+",
+                    null,
+                    null,
+                    null
+                )
+            )
+
+            materialAdapter = SelectedMaterialsRvAdapters(
+                this@ProgressFormActivity, selectedMaterialsArrayList
+            ).also {
+                with(it) {
+                    setOnMaterialsSetListener(object :
+                        SelectedMaterialsRvAdapters.OnMaterialsSetListener {
+                        override fun onMaterialsSelected(
+                            data: MaterialListResponse
+                        ) {
+                            selectedMaterialsArrayList.remove(
+                                MaterialListResponse(
+                                    null,
+                                    null,
+                                    "+",
+                                    null,
+                                    null,
+                                    null
+                                )
+                            )
+                            selectedMaterialsArrayList.add(data)
+                            selectedMaterialsArrayList.add(
+                                MaterialListResponse(
+                                    null,
+                                    null,
+                                    "+",
+                                    null,
+                                    null,
+                                    null
+                                )
+                            )
+                            materialAdapter.notifyDataSetChanged()
+                        }
+
+                        override fun onMaterialsUnselected(
+                            data: MaterialListResponse
+                        ) {
+                            selectedMaterialsArrayList.remove(
+                                MaterialListResponse(
+                                    null,
+                                    null,
+                                    "+",
+                                    null,
+                                    null,
+                                    null
+                                )
+                            )
+                            selectedMaterialsArrayList.remove(data)
+                            selectedMaterialsArrayList.add(
+                                MaterialListResponse(
+                                    null,
+                                    null,
+                                    "+",
+                                    null,
+                                    null,
+                                    null
+                                )
+                            )
+                            materialAdapter.notifyDataSetChanged()
+                        }
+                    })
+                }
+            }
+            rvMaterials.adapter = materialAdapter
+            rvMaterials.layoutManager = FlexboxLayoutManager(
+                this@ProgressFormActivity, FlexDirection.ROW, FlexWrap.WRAP
+            )
+            materialAdapter.notifyDataSetChanged()
+        }
+    }
+
     /*private fun setManageAttachment() {
         binding.apply {
             manageAttachmentButton.setOnClickListener {
@@ -816,7 +903,7 @@ class ProgressFormActivity : AppCompatActivity() {
         }
     }*/
 
-    private fun getRealPathFromURI(uri: Uri): String? {
+    /*private fun getRealPathFromURI(uri: Uri): String? {
         val contentResolver = contentResolver
         val fileName = getFileName(contentResolver, uri)
 
@@ -843,9 +930,9 @@ class ProgressFormActivity : AppCompatActivity() {
         }
 
         return null
-    }
+    }*/
 
-    private fun getFileName(contentResolver: ContentResolver, uri: Uri): String? {
+    /*private fun getFileName(contentResolver: ContentResolver, uri: Uri): String? {
         val cursor = contentResolver.query(uri, null, null, null, null)
         if (cursor != null && cursor.moveToFirst()) {
             val displayNameIndex = cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME)
@@ -857,7 +944,7 @@ class ProgressFormActivity : AppCompatActivity() {
         }
         cursor?.close()
         return null
-    }
+    }*/
 
     private fun createPartFromString(stringData: String?): RequestBody? {
         return stringData?.toRequestBody("text/plain".toMediaTypeOrNull())
