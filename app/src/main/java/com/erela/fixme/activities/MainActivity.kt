@@ -4,11 +4,14 @@ import android.annotation.SuppressLint
 import android.app.ActivityManager
 import android.content.Intent
 import android.os.Bundle
+import android.view.WindowManager
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import com.erela.fixme.R
 import com.erela.fixme.databinding.ActivityMainBinding
 import com.erela.fixme.dialogs.ConfirmationDialog
 import com.erela.fixme.helpers.PermissionHelper
@@ -60,6 +63,120 @@ class MainActivity : AppCompatActivity() {
                 }
             }
             /*PushNotifications.addDeviceInterest("hello")*/
+            val window = window
+            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
+            window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
+            when (userData.privilege) {
+                0 -> {
+                    window.statusBarColor =
+                        resources.getColor(R.color.custom_toast_default_background)
+                    toolBar.setBackgroundDrawable(
+                        ContextCompat.getDrawable(
+                            applicationContext, R
+                                .drawable.toolbar_background_owner
+                        )
+                    )
+                    appNameTitle.setTextColor(
+                        ContextCompat.getColor(
+                            applicationContext, R.color.white
+                        )
+                    )
+                    mainMenuTitle.setTextColor(
+                        ContextCompat.getColor(
+                            applicationContext,
+                            R.color.custom_toast_font_normal_soft_gray
+                        )
+                    )
+                }
+
+                1 -> {
+                    window.statusBarColor =
+                        resources.getColor(R.color.custom_toast_background_normal_dark_gray)
+                    toolBar.setBackgroundDrawable(
+                        ContextCompat.getDrawable(
+                            applicationContext, R
+                                .drawable.toolbar_background_manager
+                        )
+                    )
+                    appNameTitle.setTextColor(
+                        ContextCompat.getColor(
+                            applicationContext, R.color.white
+                        )
+                    )
+                    mainMenuTitle.setTextColor(
+                        ContextCompat.getColor(
+                            applicationContext,
+                            R.color.custom_toast_background_normal
+                        )
+                    )
+                }
+
+                2 -> {
+                    window.statusBarColor =
+                        resources.getColor(R.color.custom_toast_background_success)
+                    toolBar.setBackgroundDrawable(
+                        ContextCompat.getDrawable(
+                            applicationContext, R
+                                .drawable.toolbar_background_supervisor
+                        )
+                    )
+                    appNameTitle.setTextColor(
+                        ContextCompat.getColor(
+                            applicationContext, R.color.black
+                        )
+                    )
+                    mainMenuTitle.setTextColor(
+                        ContextCompat.getColor(
+                            applicationContext,
+                            R.color.status_pending
+                        )
+                    )
+                }
+
+                3 -> {
+                    window.statusBarColor =
+                        resources.getColor(R.color.custom_toast_background_warning)
+                    toolBar.setBackgroundDrawable(
+                        ContextCompat.getDrawable(
+                            applicationContext, R
+                                .drawable.toolbar_background_technician
+                        )
+                    )
+                    appNameTitle.setTextColor(
+                        ContextCompat.getColor(
+                            applicationContext, R.color.black
+                        )
+                    )
+                    mainMenuTitle.setTextColor(
+                        ContextCompat.getColor(
+                            applicationContext,
+                            R.color.status_pending
+                        )
+                    )
+                }
+
+                4 -> {
+                    window.statusBarColor =
+                        resources.getColor(R.color.white)
+                    toolBar.setBackgroundDrawable(
+                        ContextCompat.getDrawable(
+                            applicationContext, R
+                                .drawable.toolbar_background_staff
+                        )
+                    )
+                    appNameTitle.setTextColor(
+                        ContextCompat.getColor(
+                            applicationContext, R.color.black
+                        )
+                    )
+                    mainMenuTitle.setTextColor(
+                        ContextCompat.getColor(
+                            applicationContext,
+                            R.color.status_pending
+                        )
+                    )
+                }
+            }
             val currentDateTime = LocalDateTime.now()
             greetingText.text = "Good ${
                 when (currentDateTime.hour) {

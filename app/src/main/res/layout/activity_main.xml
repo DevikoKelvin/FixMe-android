@@ -12,7 +12,7 @@
         android:id="@+id/toolBar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/toolbar_background"
+        android:background="@drawable/toolbar_background_staff"
         android:elevation="8dp"
         android:minHeight="?attr/actionBarSize"
         android:theme="?attr/actionBarTheme"
@@ -29,6 +29,7 @@
             tools:ignore="RelativeOverlap">
 
             <TextView
+                android:id="@+id/appNameTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/app_name"
@@ -38,9 +39,11 @@
                 android:textStyle="bold" />
 
             <TextView
+                android:id="@+id/mainMenuTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/main_menu"
+                android:textColor="@color/status_pending"
                 android:textAlignment="center"
                 android:textSize="14sp" />
         </LinearLayout>
@@ -52,7 +55,7 @@
             android:layout_alignParentEnd="true"
             android:layout_centerVertical="true"
             android:layout_marginEnd="16dp"
-            app:cardBackgroundColor="@color/custom_toast_background_warning"
+            app:cardBackgroundColor="@android:color/transparent"
             app:cardCornerRadius="25dp"
             app:cardElevation="0dp"
             app:strokeWidth="0dp">
