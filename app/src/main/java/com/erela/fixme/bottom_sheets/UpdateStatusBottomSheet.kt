@@ -33,6 +33,7 @@ import org.json.JSONException
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.util.Locale
 
 class UpdateStatusBottomSheet(
     context: Context, private val dataDetail: SubmissionDetailResponse,
@@ -68,6 +69,7 @@ class UpdateStatusBottomSheet(
     @SuppressLint("SetTextI18n", "NotifyDataSetChanged")
     private fun init() {
         binding.apply {
+            issueTitle.text = dataDetail.judulKasus?.uppercase(Locale.ROOT)
             descriptionField.addTextChangedListener(object : TextWatcher {
                 override fun beforeTextChanged(
                     s: CharSequence?, start: Int, count: Int, after: Int
@@ -95,6 +97,8 @@ class UpdateStatusBottomSheet(
                 if (cancel) {
                     selectSupervisorText.visibility = View.GONE
                     rvSupervisor.visibility = View.GONE
+                    selectComplexityText.visibility = View.GONE
+                    complexityRadioGroup.visibility = View.GONE
                     selectTechniciansText.visibility = View.GONE
                     rvTechnicians.visibility = View.GONE
                     approveButton.visibility = View.GONE
@@ -108,6 +112,8 @@ class UpdateStatusBottomSheet(
                     if (approve) {
                         selectSupervisorText.visibility = View.VISIBLE
                         rvSupervisor.visibility = View.VISIBLE
+                        selectComplexityText.visibility = View.GONE
+                        complexityRadioGroup.visibility = View.GONE
                         selectTechniciansText.visibility = View.GONE
                         rvTechnicians.visibility = View.GONE
                         approveButton.visibility = View.VISIBLE
@@ -215,6 +221,8 @@ class UpdateStatusBottomSheet(
                     } else {
                         selectSupervisorText.visibility = View.GONE
                         rvSupervisor.visibility = View.GONE
+                        selectComplexityText.visibility = View.GONE
+                        complexityRadioGroup.visibility = View.GONE
                         selectTechniciansText.visibility = View.GONE
                         rvTechnicians.visibility = View.GONE
                         approveButton.visibility = View.GONE
@@ -232,6 +240,8 @@ class UpdateStatusBottomSheet(
                 descriptionFieldLayout.visibility = View.GONE
                 selectSupervisorText.visibility = View.GONE
                 rvSupervisor.visibility = View.GONE
+                selectComplexityText.visibility = View.VISIBLE
+                complexityRadioGroup.visibility = View.VISIBLE
                 selectTechniciansText.visibility = View.VISIBLE
                 rvTechnicians.visibility = View.VISIBLE
                 approveButton.visibility = View.GONE

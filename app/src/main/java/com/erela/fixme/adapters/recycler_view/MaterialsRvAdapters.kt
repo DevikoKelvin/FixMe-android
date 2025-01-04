@@ -3,6 +3,7 @@ package com.erela.fixme.adapters.recycler_view
 import android.content.Context
 import android.view.View
 import android.view.ViewGroup
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.erela.fixme.databinding.ListItemSelectionBinding
 import com.erela.fixme.objects.MaterialListResponse
@@ -64,5 +65,23 @@ class MaterialsRvAdapters(
     interface OnMaterialsSetListener {
         fun onMaterialsSelected(data: MaterialListResponse)
         fun onMaterialsUnselected(data: MaterialListResponse)
+    }
+}
+
+class MaterialDiffUtilCallback(
+    private val oldList: List<SelectedMaterialList>,
+    private val newList: List<SelectedMaterialList>
+) : DiffUtil.Callback() {
+
+    override fun getOldListSize(): Int = oldList.size
+
+    override fun getNewListSize(): Int = newList.size
+
+    override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
+        return oldList[oldItemPosition].material?.idMaterial == newList[newItemPosition].material?.idMaterial
+    }
+
+    override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
+        return oldList[oldItemPosition] == newList[newItemPosition]
     }
 }

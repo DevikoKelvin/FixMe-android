@@ -14,7 +14,7 @@ import com.erela.fixme.objects.SupervisorTechnicianListResponse
 class SelectedSupervisorTechniciansRvAdapter(
     val context: Context, private val detailData: SubmissionDetailResponse,
     private val selectedSupervisorTechniciansList: ArrayList<SupervisorTechnicianListResponse>,
-    private val isForSupervisor: Boolean
+    private val isForManager: Boolean
 ) : RecyclerView.Adapter<SelectedSupervisorTechniciansRvAdapter.ViewHolder>(),
     SelectSupervisorTechniciansBottomSheet.OnSelectTechniciansListener,
     SelectSupervisorTechniciansBottomSheet.OnSelectSupervisorListener {
@@ -60,7 +60,7 @@ class SelectedSupervisorTechniciansRvAdapter(
                     deleteButton.visibility = View.VISIBLE
                 }
                 deleteButton.setOnClickListener {
-                    if (isForSupervisor)
+                    if (isForManager)
                         onSupervisorSetListener.onSupervisorsUnselected(item)
                     else
                         onTechniciansSetListener.onTechniciansUnselected(item)
@@ -72,10 +72,10 @@ class SelectedSupervisorTechniciansRvAdapter(
                                 context,
                                 detailData,
                                 selectedSupervisorTechniciansList,
-                                isForSupervisor
+                                isForManager
                             ).also {
                                 with(it) {
-                                    if (isForSupervisor)
+                                    if (isForManager)
                                         setOnSelectSupervisorsListener(
                                             this@SelectedSupervisorTechniciansRvAdapter
                                         )

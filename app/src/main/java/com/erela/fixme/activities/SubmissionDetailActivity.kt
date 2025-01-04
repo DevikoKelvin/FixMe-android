@@ -58,24 +58,24 @@ class SubmissionDetailActivity : AppCompatActivity(),
     private lateinit var progressTrackingBottomSheet: ProgressTrackingBottomSheet
     private var message: StringBuilder = StringBuilder()
     private var isFabVisible = false
-    val activityResultLauncher: ActivityResultLauncher<Intent> = registerForActivityResult(
+    private var isUpdated = false
+    private val activityResultLauncher: ActivityResultLauncher<Intent> = registerForActivityResult(
         ActivityResultContracts.StartActivityForResult()
     ) {
         if (it.resultCode == RESULT_OK) {
+            isUpdated = true
             init()
         }
     }
 
     companion object {
         const val DETAIL_ID = "DETAIL_ID"
-        fun initiate(context: Context, detailId: String) {
-            context.startActivity(
-                Intent(
-                    context, SubmissionDetailActivity::class.java
-                ).also {
-                    it.putExtra(DETAIL_ID, detailId)
-                }
-            )
+        fun initiate(context: Context, detailId: String): Intent {
+            return Intent(
+                context, SubmissionDetailActivity::class.java
+            ).also {
+                it.putExtra(DETAIL_ID, detailId)
+            }
         }
     }
 
@@ -114,7 +114,11 @@ class SubmissionDetailActivity : AppCompatActivity(),
             detailId = intent.getStringExtra(DETAIL_ID).toString()
 
             backButton.setOnClickListener {
-                onBackPressedDispatcher.onBackPressed()
+                if (isUpdated) {
+                    onBackPressedDispatcher.onBackPressed()
+                    setResult(RESULT_OK)
+                } else
+                    onBackPressedDispatcher.onBackPressed()
             }
 
             loadingBar.visibility = View.VISIBLE
@@ -718,7 +722,7 @@ class SubmissionDetailActivity : AppCompatActivity(),
                                     }
 
                                     userApprovedOrRejectedTitle.text = if (detailData
-                                        .userNamaApprove
+                                            .userNamaApprove
                                         == "" && detailData.nameUserReject == ""
                                     ) {
                                         "-"
@@ -933,6 +937,7 @@ class SubmissionDetailActivity : AppCompatActivity(),
                                                             override fun onRejected() {}
 
                                                             override fun onCanceled() {
+                                                                isUpdated = true
                                                                 init()
                                                             }
 
@@ -1033,6 +1038,7 @@ class SubmissionDetailActivity : AppCompatActivity(),
     }
 
     override fun onUpdateSuccess() {
+        isUpdated = true
         init()
     }
 
@@ -1081,6 +1087,7 @@ class SubmissionDetailActivity : AppCompatActivity(),
                                                 if (response.body() != null) {
                                                     val result = response.body()
                                                     if (result?.code == 1) {
+                                                        isUpdated = true
                                                         CustomToast.getInstance(applicationContext)
                                                             .setBackgroundColor(
                                                                 ResourcesCompat.getColor(
@@ -1255,6 +1262,7 @@ class SubmissionDetailActivity : AppCompatActivity(),
                                                 if (response.body() != null) {
                                                     val result = response.body()
                                                     if (result?.code == 1) {
+                                                        isUpdated = true
                                                         CustomToast.getInstance(applicationContext)
                                                             .setBackgroundColor(
                                                                 ResourcesCompat.getColor(
@@ -1438,6 +1446,7 @@ class SubmissionDetailActivity : AppCompatActivity(),
                                                 if (response.body() != null) {
                                                     val result = response.body()
                                                     if (result?.code == 1) {
+                                                        isUpdated = true
                                                         CustomToast.getInstance(applicationContext)
                                                             .setBackgroundColor(
                                                                 ResourcesCompat.getColor(
@@ -1624,6 +1633,7 @@ class SubmissionDetailActivity : AppCompatActivity(),
                                             if (response.body() != null) {
                                                 val result = response.body()
                                                 if (result?.code == 1) {
+                                                    isUpdated = true
                                                     CustomToast.getInstance(applicationContext)
                                                         .setBackgroundColor(
                                                             ResourcesCompat.getColor(
@@ -1781,6 +1791,7 @@ class SubmissionDetailActivity : AppCompatActivity(),
                             override fun reportTrialSuccess() {
                                 dismiss()
                                 bottomSheet.dismiss()
+                                isUpdated = true
                                 init()
                             }
                         }
@@ -1820,6 +1831,7 @@ class SubmissionDetailActivity : AppCompatActivity(),
                                                 if (response.body() != null) {
                                                     val result = response.body()
                                                     if (result?.code == 1) {
+                                                        isUpdated = true
                                                         CustomToast.getInstance(applicationContext)
                                                             .setBackgroundColor(
                                                                 ResourcesCompat.getColor(

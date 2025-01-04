@@ -1,14 +1,25 @@
 package com.erela.fixme.activities
 
 import android.annotation.SuppressLint
+import android.content.Intent
+import android.graphics.Typeface
 import android.os.Bundle
+import android.text.Spannable
+import android.text.SpannableString
+import android.text.SpannableStringBuilder
+import android.text.style.ForegroundColorSpan
+import android.text.style.StyleSpan
 import android.util.Log
 import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import androidx.activity.enableEdgeToEdge
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+import androidx.core.text.bold
+import androidx.core.text.color
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -34,9 +45,21 @@ class SubmissionListActivity : AppCompatActivity(), SubmissionRvAdapter.OnSubmis
         UserDataHelper(this@SubmissionListActivity).getUserData()
     }
     private lateinit var adapter: SubmissionRvAdapter
+    private var firstInit = true
     private var selectedFilter = -1
     private var selectedDepartment: String = ""
     private var submissionArrayList: ArrayList<SubmissionListResponse> = ArrayList()
+
+    @SuppressLint("NotifyDataSetChanged")
+    private val activityResultLauncher: ActivityResultLauncher<Intent> = registerForActivityResult(
+        ActivityResultContracts.StartActivityForResult()
+    ) {
+        if (it.resultCode == RESULT_OK) {
+            submissionArrayList.clear()
+            adapter.notifyDataSetChanged()
+            getSubmissionList()
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -209,7 +232,12 @@ class SubmissionListActivity : AppCompatActivity(), SubmissionRvAdapter.OnSubmis
                                 loadingBar.visibility = View.GONE
                                 if (response.isSuccessful) {
                                     if (response.body() != null) {
-                                        filterList(response.body(), selectedFilter)
+                                        if (firstInit) {
+                                            filterList(response.body(), 3)
+                                            selectedFilter = 3
+                                            firstInit = false
+                                        } else
+                                            filterList(response.body(), selectedFilter)
                                         filterListButton.visibility = View.VISIBLE
                                         filterListButton.setOnClickListener {
                                             val bottomSheet = SubmissionListFilterBottomSheet(
@@ -301,9 +329,49 @@ class SubmissionListActivity : AppCompatActivity(), SubmissionRvAdapter.OnSubmis
         }
     }
 
-    @SuppressLint("NotifyDataSetChanged")
+    @SuppressLint("NotifyDataSetChanged", "SetTextI18n")
     private fun filterList(submissionList: List<SubmissionListResponse>?, filter: Int) {
         binding.apply {
+            with(filterByText) {
+                when (filter) {
+                    -1 -> {
+                        text = "None"
+                        setTextColor(getColor(R.color.black))
+                    }
+                    0 -> {
+                        text = "Rejected"
+                        setTextColor(getColor(R.color.status_rejected))
+                    }
+                    1 -> {
+                        text = "Pending"
+                        setTextColor(getColor(R.color.status_pending))
+                    }
+                    2 -> {
+                        text = "Approved"
+                        setTextColor(getColor(R.color.status_approved))
+                    }
+                    3 -> {
+                        text = "On Progress"
+                        setTextColor(getColor(R.color.status_on_progress))
+                    }
+                    30 -> {
+                        text = "Progress Done"
+                        setTextColor(getColor(R.color.status_progress_done))
+                    }
+                    31 -> {
+                        text = "On Trial"
+                        setTextColor(getColor(R.color.status_on_trial))
+                    }
+                    4 -> {
+                        text = "Done"
+                        setTextColor(getColor(R.color.status_done))
+                    }
+                    5 -> {
+                        text = "Canceled"
+                        setTextColor(getColor(R.color.custom_toast_font_failed))
+                    }
+                }
+            }
             if (filter == -1) {
                 submissionArrayList.clear()
                 for (i in 0 until submissionList!!.size) {
@@ -335,6 +403,11 @@ class SubmissionListActivity : AppCompatActivity(), SubmissionRvAdapter.OnSubmis
     }
 
     override fun onSubmissionClick(data: SubmissionListResponse) {
-        SubmissionDetailActivity.initiate(this@SubmissionListActivity, data.idGaprojects.toString())
+        activityResultLauncher.launch(
+            SubmissionDetailActivity.initiate(
+                this@SubmissionListActivity,
+                data.idGaprojects.toString()
+            )
+        )
     }
 }

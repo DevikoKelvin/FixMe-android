@@ -27,7 +27,7 @@ import retrofit2.Response
 class SelectSupervisorTechniciansBottomSheet(
     context: Context, private val detailData: SubmissionDetailResponse,
     private val selectedSupervisorTechniciansList: ArrayList<SupervisorTechnicianListResponse>,
-    private val isForSupervisor: Boolean
+    private val isForManager: Boolean
 ) : BottomSheetDialog(context), SupervisorTechniciansRvAdapter.OnTechniciansSetListener,
     SupervisorTechniciansRvAdapter.OnSupervisorSetListener {
     private val binding: BsSelectTechniciansBinding by lazy {
@@ -55,7 +55,8 @@ class SelectSupervisorTechniciansBottomSheet(
         binding.apply {
             loadingBar.visibility = View.VISIBLE
             try {
-                if (isForSupervisor) {
+                if (isForManager) {
+                    title.text = context.getString(R.string.select_supervisor)
                     InitAPI.getAPI.getSupervisorList(detailData.idGaprojects!!).enqueue(
                         object : Callback<List<SupervisorTechnicianListResponse>> {
                             override fun onResponse(
@@ -77,7 +78,7 @@ class SelectSupervisorTechniciansBottomSheet(
                                             context,
                                             supervisorsList,
                                             selectedSupervisorTechniciansList,
-                                            isForSupervisor
+                                            isForManager
                                         ).also {
                                             with(it) {
                                                 setOnSupervisorSetListener(
@@ -154,6 +155,7 @@ class SelectSupervisorTechniciansBottomSheet(
                         }
                     )
                 } else {
+                    title.text = context.getString(R.string.select_technicians)
                     InitAPI.getAPI.getTechnicianList(detailData.idGaprojects!!).enqueue(
                         object : Callback<List<SupervisorTechnicianListResponse>> {
                             override fun onResponse(
@@ -175,7 +177,7 @@ class SelectSupervisorTechniciansBottomSheet(
                                             context,
                                             techniciansList,
                                             selectedSupervisorTechniciansList,
-                                            isForSupervisor
+                                            isForManager
                                         ).also {
                                             with(it) {
                                                 setOnTechniciansSetListener(

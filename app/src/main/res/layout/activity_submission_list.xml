@@ -111,12 +111,27 @@
             app:contentPaddingTop="4dp"
             app:strokeWidth="0dp">
 
-            <TextView
+            <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:drawablePadding="4dp"
-                android:text="@string/filter_list_title"
-                app:drawableStartCompat="@drawable/baseline_filter_list_24" />
+                android:gravity=""
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:drawablePadding="4dp"
+                    android:text="@string/filter_list_title"
+                    app:drawableStartCompat="@drawable/baseline_filter_list_24" />
+
+                <TextView
+                    android:id="@+id/filterByText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="4dp"
+                    android:textStyle="bold"
+                    tools:text="None" />
+            </LinearLayout>
         </com.google.android.material.card.MaterialCardView>
     </LinearLayout>
 
@@ -169,8 +184,8 @@
                     android:id="@+id/emptyListAnimation"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:padding="52dp"
                     android:layout_gravity="center"
+                    android:padding="52dp"
                     app:lottie_autoPlay="true"
                     app:lottie_loop="true"
                     app:lottie_rawRes="@raw/empty_list_animation" />

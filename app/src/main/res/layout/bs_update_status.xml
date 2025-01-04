@@ -29,6 +29,7 @@
         android:textStyle="bold" />
 
     <TextView
+        android:id="@+id/issueTitle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="16dp"
@@ -45,6 +46,7 @@
         android:layout_marginHorizontal="16dp"
         android:layout_marginTop="8dp"
         android:hint="@string/case_description"
+        android:visibility="gone"
         app:boxCornerRadiusBottomEnd="25dp"
         app:boxCornerRadiusBottomStart="25dp"
         app:boxCornerRadiusTopEnd="25dp"
@@ -87,34 +89,54 @@
         tools:itemCount="2"
         tools:listitem="@layout/list_item_selected_items" />
 
-    <!--<com.google.android.material.card.MaterialCardView
-        android:id="@+id/supervisorDropdownLayout"
-        android:layout_width="match_parent"
+    <TextView
+        android:id="@+id/selectComplexityText"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="16dp"
         android:layout_marginTop="8dp"
-        android:minHeight="54dp"
-        android:visibility="visible"
-        app:cardBackgroundColor="@android:color/transparent"
-        app:cardCornerRadius="50dp"
-        app:cardElevation="0dp"
-        app:contentPaddingBottom="4dp"
-        app:contentPaddingLeft="8dp"
-        app:contentPaddingRight="8dp"
-        app:contentPaddingTop="4dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/toolBar"
-        app:strokeColor="@color/form_field_stroke"
-        app:strokeWidth="2dp">
+        android:text="@string/select_complexity"
+        android:textColor="@color/black"
+        android:textSize="14sp"
+        android:textStyle="bold"
+        android:visibility="gone" />
 
-        <Spinner
-            android:id="@+id/supervisorDropdown"
+    <RadioGroup
+        android:id="@+id/complexityRadioGroup"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="16dp"
+        android:layout_marginTop="4dp"
+        android:orientation="horizontal"
+        android:visibility="gone">
+
+        <RadioButton
+            android:id="@+id/lowSelector"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            tools:listitem="@layout/support_simple_spinner_dropdown_item" />
-    </com.google.android.material.card.MaterialCardView>-->
+            android:layout_weight="1"
+            android:text="@string/complexity_low"
+            android:textColor="@color/custom_toast_font_success"
+            android:textStyle="bold" />
+
+        <RadioButton
+            android:id="@+id/midSelector"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/complexity_mid"
+            android:textColor="@color/custom_toast_font_warning"
+            android:textStyle="bold" />
+
+        <RadioButton
+            android:id="@+id/highSelector"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/complexity_high"
+            android:textColor="@color/custom_toast_font_failed"
+            android:textStyle="bold" />
+    </RadioGroup>
 
     <TextView
         android:id="@+id/selectTechniciansText"

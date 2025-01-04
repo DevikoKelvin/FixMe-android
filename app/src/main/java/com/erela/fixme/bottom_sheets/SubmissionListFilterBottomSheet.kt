@@ -37,14 +37,14 @@ class SubmissionListFilterBottomSheet(context: Context, private val selectedFilt
                     onTrialSelector.isChecked = false
                 }
 
-                1 -> pendingSelector.isChecked = true
-                5 -> canceledSelector.isChecked = true
                 0 -> rejectedSelector.isChecked = true
+                1 -> pendingSelector.isChecked = true
                 2 -> approvedSelector.isChecked = true
                 3 -> onProgressSelector.isChecked = true
                 30 -> progressDoneSelector.isChecked = true
-                4 -> doneSelector.isChecked = true
                 31 -> onTrialSelector.isChecked = true
+                4 -> doneSelector.isChecked = true
+                5 -> canceledSelector.isChecked = true
             }
 
             clearFilterButton.setOnClickListener {

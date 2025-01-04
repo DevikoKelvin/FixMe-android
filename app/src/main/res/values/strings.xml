@@ -32,6 +32,8 @@
     <string name="pick_a_date">Pick a Date</string>
     <string name="pick_a_time">Pick a Time</string>
     <string name="materials">Materials</string>
+    <string name="select_materials">Select Materials</string>
+    <string name="search_materials">Search Material</string>
     <string name="attach_photo">Attach Photo</string>
     <string name="choose_file">Choose file</string>
     <string name="choose_file_title">Choose file from…</string>
@@ -43,7 +45,7 @@
 
     <string name="submission_list_title">Submission List</string>
     <string name="department_title">Department</string>
-    <string name="filter_list_title">Filter List</string>
+    <string name="filter_list_title">Filter List: Filtered by</string>
     <string name="filter_list">Filter List by Status</string>
     <string name="pending">Pending</string>
     <string name="rejected">Rejected</string>
@@ -93,6 +95,10 @@
     <string name="action_question">What would you do?</string>
     <string name="update_status">Update Status</string>
     <string name="select_supervisor">Select Supervisor</string>
+    <string name="select_complexity">Complexity</string>
+    <string name="complexity_low">Low</string>
+    <string name="complexity_mid">Middle</string>
+    <string name="complexity_high">High</string>
     <string name="select_technicians">Select Technicians</string>
 
     <string name="edit_submission_title">Edit Submission</string>
