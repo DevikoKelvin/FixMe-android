@@ -5,8 +5,6 @@ import android.content.Context
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
-import android.text.Editable
-import android.text.TextWatcher
 import android.util.Log
 import android.view.View
 import android.view.ViewGroup
@@ -28,9 +26,6 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import java.util.Locale
-import kotlin.text.contains
-import kotlin.text.isEmpty
-import kotlin.text.lowercase
 
 class SelectMaterialsBottomSheet(
     context: Context, val selectedMaterialsArrayList: ArrayList<MaterialListResponse>
