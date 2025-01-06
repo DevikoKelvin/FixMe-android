@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.app.ActivityManager
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
@@ -64,12 +65,10 @@ class MainActivity : AppCompatActivity() {
             /*PushNotifications.addDeviceInterest("hello")*/
             when (userData.privilege) {
                 0 -> {
-                    privilegeContainer.setBackgroundDrawable(
-                        ContextCompat.getDrawable(
+                    privilegeContainer.background = ContextCompat.getDrawable(
                             applicationContext, R
                                 .drawable.toolbar_background_owner
                         )
-                    )
                     privilegeText.text = "Owner"
                     privilegeText.setTextColor(
                         ContextCompat.getColor(
@@ -79,12 +78,10 @@ class MainActivity : AppCompatActivity() {
                 }
 
                 1 -> {
-                    privilegeContainer.setBackgroundDrawable(
-                        ContextCompat.getDrawable(
+                    privilegeContainer.background = ContextCompat.getDrawable(
                             applicationContext, R
                                 .drawable.toolbar_background_manager
                         )
-                    )
                     privilegeText.text = "Manager/Assistant/Admin"
                     privilegeText.setTextColor(
                         ContextCompat.getColor(
@@ -94,12 +91,10 @@ class MainActivity : AppCompatActivity() {
                 }
 
                 2 -> {
-                    privilegeContainer.setBackgroundDrawable(
-                        ContextCompat.getDrawable(
+                    privilegeContainer.background = ContextCompat.getDrawable(
                             applicationContext, R
                                 .drawable.toolbar_background_supervisor
                         )
-                    )
                     privilegeText.text = "Supervisor"
                     privilegeText.setTextColor(
                         ContextCompat.getColor(
@@ -109,12 +104,10 @@ class MainActivity : AppCompatActivity() {
                 }
 
                 3 -> {
-                    privilegeContainer.setBackgroundDrawable(
-                        ContextCompat.getDrawable(
+                    privilegeContainer.background = ContextCompat.getDrawable(
                             applicationContext, R
                                 .drawable.toolbar_background_technician
                         )
-                    )
                     privilegeText.text = "Technicians"
                     privilegeText.setTextColor(
                         ContextCompat.getColor(
@@ -124,12 +117,10 @@ class MainActivity : AppCompatActivity() {
                 }
 
                 4 -> {
-                    privilegeContainer.setBackgroundDrawable(
-                        ContextCompat.getDrawable(
+                    privilegeContainer.background = ContextCompat.getDrawable(
                             applicationContext, R
                                 .drawable.toolbar_background_staff
                         )
-                    )
                     privilegeText.text = "Staff/Reporter"
                     privilegeText.setTextColor(
                         ContextCompat.getColor(
