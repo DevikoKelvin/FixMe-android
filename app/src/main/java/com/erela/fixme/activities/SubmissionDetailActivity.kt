@@ -3,8 +3,10 @@ package com.erela.fixme.activities
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
+import android.graphics.Rect
 import android.os.Bundle
 import android.util.Log
+import android.view.MotionEvent
 import android.view.View
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.result.ActivityResultLauncher
@@ -36,6 +38,7 @@ import com.erela.fixme.objects.ProgressItem
 import com.erela.fixme.objects.StarconnectUserResponse
 import com.erela.fixme.objects.SubmissionDetailResponse
 import com.erela.fixme.objects.UserData
+import com.google.android.material.card.MaterialCardView
 import org.json.JSONException
 import retrofit2.Call
 import retrofit2.Callback
@@ -100,6 +103,23 @@ class SubmissionDetailActivity : AppCompatActivity(),
         }
 
         init()
+    }
+
+    override fun dispatchTouchEvent(motionEvent: MotionEvent?): Boolean {
+        binding.apply {
+            isFabVisible = false
+            actionSelfButton.extend()
+            editButton.hide()
+            editButton.shrink()
+            cancelButton.hide()
+            cancelButton.shrink()
+            /*if (currentFocus != null) {
+                val imm = activity!!.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+                imm.hideSoftInputFromWindow(activity!!.currentFocus!!.windowToken, 0)
+            }*/
+        }
+        return true
+        /*return super.dispatchTouchEvent(motionEvent)*/
     }
 
     @SuppressLint("SetTextI18n")
@@ -897,9 +917,6 @@ class SubmissionDetailActivity : AppCompatActivity(),
                                                     onProgressButton.visibility = View.GONE
                                                 } else {
                                                     if (userData.privilege < 2) {
-                                                        Log.e("Reporter Dept", data.deptUser.toString())
-                                                        Log.e("User Dept", userData.dept)
-                                                        Log.e("Target Dept", data.deptTujuan.toString())
                                                         if (data.deptUser == userData.dept) {
                                                             actionButton.visibility = View.VISIBLE
                                                             actionSelfButton.visibility = View.GONE
@@ -919,9 +936,6 @@ class SubmissionDetailActivity : AppCompatActivity(),
                                                     onProgressButton.visibility = View.GONE
                                                 } else {
                                                     if (userData.privilege < 2) {
-                                                        Log.e("Reporter Dept", data.deptUser.toString())
-                                                        Log.e("User Dept", userData.dept)
-                                                        Log.e("Target Dept", data.deptTujuan.toString())
                                                         if (data.deptUser == userData.dept) {
                                                             actionButton.visibility = View.VISIBLE
                                                             actionSelfButton.visibility = View.GONE
@@ -939,6 +953,7 @@ class SubmissionDetailActivity : AppCompatActivity(),
 
                                     actionSelfButton.setOnClickListener {
                                         if (!isFabVisible) {
+                                            isFabVisible = true
                                             actionSelfButton.shrink()
                                             editButton.show()
                                             editButton.extend()
@@ -992,15 +1007,13 @@ class SubmissionDetailActivity : AppCompatActivity(),
                                                 if (bottomSheet.window != null)
                                                     bottomSheet.show()
                                             }
-
-                                            isFabVisible = true
                                         } else {
+                                            isFabVisible = false
                                             actionSelfButton.extend()
                                             editButton.hide()
                                             editButton.shrink()
                                             cancelButton.hide()
                                             cancelButton.shrink()
-                                            isFabVisible = false
                                         }
                                     }
                                     actionButton.setOnClickListener {
