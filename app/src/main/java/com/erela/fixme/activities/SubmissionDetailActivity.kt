@@ -232,6 +232,20 @@ class SubmissionDetailActivity : AppCompatActivity(),
                                             messageProgressAndTrialButtonContainer.visibility =
                                                 View.GONE
                                         }
+                                        // Waiting
+                                        11 -> {
+                                            submissionStatus.setCardBackgroundColor(
+                                                ResourcesCompat.getColor(
+                                                    resources,
+                                                    R.color.status_waiting,
+                                                    theme
+                                                )
+                                            )
+                                            submissionStatusText.text = "Waiting"
+                                            onProgressButton.visibility = View.GONE
+                                            messageProgressAndTrialButtonContainer.visibility =
+                                                View.GONE
+                                        }
                                         // Approved
                                         2 -> {
                                             submissionStatus.setCardBackgroundColor(
@@ -348,6 +362,17 @@ class SubmissionDetailActivity : AppCompatActivity(),
                                                     }
                                                 }
                                             }
+                                        }
+                                        // Preparing
+                                        21 -> {
+                                            submissionStatus.setCardBackgroundColor(
+                                                ResourcesCompat.getColor(
+                                                    resources,
+                                                    R.color.status_preparing,
+                                                    theme
+                                                )
+                                            )
+                                            submissionStatusText.text = "Preparing"
                                         }
                                         // On-Progress
                                         3 -> {
@@ -872,9 +897,18 @@ class SubmissionDetailActivity : AppCompatActivity(),
                                                     onProgressButton.visibility = View.GONE
                                                 } else {
                                                     if (userData.privilege < 2) {
-                                                        actionButton.visibility = View.VISIBLE
-                                                        actionSelfButton.visibility = View.GONE
-                                                        onProgressButton.visibility = View.GONE
+                                                        Log.e("Reporter Dept", data.deptUser.toString())
+                                                        Log.e("User Dept", userData.dept)
+                                                        Log.e("Target Dept", data.deptTujuan.toString())
+                                                        if (data.deptUser == userData.dept) {
+                                                            actionButton.visibility = View.VISIBLE
+                                                            actionSelfButton.visibility = View.GONE
+                                                            onProgressButton.visibility = View.GONE
+                                                        } else {
+                                                            actionButton.visibility = View.GONE
+                                                            actionSelfButton.visibility = View.GONE
+                                                            onProgressButton.visibility = View.GONE
+                                                        }
                                                     }
                                                 }
                                             } else {
@@ -885,9 +919,18 @@ class SubmissionDetailActivity : AppCompatActivity(),
                                                     onProgressButton.visibility = View.GONE
                                                 } else {
                                                     if (userData.privilege < 2) {
-                                                        actionButton.visibility = View.GONE
-                                                        actionSelfButton.visibility = View.GONE
-                                                        onProgressButton.visibility = View.GONE
+                                                        Log.e("Reporter Dept", data.deptUser.toString())
+                                                        Log.e("User Dept", userData.dept)
+                                                        Log.e("Target Dept", data.deptTujuan.toString())
+                                                        if (data.deptUser == userData.dept) {
+                                                            actionButton.visibility = View.VISIBLE
+                                                            actionSelfButton.visibility = View.GONE
+                                                            onProgressButton.visibility = View.GONE
+                                                        } else {
+                                                            actionButton.visibility = View.GONE
+                                                            actionSelfButton.visibility = View.GONE
+                                                            onProgressButton.visibility = View.GONE
+                                                        }
                                                     }
                                                 }
                                             }

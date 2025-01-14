@@ -11,6 +11,8 @@ data class LoginResponse(
     val hakAkses: String? = null,
     @field:SerializedName("id_dept")
     val idDept: String? = null,
+    @field:SerializedName("nama_dept")
+    val dept: String? = null,
     @field:SerializedName("sts_login")
     val stsLogin: Int? = null,
     @field:SerializedName("id_user")

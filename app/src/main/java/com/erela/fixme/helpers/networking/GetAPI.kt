@@ -25,105 +25,111 @@ import retrofit2.http.PartMap
 
 interface GetAPI {
     @FormUrlEncoded
-    @POST("getuserdetail")
+    @POST("getUserDetail")
     fun getUserDetail(
         @Field("id_user") idUser: Int
     ): Call<UserDetailResponse>
 
     @FormUrlEncoded
-    @POST("getuserfromstarconnect")
+    @POST("getUserFromStarconnect")
     fun getUserFromStarConnect(
         @Field("id_user") idUser: Int
     ): Call<StarconnectUserResponse>
 
     @FormUrlEncoded
-    @POST("checklogin")
+    @POST("checkLogin")
     fun login(
         @Field("usern") username: String,
         @Field("passw") password: String
     ): Call<LoginResponse>
 
     @FormUrlEncoded
-    @POST("ubahpass")
+    @POST("changePassword")
     fun changePassword(
         @Field("id_user") id: Int,
         @Field("passw") password: String
     ): Call<GenericSimpleResponse>
 
     @FormUrlEncoded
-    @POST("showinbox")
+    @POST("showInbox")
     fun showInbox(
         @Field("id_user") id: Int
     ): Call<List<InboxResponse>>
 
-    @GET("depttuj")
+    @GET("getDeptartmentList")
     fun getDepartmentList(): Call<List<DepartmentListResponse>>
 
-    @GET("getkategorilist")
+    @GET("getCategoryList")
     fun getCategoryList(): Call<List<CategoryListResponse>>
 
-    @GET("getmateriallist")
+    @GET("getMaterialList")
     fun getMaterialList(): Call<List<MaterialListResponse>>
 
     @FormUrlEncoded
-    @POST("listpengajuan")
+    @POST("reportList")
     fun getSubmissionList(
         @Field("id_user") id: Int,
         @Field("dept") department: String
     ): Call<List<SubmissionListResponse>>
 
     @FormUrlEncoded
-    @POST("detailpengajuan")
+    @POST("reportDetail")
     fun getSubmissionDetail(
         @Field("id") submissionID: String
     ): Call<List<SubmissionDetailResponse>>
 
     @Multipart
-    @POST("pengajuansave")
+    @POST("submitReport")
     fun submitSubmission(
         @PartMap submissionData: MutableMap<String, RequestBody>,
         @Part foto: List<MultipartBody.Part?>
     ): Call<CreationResponse>
 
     @Multipart
-    @POST("pengajuansave")
+    @POST("submitReport")
     fun submitSubmissionNoAttachment(
         @PartMap submissionData: MutableMap<String, RequestBody>
     ): Call<CreationResponse>
 
     @Multipart
-    @POST("updatepengajuan")
+    @POST("reportUpdate")
     fun updateSubmission(
         @PartMap submissionData: MutableMap<String, RequestBody>,
         @Part foto: List<MultipartBody.Part?>
     ): Call<GenericSimpleResponse>
 
     @Multipart
-    @POST("updatepengajuan")
+    @POST("reportUpdate")
     fun updateSubmissionNoAttachment(
         @PartMap submissionData: MutableMap<String, RequestBody>
     ): Call<GenericSimpleResponse>
 
     @FormUrlEncoded
-    @POST("setspv")
+    @POST("getSpv")
     fun getSupervisorList(
         @Field("id") id: Int
     ): Call<List<SupervisorTechnicianListResponse>>
 
     @FormUrlEncoded
-    @POST("setteknisi")
+    @POST("getTechnician")
     fun getTechnicianList(
         @Field("id") id: Int
     ): Call<List<SupervisorTechnicianListResponse>>
 
     @Multipart
-    @POST("statusapprove")
-    fun approveSubmission(
+    @POST("statusApproveTargetManager")
+    fun approveTargetManagerSubmission(
+        @PartMap data: MutableMap<String, RequestBody>
+    ): Call<GenericSimpleResponse>
+
+    @Multipart
+    @POST("statusApproveReportManager")
+    fun approveReportManagerSubmission(
         @PartMap data: MutableMap<String, RequestBody>
     ): Call<GenericSimpleResponse>
 
     @FormUrlEncoded
-    @POST("statusreject")
+    @POST("statusReject")
     fun rejectSubmission(
         @Field("id_user") idUser: Int,
         @Field("id_gaprojects") idGaProjects: Int,
@@ -131,67 +137,53 @@ interface GetAPI {
     ): Call<GenericSimpleResponse>
 
     @Multipart
-    @POST("setupteknisi")
+    @POST("setupTechnician")
     fun deployTechnicians(
         @PartMap data: MutableMap<String, RequestBody>
     ): Call<GenericSimpleResponse>
 
     @Multipart
-    @POST("saveprogress")
+    @POST("submitProgress")
     fun createProgress(
-        @PartMap data: MutableMap<String, RequestBody>,
-        @Part foto: List<MultipartBody.Part?>
-    ): Call<CreationResponse>
-
-    @Multipart
-    @POST("saveprogress")
-    fun createProgressNoAttachment(
         @PartMap data: MutableMap<String, RequestBody>
     ): Call<CreationResponse>
 
     @FormUrlEncoded
-    @POST("delprogress")
+    @POST("deleteProgress")
     fun deleteProgress(
         @Field("id") idProgress: Int,
         @Field("id_user") idUser: Int
     ): Call<GenericSimpleResponse>
 
     @Multipart
-    @POST("updateprogress")
+    @POST("updateProgress")
     fun editProgress(
-        @PartMap data: MutableMap<String, RequestBody>,
-        @Part foto: List<MultipartBody.Part?>
-    ): Call<GenericSimpleResponse>
-
-    @Multipart
-    @POST("updateprogress")
-    fun editProgressNoAttachment(
         @PartMap data: MutableMap<String, RequestBody>
     ): Call<GenericSimpleResponse>
 
     @FormUrlEncoded
-    @POST("progressdone")
+    @POST("progressDone")
     fun markProgressDone(
         @Field("id") id: Int,
         @Field("id_user") idUser: Int
     ): Call<GenericSimpleResponse>
 
     @FormUrlEncoded
-    @POST("progressdonetrial")
+    @POST("markReadyForTrial")
     fun markAsReadyForTrial(
         @Field("id") idGaProjects: Int,
         @Field("id_user") idUser: Int
     ): Call<GenericSimpleResponse>
 
     @FormUrlEncoded
-    @POST("stsontrial")
+    @POST("startTrial")
     fun startTrial(
         @Field("id") idGaProjects: Int,
         @Field("id_user") idUser: Int
     ): Call<GenericSimpleResponse>
 
     @FormUrlEncoded
-    @POST("savenotetrial")
+    @POST("reportTrial")
     fun reportTrial(
         @Field("id_user") idUser: Int,
         @Field("id_gaprojects") idGaProjects: Int,
@@ -200,14 +192,14 @@ interface GetAPI {
     ): Call<CreationResponse>
 
     @FormUrlEncoded
-    @POST("stsfinish")
+    @POST("markIssueAsDone")
     fun markIssueDone(
         @Field("id") idGaProjects: Int,
         @Field("id_user") idUser: Int
     ): Call<GenericSimpleResponse>
 
     @FormUrlEncoded
-    @POST("statuscancel")
+    @POST("cancelReport")
     fun cancelSubmission(
         @Field("id_user") idUser: Int,
         @Field("id_gaprojects") idGaProjects: Int,

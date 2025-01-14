@@ -69,8 +69,8 @@ class SelectSupervisorTechniciansBottomSheet(
                                         for (i in 0 until response.body()!!.size) {
                                             supervisorsList.add(
                                                 SelectedSupervisorTechniciansList(
-                                                    response.body()!![i],
-                                                    false
+                                                    false,
+                                                    response.body()!![i]
                                                 )
                                             )
                                         }
@@ -168,8 +168,8 @@ class SelectSupervisorTechniciansBottomSheet(
                                         for (i in 0 until response.body()!!.size) {
                                             techniciansList.add(
                                                 SelectedSupervisorTechniciansList(
-                                                    response.body()!![i],
-                                                    false
+                                                    false,
+                                                    response.body()!![i]
                                                 )
                                             )
                                         }

@@ -18,6 +18,6 @@ data class MaterialListResponse(
 )
 
 data class SelectedMaterialList(
-    val material: MaterialListResponse? = null,
-    var isSelected: Boolean = false
+    var isSelected: Boolean = false,
+    val material: MaterialListResponse? = null
 )

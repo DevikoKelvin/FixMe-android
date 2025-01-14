@@ -6,4 +6,5 @@ data class UserData(
     val name: String,
     val privilege: Int,
     val idDept: Int,
+    val dept: String
 )

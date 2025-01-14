@@ -46,8 +46,10 @@ class UpdateStatusBottomSheet(
         UserDataHelper(context).getUserData()
     }
     private lateinit var onUpdateSuccessListener: OnUpdateSuccessListener
-    private var selectedSupervisorsArrayList: ArrayList<SupervisorTechnicianListResponse> = ArrayList()
-    private var selectedTechniciansArrayList: ArrayList<SupervisorTechnicianListResponse> = ArrayList()
+    private var selectedSupervisorsArrayList: ArrayList<SupervisorTechnicianListResponse> =
+        ArrayList()
+    private var selectedTechniciansArrayList: ArrayList<SupervisorTechnicianListResponse> =
+        ArrayList()
     private lateinit var supervisorsRvAdapter: SelectedSupervisorTechniciansRvAdapter
     private lateinit var techniciansRvAdapter: SelectedSupervisorTechniciansRvAdapter
     private var isFormEmpty = arrayOf(
@@ -110,8 +112,6 @@ class UpdateStatusBottomSheet(
                     }
                 } else {
                     if (approve) {
-                        selectSupervisorText.visibility = View.VISIBLE
-                        rvSupervisor.visibility = View.VISIBLE
                         selectComplexityText.visibility = View.GONE
                         complexityRadioGroup.visibility = View.GONE
                         selectTechniciansText.visibility = View.GONE
@@ -120,8 +120,16 @@ class UpdateStatusBottomSheet(
                         rejectButton.visibility = View.GONE
                         cancelButton.visibility = View.GONE
                         deployTechButton.visibility = View.GONE
+                        descriptionFieldLayout.visibility = View.VISIBLE
                         descriptionField.setText("Approved!")
                         isFormEmpty[0] = true
+                        if (dataDetail.deptTujuan == userData.dept) {
+                            selectSupervisorText.visibility = View.VISIBLE
+                            rvSupervisor.visibility = View.VISIBLE
+                        } else {
+                            selectSupervisorText.visibility = View.GONE
+                            rvSupervisor.visibility = View.GONE
+                        }
                         selectedSupervisorsArrayList.add(
                             SupervisorTechnicianListResponse(
                                 null,
@@ -141,7 +149,8 @@ class UpdateStatusBottomSheet(
                             true
                         ).also {
                             with(it) {
-                                setOnSupervisorSetListener(object : SelectedSupervisorTechniciansRvAdapter.OnSupervisorSetListener {
+                                setOnSupervisorSetListener(object :
+                                    SelectedSupervisorTechniciansRvAdapter.OnSupervisorSetListener {
                                     override fun onSupervisorsSelected(
                                         data: SupervisorTechnicianListResponse
                                     ) {
@@ -229,6 +238,7 @@ class UpdateStatusBottomSheet(
                         rejectButton.visibility = View.VISIBLE
                         cancelButton.visibility = View.GONE
                         deployTechButton.visibility = View.GONE
+                        descriptionFieldLayout.visibility = View.VISIBLE
                         descriptionField.setText("Rejected!")
                         isFormEmpty[0] = true
                         rejectButton.setOnClickListener {
@@ -268,7 +278,9 @@ class UpdateStatusBottomSheet(
                     with(it) {
                         setOnTechniciansSetListener(object :
                             SelectedSupervisorTechniciansRvAdapter.OnTechniciansSetListener {
-                            override fun onTechniciansSelected(data: SupervisorTechnicianListResponse) {
+                            override fun onTechniciansSelected(
+                                data: SupervisorTechnicianListResponse
+                            ) {
                                 selectedTechniciansArrayList.remove(
                                     SupervisorTechnicianListResponse(
                                         null,
@@ -299,7 +311,9 @@ class UpdateStatusBottomSheet(
                                     deployTechButton.visibility = View.VISIBLE
                             }
 
-                            override fun onTechniciansUnselected(data: SupervisorTechnicianListResponse) {
+                            override fun onTechniciansUnselected(
+                                data: SupervisorTechnicianListResponse
+                            ) {
                                 selectedTechniciansArrayList.remove(
                                     SupervisorTechnicianListResponse(
                                         null,
@@ -357,9 +371,12 @@ class UpdateStatusBottomSheet(
                 if (cancel)
                     validated == 1
                 else {
-                    if (approve)
-                        validated == isFormEmpty.size
-                    else
+                    if (approve) {
+                        if (dataDetail.deptTujuan == userData.dept)
+                            validated == isFormEmpty.size
+                        else
+                            validated == 1
+                    } else
                         validated == 1
                 }
             } else
@@ -552,17 +569,21 @@ class UpdateStatusBottomSheet(
                                         "keterangan",
                                         createPartFromString(descriptionField.text.toString())!!
                                     )
-                                    for (i in 0 until selectedSupervisorsArrayList.size - 1) {
-                                        put(
-                                            "user_supervisor[$i]",
-                                            createPartFromString(
-                                                selectedSupervisorsArrayList[i].idUser.toString()
-                                            )!!
-                                        )
+                                    if (dataDetail.deptTujuan == userData.dept) {
+                                        for (i in 0 until selectedSupervisorsArrayList.size - 1) {
+                                            put(
+                                                "user_supervisor[$i]",
+                                                createPartFromString(
+                                                    selectedSupervisorsArrayList[i].idUser.toString()
+                                                )!!
+                                            )
+                                        }
                                     }
                                 }
-                                InitAPI.getAPI.approveSubmission(data)
-                                    .enqueue(object : Callback<GenericSimpleResponse> {
+                                (if (dataDetail.deptTujuan == userData.dept)
+                                    InitAPI.getAPI.approveTargetManagerSubmission(data)
+                                else InitAPI.getAPI.approveReportManagerSubmission(data)).enqueue(
+                                    object : Callback<GenericSimpleResponse> {
                                         override fun onResponse(
                                             call: Call<GenericSimpleResponse>,
                                             response: Response<GenericSimpleResponse>
@@ -864,8 +885,8 @@ class UpdateStatusBottomSheet(
                             )
                         )
                         .setMessage("Make sure all fields are filled.").show()
-                if (descriptionField.text.toString().isEmpty())
-                    descriptionFieldLayout.error = "Make sure all fields are filled."
+                    if (descriptionField.text.toString().isEmpty())
+                        descriptionFieldLayout.error = "Make sure all fields are filled."
                 }
             } else {
                 try {

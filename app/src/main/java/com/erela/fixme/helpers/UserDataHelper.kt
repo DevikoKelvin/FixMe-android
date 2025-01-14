@@ -9,8 +9,11 @@ class UserDataHelper(private val context: Context) {
     private val keyName = "key.name"
     private val keyStatusPrev = "key.stat.prev"
     private val keyIdDept = "key.id.dept"
+    private val keyDept = "key.dept"
 
-    fun setUserData(id: Int, username: String, name: String, privilege: Int, idDept: Int) {
+    fun setUserData(
+        id: Int, username: String, name: String, privilege: Int, idDept: Int, dept: String
+    ) {
         SharedPreferencesHelper.getSharedPreferences(context).edit().also {
             it.apply {
                 putInt(keyId, id)
@@ -18,6 +21,7 @@ class UserDataHelper(private val context: Context) {
                 putString(keyName, name)
                 putInt(keyStatusPrev, privilege)
                 putInt(keyIdDept, idDept)
+                putString(keyDept, dept)
             }
         }.apply()
     }
@@ -31,7 +35,8 @@ class UserDataHelper(private val context: Context) {
                     getString(keyUsername, "").toString(),
                     getString(keyName, "").toString(),
                     getInt(keyStatusPrev, 0),
-                    getInt(keyIdDept, 0)
+                    getInt(keyIdDept, 0),
+                    getString(keyDept, "").toString()
                 )
             }
         }

@@ -110,7 +110,8 @@ class LoginActivity : AppCompatActivity() {
                             loadingBar.visibility = View.GONE
                             if (response.isSuccessful) {
                                 if (response.body() != null) {
-                                    val name = response.body()?.nama!!.toString().trimEnd()
+                                    val result = response.body()
+                                    val name = result?.nama!!.toString().trimEnd()
                                     when (response.body()?.code) {
                                         0 -> {
                                             CustomToast.getInstance(applicationContext)
@@ -147,11 +148,12 @@ class LoginActivity : AppCompatActivity() {
                                                 ).show()
                                             UserDataHelper(this@LoginActivity)
                                                 .setUserData(
-                                                    response.body()?.idUser!!.toInt(),
+                                                    result.idUser!!.toInt(),
                                                     username,
                                                     name,
-                                                    response.body()?.hakAkses!!.toInt(),
-                                                    response.body()?.idDept!!.toInt()
+                                                    result.hakAkses!!.toInt(),
+                                                    result.idDept!!.toInt(),
+                                                    result.dept!!
                                                 )
                                             Handler(mainLooper).postDelayed({
                                                 CustomToast.getInstance(applicationContext)

@@ -16,6 +16,7 @@ import com.erela.fixme.adapters.recycler_view.ProgressRvAdapter
 import com.erela.fixme.databinding.BsProgressTrackingBinding
 import com.erela.fixme.helpers.UserDataHelper
 import com.erela.fixme.objects.ProgressItem
+import com.erela.fixme.objects.ProgressItems
 import com.erela.fixme.objects.SubmissionDetailResponse
 import com.erela.fixme.objects.UserData
 import com.google.android.material.bottomsheet.BottomSheetDialog
@@ -30,6 +31,7 @@ class ProgressTrackingBottomSheet(
         UserDataHelper(context).getUserData()
     }
     private lateinit var progressAdapter: ProgressRvAdapter
+    private lateinit var progressItem: ArrayList<ProgressItems>
     private lateinit var onProgressTrackingListener: OnProgressTrackingListener
     private lateinit var onProgressItemLongTapListener: OnProgressItemLongTapListener
     private var tech = false
@@ -69,7 +71,16 @@ class ProgressTrackingBottomSheet(
                 }
             }
             progressWorkedBy.text = message.toString()
-            progressAdapter = ProgressRvAdapter(context, activity, data, data.progress).also {
+            for (i in 0 until data.progress!!.size) {
+                progressItem = ArrayList()
+                progressItem.add(
+                    ProgressItems(
+                        false,
+                        data.progress[i]
+                    )
+                )
+            }
+            progressAdapter = ProgressRvAdapter(context, activity, data, progressItem).also {
                 with(it) {
                     setOnItemHoldTapListener(this@ProgressTrackingBottomSheet)
                 }

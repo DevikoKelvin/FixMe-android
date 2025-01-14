@@ -87,8 +87,8 @@ class SelectMaterialsBottomSheet(
                                     for (i in 0 until response.body()!!.size) {
                                         materialsList.add(
                                             SelectedMaterialList(
-                                                response.body()!![i],
-                                                false
+                                                false,
+                                                response.body()!![i]
                                             )
                                         )
                                     }

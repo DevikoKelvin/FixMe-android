@@ -22,6 +22,6 @@ data class SupervisorTechnicianListResponse(
 )
 
 data class SelectedSupervisorTechniciansList(
-    val technician: SupervisorTechnicianListResponse? = null,
-    var isSelected: Boolean = false
+    var isSelected: Boolean = false,
+    val technician: SupervisorTechnicianListResponse? = null
 )

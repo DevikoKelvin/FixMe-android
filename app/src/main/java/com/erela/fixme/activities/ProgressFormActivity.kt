@@ -320,7 +320,7 @@ class ProgressFormActivity : AppCompatActivity() {
                                 (/*if (photoFiles.isNotEmpty()) {
                                     InitAPI.getAPI.editProgress(requestBodyMap, photoFiles)
                                 } else {*/
-                                    InitAPI.getAPI.editProgressNoAttachment(requestBodyMap)
+                                    InitAPI.getAPI.editProgress(requestBodyMap)
                                 /*}*/).enqueue(object : Callback<GenericSimpleResponse> {
                                     override fun onResponse(
                                         call: Call<GenericSimpleResponse>,
@@ -495,7 +495,7 @@ class ProgressFormActivity : AppCompatActivity() {
                                 (/*if (photoFiles.isNotEmpty()) {
                                     InitAPI.getAPI.createProgress(requestBodyMap, photoFiles)
                                 } else {*/
-                                    InitAPI.getAPI.createProgressNoAttachment(requestBodyMap)
+                                    InitAPI.getAPI.createProgress(requestBodyMap)
                                 /*}*/).enqueue(object :
                                     Callback<CreationResponse> {
                                     override fun onResponse(
