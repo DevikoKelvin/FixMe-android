@@ -43,7 +43,7 @@ import retrofit2.Response
 import java.util.Locale
 
 class SubmissionDetailActivity : AppCompatActivity(),
-                                 SubmissionActionBottomSheet.OnUpdateSuccessListener,
+                                 SubmissionActionBottomSheet.OnButtonActionClickedListener,
                                  ProgressTrackingBottomSheet.OnProgressTrackingListener,
                                  ProgressTrackingBottomSheet.OnProgressItemLongTapListener,
                                  ProgressOptionDialog.OnProgressOptionDialogListener,
@@ -1149,6 +1149,20 @@ class SubmissionDetailActivity : AppCompatActivity(),
     override fun onUpdateSuccess() {
         isUpdated = true
         init()
+    }
+
+    override fun onStartProgressNowClicked(bottomSheet: SubmissionActionBottomSheet) {
+        bottomSheet.dismiss()
+        activityResultLauncher.launch(
+            Intent(
+                this@SubmissionDetailActivity,
+                ProgressFormActivity::class.java
+            ).also {
+                with(it) {
+                    putExtra("data", detailData)
+                }
+            }
+        )
     }
 
     override fun createProgressClicked() {

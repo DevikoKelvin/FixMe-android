@@ -17,7 +17,7 @@ class SubmissionActionBottomSheet(context: Context, val data: SubmissionDetailRe
     private val binding: BsSubmissionActionBinding by lazy {
         BsSubmissionActionBinding.inflate(layoutInflater)
     }
-    private lateinit var onUpdateSuccessListener: OnUpdateSuccessListener
+    private lateinit var onButtonActionClickedListener: OnButtonActionClickedListener
     private val userData: UserData by lazy {
         UserDataHelper(context).getUserData()
     }
@@ -131,6 +131,9 @@ class SubmissionActionBottomSheet(context: Context, val data: SubmissionDetailRe
                         } else {
                             actionsButtonContainer.visibility = View.GONE
                             startProgressButton.visibility = View.VISIBLE
+                            startProgressButton.setOnClickListener {
+                                onButtonActionClickedListener.onStartProgressNowClicked(this@SubmissionActionBottomSheet)
+                            }
                             onTrialDoneButtonContainer.visibility = View.GONE
                         }
                     }
@@ -139,31 +142,32 @@ class SubmissionActionBottomSheet(context: Context, val data: SubmissionDetailRe
         }
     }
 
-    fun onUpdateSuccessListener(onUpdateSuccessListener: OnUpdateSuccessListener) {
-        this.onUpdateSuccessListener = onUpdateSuccessListener
+    fun onUpdateSuccessListener(onButtonActionClickedListener: OnButtonActionClickedListener) {
+        this.onButtonActionClickedListener = onButtonActionClickedListener
     }
 
-    interface OnUpdateSuccessListener {
+    interface OnButtonActionClickedListener {
         fun onUpdateSuccess()
+        fun onStartProgressNowClicked(bottomSheet: SubmissionActionBottomSheet)
     }
 
     override fun onApproved() {
-        onUpdateSuccessListener.onUpdateSuccess()
+        onButtonActionClickedListener.onUpdateSuccess()
         dismiss()
     }
 
     override fun onRejected() {
-        onUpdateSuccessListener.onUpdateSuccess()
+        onButtonActionClickedListener.onUpdateSuccess()
         dismiss()
     }
 
     override fun onCanceled() {
-        onUpdateSuccessListener.onUpdateSuccess()
+        onButtonActionClickedListener.onUpdateSuccess()
         dismiss()
     }
 
     override fun onTechniciansDeployed() {
-        onUpdateSuccessListener.onUpdateSuccess()
+        onButtonActionClickedListener.onUpdateSuccess()
         dismiss()
     }
 }

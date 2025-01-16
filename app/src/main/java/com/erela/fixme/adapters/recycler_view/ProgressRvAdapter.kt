@@ -56,6 +56,27 @@ class ProgressRvAdapter(
                     progressAnalysis.text = item.progress.analisa
                     progressDescription.text = item.progress.keterangan
                     dateTimeText.text = item.progress.tglWaktu
+                    val material = StringBuilder().also {
+                        with(it) {
+                            for (i in 0 until item.progress.material!!.size) {
+                                if (i < item.progress.material.size - 1)
+                                    append(
+                                        "${item.progress.material[i]?.namaMaterial} " +
+                                                "(${item.progress.material[i]?.qtyMaterial} Pcs)\n"
+                                    )
+                                else
+                                    append(
+                                        "${item.progress.material[i]?.namaMaterial} " +
+                                                "(${item.progress.material[i]?.qtyMaterial} Pcs)"
+                                    )
+                            }
+                        }
+                    }
+                    materialList.text = if (item.progress.material!!.isNotEmpty()) {
+                        material
+                    } else {
+                        "No materials needed"
+                    }
 
                     arrowExpandShrink.rotation = if (item.isExpanded) 90f else 270f
                     progressDoneContainer.visibility = if (item.isExpanded) View.VISIBLE else

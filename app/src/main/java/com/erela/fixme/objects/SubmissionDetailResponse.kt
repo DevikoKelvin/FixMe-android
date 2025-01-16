@@ -1,8 +1,8 @@
 package com.erela.fixme.objects
 
-import kotlinx.parcelize.Parcelize
 import android.os.Parcelable
 import com.google.gson.annotations.SerializedName
+import kotlinx.parcelize.Parcelize
 import java.io.Serial
 
 @Parcelize
@@ -119,8 +119,6 @@ data class SubmissionDetailResponse(
     val keteranganPelaporApprove: String? = null,
     @field:SerializedName("tgl_waktu_trial_end")
     val tglWaktuTrialEnd: String? = null,
-    @field:SerializedName("material")
-    val material: List<MaterialItem?>? = null,
     @field:SerializedName("tgl_waktu_kerja_start")
     val tglWaktuKerjaStart: String? = null,
     @field:SerializedName("tgl_waktu_kerja_end")
@@ -142,7 +140,9 @@ data class MaterialItem(
     @field:SerializedName("nama_material")
     val namaMaterial: String? = null,
     @field:SerializedName("id_material")
-    val idMaterial: Int? = null
+    val idMaterial: Int? = null,
+    @field:SerializedName("qty_material")
+    val qtyMaterial: Int? = null
 ) : Parcelable
 
 @Parcelize
@@ -192,7 +192,19 @@ data class ProgressItem(
     @field:SerializedName("tgl_waktu_done")
     val tglWaktuDone: String? = null,
     @field:SerializedName("sts_detail")
-    val stsDetail: Int? = null
+    val stsDetail: Int? = null,
+    @field:SerializedName("material")
+    val material: List<MaterialItem?>? = null,
+    @field:SerializedName("keterangan_approve")
+    val keteranganApprove: String? = null,
+    @field:SerializedName("approve_material_id_user")
+    val approveMaterialIdUser: Int? = null,
+    @field:SerializedName("approve_material_user")
+    val approveMaterialUser: String? = null,
+    @field:SerializedName("approve_material_tgl_waktu")
+    val approveMaterialTglWaktu: String? = null,
+    @field:SerializedName("approve_material_status")
+    val approveMaterialStatus: Int? = null
 ) : Parcelable
 
 @Parcelize
