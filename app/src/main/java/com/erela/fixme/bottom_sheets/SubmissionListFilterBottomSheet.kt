@@ -13,6 +13,20 @@ class SubmissionListFilterBottomSheet(context: Context, private val selectedFilt
     private lateinit var binding: BsSubmissionListFilterBinding
     private lateinit var onFilterListener: OnFilterListener
 
+    companion object {
+        const val ALL = -1
+        const val REJECTED = 0
+        const val PENDING = 1
+        const val WAITING = 11
+        const val APPROVED = 2
+        const val PREPARING = 21
+        const val ON_PROGRESS = 3
+        const val PROGRESS_DONE = 30
+        const val ON_TRIAL = 31
+        const val DONE = 4
+        const val CANCELED = 5
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = BsSubmissionListFilterBinding.inflate(layoutInflater)
@@ -39,6 +53,7 @@ class SubmissionListFilterBottomSheet(context: Context, private val selectedFilt
 
                 0 -> rejectedSelector.isChecked = true
                 1 -> pendingSelector.isChecked = true
+                11 -> waitingSelector.isChecked = true
                 2 -> approvedSelector.isChecked = true
                 3 -> onProgressSelector.isChecked = true
                 30 -> progressDoneSelector.isChecked = true
@@ -48,47 +63,57 @@ class SubmissionListFilterBottomSheet(context: Context, private val selectedFilt
             }
 
             clearFilterButton.setOnClickListener {
-                onFilterListener.onFilter(-1, -1)
+                onFilterListener.onFilter(ALL, ALL)
                 dismiss()
             }
 
             pendingSelector.setOnClickListener {
-                onFilterListener.onFilter(1, 1)
+                onFilterListener.onFilter(PENDING, PENDING)
+                dismiss()
+            }
+
+            waitingSelector.setOnClickListener {
+                onFilterListener.onFilter(WAITING, WAITING)
                 dismiss()
             }
 
             canceledSelector.setOnClickListener {
-                onFilterListener.onFilter(5, 5)
+                onFilterListener.onFilter(CANCELED, CANCELED)
                 dismiss()
             }
 
             rejectedSelector.setOnClickListener {
-                onFilterListener.onFilter(0, 0)
+                onFilterListener.onFilter(REJECTED, REJECTED)
                 dismiss()
             }
 
             approvedSelector.setOnClickListener {
-                onFilterListener.onFilter(2, 2)
+                onFilterListener.onFilter(APPROVED, APPROVED)
+                dismiss()
+            }
+
+            preparingSelector.setOnClickListener {
+                onFilterListener.onFilter(PREPARING, PREPARING)
                 dismiss()
             }
 
             onProgressSelector.setOnClickListener {
-                onFilterListener.onFilter(3, 3)
+                onFilterListener.onFilter(ON_PROGRESS, ON_PROGRESS)
                 dismiss()
             }
 
             progressDoneSelector.setOnClickListener {
-                onFilterListener.onFilter(30, 30)
+                onFilterListener.onFilter(PROGRESS_DONE, PROGRESS_DONE)
                 dismiss()
             }
 
             onTrialSelector.setOnClickListener {
-                onFilterListener.onFilter(31, 31)
+                onFilterListener.onFilter(ON_TRIAL, ON_TRIAL)
                 dismiss()
             }
 
             doneSelector.setOnClickListener {
-                onFilterListener.onFilter(4, 4)
+                onFilterListener.onFilter(DONE, DONE)
                 dismiss()
             }
         }

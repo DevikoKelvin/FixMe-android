@@ -71,8 +71,8 @@ class ProgressTrackingBottomSheet(
                 }
             }
             progressWorkedBy.text = message.toString()
+            progressItem = ArrayList()
             for (i in 0 until data.progress!!.size) {
-                progressItem = ArrayList()
                 progressItem.add(
                     ProgressItems(
                         false,
@@ -91,7 +91,6 @@ class ProgressTrackingBottomSheet(
             when (data.stsGaprojects) {
                 3 -> {
                     if (data.idUser == userData.id) {
-                        Log.e("Am I the reporter?", "Yes")
                         for (i in 0 until data.usernUserTeknisi.size) {
                             if (data.usernUserTeknisi[i]?.idUser == userData.id) {
                                 Log.e("Am I the Technicians?", "Yes")
@@ -114,7 +113,6 @@ class ProgressTrackingBottomSheet(
                                 tech = true
                                 break
                             } else {
-                                Log.e("Am I the Technicians?", "No")
                                 progressActionButton.visibility = View.GONE
                             }
                         }
@@ -123,7 +121,7 @@ class ProgressTrackingBottomSheet(
                             for (i in 0 until data.usernUserSpv!!.size) {
                                 if (data.usernUserSpv[i]?.idUser == userData.id) {
                                     var progressDone = 0
-                                    for (j in 0 until data.progress!!.size) {
+                                    for (j in 0 until data.progress.size) {
                                         if (data.progress[j]?.stsDetail == 1)
                                             progressDone++
                                     }
@@ -153,10 +151,8 @@ class ProgressTrackingBottomSheet(
                             }
                         }
                     } else {
-                        Log.e("Am I the reporter?", "No")
                         for (i in 0 until data.usernUserTeknisi.size) {
                             if (data.usernUserTeknisi[i]?.idUser == userData.id) {
-                                Log.e("Am I the Technicians?", "Yes")
                                 progressActionButton.visibility = View.VISIBLE
                                 progressActionButton.setCardBackgroundColor(
                                     ContextCompat.getColor(
@@ -176,7 +172,6 @@ class ProgressTrackingBottomSheet(
                                 tech = true
                                 break
                             } else {
-                                Log.e("Am I the Technicians?", "No")
                                 progressActionButton.visibility = View.GONE
                             }
                         }
@@ -185,7 +180,7 @@ class ProgressTrackingBottomSheet(
                             for (i in 0 until data.usernUserSpv!!.size) {
                                 if (data.usernUserSpv[i]?.idUser == userData.id) {
                                     var progressDone = 0
-                                    for (j in 0 until data.progress!!.size) {
+                                    for (j in 0 until data.progress.size) {
                                         if (data.progress[j]?.stsDetail == 1)
                                             progressDone++
                                     }

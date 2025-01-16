@@ -3,10 +3,8 @@ package com.erela.fixme.activities
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
-import android.graphics.Rect
 import android.os.Bundle
 import android.util.Log
-import android.view.MotionEvent
 import android.view.View
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.result.ActivityResultLauncher
@@ -38,11 +36,11 @@ import com.erela.fixme.objects.ProgressItem
 import com.erela.fixme.objects.StarconnectUserResponse
 import com.erela.fixme.objects.SubmissionDetailResponse
 import com.erela.fixme.objects.UserData
-import com.google.android.material.card.MaterialCardView
 import org.json.JSONException
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.util.Locale
 
 class SubmissionDetailActivity : AppCompatActivity(),
                                  SubmissionActionBottomSheet.OnUpdateSuccessListener,
@@ -105,23 +103,6 @@ class SubmissionDetailActivity : AppCompatActivity(),
         init()
     }
 
-    override fun dispatchTouchEvent(motionEvent: MotionEvent?): Boolean {
-        binding.apply {
-            isFabVisible = false
-            actionSelfButton.extend()
-            editButton.hide()
-            editButton.shrink()
-            cancelButton.hide()
-            cancelButton.shrink()
-            /*if (currentFocus != null) {
-                val imm = activity!!.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-                imm.hideSoftInputFromWindow(activity!!.currentFocus!!.windowToken, 0)
-            }*/
-        }
-        return true
-        /*return super.dispatchTouchEvent(motionEvent)*/
-    }
-
     @SuppressLint("SetTextI18n")
     private fun init() {
         binding.apply {
@@ -157,7 +138,7 @@ class SubmissionDetailActivity : AppCompatActivity(),
                                 if (response.body() != null) {
                                     detailData = response.body()!![0]
                                     /*Log.e("DATA", detailData.toString())*/
-                                    detailTitle.text = "No. ${detailData.nomorRequest}"
+                                    detailTitle.text = detailData.nomorRequest
                                     if (detailData.fotoGaprojects!!.isEmpty()) {
                                         imageContainer.visibility = View.GONE
                                     } else {
@@ -207,6 +188,41 @@ class SubmissionDetailActivity : AppCompatActivity(),
                                     }
                                     submissionName.text = detailData.judulKasus
                                     inputDate.text = detailData.setTglinput
+                                    submissionComplexityText.text = detailData.difficulty?.replaceFirstChar {
+                                        if (it.isLowerCase())
+                                            it.titlecase(Locale.getDefault())
+                                        else
+                                            it.toString()
+                                    }
+                                    when (detailData.difficulty) {
+                                        "low" -> {
+                                            submissionComplexity.setCardBackgroundColor(
+                                                ResourcesCompat.getColor(
+                                                    resources,
+                                                    R.color.custom_toast_font_success,
+                                                    theme
+                                                )
+                                            )
+                                        }
+                                        "middle" -> {
+                                            submissionComplexity.setCardBackgroundColor(
+                                                ResourcesCompat.getColor(
+                                                    resources,
+                                                    R.color.custom_toast_font_warning,
+                                                    theme
+                                                )
+                                            )
+                                        }
+                                        "high" -> {
+                                            submissionComplexity.setCardBackgroundColor(
+                                                ResourcesCompat.getColor(
+                                                    resources,
+                                                    R.color.custom_toast_font_failed,
+                                                    theme
+                                                )
+                                            )
+                                        }
+                                    }
                                     when (detailData.stsGaprojects) {
                                         0 -> {
                                             submissionStatus.setCardBackgroundColor(
@@ -943,6 +959,43 @@ class SubmissionDetailActivity : AppCompatActivity(),
                                                         } else {
                                                             actionButton.visibility = View.GONE
                                                             actionSelfButton.visibility = View.GONE
+                                                            onProgressButton.visibility = View.GONE
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
+
+                                        11 -> {
+                                            if (result?.mEMORG!!.toString().contains(
+                                                    data.deptTujuan.toString()
+                                                )
+                                            ) {
+                                                if (data.idUser == userData.id) {
+                                                    actionButton.visibility = View.GONE
+                                                    onProgressButton.visibility = View.GONE
+                                                } else {
+                                                    if (userData.privilege < 2) {
+                                                        if (data.deptUser == userData.dept) {
+                                                            actionButton.visibility = View.GONE
+                                                            onProgressButton.visibility = View.GONE
+                                                        } else {
+                                                            actionButton.visibility = View.VISIBLE
+                                                            onProgressButton.visibility = View.GONE
+                                                        }
+                                                    }
+                                                }
+                                            } else {
+                                                if (data.idUser == userData.id) {
+                                                    actionButton.visibility = View.GONE
+                                                    onProgressButton.visibility = View.GONE
+                                                } else {
+                                                    if (userData.privilege < 2) {
+                                                        if (data.deptUser == userData.dept) {
+                                                            actionButton.visibility = View.GONE
+                                                            onProgressButton.visibility = View.GONE
+                                                        } else {
+                                                            actionButton.visibility = View.VISIBLE
                                                             onProgressButton.visibility = View.GONE
                                                         }
                                                     }

@@ -2,7 +2,6 @@ package com.erela.fixme.adapters.recycler_view
 
 import android.annotation.SuppressLint
 import android.content.Context
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,14 +9,9 @@ import androidx.core.content.res.ResourcesCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.erela.fixme.R
 import com.erela.fixme.databinding.ListItemSubmissionBinding
-import com.erela.fixme.helpers.networking.InitAPI
 import com.erela.fixme.helpers.UserDataHelper
 import com.erela.fixme.objects.SubmissionListResponse
 import com.erela.fixme.objects.UserData
-import com.erela.fixme.objects.UserDetailResponse
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
 
 class SubmissionRvAdapter(val context: Context, val data: ArrayList<SubmissionListResponse>) :
     RecyclerView.Adapter<SubmissionRvAdapter.ViewHolder>() {
@@ -43,6 +37,7 @@ class SubmissionRvAdapter(val context: Context, val data: ArrayList<SubmissionLi
 
                 submissionName.text = item.judulKasus
                 inputDate.text = item.setTglinput
+                noRequest.text = item.nomorRequest
                 submissionDescription.text = item.keterangan
                 machineCodeText.text = "${context.getString(R.string.machine_code)}:"
                 machineNameText.text = "${context.getString(R.string.machine_name)}:"
@@ -58,38 +53,7 @@ class SubmissionRvAdapter(val context: Context, val data: ArrayList<SubmissionLi
                     "-"
                 }
                 submissionLocation.text = item.lokasi?.uppercase()
-                reportedBy.text = ""
-                try {
-                    InitAPI.getAPI.getUserDetail(item.idUser!!)
-                        .enqueue(object : Callback<UserDetailResponse> {
-                            override fun onResponse(
-                                call: Call<UserDetailResponse?>,
-                                response: Response<UserDetailResponse?>
-                            ) {
-                                if (response.isSuccessful) {
-                                    if (response.body() != null) {
-                                        reportedBy.text = response.body()?.nama
-                                    }
-                                } else {
-                                    reportedBy.text = "Can't retrieve Reporter's name"
-                                    Log.e("ERROR", response.message())
-                                }
-                            }
-
-                            override fun onFailure(
-                                call: Call<UserDetailResponse?>,
-                                throwable: Throwable
-                            ) {
-                                reportedBy.text = "Can't retrieve Reporter's name"
-                                Log.e("ERROR", throwable.toString())
-                                throwable.printStackTrace()
-                            }
-                        })
-                } catch (exception: Exception) {
-                    reportedBy.text = "Can't retrieve Reporter's name"
-                    Log.e("ERROR", exception.toString())
-                    exception.printStackTrace()
-                }
+                reportedBy.text = item.namaUser
 
                 when (item.stsGaprojects) {
                     0 -> {
@@ -119,6 +83,24 @@ class SubmissionRvAdapter(val context: Context, val data: ArrayList<SubmissionLi
                             )
                         )
                         submissionStatusText.text = "Pending"
+                        submissionStatusText.setTextColor(
+                            ResourcesCompat.getColor(
+                                context.resources,
+                                R.color.white,
+                                context.theme
+                            )
+                        )
+                    }
+
+                    11 -> {
+                        submissionStatus.setCardBackgroundColor(
+                            ResourcesCompat.getColor(
+                                context.resources,
+                                R.color.status_waiting,
+                                context.theme
+                            )
+                        )
+                        submissionStatusText.text = "Waiting"
                         submissionStatusText.setTextColor(
                             ResourcesCompat.getColor(
                                 context.resources,

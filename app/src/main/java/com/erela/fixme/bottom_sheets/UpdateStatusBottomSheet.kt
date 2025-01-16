@@ -56,6 +56,7 @@ class UpdateStatusBottomSheet(
         false,
         false
     )
+    private lateinit var complexity: String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -252,6 +253,19 @@ class UpdateStatusBottomSheet(
                 rvSupervisor.visibility = View.GONE
                 selectComplexityText.visibility = View.VISIBLE
                 complexityRadioGroup.visibility = View.VISIBLE
+                complexityRadioGroup.setOnCheckedChangeListener { _, checkedId ->
+                    when (checkedId) {
+                        R.id.lowSelector -> {
+                            complexity = lowSelector.text.toString().lowercase(Locale.getDefault())
+                        }
+                        R.id.midSelector -> {
+                            complexity = midSelector.text.toString().lowercase(Locale.getDefault())
+                        }
+                        R.id.highSelector -> {
+                            complexity = highSelector.text.toString().lowercase(Locale.getDefault())
+                        }
+                    }
+                }
                 selectTechniciansText.visibility = View.VISIBLE
                 rvTechnicians.visibility = View.VISIBLE
                 approveButton.visibility = View.GONE
@@ -362,6 +376,9 @@ class UpdateStatusBottomSheet(
         var validated = 0
 
         binding.apply {
+            if (deployTech)
+                isFormEmpty[0] = this@UpdateStatusBottomSheet::complexity.isInitialized
+
             for (element in isFormEmpty) {
                 if (element)
                     validated++
@@ -889,54 +906,76 @@ class UpdateStatusBottomSheet(
                         descriptionFieldLayout.error = "Make sure all fields are filled."
                 }
             } else {
-                try {
-                    val data: MutableMap<String, RequestBody> = mutableMapOf()
-                    with(data) {
-                        put("id_user", createPartFromString(userData.id.toString())!!)
-                        put(
-                            "id_gaprojects",
-                            createPartFromString(dataDetail.idGaprojects.toString())!!
-                        )
-                        for (i in 0 until selectedTechniciansArrayList.size - 1) {
+                if (formCheck()) {
+                    try {
+                        val data: MutableMap<String, RequestBody> = mutableMapOf()
+                        with(data) {
+                            put("id_user", createPartFromString(userData.id.toString())!!)
                             put(
-                                "user_teknisi[$i]",
-                                createPartFromString(
-                                    selectedTechniciansArrayList[i].idUser.toString()
-                                )!!
+                                "id_gaprojects",
+                                createPartFromString(dataDetail.idGaprojects.toString())!!
                             )
+                            for (i in 0 until selectedTechniciansArrayList.size - 1) {
+                                put(
+                                    "user_teknisi[$i]",
+                                    createPartFromString(
+                                        selectedTechniciansArrayList[i].idUser.toString()
+                                    )!!
+                                )
+                            }
+                            put("difficulty", createPartFromString(complexity)!!)
                         }
-                    }
-                    InitAPI.getAPI.deployTechnicians(data)
-                        .enqueue(object : Callback<GenericSimpleResponse> {
-                            override fun onResponse(
-                                call: Call<GenericSimpleResponse>,
-                                response: Response<GenericSimpleResponse>
-                            ) {
-                                approveLoading.visibility = View.GONE
-                                rejectLoading.visibility = View.GONE
-                                deployTechLoading.visibility = View.GONE
-                                if (response.isSuccessful) {
-                                    if (response.body() != null) {
-                                        val result = response.body()
-                                        if (result?.code == 1) {
-                                            CustomToast.getInstance(context)
-                                                .setBackgroundColor(
-                                                    ContextCompat.getColor(
-                                                        context,
-                                                        R.color.custom_toast_background_success
+                        InitAPI.getAPI.deployTechnicians(data)
+                            .enqueue(object : Callback<GenericSimpleResponse> {
+                                override fun onResponse(
+                                    call: Call<GenericSimpleResponse>,
+                                    response: Response<GenericSimpleResponse>
+                                ) {
+                                    approveLoading.visibility = View.GONE
+                                    rejectLoading.visibility = View.GONE
+                                    deployTechLoading.visibility = View.GONE
+                                    if (response.isSuccessful) {
+                                        if (response.body() != null) {
+                                            val result = response.body()
+                                            if (result?.code == 1) {
+                                                CustomToast.getInstance(context)
+                                                    .setBackgroundColor(
+                                                        ContextCompat.getColor(
+                                                            context,
+                                                            R.color.custom_toast_background_success
+                                                        )
                                                     )
-                                                )
-                                                .setFontColor(
-                                                    ContextCompat.getColor(
-                                                        context,
-                                                        R.color.custom_toast_font_success
+                                                    .setFontColor(
+                                                        ContextCompat.getColor(
+                                                            context,
+                                                            R.color.custom_toast_font_success
+                                                        )
                                                     )
+                                                    .setMessage(
+                                                        "Technicians successfully deployed!"
+                                                    ).show()
+                                                dismiss()
+                                                onUpdateSuccessListener.onTechniciansDeployed()
+                                            } else {
+                                                CustomToast.getInstance(context)
+                                                    .setBackgroundColor(
+                                                        ContextCompat.getColor(
+                                                            context,
+                                                            R.color.custom_toast_background_failed
+                                                        )
+                                                    )
+                                                    .setFontColor(
+                                                        ContextCompat.getColor(
+                                                            context,
+                                                            R.color.custom_toast_font_failed
+                                                        )
+                                                    )
+                                                    .setMessage("Failed to deploy technicians.")
+                                                    .show()
+                                                Log.e(
+                                                    "ERROR ${result?.code}", result?.message.toString()
                                                 )
-                                                .setMessage(
-                                                    "Technicians successfully deployed!"
-                                                ).show()
-                                            dismiss()
-                                            onUpdateSuccessListener.onTechniciansDeployed()
+                                            }
                                         } else {
                                             CustomToast.getInstance(context)
                                                 .setBackgroundColor(
@@ -954,7 +993,8 @@ class UpdateStatusBottomSheet(
                                                 .setMessage("Failed to deploy technicians.")
                                                 .show()
                                             Log.e(
-                                                "ERROR ${result?.code}", result?.message.toString()
+                                                "ERROR ${response.code()}",
+                                                response.message().toString()
                                             )
                                         }
                                     } else {
@@ -971,14 +1011,20 @@ class UpdateStatusBottomSheet(
                                                     R.color.custom_toast_font_failed
                                                 )
                                             )
-                                            .setMessage("Failed to deploy technicians.")
-                                            .show()
+                                            .setMessage("Failed to deploy technicians.").show()
                                         Log.e(
                                             "ERROR ${response.code()}",
                                             response.message().toString()
                                         )
                                     }
-                                } else {
+                                }
+
+                                override fun onFailure(
+                                    call: Call<GenericSimpleResponse>, throwable: Throwable
+                                ) {
+                                    approveLoading.visibility = View.GONE
+                                    rejectLoading.visibility = View.GONE
+                                    deployTechLoading.visibility = View.GONE
                                     CustomToast.getInstance(context)
                                         .setBackgroundColor(
                                             ContextCompat.getColor(
@@ -993,38 +1039,31 @@ class UpdateStatusBottomSheet(
                                             )
                                         )
                                         .setMessage("Failed to deploy technicians.").show()
-                                    Log.e(
-                                        "ERROR ${response.code()}",
-                                        response.message().toString()
-                                    )
+                                    Log.e("ERROR", throwable.message.toString())
+                                    throwable.printStackTrace()
                                 }
-                            }
-
-                            override fun onFailure(
-                                call: Call<GenericSimpleResponse>, throwable: Throwable
-                            ) {
-                                approveLoading.visibility = View.GONE
-                                rejectLoading.visibility = View.GONE
-                                deployTechLoading.visibility = View.GONE
-                                CustomToast.getInstance(context)
-                                    .setBackgroundColor(
-                                        ContextCompat.getColor(
-                                            context,
-                                            R.color.custom_toast_background_failed
-                                        )
-                                    )
-                                    .setFontColor(
-                                        ContextCompat.getColor(
-                                            context,
-                                            R.color.custom_toast_font_failed
-                                        )
-                                    )
-                                    .setMessage("Failed to deploy technicians.").show()
-                                Log.e("ERROR", throwable.message.toString())
-                                throwable.printStackTrace()
-                            }
-                        })
-                } catch (jsonException: JSONException) {
+                            })
+                    } catch (jsonException: JSONException) {
+                        approveLoading.visibility = View.GONE
+                        rejectLoading.visibility = View.GONE
+                        deployTechLoading.visibility = View.GONE
+                        CustomToast.getInstance(context)
+                            .setBackgroundColor(
+                                ContextCompat.getColor(
+                                    context,
+                                    R.color.custom_toast_background_failed
+                                )
+                            )
+                            .setFontColor(
+                                ContextCompat.getColor(
+                                    context,
+                                    R.color.custom_toast_font_failed
+                                )
+                            )
+                            .setMessage("Failed to deploy technicians.").show()
+                        jsonException.printStackTrace()
+                    }
+                } else {
                     approveLoading.visibility = View.GONE
                     rejectLoading.visibility = View.GONE
                     deployTechLoading.visibility = View.GONE
@@ -1041,8 +1080,7 @@ class UpdateStatusBottomSheet(
                                 R.color.custom_toast_font_failed
                             )
                         )
-                        .setMessage("Failed to deploy technicians.").show()
-                    jsonException.printStackTrace()
+                        .setMessage("Make sure all fields are filled.").show()
                 }
             }
         }

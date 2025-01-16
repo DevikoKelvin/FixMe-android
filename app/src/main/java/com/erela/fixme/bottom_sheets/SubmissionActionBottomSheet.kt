@@ -69,6 +69,39 @@ class SubmissionActionBottomSheet(context: Context, val data: SubmissionDetailRe
                             bottomSheet.show()
                     }
                 }
+                // Waiting
+                11 -> {
+                    startProgressButton.visibility = View.GONE
+                    onTrialDoneButtonContainer.visibility = View.GONE
+                    actionsButtonContainer.visibility = View.VISIBLE
+                    approveButton.visibility = View.VISIBLE
+                    rejectButton.visibility = View.VISIBLE
+                    deployTechButton.visibility = View.GONE
+                    approveButton.setOnClickListener {
+                        val bottomSheet =
+                            UpdateStatusBottomSheet(
+                                context, data, approve = true, cancel = false, deployTech = false
+                            ).also { bottomSheet ->
+                                with(bottomSheet) {
+                                    setOnUpdateSuccessListener(this@SubmissionActionBottomSheet)
+                                }
+                            }
+                        if (bottomSheet.window != null)
+                            bottomSheet.show()
+                    }
+                    rejectButton.setOnClickListener {
+                        val bottomSheet =
+                            UpdateStatusBottomSheet(
+                                context, data, approve = false, cancel = false, deployTech = false
+                            ).also { bottomSheet ->
+                                with(bottomSheet) {
+                                    setOnUpdateSuccessListener(this@SubmissionActionBottomSheet)
+                                }
+                            }
+                        if (bottomSheet.window != null)
+                            bottomSheet.show()
+                    }
+                }
                 // Approved
                 2 -> {
                     for (i in 0 until data.usernUserSpv!!.size) {

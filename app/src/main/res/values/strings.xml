@@ -48,8 +48,10 @@
     <string name="filter_list_title">Filter List: Filtered by</string>
     <string name="filter_list">Filter List by Status</string>
     <string name="pending">Pending</string>
+    <string name="waiting">Waiting</string>
     <string name="rejected">Rejected</string>
     <string name="approved">Approved</string>
+    <string name="preparing">Preparing</string>
     <string name="on_progress">On Progress</string>
     <string name="progress_done">Progress Done</string>
     <string name="on_trial">On Trial</string>

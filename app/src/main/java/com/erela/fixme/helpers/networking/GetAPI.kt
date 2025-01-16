@@ -11,7 +11,6 @@ import com.erela.fixme.objects.StarconnectUserResponse
 import com.erela.fixme.objects.SubmissionDetailResponse
 import com.erela.fixme.objects.SubmissionListResponse
 import com.erela.fixme.objects.SupervisorTechnicianListResponse
-import com.erela.fixme.objects.UserDetailResponse
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import retrofit2.Call
@@ -24,12 +23,6 @@ import retrofit2.http.Part
 import retrofit2.http.PartMap
 
 interface GetAPI {
-    @FormUrlEncoded
-    @POST("getUserDetail")
-    fun getUserDetail(
-        @Field("id_user") idUser: Int
-    ): Call<UserDetailResponse>
-
     @FormUrlEncoded
     @POST("getUserFromStarconnect")
     fun getUserFromStarConnect(

@@ -137,14 +137,38 @@
                         tools:text="07 November 2024" />
 
                     <com.google.android.material.card.MaterialCardView
+                        android:id="@+id/submissionComplexity"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="end|center"
+                        android:layout_margin="4dp"
+                        app:cardBackgroundColor="@android:color/transparent"
+                        app:cardCornerRadius="50dp"
+                        app:cardElevation="0dp"
+                        app:contentPadding="4dp"
+                        app:contentPaddingLeft="8dp"
+                        app:contentPaddingRight="8dp"
+                        app:strokeWidth="0dp">
+
+                        <TextView
+                            android:id="@+id/submissionComplexityText"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textColor="@color/white"
+                            android:textSize="12sp"
+                            android:textStyle="bold"
+                            tools:text="Low" />
+                    </com.google.android.material.card.MaterialCardView>
+
+                    <com.google.android.material.card.MaterialCardView
                         android:id="@+id/submissionStatus"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="end|center"
                         android:layout_margin="4dp"
-                        app:cardBackgroundColor="@color/status_preparing"
+                        app:cardBackgroundColor="@android:color/transparent"
                         app:cardCornerRadius="50dp"
-                        app:cardElevation="2dp"
+                        app:cardElevation="0dp"
                         app:contentPadding="4dp"
                         app:contentPaddingLeft="8dp"
                         app:contentPaddingRight="8dp"

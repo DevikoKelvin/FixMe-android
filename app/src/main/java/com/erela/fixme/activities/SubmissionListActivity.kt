@@ -233,8 +233,8 @@ class SubmissionListActivity : AppCompatActivity(), SubmissionRvAdapter.OnSubmis
                                 if (response.isSuccessful) {
                                     if (response.body() != null) {
                                         if (firstInit) {
-                                            filterList(response.body(), 3)
-                                            selectedFilter = 3
+                                            filterList(response.body(), SubmissionListFilterBottomSheet.ON_PROGRESS)
+                                            selectedFilter = SubmissionListFilterBottomSheet.ON_PROGRESS
                                             firstInit = false
                                         } else
                                             filterList(response.body(), selectedFilter)
@@ -346,9 +346,17 @@ class SubmissionListActivity : AppCompatActivity(), SubmissionRvAdapter.OnSubmis
                         text = "Pending"
                         setTextColor(getColor(R.color.status_pending))
                     }
+                    11 -> {
+                        text = "Waiting"
+                        setTextColor(getColor(R.color.status_waiting))
+                    }
                     2 -> {
                         text = "Approved"
                         setTextColor(getColor(R.color.status_approved))
+                    }
+                    21 -> {
+                        text = "Preparing"
+                        setTextColor(getColor(R.color.status_preparing))
                     }
                     3 -> {
                         text = "On Progress"

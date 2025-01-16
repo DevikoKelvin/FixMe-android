@@ -29,6 +29,8 @@ data class SubmissionListResponse(
     val fotoGaprojects: List<FotoGaprojectsItem?>? = null,
     @field:SerializedName("id_user")
     val idUser: Int? = null,
+    @field:SerializedName("nama_user")
+    val namaUser: String? = null,
     @field:SerializedName("set_tglinput")
     val setTglinput: String? = null,
     @field:SerializedName("nama_mesin")
@@ -51,6 +53,8 @@ data class SubmissionListResponse(
     val tglWaktuKerjaEnd: String? = null,
     @field:SerializedName("tglwaktu_approved")
     val tglwaktuApproved: String? = null,
+    @field:SerializedName("nomor_request")
+    val nomorRequest: String? = null,
     @field:SerializedName("judul_kasus")
     val judulKasus: String? = null,
     @field:SerializedName("id_user_done")
