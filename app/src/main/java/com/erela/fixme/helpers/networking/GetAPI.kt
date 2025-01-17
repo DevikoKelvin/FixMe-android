@@ -55,8 +55,11 @@ interface GetAPI {
     @GET("getCategoryList")
     fun getCategoryList(): Call<List<CategoryListResponse>>
 
-    @GET("getMaterialList")
-    fun getMaterialList(): Call<List<MaterialListResponse>>
+    @FormUrlEncoded
+    @POST("getMaterialList")
+    fun getMaterialList(
+        @Field("id_kategori") id: Int
+    ): Call<List<MaterialListResponse>>
 
     @FormUrlEncoded
     @POST("reportList")

@@ -188,12 +188,13 @@ class SubmissionDetailActivity : AppCompatActivity(),
                                     }
                                     submissionName.text = detailData.judulKasus
                                     inputDate.text = detailData.setTglinput
-                                    submissionComplexityText.text = detailData.difficulty?.replaceFirstChar {
-                                        if (it.isLowerCase())
-                                            it.titlecase(Locale.getDefault())
-                                        else
-                                            it.toString()
-                                    }
+                                    submissionComplexityText.text =
+                                        detailData.difficulty?.replaceFirstChar {
+                                            if (it.isLowerCase())
+                                                it.titlecase(Locale.getDefault())
+                                            else
+                                                it.toString()
+                                        }
                                     when (detailData.difficulty) {
                                         "low" -> {
                                             submissionComplexity.setCardBackgroundColor(
@@ -204,6 +205,7 @@ class SubmissionDetailActivity : AppCompatActivity(),
                                                 )
                                             )
                                         }
+
                                         "middle" -> {
                                             submissionComplexity.setCardBackgroundColor(
                                                 ResourcesCompat.getColor(
@@ -213,6 +215,7 @@ class SubmissionDetailActivity : AppCompatActivity(),
                                                 )
                                             )
                                         }
+
                                         "high" -> {
                                             submissionComplexity.setCardBackgroundColor(
                                                 ResourcesCompat.getColor(
@@ -1159,7 +1162,7 @@ class SubmissionDetailActivity : AppCompatActivity(),
                 ProgressFormActivity::class.java
             ).also {
                 with(it) {
-                    putExtra("data", detailData)
+                    putExtra("detail", detailData)
                 }
             }
         )
@@ -1173,7 +1176,7 @@ class SubmissionDetailActivity : AppCompatActivity(),
                 ProgressFormActivity::class.java
             ).also {
                 with(it) {
-                    putExtra("data", detailData)
+                    putExtra("detail", detailData)
                 }
             }
         )
@@ -1528,8 +1531,8 @@ class SubmissionDetailActivity : AppCompatActivity(),
             confirmationDialog.show()
     }
 
-    override fun onLongTapListener(data: ProgressItem?) {
-        val dialog = ProgressOptionDialog(this@SubmissionDetailActivity, data!!).also {
+    override fun onLongTapListener(data: ProgressItem?, forSpv: Boolean) {
+        val dialog = ProgressOptionDialog(this@SubmissionDetailActivity, data!!, forSpv).also {
             with(it) {
                 setOnProgressOptionDialogListener(this@SubmissionDetailActivity)
             }
@@ -1722,6 +1725,7 @@ class SubmissionDetailActivity : AppCompatActivity(),
             ).also {
                 with(it) {
                     putExtra("data", data)
+                    putExtra("detail", detailData)
                 }
             }
         )

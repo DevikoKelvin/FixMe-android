@@ -5,10 +5,13 @@ import android.content.Context
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
+import android.view.View
 import com.erela.fixme.databinding.DialogProgressOptionBinding
 import com.erela.fixme.objects.ProgressItem
 
-class ProgressOptionDialog(context: Context, private val progress: ProgressItem) : Dialog(context) {
+class ProgressOptionDialog(
+    context: Context, private val progress: ProgressItem, private val forSpv: Boolean
+) : Dialog(context) {
     private val binding: DialogProgressOptionBinding by lazy {
         DialogProgressOptionBinding.inflate(layoutInflater)
     }
@@ -26,6 +29,17 @@ class ProgressOptionDialog(context: Context, private val progress: ProgressItem)
 
     private fun init() {
         binding.apply {
+            if (forSpv) {
+                divider3.visibility = View.GONE
+                deleteButton.visibility = View.GONE
+                doneButton.visibility = View.GONE
+                editButton.visibility = View.GONE
+            } else {
+                divider3.visibility = View.VISIBLE
+                deleteButton.visibility = View.VISIBLE
+                doneButton.visibility = View.VISIBLE
+                editButton.visibility = View.VISIBLE
+            }
             deleteButton.setOnClickListener {
                 onProgressOptionDialogListener.onProgressDeleted(progress)
                 dismiss()

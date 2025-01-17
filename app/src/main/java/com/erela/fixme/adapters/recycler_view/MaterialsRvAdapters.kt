@@ -45,7 +45,7 @@ class MaterialsRvAdapters(
                     if (isChecked) {
                         onMaterialsSetListener.onMaterialsSelected(item.material)
                     } else {
-                        onMaterialsSetListener.onMaterialsUnselected(item.material)
+                        onMaterialsSetListener.onMaterialsUnselected(item.material, position)
                     }
                 }
             }
@@ -64,7 +64,7 @@ class MaterialsRvAdapters(
 
     interface OnMaterialsSetListener {
         fun onMaterialsSelected(data: MaterialListResponse)
-        fun onMaterialsUnselected(data: MaterialListResponse)
+        fun onMaterialsUnselected(data: MaterialListResponse, position: Int)
     }
 }
 

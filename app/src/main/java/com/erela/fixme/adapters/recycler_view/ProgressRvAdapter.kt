@@ -1,7 +1,9 @@
 package com.erela.fixme.adapters.recycler_view
 
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -42,6 +44,7 @@ class ProgressRvAdapter(
 
     override fun getItemCount(): Int = data.size
 
+    @SuppressLint("SetTextI18n")
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val item = data[position]
 
@@ -72,10 +75,22 @@ class ProgressRvAdapter(
                             }
                         }
                     }
-                    materialList.text = if (item.progress.material!!.isNotEmpty()) {
-                        material
-                    } else {
-                        "No materials needed"
+                    val materials = item.progress.material
+                    if (materials != null) {
+                        if (materials.isNotEmpty()) {
+                            if (item.progress.approveMaterialStatus == 1) {
+                                materialApprovedStatus.visibility = View.VISIBLE
+                                materialApprovedMessage.text = "Material approved by ${
+                                    item.progress.approveMaterialUser
+                                } on ${item.progress.approveMaterialTglWaktu}"
+                            } else
+                                materialApprovedStatus.visibility = View.GONE
+                        } else
+                            materialApprovedStatus.visibility = View.GONE
+                        materialList.text = if (materials.isNotEmpty())
+                            material
+                        else
+                            "No materials needed"
                     }
 
                     arrowExpandShrink.rotation = if (item.isExpanded) 90f else 270f
@@ -159,23 +174,62 @@ class ProgressRvAdapter(
                 }
 
                 imageCarouselHolder.setOnLongClickListener {
-                    if (userData.id == item.progress?.idUser)
-                        if (detail.stsGaprojects == 3 && item.progress.stsDetail == 0)
-                            onItemHoldTapListener.onItemHoldTap(item.progress)
+                    if (userData.id == item.progress?.idUser) {
+                        if (detail.stsGaprojects == 3 && item.progress.stsDetail == 0) {
+                            onItemHoldTapListener.onItemHoldTap(item.progress, false)
+                        }
+                    } else {
+                        for (i in 0 until detail.usernUserSpv!!.size) {
+                            if (userData.id == detail.usernUserSpv[i]?.idUser) {
+                                if (detail.stsGaprojects == 3 && item.progress?.stsDetail == 0 &&
+                                    item.progress.approveMaterialStatus == 0
+                                ) {
+                                    onItemHoldTapListener.onItemHoldTap(item.progress, true)
+                                }
+                                break
+                            }
+                        }
+                    }
                     true
                 }
 
                 submissionImage.setOnLongClickListener {
-                    if (userData.id == item.progress?.idUser)
-                        if (detail.stsGaprojects == 3 && item.progress.stsDetail == 0)
-                            onItemHoldTapListener.onItemHoldTap(item.progress)
+                    if (userData.id == item.progress?.idUser) {
+                        if (detail.stsGaprojects == 3 && item.progress.stsDetail == 0) {
+                            onItemHoldTapListener.onItemHoldTap(item.progress, false)
+                        }
+                    } else {
+                        for (i in 0 until detail.usernUserSpv!!.size) {
+                            if (userData.id == detail.usernUserSpv[i]?.idUser) {
+                                if (detail.stsGaprojects == 3 && item.progress?.stsDetail == 0 &&
+                                    item.progress.approveMaterialStatus == 0
+                                ) {
+                                    onItemHoldTapListener.onItemHoldTap(item.progress, true)
+                                }
+                                break
+                            }
+                        }
+                    }
                     true
                 }
 
                 itemView.setOnLongClickListener {
-                    if (userData.id == item.progress?.idUser)
-                        if (detail.stsGaprojects == 3 && item.progress.stsDetail == 0)
-                            onItemHoldTapListener.onItemHoldTap(item.progress)
+                    if (userData.id == item.progress?.idUser) {
+                        if (detail.stsGaprojects == 3 && item.progress.stsDetail == 0) {
+                            onItemHoldTapListener.onItemHoldTap(item.progress, false)
+                        }
+                    } else {
+                        for (i in 0 until detail.usernUserSpv!!.size) {
+                            if (userData.id == detail.usernUserSpv[i]?.idUser) {
+                                if (detail.stsGaprojects == 3 && item.progress?.stsDetail == 0 &&
+                                    item.progress.approveMaterialStatus == 0
+                                ) {
+                                    onItemHoldTapListener.onItemHoldTap(item.progress, true)
+                                }
+                                break
+                            }
+                        }
+                    }
                     true
                 }
             }
@@ -206,6 +260,6 @@ class ProgressRvAdapter(
     }
 
     interface OnItemHoldTapListener {
-        fun onItemHoldTap(item: ProgressItem?)
+        fun onItemHoldTap(item: ProgressItem?, forSpv: Boolean)
     }
 }

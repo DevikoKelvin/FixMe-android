@@ -246,10 +246,10 @@ class ProgressTrackingBottomSheet(
     }
 
     interface OnProgressItemLongTapListener {
-        fun onLongTapListener(data: ProgressItem?)
+        fun onLongTapListener(data: ProgressItem?, forSpv: Boolean)
     }
 
-    override fun onItemHoldTap(item: ProgressItem?) {
-        onProgressItemLongTapListener.onLongTapListener(item)
+    override fun onItemHoldTap(item: ProgressItem?, forSpv: Boolean) {
+        onProgressItemLongTapListener.onLongTapListener(item, forSpv)
     }
 }

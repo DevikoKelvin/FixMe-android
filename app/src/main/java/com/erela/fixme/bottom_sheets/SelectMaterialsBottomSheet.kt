@@ -20,6 +20,7 @@ import com.erela.fixme.databinding.BsSelectMaterialsBinding
 import com.erela.fixme.helpers.networking.InitAPI
 import com.erela.fixme.objects.MaterialListResponse
 import com.erela.fixme.objects.SelectedMaterialList
+import com.erela.fixme.objects.SubmissionDetailResponse
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import org.json.JSONException
 import retrofit2.Call
@@ -28,7 +29,8 @@ import retrofit2.Response
 import java.util.Locale
 
 class SelectMaterialsBottomSheet(
-    context: Context, val selectedMaterialsArrayList: ArrayList<MaterialListResponse>
+    context: Context, val selectedMaterialsArrayList: ArrayList<MaterialListResponse>,
+    private val detailData: SubmissionDetailResponse
 ) : BottomSheetDialog(context),
     MaterialsRvAdapters.OnMaterialsSetListener {
     private val binding: BsSelectMaterialsBinding by lazy {
@@ -74,7 +76,7 @@ class SelectMaterialsBottomSheet(
             loadingBar.visibility = View.VISIBLE
             searchFieldLayout.visibility = View.GONE
             try {
-                InitAPI.getAPI.getMaterialList()
+                InitAPI.getAPI.getMaterialList(detailData.idKategori!!)
                     .enqueue(object : Callback<List<MaterialListResponse>> {
                         override fun onResponse(
                             call: Call<List<MaterialListResponse>?>,
@@ -88,6 +90,7 @@ class SelectMaterialsBottomSheet(
                                         materialsList.add(
                                             SelectedMaterialList(
                                                 false,
+                                                null,
                                                 response.body()!![i]
                                             )
                                         )
@@ -202,12 +205,12 @@ class SelectMaterialsBottomSheet(
         onMaterialsSetListener.onMaterialsSelected(data)
     }
 
-    override fun onMaterialsUnselected(data: MaterialListResponse) {
-        onMaterialsSetListener.onMaterialsUnselected(data)
+    override fun onMaterialsUnselected(data: MaterialListResponse, position: Int) {
+        onMaterialsSetListener.onMaterialsUnselected(data, position)
     }
 
     interface OnMaterialsSetListener {
         fun onMaterialsSelected(data: MaterialListResponse)
-        fun onMaterialsUnselected(data: MaterialListResponse)
+        fun onMaterialsUnselected(data: MaterialListResponse, position: Int)
     }
 }

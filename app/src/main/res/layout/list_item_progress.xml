@@ -49,46 +49,15 @@
             android:textSize="12sp"
             tools:text="Progress Description" />
 
-        <LinearLayout
+        <TextView
+            android:id="@+id/materialTitle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:paddingHorizontal="16dp">
-
-            <TextView
-                android:id="@+id/materialTitle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/materials"
-                android:textColor="@color/black"
-                android:textSize="14sp"
-                android:textStyle="bold" />
-
-            <LinearLayout
-                android:id="@+id/materialApprovedStatus"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginStart="4dp"
-                android:orientation="horizontal"
-                tools:ignore="UseCompoundDrawables">
-
-                <ImageView
-                    android:layout_width="16dp"
-                    android:layout_height="16dp"
-                    android:src="@drawable/baseline_check_circle_outline_24"
-                    tools:ignore="ContentDescription" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:gravity="end"
-                    android:text="@string/approved"
-                    android:textColor="@color/custom_toast_font_success"
-                    android:textSize="12sp"
-                    android:textStyle="bold" />
-            </LinearLayout>
-        </LinearLayout>
+            android:paddingHorizontal="16dp"
+            android:text="@string/materials"
+            android:textColor="@color/black"
+            android:textSize="14sp"
+            android:textStyle="bold" />
 
         <TextView
             android:id="@+id/materialList"
@@ -98,7 +67,34 @@
             android:paddingHorizontal="16dp"
             android:textColor="@color/black"
             android:textSize="12sp"
-            tools:text="No materials need" />
+            tools:text="No materials needed" />
+
+        <LinearLayout
+            android:id="@+id/materialApprovedStatus"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingHorizontal="16dp"
+            android:layout_marginBottom="8dp"
+            android:orientation="horizontal"
+            tools:ignore="UseCompoundDrawables">
+
+            <ImageView
+                android:layout_width="16dp"
+                android:layout_height="16dp"
+                android:layout_gravity="center"
+                android:src="@drawable/baseline_check_circle_outline_24"
+                tools:ignore="ContentDescription" />
+
+            <TextView
+                android:id="@+id/materialApprovedMessage"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="2dp"
+                android:text="@string/approved"
+                android:textColor="@color/custom_toast_font_success"
+                android:textSize="12sp"
+                android:textStyle="bold" />
+        </LinearLayout>
 
         <LinearLayout
             android:id="@+id/progressDoneContainer"

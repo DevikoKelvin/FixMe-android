@@ -15,6 +15,7 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.erela.fixme.R
 import com.erela.fixme.adapters.recycler_view.SelectedMaterialsRvAdapters
+import com.erela.fixme.bottom_sheets.MaterialQuantityBottomSheet
 import com.erela.fixme.custom_views.CustomToast
 import com.erela.fixme.databinding.ActivityProgressFormBinding
 import com.erela.fixme.helpers.UserDataHelper
@@ -47,6 +48,8 @@ class ProgressFormActivity : AppCompatActivity() {
     private var progressData: ProgressItem? = null
     private var selectedMaterialsArrayList: ArrayList<MaterialListResponse> = ArrayList()
     private lateinit var materialAdapter: SelectedMaterialsRvAdapters
+    private var materialQuantityList: ArrayList<Int> = ArrayList()
+
     /*private val imageArrayUri = ArrayList<Uri>()
     private val oldImageArray = ArrayList<FotoItem>()
     private var deletedOldImageArray: ArrayList<Int> = ArrayList()
@@ -58,6 +61,7 @@ class ProgressFormActivity : AppCompatActivity() {
         false,
         false
     )
+
     /*private val cameraLauncher: ActivityResultLauncher<Intent> = registerForActivityResult(
         ActivityResultContracts.StartActivityForResult()
     ) {
@@ -104,7 +108,6 @@ class ProgressFormActivity : AppCompatActivity() {
             }
         }
     }*/
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
@@ -128,9 +131,9 @@ class ProgressFormActivity : AppCompatActivity() {
 
             detail = try {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-                    intent.getParcelableExtra("data", SubmissionDetailResponse::class.java)!!
+                    intent.getParcelableExtra("detail", SubmissionDetailResponse::class.java)!!
                 } else {
-                    intent.getParcelableExtra("data")!!
+                    intent.getParcelableExtra("detail")!!
                 }
             } catch (nullPointerException: NullPointerException) {
                 null
@@ -153,6 +156,22 @@ class ProgressFormActivity : AppCompatActivity() {
                 descriptionField.setText(progressData?.keterangan)
                 if (!progressData?.keterangan.isNullOrEmpty())
                     isFormEmpty[1] = true
+                if (progressData?.material!!.isNotEmpty()) {
+                    for (i in 0 until progressData?.material!!.size) {
+                        selectedMaterialsArrayList.add(
+                            MaterialListResponse(
+                                progressData?.material!![i]?.stsAktif,
+                                progressData?.material!![i]?.harga,
+                                progressData?.material!![i]?.namaMaterial,
+                                progressData?.material!![i]?.satuan,
+                                progressData?.material!![i]?.idMaterial,
+                                progressData?.material!![i]?.kodeMaterial,
+                                progressData?.material!![i]?.idKategori
+                            )
+                        )
+                        materialQuantityList.add(progressData?.material!![i]?.qtyMaterial!!)
+                    }
+                }
                 /*if (progressData?.foto!!.isNotEmpty()) {
                     manageAttachmentText.text = getString(R.string.manage_new_photo)
                     for (photo in progressData?.foto!!) {
@@ -224,7 +243,6 @@ class ProgressFormActivity : AppCompatActivity() {
 
                 override fun afterTextChanged(s: Editable?) {}
             })
-
             /*chooseFileButton.setOnClickListener {
                 val bottomSheet = ChooseFileBottomSheet(this@ProgressFormActivity).also {
                     with(it) {
@@ -317,38 +335,55 @@ class ProgressFormActivity : AppCompatActivity() {
                     } else {
                         if (prepareEditForm()) {
                             try {
-                                (/*if (photoFiles.isNotEmpty()) {
-                                    InitAPI.getAPI.editProgress(requestBodyMap, photoFiles)
-                                } else {*/
-                                    InitAPI.getAPI.editProgress(requestBodyMap)
-                                /*}*/).enqueue(object : Callback<GenericSimpleResponse> {
-                                    override fun onResponse(
-                                        call: Call<GenericSimpleResponse>,
-                                        response: Response<GenericSimpleResponse>
-                                    ) {
-                                        loadingBar.visibility = View.GONE
-                                        if (response.isSuccessful) {
-                                            if (response.body() != null) {
-                                                val result = response.body()
-                                                if (result?.code == 1) {
-                                                    CustomToast.getInstance(applicationContext)
-                                                        .setMessage(
-                                                            "Progress edited successfully."
-                                                        )
-                                                        .setBackgroundColor(
-                                                            ContextCompat.getColor(
-                                                                this@ProgressFormActivity,
-                                                                R.color.custom_toast_background_success
+                                InitAPI.getAPI.editProgress(requestBodyMap)
+                                    .enqueue(object : Callback<GenericSimpleResponse> {
+                                        override fun onResponse(
+                                            call: Call<GenericSimpleResponse>,
+                                            response: Response<GenericSimpleResponse>
+                                        ) {
+                                            loadingBar.visibility = View.GONE
+                                            if (response.isSuccessful) {
+                                                if (response.body() != null) {
+                                                    val result = response.body()
+                                                    if (result?.code == 1) {
+                                                        CustomToast.getInstance(applicationContext)
+                                                            .setMessage(
+                                                                "Progress edited successfully."
                                                             )
-                                                        )
-                                                        .setFontColor(
-                                                            ContextCompat.getColor(
-                                                                this@ProgressFormActivity,
-                                                                R.color.custom_toast_font_success
+                                                            .setBackgroundColor(
+                                                                ContextCompat.getColor(
+                                                                    this@ProgressFormActivity,
+                                                                    R.color.custom_toast_background_success
+                                                                )
                                                             )
-                                                        ).show()
-                                                    setResult(RESULT_OK)
-                                                    finish()
+                                                            .setFontColor(
+                                                                ContextCompat.getColor(
+                                                                    this@ProgressFormActivity,
+                                                                    R.color.custom_toast_font_success
+                                                                )
+                                                            ).show()
+                                                        setResult(RESULT_OK)
+                                                        finish()
+                                                    } else {
+                                                        CustomToast.getInstance(applicationContext)
+                                                            .setMessage("Failed to create progress!")
+                                                            .setFontColor(
+                                                                ContextCompat.getColor(
+                                                                    this@ProgressFormActivity,
+                                                                    R.color.custom_toast_font_failed
+                                                                )
+                                                            )
+                                                            .setBackgroundColor(
+                                                                ContextCompat.getColor(
+                                                                    this@ProgressFormActivity,
+                                                                    R.color.custom_toast_background_failed
+                                                                )
+                                                            ).show()
+                                                        Log.e(
+                                                            "ERROR ${response.code()}",
+                                                            "Edit Progress Response Code 0 | ${result?.message}"
+                                                        )
+                                                    }
                                                 } else {
                                                     CustomToast.getInstance(applicationContext)
                                                         .setMessage("Failed to create progress!")
@@ -366,7 +401,7 @@ class ProgressFormActivity : AppCompatActivity() {
                                                         ).show()
                                                     Log.e(
                                                         "ERROR ${response.code()}",
-                                                        "Edit Progress Response Code 0 | ${result?.message}"
+                                                        "Edit Progress Response null | ${response.message()}"
                                                     )
                                                 }
                                             } else {
@@ -386,12 +421,18 @@ class ProgressFormActivity : AppCompatActivity() {
                                                     ).show()
                                                 Log.e(
                                                     "ERROR ${response.code()}",
-                                                    "Edit Progress Response null | ${response.message()}"
+                                                    "Edit Progress Response Fail | ${response.message()}"
                                                 )
                                             }
-                                        } else {
+                                        }
+
+                                        override fun onFailure(
+                                            call: Call<GenericSimpleResponse>,
+                                            throwable: Throwable
+                                        ) {
+                                            loadingBar.visibility = View.GONE
                                             CustomToast.getInstance(applicationContext)
-                                                .setMessage("Failed to create progress!")
+                                                .setMessage("Something went wrong, please try again.")
                                                 .setFontColor(
                                                     ContextCompat.getColor(
                                                         this@ProgressFormActivity,
@@ -404,36 +445,10 @@ class ProgressFormActivity : AppCompatActivity() {
                                                         R.color.custom_toast_background_failed
                                                     )
                                                 ).show()
-                                            Log.e(
-                                                "ERROR ${response.code()}",
-                                                "Edit Progress Response Fail | ${response.message()}"
-                                            )
+                                            Log.e("ERROR", "Edit Progress Failure | $throwable")
+                                            throwable.printStackTrace()
                                         }
-                                    }
-
-                                    override fun onFailure(
-                                        call: Call<GenericSimpleResponse>,
-                                        throwable: Throwable
-                                    ) {
-                                        loadingBar.visibility = View.GONE
-                                        CustomToast.getInstance(applicationContext)
-                                            .setMessage("Something went wrong, please try again.")
-                                            .setFontColor(
-                                                ContextCompat.getColor(
-                                                    this@ProgressFormActivity,
-                                                    R.color.custom_toast_font_failed
-                                                )
-                                            )
-                                            .setBackgroundColor(
-                                                ContextCompat.getColor(
-                                                    this@ProgressFormActivity,
-                                                    R.color.custom_toast_background_failed
-                                                )
-                                            ).show()
-                                        Log.e("ERROR", "Edit Progress Failure | $throwable")
-                                        throwable.printStackTrace()
-                                    }
-                                })
+                                    })
                             } catch (jsonException: JSONException) {
                                 loadingBar.visibility = View.GONE
                                 CustomToast.getInstance(applicationContext)
@@ -492,39 +507,55 @@ class ProgressFormActivity : AppCompatActivity() {
                     } else {
                         if (prepareSubmitForm()) {
                             try {
-                                (/*if (photoFiles.isNotEmpty()) {
-                                    InitAPI.getAPI.createProgress(requestBodyMap, photoFiles)
-                                } else {*/
-                                    InitAPI.getAPI.createProgress(requestBodyMap)
-                                /*}*/).enqueue(object :
-                                    Callback<CreationResponse> {
-                                    override fun onResponse(
-                                        call: Call<CreationResponse>,
-                                        response: Response<CreationResponse>
-                                    ) {
-                                        loadingBar.visibility = View.GONE
-                                        if (response.isSuccessful) {
-                                            if (response.body() != null) {
-                                                val result = response.body()
-                                                if (result?.code == 1) {
-                                                    CustomToast.getInstance(applicationContext)
-                                                        .setMessage(
-                                                            "Progress created successfully."
-                                                        )
-                                                        .setBackgroundColor(
-                                                            ContextCompat.getColor(
-                                                                this@ProgressFormActivity,
-                                                                R.color.custom_toast_background_success
+                                InitAPI.getAPI.createProgress(requestBodyMap)
+                                    .enqueue(object : Callback<CreationResponse> {
+                                        override fun onResponse(
+                                            call: Call<CreationResponse>,
+                                            response: Response<CreationResponse>
+                                        ) {
+                                            loadingBar.visibility = View.GONE
+                                            if (response.isSuccessful) {
+                                                if (response.body() != null) {
+                                                    val result = response.body()
+                                                    if (result?.code == 1) {
+                                                        CustomToast.getInstance(applicationContext)
+                                                            .setMessage(
+                                                                "Progress created successfully."
                                                             )
-                                                        )
-                                                        .setFontColor(
-                                                            ContextCompat.getColor(
-                                                                this@ProgressFormActivity,
-                                                                R.color.custom_toast_font_success
+                                                            .setBackgroundColor(
+                                                                ContextCompat.getColor(
+                                                                    this@ProgressFormActivity,
+                                                                    R.color.custom_toast_background_success
+                                                                )
                                                             )
-                                                        ).show()
-                                                    setResult(RESULT_OK)
-                                                    finish()
+                                                            .setFontColor(
+                                                                ContextCompat.getColor(
+                                                                    this@ProgressFormActivity,
+                                                                    R.color.custom_toast_font_success
+                                                                )
+                                                            ).show()
+                                                        setResult(RESULT_OK)
+                                                        finish()
+                                                    } else {
+                                                        CustomToast.getInstance(applicationContext)
+                                                            .setMessage("Failed to create progress!")
+                                                            .setFontColor(
+                                                                ContextCompat.getColor(
+                                                                    this@ProgressFormActivity,
+                                                                    R.color.custom_toast_font_failed
+                                                                )
+                                                            )
+                                                            .setBackgroundColor(
+                                                                ContextCompat.getColor(
+                                                                    this@ProgressFormActivity,
+                                                                    R.color.custom_toast_background_failed
+                                                                )
+                                                            ).show()
+                                                        Log.e(
+                                                            "ERROR ${response.code()}",
+                                                            "Create Progress Response Code 0 | ${result?.message}"
+                                                        )
+                                                    }
                                                 } else {
                                                     CustomToast.getInstance(applicationContext)
                                                         .setMessage("Failed to create progress!")
@@ -542,7 +573,7 @@ class ProgressFormActivity : AppCompatActivity() {
                                                         ).show()
                                                     Log.e(
                                                         "ERROR ${response.code()}",
-                                                        "Create Progress Response Code 0 | ${result?.message}"
+                                                        "Create Progress Response null | ${response.message()}"
                                                     )
                                                 }
                                             } else {
@@ -562,12 +593,18 @@ class ProgressFormActivity : AppCompatActivity() {
                                                     ).show()
                                                 Log.e(
                                                     "ERROR ${response.code()}",
-                                                    "Create Progress Response null | ${response.message()}"
+                                                    "Create Progress Response Fail | ${response.message()}"
                                                 )
                                             }
-                                        } else {
+                                        }
+
+                                        override fun onFailure(
+                                            call: Call<CreationResponse>,
+                                            throwable: Throwable
+                                        ) {
+                                            loadingBar.visibility = View.GONE
                                             CustomToast.getInstance(applicationContext)
-                                                .setMessage("Failed to create progress!")
+                                                .setMessage("Something went wrong, please try again.")
                                                 .setFontColor(
                                                     ContextCompat.getColor(
                                                         this@ProgressFormActivity,
@@ -580,36 +617,10 @@ class ProgressFormActivity : AppCompatActivity() {
                                                         R.color.custom_toast_background_failed
                                                     )
                                                 ).show()
-                                            Log.e(
-                                                "ERROR ${response.code()}",
-                                                "Create Progress Response Fail | ${response.message()}"
-                                            )
+                                            Log.e("ERROR", "Create Progress Failure | $throwable")
+                                            throwable.printStackTrace()
                                         }
-                                    }
-
-                                    override fun onFailure(
-                                        call: Call<CreationResponse>,
-                                        throwable: Throwable
-                                    ) {
-                                        loadingBar.visibility = View.GONE
-                                        CustomToast.getInstance(applicationContext)
-                                            .setMessage("Something went wrong, please try again.")
-                                            .setFontColor(
-                                                ContextCompat.getColor(
-                                                    this@ProgressFormActivity,
-                                                    R.color.custom_toast_font_failed
-                                                )
-                                            )
-                                            .setBackgroundColor(
-                                                ContextCompat.getColor(
-                                                    this@ProgressFormActivity,
-                                                    R.color.custom_toast_background_failed
-                                                )
-                                            ).show()
-                                        Log.e("ERROR", "Create Progress Failure | $throwable")
-                                        throwable.printStackTrace()
-                                    }
-                                })
+                                    })
                             } catch (jsonException: JSONException) {
                                 loadingBar.visibility = View.GONE
                                 CustomToast.getInstance(applicationContext)
@@ -658,17 +669,16 @@ class ProgressFormActivity : AppCompatActivity() {
         binding.apply {
             selectedMaterialsArrayList.add(
                 MaterialListResponse(
-                    null,
-                    null,
-                    "+",
-                    null,
-                    null,
-                    null
+                    null, null, "+", null, null, null
                 )
             )
+            materialQuantityList.add(0)
 
             materialAdapter = SelectedMaterialsRvAdapters(
-                this@ProgressFormActivity, selectedMaterialsArrayList
+                this@ProgressFormActivity,
+                selectedMaterialsArrayList,
+                materialQuantityList,
+                detail!!
             ).also {
                 with(it) {
                     setOnMaterialsSetListener(object :
@@ -676,53 +686,64 @@ class ProgressFormActivity : AppCompatActivity() {
                         override fun onMaterialsSelected(
                             data: MaterialListResponse
                         ) {
-                            selectedMaterialsArrayList.remove(
-                                MaterialListResponse(
-                                    null,
-                                    null,
-                                    "+",
-                                    null,
-                                    null,
-                                    null
-                                )
-                            )
-                            selectedMaterialsArrayList.add(data)
-                            selectedMaterialsArrayList.add(
-                                MaterialListResponse(
-                                    null,
-                                    null,
-                                    "+",
-                                    null,
-                                    null,
-                                    null
-                                )
-                            )
-                            materialAdapter.notifyDataSetChanged()
+                            val bottomSheet =
+                                MaterialQuantityBottomSheet(this@ProgressFormActivity).also { qtyBottomSheet ->
+                                    with(qtyBottomSheet) {
+                                        setOnQuantityConfirmListener(object :
+                                            MaterialQuantityBottomSheet.OnQuantityConfirmListener {
+                                            override fun onQuantityConfirm(quantity: Int) {
+                                                materialQuantityList.removeAt(
+                                                    materialQuantityList.size - 1
+                                                )
+                                                selectedMaterialsArrayList.remove(
+                                                    MaterialListResponse(
+                                                        null, null, "+", null, null, null
+                                                    )
+                                                )
+                                                materialQuantityList.add(quantity)
+                                                selectedMaterialsArrayList.add(data)
+                                                materialQuantityList.add(0)
+                                                selectedMaterialsArrayList.add(
+                                                    MaterialListResponse(
+                                                        null, null, "+", null, null, null
+                                                    )
+                                                )
+                                                Log.e(
+                                                    "Material Size | Quantity Size",
+                                                    "${selectedMaterialsArrayList.size} | ${materialQuantityList.size}"
+                                                )
+                                                materialAdapter.notifyDataSetChanged()
+                                            }
+                                        })
+                                    }
+                                }
+
+                            if (bottomSheet.window != null)
+                                bottomSheet.show()
                         }
 
                         override fun onMaterialsUnselected(
-                            data: MaterialListResponse
+                            data: MaterialListResponse, position: Int
                         ) {
+                            materialQuantityList.removeAt(
+                                materialQuantityList.size - 1
+                            )
                             selectedMaterialsArrayList.remove(
                                 MaterialListResponse(
-                                    null,
-                                    null,
-                                    "+",
-                                    null,
-                                    null,
-                                    null
+                                    null, null, "+", null, null, null
                                 )
                             )
+                            materialQuantityList.removeAt(position)
                             selectedMaterialsArrayList.remove(data)
+                            materialQuantityList.add(0)
                             selectedMaterialsArrayList.add(
                                 MaterialListResponse(
-                                    null,
-                                    null,
-                                    "+",
-                                    null,
-                                    null,
-                                    null
+                                    null, null, "+", null, null, null
                                 )
+                            )
+                            Log.e(
+                                "Material Size | Quantity Size",
+                                "${selectedMaterialsArrayList.size} | ${materialQuantityList.size}"
                             )
                             materialAdapter.notifyDataSetChanged()
                         }
@@ -798,7 +819,6 @@ class ProgressFormActivity : AppCompatActivity() {
             }
         )
     }*/
-
     private fun formCheck(): Boolean {
         var validated = 0
         binding.apply {
@@ -833,6 +853,18 @@ class ProgressFormActivity : AppCompatActivity() {
                 put(
                     "keterangan_perbaikan", createPartFromString(descriptionField.text.toString())!!
                 )
+                if (selectedMaterialsArrayList.size > 1 && materialQuantityList.size > 1) {
+                    for (i in 0 until selectedMaterialsArrayList.size - 1) {
+                        put(
+                            "material[]",
+                            createPartFromString(selectedMaterialsArrayList[i].idMaterial.toString())!!
+                        )
+                        put(
+                            "qty_material[]",
+                            createPartFromString(materialQuantityList[i].toString())!!
+                        )
+                    }
+                }
             }
         }
 
@@ -868,6 +900,18 @@ class ProgressFormActivity : AppCompatActivity() {
                 put(
                     "keterangan_perbaikan", createPartFromString(descriptionField.text.toString())!!
                 )
+                if (selectedMaterialsArrayList.size > 1 && materialQuantityList.size > 1) {
+                    for (i in 0 until selectedMaterialsArrayList.size - 1) {
+                        put(
+                            "material[]",
+                            createPartFromString(selectedMaterialsArrayList[i].idMaterial.toString())!!
+                        )
+                        put(
+                            "qty_material[]",
+                            createPartFromString(materialQuantityList[i].toString())!!
+                        )
+                    }
+                }
                 /*if (deletedOldImageArray.isNotEmpty()) {
                     for (element in deletedOldImageArray) {
                         put(
@@ -882,7 +926,6 @@ class ProgressFormActivity : AppCompatActivity() {
         }
 
         return requestBodyMap.isNotEmpty()
-
         /*return if (requestBodyMap.isNotEmpty()) {
             if (photoFiles.isNotEmpty())
                 true
@@ -902,7 +945,6 @@ class ProgressFormActivity : AppCompatActivity() {
             null
         }
     }*/
-
     /*private fun getRealPathFromURI(uri: Uri): String? {
         val contentResolver = contentResolver
         val fileName = getFileName(contentResolver, uri)
@@ -931,7 +973,6 @@ class ProgressFormActivity : AppCompatActivity() {
 
         return null
     }*/
-
     /*private fun getFileName(contentResolver: ContentResolver, uri: Uri): String? {
         val cursor = contentResolver.query(uri, null, null, null, null)
         if (cursor != null && cursor.moveToFirst()) {
@@ -945,7 +986,6 @@ class ProgressFormActivity : AppCompatActivity() {
         cursor?.close()
         return null
     }*/
-
     private fun createPartFromString(stringData: String?): RequestBody? {
         return stringData?.toRequestBody("text/plain".toMediaTypeOrNull())
     }

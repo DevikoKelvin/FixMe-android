@@ -141,8 +141,18 @@ data class MaterialItem(
     val namaMaterial: String? = null,
     @field:SerializedName("id_material")
     val idMaterial: Int? = null,
+    @field:SerializedName("kode_material")
+    val kodeMaterial: String? = null,
     @field:SerializedName("qty_material")
-    val qtyMaterial: Int? = null
+    val qtyMaterial: Int? = null,
+    @field:SerializedName("satuan")
+    val satuan: String? = null,
+    @field:SerializedName("harga")
+    val harga: Int? = null,
+    @field:SerializedName("id_kategori")
+    val idKategori: Int? = null,
+    @field:SerializedName("sts_aktif")
+    val stsAktif: Int? = null
 ) : Parcelable
 
 @Parcelize
