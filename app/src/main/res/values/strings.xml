@@ -99,6 +99,7 @@
     <string name="action_done">Done This Issue</string>
 
     <string name="repair_analysis">Repair Analysis</string>
+    <string name="materials_hint">Tap \"×\" to delete item.\nTap the item to edit the quantity of the item.\nTap \"+\" to add a material item.</string>
 
     <string name="action_question">What would you do?</string>
     <string name="update_status">Update Status</string>

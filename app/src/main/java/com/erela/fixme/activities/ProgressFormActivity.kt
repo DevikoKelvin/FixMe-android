@@ -50,6 +50,7 @@ class ProgressFormActivity : AppCompatActivity() {
     private var selectedMaterialsArrayList: ArrayList<MaterialListResponse> = ArrayList()
     private lateinit var materialAdapter: SelectedMaterialsRvAdapters
     private var materialQuantityList: ArrayList<Int> = ArrayList()
+    private var oldMaterialCount: Int = 0
 
     /*private val imageArrayUri = ArrayList<Uri>()
     private val oldImageArray = ArrayList<FotoItem>()
@@ -58,6 +59,7 @@ class ProgressFormActivity : AppCompatActivity() {
     private lateinit var imageUri: Uri
     private val photoFiles: ArrayList<MultipartBody.Part?> = ArrayList()*/
     private val requestBodyMap: MutableMap<String, RequestBody> = mutableMapOf()
+    private val requestBodyMapMaterial: MutableMap<String, RequestBody> = mutableMapOf()
     private var isFormEmpty = arrayOf(
         false,
         false
@@ -158,6 +160,7 @@ class ProgressFormActivity : AppCompatActivity() {
                 if (!progressData?.keterangan.isNullOrEmpty())
                     isFormEmpty[1] = true
                 if (progressData?.material!!.isNotEmpty()) {
+                    oldMaterialCount = progressData?.material!!.size
                     for (i in 0 until progressData?.material!!.size) {
                         selectedMaterialsArrayList.add(
                             MaterialListResponse(
@@ -347,24 +350,158 @@ class ProgressFormActivity : AppCompatActivity() {
                                                 if (response.body() != null) {
                                                     val result = response.body()
                                                     if (result?.code == 1) {
-                                                        CustomToast.getInstance(applicationContext)
-                                                            .setMessage(
-                                                                "Progress edited successfully."
-                                                            )
-                                                            .setBackgroundColor(
-                                                                ContextCompat.getColor(
-                                                                    this@ProgressFormActivity,
-                                                                    R.color.custom_toast_background_success
+                                                        if (selectedMaterialsArrayList.size >
+                                                            oldMaterialCount
+                                                        ) {
+                                                            if (prepareRequestMaterialForm(
+                                                                    progressData!!
+                                                                        .idGaprojectsDetail!!
                                                                 )
-                                                            )
-                                                            .setFontColor(
-                                                                ContextCompat.getColor(
-                                                                    this@ProgressFormActivity,
-                                                                    R.color.custom_toast_font_success
+                                                            ) {
+                                                                InitAPI.getAPI.requestMaterialAdd(
+                                                                    requestBodyMapMaterial
+                                                                ).enqueue(
+                                                                    object :
+                                                                        Callback<GenericSimpleResponse> {
+                                                                        override fun onResponse(
+                                                                            call1: Call<GenericSimpleResponse>,
+                                                                            response1: Response<GenericSimpleResponse>
+                                                                        ) {
+                                                                            loadingBar.visibility =
+                                                                                View.GONE
+                                                                            val result1 =
+                                                                                response1.body()
+                                                                            if (
+                                                                                result1?.code == 1
+                                                                            ) {
+                                                                                CustomToast
+                                                                                    .getInstance(
+                                                                                        applicationContext
+                                                                                    )
+                                                                                    .setMessage(
+                                                                                        "Progress edited successfully."
+                                                                                    )
+                                                                                    .setBackgroundColor(
+                                                                                        ContextCompat.getColor(
+                                                                                            this@ProgressFormActivity,
+                                                                                            R.color.custom_toast_background_success
+                                                                                        )
+                                                                                    )
+                                                                                    .setFontColor(
+                                                                                        ContextCompat.getColor(
+                                                                                            this@ProgressFormActivity,
+                                                                                            R.color.custom_toast_font_success
+                                                                                        )
+                                                                                    ).show()
+                                                                                setResult(RESULT_OK)
+                                                                                finish()
+                                                                            } else {
+                                                                                CustomToast
+                                                                                    .getInstance(
+                                                                                        applicationContext
+                                                                                    ).setMessage(
+                                                                                        "Failed to " +
+                                                                                                "request" +
+                                                                                                " " +
+                                                                                                "material!"
+                                                                                    ).setFontColor(
+                                                                                        ContextCompat.getColor(
+                                                                                            this@ProgressFormActivity,
+                                                                                            R.color.custom_toast_font_failed
+                                                                                        )
+                                                                                    )
+                                                                                    .setBackgroundColor(
+                                                                                        ContextCompat.getColor(
+                                                                                            this@ProgressFormActivity,
+                                                                                            R.color.custom_toast_background_failed
+                                                                                        )
+                                                                                    ).show()
+                                                                                Log.e(
+                                                                                    "ERROR " +
+                                                                                            "${response1.code()}",
+                                                                                    "Request " +
+                                                                                            "Material" +
+                                                                                            " " +
+                                                                                            "Response Code 0 | ${result1?.message}"
+                                                                                )
+                                                                            }
+                                                                        }
+
+                                                                        override fun onFailure(
+                                                                            call1: Call<GenericSimpleResponse>,
+                                                                            throwable: Throwable
+                                                                        ) {
+                                                                            loadingBar.visibility =
+                                                                                View.GONE
+                                                                            CustomToast.getInstance(
+                                                                                applicationContext
+                                                                            )
+                                                                                .setMessage("Something went wrong, please try again.")
+                                                                                .setFontColor(
+                                                                                    ContextCompat.getColor(
+                                                                                        this@ProgressFormActivity,
+                                                                                        R.color.custom_toast_font_failed
+                                                                                    )
+                                                                                )
+                                                                                .setBackgroundColor(
+                                                                                    ContextCompat.getColor(
+                                                                                        this@ProgressFormActivity,
+                                                                                        R.color.custom_toast_background_failed
+                                                                                    )
+                                                                                ).show()
+                                                                            Log.e(
+                                                                                "ERROR",
+                                                                                "Request Material" +
+                                                                                        " Failure" +
+                                                                                        " | $throwable"
+                                                                            )
+                                                                            throwable.printStackTrace()
+                                                                        }
+                                                                    }
                                                                 )
-                                                            ).show()
-                                                        setResult(RESULT_OK)
-                                                        finish()
+                                                            } else {
+                                                                loadingBar.visibility = View.GONE
+                                                                CustomToast
+                                                                    .getInstance(applicationContext)
+                                                                    .setMessage("Something went wrong, please try again.")
+                                                                    .setFontColor(
+                                                                        ContextCompat.getColor(
+                                                                            this@ProgressFormActivity,
+                                                                            R.color.custom_toast_font_failed
+                                                                        )
+                                                                    )
+                                                                    .setBackgroundColor(
+                                                                        ContextCompat.getColor(
+                                                                            this@ProgressFormActivity,
+                                                                            R.color.custom_toast_background_failed
+                                                                        )
+                                                                    ).show()
+                                                                Log.e(
+                                                                    "ERROR",
+                                                                    "Submit form not prepared"
+                                                                )
+                                                            }
+                                                        } else {
+                                                            CustomToast
+                                                                .getInstance(applicationContext)
+                                                                .setMessage(
+                                                                    "Progress edited successfully."
+                                                                )
+                                                                .setBackgroundColor(
+                                                                    ContextCompat.getColor(
+                                                                        this@ProgressFormActivity,
+                                                                        R.color.custom_toast_background_success
+                                                                    )
+                                                                )
+                                                                .setFontColor(
+                                                                    ContextCompat.getColor(
+                                                                        this@ProgressFormActivity,
+                                                                        R.color.custom_toast_font_success
+                                                                    )
+                                                                ).show()
+                                                            setResult(RESULT_OK)
+                                                            finish()
+                                                        }
                                                     } else {
                                                         CustomToast.getInstance(applicationContext)
                                                             .setMessage("Failed to create progress!")
@@ -514,29 +651,164 @@ class ProgressFormActivity : AppCompatActivity() {
                                             call: Call<CreationResponse>,
                                             response: Response<CreationResponse>
                                         ) {
-                                            loadingBar.visibility = View.GONE
                                             if (response.isSuccessful) {
                                                 if (response.body() != null) {
                                                     val result = response.body()
                                                     if (result?.code == 1) {
-                                                        CustomToast.getInstance(applicationContext)
-                                                            .setMessage(
-                                                                "Progress created successfully."
-                                                            )
-                                                            .setBackgroundColor(
-                                                                ContextCompat.getColor(
-                                                                    this@ProgressFormActivity,
-                                                                    R.color.custom_toast_background_success
+                                                        if (selectedMaterialsArrayList.size > 1) {
+                                                            if (prepareRequestMaterialForm(
+                                                                    result.lastId!!
                                                                 )
-                                                            )
-                                                            .setFontColor(
-                                                                ContextCompat.getColor(
-                                                                    this@ProgressFormActivity,
-                                                                    R.color.custom_toast_font_success
+                                                            ) {
+                                                                InitAPI.getAPI.requestMaterialAdd(
+                                                                    requestBodyMapMaterial
+                                                                ).enqueue(
+                                                                    object :
+                                                                        Callback<GenericSimpleResponse> {
+                                                                        override fun onResponse(
+                                                                            call1: Call<GenericSimpleResponse>,
+                                                                            response1: Response<GenericSimpleResponse>
+                                                                        ) {
+                                                                            loadingBar.visibility =
+                                                                                View.GONE
+                                                                            val result1 =
+                                                                                response1.body()
+                                                                            if (
+                                                                                result1?.code == 1
+                                                                            ) {
+                                                                                CustomToast
+                                                                                    .getInstance(
+                                                                                        applicationContext
+                                                                                    )
+                                                                                    .setMessage(
+                                                                                        "Progress created successfully."
+                                                                                    )
+                                                                                    .setBackgroundColor(
+                                                                                        ContextCompat.getColor(
+                                                                                            this@ProgressFormActivity,
+                                                                                            R.color.custom_toast_background_success
+                                                                                        )
+                                                                                    )
+                                                                                    .setFontColor(
+                                                                                        ContextCompat.getColor(
+                                                                                            this@ProgressFormActivity,
+                                                                                            R.color.custom_toast_font_success
+                                                                                        )
+                                                                                    ).show()
+                                                                                setResult(
+                                                                                    RESULT_OK
+                                                                                )
+                                                                                finish()
+                                                                            } else {
+                                                                                CustomToast
+                                                                                    .getInstance(
+                                                                                        applicationContext
+                                                                                    ).setMessage(
+                                                                                        "Failed to " +
+                                                                                                "request" +
+                                                                                                " " +
+                                                                                                "material!"
+                                                                                    ).setFontColor(
+                                                                                        ContextCompat.getColor(
+                                                                                            this@ProgressFormActivity,
+                                                                                            R.color.custom_toast_font_failed
+                                                                                        )
+                                                                                    )
+                                                                                    .setBackgroundColor(
+                                                                                        ContextCompat.getColor(
+                                                                                            this@ProgressFormActivity,
+                                                                                            R.color.custom_toast_background_failed
+                                                                                        )
+                                                                                    ).show()
+                                                                                Log.e(
+                                                                                    "ERROR " +
+                                                                                            "${response1.code()}",
+                                                                                    "Request " +
+                                                                                            "Material" +
+                                                                                            " " +
+                                                                                            "Response Code 0 | ${result1?.message}"
+                                                                                )
+                                                                            }
+                                                                        }
+
+                                                                        override fun onFailure(
+                                                                            call1: Call<GenericSimpleResponse>,
+                                                                            throwable: Throwable
+                                                                        ) {
+                                                                            loadingBar.visibility =
+                                                                                View.GONE
+                                                                            CustomToast.getInstance(
+                                                                                applicationContext
+                                                                            )
+                                                                                .setMessage("Something went wrong, please try again.")
+                                                                                .setFontColor(
+                                                                                    ContextCompat.getColor(
+                                                                                        this@ProgressFormActivity,
+                                                                                        R.color.custom_toast_font_failed
+                                                                                    )
+                                                                                )
+                                                                                .setBackgroundColor(
+                                                                                    ContextCompat.getColor(
+                                                                                        this@ProgressFormActivity,
+                                                                                        R.color.custom_toast_background_failed
+                                                                                    )
+                                                                                ).show()
+                                                                            Log.e(
+                                                                                "ERROR",
+                                                                                "Request Material" +
+                                                                                        " Failure" +
+                                                                                        " | $throwable"
+                                                                            )
+                                                                            throwable.printStackTrace()
+                                                                        }
+                                                                    }
                                                                 )
-                                                            ).show()
-                                                        setResult(RESULT_OK)
-                                                        finish()
+                                                            } else {
+                                                                loadingBar.visibility = View.GONE
+                                                                CustomToast
+                                                                    .getInstance(applicationContext)
+                                                                    .setMessage("Something went wrong, please try again.")
+                                                                    .setFontColor(
+                                                                        ContextCompat.getColor(
+                                                                            this@ProgressFormActivity,
+                                                                            R.color.custom_toast_font_failed
+                                                                        )
+                                                                    )
+                                                                    .setBackgroundColor(
+                                                                        ContextCompat.getColor(
+                                                                            this@ProgressFormActivity,
+                                                                            R.color.custom_toast_background_failed
+                                                                        )
+                                                                    ).show()
+                                                                Log.e(
+                                                                    "ERROR",
+                                                                    "Submit form not prepared"
+                                                                )
+                                                            }
+                                                        } else {
+                                                            loadingBar.visibility = View.GONE
+                                                            CustomToast
+                                                                .getInstance(
+                                                                    applicationContext
+                                                                )
+                                                                .setMessage(
+                                                                    "Progress created successfully."
+                                                                )
+                                                                .setBackgroundColor(
+                                                                    ContextCompat.getColor(
+                                                                        this@ProgressFormActivity,
+                                                                        R.color.custom_toast_background_success
+                                                                    )
+                                                                )
+                                                                .setFontColor(
+                                                                    ContextCompat.getColor(
+                                                                        this@ProgressFormActivity,
+                                                                        R.color.custom_toast_font_success
+                                                                    )
+                                                                ).show()
+                                                            setResult(RESULT_OK)
+                                                            finish()
+                                                        }
                                                     } else {
                                                         CustomToast.getInstance(applicationContext)
                                                             .setMessage("Failed to create progress!")
@@ -840,6 +1112,24 @@ class ProgressFormActivity : AppCompatActivity() {
         return validated == isFormEmpty.size
     }
 
+    private fun prepareRequestMaterialForm(idGaProjectsDetail: Int): Boolean {
+        with(requestBodyMapMaterial) {
+            put("id", createPartFromString(idGaProjectsDetail.toString())!!)
+            put("id_user", createPartFromString(userData.id.toString())!!)
+            for (i in 0 until selectedMaterialsArrayList.size - 1) {
+                put(
+                    "material[$i]",
+                    createPartFromString(selectedMaterialsArrayList[i].idMaterial.toString())!!
+                )
+                put(
+                    "qty_material[$i]",
+                    createPartFromString(materialQuantityList[i].toString())!!
+                )
+            }
+        }
+        return requestBodyMapMaterial.isNotEmpty()
+    }
+
     private fun prepareSubmitForm(): Boolean {
         binding.apply {
             /*if (imageArrayUri.isNotEmpty()) {
@@ -861,11 +1151,11 @@ class ProgressFormActivity : AppCompatActivity() {
                 if (selectedMaterialsArrayList.size > 1 && materialQuantityList.size > 1) {
                     for (i in 0 until selectedMaterialsArrayList.size - 1) {
                         put(
-                            "material[]",
+                            "material[$i]",
                             createPartFromString(selectedMaterialsArrayList[i].idMaterial.toString())!!
                         )
                         put(
-                            "qty_material[]",
+                            "qty_material[$i]",
                             createPartFromString(materialQuantityList[i].toString())!!
                         )
                     }
@@ -908,11 +1198,11 @@ class ProgressFormActivity : AppCompatActivity() {
                 if (selectedMaterialsArrayList.size > 1 && materialQuantityList.size > 1) {
                     for (i in 0 until selectedMaterialsArrayList.size - 1) {
                         put(
-                            "material[]",
+                            "material[$i]",
                             createPartFromString(selectedMaterialsArrayList[i].idMaterial.toString())!!
                         )
                         put(
-                            "qty_material[]",
+                            "qty_material[$i]",
                             createPartFromString(materialQuantityList[i].toString())!!
                         )
                     }

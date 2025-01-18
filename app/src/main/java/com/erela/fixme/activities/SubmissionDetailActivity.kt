@@ -1906,6 +1906,12 @@ class SubmissionDetailActivity : AppCompatActivity(),
             confirmationDialog.show()
     }
 
+    override fun onMaterialEdited(data: ProgressItem) {
+    }
+
+    override fun onMaterialApproved(data: ProgressItem) {
+    }
+
     override fun reportTrialClicked(bottomSheet: TrialTrackingBottomSheet) {
         val reportTrialBs =
             ReportTrialBottomSheet(

@@ -144,6 +144,12 @@ interface GetAPI {
         @PartMap data: MutableMap<String, RequestBody>
     ): Call<CreationResponse>
 
+    @Multipart
+    @POST("requestMaterialAdd")
+    fun requestMaterialAdd(
+        @PartMap data: MutableMap<String, RequestBody>
+    ): Call<GenericSimpleResponse>
+
     @FormUrlEncoded
     @POST("deleteProgress")
     fun deleteProgress(

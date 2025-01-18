@@ -34,17 +34,29 @@ class ProgressOptionDialog(
                 deleteButton.visibility = View.GONE
                 doneButton.visibility = View.GONE
                 editButton.visibility = View.GONE
+                editMaterialsButton.visibility = View.VISIBLE
+                editMaterialsButton.setOnClickListener {
+                    onProgressOptionDialogListener.onMaterialEdited(progress)
+                    dismiss()
+                }
+                approveMaterialButton.visibility = View.VISIBLE
+                approveMaterialButton.setOnClickListener {
+                    onProgressOptionDialogListener.onMaterialApproved(progress)
+                    dismiss()
+                }
             } else {
                 divider3.visibility = View.VISIBLE
                 deleteButton.visibility = View.VISIBLE
                 doneButton.visibility = View.VISIBLE
                 editButton.visibility = View.VISIBLE
+                editMaterialsButton.visibility = View.GONE
+                approveMaterialButton.visibility = View.GONE
             }
             deleteButton.setOnClickListener {
                 onProgressOptionDialogListener.onProgressDeleted(progress)
                 dismiss()
             }
-            if (progress.stsDetail == 0) {
+            if (progress.stsDetail == 0 && progress.approveMaterialStatus == 0) {
                 doneButton.isEnabled = true
                 doneButton.setOnClickListener {
                     onProgressOptionDialogListener.onProgressSetDone(progress)
@@ -55,6 +67,16 @@ class ProgressOptionDialog(
                     onProgressOptionDialogListener.onProgressEdited(progress)
                     dismiss()
                 }
+            } else if (progress.stsDetail == 0 && progress.approveMaterialStatus == 1) {
+                doneButton.isEnabled = true
+                doneButton.setOnClickListener {
+                    onProgressOptionDialogListener.onProgressSetDone(progress)
+                    dismiss()
+                }
+                editButton.isEnabled = false
+                editButton.alpha = 0.5f
+                deleteButton.isEnabled = false
+                deleteButton.alpha = 0.5f
             } else {
                 doneButton.isEnabled = false
                 doneButton.alpha = 0.5f
@@ -74,5 +96,7 @@ class ProgressOptionDialog(
         fun onProgressDeleted(data: ProgressItem)
         fun onProgressEdited(data: ProgressItem)
         fun onProgressSetDone(data: ProgressItem)
+        fun onMaterialEdited(data: ProgressItem)
+        fun onMaterialApproved(data: ProgressItem)
     }
 }
