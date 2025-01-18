@@ -8,6 +8,7 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.view.ViewGroup
+import android.widget.CheckBox
 import androidx.core.content.ContextCompat
 import androidx.core.widget.addTextChangedListener
 import androidx.recyclerview.widget.DiffUtil
@@ -201,16 +202,22 @@ class SelectMaterialsBottomSheet(
         this.onMaterialsSetListener = onMaterialsSetListener
     }
 
-    override fun onMaterialsSelected(data: MaterialListResponse) {
-        onMaterialsSetListener.onMaterialsSelected(data)
+    override fun onMaterialsSelected(
+        checkBox: CheckBox, isChecked: Boolean, data: MaterialListResponse
+    ) {
+        dismiss()
+        onMaterialsSetListener.onMaterialsSelected(data, checkBox, isChecked)
     }
 
-    override fun onMaterialsUnselected(data: MaterialListResponse, position: Int) {
+    override fun onMaterialsUnselected(
+        checkBox: CheckBox, isChecked: Boolean, data: MaterialListResponse, position: Int
+    ) {
+        checkBox.isChecked = isChecked
         onMaterialsSetListener.onMaterialsUnselected(data, position)
     }
 
     interface OnMaterialsSetListener {
-        fun onMaterialsSelected(data: MaterialListResponse)
+        fun onMaterialsSelected(data: MaterialListResponse, checkBox: CheckBox, isChecked: Boolean)
         fun onMaterialsUnselected(data: MaterialListResponse, position: Int)
     }
 }

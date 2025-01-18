@@ -5,8 +5,10 @@ import com.erela.fixme.R
 import android.content.Context
 import android.view.View
 import android.view.ViewGroup
+import android.widget.CheckBox
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
+import com.erela.fixme.bottom_sheets.MaterialQuantityBottomSheet
 import com.erela.fixme.bottom_sheets.SelectMaterialsBottomSheet
 import com.erela.fixme.databinding.ListItemSelectedItemsBinding
 import com.erela.fixme.objects.MaterialListResponse
@@ -55,7 +57,7 @@ class SelectedMaterialsRvAdapters(
                     )
                 }
                 amountText.text = if (materialQuantityList.isNotEmpty())
-                        "(${materialQuantityList[position]})"
+                    "(${materialQuantityList[position]})"
                 else
                     ""
                 if (position == selectedMaterialsArrayList.size - 1) {
@@ -81,6 +83,27 @@ class SelectedMaterialsRvAdapters(
 
                         if (bottomSheet.window != null)
                             bottomSheet.show()
+                    } else {
+                        val bottomSheet =
+                            MaterialQuantityBottomSheet(
+                                context, item.namaMaterial!!, materialQuantityList[position]
+                            ).also {
+                                with(it) {
+                                    setOnQuantityConfirmListener(object :
+                                        MaterialQuantityBottomSheet.OnQuantityConfirmListener {
+                                        override fun onQuantityConfirm(quantity: Int) {
+                                            onMaterialsSetListener.onMaterialsQuantityEdited(
+                                                quantity, position
+                                            )
+                                        }
+
+                                        override fun onBottomSheetDismissed(quantity: Int) {}
+                                    })
+                                }
+                            }
+
+                        if (bottomSheet.window != null)
+                            bottomSheet.show()
                     }
                 }
             }
@@ -97,8 +120,10 @@ class SelectedMaterialsRvAdapters(
         this.onMaterialsSetListener = onMaterialsSetListener
     }
 
-    override fun onMaterialsSelected(data: MaterialListResponse) {
-        onMaterialsSetListener.onMaterialsSelected(data)
+    override fun onMaterialsSelected(
+        data: MaterialListResponse, checkBox: CheckBox, isChecked: Boolean
+    ) {
+        onMaterialsSetListener.onMaterialsSelected(data, checkBox, isChecked)
     }
 
     override fun onMaterialsUnselected(data: MaterialListResponse, position: Int) {
@@ -106,7 +131,8 @@ class SelectedMaterialsRvAdapters(
     }
 
     interface OnMaterialsSetListener {
-        fun onMaterialsSelected(data: MaterialListResponse)
+        fun onMaterialsSelected(data: MaterialListResponse, checkBox: CheckBox, isChecked: Boolean)
         fun onMaterialsUnselected(data: MaterialListResponse, position: Int)
+        fun onMaterialsQuantityEdited(quantity: Int, position: Int)
     }
 }

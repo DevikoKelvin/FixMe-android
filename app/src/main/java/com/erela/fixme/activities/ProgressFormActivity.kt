@@ -8,6 +8,7 @@ import android.text.TextWatcher
 import android.util.Log
 import android.view.View
 import android.view.inputmethod.InputMethodManager
+import android.widget.CheckBox
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
@@ -684,10 +685,13 @@ class ProgressFormActivity : AppCompatActivity() {
                     setOnMaterialsSetListener(object :
                         SelectedMaterialsRvAdapters.OnMaterialsSetListener {
                         override fun onMaterialsSelected(
-                            data: MaterialListResponse
+                            data: MaterialListResponse, checkBox: CheckBox, isChecked: Boolean
                         ) {
                             val bottomSheet =
-                                MaterialQuantityBottomSheet(this@ProgressFormActivity).also { qtyBottomSheet ->
+                                MaterialQuantityBottomSheet(
+                                    this@ProgressFormActivity,
+                                    data.namaMaterial!!
+                                ).also { qtyBottomSheet ->
                                     with(qtyBottomSheet) {
                                         setOnQuantityConfirmListener(object :
                                             MaterialQuantityBottomSheet.OnQuantityConfirmListener {
@@ -708,11 +712,11 @@ class ProgressFormActivity : AppCompatActivity() {
                                                         null, null, "+", null, null, null
                                                     )
                                                 )
-                                                Log.e(
-                                                    "Material Size | Quantity Size",
-                                                    "${selectedMaterialsArrayList.size} | ${materialQuantityList.size}"
-                                                )
                                                 materialAdapter.notifyDataSetChanged()
+                                            }
+
+                                            override fun onBottomSheetDismissed(quantity: Int) {
+                                                checkBox.isChecked = false
                                             }
                                         })
                                     }
@@ -741,10 +745,11 @@ class ProgressFormActivity : AppCompatActivity() {
                                     null, null, "+", null, null, null
                                 )
                             )
-                            Log.e(
-                                "Material Size | Quantity Size",
-                                "${selectedMaterialsArrayList.size} | ${materialQuantityList.size}"
-                            )
+                            materialAdapter.notifyDataSetChanged()
+                        }
+
+                        override fun onMaterialsQuantityEdited(quantity: Int, position: Int) {
+                            materialQuantityList[position] = quantity
                             materialAdapter.notifyDataSetChanged()
                         }
                     })

@@ -19,18 +19,11 @@ class ManageOldPhotoBottomSheet(context: Context) : BottomSheetDialog(context) {
         BsManagePhotoBinding.inflate(layoutInflater)
     }
     private var imageArrayUri: ArrayList<FotoGaprojectsItem>? = null
-    private var imageArrayProgress: MutableList<FotoItem>? = null
     private lateinit var submissionAdapter: OldAttachmentSubmissionRvAdapter
-    private lateinit var progressAdapter: OldAttachmentProgressRvAdapter
     private lateinit var onSubmissionAttachmentActionListener: OnSubmissionAttachmentActionListener
-    private lateinit var onProgressAttachmentActionListener: OnProgressAttachmentActionListener
 
     constructor(context: Context, imageArrayUri: ArrayList<FotoGaprojectsItem>) : this(context) {
         this.imageArrayUri = imageArrayUri
-    }
-
-    constructor(context: Context, imageArrayProgress: MutableList<FotoItem>) : this(context) {
-        this.imageArrayProgress = imageArrayProgress
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -67,7 +60,7 @@ class ManageOldPhotoBottomSheet(context: Context) : BottomSheetDialog(context) {
                 }
                 attachmentRv.adapter = submissionAdapter
                 attachmentRv.layoutManager = LinearLayoutManager(context)
-            } else {
+            } /*else {
                 progressAdapter =
                     OldAttachmentProgressRvAdapter(context, imageArrayProgress!!).also {
                         with(it) {
@@ -88,7 +81,7 @@ class ManageOldPhotoBottomSheet(context: Context) : BottomSheetDialog(context) {
                     }
                 attachmentRv.adapter = progressAdapter
                 attachmentRv.layoutManager = LinearLayoutManager(context)
-            }
+            }*/
         }
     }
 
@@ -98,17 +91,17 @@ class ManageOldPhotoBottomSheet(context: Context) : BottomSheetDialog(context) {
         this.onSubmissionAttachmentActionListener = onSubmissionAttachmentActionListener
     }
 
-    fun setOnProgressAttachmentActionListener(
+    /*fun setOnProgressAttachmentActionListener(
         onProgressAttachmentActionListener: OnProgressAttachmentActionListener
     ) {
         this.onProgressAttachmentActionListener = onProgressAttachmentActionListener
-    }
+    }*/
 
     interface OnSubmissionAttachmentActionListener {
         fun onDeleteOldPhoto(fotoGaProjectsItem: FotoGaprojectsItem)
     }
 
-    interface OnProgressAttachmentActionListener {
+    /*interface OnProgressAttachmentActionListener {
         fun onDeleteOldPhoto(photo: FotoItem)
-    }
+    }*/
 }

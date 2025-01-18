@@ -759,6 +759,7 @@ class SubmissionDetailActivity : AppCompatActivity(),
                                     user.text = detailData.namaUserBuat?.trimEnd()
                                     actionCondition(detailData)
                                     department.text = detailData.deptTujuan
+                                    category.text = detailData.namaKategori
                                     inputTime.text = detailData.tglInput
                                     location.text = detailData.lokasi
                                     reportTime.text = if (detailData.tglWaktuLapor != null) {

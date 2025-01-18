@@ -64,7 +64,7 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_marginTop="8dp"
-            android:visibility="gone"
+            android:visibility="visible"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -299,6 +299,30 @@
                         android:layout_weight="1"
                         android:textColor="@color/black"
                         tools:text="Engineering" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="16dp"
+                    android:layout_marginTop="4dp"
+                    android:orientation="horizontal"
+                    tools:ignore="UseCompoundDrawables">
+
+                    <ImageView
+                        android:layout_width="21dp"
+                        android:layout_height="21dp"
+                        android:src="@drawable/category_icon"
+                        tools:ignore="ContentDescription" />
+
+                    <TextView
+                        android:id="@+id/category"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
+                        android:layout_weight="1"
+                        android:textColor="@color/black"
+                        tools:text="IT" />
                 </LinearLayout>
 
                 <LinearLayout

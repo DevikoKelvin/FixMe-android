@@ -3,8 +3,10 @@ package com.erela.fixme.adapters.recycler_view
 import android.content.Context
 import android.view.View
 import android.view.ViewGroup
+import android.widget.CheckBox
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
+import com.erela.fixme.bottom_sheets.SelectMaterialsBottomSheet
 import com.erela.fixme.databinding.ListItemSelectionBinding
 import com.erela.fixme.objects.MaterialListResponse
 import com.erela.fixme.objects.SelectedMaterialList
@@ -40,13 +42,15 @@ class MaterialsRvAdapters(
                     }
                 }
 
-                itemCheckboxText.setOnCheckedChangeListener { _, isChecked ->
-                    item.isSelected = isChecked
-                    if (isChecked) {
-                        onMaterialsSetListener.onMaterialsSelected(item.material)
-                    } else {
-                        onMaterialsSetListener.onMaterialsUnselected(item.material, position)
-                    }
+                itemCheckboxText.setOnClickListener {
+                    if (itemCheckboxText.isChecked) {
+                        onMaterialsSetListener.onMaterialsSelected(
+                            itemCheckboxText, true, item.material
+                        )
+                    } else
+                        onMaterialsSetListener.onMaterialsUnselected(
+                            itemCheckboxText, false, item.material, position
+                        )
                 }
             }
         }
@@ -63,8 +67,10 @@ class MaterialsRvAdapters(
     }
 
     interface OnMaterialsSetListener {
-        fun onMaterialsSelected(data: MaterialListResponse)
-        fun onMaterialsUnselected(data: MaterialListResponse, position: Int)
+        fun onMaterialsSelected(checkBox: CheckBox, isChecked: Boolean, data: MaterialListResponse)
+        fun onMaterialsUnselected(
+            checkBox: CheckBox, isChecked: Boolean, data: MaterialListResponse, position: Int
+        )
     }
 }
 
@@ -72,7 +78,6 @@ class MaterialDiffUtilCallback(
     private val oldList: List<SelectedMaterialList>,
     private val newList: List<SelectedMaterialList>
 ) : DiffUtil.Callback() {
-
     override fun getOldListSize(): Int = oldList.size
 
     override fun getNewListSize(): Int = newList.size
