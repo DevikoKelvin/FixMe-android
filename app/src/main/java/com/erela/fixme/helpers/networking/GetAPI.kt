@@ -78,7 +78,7 @@ interface GetAPI {
     @POST("submitReport")
     fun submitSubmission(
         @PartMap submissionData: MutableMap<String, RequestBody>,
-        @Part foto: List<MultipartBody.Part?>
+        @Part photo: List<MultipartBody.Part?>
     ): Call<CreationResponse>
 
     @Multipart
@@ -91,7 +91,7 @@ interface GetAPI {
     @POST("reportUpdate")
     fun updateSubmission(
         @PartMap submissionData: MutableMap<String, RequestBody>,
-        @Part foto: List<MultipartBody.Part?>
+        @Part photo: List<MultipartBody.Part?>
     ): Call<GenericSimpleResponse>
 
     @Multipart
@@ -169,11 +169,11 @@ interface GetAPI {
         @PartMap data: MutableMap<String, RequestBody>
     ): Call<GenericSimpleResponse>
 
-    @FormUrlEncoded
+    @Multipart
     @POST("progressDone")
     fun markProgressDone(
-        @Field("id") id: Int,
-        @Field("id_user") idUser: Int
+        @PartMap submissionData: MutableMap<String, RequestBody>,
+        @Part photo: List<MultipartBody.Part?>
     ): Call<GenericSimpleResponse>
 
     @FormUrlEncoded

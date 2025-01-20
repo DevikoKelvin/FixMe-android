@@ -54,10 +54,12 @@ class SubmissionDetailActivity : AppCompatActivity(),
     private val binding: ActivitySubmissionDetailBinding by lazy {
         ActivitySubmissionDetailBinding.inflate(layoutInflater)
     }
+    private val userData: UserData by lazy {
+        UserDataHelper(applicationContext).getUserData()
+    }
     private lateinit var imageData: ArrayList<FotoGaprojectsItem>
     private lateinit var imageCarouselAdapter: ImageCarouselPagerAdapter
     private lateinit var detailId: String
-    private lateinit var userData: UserData
     private lateinit var detailData: SubmissionDetailResponse
     private lateinit var progressTrackingBottomSheet: ProgressTrackingBottomSheet
     private var message: StringBuilder = StringBuilder()
@@ -94,8 +96,6 @@ class SubmissionDetailActivity : AppCompatActivity(),
                 v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
                 insets
             }
-
-            userData = UserDataHelper(applicationContext).getUserData()
 
             swipeRefresh.setOnRefreshListener {
                 init()
@@ -2331,178 +2331,17 @@ class SubmissionDetailActivity : AppCompatActivity(),
     }
 
     override fun onProgressSetDone(data: ProgressItem) {
-        val confirmationDialog =
-            ConfirmationDialog(
+        progressTrackingBottomSheet.dismiss()
+        activityResultLauncher.launch(
+            Intent(
                 this@SubmissionDetailActivity,
-                "Are you sure you want to mark this progress as done?\n\nMake sure your progress are totally done before marking it as done",
-                "Yes"
+                ProgressDoneFormActivity::class.java
             ).also {
                 with(it) {
-                    setConfirmationDialogListener(object :
-                        ConfirmationDialog.ConfirmationDialogListener {
-                        override fun onConfirm() {
-                            progressTrackingBottomSheet.dismiss()
-                            val loadingDialog = LoadingDialog(this@SubmissionDetailActivity)
-                            if (loadingDialog.window != null)
-                                loadingDialog.show()
-                            try {
-                                InitAPI.getAPI.markProgressDone(
-                                    data.idGaprojectsDetail!!, userData.id
-                                ).enqueue(object :
-                                    Callback<GenericSimpleResponse> {
-                                    override fun onResponse(
-                                        call: Call<GenericSimpleResponse>,
-                                        response: Response<GenericSimpleResponse>
-                                    ) {
-                                        loadingDialog.dismiss()
-                                        if (response.isSuccessful) {
-                                            if (response.body() != null) {
-                                                val result = response.body()
-                                                if (result?.code == 1) {
-                                                    isUpdated = true
-                                                    CustomToast.getInstance(applicationContext)
-                                                        .setBackgroundColor(
-                                                            ResourcesCompat.getColor(
-                                                                resources,
-                                                                R.color.custom_toast_background_success,
-                                                                theme
-                                                            )
-                                                        )
-                                                        .setFontColor(
-                                                            ResourcesCompat.getColor(
-                                                                resources,
-                                                                R.color.custom_toast_font_success,
-                                                                theme
-                                                            )
-                                                        )
-                                                        .setMessage(
-                                                            "Progress marked as done successfully!"
-                                                        ).show()
-                                                    init()
-                                                } else {
-                                                    CustomToast.getInstance(applicationContext)
-                                                        .setBackgroundColor(
-                                                            ResourcesCompat.getColor(
-                                                                resources,
-                                                                R.color.custom_toast_background_failed,
-                                                                theme
-                                                            )
-                                                        )
-                                                        .setFontColor(
-                                                            ResourcesCompat.getColor(
-                                                                resources,
-                                                                R.color.custom_toast_font_failed,
-                                                                theme
-                                                            )
-                                                        )
-                                                        .setMessage(
-                                                            "Failed to mark progress as done"
-                                                        )
-                                                        .show()
-                                                    Log.e(
-                                                        "ERROR ${response.code()}",
-                                                        "Mark Progress Done Response code 0 | ${response.message()}"
-                                                    )
-                                                }
-                                            } else {
-                                                CustomToast.getInstance(applicationContext)
-                                                    .setBackgroundColor(
-                                                        ResourcesCompat.getColor(
-                                                            resources,
-                                                            R.color.custom_toast_background_failed,
-                                                            theme
-                                                        )
-                                                    )
-                                                    .setFontColor(
-                                                        ResourcesCompat.getColor(
-                                                            resources,
-                                                            R.color.custom_toast_font_failed,
-                                                            theme
-                                                        )
-                                                    )
-                                                    .setMessage("Failed to mark progress as done")
-                                                    .show()
-                                                Log.e(
-                                                    "ERROR ${response.code()}",
-                                                    "Mark Progress Done Response null | ${response.message()}"
-                                                )
-                                            }
-                                        } else {
-                                            CustomToast.getInstance(applicationContext)
-                                                .setBackgroundColor(
-                                                    ResourcesCompat.getColor(
-                                                        resources,
-                                                        R.color.custom_toast_background_failed,
-                                                        theme
-                                                    )
-                                                )
-                                                .setFontColor(
-                                                    ResourcesCompat.getColor(
-                                                        resources,
-                                                        R.color.custom_toast_font_failed, theme
-                                                    )
-                                                )
-                                                .setMessage("Failed to mark progress as done")
-                                                .show()
-                                            Log.e(
-                                                "ERROR ${response.code()}",
-                                                "Mark Progress Done Response Fail | ${response.message()}"
-                                            )
-                                        }
-                                    }
-
-                                    override fun onFailure(
-                                        call: Call<GenericSimpleResponse>,
-                                        throwable: Throwable
-                                    ) {
-                                        loadingDialog.dismiss()
-                                        CustomToast.getInstance(applicationContext)
-                                            .setBackgroundColor(
-                                                ResourcesCompat.getColor(
-                                                    resources,
-                                                    R.color.custom_toast_background_failed,
-                                                    theme
-                                                )
-                                            )
-                                            .setFontColor(
-                                                ResourcesCompat.getColor(
-                                                    resources, R.color.custom_toast_font_failed,
-                                                    theme
-                                                )
-                                            )
-                                            .setMessage(
-                                                "Something went wrong, please try again later"
-                                            )
-                                            .show()
-                                        throwable.printStackTrace()
-                                        Log.e("ERROR", "Mark Progress Done Failure | $throwable")
-                                    }
-                                })
-                            } catch (jsonException: JSONException) {
-                                loadingDialog.dismiss()
-                                CustomToast.getInstance(applicationContext)
-                                    .setBackgroundColor(
-                                        ResourcesCompat.getColor(
-                                            resources, R.color.custom_toast_background_failed, theme
-                                        )
-                                    )
-                                    .setFontColor(
-                                        ResourcesCompat.getColor(
-                                            resources, R.color.custom_toast_font_failed, theme
-                                        )
-                                    )
-                                    .setMessage("Something went wrong, please try again later")
-                                    .show()
-                                jsonException.printStackTrace()
-                                Log.e("ERROR", "Mark Progress Done Exception | $jsonException")
-                            }
-                        }
-                    })
+                    putExtra("data", data)
                 }
             }
-
-        if (confirmationDialog.window != null)
-            confirmationDialog.show()
+        )
     }
 
     override fun onMaterialEdited(data: ProgressItem) {

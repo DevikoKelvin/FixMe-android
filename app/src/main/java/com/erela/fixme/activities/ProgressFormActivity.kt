@@ -1119,9 +1119,9 @@ class ProgressFormActivity : AppCompatActivity() {
                 if (element)
                     validated++
             }
-            if (repairAnalysisField.text!!.isEmpty())
+            if (repairAnalysisField.text!!.toString().isEmpty())
                 repairAnalysisFieldLayout.error = "Analysis can't be empty!"
-            if (descriptionField.text!!.isEmpty())
+            if (descriptionField.text!!.toString().isEmpty())
                 descriptionFieldLayout.error = "Description can't be empty!"
         }
 

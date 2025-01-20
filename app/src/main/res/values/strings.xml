@@ -100,6 +100,8 @@
     <string name="action_cancel_this_issue">Cancel This Issue</string>
     <string name="action_done">Done This Issue</string>
 
+    <string name="mark_progress_done_title">Mark Progress as Done</string>
+
     <string name="repair_analysis">Repair Analysis</string>
     <string name="materials_hint">Tap \"×\" to delete item.\nTap the item to edit the quantity of the item.\nTap \"+\" to add a material item.</string>
 

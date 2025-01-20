@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#FDFDFD"
-    tools:context=".activities.ProgressFormActivity">
+    tools:context=".activities.ProgressDoneFormActivity">
 
     <RelativeLayout
         android:id="@+id/toolBar"
@@ -44,7 +44,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            android:text="@string/create_new_progress"
+            android:text="@string/mark_progress_done_title"
             android:textColor="@color/black"
             android:textSize="16sp"
             android:textStyle="bold"
@@ -63,33 +63,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
-
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/repairAnalysisFieldLayout"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginHorizontal="16dp"
-                android:layout_marginTop="8dp"
-                android:hint="@string/repair_analysis"
-                app:boxCornerRadiusBottomEnd="25dp"
-                app:boxCornerRadiusBottomStart="25dp"
-                app:boxCornerRadiusTopEnd="25dp"
-                app:boxCornerRadiusTopStart="25dp"
-                app:boxStrokeColor="@color/black"
-                app:boxStrokeWidth="2dp"
-                app:expandedHintEnabled="true"
-                app:hintAnimationEnabled="true"
-                app:hintTextColor="@color/black">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/repairAnalysisField"
-                    android:layout_width="match_parent"
-                    android:layout_height="150dp"
-                    android:gravity="top"
-                    android:inputType="textMultiLine"
-                    android:textSize="14sp" />
-            </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/descriptionFieldLayout"
@@ -123,34 +96,6 @@
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="16dp"
                 android:layout_marginTop="8dp"
-                android:text="@string/materials"
-                android:textColor="@color/black"
-                android:textSize="14sp"
-                android:textStyle="bold" />
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/rvMaterials"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginHorizontal="16dp"
-                android:layout_marginTop="4dp"
-                app:layoutManager="com.google.android.flexbox.FlexboxLayoutManager"
-                tools:itemCount="2"
-                tools:listitem="@layout/list_item_selected_items" />
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginHorizontal="16dp"
-                android:layout_marginBottom="75dp"
-                android:textSize="12sp"
-                android:text="@string/materials_hint" />
-
-            <!--<TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginHorizontal="16dp"
-                android:layout_marginTop="8dp"
                 android:text="@string/attach_photo"
                 android:textColor="@color/black"
                 android:textSize="14sp"
@@ -161,7 +106,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="16dp"
                 android:layout_marginTop="4dp"
-                android:layout_marginBottom="16dp"
+                android:layout_marginBottom="75dp"
                 android:orientation="horizontal">
 
                 <com.google.android.material.card.MaterialCardView
@@ -213,13 +158,13 @@
                         android:textStyle="bold" />
                 </com.google.android.material.card.MaterialCardView>
 
-                <com.google.android.material.card.MaterialCardView
+                <!--<com.google.android.material.card.MaterialCardView
                     android:id="@+id/manageOldAttachmentButton"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:layout_marginStart="8dp"
-                    android:visibility="gone"
+                    android:visibility="visible"
                     app:cardBackgroundColor="@android:color/transparent"
                     app:cardCornerRadius="50dp"
                     app:cardElevation="0dp"
@@ -236,17 +181,17 @@
                         android:textColor="@color/black"
                         android:textSize="12sp"
                         android:textStyle="bold" />
-                </com.google.android.material.card.MaterialCardView>
-            </LinearLayout>-->
+                </com.google.android.material.card.MaterialCardView>-->
+            </LinearLayout>
         </LinearLayout>
     </ScrollView>
 
     <com.google.android.material.card.MaterialCardView
-        android:id="@+id/progressActionButton"
+        android:id="@+id/doneActionButton"
         android:layout_width="match_parent"
         android:layout_height="46dp"
         android:layout_margin="16dp"
-        app:cardBackgroundColor="@color/button_color"
+        app:cardBackgroundColor="@color/status_approved"
         app:cardCornerRadius="50dp"
         app:cardElevation="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -255,11 +200,11 @@
         app:strokeWidth="0dp">
 
         <TextView
-            android:id="@+id/progressActionText"
+            android:id="@+id/doneActionText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:text="@string/create_new_progress"
+            android:text="@string/mark_progress_done"
             android:textAlignment="center"
             android:textColor="@color/white"
             android:textSize="16sp"
