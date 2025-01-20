@@ -55,8 +55,9 @@
     <string name="waiting">Waiting</string>
     <string name="rejected">Rejected</string>
     <string name="approved">Approved</string>
-    <string name="preparing">Preparing</string>
     <string name="on_progress">On Progress</string>
+    <string name="hold">Hold</string>
+    <string name="resume">Resume</string>
     <string name="progress_done">Progress Done</string>
     <string name="on_trial">On Trial</string>
     <string name="done">Done</string>
@@ -85,6 +86,7 @@
     <string name="action_on_progress">Start Progress Now</string>
     <string name="see_progress">See Progress</string>
     <string name="progress_tracking">Progress Tracking</string>
+    <string name="hold_issue">Hold This Issue</string>
     <string name="create_new_progress">Create New Progress</string>
     <string name="approve_material">Approve Materials Request</string>
     <string name="edit_material">Edit Materials</string>
@@ -100,6 +102,9 @@
 
     <string name="repair_analysis">Repair Analysis</string>
     <string name="materials_hint">Tap \"×\" to delete item.\nTap the item to edit the quantity of the item.\nTap \"+\" to add a material item.</string>
+
+    <string name="hold_issue_description_title">Why do you want to hold this issue?</string>
+    <string name="hold_issue_description_hint">Explain your reason</string>
 
     <string name="action_question">What would you do?</string>
     <string name="update_status">Update Status</string>

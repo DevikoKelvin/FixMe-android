@@ -19,7 +19,7 @@ class SubmissionListFilterBottomSheet(context: Context, private val selectedFilt
         const val PENDING = 1
         const val WAITING = 11
         const val APPROVED = 2
-        const val PREPARING = 21
+        const val HOLD = 22
         const val ON_PROGRESS = 3
         const val PROGRESS_DONE = 30
         const val ON_TRIAL = 31
@@ -55,6 +55,7 @@ class SubmissionListFilterBottomSheet(context: Context, private val selectedFilt
                 1 -> pendingSelector.isChecked = true
                 11 -> waitingSelector.isChecked = true
                 2 -> approvedSelector.isChecked = true
+                22 -> holdSelector.isChecked = true
                 3 -> onProgressSelector.isChecked = true
                 30 -> progressDoneSelector.isChecked = true
                 31 -> onTrialSelector.isChecked = true
@@ -92,8 +93,8 @@ class SubmissionListFilterBottomSheet(context: Context, private val selectedFilt
                 dismiss()
             }
 
-            preparingSelector.setOnClickListener {
-                onFilterListener.onFilter(PREPARING, PREPARING)
+            holdSelector.setOnClickListener {
+                onFilterListener.onFilter(HOLD, HOLD)
                 dismiss()
             }
 

@@ -71,6 +71,11 @@ class ProgressTrackingBottomSheet(
                 }
             }
             progressWorkedBy.text = message.toString()
+            if (data.stsGaprojects == 22) {
+                holdMessage.visibility = View.VISIBLE
+                holdMessage.text = "Issue on Hold status. Reason: ${data.keteranganHold}"
+            } else
+                holdMessage.visibility = View.GONE
             progressItem = ArrayList()
             for (i in 0 until data.progress!!.size) {
                 progressItem.add(
@@ -89,6 +94,7 @@ class ProgressTrackingBottomSheet(
             rvProgress.layoutManager = LinearLayoutManager(context)
 
             when (data.stsGaprojects) {
+                22 -> progressActionButton.visibility = View.GONE
                 3 -> {
                     if (data.idUser == userData.id) {
                         for (i in 0 until data.usernUserTeknisi.size) {
@@ -210,7 +216,6 @@ class ProgressTrackingBottomSheet(
                     }
                 }
                 4 -> progressActionButton.visibility = View.GONE
-                /*30 -> progressActionButton.visibility = View.GONE*/
                 31 -> progressActionButton.visibility = View.GONE
                 else -> {
                     if (data.idUser == userData.id) {

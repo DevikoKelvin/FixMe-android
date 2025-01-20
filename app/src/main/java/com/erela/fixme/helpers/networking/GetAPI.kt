@@ -163,11 +163,39 @@ interface GetAPI {
         @PartMap data: MutableMap<String, RequestBody>
     ): Call<GenericSimpleResponse>
 
+    @Multipart
+    @POST("updateProgressMaterial")
+    fun editMaterialProgress(
+        @PartMap data: MutableMap<String, RequestBody>
+    ): Call<GenericSimpleResponse>
+
     @FormUrlEncoded
     @POST("progressDone")
     fun markProgressDone(
         @Field("id") id: Int,
         @Field("id_user") idUser: Int
+    ): Call<GenericSimpleResponse>
+
+    @FormUrlEncoded
+    @POST("approveMaterialAdd")
+    fun approveMaterialAddition(
+        @Field("id") idGaProjectsDetail: Int,
+        @Field("id_user") idUser: Int
+    ): Call<GenericSimpleResponse>
+
+    @FormUrlEncoded
+    @POST("statusHold")
+    fun holdIssue(
+        @Field("id") idGaProjects: Int,
+        @Field("id_user") idUser: Int,
+        @Field("keterangan") description: String
+    ): Call<GenericSimpleResponse>
+
+    @FormUrlEncoded
+    @POST("statusResume")
+    fun resumeIssue(
+        @Field("id") idGaProjects: Int,
+        @Field("id_user") idUser: Int,
     ): Call<GenericSimpleResponse>
 
     @FormUrlEncoded

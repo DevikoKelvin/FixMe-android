@@ -354,9 +354,9 @@ class SubmissionListActivity : AppCompatActivity(), SubmissionRvAdapter.OnSubmis
                         text = "Approved"
                         setTextColor(getColor(R.color.status_approved))
                     }
-                    21 -> {
-                        text = "Preparing"
-                        setTextColor(getColor(R.color.status_preparing))
+                    22 -> {
+                        text = "Hold"
+                        setTextColor(getColor(R.color.status_hold))
                     }
                     3 -> {
                         text = "On Progress"

@@ -56,27 +56,39 @@ class ProgressOptionDialog(
                 onProgressOptionDialogListener.onProgressDeleted(progress)
                 dismiss()
             }
-            if (progress.stsDetail == 0 && progress.approveMaterialStatus == 0) {
-                doneButton.isEnabled = true
-                doneButton.setOnClickListener {
-                    onProgressOptionDialogListener.onProgressSetDone(progress)
-                    dismiss()
+            if (progress.stsDetail == 0) {
+                if (progress.material!!.isNotEmpty()) {
+                    if (progress.approveMaterialStatus == 0) {
+                        doneButton.isEnabled = false
+                        doneButton.alpha = 0.5f
+                        editButton.isEnabled = true
+                        editButton.setOnClickListener {
+                            onProgressOptionDialogListener.onProgressEdited(progress)
+                            dismiss()
+                        }
+                    } else if (progress.approveMaterialStatus == 1) {
+                        doneButton.isEnabled = true
+                        doneButton.setOnClickListener {
+                            onProgressOptionDialogListener.onProgressSetDone(progress)
+                            dismiss()
+                        }
+                        editButton.isEnabled = false
+                        editButton.alpha = 0.5f
+                        deleteButton.isEnabled = false
+                        deleteButton.alpha = 0.5f
+                    }
+                } else {
+                    doneButton.isEnabled = true
+                    doneButton.setOnClickListener {
+                        onProgressOptionDialogListener.onProgressSetDone(progress)
+                        dismiss()
+                    }
+                    editButton.isEnabled = true
+                    editButton.setOnClickListener {
+                        onProgressOptionDialogListener.onProgressEdited(progress)
+                        dismiss()
+                    }
                 }
-                editButton.isEnabled = true
-                editButton.setOnClickListener {
-                    onProgressOptionDialogListener.onProgressEdited(progress)
-                    dismiss()
-                }
-            } else if (progress.stsDetail == 0 && progress.approveMaterialStatus == 1) {
-                doneButton.isEnabled = true
-                doneButton.setOnClickListener {
-                    onProgressOptionDialogListener.onProgressSetDone(progress)
-                    dismiss()
-                }
-                editButton.isEnabled = false
-                editButton.alpha = 0.5f
-                deleteButton.isEnabled = false
-                deleteButton.alpha = 0.5f
             } else {
                 doneButton.isEnabled = false
                 doneButton.alpha = 0.5f

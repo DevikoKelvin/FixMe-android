@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@drawable/bottom_sheets_background"
@@ -23,67 +22,73 @@
         app:strokeWidth="0dp" />
 
     <TextView
-        android:id="@+id/progressTrackingTitle"
+        android:id="@+id/trialTitle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="16dp"
         android:layout_marginTop="18dp"
-        android:text="@string/progress_tracking"
+        android:text="@string/hold"
         android:textAlignment="center"
         android:textColor="@color/black"
         android:textSize="18sp"
         android:textStyle="bold" />
 
     <TextView
-        android:id="@+id/progressWorkedBy"
-        android:layout_width="match_parent"
+        android:id="@+id/selectSupervisorText"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="16dp"
-        android:textAlignment="center"
-        android:textSize="14sp"
-        tools:text="Progress is being worked on by hendrick" />
-
-    <TextView
-        android:id="@+id/holdMessage"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginHorizontal="16dp"
-        android:textAlignment="center"
-        android:textColor="@color/status_hold"
-        android:textSize="16sp"
-        android:textStyle="bold"
-        android:visibility="gone"
-        tools:text="Issue on Hold status. Reason: Insufficient Material" />
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rvProgress"
-        android:layout_width="match_parent"
-        android:layout_height="450dp"
         android:layout_marginTop="8dp"
-        tools:itemCount="2"
-        tools:listitem="@layout/list_item_progress" />
+        android:text="@string/hold_issue_description_title"
+        android:textColor="@color/black"
+        android:textSize="14sp"
+        android:textStyle="bold" />
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/descriptionFieldLayout"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="16dp"
+        android:layout_marginTop="8dp"
+        android:visibility="visible"
+        app:boxCornerRadiusBottomEnd="25dp"
+        app:boxCornerRadiusBottomStart="25dp"
+        app:boxCornerRadiusTopEnd="25dp"
+        app:boxCornerRadiusTopStart="25dp"
+        app:boxStrokeColor="@color/black"
+        app:boxStrokeWidth="2dp"
+        app:expandedHintEnabled="false"
+        app:hintAnimationEnabled="false"
+        app:hintEnabled="false"
+        app:placeholderText="@string/hold_issue_description_hint">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/descriptionField"
+            android:layout_width="match_parent"
+            android:layout_height="150dp"
+            android:gravity="top"
+            android:inputType="textMultiLine"
+            android:textSize="14sp" />
+    </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.card.MaterialCardView
-        android:id="@+id/progressActionButton"
+        android:id="@+id/holdIssueButton"
         android:layout_width="match_parent"
         android:layout_height="46dp"
         android:layout_marginHorizontal="16dp"
-        android:layout_marginTop="8dp"
-        android:visibility="gone"
-        app:cardBackgroundColor="@color/button_color"
+        android:layout_marginVertical="16dp"
+        app:cardBackgroundColor="@color/status_hold"
         app:cardCornerRadius="50dp"
-        app:cardElevation="0dp"
         app:strokeWidth="0dp">
 
         <TextView
-            android:id="@+id/progressActionText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:text="@string/create_new_progress"
-            android:textAlignment="center"
+            android:text="@string/hold_issue"
             android:textColor="@color/white"
-            android:textSize="14sp"
+            android:textSize="16sp"
             android:textStyle="bold" />
     </com.google.android.material.card.MaterialCardView>
 </LinearLayout>

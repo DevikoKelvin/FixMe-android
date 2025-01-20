@@ -28,8 +28,8 @@
     <color name="status_pending">#505050</color>
     <color name="status_waiting">#964B00</color>
     <color name="status_approved">#388E3C</color>
-    <color name="status_preparing">#FF6D00</color>
     <color name="status_on_progress">#FBC02D</color>
+    <color name="status_hold">#FF6D00</color>
     <color name="status_progress_done">#9FA8DA</color>
     <color name="status_done">#0288D1</color>
     <color name="status_on_trial">#512DA8</color>

@@ -152,7 +152,7 @@ class SubmissionFormActivity : AppCompatActivity() {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
                     intent.getParcelableExtra("data", SubmissionDetailResponse::class.java)!!
                 } else {
-                    intent.getParcelableExtra("data")!!
+                    @Suppress("DEPRECATION") intent.getParcelableExtra("data")!!
                 }
             } catch (nullPointerException: NullPointerException) {
                 null

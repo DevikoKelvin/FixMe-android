@@ -75,19 +75,19 @@
             android:textStyle="bold" />
 
         <RadioButton
-            android:id="@+id/preparingSelector"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/preparing"
-            android:textColor="@color/status_preparing"
-            android:textStyle="bold" />
-
-        <RadioButton
             android:id="@+id/onProgressSelector"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/on_progress"
             android:textColor="@color/status_on_progress"
+            android:textStyle="bold" />
+
+        <RadioButton
+            android:id="@+id/holdSelector"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/hold"
+            android:textColor="@color/status_hold"
             android:textStyle="bold" />
 
         <RadioButton

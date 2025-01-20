@@ -4,6 +4,8 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.util.Log
 import android.view.View
 import androidx.activity.enableEdgeToEdge
@@ -17,6 +19,7 @@ import androidx.core.view.WindowInsetsCompat
 import com.bumptech.glide.Glide
 import com.erela.fixme.R
 import com.erela.fixme.adapters.pager.ImageCarouselPagerAdapter
+import com.erela.fixme.bottom_sheets.ActionHoldIssueBottomSheet
 import com.erela.fixme.bottom_sheets.ProgressTrackingBottomSheet
 import com.erela.fixme.bottom_sheets.ReportTrialBottomSheet
 import com.erela.fixme.bottom_sheets.SubmissionActionBottomSheet
@@ -122,8 +125,26 @@ class SubmissionDetailActivity : AppCompatActivity(),
                     onBackPressedDispatcher.onBackPressed()
             }
 
+            holdResumeButton.visibility = View.GONE
+
             loadingBar.visibility = View.VISIBLE
             contentScrollContainer.visibility = View.GONE
+            messageProgressAndTrialButtonContainer.visibility = View.GONE
+            val handler = Handler(Looper.getMainLooper())
+            val runnable = object : Runnable {
+                var count = 1
+                override fun run() {
+                    when (count) {
+                        1 -> detailTitle.text = "Loading."
+                        2 -> detailTitle.text = "Loading.."
+                        3 -> detailTitle.text = "Loading..."
+                    }
+                    count = if (count < 3) count + 1 else 1
+                    handler.postDelayed(this, 500)
+                }
+            }
+
+            handler.post(runnable)
 
             try {
                 InitAPI.getAPI.getSubmissionDetail(detailId)
@@ -133,6 +154,7 @@ class SubmissionDetailActivity : AppCompatActivity(),
                             response: Response<List<SubmissionDetailResponse>?>
                         ) {
                             loadingBar.visibility = View.GONE
+                            handler.removeCallbacks(runnable)
                             contentScrollContainer.visibility = View.VISIBLE
                             if (response.isSuccessful) {
                                 if (response.body() != null) {
@@ -402,19 +424,545 @@ class SubmissionDetailActivity : AppCompatActivity(),
                                                 }
                                             }
                                         }
-                                        // Preparing
-                                        21 -> {
+                                        // Hold
+                                        22 -> {
+                                            for (i in 0 until detailData.usernUserSpv!!.size) {
+                                                if (userData.id == detailData.usernUserSpv!![i]
+                                                    !!.idUser
+                                                ) {
+                                                    holdResumeIcon.setImageDrawable(
+                                                        ContextCompat.getDrawable(
+                                                            applicationContext,
+                                                            R.drawable.baseline_play_arrow_24
+                                                        )
+                                                    )
+                                                    holdResumeButton.visibility = View.VISIBLE
+                                                    holdResumeButton.setCardBackgroundColor(
+                                                        ContextCompat.getColor(
+                                                            applicationContext,
+                                                            R.color.status_approved
+                                                        )
+                                                    )
+                                                    holdResumeButton.setOnClickListener {
+                                                        val confirmationDialog = ConfirmationDialog(
+                                                            this@SubmissionDetailActivity,
+                                                            "Are you sure want to resume this issue?",
+                                                            "Yes"
+                                                        ).also {
+                                                            with(it) {
+                                                                setConfirmationDialogListener(
+                                                                    object :
+                                                                        ConfirmationDialog.ConfirmationDialogListener {
+                                                                        override fun onConfirm() {
+                                                                            val loadingDialog =
+                                                                                LoadingDialog(
+                                                                                    this@SubmissionDetailActivity
+                                                                                )
+                                                                            if (loadingDialog.window != null)
+                                                                                loadingDialog.show()
+                                                                            try {
+                                                                                InitAPI.getAPI
+                                                                                    .resumeIssue(
+                                                                                        detailData.idGaprojects!!,
+                                                                                        userData.id
+                                                                                    ).enqueue(
+                                                                                        object :
+                                                                                            Callback<GenericSimpleResponse> {
+                                                                                            override fun onResponse(
+                                                                                                call1: Call<GenericSimpleResponse>,
+                                                                                                response1: Response<GenericSimpleResponse>
+                                                                                            ) {
+                                                                                                loadingDialog.dismiss()
+                                                                                                if (response1.isSuccessful) {
+                                                                                                    val result =
+                                                                                                        response1.body()
+                                                                                                    if (result != null) {
+                                                                                                        if (result.code == 1) {
+                                                                                                            isUpdated =
+                                                                                                                true
+                                                                                                            CustomToast
+                                                                                                                .getInstance(
+                                                                                                                    applicationContext
+                                                                                                                )
+                                                                                                                .setBackgroundColor(
+                                                                                                                    ResourcesCompat.getColor(
+                                                                                                                        resources,
+                                                                                                                        R.color.custom_toast_background_success,
+                                                                                                                        theme
+                                                                                                                    )
+                                                                                                                )
+                                                                                                                .setFontColor(
+                                                                                                                    ResourcesCompat.getColor(
+                                                                                                                        resources,
+                                                                                                                        R.color.custom_toast_font_success,
+                                                                                                                        theme
+                                                                                                                    )
+                                                                                                                )
+                                                                                                                .setMessage(
+                                                                                                                    "Issue was resumed!"
+                                                                                                                )
+                                                                                                                .show()
+                                                                                                            init()
+                                                                                                        } else {
+                                                                                                            CustomToast
+                                                                                                                .getInstance(
+                                                                                                                    applicationContext
+                                                                                                                )
+                                                                                                                .setBackgroundColor(
+                                                                                                                    ResourcesCompat.getColor(
+                                                                                                                        resources,
+                                                                                                                        R.color.custom_toast_background_failed,
+                                                                                                                        theme
+                                                                                                                    )
+                                                                                                                )
+                                                                                                                .setFontColor(
+                                                                                                                    ResourcesCompat.getColor(
+                                                                                                                        resources,
+                                                                                                                        R.color.custom_toast_font_failed,
+                                                                                                                        theme
+                                                                                                                    )
+                                                                                                                )
+                                                                                                                .setMessage(
+                                                                                                                    "Failed to resume this issue"
+                                                                                                                )
+                                                                                                                .show()
+                                                                                                            Log.e(
+                                                                                                                "ERROR ${response1.code()}",
+                                                                                                                "Resume Issue Response code 0 | ${response1.message()}"
+                                                                                                            )
+                                                                                                        }
+                                                                                                    } else {
+                                                                                                        CustomToast
+                                                                                                            .getInstance(
+                                                                                                                applicationContext
+                                                                                                            )
+                                                                                                            .setBackgroundColor(
+                                                                                                                ResourcesCompat.getColor(
+                                                                                                                    resources,
+                                                                                                                    R.color.custom_toast_background_failed,
+                                                                                                                    theme
+                                                                                                                )
+                                                                                                            )
+                                                                                                            .setFontColor(
+                                                                                                                ResourcesCompat.getColor(
+                                                                                                                    resources,
+                                                                                                                    R.color.custom_toast_font_failed,
+                                                                                                                    theme
+                                                                                                                )
+                                                                                                            )
+                                                                                                            .setMessage(
+                                                                                                                "Failed to resume this issue"
+                                                                                                            )
+                                                                                                            .show()
+                                                                                                        Log.e(
+                                                                                                            "ERROR ${response1.code()}",
+                                                                                                            "Resume Issue Response null | ${response1.message()}"
+                                                                                                        )
+                                                                                                    }
+                                                                                                } else {
+                                                                                                    CustomToast
+                                                                                                        .getInstance(
+                                                                                                            applicationContext
+                                                                                                        )
+                                                                                                        .setBackgroundColor(
+                                                                                                            ResourcesCompat.getColor(
+                                                                                                                resources,
+                                                                                                                R.color.custom_toast_background_failed,
+                                                                                                                theme
+                                                                                                            )
+                                                                                                        )
+                                                                                                        .setFontColor(
+                                                                                                            ResourcesCompat.getColor(
+                                                                                                                resources,
+                                                                                                                R.color.custom_toast_font_failed,
+                                                                                                                theme
+                                                                                                            )
+                                                                                                        )
+                                                                                                        .setMessage(
+                                                                                                            "Failed to resume this issue"
+                                                                                                        )
+                                                                                                        .show()
+                                                                                                    Log.e(
+                                                                                                        "ERROR ${response1.code()}",
+                                                                                                        "Resume Issue Response Fail | ${response1.message()}"
+                                                                                                    )
+                                                                                                }
+                                                                                                init()
+                                                                                            }
+
+                                                                                            override fun onFailure(
+                                                                                                call1: Call<GenericSimpleResponse>,
+                                                                                                throwable: Throwable
+                                                                                            ) {
+                                                                                                loadingDialog.dismiss()
+                                                                                                    CustomToast
+                                                                                                        .getInstance(
+                                                                                                            applicationContext
+                                                                                                        )
+                                                                                                        .setBackgroundColor(
+                                                                                                            ResourcesCompat.getColor(
+                                                                                                                resources,
+                                                                                                                R.color.custom_toast_background_failed,
+                                                                                                                theme
+                                                                                                            )
+                                                                                                        )
+                                                                                                        .setFontColor(
+                                                                                                            ResourcesCompat.getColor(
+                                                                                                                resources,
+                                                                                                                R.color.custom_toast_font_failed,
+                                                                                                                theme
+                                                                                                            )
+                                                                                                        )
+                                                                                                        .setMessage(
+                                                                                                            "Something went wrong, please try again later"
+                                                                                                        )
+                                                                                                        .show()
+                                                                                                    throwable.printStackTrace()
+                                                                                                    Log.e(
+                                                                                                        "ERROR",
+                                                                                                        "Resume Issue Failure | $throwable"
+                                                                                                    )
+                                                                                            }
+                                                                                        }
+                                                                                    )
+                                                                            } catch (jsonException: JSONException) {
+                                                                                loadingDialog.dismiss()
+                                                                                    CustomToast
+                                                                                        .getInstance(
+                                                                                            applicationContext
+                                                                                        )
+                                                                                        .setBackgroundColor(
+                                                                                            ResourcesCompat.getColor(
+                                                                                                resources,
+                                                                                                R.color.custom_toast_background_failed,
+                                                                                                theme
+                                                                                            )
+                                                                                        )
+                                                                                        .setFontColor(
+                                                                                            ResourcesCompat.getColor(
+                                                                                                resources,
+                                                                                                R.color.custom_toast_font_failed,
+                                                                                                theme
+                                                                                            )
+                                                                                        )
+                                                                                        .setMessage(
+                                                                                            "Something went wrong, please try again later"
+                                                                                        )
+                                                                                        .show()
+                                                                                    jsonException.printStackTrace()
+                                                                                    Log.e(
+                                                                                        "ERROR",
+                                                                                        "Resume Issue Exception | $jsonException"
+                                                                                    )
+                                                                            }
+                                                                        }
+                                                                    }
+                                                                )
+                                                            }
+                                                        }
+
+                                                        if (confirmationDialog.window != null)
+                                                            confirmationDialog.show()
+                                                    }
+                                                    break
+                                                }
+                                            }
                                             submissionStatus.setCardBackgroundColor(
                                                 ResourcesCompat.getColor(
                                                     resources,
-                                                    R.color.status_preparing,
+                                                    R.color.status_hold,
                                                     theme
                                                 )
                                             )
-                                            submissionStatusText.text = "Preparing"
+                                            submissionStatusText.text = "Hold"
+                                            messageProgressAndTrialButtonContainer.visibility =
+                                                View.VISIBLE
+                                            statusMessageContainer.visibility = View.GONE
+                                            onProgressButton.visibility = View.VISIBLE
+                                            onProgressText.setCompoundDrawablesWithIntrinsicBounds(
+                                                null,
+                                                null,
+                                                null,
+                                                null
+                                            )
+                                            onProgressButton.setCardBackgroundColor(
+                                                ContextCompat.getColor(
+                                                    this@SubmissionDetailActivity,
+                                                    R.color.status_hold
+                                                )
+                                            )
+                                            onProgressButton.setOnClickListener {
+                                                progressTrackingBottomSheet =
+                                                    ProgressTrackingBottomSheet(
+                                                        this@SubmissionDetailActivity,
+                                                        this@SubmissionDetailActivity, detailData
+                                                    ).also {
+                                                        with(it) {
+                                                            setOnProgressTrackingListener(
+                                                                this@SubmissionDetailActivity
+                                                            )
+                                                            setOnProgressItemLongTapListener(
+                                                                this@SubmissionDetailActivity
+                                                            )
+                                                        }
+                                                    }
+
+                                                if (progressTrackingBottomSheet.window != null)
+                                                    progressTrackingBottomSheet.show()
+                                            }
+                                            onProgressText.text = "Issue on hold by ${
+                                                detailData.namaUserHold
+                                            }\nClick to see progress"
+                                            onProgressText.setTextColor(
+                                                ContextCompat.getColor(
+                                                    this@SubmissionDetailActivity,
+                                                    R.color.white
+                                                )
+                                            )
                                         }
                                         // On-Progress
                                         3 -> {
+                                            for (i in 0 until detailData.usernUserSpv!!.size) {
+                                                if (userData.id == detailData.usernUserSpv!![i]
+                                                    !!.idUser
+                                                ) {
+                                                    holdResumeIcon.setImageDrawable(
+                                                        ContextCompat.getDrawable(
+                                                            applicationContext,
+                                                            R.drawable.baseline_pause_24
+                                                        )
+                                                    )
+                                                    holdResumeButton.visibility = View.VISIBLE
+                                                    holdResumeButton.setCardBackgroundColor(
+                                                        ContextCompat.getColor(
+                                                            applicationContext,
+                                                            R.color.status_hold
+                                                        )
+                                                    )
+                                                    holdResumeButton.setOnClickListener {
+                                                        val holdBottomSheet =
+                                                            ActionHoldIssueBottomSheet(this@SubmissionDetailActivity).also {
+                                                                with(it) {
+                                                                    setOnButtonClickListener(
+                                                                        object :
+                                                                            ActionHoldIssueBottomSheet.OnHoldButtonClickListener {
+                                                                            override fun onHoldButtonClicked(
+                                                                                reason: String
+                                                                            ) {
+                                                                                val loadingDialog =
+                                                                                    LoadingDialog(
+                                                                                        this@SubmissionDetailActivity
+                                                                                    )
+                                                                                if (loadingDialog.window != null)
+                                                                                    loadingDialog.show()
+                                                                                try {
+                                                                                    InitAPI.getAPI
+                                                                                        .holdIssue(
+                                                                                            detailData.idGaprojects!!,
+                                                                                            userData.id,
+                                                                                            reason
+                                                                                        ).enqueue(
+                                                                                            object :
+                                                                                                Callback<GenericSimpleResponse> {
+                                                                                                override fun onResponse(
+                                                                                                    call1: Call<GenericSimpleResponse>,
+                                                                                                    response1: Response<GenericSimpleResponse>
+                                                                                                ) {
+                                                                                                    loadingDialog.dismiss()
+                                                                                                    if (response1.isSuccessful) {
+                                                                                                        val result =
+                                                                                                            response1.body()
+                                                                                                        if (result != null) {
+                                                                                                            if (result.code == 1) {
+                                                                                                                isUpdated =
+                                                                                                                    true
+                                                                                                                CustomToast
+                                                                                                                    .getInstance(
+                                                                                                                        applicationContext
+                                                                                                                    )
+                                                                                                                    .setBackgroundColor(
+                                                                                                                        ResourcesCompat.getColor(
+                                                                                                                            resources,
+                                                                                                                            R.color.custom_toast_background_success,
+                                                                                                                            theme
+                                                                                                                        )
+                                                                                                                    )
+                                                                                                                    .setFontColor(
+                                                                                                                        ResourcesCompat.getColor(
+                                                                                                                            resources,
+                                                                                                                            R.color.custom_toast_font_success,
+                                                                                                                            theme
+                                                                                                                        )
+                                                                                                                    )
+                                                                                                                    .setMessage(
+                                                                                                                        "Issue was hold!"
+                                                                                                                    )
+                                                                                                                    .show()
+                                                                                                                init()
+                                                                                                            } else {
+                                                                                                                CustomToast
+                                                                                                                    .getInstance(
+                                                                                                                        applicationContext
+                                                                                                                    )
+                                                                                                                    .setBackgroundColor(
+                                                                                                                        ResourcesCompat.getColor(
+                                                                                                                            resources,
+                                                                                                                            R.color.custom_toast_background_failed,
+                                                                                                                            theme
+                                                                                                                        )
+                                                                                                                    )
+                                                                                                                    .setFontColor(
+                                                                                                                        ResourcesCompat.getColor(
+                                                                                                                            resources,
+                                                                                                                            R.color.custom_toast_font_failed,
+                                                                                                                            theme
+                                                                                                                        )
+                                                                                                                    )
+                                                                                                                    .setMessage(
+                                                                                                                        "Failed to hold this issue"
+                                                                                                                    )
+                                                                                                                    .show()
+                                                                                                                Log.e(
+                                                                                                                    "ERROR ${response1.code()}",
+                                                                                                                    "Hold Issue Response code 0 | ${response1.message()}"
+                                                                                                                )
+                                                                                                            }
+                                                                                                        } else {
+                                                                                                            CustomToast
+                                                                                                                .getInstance(
+                                                                                                                    applicationContext
+                                                                                                                )
+                                                                                                                .setBackgroundColor(
+                                                                                                                    ResourcesCompat.getColor(
+                                                                                                                        resources,
+                                                                                                                        R.color.custom_toast_background_failed,
+                                                                                                                        theme
+                                                                                                                    )
+                                                                                                                )
+                                                                                                                .setFontColor(
+                                                                                                                    ResourcesCompat.getColor(
+                                                                                                                        resources,
+                                                                                                                        R.color.custom_toast_font_failed,
+                                                                                                                        theme
+                                                                                                                    )
+                                                                                                                )
+                                                                                                                .setMessage(
+                                                                                                                    "Failed to hold this issue"
+                                                                                                                )
+                                                                                                                .show()
+                                                                                                            Log.e(
+                                                                                                                "ERROR ${response1.code()}",
+                                                                                                                "Hold Issue Response null | ${response1.message()}"
+                                                                                                            )
+                                                                                                        }
+                                                                                                    } else {
+                                                                                                        CustomToast
+                                                                                                            .getInstance(
+                                                                                                                applicationContext
+                                                                                                            )
+                                                                                                            .setBackgroundColor(
+                                                                                                                ResourcesCompat.getColor(
+                                                                                                                    resources,
+                                                                                                                    R.color.custom_toast_background_failed,
+                                                                                                                    theme
+                                                                                                                )
+                                                                                                            )
+                                                                                                            .setFontColor(
+                                                                                                                ResourcesCompat.getColor(
+                                                                                                                    resources,
+                                                                                                                    R.color.custom_toast_font_failed,
+                                                                                                                    theme
+                                                                                                                )
+                                                                                                            )
+                                                                                                            .setMessage(
+                                                                                                                "Failed to hold this issue"
+                                                                                                            )
+                                                                                                            .show()
+                                                                                                        Log.e(
+                                                                                                            "ERROR ${response1.code()}",
+                                                                                                            "Hold Issue Response Fail | ${response1.message()}"
+                                                                                                        )
+                                                                                                    }
+                                                                                                    init()
+                                                                                                }
+
+                                                                                                override fun onFailure(
+                                                                                                    call1: Call<GenericSimpleResponse>,
+                                                                                                    throwable: Throwable
+                                                                                                ) {
+                                                                                                    loadingDialog.dismiss()
+                                                                                                    CustomToast
+                                                                                                        .getInstance(
+                                                                                                            applicationContext
+                                                                                                        )
+                                                                                                        .setBackgroundColor(
+                                                                                                            ResourcesCompat.getColor(
+                                                                                                                resources,
+                                                                                                                R.color.custom_toast_background_failed,
+                                                                                                                theme
+                                                                                                            )
+                                                                                                        )
+                                                                                                        .setFontColor(
+                                                                                                            ResourcesCompat.getColor(
+                                                                                                                resources,
+                                                                                                                R.color.custom_toast_font_failed,
+                                                                                                                theme
+                                                                                                            )
+                                                                                                        )
+                                                                                                        .setMessage(
+                                                                                                            "Something went wrong, please try again later"
+                                                                                                        )
+                                                                                                        .show()
+                                                                                                    throwable.printStackTrace()
+                                                                                                    Log.e(
+                                                                                                        "ERROR",
+                                                                                                        "Hold Issue Failure | $throwable"
+                                                                                                    )
+                                                                                                }
+                                                                                            }
+                                                                                        )
+                                                                                } catch (jsonException: JSONException) {
+                                                                                    loadingDialog.dismiss()
+                                                                                    CustomToast
+                                                                                        .getInstance(
+                                                                                            applicationContext
+                                                                                        )
+                                                                                        .setBackgroundColor(
+                                                                                            ResourcesCompat.getColor(
+                                                                                                resources,
+                                                                                                R.color.custom_toast_background_failed,
+                                                                                                theme
+                                                                                            )
+                                                                                        )
+                                                                                        .setFontColor(
+                                                                                            ResourcesCompat.getColor(
+                                                                                                resources,
+                                                                                                R.color.custom_toast_font_failed,
+                                                                                                theme
+                                                                                            )
+                                                                                        )
+                                                                                        .setMessage(
+                                                                                            "Something went wrong, please try again later"
+                                                                                        )
+                                                                                        .show()
+                                                                                    jsonException.printStackTrace()
+                                                                                    Log.e(
+                                                                                        "ERROR",
+                                                                                        "Hold Issue Exception | $jsonException"
+                                                                                    )
+                                                                                }
+                                                                            }
+                                                                        }
+                                                                    )
+                                                                }
+                                                            }
+
+                                                        if (holdBottomSheet.window != null)
+                                                            holdBottomSheet.show()
+                                                    }
+                                                    break
+                                                }
+                                            }
                                             submissionStatus.setCardBackgroundColor(
                                                 ResourcesCompat.getColor(
                                                     resources,
@@ -429,7 +977,7 @@ class SubmissionDetailActivity : AppCompatActivity(),
                                                 View.VISIBLE
                                             statusMessageContainer.visibility = View.GONE
                                             onProgressButton.visibility = View.VISIBLE
-                                            onProgressText.setCompoundDrawables(
+                                            onProgressText.setCompoundDrawablesWithIntrinsicBounds(
                                                 ContextCompat.getDrawable(
                                                     this@SubmissionDetailActivity,
                                                     R.drawable.baseline_timelapse_24
@@ -461,6 +1009,12 @@ class SubmissionDetailActivity : AppCompatActivity(),
                                                     )
                                             }
                                             onProgressText.text = message.toString()
+                                            onProgressText.setTextColor(
+                                                ContextCompat.getColor(
+                                                    applicationContext,
+                                                    R.color.custom_toast_background_normal_dark_gray
+                                                )
+                                            )
                                             onProgressButton.setOnClickListener {
                                                 progressTrackingBottomSheet =
                                                     ProgressTrackingBottomSheet(
@@ -527,7 +1081,7 @@ class SubmissionDetailActivity : AppCompatActivity(),
                                                     R.color.black
                                                 )
                                             )
-                                            onProgressText.setCompoundDrawables(
+                                            onProgressText.setCompoundDrawablesWithIntrinsicBounds(
                                                 null,
                                                 null,
                                                 null,
@@ -846,6 +1400,28 @@ class SubmissionDetailActivity : AppCompatActivity(),
                                             }
                                         }
                                     }
+                                } else {
+                                    detailTitle.text = "ERR!!"
+                                    CustomToast.getInstance(applicationContext)
+                                        .setBackgroundColor(
+                                            ResourcesCompat.getColor(
+                                                resources,
+                                                R.color.custom_toast_background_failed,
+                                                theme
+                                            )
+                                        )
+                                        .setFontColor(
+                                            ResourcesCompat.getColor(
+                                                resources, R.color.custom_toast_font_failed, theme
+                                            )
+                                        )
+                                        .setMessage("Failed to get submission detail")
+                                        .show()
+                                    Log.e(
+                                        "ERROR",
+                                        "Submission Detail Response null | ${response.message()}"
+                                    )
+                                    finish()
                                 }
                             } else {
                                 CustomToast.getInstance(applicationContext)
@@ -863,7 +1439,7 @@ class SubmissionDetailActivity : AppCompatActivity(),
                                     .show()
                                 Log.e(
                                     "ERROR",
-                                    "Submission Detail Response null | ${response.message()}"
+                                    "Submission Detail Response fail | ${response.message()}"
                                 )
                                 finish()
                             }
@@ -873,6 +1449,7 @@ class SubmissionDetailActivity : AppCompatActivity(),
                             call: Call<List<SubmissionDetailResponse>?>,
                             throwable: Throwable
                         ) {
+                            handler.removeCallbacks(runnable)
                             CustomToast.getInstance(applicationContext)
                                 .setBackgroundColor(
                                     ResourcesCompat.getColor(
@@ -892,6 +1469,7 @@ class SubmissionDetailActivity : AppCompatActivity(),
                         }
                     })
             } catch (exception: Exception) {
+                handler.removeCallbacks(runnable)
                 CustomToast.getInstance(applicationContext)
                     .setBackgroundColor(
                         ResourcesCompat.getColor(
@@ -1087,6 +1665,26 @@ class SubmissionDetailActivity : AppCompatActivity(),
                                             bottomSheet.show()
                                         }
                                     }
+                                } else {
+                                    CustomToast.getInstance(applicationContext)
+                                        .setBackgroundColor(
+                                            ResourcesCompat.getColor(
+                                                resources,
+                                                R.color.custom_toast_background_failed,
+                                                theme
+                                            )
+                                        )
+                                        .setFontColor(
+                                            ResourcesCompat.getColor(
+                                                resources, R.color.custom_toast_font_failed, theme
+                                            )
+                                        )
+                                        .setMessage("Something went wrong, please try again later")
+                                        .show()
+                                    Log.e(
+                                        "ERROR",
+                                        "Starconnect User Response null | ${response.message()}"
+                                    )
                                 }
                             } else {
                                 CustomToast.getInstance(applicationContext)
@@ -1104,7 +1702,7 @@ class SubmissionDetailActivity : AppCompatActivity(),
                                     .show()
                                 Log.e(
                                     "ERROR",
-                                    "Starconnect User Response null | ${response.message()}"
+                                    "Starconnect User Response fail | ${response.message()}"
                                 )
                             }
                         }
@@ -1902,14 +2500,206 @@ class SubmissionDetailActivity : AppCompatActivity(),
                     })
                 }
             }
+
         if (confirmationDialog.window != null)
             confirmationDialog.show()
     }
 
     override fun onMaterialEdited(data: ProgressItem) {
+        progressTrackingBottomSheet.dismiss()
+        activityResultLauncher.launch(
+            Intent(
+                this@SubmissionDetailActivity,
+                ProgressFormActivity::class.java
+            ).also {
+                with(it) {
+                    putExtra("data", data)
+                    putExtra("detail", detailData)
+                    putExtra("edit_material", true)
+                }
+            }
+        )
     }
 
     override fun onMaterialApproved(data: ProgressItem) {
+        val confirmationDialog =
+            ConfirmationDialog(
+                this@SubmissionDetailActivity,
+                "Are you sure you want to approve this progress materials?\n\nMake sure " +
+                        "your action are totally final before approving it!",
+                "Yes"
+            ).also {
+                with(it) {
+                    setConfirmationDialogListener(object :
+                        ConfirmationDialog.ConfirmationDialogListener {
+                        override fun onConfirm() {
+                            progressTrackingBottomSheet.dismiss()
+                            val loadingDialog = LoadingDialog(this@SubmissionDetailActivity)
+                            if (loadingDialog.window != null)
+                                loadingDialog.show()
+                            try {
+                                InitAPI.getAPI.approveMaterialAddition(
+                                    data.idGaprojectsDetail!!,
+                                    userData.id
+                                ).enqueue(object : Callback<GenericSimpleResponse> {
+                                    override fun onResponse(
+                                        call: Call<GenericSimpleResponse>,
+                                        response: Response<GenericSimpleResponse>
+                                    ) {
+                                        loadingDialog.dismiss()
+                                        if (response.isSuccessful) {
+                                            val result = response.body()
+                                            if (result != null) {
+                                                if (result.code == 1) {
+                                                    isUpdated = true
+                                                    CustomToast.getInstance(applicationContext)
+                                                        .setBackgroundColor(
+                                                            ResourcesCompat.getColor(
+                                                                resources,
+                                                                R.color.custom_toast_background_success,
+                                                                theme
+                                                            )
+                                                        )
+                                                        .setFontColor(
+                                                            ResourcesCompat.getColor(
+                                                                resources,
+                                                                R.color.custom_toast_font_success,
+                                                                theme
+                                                            )
+                                                        )
+                                                        .setMessage(
+                                                            "Progress material successfully " +
+                                                                    "approved!"
+                                                        ).show()
+                                                    init()
+                                                } else {
+                                                    CustomToast.getInstance(applicationContext)
+                                                        .setBackgroundColor(
+                                                            ResourcesCompat.getColor(
+                                                                resources,
+                                                                R.color.custom_toast_background_failed,
+                                                                theme
+                                                            )
+                                                        )
+                                                        .setFontColor(
+                                                            ResourcesCompat.getColor(
+                                                                resources,
+                                                                R.color.custom_toast_font_failed,
+                                                                theme
+                                                            )
+                                                        )
+                                                        .setMessage(
+                                                            "Failed to mark progress as done"
+                                                        )
+                                                        .show()
+                                                    Log.e(
+                                                        "ERROR ${response.code()}",
+                                                        "Approve Progress Materials Response code 0 | ${response.message()}"
+                                                    )
+                                                }
+                                            } else {
+                                                CustomToast.getInstance(applicationContext)
+                                                    .setBackgroundColor(
+                                                        ResourcesCompat.getColor(
+                                                            resources,
+                                                            R.color.custom_toast_background_failed,
+                                                            theme
+                                                        )
+                                                    )
+                                                    .setFontColor(
+                                                        ResourcesCompat.getColor(
+                                                            resources,
+                                                            R.color.custom_toast_font_failed,
+                                                            theme
+                                                        )
+                                                    )
+                                                    .setMessage("Failed to mark progress as done")
+                                                    .show()
+                                                Log.e(
+                                                    "ERROR ${response.code()}",
+                                                    "Approve Progress Materials Response null | ${response.message()}"
+                                                )
+                                            }
+                                        } else {
+                                            CustomToast.getInstance(applicationContext)
+                                                .setBackgroundColor(
+                                                    ResourcesCompat.getColor(
+                                                        resources,
+                                                        R.color.custom_toast_background_failed,
+                                                        theme
+                                                    )
+                                                )
+                                                .setFontColor(
+                                                    ResourcesCompat.getColor(
+                                                        resources,
+                                                        R.color.custom_toast_font_failed, theme
+                                                    )
+                                                )
+                                                .setMessage("Failed to mark progress as done")
+                                                .show()
+                                            Log.e(
+                                                "ERROR ${response.code()}",
+                                                "Approve Progress Materials Response Fail | ${response.message()}"
+                                            )
+                                        }
+                                    }
+
+                                    override fun onFailure(
+                                        call: Call<GenericSimpleResponse>, throwable: Throwable
+                                    ) {
+                                        loadingDialog.dismiss()
+                                        CustomToast.getInstance(applicationContext)
+                                            .setBackgroundColor(
+                                                ResourcesCompat.getColor(
+                                                    resources,
+                                                    R.color.custom_toast_background_failed,
+                                                    theme
+                                                )
+                                            )
+                                            .setFontColor(
+                                                ResourcesCompat.getColor(
+                                                    resources, R.color.custom_toast_font_failed,
+                                                    theme
+                                                )
+                                            )
+                                            .setMessage(
+                                                "Something went wrong, please try again later"
+                                            ).show()
+                                        throwable.printStackTrace()
+                                        Log.e(
+                                            "ERROR",
+                                            "Approve Progress Materials Failure | $throwable"
+                                        )
+                                    }
+                                })
+                            } catch (jsonException: JSONException) {
+                                loadingDialog.dismiss()
+                                CustomToast.getInstance(applicationContext)
+                                    .setBackgroundColor(
+                                        ResourcesCompat.getColor(
+                                            resources, R.color.custom_toast_background_failed, theme
+                                        )
+                                    )
+                                    .setFontColor(
+                                        ResourcesCompat.getColor(
+                                            resources, R.color.custom_toast_font_failed, theme
+                                        )
+                                    )
+                                    .setMessage("Something went wrong, please try again later")
+                                    .show()
+                                jsonException.printStackTrace()
+                                Log.e(
+                                    "ERROR",
+                                    "Approve Progress Materials Exception | $jsonException"
+                                )
+                            }
+                        }
+                    })
+                }
+            }
+
+        if (confirmationDialog.window != null)
+            confirmationDialog.show()
     }
 
     override fun reportTrialClicked(bottomSheet: TrialTrackingBottomSheet) {

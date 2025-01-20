@@ -47,6 +47,7 @@ class ProgressFormActivity : AppCompatActivity() {
     }
     private var detail: SubmissionDetailResponse? = null
     private var progressData: ProgressItem? = null
+    private var editMaterial: Boolean = false
     private var selectedMaterialsArrayList: ArrayList<MaterialListResponse> = ArrayList()
     private lateinit var materialAdapter: SelectedMaterialsRvAdapters
     private var materialQuantityList: ArrayList<Int> = ArrayList()
@@ -136,7 +137,7 @@ class ProgressFormActivity : AppCompatActivity() {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
                     intent.getParcelableExtra("detail", SubmissionDetailResponse::class.java)!!
                 } else {
-                    intent.getParcelableExtra("detail")!!
+                    @Suppress("DEPRECATION") intent.getParcelableExtra("detail")!!
                 }
             } catch (nullPointerException: NullPointerException) {
                 null
@@ -145,13 +146,25 @@ class ProgressFormActivity : AppCompatActivity() {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
                     intent.getParcelableExtra("data", ProgressItem::class.java)!!
                 } else {
-                    intent.getParcelableExtra("data")
+                    @Suppress("DEPRECATION") intent.getParcelableExtra("data")
                 }
             } catch (nullPointerException: NullPointerException) {
                 null
             }
 
             if (progressData != null) {
+                editMaterial = try {
+                    intent.getBooleanExtra("edit_material", false)
+                } catch (nullPointerException: NullPointerException) {
+                    false
+                }
+                if (editMaterial) {
+                    repairAnalysisField.isEnabled = false
+                    descriptionField.isEnabled = false
+                } else {
+                    repairAnalysisField.isEnabled = true
+                    descriptionField.isEnabled = true
+                }
                 progressActionText.text = "Save Edited Progress"
                 repairAnalysisField.setText(progressData?.analisa)
                 if (!progressData?.analisa.isNullOrEmpty())
@@ -339,7 +352,10 @@ class ProgressFormActivity : AppCompatActivity() {
                     } else {
                         if (prepareEditForm()) {
                             try {
-                                InitAPI.getAPI.editProgress(requestBodyMap)
+                                (if (editMaterial)
+                                    InitAPI.getAPI.editMaterialProgress(requestBodyMap)
+                                else
+                                    InitAPI.getAPI.editProgress(requestBodyMap))
                                     .enqueue(object : Callback<GenericSimpleResponse> {
                                         override fun onResponse(
                                             call: Call<GenericSimpleResponse>,
@@ -1189,12 +1205,16 @@ class ProgressFormActivity : AppCompatActivity() {
                     "id_gaprojects_detail",
                     createPartFromString(progressData?.idGaprojectsDetail.toString())!!
                 )
-                put(
-                    "analisa_perbaikan", createPartFromString(repairAnalysisField.text.toString())!!
-                )
-                put(
-                    "keterangan_perbaikan", createPartFromString(descriptionField.text.toString())!!
-                )
+                if (!editMaterial) {
+                    put(
+                        "analisa_perbaikan",
+                        createPartFromString(repairAnalysisField.text.toString())!!
+                    )
+                    put(
+                        "keterangan_perbaikan",
+                        createPartFromString(descriptionField.text.toString())!!
+                    )
+                }
                 if (selectedMaterialsArrayList.size > 1 && materialQuantityList.size > 1) {
                     for (i in 0 until selectedMaterialsArrayList.size - 1) {
                         put(

@@ -128,6 +128,24 @@ class SubmissionRvAdapter(val context: Context, val data: ArrayList<SubmissionLi
                         )
                     }
 
+                    22 -> {
+                        submissionStatus.setCardBackgroundColor(
+                            ResourcesCompat.getColor(
+                                context.resources,
+                                R.color.status_hold,
+                                context.theme
+                            )
+                        )
+                        submissionStatusText.text = "Hold"
+                        submissionStatusText.setTextColor(
+                            ResourcesCompat.getColor(
+                                context.resources,
+                                R.color.white,
+                                context.theme
+                            )
+                        )
+                    }
+
                     3 -> {
                         submissionStatus.setCardBackgroundColor(
                             ResourcesCompat.getColor(
