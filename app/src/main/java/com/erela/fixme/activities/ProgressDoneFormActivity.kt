@@ -141,6 +141,29 @@ class ProgressDoneFormActivity : AppCompatActivity() {
                 null
             }
 
+            backButton.setOnClickListener {
+                onBackPressedDispatcher.onBackPressed()
+            }
+
+            descriptionField.addTextChangedListener(object : TextWatcher {
+                override fun beforeTextChanged(
+                    s: CharSequence?, start: Int, count: Int, after: Int
+                ) {
+                }
+
+                override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                    if (s!!.isEmpty()) {
+                        descriptionFieldLayout.error = "Description can't be empty!"
+                        isFormEmpty[0] = false
+                    } else {
+                        descriptionFieldLayout.error = null
+                        isFormEmpty[0] = true
+                    }
+                }
+
+                override fun afterTextChanged(s: Editable?) {}
+            })
+
             chooseFileButton.setOnClickListener {
                 val bottomSheet = ChooseFileBottomSheet(this@ProgressDoneFormActivity).also {
                     with(it) {
@@ -452,29 +475,6 @@ class ProgressDoneFormActivity : AppCompatActivity() {
 
     private fun setManageAttachment() {
         binding.apply {
-            backButton.setOnClickListener {
-                onBackPressedDispatcher.onBackPressed()
-            }
-
-            descriptionField.addTextChangedListener(object : TextWatcher {
-                override fun beforeTextChanged(
-                    s: CharSequence?, start: Int, count: Int, after: Int
-                ) {
-                }
-
-                override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                    if (s!!.isEmpty()) {
-                        descriptionFieldLayout.error = "Description can't be empty!"
-                        isFormEmpty[0] = false
-                    } else {
-                        descriptionFieldLayout.error = null
-                        isFormEmpty[0] = true
-                    }
-                }
-
-                override fun afterTextChanged(s: Editable?) {}
-            })
-
             manageAttachmentButton.setOnClickListener {
                 val bottomSheet = ManagePhotoBottomSheet(
                     this@ProgressDoneFormActivity, imageArrayUri
