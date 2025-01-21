@@ -1,6 +1,5 @@
 package com.erela.fixme.activities
 
-import com.erela.fixme.R
 import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
@@ -12,12 +11,12 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import com.erela.fixme.R
 import com.erela.fixme.custom_views.CustomToast
 import com.erela.fixme.databinding.ActivityLoginBinding
-import com.erela.fixme.helpers.networking.InitAPI
 import com.erela.fixme.helpers.UserDataHelper
+import com.erela.fixme.helpers.networking.InitAPI
 import com.erela.fixme.objects.LoginResponse
-import com.erela.fixme.objects.UserData
 import com.google.android.material.snackbar.Snackbar
 import retrofit2.Call
 import retrofit2.Callback
@@ -27,7 +26,6 @@ class LoginActivity : AppCompatActivity() {
     private val binding: ActivityLoginBinding by lazy {
         ActivityLoginBinding.inflate(layoutInflater)
     }
-    private lateinit var userData: UserData
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -39,8 +37,6 @@ class LoginActivity : AppCompatActivity() {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
-
-        userData = UserDataHelper(this@LoginActivity).getUserData()
 
         init()
     }
@@ -111,7 +107,7 @@ class LoginActivity : AppCompatActivity() {
                             if (response.isSuccessful) {
                                 if (response.body() != null) {
                                     val result = response.body()
-                                    val name = result?.nama!!.toString().trimEnd()
+                                    val name = result?.nama!!.toString()
                                     when (response.body()?.code) {
                                         0 -> {
                                             CustomToast.getInstance(applicationContext)
@@ -148,12 +144,14 @@ class LoginActivity : AppCompatActivity() {
                                                 ).show()
                                             UserDataHelper(this@LoginActivity)
                                                 .setUserData(
-                                                    result.idUser!!.toInt(),
+                                                    result.idUser!!,
+                                                    result.idStarConnect!!,
                                                     username,
                                                     name,
-                                                    result.hakAkses!!.toInt(),
-                                                    result.idDept!!.toInt(),
-                                                    result.dept!!
+                                                    result.hakAkses!!,
+                                                    result.idDept!!,
+                                                    result.dept!!,
+                                                    result.subDept!!
                                                 )
                                             Handler(mainLooper).postDelayed({
                                                 CustomToast.getInstance(applicationContext)

@@ -13,6 +13,14 @@
     <string name="confirm">Confirm</string>
     <string name="ok">OK</string>
 
+    <string name="user_info_title">FixMe User Info</string>
+    <string name="name">Name</string>
+    <string name="id_starconnect">ID StarConnect</string>
+    <string name="fixme_username">FixMe Username</string>
+    <string name="privilege_access">Privilege Access</string>
+    <string name="department">Department</string>
+    <string name="sub_department">Sub-Department</string>
+
     <string name="notification_title">Notification / Inbox</string>
     <string name="inbox_sent">Sent</string>
     <string name="inbox_read">Read</string>

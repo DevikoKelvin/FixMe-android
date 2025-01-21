@@ -111,17 +111,28 @@
                 android:id="@+id/greetingText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="4dp"
                 android:textSize="16sp"
                 tools:text="@string/welcome_message" />
 
-            <TextView
-                android:id="@+id/usernameText"
-                android:layout_width="wrap_content"
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/userInfoButton"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textColor="@color/black"
-                android:textSize="20sp"
-                android:textStyle="bold"
-                tools:text="Hendrick!" />
+                app:cardBackgroundColor="@android:color/transparent"
+                app:cardCornerRadius="8dp"
+                app:cardElevation="0dp"
+                app:contentPadding="4dp">
+
+                <TextView
+                    android:id="@+id/usernameText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/black"
+                    android:textSize="20sp"
+                    android:textStyle="bold"
+                    tools:text="Hendrick!" />
+            </com.google.android.material.card.MaterialCardView>
         </LinearLayout>
 
         <LinearLayout

@@ -11,6 +11,7 @@ import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.erela.fixme.R
+import com.erela.fixme.bottom_sheets.UserInfoBottomSheet
 import com.erela.fixme.databinding.ActivityMainBinding
 import com.erela.fixme.dialogs.ConfirmationDialog
 import com.erela.fixme.helpers.PermissionHelper
@@ -61,7 +62,7 @@ class MainActivity : AppCompatActivity() {
                     startForegroundService(it)
                 }
             }
-            /*PushNotifications.addDeviceInterest("hello")*/
+
             when (userData.privilege) {
                 0 -> {
                     privilegeContainer.background = ContextCompat.getDrawable(
@@ -107,7 +108,7 @@ class MainActivity : AppCompatActivity() {
                             applicationContext, R
                                 .drawable.toolbar_background_technician
                         )
-                    privilegeText.text = "Technicians"
+                    privilegeText.text = "Technician"
                     privilegeText.setTextColor(
                         ContextCompat.getColor(
                             applicationContext, R.color.black
@@ -137,6 +138,14 @@ class MainActivity : AppCompatActivity() {
                 }
             }"
             usernameText.text = "${userData.name.trimEnd()}!"
+            userInfoButton.setOnClickListener {
+                UserInfoBottomSheet(this@MainActivity).also {
+                    with(it) {
+                        if (window != null)
+                            show()
+                    }
+                }
+            }
 
             notificationButton.setOnClickListener {
                 notificationAnimation.playAnimation()
