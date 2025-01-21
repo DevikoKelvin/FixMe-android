@@ -17,6 +17,7 @@
         <item name="bottomSheetStyle">@style/AppModalStyle</item>
         <item name="cornerSizeTopLeft">25dp</item>
         <item name="cornerSizeTopRight">25dp</item>
+        <item name="colorSecondary">@color/black</item>
     </style>
 
     <style name="AppModalStyle"
