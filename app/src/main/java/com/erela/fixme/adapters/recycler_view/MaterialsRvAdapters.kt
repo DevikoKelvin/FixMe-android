@@ -6,7 +6,6 @@ import android.view.ViewGroup
 import android.widget.CheckBox
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
-import com.erela.fixme.bottom_sheets.SelectMaterialsBottomSheet
 import com.erela.fixme.databinding.ListItemSelectionBinding
 import com.erela.fixme.objects.MaterialListResponse
 import com.erela.fixme.objects.SelectedMaterialList

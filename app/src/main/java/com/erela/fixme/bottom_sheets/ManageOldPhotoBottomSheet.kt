@@ -7,11 +7,9 @@ import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.erela.fixme.adapters.recycler_view.OldAttachmentProgressRvAdapter
 import com.erela.fixme.adapters.recycler_view.OldAttachmentSubmissionRvAdapter
 import com.erela.fixme.databinding.BsManagePhotoBinding
 import com.erela.fixme.objects.FotoGaprojectsItem
-import com.erela.fixme.objects.FotoItem
 import com.google.android.material.bottomsheet.BottomSheetDialog
 
 class ManageOldPhotoBottomSheet(context: Context) : BottomSheetDialog(context) {
@@ -60,28 +58,7 @@ class ManageOldPhotoBottomSheet(context: Context) : BottomSheetDialog(context) {
                 }
                 attachmentRv.adapter = submissionAdapter
                 attachmentRv.layoutManager = LinearLayoutManager(context)
-            } /*else {
-                progressAdapter =
-                    OldAttachmentProgressRvAdapter(context, imageArrayProgress!!).also {
-                        with(it) {
-                            onAttachmentItemActionListener(object :
-                                OldAttachmentProgressRvAdapter.OnAttachmentItemActionListener {
-                                override fun onDeleteOldPhoto(photo: FotoItem) {
-                                    imageArrayProgress!!.remove(photo)
-                                    progressAdapter.notifyDataSetChanged()
-                                    onProgressAttachmentActionListener.onDeleteOldPhoto(
-                                        photo
-                                    )
-                                    if (imageArrayProgress!!.isEmpty()) {
-                                        dismiss()
-                                    }
-                                }
-                            })
-                        }
-                    }
-                attachmentRv.adapter = progressAdapter
-                attachmentRv.layoutManager = LinearLayoutManager(context)
-            }*/
+            }
         }
     }
 
@@ -91,17 +68,7 @@ class ManageOldPhotoBottomSheet(context: Context) : BottomSheetDialog(context) {
         this.onSubmissionAttachmentActionListener = onSubmissionAttachmentActionListener
     }
 
-    /*fun setOnProgressAttachmentActionListener(
-        onProgressAttachmentActionListener: OnProgressAttachmentActionListener
-    ) {
-        this.onProgressAttachmentActionListener = onProgressAttachmentActionListener
-    }*/
-
     interface OnSubmissionAttachmentActionListener {
         fun onDeleteOldPhoto(fotoGaProjectsItem: FotoGaprojectsItem)
     }
-
-    /*interface OnProgressAttachmentActionListener {
-        fun onDeleteOldPhoto(photo: FotoItem)
-    }*/
 }

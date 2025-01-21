@@ -63,8 +63,6 @@ class SubmissionFormActivity : AppCompatActivity() {
     }
     private var detail: SubmissionDetailResponse? = null
     private var selectedDept: DepartmentListResponse? = null
-    /*private var selectedMaterialsArrayList: ArrayList<MaterialListResponse> = ArrayList()
-    private lateinit var materialAdapter: SelectedMaterialsRvAdapters*/
     private var selectedCategory: Int = 0
     private var selectedDepartment: Int = 0
     private val imageArrayUri = ArrayList<Uri>()

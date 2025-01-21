@@ -3,7 +3,6 @@ package com.erela.fixme.objects
 import android.os.Parcelable
 import com.google.gson.annotations.SerializedName
 import kotlinx.parcelize.Parcelize
-import java.io.Serial
 
 @Parcelize
 data class SubmissionDetailResponse(

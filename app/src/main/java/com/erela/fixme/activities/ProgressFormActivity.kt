@@ -52,13 +52,6 @@ class ProgressFormActivity : AppCompatActivity() {
     private lateinit var materialAdapter: SelectedMaterialsRvAdapters
     private var materialQuantityList: ArrayList<Int> = ArrayList()
     private var oldMaterialCount: Int = 0
-
-    /*private val imageArrayUri = ArrayList<Uri>()
-    private val oldImageArray = ArrayList<FotoItem>()
-    private var deletedOldImageArray: ArrayList<Int> = ArrayList()
-    private var cameraCaptureFileName: String = ""
-    private lateinit var imageUri: Uri
-    private val photoFiles: ArrayList<MultipartBody.Part?> = ArrayList()*/
     private val requestBodyMap: MutableMap<String, RequestBody> = mutableMapOf()
     private val requestBodyMapMaterial: MutableMap<String, RequestBody> = mutableMapOf()
     private var isFormEmpty = arrayOf(
@@ -66,52 +59,6 @@ class ProgressFormActivity : AppCompatActivity() {
         false
     )
 
-    /*private val cameraLauncher: ActivityResultLauncher<Intent> = registerForActivityResult(
-        ActivityResultContracts.StartActivityForResult()
-    ) {
-        with(it) {
-            if (resultCode == RESULT_OK) {
-                if (imageArrayUri.isEmpty()) {
-                    imageArrayUri.add(imageUri)
-                } else {
-                    if (!imageArrayUri.contains(imageUri))
-                        imageArrayUri.add(imageUri)
-                }
-                setManageAttachment()
-            }
-        }
-    }
-    private val galleryLauncher: ActivityResultLauncher<Intent> = registerForActivityResult(
-        ActivityResultContracts.StartActivityForResult()
-    ) {
-        with(it) {
-            if (resultCode == RESULT_OK) {
-                if (data?.clipData != null) {
-                    val mClipData: ClipData = data!!.clipData!!
-                    for (i in 0 until mClipData.itemCount) {
-                        val imageUrl: Uri = mClipData.getItemAt(i).uri
-                        if (imageArrayUri.isEmpty())
-                            imageArrayUri.add(imageUrl)
-                        else {
-                            if (!imageArrayUri.contains(imageUrl))
-                                imageArrayUri.add(imageUrl)
-                        }
-                    }
-                } else {
-                    val imageUrl: Uri? = data?.data
-                    if (imageUrl != null) {
-                        if (imageArrayUri.isEmpty())
-                            imageArrayUri.add(imageUrl)
-                        else {
-                            if (!imageArrayUri.contains(imageUrl))
-                                imageArrayUri.add(imageUrl)
-                        }
-                    }
-                }
-                setManageAttachment()
-            }
-        }
-    }*/
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
@@ -189,37 +136,6 @@ class ProgressFormActivity : AppCompatActivity() {
                         materialQuantityList.add(progressData?.material!![i]?.qtyMaterial!!)
                     }
                 }
-                /*if (progressData?.foto!!.isNotEmpty()) {
-                    manageAttachmentText.text = getString(R.string.manage_new_photo)
-                    for (photo in progressData?.foto!!) {
-                        if (photo != null) {
-                            oldImageArray.add(photo)
-                        }
-                    }
-                }
-                if (oldImageArray.isNotEmpty()) {
-                    manageOldAttachmentButton.visibility = View.VISIBLE
-                    manageOldAttachmentButton.setOnClickListener {
-                        val bottomSheet = ManageOldPhotoBottomSheet(
-                            this@ProgressFormActivity, oldImageArray
-                        ).also {
-                            with(it) {
-                                setOnProgressAttachmentActionListener(object :
-                                    ManageOldPhotoBottomSheet.OnProgressAttachmentActionListener {
-                                    override fun onDeleteOldPhoto(photo: FotoItem) {
-                                        deletedOldImageArray.add(photo.idFoto!!)
-                                        oldImageArray.remove(photo)
-                                        if (oldImageArray.isEmpty())
-                                            manageOldAttachmentButton.visibility = View.GONE
-                                    }
-                                })
-                            }
-                        }
-
-                        if (bottomSheet.window != null)
-                            bottomSheet.show()
-                    }
-                }*/
             }
 
             prepareMaterials()
@@ -260,73 +176,6 @@ class ProgressFormActivity : AppCompatActivity() {
 
                 override fun afterTextChanged(s: Editable?) {}
             })
-            /*chooseFileButton.setOnClickListener {
-                val bottomSheet = ChooseFileBottomSheet(this@ProgressFormActivity).also {
-                    with(it) {
-                        setOnChooseFileListener(object :
-                            ChooseFileBottomSheet.OnChooseFileListener {
-                            override fun onOpenCameraClicked() {
-                                if (PermissionHelper.isPermissionGranted(
-                                        this@ProgressFormActivity,
-                                        PermissionHelper.CAMERA
-                                    )
-                                ) {
-                                    openCamera()
-                                } else {
-                                    PermissionHelper.requestPermission(
-                                        this@ProgressFormActivity,
-                                        arrayOf(PermissionHelper.CAMERA),
-                                        PermissionHelper.REQUEST_CODE_CAMERA
-                                    )
-                                }
-                                dismiss()
-                            }
-
-                            override fun onOpenGalleryClicked() {
-                                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-                                    if (PermissionHelper.isPermissionGranted(
-                                            this@ProgressFormActivity,
-                                            PermissionHelper.READ_MEDIA_IMAGES
-                                        ) || PermissionHelper.isPermissionGranted(
-                                            this@ProgressFormActivity,
-                                            PermissionHelper.READ_MEDIA_VIDEO
-                                        )
-                                    ) {
-                                        openGallery()
-                                    } else {
-                                        PermissionHelper.requestPermission(
-                                            this@ProgressFormActivity,
-                                            arrayOf(
-                                                PermissionHelper.READ_MEDIA_IMAGES,
-                                                PermissionHelper.READ_MEDIA_VIDEO
-                                            ),
-                                            PermissionHelper.REQUEST_CODE_GALLERY
-                                        )
-                                    }
-                                } else {
-                                    if (PermissionHelper.isPermissionGranted(
-                                            this@ProgressFormActivity,
-                                            PermissionHelper.READ_EXTERNAL_STORAGE
-                                        )
-                                    ) {
-                                        openGallery()
-                                    } else {
-                                        PermissionHelper.requestPermission(
-                                            this@ProgressFormActivity,
-                                            arrayOf(PermissionHelper.READ_EXTERNAL_STORAGE),
-                                            PermissionHelper.REQUEST_CODE_GALLERY
-                                        )
-                                    }
-                                }
-                                dismiss()
-                            }
-                        })
-                    }
-                }
-
-                if (bottomSheet.window != null)
-                    bottomSheet.show()
-            }*/
 
             progressActionButton.setOnClickListener {
                 loadingBar.visibility = View.VISIBLE
@@ -1051,67 +900,6 @@ class ProgressFormActivity : AppCompatActivity() {
         }
     }
 
-    /*private fun setManageAttachment() {
-        binding.apply {
-            manageAttachmentButton.setOnClickListener {
-                val bottomSheet = ManagePhotoBottomSheet(
-                    this@ProgressFormActivity, imageArrayUri
-                ).also {
-                    with(it) {
-                        setOnAttachmentActionListener(object :
-                            ManagePhotoBottomSheet.OnAttachmentActionListener {
-                            override fun onDeletePhoto(uri: Uri) {
-                                imageArrayUri.remove(uri)
-                                if (imageArrayUri.isEmpty()) {
-                                    manageAttachmentButton.visibility = View.GONE
-                                }
-                            }
-                        })
-                    }
-                }
-
-                if (bottomSheet.window != null)
-                    bottomSheet.show()
-            }
-            if (imageArrayUri.isNotEmpty()) {
-                manageAttachmentButton.visibility = View.VISIBLE
-            } else {
-                manageAttachmentButton.visibility = View.GONE
-            }
-        }
-    }
-
-    private fun openGallery() {
-        galleryLauncher.launch(
-            Intent().also {
-                it.type = "image*//*"
-                it.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true)
-                it.action = Intent.ACTION_GET_CONTENT
-            }
-        )
-    }
-
-    private fun openCamera() {
-        val timeStamp = SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(Date())
-        cameraCaptureFileName = "FixMe_Capture_$timeStamp.jpg"
-        imageUri = contentResolver.insert(
-            MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
-            ContentValues().also {
-                with(it) {
-                    put(MediaStore.Images.Media.TITLE, cameraCaptureFileName)
-                    put(MediaStore.Images.Media.DESCRIPTION, "Image capture by camera")
-                }
-            }
-        )!!
-
-        cameraLauncher.launch(
-            Intent(MediaStore.ACTION_IMAGE_CAPTURE).also {
-                with(it) {
-                    putExtra(MediaStore.EXTRA_OUTPUT, imageUri)
-                }
-            }
-        )
-    }*/
     private fun formCheck(): Boolean {
         var validated = 0
         binding.apply {
@@ -1148,13 +936,6 @@ class ProgressFormActivity : AppCompatActivity() {
 
     private fun prepareSubmitForm(): Boolean {
         binding.apply {
-            /*if (imageArrayUri.isNotEmpty()) {
-                for (element in imageArrayUri) {
-                    photoFiles.add(
-                        createMultipartBody(element)
-                    )
-                }
-            }*/
             with(requestBodyMap) {
                 put("id_user", createPartFromString(userData.id.toString())!!)
                 put("id_gaprojects", createPartFromString(detail?.idGaprojects.toString())!!)
@@ -1180,24 +961,10 @@ class ProgressFormActivity : AppCompatActivity() {
         }
 
         return requestBodyMap.isNotEmpty()
-        /*return if (requestBodyMap.isNotEmpty()) {
-            if (photoFiles.isNotEmpty())
-                true
-            else
-                true
-        } else
-            false*/
     }
 
     private fun prepareEditForm(): Boolean {
         binding.apply {
-            /*if (imageArrayUri.isNotEmpty()) {
-                for (element in imageArrayUri) {
-                    photoFiles.add(
-                        createMultipartBody(element)
-                    )
-                }
-            }*/
             with(requestBodyMap) {
                 put("id_user", createPartFromString(userData.id.toString())!!)
                 put("id_gaprojects", createPartFromString(progressData?.idGaprojects.toString())!!)
@@ -1227,80 +994,12 @@ class ProgressFormActivity : AppCompatActivity() {
                         )
                     }
                 }
-                /*if (deletedOldImageArray.isNotEmpty()) {
-                    for (element in deletedOldImageArray) {
-                        put(
-                            "foto_old[]",
-                            createPartFromString(
-                                element.toString()
-                            )!!
-                        )
-                    }
-                }*/
             }
         }
 
         return requestBodyMap.isNotEmpty()
-        /*return if (requestBodyMap.isNotEmpty()) {
-            if (photoFiles.isNotEmpty())
-                true
-            else
-                true
-        } else
-            false*/
     }
 
-    /*private fun createMultipartBody(uri: Uri): MultipartBody.Part? {
-        return try {
-            val file = File(getRealPathFromURI(uri)!!)
-            val requestBody = file.asRequestBody("image*//*".toMediaTypeOrNull())
-            MultipartBody.Part.createFormData("foto[]", file.name, requestBody)
-        } catch (e: Exception) {
-            Log.e("createMultipartBody", "Error creating MultipartBody.Part", e)
-            null
-        }
-    }*/
-    /*private fun getRealPathFromURI(uri: Uri): String? {
-        val contentResolver = contentResolver
-        val fileName = getFileName(contentResolver, uri)
-
-        if (fileName != null) {
-            val file = File(cacheDir, fileName)
-            try {
-                val inputStream = contentResolver.openInputStream(uri)
-                val outputStream = FileOutputStream(file)
-                val buffer = ByteArray(4 * 1024)
-                var read: Int
-
-                while (inputStream!!.read(buffer).also { read = it } != -1) {
-                    outputStream.write(buffer, 0, read)
-                }
-
-                outputStream.flush()
-                outputStream.close()
-                inputStream.close()
-
-                return file.absolutePath
-            } catch (e: IOException) {
-                Log.e("getRealPathFromURI", "Error: ${e.message}")
-            }
-        }
-
-        return null
-    }*/
-    /*private fun getFileName(contentResolver: ContentResolver, uri: Uri): String? {
-        val cursor = contentResolver.query(uri, null, null, null, null)
-        if (cursor != null && cursor.moveToFirst()) {
-            val displayNameIndex = cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME)
-            if (displayNameIndex != -1) {
-                val fileName = cursor.getString(displayNameIndex)
-                cursor.close()
-                return fileName
-            }
-        }
-        cursor?.close()
-        return null
-    }*/
     private fun createPartFromString(stringData: String?): RequestBody? {
         return stringData?.toRequestBody("text/plain".toMediaTypeOrNull())
     }

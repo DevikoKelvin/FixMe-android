@@ -35,11 +35,11 @@ class SelectedMaterialsRvAdapters(
         holder: ViewHolder,
         position: Int
     ) {
-        val item = selectedMaterialsArrayList[position]
+        val item = selectedMaterialsArrayList[holder.adapterPosition]
         with(holder) {
             binding.apply {
                 itemText.text = item.namaMaterial
-                if (position == selectedMaterialsArrayList.size - 1) {
+                if (adapterPosition == selectedMaterialsArrayList.size - 1) {
                     amountText.visibility = View.GONE
                     mainContainer.setCardBackgroundColor(
                         ContextCompat.getColor(
@@ -57,19 +57,19 @@ class SelectedMaterialsRvAdapters(
                     )
                 }
                 amountText.text = if (materialQuantityList.isNotEmpty())
-                    "(${materialQuantityList[position]})"
+                    "(${materialQuantityList[adapterPosition]})"
                 else
                     ""
-                if (position == selectedMaterialsArrayList.size - 1) {
+                if (adapterPosition == selectedMaterialsArrayList.size - 1) {
                     deleteButton.visibility = View.GONE
                 } else {
                     deleteButton.visibility = View.VISIBLE
                 }
                 deleteButton.setOnClickListener {
-                    onMaterialsSetListener.onMaterialsUnselected(item, position)
+                    onMaterialsSetListener.onMaterialsUnselected(item, adapterPosition)
                 }
                 itemView.setOnClickListener {
-                    if (position == selectedMaterialsArrayList.size - 1) {
+                    if (adapterPosition == selectedMaterialsArrayList.size - 1) {
                         val bottomSheet =
                             SelectMaterialsBottomSheet(
                                 context,
@@ -86,14 +86,14 @@ class SelectedMaterialsRvAdapters(
                     } else {
                         val bottomSheet =
                             MaterialQuantityBottomSheet(
-                                context, item.namaMaterial!!, materialQuantityList[position]
+                                context, item.namaMaterial!!, materialQuantityList[adapterPosition]
                             ).also {
                                 with(it) {
                                     setOnQuantityConfirmListener(object :
                                         MaterialQuantityBottomSheet.OnQuantityConfirmListener {
                                         override fun onQuantityConfirm(quantity: Int) {
                                             onMaterialsSetListener.onMaterialsQuantityEdited(
-                                                quantity, position
+                                                quantity, adapterPosition
                                             )
                                         }
 
