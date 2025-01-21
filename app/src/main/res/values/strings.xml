@@ -103,6 +103,7 @@
     <string name="mark_progress_done_title">Mark Progress as Done</string>
 
     <string name="repair_analysis">Repair Analysis</string>
+    <string name="progress_result_description">Progress Result Description</string>
     <string name="materials_hint">Tap \"×\" to delete item.\nTap the item to edit the quantity of the item.\nTap \"+\" to add a material item.</string>
 
     <string name="hold_issue_description_title">Why do you want to hold this issue?</string>

@@ -171,6 +171,11 @@ class ProgressRvAdapter(
                         imageContainer.visibility = View.GONE
                         circleIndicator.visibility = View.GONE
                     }
+                    progressResultDescription.text = if (item.progress.keteranganApprove != "null" || item.progress.keteranganApprove != null) {
+                        item.progress.keteranganApprove
+                    } else {
+                        "No remarks"
+                    }
                 }
 
                 imageCarouselHolder.setOnLongClickListener {

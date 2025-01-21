@@ -36,7 +36,7 @@
             android:textColor="@color/black"
             android:textSize="14sp"
             android:textStyle="bold"
-            tools:text="Progress Description" />
+            tools:text="Progress Analysis" />
 
         <TextView
             android:id="@+id/progressDescription"
@@ -73,9 +73,9 @@
             android:id="@+id/materialApprovedStatus"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingHorizontal="16dp"
             android:layout_marginBottom="8dp"
             android:orientation="horizontal"
+            android:paddingHorizontal="16dp"
             tools:ignore="UseCompoundDrawables">
 
             <ImageView
@@ -154,6 +154,26 @@
                 app:ci_drawable="@drawable/circle_indicator_color"
                 app:ci_height="5dp"
                 app:ci_width="5dp" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:paddingHorizontal="16dp"
+                android:text="@string/progress_result_description"
+                android:textColor="@color/black"
+                android:textSize="14sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/progressResultDescription"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
+                android:paddingHorizontal="16dp"
+                android:textColor="@color/black"
+                android:textSize="12sp"
+                tools:text="Description" />
         </LinearLayout>
 
         <com.google.android.material.card.MaterialCardView

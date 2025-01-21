@@ -1,7 +1,7 @@
 [versions]
 # Plugins
 agp = "8.7.3"
-kotlin = "1.9.24"
+kotlin = "2.1.0"
 googleServices = "4.4.2"
 
 # Dependencies
@@ -11,13 +11,13 @@ junitVersion = "1.2.1"
 espressoCore = "3.6.1"
 appcompat = "1.7.0"
 material = "1.12.0"
-activity = "1.9.3"
+activity = "1.10.0"
 constraintlayout = "2.2.0"
 
 # Third-party Dependencies
 firebaseCore = "21.1.1"
-firebaseBom = "33.7.0"
-firebaseAnalytic="22.1.2"
+firebaseBom = "33.8.0"
+firebaseAnalytic="22.2.0"
 firebaseIid="21.1.0"
 retrofit = "2.11.0"
 okhttp3 = "5.0.0-alpha.14"

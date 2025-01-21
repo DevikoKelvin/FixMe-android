@@ -152,7 +152,7 @@ class ProgressDoneFormActivity : AppCompatActivity() {
                 }
 
                 override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                    if (s!!.isEmpty()) {
+                    if (s!!.toString().isEmpty()) {
                         descriptionFieldLayout.error = "Description can't be empty!"
                         isFormEmpty[0] = false
                     } else {
@@ -539,11 +539,13 @@ class ProgressDoneFormActivity : AppCompatActivity() {
     private fun formCheck(): Boolean {
         var validated = 0
         binding.apply {
-            if (photoFiles.isEmpty())
-                isFormEmpty[1] = false
+            isFormEmpty[1] = imageArrayUri.isNotEmpty()
             for (element in isFormEmpty) {
                 if (element)
                     validated++
+            }
+            for (i in isFormEmpty.indices) {
+                Log.e("Form [$i]", isFormEmpty[i].toString())
             }
             if (descriptionField.text.toString().isEmpty())
                 descriptionFieldLayout.error = "Description can't be empty!"
@@ -555,9 +557,9 @@ class ProgressDoneFormActivity : AppCompatActivity() {
     private fun prepareSubmitForm(): Boolean {
         binding.apply {
             if (imageArrayUri.isNotEmpty()) {
-                for (element in imageArrayUri) {
+                for (i in 0 until imageArrayUri.size) {
                     photoFiles.add(
-                        createMultipartBody(element)
+                        createMultipartBody(imageArrayUri[i], "foto[$i]")
                     )
                 }
             }
@@ -572,11 +574,11 @@ class ProgressDoneFormActivity : AppCompatActivity() {
         return requestBodyMap.isNotEmpty()
     }
 
-    private fun createMultipartBody(uri: Uri): MultipartBody.Part? {
+    private fun createMultipartBody(uri: Uri, partName: String): MultipartBody.Part? {
         return try {
             val file = File(getRealPathFromURI(uri)!!)
             val requestBody = file.asRequestBody("image/*".toMediaTypeOrNull())
-            MultipartBody.Part.createFormData("foto[]", file.name, requestBody)
+            MultipartBody.Part.createFormData(partName, file.name, requestBody)
         } catch (e: Exception) {
             Log.e("createMultipartBody", "Error creating MultipartBody.Part", e)
             null
