@@ -54,7 +54,8 @@ class TrialRvAdapter(
                         )
                     }
                     usernameText.text = detail.namaUserBuat?.trimEnd()
-                    progressDescription.text = item.keterangan
+                    progressAnalysis.text = item.keterangan
+                    progressDescription.visibility = View.GONE
                     dateTimeText.text = item.tglWaktu
                     imageContainer.visibility = View.GONE
                     circleIndicator.visibility = View.GONE

@@ -57,7 +57,8 @@
             android:text="@string/materials"
             android:textColor="@color/black"
             android:textSize="14sp"
-            android:textStyle="bold" />
+            android:textStyle="bold"
+            android:visibility="gone" />
 
         <TextView
             android:id="@+id/materialList"
@@ -67,6 +68,7 @@
             android:paddingHorizontal="16dp"
             android:textColor="@color/black"
             android:textSize="12sp"
+            android:visibility="gone"
             tools:text="No materials needed" />
 
         <LinearLayout
@@ -76,6 +78,7 @@
             android:layout_marginBottom="8dp"
             android:orientation="horizontal"
             android:paddingHorizontal="16dp"
+            android:visibility="gone"
             tools:ignore="UseCompoundDrawables">
 
             <ImageView
@@ -181,6 +184,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="4dp"
+            android:visibility="gone"
             app:cardBackgroundColor="@android:color/transparent"
             app:cardCornerRadius="0dp"
             app:cardElevation="0dp"

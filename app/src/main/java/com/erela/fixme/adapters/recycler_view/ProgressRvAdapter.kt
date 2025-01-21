@@ -74,6 +74,8 @@ class ProgressRvAdapter(
                             }
                         }
                     }
+                    materialTitle.visibility = View.VISIBLE
+                    materialList.visibility = View.VISIBLE
                     val materials = item.progress.material
                     if (materials != null) {
                         if (materials.isNotEmpty()) {
@@ -170,11 +172,12 @@ class ProgressRvAdapter(
                         imageContainer.visibility = View.GONE
                         circleIndicator.visibility = View.GONE
                     }
-                    progressResultDescription.text = if (item.progress.keteranganApprove != "null" || item.progress.keteranganApprove != null) {
-                        item.progress.keteranganApprove
-                    } else {
-                        "No remarks"
-                    }
+                    progressResultDescription.text =
+                        if (item.progress.keteranganApprove != "null" || item.progress.keteranganApprove != null) {
+                            item.progress.keteranganApprove
+                        } else {
+                            "No remarks"
+                        }
                 }
 
                 imageCarouselHolder.setOnLongClickListener {
