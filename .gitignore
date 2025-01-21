@@ -17,3 +17,4 @@ local.properties
 keystore.jks
 FixMe Keystore.txt
 /app/release
+/app/google-services.json
