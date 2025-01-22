@@ -37,7 +37,6 @@ import com.erela.fixme.helpers.networking.InitAPI
 import com.erela.fixme.objects.FotoGaprojectsItem
 import com.erela.fixme.objects.GenericSimpleResponse
 import com.erela.fixme.objects.ProgressItem
-import com.erela.fixme.objects.StarconnectUserResponse
 import com.erela.fixme.objects.SubmissionDetailResponse
 import com.erela.fixme.objects.UserData
 import com.skydoves.balloon.ArrowPositionRules
