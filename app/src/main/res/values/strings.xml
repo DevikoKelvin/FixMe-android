@@ -74,6 +74,7 @@
     <string name="machine_code">Machine Code</string>
     <string name="machine_name">Machine Name</string>
     <string name="reported_by">Reported by:</string>
+    <string name="department_from">From:</string>
 
     <string name="submission_detail_title">Submission Detail</string>
     <string name="submission_description">Description</string>

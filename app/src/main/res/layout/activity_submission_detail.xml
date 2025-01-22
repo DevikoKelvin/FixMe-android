@@ -286,6 +286,7 @@
                     <ImageView
                         android:layout_width="21dp"
                         android:layout_height="21dp"
+                        android:layout_gravity="center"
                         android:src="@drawable/baseline_account_circle_24"
                         tools:ignore="ContentDescription" />
 
@@ -296,7 +297,7 @@
                         android:layout_marginStart="8dp"
                         android:layout_weight="1"
                         android:textColor="@color/black"
-                        tools:text="Hendrick" />
+                        tools:text="Hendrick\nFrom Information Technology Department" />
                 </LinearLayout>
 
                 <LinearLayout

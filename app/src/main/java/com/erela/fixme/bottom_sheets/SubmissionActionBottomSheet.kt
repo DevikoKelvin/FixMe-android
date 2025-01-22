@@ -1,16 +1,24 @@
 package com.erela.fixme.bottom_sheets
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.view.View
 import android.view.ViewGroup
+import com.erela.fixme.R
 import com.erela.fixme.databinding.BsSubmissionActionBinding
 import com.erela.fixme.helpers.UserDataHelper
 import com.erela.fixme.objects.SubmissionDetailResponse
 import com.erela.fixme.objects.UserData
 import com.google.android.material.bottomsheet.BottomSheetDialog
+import com.skydoves.balloon.ArrowPositionRules
+import com.skydoves.balloon.Balloon
+import com.skydoves.balloon.BalloonAnimation
+import com.skydoves.balloon.BalloonSizeSpec
+import com.skydoves.balloon.showAlignBottom
+import com.skydoves.balloon.showAlignTop
 
 class SubmissionActionBottomSheet(context: Context, val data: SubmissionDetailResponse) :
     BottomSheetDialog(context), UpdateStatusBottomSheet.OnUpdateSuccessListener {
@@ -33,6 +41,7 @@ class SubmissionActionBottomSheet(context: Context, val data: SubmissionDetailRe
         init()
     }
 
+    @SuppressLint("SetTextI18n")
     private fun init() {
         binding.apply {
             when (data.stsGaprojects) {
@@ -77,6 +86,27 @@ class SubmissionActionBottomSheet(context: Context, val data: SubmissionDetailRe
                     approveButton.visibility = View.VISIBLE
                     rejectButton.visibility = View.VISIBLE
                     deployTechButton.visibility = View.GONE
+                    reportManagerApprovalMessageContainer.visibility = View.VISIBLE
+                    reportManagerApprovalMessage.text =
+                        "Report was approved by ${data.namaUserPelaporApprove}\nClick to see message"
+                    reportManagerApprovalMessageContainer.setOnClickListener {
+                        val balloon = Balloon.Builder(context).also {
+                            with(it) {
+                                setHeight(BalloonSizeSpec.WRAP)
+                                setText(data.keteranganPelaporApprove.toString())
+                                setTextColorResource(R.color.custom_toast_font_success)
+                                setTextSize(14f)
+                                setArrowPositionRules(ArrowPositionRules.ALIGN_ANCHOR)
+                                setArrowSize(10)
+                                setPadding(12)
+                                setCornerRadius(8f)
+                                setBackgroundColorResource(R.color.custom_toast_background_success)
+                                setBalloonAnimation(BalloonAnimation.FADE)
+                                setLifecycleOwner(lifecycleOwner)
+                            }
+                        }.build()
+                        reportManagerApprovalMessageContainer.showAlignTop(balloon, 0, 0)
+                    }
                     approveButton.setOnClickListener {
                         val bottomSheet =
                             UpdateStatusBottomSheet(

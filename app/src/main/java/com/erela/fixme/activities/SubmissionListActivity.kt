@@ -212,6 +212,8 @@ class SubmissionListActivity : AppCompatActivity(), SubmissionRvAdapter.OnSubmis
     private fun getSubmissionList() {
         binding.apply {
             loadingBar.visibility = View.VISIBLE
+            filterListButton.visibility = View.GONE
+            emptyListContainer.visibility = View.GONE
             try {
                 if (selectedDepartment != "") {
                     InitAPI.getAPI.getSubmissionList(userData.id, selectedDepartment)
@@ -225,8 +227,12 @@ class SubmissionListActivity : AppCompatActivity(), SubmissionRvAdapter.OnSubmis
                                 if (response.isSuccessful) {
                                     if (response.body() != null) {
                                         if (firstInit) {
-                                            filterList(response.body(), SubmissionListFilterBottomSheet.ON_PROGRESS)
-                                            selectedFilter = SubmissionListFilterBottomSheet.ON_PROGRESS
+                                            filterList(
+                                                response.body(),
+                                                SubmissionListFilterBottomSheet.ON_PROGRESS
+                                            )
+                                            selectedFilter =
+                                                SubmissionListFilterBottomSheet.ON_PROGRESS
                                             firstInit = false
                                         } else
                                             filterList(response.body(), selectedFilter)
@@ -330,42 +336,52 @@ class SubmissionListActivity : AppCompatActivity(), SubmissionRvAdapter.OnSubmis
                         text = "None"
                         setTextColor(getColor(R.color.black))
                     }
+
                     0 -> {
                         text = "Rejected"
                         setTextColor(getColor(R.color.status_rejected))
                     }
+
                     1 -> {
                         text = "Pending"
                         setTextColor(getColor(R.color.status_pending))
                     }
+
                     11 -> {
                         text = "Waiting"
                         setTextColor(getColor(R.color.status_waiting))
                     }
+
                     2 -> {
                         text = "Approved"
                         setTextColor(getColor(R.color.status_approved))
                     }
+
                     22 -> {
                         text = "Hold"
                         setTextColor(getColor(R.color.status_hold))
                     }
+
                     3 -> {
                         text = "On Progress"
                         setTextColor(getColor(R.color.status_on_progress))
                     }
+
                     30 -> {
                         text = "Progress Done"
                         setTextColor(getColor(R.color.status_progress_done))
                     }
+
                     31 -> {
                         text = "On Trial"
                         setTextColor(getColor(R.color.status_on_trial))
                     }
+
                     4 -> {
                         text = "Done"
                         setTextColor(getColor(R.color.status_done))
                     }
+
                     5 -> {
                         text = "Canceled"
                         setTextColor(getColor(R.color.custom_toast_font_failed))

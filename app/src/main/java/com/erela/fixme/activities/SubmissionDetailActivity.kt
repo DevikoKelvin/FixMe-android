@@ -11,6 +11,7 @@ import android.view.View
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.annotation.ColorRes
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
@@ -39,6 +40,11 @@ import com.erela.fixme.objects.ProgressItem
 import com.erela.fixme.objects.StarconnectUserResponse
 import com.erela.fixme.objects.SubmissionDetailResponse
 import com.erela.fixme.objects.UserData
+import com.skydoves.balloon.ArrowPositionRules
+import com.skydoves.balloon.Balloon
+import com.skydoves.balloon.BalloonAnimation
+import com.skydoves.balloon.BalloonSizeSpec
+import com.skydoves.balloon.showAlignTop
 import org.json.JSONException
 import retrofit2.Call
 import retrofit2.Callback
@@ -249,6 +255,7 @@ class SubmissionDetailActivity : AppCompatActivity(),
                                         }
                                     }
                                     when (detailData.stsGaprojects) {
+                                        // Rejected
                                         0 -> {
                                             submissionStatus.setCardBackgroundColor(
                                                 ResourcesCompat.getColor(
@@ -263,6 +270,15 @@ class SubmissionDetailActivity : AppCompatActivity(),
                                             onProgressButton.visibility = View.GONE
                                             messageProgressAndTrialButtonContainer.visibility =
                                                 View.VISIBLE
+                                            statusMessageContainer.setOnClickListener {
+                                                statusMessageContainer.showAlignTop(
+                                                    createBalloonOverlay(
+                                                        "Reason: ${detailData.keteranganReject}",
+                                                        R.color.custom_toast_background_normal_dark_gray,
+                                                        R.color.custom_toast_font_normal_soft_gray
+                                                    ), 0, 0
+                                                )
+                                            }
                                             statusMessageContainer.visibility = View.VISIBLE
                                             statusMessageContainer.setCardBackgroundColor(
                                                 ContextCompat.getColor(
@@ -271,7 +287,7 @@ class SubmissionDetailActivity : AppCompatActivity(),
                                                 )
                                             )
                                             statusMessage.text =
-                                                "Rejected by ${detailData.nameUserReject?.trimEnd()}"
+                                                "Rejected by ${detailData.nameUserReject?.trimEnd()}\nClick to see reason"
                                             statusMessage.setTextColor(
                                                 ContextCompat.getColor(
                                                     this@SubmissionDetailActivity,
@@ -305,7 +321,31 @@ class SubmissionDetailActivity : AppCompatActivity(),
                                             submissionStatusText.text = "Waiting"
                                             onProgressButton.visibility = View.GONE
                                             messageProgressAndTrialButtonContainer.visibility =
-                                                View.GONE
+                                                View.VISIBLE
+                                            statusMessageContainer.setOnClickListener {
+                                                statusMessageContainer.showAlignTop(
+                                                    createBalloonOverlay(
+                                                        "Message: ${detailData.keteranganPelaporApprove}",
+                                                        R.color.custom_toast_font_success,
+                                                        R.color.custom_toast_background_success
+                                                    ), 0, 0
+                                                )
+                                            }
+                                            statusMessageContainer.visibility = View.VISIBLE
+                                            statusMessageContainer.setCardBackgroundColor(
+                                                ContextCompat.getColor(
+                                                    this@SubmissionDetailActivity,
+                                                    R.color.custom_toast_background_soft_blue
+                                                )
+                                            )
+                                            statusMessage.text =
+                                                "Approved by ${detailData.namaUserPelaporApprove?.trimEnd()}. Wait for targeted manager to approve\nClick to see message"
+                                            statusMessage.setTextColor(
+                                                ContextCompat.getColor(
+                                                    this@SubmissionDetailActivity,
+                                                    R.color.black
+                                                )
+                                            )
                                         }
                                         // Approved
                                         2 -> {
@@ -354,6 +394,15 @@ class SubmissionDetailActivity : AppCompatActivity(),
                                                     onProgressButton.visibility = View.GONE
                                                     messageProgressAndTrialButtonContainer.visibility =
                                                         View.VISIBLE
+                                                    statusMessageContainer.setOnClickListener {
+                                                        statusMessageContainer.showAlignTop(
+                                                            createBalloonOverlay(
+                                                                "Message: ${detailData.ketApproved}",
+                                                                R.color.custom_toast_font_success,
+                                                                R.color.custom_toast_background_success
+                                                            ), 0, 0
+                                                        )
+                                                    }
                                                     statusMessageContainer.visibility = View.VISIBLE
                                                     statusMessageContainer.setCardBackgroundColor(
                                                         ContextCompat.getColor(
@@ -407,7 +456,7 @@ class SubmissionDetailActivity : AppCompatActivity(),
                                                                     )
                                                             }
                                                             message.append(
-                                                                " to assign technicians"
+                                                                " to assign technicians\nClick to see message"
                                                             )
                                                             statusMessage.text =
                                                                 message.toString()
@@ -595,65 +644,65 @@ class SubmissionDetailActivity : AppCompatActivity(),
                                                                                                 throwable: Throwable
                                                                                             ) {
                                                                                                 loadingDialog.dismiss()
-                                                                                                    CustomToast
-                                                                                                        .getInstance(
-                                                                                                            applicationContext
-                                                                                                        )
-                                                                                                        .setBackgroundColor(
-                                                                                                            ResourcesCompat.getColor(
-                                                                                                                resources,
-                                                                                                                R.color.custom_toast_background_failed,
-                                                                                                                theme
-                                                                                                            )
-                                                                                                        )
-                                                                                                        .setFontColor(
-                                                                                                            ResourcesCompat.getColor(
-                                                                                                                resources,
-                                                                                                                R.color.custom_toast_font_failed,
-                                                                                                                theme
-                                                                                                            )
-                                                                                                        )
-                                                                                                        .setMessage(
-                                                                                                            "Something went wrong, please try again later"
-                                                                                                        )
-                                                                                                        .show()
-                                                                                                    throwable.printStackTrace()
-                                                                                                    Log.e(
-                                                                                                        "ERROR",
-                                                                                                        "Resume Issue Failure | $throwable"
+                                                                                                CustomToast
+                                                                                                    .getInstance(
+                                                                                                        applicationContext
                                                                                                     )
+                                                                                                    .setBackgroundColor(
+                                                                                                        ResourcesCompat.getColor(
+                                                                                                            resources,
+                                                                                                            R.color.custom_toast_background_failed,
+                                                                                                            theme
+                                                                                                        )
+                                                                                                    )
+                                                                                                    .setFontColor(
+                                                                                                        ResourcesCompat.getColor(
+                                                                                                            resources,
+                                                                                                            R.color.custom_toast_font_failed,
+                                                                                                            theme
+                                                                                                        )
+                                                                                                    )
+                                                                                                    .setMessage(
+                                                                                                        "Something went wrong, please try again later"
+                                                                                                    )
+                                                                                                    .show()
+                                                                                                throwable.printStackTrace()
+                                                                                                Log.e(
+                                                                                                    "ERROR",
+                                                                                                    "Resume Issue Failure | $throwable"
+                                                                                                )
                                                                                             }
                                                                                         }
                                                                                     )
                                                                             } catch (jsonException: JSONException) {
                                                                                 loadingDialog.dismiss()
-                                                                                    CustomToast
-                                                                                        .getInstance(
-                                                                                            applicationContext
-                                                                                        )
-                                                                                        .setBackgroundColor(
-                                                                                            ResourcesCompat.getColor(
-                                                                                                resources,
-                                                                                                R.color.custom_toast_background_failed,
-                                                                                                theme
-                                                                                            )
-                                                                                        )
-                                                                                        .setFontColor(
-                                                                                            ResourcesCompat.getColor(
-                                                                                                resources,
-                                                                                                R.color.custom_toast_font_failed,
-                                                                                                theme
-                                                                                            )
-                                                                                        )
-                                                                                        .setMessage(
-                                                                                            "Something went wrong, please try again later"
-                                                                                        )
-                                                                                        .show()
-                                                                                    jsonException.printStackTrace()
-                                                                                    Log.e(
-                                                                                        "ERROR",
-                                                                                        "Resume Issue Exception | $jsonException"
+                                                                                CustomToast
+                                                                                    .getInstance(
+                                                                                        applicationContext
                                                                                     )
+                                                                                    .setBackgroundColor(
+                                                                                        ResourcesCompat.getColor(
+                                                                                            resources,
+                                                                                            R.color.custom_toast_background_failed,
+                                                                                            theme
+                                                                                        )
+                                                                                    )
+                                                                                    .setFontColor(
+                                                                                        ResourcesCompat.getColor(
+                                                                                            resources,
+                                                                                            R.color.custom_toast_font_failed,
+                                                                                            theme
+                                                                                        )
+                                                                                    )
+                                                                                    .setMessage(
+                                                                                        "Something went wrong, please try again later"
+                                                                                    )
+                                                                                    .show()
+                                                                                jsonException.printStackTrace()
+                                                                                Log.e(
+                                                                                    "ERROR",
+                                                                                    "Resume Issue Exception | $jsonException"
+                                                                                )
                                                                             }
                                                                         }
                                                                     }
@@ -1310,7 +1359,8 @@ class SubmissionDetailActivity : AppCompatActivity(),
                                     machineName.text = if (detailData.namaMesin != null) {
                                         detailData.namaMesin!!.ifEmpty { "-" }
                                     } else "-"
-                                    user.text = detailData.namaUserBuat?.trimEnd()
+                                    user.text =
+                                        "${detailData.namaUserBuat?.trimEnd()}\nFrom ${detailData.deptUser} Department"
                                     actionCondition(detailData)
                                     department.text = detailData.deptTujuan
                                     category.text = detailData.namaKategori
@@ -1490,260 +1540,162 @@ class SubmissionDetailActivity : AppCompatActivity(),
         }
     }
 
+    private fun createBalloonOverlay(
+        message: String, @ColorRes textColor: Int, @ColorRes backgroundColor: Int
+    ): Balloon {
+        return Balloon.Builder(this@SubmissionDetailActivity).also {
+            with(it) {
+                setHeight(BalloonSizeSpec.WRAP)
+                setText(message)
+                setTextColorResource(textColor)
+                setTextSize(14f)
+                setArrowPositionRules(ArrowPositionRules.ALIGN_ANCHOR)
+                setArrowSize(10)
+                setPadding(12)
+                setMarginBottom(4)
+                setCornerRadius(8f)
+                setBackgroundColorResource(backgroundColor)
+                setBalloonAnimation(BalloonAnimation.FADE)
+                setLifecycleOwner(lifecycleOwner)
+            }
+        }.build()
+    }
+
     private fun actionCondition(data: SubmissionDetailResponse) {
         binding.apply {
-            try {
-                InitAPI.getAPI.getUserFromStarConnect(userData.id)
-                    .enqueue(object : Callback<StarconnectUserResponse> {
-                        override fun onResponse(
-                            call: Call<StarconnectUserResponse?>,
-                            response: Response<StarconnectUserResponse?>
-                        ) {
-                            if (response.isSuccessful) {
-                                if (response.body() != null) {
-                                    val result = response.body()
-                                    when (data.stsGaprojects) {
-                                        1 -> {
-                                            if (result?.mEMORG!!.toString().contains(
-                                                    data.deptTujuan.toString()
-                                                )
-                                            ) {
-                                                if (data.idUser == userData.id) {
-                                                    actionButton.visibility = View.GONE
-                                                    actionSelfButton.visibility = View.VISIBLE
-                                                    actionSelfButton.extend()
-                                                    onProgressButton.visibility = View.GONE
-                                                } else {
-                                                    if (userData.privilege < 2) {
-                                                        if (data.deptUser == userData.dept) {
-                                                            actionButton.visibility = View.VISIBLE
-                                                            actionSelfButton.visibility = View.GONE
-                                                            onProgressButton.visibility = View.GONE
-                                                        } else {
-                                                            actionButton.visibility = View.GONE
-                                                            actionSelfButton.visibility = View.GONE
-                                                            onProgressButton.visibility = View.GONE
-                                                        }
-                                                    }
-                                                }
-                                            } else {
-                                                if (data.idUser == userData.id) {
-                                                    actionButton.visibility = View.GONE
-                                                    actionSelfButton.visibility = View.VISIBLE
-                                                    actionSelfButton.extend()
-                                                    onProgressButton.visibility = View.GONE
-                                                } else {
-                                                    if (userData.privilege < 2) {
-                                                        if (data.deptUser == userData.dept) {
-                                                            actionButton.visibility = View.VISIBLE
-                                                            actionSelfButton.visibility = View.GONE
-                                                            onProgressButton.visibility = View.GONE
-                                                        } else {
-                                                            actionButton.visibility = View.GONE
-                                                            actionSelfButton.visibility = View.GONE
-                                                            onProgressButton.visibility = View.GONE
-                                                        }
-                                                    }
-                                                }
-                                            }
-                                        }
-
-                                        11 -> {
-                                            if (result?.mEMORG!!.toString().contains(
-                                                    data.deptTujuan.toString()
-                                                )
-                                            ) {
-                                                if (data.idUser == userData.id) {
-                                                    actionButton.visibility = View.GONE
-                                                    onProgressButton.visibility = View.GONE
-                                                } else {
-                                                    if (userData.privilege < 2) {
-                                                        if (data.deptUser == userData.dept) {
-                                                            actionButton.visibility = View.GONE
-                                                            onProgressButton.visibility = View.GONE
-                                                        } else {
-                                                            actionButton.visibility = View.VISIBLE
-                                                            onProgressButton.visibility = View.GONE
-                                                        }
-                                                    }
-                                                }
-                                            } else {
-                                                if (data.idUser == userData.id) {
-                                                    actionButton.visibility = View.GONE
-                                                    onProgressButton.visibility = View.GONE
-                                                } else {
-                                                    if (userData.privilege < 2) {
-                                                        if (data.deptUser == userData.dept) {
-                                                            actionButton.visibility = View.GONE
-                                                            onProgressButton.visibility = View.GONE
-                                                        } else {
-                                                            actionButton.visibility = View.VISIBLE
-                                                            onProgressButton.visibility = View.GONE
-                                                        }
-                                                    }
-                                                }
-                                            }
-                                        }
-                                    }
-
-                                    actionSelfButton.setOnClickListener {
-                                        if (!isFabVisible) {
-                                            isFabVisible = true
-                                            actionSelfButton.shrink()
-                                            editButton.show()
-                                            editButton.extend()
-                                            cancelButton.show()
-                                            cancelButton.extend()
-
-                                            editButton.setOnClickListener {
-                                                activityResultLauncher.launch(
-                                                    Intent(
-                                                        this@SubmissionDetailActivity,
-                                                        SubmissionFormActivity::class.java
-                                                    ).also {
-                                                        with(it) {
-                                                            putExtra("data", data)
-                                                        }
-                                                    }
-                                                )
-                                            }
-
-                                            cancelButton.setOnClickListener {
-                                                actionSelfButton.extend()
-                                                editButton.hide()
-                                                editButton.shrink()
-                                                cancelButton.hide()
-                                                cancelButton.shrink()
-                                                isFabVisible = false
-                                                val bottomSheet = UpdateStatusBottomSheet(
-                                                    this@SubmissionDetailActivity,
-                                                    data,
-                                                    approve = false,
-                                                    cancel = true,
-                                                    deployTech = false
-                                                ).also { bs ->
-                                                    with(bs) {
-                                                        setOnUpdateSuccessListener(object :
-                                                            UpdateStatusBottomSheet.OnUpdateSuccessListener {
-                                                            override fun onApproved() {}
-
-                                                            override fun onRejected() {}
-
-                                                            override fun onCanceled() {
-                                                                isUpdated = true
-                                                                init()
-                                                            }
-
-                                                            override fun onTechniciansDeployed() {}
-                                                        })
-                                                    }
-                                                }
-
-                                                if (bottomSheet.window != null)
-                                                    bottomSheet.show()
-                                            }
-                                        } else {
-                                            isFabVisible = false
-                                            actionSelfButton.extend()
-                                            editButton.hide()
-                                            editButton.shrink()
-                                            cancelButton.hide()
-                                            cancelButton.shrink()
-                                        }
-                                    }
-                                    actionButton.setOnClickListener {
-                                        val bottomSheet = SubmissionActionBottomSheet(
-                                            this@SubmissionDetailActivity, data
-                                        ).also { bottomSheet ->
-                                            with(bottomSheet) {
-                                                onUpdateSuccessListener(
-                                                    this@SubmissionDetailActivity
-                                                )
-                                            }
-                                        }
-                                        if (bottomSheet.window != null) {
-                                            bottomSheet.show()
-                                        }
-                                    }
-                                } else {
-                                    CustomToast.getInstance(applicationContext)
-                                        .setBackgroundColor(
-                                            ResourcesCompat.getColor(
-                                                resources,
-                                                R.color.custom_toast_background_failed,
-                                                theme
-                                            )
-                                        )
-                                        .setFontColor(
-                                            ResourcesCompat.getColor(
-                                                resources, R.color.custom_toast_font_failed, theme
-                                            )
-                                        )
-                                        .setMessage("Something went wrong, please try again later")
-                                        .show()
-                                    Log.e(
-                                        "ERROR",
-                                        "Starconnect User Response null | ${response.message()}"
-                                    )
-                                }
+            when (data.stsGaprojects) {
+                // Pending
+                1 -> {
+                    if (userData.id == data.idUser) { // If logged in user is reporter
+                        actionButton.visibility = View.GONE
+                        actionSelfButton.visibility = View.VISIBLE
+                        actionSelfButton.extend()
+                        onProgressButton.visibility = View.GONE
+                    } else {
+                        // If logged in user are not the reporter but..
+                        if (userData.privilege < 2) { // If logged in user is manager or owner
+                            if (userData.subDept == data.deptUser
+                                || data.deptUser!!.contains(userData.dept, true)
+                            ) { // If reporter's department are same as manager's/owner's department
+                                actionButton.visibility = View.VISIBLE
+                                actionSelfButton.visibility = View.GONE
+                                onProgressButton.visibility = View.GONE
                             } else {
-                                CustomToast.getInstance(applicationContext)
-                                    .setBackgroundColor(
-                                        ResourcesCompat.getColor(
-                                            resources, R.color.custom_toast_background_failed, theme
-                                        )
-                                    )
-                                    .setFontColor(
-                                        ResourcesCompat.getColor(
-                                            resources, R.color.custom_toast_font_failed, theme
-                                        )
-                                    )
-                                    .setMessage("Something went wrong, please try again later")
-                                    .show()
-                                Log.e(
-                                    "ERROR",
-                                    "Starconnect User Response fail | ${response.message()}"
-                                )
+                                // If reporter's department are not the same as manager's/owner's department
+                                actionButton.visibility = View.GONE
+                                actionSelfButton.visibility = View.GONE
+                                onProgressButton.visibility = View.GONE
+                            }
+                        } else {
+                            // If logged in user is not a manager or owner
+                            actionButton.visibility = View.GONE
+                            actionSelfButton.visibility = View.GONE
+                            onProgressButton.visibility = View.GONE
+                        }
+                    }
+                }
+                // Waiting
+                11 -> {
+                    if (userData.privilege < 2) { // If logged in user is manager or owner
+                        if (userData.dept == data.deptTujuan) { // If manager's/owner's department are same as targeted department
+                            actionButton.visibility = View.VISIBLE
+                            actionSelfButton.visibility = View.GONE
+                            onProgressButton.visibility = View.GONE
+                            statusMessageContainer.visibility = View.GONE
+                            messageProgressAndTrialButtonContainer.visibility = View.GONE
+                        } else {
+                            // If manager's/owner's department are not the same as targeted department
+                            actionButton.visibility = View.GONE
+                            actionSelfButton.visibility = View.GONE
+                            onProgressButton.visibility = View.GONE
+                        }
+                    } else {
+                        // If logged in user is not a manager or owner
+                        actionButton.visibility = View.GONE
+                        actionSelfButton.visibility = View.GONE
+                        onProgressButton.visibility = View.GONE
+                    }
+                }
+            }
+
+            actionSelfButton.setOnClickListener {
+                if (!isFabVisible) {
+                    isFabVisible = true
+                    actionSelfButton.shrink()
+                    editButton.show()
+                    editButton.extend()
+                    cancelButton.show()
+                    cancelButton.extend()
+
+                    editButton.setOnClickListener {
+                        activityResultLauncher.launch(
+                            Intent(
+                                this@SubmissionDetailActivity,
+                                SubmissionFormActivity::class.java
+                            ).also {
+                                with(it) {
+                                    putExtra("data", data)
+                                }
+                            }
+                        )
+                    }
+
+                    cancelButton.setOnClickListener {
+                        actionSelfButton.extend()
+                        editButton.hide()
+                        editButton.shrink()
+                        cancelButton.hide()
+                        cancelButton.shrink()
+                        isFabVisible = false
+                        val bottomSheet = UpdateStatusBottomSheet(
+                            this@SubmissionDetailActivity,
+                            data,
+                            approve = false,
+                            cancel = true,
+                            deployTech = false
+                        ).also { bs ->
+                            with(bs) {
+                                setOnUpdateSuccessListener(object :
+                                    UpdateStatusBottomSheet.OnUpdateSuccessListener {
+                                    override fun onApproved() {}
+
+                                    override fun onRejected() {}
+
+                                    override fun onCanceled() {
+                                        isUpdated = true
+                                        init()
+                                    }
+
+                                    override fun onTechniciansDeployed() {}
+                                })
                             }
                         }
 
-                        override fun onFailure(
-                            call: Call<StarconnectUserResponse?>,
-                            throwable: Throwable
-                        ) {
-                            CustomToast.getInstance(applicationContext)
-                                .setBackgroundColor(
-                                    ResourcesCompat.getColor(
-                                        resources, R.color.custom_toast_background_failed, theme
-                                    )
-                                )
-                                .setFontColor(
-                                    ResourcesCompat.getColor(
-                                        resources, R.color.custom_toast_font_failed, theme
-                                    )
-                                )
-                                .setMessage("Something went wrong, please try again later")
-                                .show()
-                            throwable.printStackTrace()
-                            Log.e("ERROR", "Starconnect User Failure | $throwable")
-                        }
-                    })
-            } catch (jsonException: JSONException) {
-                CustomToast.getInstance(applicationContext)
-                    .setBackgroundColor(
-                        ResourcesCompat.getColor(
-                            resources, R.color.custom_toast_background_failed, theme
+                        if (bottomSheet.window != null)
+                            bottomSheet.show()
+                    }
+                } else {
+                    isFabVisible = false
+                    actionSelfButton.extend()
+                    editButton.hide()
+                    editButton.shrink()
+                    cancelButton.hide()
+                    cancelButton.shrink()
+                }
+            }
+            actionButton.setOnClickListener {
+                val bottomSheet = SubmissionActionBottomSheet(
+                    this@SubmissionDetailActivity, data
+                ).also { bottomSheet ->
+                    with(bottomSheet) {
+                        onUpdateSuccessListener(
+                            this@SubmissionDetailActivity
                         )
-                    )
-                    .setFontColor(
-                        ResourcesCompat.getColor(
-                            resources, R.color.custom_toast_font_failed, theme
-                        )
-                    )
-                    .setMessage("Something went wrong, please try again later")
-                    .show()
-                jsonException.printStackTrace()
-                Log.e("ERROR", "Starconnect User Exception | $jsonException")
+                    }
+                }
+                if (bottomSheet.window != null) {
+                    bottomSheet.show()
+                }
             }
         }
     }

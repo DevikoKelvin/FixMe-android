@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@drawable/bottom_sheets_background"
@@ -26,6 +27,32 @@
         android:textColor="@color/black"
         android:textSize="18sp"
         android:textStyle="bold" />
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/reportManagerApprovalMessageContainer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginHorizontal="16dp"
+        android:layout_marginTop="4dp"
+        android:visibility="gone"
+        app:cardBackgroundColor="@android:color/transparent"
+        app:cardCornerRadius="25dp"
+        app:cardElevation="0dp"
+        app:contentPaddingBottom="4dp"
+        app:contentPaddingLeft="16dp"
+        app:contentPaddingRight="16dp"
+        app:contentPaddingTop="4dp">
+
+        <TextView
+            android:id="@+id/reportManagerApprovalMessage"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textAlignment="center"
+            android:textColor="@color/custom_toast_font_success"
+            android:textSize="14sp"
+            tools:text="Report was approved by reporter's manager\nClick to see message" />
+    </com.google.android.material.card.MaterialCardView>
 
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/startProgressButton"

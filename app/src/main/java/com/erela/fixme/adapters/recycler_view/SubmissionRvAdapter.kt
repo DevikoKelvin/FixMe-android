@@ -54,6 +54,7 @@ class SubmissionRvAdapter(val context: Context, val data: ArrayList<SubmissionLi
                 }
                 submissionLocation.text = item.lokasi?.uppercase()
                 reportedBy.text = item.namaUser
+                departmentFrom.text = item.deptUser
 
                 when (item.stsGaprojects) {
                     0 -> {

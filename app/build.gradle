@@ -68,6 +68,7 @@ dependencies {
     implementation libs.appxupdater
     implementation libs.pusher.java.client
     implementation libs.push.notifications.android
+    implementation libs.balloon
 
     // Testing
     testImplementation libs.junit

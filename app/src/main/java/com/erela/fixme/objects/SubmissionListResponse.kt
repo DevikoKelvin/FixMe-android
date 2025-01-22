@@ -31,6 +31,8 @@ data class SubmissionListResponse(
     val idUser: Int? = null,
     @field:SerializedName("nama_user")
     val namaUser: String? = null,
+    @field:SerializedName("dept_user")
+    val deptUser: String? = null,
     @field:SerializedName("set_tglinput")
     val setTglinput: String? = null,
     @field:SerializedName("nama_mesin")

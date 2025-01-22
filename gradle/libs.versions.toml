@@ -31,6 +31,7 @@ circleIndicator = "2.1.6"
 appxupdater = "v2.0.20"
 pusherJavaClient = "2.4.2"
 pushNotificationsAndroid = "1.9.0"
+balloon = "1.6.11"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -59,6 +60,7 @@ circleIndicator = { group = "me.relex", name = "circleIndicator", version.ref = 
 appxupdater = { module = "com.github.TutorialsAndroid:AppXUpdater", version.ref = "appxupdater" }
 pusher-java-client = { module = "com.pusher:pusher-java-client", version.ref = "pusherJavaClient" }
 push-notifications-android = { module = "com.pusher:push-notifications-android", version.ref = "pushNotificationsAndroid" }
+balloon = { module = "com.github.skydoves:balloon", version.ref = "balloon" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
