@@ -27,112 +27,127 @@
         android:textSize="18sp"
         android:textStyle="bold" />
 
-    <RadioGroup
-        android:id="@+id/sortRadioGroup"
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="400dp"
         android:layout_marginHorizontal="16dp"
         android:layout_marginTop="8dp">
 
-        <RadioButton
-            android:id="@+id/pendingSelector"
+        <ScrollView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/pending"
-            android:textColor="@color/status_pending"
-            android:textStyle="bold" />
+            android:layout_centerInParent="true"
+            android:nestedScrollingEnabled="true"
+            android:paddingBottom="68dp">
 
-        <RadioButton
-            android:id="@+id/waitingSelector"
+            <RadioGroup
+                android:id="@+id/sortRadioGroup"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <RadioButton
+                    android:id="@+id/pendingSelector"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/pending"
+                    android:textColor="@color/status_pending"
+                    android:textStyle="bold" />
+
+                <RadioButton
+                    android:id="@+id/waitingSelector"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/waiting"
+                    android:textColor="@color/status_waiting"
+                    android:textStyle="bold" />
+
+                <RadioButton
+                    android:id="@+id/canceledSelector"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/canceled"
+                    android:textColor="@color/custom_toast_font_failed"
+                    android:textStyle="bold" />
+
+                <RadioButton
+                    android:id="@+id/rejectedSelector"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/rejected"
+                    android:textColor="@color/status_rejected"
+                    android:textStyle="bold" />
+
+                <RadioButton
+                    android:id="@+id/approvedSelector"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/approved"
+                    android:textColor="@color/status_approved"
+                    android:textStyle="bold" />
+
+                <RadioButton
+                    android:id="@+id/onProgressSelector"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/on_progress"
+                    android:textColor="@color/status_on_progress"
+                    android:textStyle="bold" />
+
+                <RadioButton
+                    android:id="@+id/holdSelector"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/hold"
+                    android:textColor="@color/status_hold"
+                    android:textStyle="bold" />
+
+                <RadioButton
+                    android:id="@+id/progressDoneSelector"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/progress_done"
+                    android:textColor="@color/status_progress_done"
+                    android:textStyle="bold" />
+
+                <RadioButton
+                    android:id="@+id/onTrialSelector"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/on_trial"
+                    android:textColor="@color/status_on_trial"
+                    android:textStyle="bold" />
+
+                <RadioButton
+                    android:id="@+id/doneSelector"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/done"
+                    android:textColor="@color/status_done"
+                    android:textStyle="bold" />
+            </RadioGroup>
+        </ScrollView>
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/clearFilterButton"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/waiting"
-            android:textColor="@color/status_waiting"
-            android:textStyle="bold" />
+            android:layout_height="46dp"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginHorizontal="16dp"
+            android:layout_marginVertical="8dp"
+            app:cardBackgroundColor="#CDCDCD"
+            app:cardCornerRadius="50dp"
+            app:cardElevation="0dp"
+            app:strokeWidth="0dp">
 
-        <RadioButton
-            android:id="@+id/canceledSelector"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/canceled"
-            android:textColor="@color/custom_toast_font_failed"
-            android:textStyle="bold" />
-
-        <RadioButton
-            android:id="@+id/rejectedSelector"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/rejected"
-            android:textColor="@color/status_rejected"
-            android:textStyle="bold" />
-
-        <RadioButton
-            android:id="@+id/approvedSelector"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/approved"
-            android:textColor="@color/status_approved"
-            android:textStyle="bold" />
-
-        <RadioButton
-            android:id="@+id/onProgressSelector"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/on_progress"
-            android:textColor="@color/status_on_progress"
-            android:textStyle="bold" />
-
-        <RadioButton
-            android:id="@+id/holdSelector"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/hold"
-            android:textColor="@color/status_hold"
-            android:textStyle="bold" />
-
-        <RadioButton
-            android:id="@+id/progressDoneSelector"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/progress_done"
-            android:textColor="@color/status_progress_done"
-            android:textStyle="bold" />
-
-        <RadioButton
-            android:id="@+id/onTrialSelector"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/on_trial"
-            android:textColor="@color/status_on_trial"
-            android:textStyle="bold" />
-
-        <RadioButton
-            android:id="@+id/doneSelector"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/done"
-            android:textColor="@color/status_done"
-            android:textStyle="bold" />
-    </RadioGroup>
-
-    <com.google.android.material.card.MaterialCardView
-        android:id="@+id/clearFilterButton"
-        android:layout_width="match_parent"
-        android:layout_height="46dp"
-        android:layout_marginHorizontal="16dp"
-        android:layout_marginVertical="8dp"
-        app:cardBackgroundColor="#CDCDCD"
-        app:cardCornerRadius="50dp"
-        app:cardElevation="0dp"
-        app:strokeWidth="0dp">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:text="@string/clear_filter"
-            android:textColor="@color/black"
-            android:textSize="16sp"
-            android:textStyle="bold" />
-    </com.google.android.material.card.MaterialCardView>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="@string/clear_filter"
+                android:textColor="@color/black"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+        </com.google.android.material.card.MaterialCardView>
+    </RelativeLayout>
 </LinearLayout>
