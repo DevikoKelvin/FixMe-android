@@ -19,3 +19,4 @@ FixMe Keystore.txt
 /app/release
 /app/google-services.json
 .idea/deploymentTargetSelector.xml
+/app/debug
