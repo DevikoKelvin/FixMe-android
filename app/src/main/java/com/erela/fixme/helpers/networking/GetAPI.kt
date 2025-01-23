@@ -7,7 +7,6 @@ import com.erela.fixme.objects.GenericSimpleResponse
 import com.erela.fixme.objects.InboxResponse
 import com.erela.fixme.objects.LoginResponse
 import com.erela.fixme.objects.MaterialListResponse
-import com.erela.fixme.objects.StarconnectUserResponse
 import com.erela.fixme.objects.SubmissionDetailResponse
 import com.erela.fixme.objects.SubmissionListResponse
 import com.erela.fixme.objects.SupervisorTechnicianListResponse
@@ -23,12 +22,6 @@ import retrofit2.http.Part
 import retrofit2.http.PartMap
 
 interface GetAPI {
-    @FormUrlEncoded
-    @POST("getUserFromStarconnect")
-    fun getUserFromStarConnect(
-        @Field("id_user") idUser: Int
-    ): Call<StarconnectUserResponse>
-
     @FormUrlEncoded
     @POST("checkLogin")
     fun login(
