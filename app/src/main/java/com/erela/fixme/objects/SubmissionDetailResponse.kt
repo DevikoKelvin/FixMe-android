@@ -76,6 +76,8 @@ data class SubmissionDetailResponse(
     val usernUserSpv: List<UsernUserSpvItem?>? = null,
     @field:SerializedName("dept_tujuan")
     val deptTujuan: String? = null,
+    @field:SerializedName("sub_dept_tujuan")
+    val subDeptTujuan: String? = null,
     @field:SerializedName("tgl_waktu_done")
     val tglWaktuDone: String? = null,
     @field:SerializedName("name_user_reject")

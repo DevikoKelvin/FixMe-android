@@ -1361,7 +1361,7 @@ class SubmissionDetailActivity : AppCompatActivity(),
                                     user.text =
                                         "${detailData.namaUserBuat?.trimEnd()}\nFrom ${detailData.deptUser} Department"
                                     actionCondition(detailData)
-                                    department.text = detailData.deptTujuan
+                                    department.text = detailData.subDeptTujuan
                                     category.text = detailData.namaKategori
                                     inputTime.text = detailData.tglInput
                                     location.text = detailData.lokasi
