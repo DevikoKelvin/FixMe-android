@@ -1,11 +1,11 @@
 [versions]
 # Plugins
-agp = "8.7.3"
+agp = "8.8.0"
 kotlin = "2.1.0"
 googleServices = "4.4.2"
 
 # Dependencies
-coreKtx = "1.13.1"
+coreKtx = "1.15.0"
 junit = "4.13.2"
 junitVersion = "1.2.1"
 espressoCore = "3.6.1"
