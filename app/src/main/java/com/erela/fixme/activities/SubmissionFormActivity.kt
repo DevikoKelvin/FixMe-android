@@ -7,7 +7,8 @@ import android.content.ContentValues
 import android.content.Intent
 import android.content.pm.PackageManager.PERMISSION_GRANTED
 import android.net.Uri
-import android.os.Build
+import android.os.Build.VERSION
+import android.os.Build.VERSION_CODES
 import android.os.Bundle
 import android.provider.MediaStore
 import android.provider.OpenableColumns
@@ -147,7 +148,7 @@ class SubmissionFormActivity : AppCompatActivity() {
     private fun init() {
         binding.apply {
             detail = try {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                if (VERSION.SDK_INT >= VERSION_CODES.TIRAMISU) {
                     intent.getParcelableExtra("data", SubmissionDetailResponse::class.java)!!
                 } else {
                     @Suppress("DEPRECATION") intent.getParcelableExtra("data")!!
@@ -536,7 +537,7 @@ class SubmissionFormActivity : AppCompatActivity() {
                             }
 
                             override fun onOpenGalleryClicked() {
-                                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                                if (VERSION.SDK_INT >= VERSION_CODES.TIRAMISU) {
                                     if (PermissionHelper.isPermissionGranted(
                                             this@SubmissionFormActivity,
                                             PermissionHelper.READ_MEDIA_IMAGES
@@ -759,64 +760,61 @@ class SubmissionFormActivity : AppCompatActivity() {
 
                 override fun afterTextChanged(s: Editable?) {}
             })
-            if (machineCodeFieldLayout.visibility == View.VISIBLE) {
-                machineCodeField.addTextChangedListener(object : TextWatcher {
-                    override fun beforeTextChanged(
-                        s: CharSequence?, start: Int, count: Int,
-                        after: Int
-                    ) {
-                    }
+            machineCodeField.addTextChangedListener(object : TextWatcher {
+                override fun beforeTextChanged(
+                    s: CharSequence?, start: Int, count: Int,
+                    after: Int
+                ) {
+                }
 
-                    override fun onTextChanged(
-                        s: CharSequence?, start: Int, before: Int,
-                        count: Int
-                    ) {
-                        if (s!!.isEmpty()) {
-                            machineCodeFieldLayout.error = "Enter the Machine Code!"
-                            isFormEmpty[4] = false
-                        } else {
-                            machineCodeFieldLayout.error = null
-                            isFormEmpty[4] = true
-                        }
+                override fun onTextChanged(
+                    s: CharSequence?, start: Int, before: Int,
+                    count: Int
+                ) {
+                    if (s!!.isEmpty()) {
+                        machineCodeFieldLayout.error = "Enter the Machine Code!"
+                        isFormEmpty[4] = false
+                    } else {
+                        machineCodeFieldLayout.error = null
+                        isFormEmpty[4] = true
                     }
+                }
 
-                    override fun afterTextChanged(s: Editable?) {}
-                })
-            }
-            if (machineNameFieldLayout.visibility == View.VISIBLE) {
-                machineNameField.addTextChangedListener(object : TextWatcher {
-                    override fun beforeTextChanged(
-                        s: CharSequence?, start: Int, count: Int,
-                        after: Int
-                    ) {
+                override fun afterTextChanged(s: Editable?) {}
+            })
+            machineNameField.addTextChangedListener(object : TextWatcher {
+                override fun beforeTextChanged(
+                    s: CharSequence?, start: Int, count: Int,
+                    after: Int
+                ) {
+                }
+
+                override fun onTextChanged(
+                    s: CharSequence?, start: Int, before: Int,
+                    count: Int
+                ) {
+                    if (s!!.isEmpty()) {
+                        machineNameFieldLayout.error = "Enter the Machine Name!"
+                        isFormEmpty[5] = false
+                    } else {
+                        machineNameFieldLayout.error = null
+                        isFormEmpty[5] = true
                     }
+                }
 
-                    override fun onTextChanged(
-                        s: CharSequence?, start: Int, before: Int,
-                        count: Int
-                    ) {
-                        if (s!!.isEmpty()) {
-                            machineNameFieldLayout.error = "Enter the Machine Name!"
-                            isFormEmpty[5] = false
-                        } else {
-                            machineNameFieldLayout.error = null
-                            isFormEmpty[5] = true
-                        }
-                    }
-
-                    override fun afterTextChanged(s: Editable?) {}
-                })
-            }
+                override fun afterTextChanged(s: Editable?) {}
+            })
         }
     }
 
     private fun formCheck(): Boolean {
         var validated = 0
-        var isFormValid = false
         binding.apply {
-            for (element in isFormEmpty) {
-                if (element)
+            for (i in isFormEmpty.indices) {
+                Log.e("isFormEmpty[$i]", isFormEmpty[i].toString())
+                if (isFormEmpty[i]) {
                     validated++
+                }
             }
             if (caseTitleField.text!!.isEmpty())
                 caseTitleFieldLayout.error = "Title can't be empty!"
@@ -833,25 +831,35 @@ class SubmissionFormActivity : AppCompatActivity() {
                     R.color.custom_toast_font_failed
                 )
 
-            if (selectedDepartment == 0)
+            return if (selectedDepartment == 0) {
                 departmentDropdownLayout.strokeColor = ContextCompat.getColor(
                     this@SubmissionFormActivity,
                     R.color.custom_toast_font_failed
                 )
-            else {
-                if (selectedDepartmentText.text.contains("Engineering")) {
+                false
+            } else {
+                Log.e("Selected Department", selectedDepartmentText.text.toString())
+                Log.e(
+                    "Is Selected Dept is Engineering?",
+                    selectedDepartmentText.text.toString()
+                        .contains("Engineering", ignoreCase = true).toString()
+                )
+                if (selectedDepartmentText.text.toString()
+                        .contains("Engineering", ignoreCase = true)
+                ) {
                     if (machineCodeField.text!!.isEmpty())
                         machineCodeFieldLayout.error = "Enter the Machine Code!"
 
                     if (machineNameField.text!!.isEmpty())
                         machineNameFieldLayout.error = "Enter the Machine Name!"
-
-                    isFormValid = validated == 7
-                } else
-                    isFormValid = validated == 5
+                    Log.e("Validated", validated.toString())
+                    validated == 7
+                } else {
+                    Log.e("Validated", validated.toString())
+                    validated == 5
+                }
             }
         }
-        return isFormValid
     }
 
     override fun onRequestPermissionsResult(
@@ -866,6 +874,29 @@ class SubmissionFormActivity : AppCompatActivity() {
             }
         }
         if (requestCode == PermissionHelper.REQUEST_CODE_CAMERA) {
+            if (grantResults.isNotEmpty()) {
+                if (grantResults[0] == PERMISSION_GRANTED) {
+                    if (VERSION.SDK_INT <= VERSION_CODES.P) {
+                        if (PermissionHelper.isPermissionGranted(
+                                this@SubmissionFormActivity,
+                                PermissionHelper.WRITE_EXTERNAL_STORAGE
+                            )
+                        ) {
+                            openCamera()
+                        } else {
+                            PermissionHelper.requestPermission(
+                                this@SubmissionFormActivity,
+                                arrayOf(PermissionHelper.WRITE_EXTERNAL_STORAGE),
+                                PermissionHelper.REQUEST_WRITE_EXTERNAL_STORAGE
+                            )
+                        }
+                    } else {
+                        openCamera()
+                    }
+                }
+            }
+        }
+        if (requestCode == PermissionHelper.REQUEST_WRITE_EXTERNAL_STORAGE) {
             if (grantResults.isNotEmpty()) {
                 if (grantResults[0] == PERMISSION_GRANTED) {
                     openCamera()
