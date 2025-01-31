@@ -2,7 +2,10 @@ package com.erela.fixme.bottom_sheets
 
 import android.content.Context
 import android.content.DialogInterface
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
+import android.view.ViewGroup
 import com.erela.fixme.databinding.BsMaterialQuantityBinding
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import java.util.Locale
@@ -25,6 +28,10 @@ class MaterialQuantityBottomSheet(context: Context, private val materialName: St
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
+
+        window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+        window?.setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT)
+        setCancelable(true)
 
         init()
     }
