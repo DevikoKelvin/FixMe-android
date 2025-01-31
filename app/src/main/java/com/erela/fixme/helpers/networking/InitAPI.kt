@@ -11,10 +11,10 @@ import java.util.concurrent.TimeUnit
 object InitAPI {
     // Local IP
     /*private const val IP = "192.168.3.109:88"*/
-    private const val IP = "192.168.3.245"
+    /*private const val IP = "192.168.3.245"*/
 
     // Server IP
-    /*private const val IP = "192.168.3.213"*/
+    private const val IP = "192.168.3.213"
 
     private const val MAIN_URL = "http://$IP/fixme"
     private const val BASE_URL = "$MAIN_URL/apimobile/"
