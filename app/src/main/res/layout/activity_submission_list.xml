@@ -128,7 +128,7 @@
                     android:id="@+id/filterByText"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="2dp"
+                    android:layout_marginStart="3dp"
                     android:textStyle="bold"
                     tools:text="None" />
             </LinearLayout>
