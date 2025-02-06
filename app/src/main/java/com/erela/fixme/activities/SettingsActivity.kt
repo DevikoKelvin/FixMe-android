@@ -83,21 +83,37 @@ class SettingsActivity : AppCompatActivity() {
                                         newAppVersionText.visibility = View.VISIBLE
                                         downloadLink = update?.urlToDownload.toString()
                                     } else {
-                                        CustomToast.getInstance(applicationContext)
-                                            .setMessage("No update available. Your app is on the latest version!")
-                                            .setFontColor(
-                                                ContextCompat.getColor(
-                                                    this@SettingsActivity,
-                                                    R.color.custom_toast_background_soft_blue
+                                        if (currentAppVersion > update?.latestVersion!!) {
+                                            CustomToast.getInstance(applicationContext)
+                                                .setMessage("Your app version is higher than the latest version.")
+                                                .setFontColor(
+                                                    ContextCompat.getColor(
+                                                        this@SettingsActivity,
+                                                        R.color.custom_toast_background_soft_blue
+                                                    )
                                                 )
-                                            )
-                                            .setBackgroundColor(
-                                                ContextCompat.getColor(
-                                                    this@SettingsActivity,
-                                                    R.color.custom_toast_font_blue
+                                                .setBackgroundColor(
+                                                    ContextCompat.getColor(
+                                                        this@SettingsActivity,
+                                                        R.color.custom_toast_font_blue
+                                                    )
+                                                ).show()
+                                        } else {
+                                            CustomToast.getInstance(applicationContext)
+                                                .setMessage("No update available. Your app is on the latest version!")
+                                                .setFontColor(
+                                                    ContextCompat.getColor(
+                                                        this@SettingsActivity,
+                                                        R.color.custom_toast_background_soft_blue
+                                                    )
                                                 )
-                                            ).show()
-                                        Log.e("No Update", isUpdateAvailable.toString())
+                                                .setBackgroundColor(
+                                                    ContextCompat.getColor(
+                                                        this@SettingsActivity,
+                                                        R.color.custom_toast_font_blue
+                                                    )
+                                                ).show()
+                                        }
                                         currentAppVersionText.setTextColor(
                                             ContextCompat.getColor(
                                                 this@SettingsActivity,
