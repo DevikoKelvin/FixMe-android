@@ -28,6 +28,12 @@ import com.erela.fixme.objects.UserData
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.text.SimpleDateFormat
+import java.time.LocalDate
+import java.time.LocalDateTime
+import java.time.ZoneId
+import java.util.Date
+import java.util.Locale
 
 class SubmissionListActivity : AppCompatActivity(), SubmissionRvAdapter.OnSubmissionClickListener {
     private val binding: ActivitySubmissionListBinding by lazy {
@@ -38,7 +44,7 @@ class SubmissionListActivity : AppCompatActivity(), SubmissionRvAdapter.OnSubmis
     }
     private lateinit var adapter: SubmissionRvAdapter
     private var firstInit = true
-    private var selectedFilter = -1
+    private var selectedFilter = 100
     private var selectedDepartment: String = ""
     private var submissionArrayList: ArrayList<SubmissionListResponse> = ArrayList()
 
@@ -332,8 +338,18 @@ class SubmissionListActivity : AppCompatActivity(), SubmissionRvAdapter.OnSubmis
         binding.apply {
             with(filterByText) {
                 when (filter) {
+                    -2 -> {
+                        text = "All (Finished)"
+                        setTextColor(getColor(R.color.black))
+                    }
+
                     -1 -> {
-                        text = "None"
+                        text = "All (Unfinished)"
+                        setTextColor(getColor(R.color.black))
+                    }
+
+                    100 -> {
+                        text = "All Case"
                         setTextColor(getColor(R.color.black))
                     }
 
@@ -388,16 +404,56 @@ class SubmissionListActivity : AppCompatActivity(), SubmissionRvAdapter.OnSubmis
                     }
                 }
             }
-            if (filter == -1) {
-                submissionArrayList.clear()
-                for (i in 0 until submissionList!!.size) {
-                    submissionArrayList.add(submissionList[i])
+            when (filter) {
+                -1 -> {
+                    submissionArrayList.clear()
+                    for (i in 0 until submissionList!!.size) {
+                        if (submissionList[i].stsGaprojects == 1 || submissionList[i].stsGaprojects == 11
+                            || submissionList[i].stsGaprojects == 2 || submissionList[i].stsGaprojects == 22
+                            || submissionList[i].stsGaprojects == 3 || submissionList[i].stsGaprojects == 30
+                            || submissionList[i].stsGaprojects == 31
+                        )
+                            submissionArrayList.add(submissionList[i])
+                    }
                 }
-            } else {
-                submissionArrayList.clear()
-                for (i in 0 until submissionList!!.size) {
-                    if (submissionList[i].stsGaprojects == filter) {
-                        submissionArrayList.add(submissionList[i])
+
+                -2 -> {
+                    submissionArrayList.clear()
+                    for (i in 0 until submissionList!!.size) {
+                        if (submissionList[i].stsGaprojects == 0 || submissionList[i].stsGaprojects == 4
+                            || submissionList[i].stsGaprojects == 5
+                        )
+                            if (dateChecker(submissionList[i].tglInput.toString()))
+                                submissionArrayList.add(submissionList[i])
+                    }
+                }
+
+                100 -> {
+                    submissionArrayList.clear()
+                    for (i in 0 until submissionList!!.size) {
+                        if (submissionList[i].stsGaprojects == 1 || submissionList[i].stsGaprojects == 11
+                            || submissionList[i].stsGaprojects == 2 || submissionList[i].stsGaprojects == 22
+                            || submissionList[i].stsGaprojects == 3 || submissionList[i].stsGaprojects == 30
+                            || submissionList[i].stsGaprojects == 31
+                        )
+                            submissionArrayList.add(submissionList[i])
+                        else
+                            if (dateChecker(submissionList[i].tglInput.toString()))
+                                submissionArrayList.add(submissionList[i])
+                    }
+                }
+
+                else -> {
+                    submissionArrayList.clear()
+                    for (i in 0 until submissionList!!.size) {
+                        if (submissionList[i].stsGaprojects == filter) {
+                            if (filter == 0 || filter == 4 || filter == 5
+                            ) {
+                                if (dateChecker(submissionList[i].tglInput.toString()))
+                                    submissionArrayList.add(submissionList[i])
+                            } else
+                                submissionArrayList.add(submissionList[i])
+                        }
                     }
                 }
             }
@@ -416,6 +472,25 @@ class SubmissionListActivity : AppCompatActivity(), SubmissionRvAdapter.OnSubmis
                 emptyListContainer.visibility = View.GONE
             }
         }
+    }
+
+    private fun dateChecker(date: String): Boolean {
+        val simpleDateFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault())
+        val thisMonth = LocalDateTime.now().month
+        val thisYear = LocalDateTime.now().year
+        val firstDate = Date.from(
+            LocalDateTime.of(thisYear, thisMonth, 1, 0, 0).atZone(ZoneId.systemDefault())
+                .toInstant()
+        )
+        val lastDate = Date.from(
+            LocalDateTime.of(thisYear, thisMonth, LocalDate.now().lengthOfMonth(), 0, 0)
+                .atZone(ZoneId.systemDefault()).toInstant()
+        )
+        val reportDate = simpleDateFormat.parse(date)
+
+        return if (reportDate != null)
+            reportDate.after(firstDate) && reportDate.before(lastDate)
+        else false
     }
 
     override fun onSubmissionClick(data: SubmissionListResponse) {

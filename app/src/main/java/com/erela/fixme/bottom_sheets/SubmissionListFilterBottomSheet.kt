@@ -4,18 +4,29 @@ import android.content.Context
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
+import android.util.Log
+import android.view.View
 import android.view.ViewGroup
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
+import com.erela.fixme.R
 import com.erela.fixme.databinding.BsSubmissionListFilterBinding
 import com.google.android.material.bottomsheet.BottomSheetDialog
 
 class SubmissionListFilterBottomSheet(context: Context, private val selectedFilter: Int) :
     BottomSheetDialog(context) {
-    private lateinit var binding: BsSubmissionListFilterBinding
+    private val binding: BsSubmissionListFilterBinding by lazy {
+        BsSubmissionListFilterBinding.inflate(layoutInflater)
+    }
     private lateinit var onFilterListener: OnFilterListener
+    private var filterBy = -1
+    private var selectFilterByStatus = -3
 
     companion object {
-        const val ALL = -1
-        const val REJECTED = 0
+        private const val ALL_DONE = -2
+        private const val ALL_ON_GOING = -1
+        const val ALL = 100
+        private const val REJECTED = 0
         const val PENDING = 1
         const val WAITING = 11
         const val APPROVED = 2
@@ -23,13 +34,25 @@ class SubmissionListFilterBottomSheet(context: Context, private val selectedFilt
         const val ON_PROGRESS = 3
         const val PROGRESS_DONE = 30
         const val ON_TRIAL = 31
-        const val DONE = 4
-        const val CANCELED = 5
+        private const val DONE = 4
+        private const val CANCELED = 5
+        private var arrayOfStatusOnGoing = arrayOf(
+            "All",
+            "Pending",
+            "Waiting",
+            "Approved",
+            "Hold",
+            "On Progress",
+            "Progress Done",
+            "On Trial"
+        )
+        private var arrayOfStatusDone = arrayOf(
+            "All", "Rejected", "Done", "Canceled"
+        )
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = BsSubmissionListFilterBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
         window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
@@ -41,81 +64,132 @@ class SubmissionListFilterBottomSheet(context: Context, private val selectedFilt
 
     private fun init() {
         binding.apply {
-            when (selectedFilter) {
-                -1 -> {
-                    pendingSelector.isChecked = false
-                    canceledSelector.isChecked = false
-                    rejectedSelector.isChecked = false
-                    approvedSelector.isChecked = false
-                    onProgressSelector.isChecked = false
-                    onTrialSelector.isChecked = false
+            filterBy = if (selectedFilter == ALL_ON_GOING || selectedFilter == PENDING
+                || selectedFilter == WAITING || selectedFilter == APPROVED || selectedFilter == HOLD
+                || selectedFilter == ON_PROGRESS || selectedFilter == PROGRESS_DONE
+                || selectedFilter == ON_TRIAL
+            )
+                0
+            else if (selectedFilter == ALL_DONE || selectedFilter == REJECTED || selectedFilter == DONE
+                || selectedFilter == CANCELED)
+                1
+            else
+                -1
+            val filterList = ArrayList<String>()
+            filterList.add("All Case")
+            filterList.add("On Going Case")
+            filterList.add("Finished Case")
+            val filterAdapter = ArrayAdapter(
+                context,
+                R.layout.general_dropdown_item,
+                filterList
+            )
+            filterByDropdown.adapter = filterAdapter
+            when (filterBy) {
+                0 -> {
+                    filterByDropdown.setSelection(1)
+                    statusDropdownLayout.visibility = View.VISIBLE
+                    initStatusList(0, selectedFilter)
+                }
+                1 -> {
+                    filterByDropdown.setSelection(2)
+                    statusDropdownLayout.visibility = View.VISIBLE
+                    initStatusList(1, selectedFilter)
+                }
+                else -> {
+                    filterByDropdown.setSelection(0)
+                }
+            }
+            filterByDropdown.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+                override fun onItemSelected(
+                    parent: AdapterView<*>?, view: View?, position: Int, id: Long
+                ) {
+                    if (position != 0) {
+                        filterBy = if (position == 1)
+                            0
+                        else
+                            1
+                        statusDropdownLayout.visibility = View.VISIBLE
+                        doneButton.visibility = View.VISIBLE
+                        initStatusList(filterBy, selectedFilter)
+                    } else {
+                        filterBy = -1
+                        statusDropdownLayout.visibility = View.GONE
+                        selectFilterByStatus = ALL
+                        doneButton.visibility = View.VISIBLE
+                    }
                 }
 
-                0 -> rejectedSelector.isChecked = true
-                1 -> pendingSelector.isChecked = true
-                11 -> waitingSelector.isChecked = true
-                2 -> approvedSelector.isChecked = true
-                22 -> holdSelector.isChecked = true
-                3 -> onProgressSelector.isChecked = true
-                30 -> progressDoneSelector.isChecked = true
-                31 -> onTrialSelector.isChecked = true
-                4 -> doneSelector.isChecked = true
-                5 -> canceledSelector.isChecked = true
+                override fun onNothingSelected(parent: AdapterView<*>?) {}
             }
 
-            clearFilterButton.setOnClickListener {
-                onFilterListener.onFilter(ALL, ALL)
+            doneButton.setOnClickListener {
+                onFilterListener.onFilter(selectFilterByStatus, selectFilterByStatus)
                 dismiss()
             }
+        }
+    }
 
-            pendingSelector.setOnClickListener {
-                onFilterListener.onFilter(PENDING, PENDING)
-                dismiss()
+    private fun initStatusList(filterBy: Int, status: Int) {
+        binding.apply {
+            val statusList = ArrayList<String>()
+            if (filterBy == 0) {
+                for (i in arrayOfStatusOnGoing.indices) {
+                    statusList.add(arrayOfStatusOnGoing[i])
+                }
+            } else {
+                for (i in arrayOfStatusDone.indices) {
+                    statusList.add(arrayOfStatusDone[i])
+                }
             }
-
-            waitingSelector.setOnClickListener {
-                onFilterListener.onFilter(WAITING, WAITING)
-                dismiss()
+            val statusAdapter = ArrayAdapter(
+                context,
+                R.layout.general_dropdown_item,
+                statusList
+            )
+            statusDropdown.adapter = statusAdapter
+            val statusText: String = when (status) {
+                -2 -> "All"
+                -1 -> "All"
+                0 -> "Rejected"
+                1 -> "Pending"
+                11 -> "Waiting"
+                2 -> "Approved"
+                22 -> "Hold"
+                3 -> "On Progress"
+                30 -> "Progress Done"
+                31 -> "On Trial"
+                4 -> "Done"
+                5 -> "Canceled"
+                else -> ""
             }
+            statusDropdown.setSelection(statusList.indexOf(statusText))
+            statusDropdown.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+                override fun onItemSelected(
+                    parent: AdapterView<*>?, view: View?, position: Int, id: Long
+                ) {
+                    if (filterBy == 1) {
+                        when (position) {
+                            0 -> selectFilterByStatus = ALL_DONE
+                            1 -> selectFilterByStatus = REJECTED
+                            2 -> selectFilterByStatus = DONE
+                            3 -> selectFilterByStatus = CANCELED
+                        }
+                    } else {
+                        when (position) {
+                            0 -> selectFilterByStatus = ALL_ON_GOING
+                            1 -> selectFilterByStatus = PENDING
+                            2 -> selectFilterByStatus = WAITING
+                            3 -> selectFilterByStatus = APPROVED
+                            4 -> selectFilterByStatus = HOLD
+                            5 -> selectFilterByStatus = ON_PROGRESS
+                            6 -> selectFilterByStatus = PROGRESS_DONE
+                            7 -> selectFilterByStatus = ON_TRIAL
+                        }
+                    }
+                }
 
-            canceledSelector.setOnClickListener {
-                onFilterListener.onFilter(CANCELED, CANCELED)
-                dismiss()
-            }
-
-            rejectedSelector.setOnClickListener {
-                onFilterListener.onFilter(REJECTED, REJECTED)
-                dismiss()
-            }
-
-            approvedSelector.setOnClickListener {
-                onFilterListener.onFilter(APPROVED, APPROVED)
-                dismiss()
-            }
-
-            holdSelector.setOnClickListener {
-                onFilterListener.onFilter(HOLD, HOLD)
-                dismiss()
-            }
-
-            onProgressSelector.setOnClickListener {
-                onFilterListener.onFilter(ON_PROGRESS, ON_PROGRESS)
-                dismiss()
-            }
-
-            progressDoneSelector.setOnClickListener {
-                onFilterListener.onFilter(PROGRESS_DONE, PROGRESS_DONE)
-                dismiss()
-            }
-
-            onTrialSelector.setOnClickListener {
-                onFilterListener.onFilter(ON_TRIAL, ON_TRIAL)
-                dismiss()
-            }
-
-            doneSelector.setOnClickListener {
-                onFilterListener.onFilter(DONE, DONE)
-                dismiss()
+                override fun onNothingSelected(parent: AdapterView<*>?) {}
             }
         }
     }

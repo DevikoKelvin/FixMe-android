@@ -32,17 +32,10 @@ object NotificationsHelper {
                 }
 
                 override fun onError(message: String, code: String, e: Exception?) {
-                    if (e != null) {
-                        Log.e(
-                            "PUSHER",
-                            "There was a problem connecting! code: $code, message: $message, exception: $e"
-                        )
-                    } else {
-                        Log.e(
-                            "PUSHER",
-                            "There was a problem connecting! code: $code, message: $message"
-                        )
-                    }
+                    Log.e(
+                        "PUSHER",
+                        "There was a problem connecting! code: $code, message: $message, exception: $e"
+                    )
                 }
             }, ConnectionState.CONNECTED)
         }

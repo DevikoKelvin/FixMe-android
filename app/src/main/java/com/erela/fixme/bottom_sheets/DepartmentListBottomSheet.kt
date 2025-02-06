@@ -4,7 +4,6 @@ import android.content.Context
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
@@ -78,7 +77,6 @@ class DepartmentListBottomSheet(
                             subDeptartmentDropdownLayout.visibility = View.GONE
                             selectDepartmentButton.visibility = View.GONE
                         }
-                        Log.e("Selected Department", selectedDepartment)
                     }
 
                     override fun onNothingSelected(parent: AdapterView<*>?) {}
