@@ -338,7 +338,7 @@ class SubmissionDetailActivity : AppCompatActivity(),
                                                 )
                                             )
                                             statusMessage.text =
-                                                "Approved by ${detailData.namaUserPelaporApprove?.trimEnd()}. Wait for targeted manager to approve\nClick to see message"
+                                                "Approved by ${detailData.namaUserPelaporApprove?.trimEnd()}\nWait for targeted manager to approve\nClick to see message"
                                             statusMessage.setTextColor(
                                                 ContextCompat.getColor(
                                                     this@SubmissionDetailActivity,
