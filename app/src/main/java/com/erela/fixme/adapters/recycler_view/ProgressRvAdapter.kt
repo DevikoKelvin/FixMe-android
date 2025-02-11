@@ -173,26 +173,23 @@ class ProgressRvAdapter(
                         circleIndicator.visibility = View.GONE
                     }
                     progressResultDescription.text =
-                        if (item.progress.keteranganApprove != "null" || item.progress.keteranganApprove != null) {
+                        if (item.progress.keteranganApprove != "null" || item.progress.keteranganApprove != null)
                             item.progress.keteranganApprove
-                        } else {
+                        else
                             "No remarks"
-                        }
                 }
 
                 imageCarouselHolder.setOnLongClickListener {
                     if (userData.id == item.progress?.idUser) {
-                        if (detail.stsGaprojects == 3 && item.progress.stsDetail == 0) {
+                        if (detail.stsGaprojects == 3 && item.progress.stsDetail == 0)
                             onItemHoldTapListener.onItemHoldTap(item.progress, false)
-                        }
                     } else {
                         for (i in 0 until detail.usernUserSpv!!.size) {
                             if (userData.id == detail.usernUserSpv[i]?.idUser) {
                                 if (detail.stsGaprojects == 3 && item.progress?.stsDetail == 0 &&
                                     item.progress.approveMaterialStatus == 0
-                                ) {
+                                )
                                     onItemHoldTapListener.onItemHoldTap(item.progress, true)
-                                }
                                 break
                             }
                         }
@@ -202,17 +199,15 @@ class ProgressRvAdapter(
 
                 submissionImage.setOnLongClickListener {
                     if (userData.id == item.progress?.idUser) {
-                        if (detail.stsGaprojects == 3 && item.progress.stsDetail == 0) {
+                        if (detail.stsGaprojects == 3 && item.progress.stsDetail == 0)
                             onItemHoldTapListener.onItemHoldTap(item.progress, false)
-                        }
                     } else {
                         for (i in 0 until detail.usernUserSpv!!.size) {
                             if (userData.id == detail.usernUserSpv[i]?.idUser) {
                                 if (detail.stsGaprojects == 3 && item.progress?.stsDetail == 0 &&
                                     item.progress.approveMaterialStatus == 0
-                                ) {
+                                )
                                     onItemHoldTapListener.onItemHoldTap(item.progress, true)
-                                }
                                 break
                             }
                         }
@@ -222,17 +217,15 @@ class ProgressRvAdapter(
 
                 itemView.setOnLongClickListener {
                     if (userData.id == item.progress?.idUser) {
-                        if (detail.stsGaprojects == 3 && item.progress.stsDetail == 0) {
+                        if (detail.stsGaprojects == 3 && item.progress.stsDetail == 0)
                             onItemHoldTapListener.onItemHoldTap(item.progress, false)
-                        }
                     } else {
                         for (i in 0 until detail.usernUserSpv!!.size) {
                             if (userData.id == detail.usernUserSpv[i]?.idUser) {
                                 if (detail.stsGaprojects == 3 && item.progress?.stsDetail == 0 &&
                                     item.progress.approveMaterialStatus == 0
-                                ) {
+                                )
                                     onItemHoldTapListener.onItemHoldTap(item.progress, true)
-                                }
                                 break
                             }
                         }

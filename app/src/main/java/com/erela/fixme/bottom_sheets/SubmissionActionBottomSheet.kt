@@ -17,7 +17,6 @@ import com.skydoves.balloon.ArrowPositionRules
 import com.skydoves.balloon.Balloon
 import com.skydoves.balloon.BalloonAnimation
 import com.skydoves.balloon.BalloonSizeSpec
-import com.skydoves.balloon.showAlignBottom
 import com.skydoves.balloon.showAlignTop
 
 class SubmissionActionBottomSheet(context: Context, val data: SubmissionDetailResponse) :
