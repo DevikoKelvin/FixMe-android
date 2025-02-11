@@ -64,17 +64,11 @@ class SubmissionListFilterBottomSheet(context: Context, private val selectedFilt
 
     private fun init() {
         binding.apply {
-            filterBy = if (selectedFilter == ALL_ON_GOING || selectedFilter == PENDING
-                || selectedFilter == WAITING || selectedFilter == APPROVED || selectedFilter == HOLD
-                || selectedFilter == ON_PROGRESS || selectedFilter == PROGRESS_DONE
-                || selectedFilter == ON_TRIAL
-            )
-                0
-            else if (selectedFilter == ALL_DONE || selectedFilter == REJECTED || selectedFilter == DONE
-                || selectedFilter == CANCELED)
-                1
-            else
-                -1
+            filterBy = when (selectedFilter) {
+                ALL_ON_GOING, PENDING, WAITING, APPROVED, HOLD, ON_PROGRESS, PROGRESS_DONE, ON_TRIAL -> 0
+                ALL_DONE, REJECTED, DONE, CANCELED -> 1
+                else -> -1
+            }
             val filterList = ArrayList<String>()
             filterList.add("All Case")
             filterList.add("On Going Case")
@@ -91,11 +85,13 @@ class SubmissionListFilterBottomSheet(context: Context, private val selectedFilt
                     statusDropdownLayout.visibility = View.VISIBLE
                     initStatusList(0, selectedFilter)
                 }
+
                 1 -> {
                     filterByDropdown.setSelection(2)
                     statusDropdownLayout.visibility = View.VISIBLE
                     initStatusList(1, selectedFilter)
                 }
+
                 else -> {
                     filterByDropdown.setSelection(0)
                 }
