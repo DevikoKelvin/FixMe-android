@@ -33,7 +33,7 @@ import com.erela.fixme.dialogs.LoadingDialog
 import com.erela.fixme.dialogs.ProgressOptionDialog
 import com.erela.fixme.helpers.Base64Helper
 import com.erela.fixme.helpers.UserDataHelper
-import com.erela.fixme.helpers.networking.InitAPI
+import com.erela.fixme.helpers.api.InitAPI
 import com.erela.fixme.objects.FotoGaprojectsItem
 import com.erela.fixme.objects.GenericSimpleResponse
 import com.erela.fixme.objects.ProgressItem

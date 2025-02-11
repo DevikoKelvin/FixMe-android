@@ -29,7 +29,7 @@ import com.erela.fixme.dialogs.ConfirmationDialog
 import com.erela.fixme.dialogs.LoadingDialog
 import com.erela.fixme.helpers.PermissionHelper
 import com.erela.fixme.helpers.UserDataHelper
-import com.erela.fixme.helpers.networking.InitAPI
+import com.erela.fixme.helpers.api.InitAPI
 import com.erela.fixme.objects.GenericSimpleResponse
 import com.erela.fixme.objects.ProgressItem
 import com.erela.fixme.objects.UserData

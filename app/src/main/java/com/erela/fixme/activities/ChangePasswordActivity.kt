@@ -11,7 +11,7 @@ import com.erela.fixme.R
 import com.erela.fixme.custom_views.CustomToast
 import com.erela.fixme.databinding.ActivityChangePasswordBinding
 import com.erela.fixme.helpers.UserDataHelper
-import com.erela.fixme.helpers.networking.InitAPI
+import com.erela.fixme.helpers.api.InitAPI
 import com.erela.fixme.objects.GenericSimpleResponse
 import com.erela.fixme.objects.UserData
 import retrofit2.Call

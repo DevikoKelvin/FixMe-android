@@ -15,7 +15,7 @@ import com.erela.fixme.R
 import com.erela.fixme.custom_views.CustomToast
 import com.erela.fixme.databinding.ActivityLoginBinding
 import com.erela.fixme.helpers.UserDataHelper
-import com.erela.fixme.helpers.networking.InitAPI
+import com.erela.fixme.helpers.api.InitAPI
 import com.erela.fixme.objects.LoginResponse
 import com.google.android.material.snackbar.Snackbar
 import retrofit2.Call

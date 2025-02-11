@@ -12,7 +12,7 @@ import com.erela.fixme.R
 import com.erela.fixme.custom_views.zoom_helper.ImageZoomHelper
 import com.erela.fixme.databinding.ViewImageCarouselBinding
 import com.erela.fixme.helpers.Base64Helper
-import com.erela.fixme.helpers.networking.InitAPI
+import com.erela.fixme.helpers.api.InitAPI
 import com.erela.fixme.objects.FotoGaprojectsItem
 
 class ImageCarouselPagerAdapter(

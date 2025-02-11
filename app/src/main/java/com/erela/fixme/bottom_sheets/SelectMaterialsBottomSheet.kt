@@ -18,7 +18,7 @@ import com.erela.fixme.adapters.recycler_view.MaterialDiffUtilCallback
 import com.erela.fixme.adapters.recycler_view.MaterialsRvAdapters
 import com.erela.fixme.custom_views.CustomToast
 import com.erela.fixme.databinding.BsSelectMaterialsBinding
-import com.erela.fixme.helpers.networking.InitAPI
+import com.erela.fixme.helpers.api.InitAPI
 import com.erela.fixme.objects.MaterialListResponse
 import com.erela.fixme.objects.SelectedMaterialList
 import com.erela.fixme.objects.SubmissionDetailResponse

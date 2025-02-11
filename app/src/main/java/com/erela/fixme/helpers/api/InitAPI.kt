@@ -1,4 +1,4 @@
-package com.erela.fixme.helpers.networking
+package com.erela.fixme.helpers.api
 
 import com.erela.fixme.BuildConfig
 import com.google.gson.GsonBuilder

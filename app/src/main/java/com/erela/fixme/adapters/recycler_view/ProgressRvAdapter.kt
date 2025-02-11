@@ -17,7 +17,7 @@ import com.erela.fixme.R
 import com.erela.fixme.adapters.pager.ImageCarouselPagerAdapter
 import com.erela.fixme.databinding.ListItemProgressBinding
 import com.erela.fixme.helpers.UserDataHelper
-import com.erela.fixme.helpers.networking.InitAPI
+import com.erela.fixme.helpers.api.InitAPI
 import com.erela.fixme.objects.ProgressItem
 import com.erela.fixme.objects.ProgressItems
 import com.erela.fixme.objects.SubmissionDetailResponse

@@ -8,7 +8,7 @@ import android.net.Uri
 import android.os.Bundle
 import com.bumptech.glide.Glide
 import com.erela.fixme.databinding.DialogPhotoPreviewBinding
-import com.erela.fixme.helpers.networking.InitAPI
+import com.erela.fixme.helpers.api.InitAPI
 
 class PhotoPreviewDialog(
     context: Context, private val imageUri: Uri?, private val photoName: String?

@@ -1,4 +1,4 @@
-package com.erela.fixme.helpers.networking
+package com.erela.fixme.helpers.api
 
 import com.erela.fixme.objects.CategoryListResponse
 import com.erela.fixme.objects.CreationResponse

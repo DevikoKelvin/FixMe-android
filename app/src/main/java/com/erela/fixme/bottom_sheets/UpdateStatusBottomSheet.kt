@@ -17,7 +17,7 @@ import com.erela.fixme.custom_views.CustomToast
 import com.erela.fixme.databinding.BsUpdateStatusBinding
 import com.erela.fixme.dialogs.ConfirmationDialog
 import com.erela.fixme.helpers.UserDataHelper
-import com.erela.fixme.helpers.networking.InitAPI
+import com.erela.fixme.helpers.api.InitAPI
 import com.erela.fixme.objects.GenericSimpleResponse
 import com.erela.fixme.objects.SubmissionDetailResponse
 import com.erela.fixme.objects.SupervisorTechnicianListResponse

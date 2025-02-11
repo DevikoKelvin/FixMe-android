@@ -21,7 +21,7 @@ import com.erela.fixme.bottom_sheets.SubmissionListFilterBottomSheet
 import com.erela.fixme.custom_views.CustomToast
 import com.erela.fixme.databinding.ActivitySubmissionListBinding
 import com.erela.fixme.helpers.UserDataHelper
-import com.erela.fixme.helpers.networking.InitAPI
+import com.erela.fixme.helpers.api.InitAPI
 import com.erela.fixme.objects.DepartmentListResponse
 import com.erela.fixme.objects.SubmissionListResponse
 import com.erela.fixme.objects.UserData

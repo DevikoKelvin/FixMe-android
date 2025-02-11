@@ -14,7 +14,7 @@ import com.erela.fixme.R
 import com.erela.fixme.adapters.recycler_view.SupervisorTechniciansRvAdapter
 import com.erela.fixme.custom_views.CustomToast
 import com.erela.fixme.databinding.BsSelectTechniciansBinding
-import com.erela.fixme.helpers.networking.InitAPI
+import com.erela.fixme.helpers.api.InitAPI
 import com.erela.fixme.objects.SelectedSupervisorTechniciansList
 import com.erela.fixme.objects.SubmissionDetailResponse
 import com.erela.fixme.objects.SupervisorTechnicianListResponse
