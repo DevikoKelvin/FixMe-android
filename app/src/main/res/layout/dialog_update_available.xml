@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/main"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/dialogContainer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="8dp"
+        android:layout_marginVertical="8dp"
+        app:cardBackgroundColor="@color/white"
+        app:cardCornerRadius="16dp"
+        app:cardElevation="2dp"
+        app:strokeWidth="0dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/titleText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/button_color"
+                android:paddingHorizontal="16dp"
+                android:paddingVertical="8dp"
+                android:text="@string/update_available_title"
+                android:textAlignment="center"
+                android:textColor="@color/white"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                app:cardBackgroundColor="@color/custom_toast_font_normal_soft_gray"
+                app:cardElevation="0dp"
+                app:strokeWidth="0dp" />
+
+            <TextView
+                android:id="@+id/messageText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="16dp"
+                android:layout_marginVertical="16dp"
+                android:text="@string/download_update_message"
+                android:textAlignment="center"
+                android:textColor="@color/black"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                app:cardBackgroundColor="@color/custom_toast_font_normal_soft_gray"
+                app:cardElevation="0dp"
+                app:strokeWidth="0dp" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/cancelButton"
+                    android:layout_width="match_parent"
+                    android:layout_height="56dp"
+                    android:layout_weight="1"
+                    app:cardBackgroundColor="@android:color/transparent"
+                    app:cardCornerRadius="0dp"
+                    app:cardElevation="0dp"
+                    app:strokeWidth="0dp">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="center"
+                        android:text="@string/not_now"
+                        android:textColor="@color/custom_toast_font_failed"
+                        android:textSize="14sp"
+                        android:textStyle="bold" />
+                </com.google.android.material.card.MaterialCardView>
+
+                <com.google.android.material.card.MaterialCardView
+                    android:layout_width="1dp"
+                    android:layout_height="match_parent"
+                    app:cardBackgroundColor="@color/custom_toast_font_normal_soft_gray"
+                    app:cardElevation="0dp"
+                    app:strokeWidth="0dp" />
+
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/confirmButton"
+                    android:layout_width="match_parent"
+                    android:layout_height="56dp"
+                    android:layout_weight="1"
+                    app:cardBackgroundColor="@android:color/transparent"
+                    app:cardCornerRadius="0dp"
+                    app:cardElevation="0dp">
+
+                    <TextView
+                        android:id="@+id/confirmText"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="center"
+                        android:text="@string/download_update"
+                        android:textColor="@color/black"
+                        android:textSize="14sp"
+                        android:textStyle="bold" />
+                </com.google.android.material.card.MaterialCardView>
+            </LinearLayout>
+        </LinearLayout>
+    </com.google.android.material.card.MaterialCardView>
+</RelativeLayout>

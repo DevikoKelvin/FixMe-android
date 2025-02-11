@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.app.ActivityManager
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
@@ -14,10 +15,15 @@ import com.erela.fixme.R
 import com.erela.fixme.bottom_sheets.UserInfoBottomSheet
 import com.erela.fixme.databinding.ActivityMainBinding
 import com.erela.fixme.dialogs.ConfirmationDialog
+import com.erela.fixme.dialogs.UpdateAvailableDialog
 import com.erela.fixme.helpers.PermissionHelper
 import com.erela.fixme.helpers.UserDataHelper
 import com.erela.fixme.objects.UserData
 import com.erela.fixme.services.NotificationService
+import com.github.tutorialsandroid.appxupdater.AppUpdaterUtils
+import com.github.tutorialsandroid.appxupdater.enums.AppUpdaterError
+import com.github.tutorialsandroid.appxupdater.enums.UpdateFrom
+import com.github.tutorialsandroid.appxupdater.objects.Update
 import com.pusher.pushnotifications.PushNotifications
 import java.time.LocalDateTime
 
@@ -40,6 +46,7 @@ class MainActivity : AppCompatActivity() {
             insets
         }
 
+        checkNewUpdate()
         init()
     }
 
@@ -66,9 +73,9 @@ class MainActivity : AppCompatActivity() {
             when (userData.privilege) {
                 0 -> {
                     privilegeContainer.background = ContextCompat.getDrawable(
-                            applicationContext, R
-                                .drawable.toolbar_background_owner
-                        )
+                        applicationContext, R
+                            .drawable.toolbar_background_owner
+                    )
                     privilegeText.text = "Owner"
                     privilegeText.setTextColor(
                         ContextCompat.getColor(
@@ -79,9 +86,9 @@ class MainActivity : AppCompatActivity() {
 
                 1 -> {
                     privilegeContainer.background = ContextCompat.getDrawable(
-                            applicationContext, R
-                                .drawable.toolbar_background_manager
-                        )
+                        applicationContext, R
+                            .drawable.toolbar_background_manager
+                    )
                     privilegeText.text = "Manager/Assistant/Admin"
                     privilegeText.setTextColor(
                         ContextCompat.getColor(
@@ -92,9 +99,9 @@ class MainActivity : AppCompatActivity() {
 
                 2 -> {
                     privilegeContainer.background = ContextCompat.getDrawable(
-                            applicationContext, R
-                                .drawable.toolbar_background_supervisor
-                        )
+                        applicationContext, R
+                            .drawable.toolbar_background_supervisor
+                    )
                     privilegeText.text = "Supervisor"
                     privilegeText.setTextColor(
                         ContextCompat.getColor(
@@ -105,9 +112,9 @@ class MainActivity : AppCompatActivity() {
 
                 3 -> {
                     privilegeContainer.background = ContextCompat.getDrawable(
-                            applicationContext, R
-                                .drawable.toolbar_background_technician
-                        )
+                        applicationContext, R
+                            .drawable.toolbar_background_technician
+                    )
                     privilegeText.text = "Technician"
                     privilegeText.setTextColor(
                         ContextCompat.getColor(
@@ -118,9 +125,9 @@ class MainActivity : AppCompatActivity() {
 
                 4 -> {
                     privilegeContainer.background = ContextCompat.getDrawable(
-                            applicationContext, R
-                                .drawable.toolbar_background_staff
-                        )
+                        applicationContext, R
+                            .drawable.toolbar_background_staff
+                    )
                     privilegeText.text = "Staff/Reporter"
                     privilegeText.setTextColor(
                         ContextCompat.getColor(
@@ -218,5 +225,35 @@ class MainActivity : AppCompatActivity() {
             }
         }
         return false
+    }
+
+    private fun checkNewUpdate() {
+        AppUpdaterUtils(this@MainActivity).also {
+            with(it) {
+                setUpdateFrom(UpdateFrom.GITHUB)
+                setGitHubUserAndRepo("DevikoKelvin", "FixMe-android")
+                withListener(object : AppUpdaterUtils.UpdateListener {
+                    override fun onSuccess(update: Update?, isUpdateAvailable: Boolean?) {
+                        if (isUpdateAvailable == true) {
+                            val dialog = UpdateAvailableDialog(
+                                this@MainActivity,
+                                update?.urlToDownload.toString()
+                            )
+
+                            if (dialog.window != null)
+                                dialog.show()
+                        } else
+                            return
+                    }
+
+                    override fun onFailed(error: AppUpdaterError?) {
+                        Log.e(
+                            "ERROR Update Check",
+                            "Can't retrieve update channel | ERROR ${error.toString()}"
+                        )
+                    }
+                })
+            }
+        }.start()
     }
 }

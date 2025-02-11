@@ -68,7 +68,6 @@ class SettingsActivity : AppCompatActivity() {
                                     update: Update?, isUpdateAvailable: Boolean?
                                 ) {
                                     if (isUpdateAvailable == true) {
-                                        Log.e("Update Available", isUpdateAvailable.toString())
                                         checkDownloadInstallText.text =
                                             getString(R.string.download_update)
                                         updateAvailableStatus.visibility = View.VISIBLE
