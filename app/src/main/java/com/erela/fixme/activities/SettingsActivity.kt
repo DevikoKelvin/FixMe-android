@@ -3,6 +3,8 @@ package com.erela.fixme.activities
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.util.Log
 import android.view.View
 import androidx.activity.enableEdgeToEdge
@@ -59,6 +61,23 @@ class SettingsActivity : AppCompatActivity() {
                         )
                     )
                 } else {
+                    loadingBar.visibility = View.VISIBLE
+                    val handler = Handler(Looper.getMainLooper())
+                    val runnable = object : Runnable {
+                        var count = 1
+                        override fun run() {
+                            when (count) {
+                                1 -> checkDownloadInstallText.text = "Checking update."
+                                2 -> checkDownloadInstallText.text = "Checking update.."
+                                3 -> checkDownloadInstallText.text = "Checking update..."
+                            }
+                            count = if (count < 3) count + 1 else 1
+                            handler.postDelayed(this, 500)
+                        }
+                    }
+
+                    handler.post(runnable)
+
                     val appUpdaterUtils = AppUpdaterUtils(this@SettingsActivity).also {
                         with(it) {
                             setUpdateFrom(UpdateFrom.GITHUB)
@@ -67,6 +86,8 @@ class SettingsActivity : AppCompatActivity() {
                                 override fun onSuccess(
                                     update: Update?, isUpdateAvailable: Boolean?
                                 ) {
+                                    loadingBar.visibility = View.GONE
+                                    handler.removeCallbacks(runnable)
                                     if (isUpdateAvailable == true) {
                                         checkDownloadInstallText.text =
                                             getString(R.string.download_update)
@@ -127,6 +148,8 @@ class SettingsActivity : AppCompatActivity() {
                                 }
 
                                 override fun onFailed(error: AppUpdaterError?) {
+                                    loadingBar.visibility = View.GONE
+                                    handler.removeCallbacks(runnable)
                                     CustomToast.getInstance(applicationContext)
                                         .setMessage("Something went wrong, please try again.")
                                         .setFontColor(

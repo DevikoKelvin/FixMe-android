@@ -16,6 +16,7 @@ import com.erela.fixme.bottom_sheets.UserInfoBottomSheet
 import com.erela.fixme.databinding.ActivityMainBinding
 import com.erela.fixme.dialogs.ConfirmationDialog
 import com.erela.fixme.dialogs.UpdateAvailableDialog
+import com.erela.fixme.helpers.NotificationsHelper
 import com.erela.fixme.helpers.PermissionHelper
 import com.erela.fixme.helpers.UserDataHelper
 import com.erela.fixme.objects.UserData
@@ -50,6 +51,11 @@ class MainActivity : AppCompatActivity() {
         init()
     }
 
+    override fun onPause() {
+        super.onPause()
+        NotificationsHelper.disconnectPusher()
+    }
+
     @SuppressLint("SetTextI18n", "InlinedApi")
     private fun init() {
         binding.apply {
@@ -64,9 +70,14 @@ class MainActivity : AppCompatActivity() {
             }
 
             PushNotifications.start(applicationContext, "66b9148d-50f4-4114-b258-e9e9485ce75c")
-            if (!isServiceRunning(NotificationService::class.java)) {
-                Intent(this@MainActivity, NotificationService::class.java).also {
-                    startForegroundService(it)
+
+            if (!isFinishing) {
+                runOnUiThread {
+                    if (!isServiceRunning(NotificationService::class.java)) {
+                        Intent(this@MainActivity, NotificationService::class.java).also {
+                            startForegroundService(it)
+                        }
+                    }
                 }
             }
 

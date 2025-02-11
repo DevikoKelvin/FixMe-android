@@ -1,5 +1,6 @@
 package com.erela.fixme.helpers
 
+import android.app.Activity
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.content.Context
@@ -17,13 +18,18 @@ import com.pusher.client.connection.ConnectionState
 import com.pusher.client.connection.ConnectionStateChange
 
 object NotificationsHelper {
-    fun receiveNotifications(context: Context, userData: UserData) {
-        val options = PusherOptions()
-        options.setCluster("ap1")
-        val pusher = Pusher("4ae6ab89bbc42534b759", options)
+    private var pusher: Pusher? = null
 
-        if (pusher.connection.state == ConnectionState.DISCONNECTED) {
-            pusher.connect(object : ConnectionEventListener {
+    fun disconnectPusher() {
+        pusher?.disconnect()
+        pusher = null
+    }
+
+    fun receiveNotifications(context: Context, userData: UserData) {
+        pusher = Pusher("4ae6ab89bbc42534b759", PusherOptions().setCluster("ap1"))
+
+        if (pusher?.connection?.state == ConnectionState.DISCONNECTED) {
+            pusher?.connect(object : ConnectionEventListener {
                 override fun onConnectionStateChange(change: ConnectionStateChange) {
                     Log.e(
                         "PUSHER",
@@ -31,19 +37,70 @@ object NotificationsHelper {
                     )
                 }
 
-                override fun onError(message: String, code: String, e: Exception?) {
-                    Log.e(
-                        "PUSHER",
-                        "There was a problem connecting! code: $code, message: $message, exception: $e"
-                    )
+                override fun onError(message: String?, code: String?, e: Exception?) {
+                    if (code != null) {
+                        if (message != null) {
+                            if (e != null) {
+                                Log.e(
+                                    "PUSHER",
+                                    "There was a problem on connecting! Error code: $code, message: $message, error: $e"
+                                )
+                            } else {
+                                Log.e(
+                                    "PUSHER",
+                                    "There was a problem on connecting! Error code: $code, message: $message"
+                                )
+                            }
+                        } else {
+                            if (e != null) {
+                                Log.e(
+                                    "PUSHER",
+                                    "There was a problem on connecting! Error code: $code, error: $e"
+                                )
+                            } else {
+                                Log.e(
+                                    "PUSHER",
+                                    "There was a problem on connecting! Error code: $code"
+                                )
+                            }
+                        }
+                    } else {
+                        if (message != null) {
+                            if (e != null) {
+                                Log.e(
+                                    "PUSHER",
+                                    "There was a problem on connecting! Error message: $message, error: $e"
+                                )
+                            } else {
+                                Log.e(
+                                    "PUSHER",
+                                    "There was a problem on connecting! Error message: $message"
+                                )
+                            }
+                        } else {
+                            if (e != null) {
+                                Log.e(
+                                    "PUSHER",
+                                    "There was a problem on connecting! Error exception: $e"
+                                )
+                            } else {
+                                Log.e(
+                                    "PUSHER",
+                                    "There was a problem on connecting!"
+                                )
+                            }
+                        }
+                    }
                 }
             }, ConnectionState.CONNECTED)
         }
-        val channel = pusher.subscribe("my-channel")
-        channel.bind("my-event") { event ->
-            val pusherData = parseToJson(event.data)
-            if (pusherData.idUser == userData.id) {
-                generateNotification(pusherData.message, context)
+        val channel = pusher?.subscribe("my-channel")
+        channel?.bind("my-event") { event ->
+            if (context is Activity && !context.isFinishing) {
+                val pusherData = parseToJson(event.data)
+                if (pusherData.idUser == userData.id) {
+                    generateNotification(pusherData.message, context)
+                }
             }
         }
     }
