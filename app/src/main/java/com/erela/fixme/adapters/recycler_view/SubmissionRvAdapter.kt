@@ -12,6 +12,7 @@ import com.erela.fixme.databinding.ListItemSubmissionBinding
 import com.erela.fixme.helpers.UserDataHelper
 import com.erela.fixme.objects.SubmissionListResponse
 import com.erela.fixme.objects.UserData
+import java.util.Locale
 
 class SubmissionRvAdapter(val context: Context, val data: ArrayList<SubmissionListResponse>) :
     RecyclerView.Adapter<SubmissionRvAdapter.ViewHolder>() {
@@ -55,6 +56,45 @@ class SubmissionRvAdapter(val context: Context, val data: ArrayList<SubmissionLi
                 submissionLocation.text = item.lokasi?.uppercase()
                 reportedBy.text = item.namaUser
                 departmentFrom.text = item.deptUser
+
+                complexityText.text =
+                    item.complexity.toString().replaceFirstChar {
+                        if (it.isLowerCase())
+                            it.titlecase(Locale.getDefault())
+                        else
+                            it.toString()
+                    }
+                when (item.complexity) {
+                    "low" -> {
+                        complexity.setCardBackgroundColor(
+                            ResourcesCompat.getColor(
+                                context.resources,
+                                R.color.custom_toast_font_success,
+                                context.theme
+                            )
+                        )
+                    }
+
+                    "middle" -> {
+                        complexity.setCardBackgroundColor(
+                            ResourcesCompat.getColor(
+                                context.resources,
+                                R.color.custom_toast_font_warning,
+                                context.theme
+                            )
+                        )
+                    }
+
+                    "high" -> {
+                        complexity.setCardBackgroundColor(
+                            ResourcesCompat.getColor(
+                                context.resources,
+                                R.color.custom_toast_font_failed,
+                                context.theme
+                            )
+                        )
+                    }
+                }
 
                 when (item.stsGaprojects) {
                     0 -> {

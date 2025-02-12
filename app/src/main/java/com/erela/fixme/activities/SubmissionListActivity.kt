@@ -3,6 +3,9 @@ package com.erela.fixme.activities
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
+import android.text.Spannable
+import android.text.SpannableStringBuilder
+import android.text.style.ForegroundColorSpan
 import android.util.Log
 import android.view.View
 import android.widget.AdapterView
@@ -45,6 +48,7 @@ class SubmissionListActivity : AppCompatActivity(), SubmissionRvAdapter.OnSubmis
     private lateinit var adapter: SubmissionRvAdapter
     private var firstInit = true
     private var selectedFilter = 100
+    private var selectedComplexity = ""
     private var selectedDepartment: String = ""
     private var submissionArrayList: ArrayList<SubmissionListResponse> = ArrayList()
 
@@ -235,28 +239,43 @@ class SubmissionListActivity : AppCompatActivity(), SubmissionRvAdapter.OnSubmis
                                         if (firstInit) {
                                             filterList(
                                                 response.body(),
-                                                SubmissionListFilterBottomSheet.ON_PROGRESS
+                                                SubmissionListFilterBottomSheet.ON_PROGRESS,
+                                                "All"
                                             )
                                             selectedFilter =
                                                 SubmissionListFilterBottomSheet.ON_PROGRESS
+                                            selectedComplexity = "All"
                                             firstInit = false
                                         } else
-                                            filterList(response.body(), selectedFilter)
+                                            filterList(
+                                                response.body(),
+                                                selectedFilter,
+                                                selectedComplexity
+                                            )
                                         filterListButton.visibility = View.VISIBLE
                                         filterListButton.setOnClickListener {
                                             val bottomSheet = SubmissionListFilterBottomSheet(
-                                                this@SubmissionListActivity, selectedFilter
+                                                this@SubmissionListActivity,
+                                                selectedFilter,
+                                                selectedComplexity
                                             ).also {
                                                 with(it) {
                                                     setOnFilterListener(object :
                                                         SubmissionListFilterBottomSheet.OnFilterListener {
                                                         override fun onFilter(
                                                             filter: Int,
-                                                            selectedFilter: Int
+                                                            selectedFilter: Int,
+                                                            selectedComplexity: String
                                                         ) {
-                                                            filterList(response.body(), filter)
+                                                            filterList(
+                                                                response.body(),
+                                                                filter,
+                                                                selectedComplexity
+                                                            )
                                                             this@SubmissionListActivity.selectedFilter =
                                                                 selectedFilter
+                                                            this@SubmissionListActivity.selectedComplexity =
+                                                                selectedComplexity
                                                         }
                                                     })
                                                 }
@@ -334,75 +353,110 @@ class SubmissionListActivity : AppCompatActivity(), SubmissionRvAdapter.OnSubmis
     }
 
     @SuppressLint("NotifyDataSetChanged", "SetTextI18n")
-    private fun filterList(submissionList: List<SubmissionListResponse>?, filter: Int) {
+    private fun filterList(
+        submissionList: List<SubmissionListResponse>?, filter: Int, complexity: String
+    ) {
         binding.apply {
+            val filterText = SpannableStringBuilder()
             with(filterByText) {
                 when (filter) {
                     -2 -> {
-                        text = "All (Finished)"
+                        filterText.append("All (Finished)")
                         setTextColor(getColor(R.color.black))
                     }
 
                     -1 -> {
-                        text = "All (Unfinished)"
+                        filterText.append("All (Unfinished)")
                         setTextColor(getColor(R.color.black))
                     }
 
                     100 -> {
-                        text = "All Case"
+                        filterText.append("All Case")
                         setTextColor(getColor(R.color.black))
                     }
 
                     0 -> {
-                        text = "Rejected"
+                        filterText.append("Rejected")
                         setTextColor(getColor(R.color.status_rejected))
                     }
 
                     1 -> {
-                        text = "Pending"
+                        filterText.append("Pending")
                         setTextColor(getColor(R.color.status_pending))
                     }
 
                     11 -> {
-                        text = "Waiting"
+                        filterText.append("Waiting")
                         setTextColor(getColor(R.color.status_waiting))
                     }
 
                     2 -> {
-                        text = "Approved"
+                        filterText.append("Approved")
                         setTextColor(getColor(R.color.status_approved))
                     }
 
                     22 -> {
-                        text = "Hold"
+                        filterText.append("Hold")
                         setTextColor(getColor(R.color.status_hold))
                     }
 
                     3 -> {
-                        text = "On Progress"
+                        filterText.append("On Progress")
                         setTextColor(getColor(R.color.status_on_progress))
                     }
 
                     30 -> {
-                        text = "Progress Done"
+                        filterText.append("Progress Done")
                         setTextColor(getColor(R.color.status_progress_done))
                     }
 
                     31 -> {
-                        text = "On Trial"
+                        filterText.append("On Trial")
                         setTextColor(getColor(R.color.status_on_trial))
                     }
 
                     4 -> {
-                        text = "Done"
+                        filterText.append("Done")
                         setTextColor(getColor(R.color.status_done))
                     }
 
                     5 -> {
-                        text = "Canceled"
+                        filterText.append("Canceled")
                         setTextColor(getColor(R.color.custom_toast_font_failed))
                     }
                 }
+                val complexityText = when (complexity) {
+                    "Low" -> " (Low)"
+                    "Middle" -> " (Medium)"
+                    "High" -> " (High)"
+                    else -> " (All)"
+                }
+                val startIndexOfComplexity = filterText.length
+                filterText.append(complexityText)
+                val endIndexOfComplexity = filterText.length
+                val complexityColor = when (complexity) {
+                    "Low" -> ContextCompat.getColor(
+                        context,
+                        R.color.custom_toast_font_success
+                    )
+
+                    "Middle" -> ContextCompat.getColor(
+                        context,
+                        R.color.custom_toast_font_warning
+                    )
+
+                    "High" -> ContextCompat.getColor(
+                        context,
+                        R.color.custom_toast_font_failed
+                    )
+
+                    else -> ContextCompat.getColor(context, R.color.black)
+                }
+
+                val fcs = ForegroundColorSpan(complexityColor)
+                filterText.setSpan(fcs, startIndexOfComplexity, endIndexOfComplexity, Spannable.SPAN_INCLUSIVE_INCLUSIVE)
+
+                text = filterText
             }
             when (filter) {
                 -1 -> {
@@ -412,8 +466,14 @@ class SubmissionListActivity : AppCompatActivity(), SubmissionRvAdapter.OnSubmis
                             || submissionList[i].stsGaprojects == 2 || submissionList[i].stsGaprojects == 22
                             || submissionList[i].stsGaprojects == 3 || submissionList[i].stsGaprojects == 30
                             || submissionList[i].stsGaprojects == 31
-                        )
-                            submissionArrayList.add(submissionList[i])
+                        ) {
+                            if (complexity != "All") {
+                                if (submissionList[i].complexity == complexity.lowercase(Locale.getDefault()))
+                                    submissionArrayList.add(submissionList[i])
+                            } else {
+                                submissionArrayList.add(submissionList[i])
+                            }
+                        }
                     }
                 }
 
@@ -423,8 +483,14 @@ class SubmissionListActivity : AppCompatActivity(), SubmissionRvAdapter.OnSubmis
                         if (submissionList[i].stsGaprojects == 0 || submissionList[i].stsGaprojects == 4
                             || submissionList[i].stsGaprojects == 5
                         )
-                            if (dateChecker(submissionList[i].tglInput.toString()))
-                                submissionArrayList.add(submissionList[i])
+                            if (dateChecker(submissionList[i].tglInput.toString())) {
+                                if (complexity != "All") {
+                                    if (submissionList[i].complexity == complexity.lowercase(Locale.getDefault()))
+                                        submissionArrayList.add(submissionList[i])
+                                } else {
+                                    submissionArrayList.add(submissionList[i])
+                                }
+                            }
                     }
                 }
 
@@ -435,11 +501,22 @@ class SubmissionListActivity : AppCompatActivity(), SubmissionRvAdapter.OnSubmis
                             || submissionList[i].stsGaprojects == 2 || submissionList[i].stsGaprojects == 22
                             || submissionList[i].stsGaprojects == 3 || submissionList[i].stsGaprojects == 30
                             || submissionList[i].stsGaprojects == 31
-                        )
-                            submissionArrayList.add(submissionList[i])
-                        else
-                            if (dateChecker(submissionList[i].tglInput.toString()))
+                        ) {
+                            if (complexity != "All") {
+                                if (submissionList[i].complexity == complexity.lowercase(Locale.getDefault()))
+                                    submissionArrayList.add(submissionList[i])
+                            } else {
                                 submissionArrayList.add(submissionList[i])
+                            }
+                        } else
+                            if (dateChecker(submissionList[i].tglInput.toString())) {
+                                if (complexity != "All") {
+                                    if (submissionList[i].complexity == complexity.lowercase(Locale.getDefault()))
+                                        submissionArrayList.add(submissionList[i])
+                                } else {
+                                    submissionArrayList.add(submissionList[i])
+                                }
+                            }
                     }
                 }
 
@@ -449,10 +526,25 @@ class SubmissionListActivity : AppCompatActivity(), SubmissionRvAdapter.OnSubmis
                         if (submissionList[i].stsGaprojects == filter) {
                             if (filter == 0 || filter == 4 || filter == 5
                             ) {
-                                if (dateChecker(submissionList[i].tglInput.toString()))
+                                if (dateChecker(submissionList[i].tglInput.toString())) {
+                                    if (complexity != "All") {
+                                        if (submissionList[i].complexity == complexity.lowercase(
+                                                Locale.getDefault()
+                                            )
+                                        )
+                                            submissionArrayList.add(submissionList[i])
+                                    } else {
+                                        submissionArrayList.add(submissionList[i])
+                                    }
+                                }
+                            } else {
+                                if (complexity != "All") {
+                                    if (submissionList[i].complexity == complexity.lowercase(Locale.getDefault()))
+                                        submissionArrayList.add(submissionList[i])
+                                } else {
                                     submissionArrayList.add(submissionList[i])
-                            } else
-                                submissionArrayList.add(submissionList[i])
+                                }
+                            }
                         }
                     }
                 }

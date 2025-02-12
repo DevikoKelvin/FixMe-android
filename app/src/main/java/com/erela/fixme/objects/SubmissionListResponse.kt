@@ -23,6 +23,8 @@ data class SubmissionListResponse(
     val idUserApprove: Int? = null,
     @field:SerializedName("sts_gaprojects")
     val stsGaprojects: Int? = null,
+    @field:SerializedName("complexity")
+    val complexity: String? = null,
     @field:SerializedName("usern_user_end")
     val usernUserEnd: String? = null,
     @field:SerializedName("foto_gaprojects")

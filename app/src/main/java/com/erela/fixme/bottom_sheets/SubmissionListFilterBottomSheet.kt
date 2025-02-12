@@ -4,6 +4,7 @@ import android.content.Context
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
@@ -12,7 +13,7 @@ import com.erela.fixme.R
 import com.erela.fixme.databinding.BsSubmissionListFilterBinding
 import com.google.android.material.bottomsheet.BottomSheetDialog
 
-class SubmissionListFilterBottomSheet(context: Context, private val selectedFilter: Int) :
+class SubmissionListFilterBottomSheet(context: Context, private val selectedFilter: Int, private val selectedcomplexity: String) :
     BottomSheetDialog(context) {
     private val binding: BsSubmissionListFilterBinding by lazy {
         BsSubmissionListFilterBinding.inflate(layoutInflater)
@@ -20,6 +21,7 @@ class SubmissionListFilterBottomSheet(context: Context, private val selectedFilt
     private lateinit var onFilterListener: OnFilterListener
     private var filterBy = -1
     private var selectFilterByStatus = -3
+    private var complexity = "All"
 
     companion object {
         private const val ALL_DONE = -2
@@ -118,8 +120,28 @@ class SubmissionListFilterBottomSheet(context: Context, private val selectedFilt
                 override fun onNothingSelected(parent: AdapterView<*>?) {}
             }
 
+            Log.e("Selected Complexity", selectedcomplexity)
+            when (selectedcomplexity) {
+                "All" -> allSelector.isChecked = true
+                "Low" -> lowSelector.isChecked = true
+                "Middle" -> midSelector.isChecked = true
+                "High" -> highSelector.isChecked = true
+            }
+            complexityRadioGroup.setOnCheckedChangeListener { _, checkedId ->
+                when (checkedId) {
+                    R.id.allSelector -> complexity = "All"
+                    R.id.lowSelector -> complexity = "Low"
+                    R.id.midSelector -> complexity = "Middle"
+                    R.id.highSelector -> complexity = "High"
+                }
+            }
+
             doneButton.setOnClickListener {
-                onFilterListener.onFilter(selectFilterByStatus, selectFilterByStatus)
+                onFilterListener.onFilter(
+                    selectFilterByStatus,
+                    selectFilterByStatus,
+                    complexity
+                )
                 dismiss()
             }
         }
@@ -194,6 +216,6 @@ class SubmissionListFilterBottomSheet(context: Context, private val selectedFilt
     }
 
     interface OnFilterListener {
-        fun onFilter(filter: Int, selectedFilter: Int)
+        fun onFilter(filter: Int, selectedFilter: Int, selectedComplexity: String)
     }
 }

@@ -14,7 +14,10 @@ object InitAPI {
     /*private const val IP = "192.168.3.245"*/
 
     // Server IP
-    private const val IP = "192.168.3.213"
+    /*private const val IP = "192.168.3.213"*/
+
+    // Public IP
+    private const val IP = "182.23.21.202:8282"
 
     private const val MAIN_URL = "http://$IP/fixme"
     private const val BASE_URL = "$MAIN_URL/apimobile/"

@@ -82,6 +82,63 @@
             tools:listitem="@layout/support_simple_spinner_dropdown_item" />
     </com.google.android.material.card.MaterialCardView>
 
+    <TextView
+        android:id="@+id/selectComplexityText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="16dp"
+        android:layout_marginTop="16dp"
+        android:text="@string/select_complexity"
+        android:textColor="@color/black"
+        android:textSize="14sp"
+        android:textStyle="bold" />
+
+    <RadioGroup
+        android:id="@+id/complexityRadioGroup"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="16dp"
+        android:layout_marginTop="4dp"
+        android:orientation="horizontal">
+
+        <RadioButton
+            android:id="@+id/allSelector"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="All"
+            android:textColor="@color/custom_toast_background_normal_dark_gray"
+            android:textStyle="bold"
+            tools:ignore="HardcodedText" />
+
+        <RadioButton
+            android:id="@+id/lowSelector"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/complexity_low"
+            android:textColor="@color/custom_toast_font_success"
+            android:textStyle="bold" />
+
+        <RadioButton
+            android:id="@+id/midSelector"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/complexity_mid"
+            android:textColor="@color/custom_toast_font_warning"
+            android:textStyle="bold" />
+
+        <RadioButton
+            android:id="@+id/highSelector"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/complexity_high"
+            android:textColor="@color/custom_toast_font_failed"
+            android:textStyle="bold" />
+    </RadioGroup>
+
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/doneButton"
         android:layout_width="match_parent"
