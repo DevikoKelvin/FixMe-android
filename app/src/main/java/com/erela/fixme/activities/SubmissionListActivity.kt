@@ -427,7 +427,7 @@ class SubmissionListActivity : AppCompatActivity(), SubmissionRvAdapter.OnSubmis
                 }
                 val complexityText = when (complexity) {
                     "Low" -> " (Low)"
-                    "Middle" -> " (Medium)"
+                    "Middle" -> " (Middle)"
                     "High" -> " (High)"
                     else -> " (All)"
                 }
