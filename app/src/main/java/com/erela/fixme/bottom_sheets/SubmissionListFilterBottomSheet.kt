@@ -13,7 +13,9 @@ import com.erela.fixme.R
 import com.erela.fixme.databinding.BsSubmissionListFilterBinding
 import com.google.android.material.bottomsheet.BottomSheetDialog
 
-class SubmissionListFilterBottomSheet(context: Context, private val selectedFilter: Int, private val selectedcomplexity: String) :
+class SubmissionListFilterBottomSheet(
+    context: Context, private val selectedFilter: Int, private val selectedcomplexity: String
+) :
     BottomSheetDialog(context) {
     private val binding: BsSubmissionListFilterBinding by lazy {
         BsSubmissionListFilterBinding.inflate(layoutInflater)
@@ -119,13 +121,21 @@ class SubmissionListFilterBottomSheet(context: Context, private val selectedFilt
 
                 override fun onNothingSelected(parent: AdapterView<*>?) {}
             }
-
-            Log.e("Selected Complexity", selectedcomplexity)
+            
             when (selectedcomplexity) {
                 "All" -> allSelector.isChecked = true
                 "Low" -> lowSelector.isChecked = true
                 "Middle" -> midSelector.isChecked = true
                 "High" -> highSelector.isChecked = true
+            }
+            if (allSelector.isChecked) {
+                complexity = "All"
+            } else if (lowSelector.isChecked) {
+                complexity = "Low"
+            } else if (midSelector.isChecked) {
+                complexity = "Middle"
+            } else if (highSelector.isChecked) {
+                complexity = "High"
             }
             complexityRadioGroup.setOnCheckedChangeListener { _, checkedId ->
                 when (checkedId) {

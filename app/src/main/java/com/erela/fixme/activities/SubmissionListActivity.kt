@@ -453,8 +453,12 @@ class SubmissionListActivity : AppCompatActivity(), SubmissionRvAdapter.OnSubmis
                     else -> ContextCompat.getColor(context, R.color.black)
                 }
 
-                val fcs = ForegroundColorSpan(complexityColor)
-                filterText.setSpan(fcs, startIndexOfComplexity, endIndexOfComplexity, Spannable.SPAN_INCLUSIVE_INCLUSIVE)
+                filterText.setSpan(
+                    ForegroundColorSpan(complexityColor),
+                    startIndexOfComplexity,
+                    endIndexOfComplexity,
+                    Spannable.SPAN_INCLUSIVE_INCLUSIVE
+                )
 
                 text = filterText
             }
