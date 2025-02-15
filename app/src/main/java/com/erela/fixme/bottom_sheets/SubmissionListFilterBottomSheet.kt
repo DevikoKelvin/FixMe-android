@@ -4,7 +4,6 @@ import android.content.Context
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
@@ -14,7 +13,7 @@ import com.erela.fixme.databinding.BsSubmissionListFilterBinding
 import com.google.android.material.bottomsheet.BottomSheetDialog
 
 class SubmissionListFilterBottomSheet(
-    context: Context, private val selectedFilter: Int, private val selectedcomplexity: String
+    context: Context, private val selectedFilter: Int, private val selectedComplexity: String
 ) :
     BottomSheetDialog(context) {
     private val binding: BsSubmissionListFilterBinding by lazy {
@@ -122,7 +121,7 @@ class SubmissionListFilterBottomSheet(
                 override fun onNothingSelected(parent: AdapterView<*>?) {}
             }
             
-            when (selectedcomplexity) {
+            when (selectedComplexity) {
                 "All" -> allSelector.isChecked = true
                 "Low" -> lowSelector.isChecked = true
                 "Middle" -> midSelector.isChecked = true
