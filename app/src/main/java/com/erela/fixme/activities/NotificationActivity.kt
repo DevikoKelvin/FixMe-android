@@ -70,7 +70,7 @@ class NotificationActivity : AppCompatActivity() {
 
     private fun getNotification() {
         binding.apply {
-            loadingBar.visibility = View.VISIBLE
+            loadingManager(true)
             try {
                 InitAPI.getAPI.showInbox(userData.id)
                     .enqueue(object : Callback<List<InboxResponse>> {
@@ -79,7 +79,7 @@ class NotificationActivity : AppCompatActivity() {
                             call: Call<List<InboxResponse>?>,
                             response: Response<List<InboxResponse>?>
                         ) {
-                            loadingBar.visibility = View.GONE
+                            loadingManager(false)
                             if (response.isSuccessful) {
                                 for (i in 0 until response.body()?.size.toString().toInt()) {
                                     inboxArrayList.add(
@@ -111,6 +111,7 @@ class NotificationActivity : AppCompatActivity() {
                             call: Call<List<InboxResponse>?>,
                             throwable: Throwable
                         ) {
+                            loadingManager(false)
                             CustomToast.getInstance(applicationContext)
                                 .setMessage("Something went wrong, please try again.")
                                 .setFontColor(
@@ -127,12 +128,11 @@ class NotificationActivity : AppCompatActivity() {
                                 ).show()
                             Log.e("ERROR", throwable.toString())
                             throwable.printStackTrace()
-                            loadingBar.visibility = View.GONE
                             finish()
                         }
                     })
             } catch (exception: Exception) {
-                loadingBar.visibility = View.GONE
+                loadingManager(false)
                 CustomToast.getInstance(applicationContext)
                     .setMessage("Something went wrong, please try again.")
                     .setFontColor(
@@ -150,6 +150,24 @@ class NotificationActivity : AppCompatActivity() {
                 Log.e("ERROR", exception.toString())
                 exception.printStackTrace()
                 finish()
+            }
+        }
+    }
+
+    private fun loadingManager(isLoading: Boolean) {
+        binding.apply {
+            if (isLoading) {
+                shimmerLayout.apply {
+                    visibility = View.VISIBLE
+                    startShimmer()
+                }
+                rvInbox.visibility = View.GONE
+            } else {
+                shimmerLayout.apply {
+                    visibility = View.GONE
+                    stopShimmer()
+                }
+                rvInbox.visibility = View.VISIBLE
             }
         }
     }

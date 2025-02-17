@@ -33,6 +33,7 @@ appxupdater = "v2.0.20"
 pusherJavaClient = "2.4.2"
 pushNotificationsAndroid = "1.9.0"
 balloon = "1.6.11"
+shimmer = "0.5.0"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -63,6 +64,7 @@ appxupdater = { module = "com.github.TutorialsAndroid:AppXUpdater", version.ref 
 pusher-java-client = { module = "com.pusher:pusher-java-client", version.ref = "pusherJavaClient" }
 push-notifications-android = { module = "com.pusher:push-notifications-android", version.ref = "pushNotificationsAndroid" }
 balloon = { module = "com.github.skydoves:balloon", version.ref = "balloon" }
+shimmer = { module = "com.facebook.shimmer:shimmer", version.ref = "shimmer" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

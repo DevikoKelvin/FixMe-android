@@ -103,7 +103,7 @@ class SubmissionListActivity : AppCompatActivity(), SubmissionRvAdapter.OnSubmis
                 swipeRefresh.isRefreshing = false
             }
 
-            loadingBar.visibility = View.VISIBLE
+            loadingManager(true)
             try {
                 InitAPI.getAPI.getDepartmentList()
                     .enqueue(object : Callback<List<DepartmentListResponse>> {
@@ -111,7 +111,7 @@ class SubmissionListActivity : AppCompatActivity(), SubmissionRvAdapter.OnSubmis
                             call: Call<List<DepartmentListResponse>>,
                             response: Response<List<DepartmentListResponse>>
                         ) {
-                            loadingBar.visibility = View.GONE
+                            loadingManager(false)
                             if (response.isSuccessful) {
                                 if (response.body() != null) {
                                     val data: ArrayList<String> = ArrayList()
@@ -178,7 +178,7 @@ class SubmissionListActivity : AppCompatActivity(), SubmissionRvAdapter.OnSubmis
                             throwable: Throwable
                         ) {
                             Log.e("ERROR", throwable.toString())
-                            loadingBar.visibility = View.GONE
+                            loadingManager(false)
                             CustomToast.getInstance(applicationContext)
                                 .setMessage("Something went wrong, please try again.")
                                 .setFontColor(
@@ -198,7 +198,7 @@ class SubmissionListActivity : AppCompatActivity(), SubmissionRvAdapter.OnSubmis
                         }
                     })
             } catch (exception: Exception) {
-                loadingBar.visibility = View.GONE
+                loadingManager(false)
                 CustomToast.getInstance(applicationContext)
                     .setMessage("Something went wrong, please try again.")
                     .setFontColor(
@@ -221,7 +221,7 @@ class SubmissionListActivity : AppCompatActivity(), SubmissionRvAdapter.OnSubmis
 
     private fun getSubmissionList() {
         binding.apply {
-            loadingBar.visibility = View.VISIBLE
+            loadingManager(true)
             filterListButton.visibility = View.GONE
             emptyListContainer.visibility = View.GONE
             try {
@@ -233,7 +233,7 @@ class SubmissionListActivity : AppCompatActivity(), SubmissionRvAdapter.OnSubmis
                                 call: Call<List<SubmissionListResponse>>,
                                 response: Response<List<SubmissionListResponse>>
                             ) {
-                                loadingBar.visibility = View.GONE
+                                loadingManager(false)
                                 if (response.isSuccessful) {
                                     if (response.body() != null) {
                                         if (firstInit) {
@@ -286,7 +286,7 @@ class SubmissionListActivity : AppCompatActivity(), SubmissionRvAdapter.OnSubmis
                                         }
                                     }
                                 } else {
-                                    loadingBar.visibility = View.GONE
+                                    loadingManager(false)
                                     CustomToast.getInstance(applicationContext)
                                         .setMessage("Something went wrong, please try again.")
                                         .setFontColor(
@@ -309,7 +309,7 @@ class SubmissionListActivity : AppCompatActivity(), SubmissionRvAdapter.OnSubmis
                                 call: Call<List<SubmissionListResponse>>,
                                 throwable: Throwable
                             ) {
-                                loadingBar.visibility = View.GONE
+                                loadingManager(false)
                                 CustomToast.getInstance(applicationContext)
                                     .setMessage("Something went wrong, please try again.")
                                     .setFontColor(
@@ -328,11 +328,11 @@ class SubmissionListActivity : AppCompatActivity(), SubmissionRvAdapter.OnSubmis
                             }
                         })
                 } else {
-                    loadingBar.visibility = View.GONE
+                    loadingManager(false)
                     submissionArrayList.clear()
                 }
             } catch (exception: Exception) {
-                loadingBar.visibility = View.GONE
+                loadingManager(false)
                 CustomToast.getInstance(applicationContext)
                     .setMessage("Something went wrong, please try again.")
                     .setFontColor(
@@ -596,5 +596,21 @@ class SubmissionListActivity : AppCompatActivity(), SubmissionRvAdapter.OnSubmis
                 data.idGaprojects.toString()
             )
         )
+    }
+
+    private fun loadingManager(isLoading: Boolean) {
+        binding.apply {
+            if (isLoading) {
+                shimmerLayout.apply {
+                    visibility = View.VISIBLE
+                    startShimmer()
+                }
+            } else {
+                shimmerLayout.apply {
+                    stopShimmer()
+                    visibility = View.GONE
+                }
+            }
+        }
     }
 }

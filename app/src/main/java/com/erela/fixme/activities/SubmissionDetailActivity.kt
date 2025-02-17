@@ -132,8 +132,7 @@ class SubmissionDetailActivity : AppCompatActivity(),
 
             holdResumeButton.visibility = View.GONE
 
-            loadingBar.visibility = View.VISIBLE
-            contentScrollContainer.visibility = View.GONE
+            loadingManager(true)
             messageProgressAndTrialButtonContainer.visibility = View.GONE
             val handler = Handler(Looper.getMainLooper())
             val runnable = object : Runnable {
@@ -158,9 +157,9 @@ class SubmissionDetailActivity : AppCompatActivity(),
                             call: Call<List<SubmissionDetailResponse>?>,
                             response: Response<List<SubmissionDetailResponse>?>
                         ) {
-                            loadingBar.visibility = View.GONE
+                            loadingManager(false)
                             handler.removeCallbacks(runnable)
-                            contentScrollContainer.visibility = View.VISIBLE
+                            content.visibility = View.VISIBLE
                             if (response.isSuccessful) {
                                 if (response.body() != null) {
                                     detailData = response.body()!![0]
@@ -1498,6 +1497,7 @@ class SubmissionDetailActivity : AppCompatActivity(),
                             call: Call<List<SubmissionDetailResponse>?>,
                             throwable: Throwable
                         ) {
+                            loadingManager(false)
                             handler.removeCallbacks(runnable)
                             CustomToast.getInstance(applicationContext)
                                 .setBackgroundColor(
@@ -1518,6 +1518,7 @@ class SubmissionDetailActivity : AppCompatActivity(),
                         }
                     })
             } catch (exception: Exception) {
+                loadingManager(false)
                 handler.removeCallbacks(runnable)
                 CustomToast.getInstance(applicationContext)
                     .setBackgroundColor(
@@ -1695,6 +1696,24 @@ class SubmissionDetailActivity : AppCompatActivity(),
                 if (bottomSheet.window != null) {
                     bottomSheet.show()
                 }
+            }
+        }
+    }
+
+    private fun loadingManager(isLoading: Boolean) {
+        binding.apply {
+            if (isLoading) {
+                shimmer.apply {
+                    visibility = View.VISIBLE
+                    startShimmer()
+                }
+                content.visibility = View.GONE
+            } else {
+                shimmer.apply {
+                    visibility = View.GONE
+                    stopShimmer()
+                }
+                content.visibility = View.VISIBLE
             }
         }
     }
