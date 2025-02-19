@@ -77,7 +77,6 @@ class SettingsActivity : AppCompatActivity() {
                     }
 
                     handler.post(runnable)
-
                     val appUpdaterUtils = AppUpdaterUtils(this@SettingsActivity).also {
                         with(it) {
                             setUpdateFrom(UpdateFrom.GITHUB)
@@ -101,7 +100,11 @@ class SettingsActivity : AppCompatActivity() {
                                         newAppVersionText.text =
                                             "Detected new app version: ${update?.latestVersion}"
                                         newAppVersionText.visibility = View.VISIBLE
-                                        downloadLink = update?.urlToDownload.toString()
+                                        downloadLink = update?.urlToDownload.toString().replace(
+                                            "latest",
+                                            "download/v${update?.latestVersion}/Erela_FixMe_prerelease_v${update?.latestVersion}.apk"
+                                        )
+                                        Log.e("Download Link", downloadLink.toString())
                                     } else {
                                         if (currentAppVersion > update?.latestVersion!!) {
                                             CustomToast.getInstance(applicationContext)

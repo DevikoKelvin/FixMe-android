@@ -9,15 +9,12 @@ import androidx.core.content.res.ResourcesCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.erela.fixme.R
 import com.erela.fixme.databinding.ListItemSubmissionBinding
-import com.erela.fixme.helpers.UserDataHelper
 import com.erela.fixme.objects.SubmissionListResponse
-import com.erela.fixme.objects.UserData
 import java.util.Locale
 
 class SubmissionRvAdapter(val context: Context, val data: ArrayList<SubmissionListResponse>) :
     RecyclerView.Adapter<SubmissionRvAdapter.ViewHolder>() {
     private lateinit var onSubmissionClickListener: OnSubmissionClickListener
-    private lateinit var userData: UserData
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder = ViewHolder(
         ListItemSubmissionBinding.inflate(
@@ -33,7 +30,6 @@ class SubmissionRvAdapter(val context: Context, val data: ArrayList<SubmissionLi
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         with(holder) {
             binding.apply {
-                userData = UserDataHelper(context).getUserData()
                 val item = data[position]
 
                 submissionName.text = item.judulKasus
@@ -90,6 +86,16 @@ class SubmissionRvAdapter(val context: Context, val data: ArrayList<SubmissionLi
                             ResourcesCompat.getColor(
                                 context.resources,
                                 R.color.custom_toast_font_failed,
+                                context.theme
+                            )
+                        )
+                    }
+
+                    else -> {
+                        complexity.setCardBackgroundColor(
+                            ResourcesCompat.getColor(
+                                context.resources,
+                                R.color.white,
                                 context.theme
                             )
                         )

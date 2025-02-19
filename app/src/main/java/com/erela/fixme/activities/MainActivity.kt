@@ -248,7 +248,10 @@ class MainActivity : AppCompatActivity() {
                         if (isUpdateAvailable == true) {
                             val dialog = UpdateAvailableDialog(
                                 this@MainActivity,
-                                update?.urlToDownload.toString()
+                                update?.urlToDownload.toString().replace(
+                                    "latest",
+                                    "download/v${update?.latestVersion}/Erela_FixMe_prerelease_v${update?.latestVersion}.apk"
+                                )
                             )
 
                             if (dialog.window != null)
