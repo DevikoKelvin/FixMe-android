@@ -22,6 +22,7 @@
     <uses-permission android:name="android.permission.READ_MEDIA_VIDEO" />
     <uses-permission android:name="android.permission.READ_MEDIA_VISUAL_USER_SELECTED" />
     <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.SEND_DOWNLOAD_COMPLETED_INTENTS" />
 
     <application
         android:allowBackup="true"
@@ -122,7 +123,6 @@
             <intent-filter>
                 <action android:name="android.intent.action.REBOOT" />
                 <action android:name="android.intent.action.SCREEN_ON" />
-                <!--<action android:name="android.intent.action.BOOT_COMPLETED" />-->
             </intent-filter>
         </receiver>
 
@@ -136,5 +136,4 @@
                 android:resource="@xml/path_provider" />
         </provider>
     </application>
-
 </manifest>
