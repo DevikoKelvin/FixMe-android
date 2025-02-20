@@ -4,6 +4,7 @@ import android.Manifest
 import android.annotation.SuppressLint
 import android.app.ActivityManager
 import android.app.DownloadManager
+import android.content.ActivityNotFoundException
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
@@ -439,10 +440,24 @@ class MainActivity : AppCompatActivity() {
                 addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
                 addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
             }
-            if (installIntent.resolveActivity(packageManager) != null)
+            try {
                 startActivity(installIntent)
-            else
-                println("No activity found to handle APK installation")
+            } catch (ex: ActivityNotFoundException) {
+                CustomToast.getInstance(applicationContext)
+                    .setMessage("No activity found to handle APK installation.")
+                    .setFontColor(
+                        ContextCompat.getColor(
+                            this@MainActivity,
+                            R.color.custom_toast_font_failed
+                        )
+                    )
+                    .setBackgroundColor(
+                        ContextCompat.getColor(
+                            this@MainActivity,
+                            R.color.custom_toast_background_failed
+                        )
+                    ).show()
+            }
         } catch (e: Exception) {
             Log.e("InstallApk", "Error installing APK", e)
             CustomToast.getInstance(applicationContext)
