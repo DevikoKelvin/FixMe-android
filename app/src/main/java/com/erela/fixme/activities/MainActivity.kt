@@ -44,6 +44,7 @@ import com.github.tutorialsandroid.appxupdater.objects.Update
 import com.pusher.pushnotifications.PushNotifications
 import java.io.File
 import java.time.LocalDateTime
+import androidx.core.net.toUri
 
 class MainActivity : AppCompatActivity() {
     private val binding: ActivityMainBinding by lazy {
@@ -398,7 +399,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun startDownload(url: String) {
-        val request = DownloadManager.Request(Uri.parse(url))
+        val request = DownloadManager.Request(url.toUri())
             .setTitle("FixMe Updates")
             .setDescription("Please wait while the update is downloading...")
             .setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED)

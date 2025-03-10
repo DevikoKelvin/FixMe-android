@@ -1,13 +1,13 @@
 package com.erela.fixme.adapters.recycler_view
 
 import android.annotation.SuppressLint
-import com.erela.fixme.R
 import android.content.Context
 import android.view.View
 import android.view.ViewGroup
 import android.widget.CheckBox
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
+import com.erela.fixme.R
 import com.erela.fixme.bottom_sheets.MaterialQuantityBottomSheet
 import com.erela.fixme.bottom_sheets.SelectMaterialsBottomSheet
 import com.erela.fixme.databinding.ListItemSelectedItemsBinding

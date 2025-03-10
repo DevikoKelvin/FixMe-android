@@ -51,11 +51,11 @@ import retrofit2.Response
 import java.util.Locale
 
 class SubmissionDetailActivity : AppCompatActivity(),
-                                 SubmissionActionBottomSheet.OnButtonActionClickedListener,
-                                 ProgressTrackingBottomSheet.OnProgressTrackingListener,
-                                 ProgressTrackingBottomSheet.OnProgressItemLongTapListener,
-                                 ProgressOptionDialog.OnProgressOptionDialogListener,
-                                 TrialTrackingBottomSheet.OnTrialTrackingListener {
+    SubmissionActionBottomSheet.OnButtonActionClickedListener,
+    ProgressTrackingBottomSheet.OnProgressTrackingListener,
+    ProgressTrackingBottomSheet.OnProgressItemLongTapListener,
+    ProgressOptionDialog.OnProgressOptionDialogListener,
+    TrialTrackingBottomSheet.OnTrialTrackingListener {
     private val binding: ActivitySubmissionDetailBinding by lazy {
         ActivitySubmissionDetailBinding.inflate(layoutInflater)
     }
@@ -1358,7 +1358,9 @@ class SubmissionDetailActivity : AppCompatActivity(),
                                         detailData.namaMesin!!.ifEmpty { "-" }
                                     } else "-"
                                     user.text =
-                                        "${detailData.namaUserBuat?.trimEnd()}\nFrom ${detailData.deptUser} Department"
+                                        "${detailData.namaUserBuat?.trimEnd()} " +
+                                                "(ID: ${detailData.idUser} | StarConnect ID: ${detailData.idStarconnectUserBuat})" +
+                                                "\nFrom ${detailData.deptUser} Department"
                                     actionCondition(detailData)
                                     department.text = detailData.subDeptTujuan
                                     category.text = detailData.namaKategori

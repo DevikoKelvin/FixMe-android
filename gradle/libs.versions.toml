@@ -1,31 +1,31 @@
 [versions]
 # Plugins
-agp = "8.8.1"
+agp = "8.9.0"
 kotlin = "2.1.0"
 googleServices = "4.4.2"
 
 # Dependencies
 coreKtx = "1.15.0"
 appcompat = "1.7.0"
-activity = "1.10.0"
+activity = "1.10.1"
 material = "1.12.0"
 design = "28.0.0"
-constraintlayout = "2.2.0"
+constraintlayout = "2.2.1"
 junit = "4.13.2"
 junitVersion = "1.2.1"
 espressoCore = "3.6.1"
 
 # Third-party Dependencies
 firebaseCore = "21.1.1"
-firebaseBom = "33.9.0"
-firebaseAnalytic="22.2.0"
+firebaseBom = "33.10.0"
+firebaseAnalytic="22.3.0"
 firebaseIid="21.1.0"
 retrofit = "2.11.0"
 okhttp3 = "5.0.0-alpha.14"
 converterGson = "2.11.0"
 loggingInterceptor = "5.0.0-alpha.14"
 flexbox = "3.0.0"
-lottie = "6.6.1"
+lottie = "6.6.3"
 glide = "4.16.0"
 swipeRefreshLayout = "1.1.0"
 circleIndicator = "2.1.6"

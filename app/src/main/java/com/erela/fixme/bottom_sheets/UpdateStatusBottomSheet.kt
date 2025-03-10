@@ -34,6 +34,7 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import java.util.Locale
+import androidx.core.graphics.drawable.toDrawable
 
 class UpdateStatusBottomSheet(
     context: Context, private val dataDetail: SubmissionDetailResponse,
@@ -62,7 +63,7 @@ class UpdateStatusBottomSheet(
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
 
-        window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+        window?.setBackgroundDrawable(Color.TRANSPARENT.toDrawable())
         window?.setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT)
         setCancelable(true)
 
@@ -108,6 +109,7 @@ class UpdateStatusBottomSheet(
                     rejectButton.visibility = View.GONE
                     cancelButton.visibility = View.VISIBLE
                     deployTechButton.visibility = View.GONE
+                    descriptionFieldLayout.visibility = View.VISIBLE
                     cancelButton.setOnClickListener {
                         executeUpdate()
                     }
@@ -258,9 +260,11 @@ class UpdateStatusBottomSheet(
                         R.id.lowSelector -> {
                             complexity = lowSelector.text.toString().lowercase(Locale.getDefault())
                         }
+
                         R.id.midSelector -> {
                             complexity = midSelector.text.toString().lowercase(Locale.getDefault())
                         }
+
                         R.id.highSelector -> {
                             complexity = highSelector.text.toString().lowercase(Locale.getDefault())
                         }
@@ -973,7 +977,8 @@ class UpdateStatusBottomSheet(
                                                     .setMessage("Failed to deploy technicians.")
                                                     .show()
                                                 Log.e(
-                                                    "ERROR ${result?.code}", result?.message.toString()
+                                                    "ERROR ${result?.code}",
+                                                    result?.message.toString()
                                                 )
                                             }
                                         } else {

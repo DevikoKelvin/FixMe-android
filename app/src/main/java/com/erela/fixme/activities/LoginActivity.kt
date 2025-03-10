@@ -108,7 +108,7 @@ class LoginActivity : AppCompatActivity() {
                                 if (response.body() != null) {
                                     val result = response.body()
                                     val name = result?.nama!!.toString()
-                                    when (response.body()?.code) {
+                                    when (result.code) {
                                         0 -> {
                                             CustomToast.getInstance(applicationContext)
                                                 .setMessage("Wrong password. Please try again!")

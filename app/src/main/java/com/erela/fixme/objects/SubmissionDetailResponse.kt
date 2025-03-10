@@ -48,6 +48,8 @@ data class SubmissionDetailResponse(
     val namaUserPelaporReject: String? = null,
     @field:SerializedName("nama_user_buat")
     val namaUserBuat: String? = null,
+    @field:SerializedName("id_starconnect_user_buat")
+    val idStarconnectUserBuat: String? = null,
     @field:SerializedName("dept_user")
     val deptUser: String? = null,
     @field:SerializedName("tgl_input")

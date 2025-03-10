@@ -267,6 +267,7 @@ class SubmissionListActivity : AppCompatActivity(), SubmissionRvAdapter.OnSubmis
                                                             selectedFilter: Int,
                                                             selectedComplexity: String
                                                         ) {
+                                                            getSubmissionList()
                                                             filterList(
                                                                 response.body(),
                                                                 filter,

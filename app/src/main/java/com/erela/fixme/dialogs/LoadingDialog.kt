@@ -6,6 +6,7 @@ import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import com.erela.fixme.databinding.DialogLoadingBinding
+import androidx.core.graphics.drawable.toDrawable
 
 class LoadingDialog(context: Context) : Dialog(context) {
     private val binding: DialogLoadingBinding by lazy {
@@ -16,7 +17,7 @@ class LoadingDialog(context: Context) : Dialog(context) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
 
-        window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+        window?.setBackgroundDrawable(Color.TRANSPARENT.toDrawable())
         setCancelable(false)
     }
 }
