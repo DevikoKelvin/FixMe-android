@@ -3,8 +3,8 @@ package com.erela.fixme.dialogs
 import android.app.Dialog
 import android.content.Context
 import android.graphics.Color
-import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
+import androidx.core.graphics.drawable.toDrawable
 import com.erela.fixme.databinding.DialogConfirmationBinding
 
 class ConfirmationDialog(context: Context): Dialog(context) {
@@ -24,7 +24,7 @@ class ConfirmationDialog(context: Context): Dialog(context) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
 
-        window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+        window?.setBackgroundDrawable(Color.TRANSPARENT.toDrawable())
         setCancelable(false)
 
         init()
