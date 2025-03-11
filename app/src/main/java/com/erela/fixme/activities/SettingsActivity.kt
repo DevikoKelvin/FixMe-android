@@ -24,6 +24,7 @@ import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
+import androidx.core.net.toUri
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.erela.fixme.BuildConfig
@@ -64,7 +65,7 @@ class SettingsActivity : AppCompatActivity() {
                             if (uriColumnIndex != -1) {
                                 val fileUriString = cursor.getString(uriColumnIndex)
                                 if (fileUriString != null) {
-                                    val fileUri = Uri.parse(fileUriString)
+                                    val fileUri = fileUriString.toUri()
                                     installApk(fileUri)
                                 } else {
                                     Log.e("DownloadManager", "COLUMN_LOCAL_URI is null")
@@ -300,7 +301,7 @@ class SettingsActivity : AppCompatActivity() {
     }
 
     private fun startDownload(url: String) {
-        val request = DownloadManager.Request(Uri.parse(url))
+        val request = DownloadManager.Request(url.toUri())
             .setTitle("FixMe Updates")
             .setDescription("Please wait while the update is downloading...")
             .setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED)

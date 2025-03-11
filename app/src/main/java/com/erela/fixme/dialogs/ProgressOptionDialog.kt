@@ -3,9 +3,9 @@ package com.erela.fixme.dialogs
 import android.app.Dialog
 import android.content.Context
 import android.graphics.Color
-import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.view.View
+import androidx.core.graphics.drawable.toDrawable
 import com.erela.fixme.databinding.DialogProgressOptionBinding
 import com.erela.fixme.objects.ProgressItem
 
@@ -21,7 +21,7 @@ class ProgressOptionDialog(
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
 
-        window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+        window?.setBackgroundDrawable(Color.TRANSPARENT.toDrawable())
         setCancelable(true)
 
         init()

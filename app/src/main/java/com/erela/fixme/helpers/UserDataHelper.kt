@@ -2,6 +2,7 @@ package com.erela.fixme.helpers
 
 import android.content.Context
 import com.erela.fixme.objects.UserData
+import androidx.core.content.edit
 
 class UserDataHelper(private val context: Context) {
     private val keyId = "key.id"
@@ -17,18 +18,20 @@ class UserDataHelper(private val context: Context) {
         id: Int, idStarConnect: Int, username: String, name: String, privilege: Int, idDept: Int,
         dept: String, subDept: String
     ) {
-        SharedPreferencesHelper.getSharedPreferences(context).edit().also {
-            it.apply {
-                putInt(keyId, id)
-                putInt(keyIdStarConnect, idStarConnect)
-                putString(keyUsername, username)
-                putString(keyName, name)
-                putInt(keyStatusPrev, privilege)
-                putInt(keyIdDept, idDept)
-                putString(keyDept, dept)
-                putString(keySubDept, subDept)
+        SharedPreferencesHelper.getSharedPreferences(context).edit {
+            also {
+                it.apply {
+                    putInt(keyId, id)
+                    putInt(keyIdStarConnect, idStarConnect)
+                    putString(keyUsername, username)
+                    putString(keyName, name)
+                    putInt(keyStatusPrev, privilege)
+                    putInt(keyIdDept, idDept)
+                    putString(keyDept, dept)
+                    putString(keySubDept, subDept)
+                }
             }
-        }.apply()
+        }
     }
 
     fun getUserData(): UserData {
@@ -57,6 +60,6 @@ class UserDataHelper(private val context: Context) {
             .contains(keyUsername)
 
     fun purgeUserData() {
-        SharedPreferencesHelper.getSharedPreferences(context).edit().clear().apply()
+        SharedPreferencesHelper.getSharedPreferences(context).edit { clear() }
     }
 }

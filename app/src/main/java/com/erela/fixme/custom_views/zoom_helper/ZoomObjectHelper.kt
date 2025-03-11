@@ -7,6 +7,7 @@ import android.graphics.PointF
 import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.graphics.createBitmap
 
 object ZoomObjectHelper {
     interface ZoomListener {
@@ -45,7 +46,7 @@ object ZoomObjectHelper {
 
     fun getBitmapFromView(view: View): Bitmap {
         // Define a bitmap with the same size as the view
-        val returnedBitmap = Bitmap.createBitmap(view.width, view.height, Bitmap.Config.ARGB_8888)
+        val returnedBitmap = createBitmap(view.width, view.height)
         // Bind a canvas to it
         val canvas = Canvas(returnedBitmap)
         // Draw the view on the canvas
