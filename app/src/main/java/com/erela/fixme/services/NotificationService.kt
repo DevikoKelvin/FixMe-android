@@ -3,11 +3,11 @@ package com.erela.fixme.services
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.Service
+import android.content.Context
 import android.content.Intent
 import android.os.IBinder
 import androidx.core.app.NotificationCompat
 import com.erela.fixme.R
-import com.erela.fixme.helpers.NotificationsHelper
 import com.erela.fixme.helpers.UserDataHelper
 
 class NotificationService : Service() {
@@ -23,7 +23,6 @@ class NotificationService : Service() {
     override fun onBind(intent: Intent?): IBinder? = null
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-        val userData = UserDataHelper(this).getUserData()
         Thread {
             while (true) {
                 val channel =
@@ -43,7 +42,11 @@ class NotificationService : Service() {
 
                 startForeground(NOTIFICATION_ID_FOREGROUND, notificationBuilder)
 
-                NotificationsHelper.receiveNotifications(applicationContext, userData)
+                if (!UserDataHelper(this).getNotification()) {
+                    createNotificationChannel()
+                    UserDataHelper(this).setNotification(true)
+                }
+
                 try {
                     Thread.sleep(30000)
                 } catch (interruptedException: InterruptedException) {
@@ -53,5 +56,16 @@ class NotificationService : Service() {
         }.start()
 
         return super.onStartCommand(intent, flags, startId)
+    }
+
+    private fun createNotificationChannel() {
+        val notificationManager =
+            getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+        val channel = NotificationChannel(
+            CHANNEL_ID,
+            CHANNEL_NAME,
+            NotificationManager.IMPORTANCE_HIGH
+        )
+        notificationManager.createNotificationChannel(channel)
     }
 }
