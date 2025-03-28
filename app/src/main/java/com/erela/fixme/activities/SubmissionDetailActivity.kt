@@ -1396,28 +1396,18 @@ class SubmissionDetailActivity : AppCompatActivity(),
                                     ) {
                                         "-"
                                     } else {
-                                        if (detailData.userNamaApprove != "") {
-                                            "Approved by"
-                                        } else if (detailData.nameUserReject != "") {
-                                            "Rejected by"
-                                        } else {
-                                            "-"
+                                        when {
+                                            detailData.userNamaApprove?.isNotEmpty() == true -> "Approved by"
+                                            detailData.nameUserReject?.isNotEmpty() == true -> "Rejected by"
+                                            else -> "-"
                                         }
                                     }
 
-                                    userApprovedOrRejected.text = if (detailData.userNamaApprove
-                                        == "" && detailData.nameUserReject == ""
-                                    ) {
-                                        "-"
-                                    } else {
-                                        if (detailData.userNamaApprove != "") {
-                                            detailData.userNamaApprove?.trimEnd()
-                                        } else if (detailData.nameUserReject != "") {
-                                            detailData.nameUserReject?.trimEnd()
-                                        } else {
-                                            "-"
-                                        }
-                                    }
+                                    userApprovedOrRejected.text =
+                                        detailData.userNamaApprove?.takeIf { it.isNotBlank() }
+                                            ?.trimEnd()
+                                            ?: detailData.nameUserReject?.takeIf { it.isNotBlank() }
+                                                ?.trimEnd() ?: "-"
 
                                     userSupervisors.text = StringBuilder().also {
                                         with(it) {

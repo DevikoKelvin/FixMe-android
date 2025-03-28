@@ -23,8 +23,10 @@ import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
+import androidx.core.net.toUri
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.lifecycle.lifecycleScope
 import com.erela.fixme.BuildConfig
 import com.erela.fixme.R
 import com.erela.fixme.bottom_sheets.UserInfoBottomSheet
@@ -44,7 +46,6 @@ import com.github.tutorialsandroid.appxupdater.objects.Update
 import com.pusher.pushnotifications.PushNotifications
 import java.io.File
 import java.time.LocalDateTime
-import androidx.core.net.toUri
 
 class MainActivity : AppCompatActivity() {
     private val binding: ActivityMainBinding by lazy {
@@ -74,7 +75,7 @@ class MainActivity : AppCompatActivity() {
                             if (uriColumnIndex != -1) {
                                 val fileUriString = cursor.getString(uriColumnIndex)
                                 if (fileUriString != null) {
-                                    val fileUri = Uri.parse(fileUriString)
+                                    val fileUri = fileUriString.toUri()
                                     installApk(fileUri)
                                 } else {
                                     Log.e("DownloadManager", "COLUMN_LOCAL_URI is null")
@@ -170,11 +171,6 @@ class MainActivity : AppCompatActivity() {
                 )
             }
 
-            if (UserDataHelper(this@MainActivity).getNotification())
-                NotificationsHelper.receiveNotifications(applicationContext, userData)
-
-            PushNotifications.start(applicationContext, "66b9148d-50f4-4114-b258-e9e9485ce75c")
-
             if (!isFinishing) {
                 runOnUiThread {
                     if (!isServiceRunning(NotificationService::class.java)) {
@@ -182,6 +178,11 @@ class MainActivity : AppCompatActivity() {
                             startForegroundService(it)
                         }
                     }
+
+                    if (UserDataHelper(this@MainActivity).getNotification())
+                        NotificationsHelper.receiveNotifications(applicationContext, userData)
+
+                    PushNotifications.start(applicationContext, "66b9148d-50f4-4114-b258-e9e9485ce75c")
                 }
             }
 
@@ -254,8 +255,8 @@ class MainActivity : AppCompatActivity() {
             val currentDateTime = LocalDateTime.now()
             greetingText.text = "Good ${
                 when (currentDateTime.hour) {
-                    in 0 .. 11 -> "morning,"
-                    in 12 .. 18 -> "afternoon,"
+                    in 0..11 -> "morning,"
+                    in 12..18 -> "afternoon,"
                     else -> "evening,"
                 }
             }"

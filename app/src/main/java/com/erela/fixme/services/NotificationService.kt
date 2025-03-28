@@ -8,6 +8,7 @@ import android.content.Intent
 import android.os.IBinder
 import androidx.core.app.NotificationCompat
 import com.erela.fixme.R
+import com.erela.fixme.helpers.NotificationsHelper
 import com.erela.fixme.helpers.UserDataHelper
 
 class NotificationService : Service() {
@@ -42,13 +43,18 @@ class NotificationService : Service() {
 
                 startForeground(NOTIFICATION_ID_FOREGROUND, notificationBuilder)
 
-                if (!UserDataHelper(this).getNotification()) {
-                    createNotificationChannel()
+                if (!UserDataHelper(this).getNotification())
                     UserDataHelper(this).setNotification(true)
+                else {
+                    createNotificationChannel()
+                    NotificationsHelper.callNewNotification(
+                        this,
+                        UserDataHelper(this).getUserData()
+                    )
                 }
 
                 try {
-                    Thread.sleep(30000)
+                    Thread.sleep(1500)
                 } catch (interruptedException: InterruptedException) {
                     interruptedException.printStackTrace()
                 }
