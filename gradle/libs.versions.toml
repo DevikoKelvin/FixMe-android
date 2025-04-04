@@ -17,7 +17,7 @@ espressoCore = "3.6.1"
 
 # Third-party Dependencies
 firebaseCore = "21.1.1"
-firebaseBom = "33.11.0"
+firebaseBom = "33.12.0"
 firebaseAnalytic="22.4.0"
 firebaseIid="21.1.0"
 retrofit = "2.11.0"
