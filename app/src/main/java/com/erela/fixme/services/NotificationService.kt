@@ -54,7 +54,7 @@ class NotificationService : Service() {
                 }
 
                 try {
-                    Thread.sleep(1500)
+                    Thread.sleep(2000)
                 } catch (interruptedException: InterruptedException) {
                     interruptedException.printStackTrace()
                 }
