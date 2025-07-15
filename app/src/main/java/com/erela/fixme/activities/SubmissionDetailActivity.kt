@@ -139,9 +139,14 @@ class SubmissionDetailActivity : AppCompatActivity(),
                 var count = 1
                 override fun run() {
                     when (count) {
-                        1 -> detailTitle.text = "Loading."
-                        2 -> detailTitle.text = "Loading.."
-                        3 -> detailTitle.text = "Loading..."
+                        1 -> detailTitle.text =
+                            if (getString(R.string.lang) == "in") "Memuat." else "Loading."
+
+                        2 -> detailTitle.text =
+                            if (getString(R.string.lang) == "in") "Memuat.." else "Loading.."
+
+                        3 -> detailTitle.text =
+                            if (getString(R.string.lang) == "in") "Memuat..." else "Loading..."
                     }
                     count = if (count < 3) count + 1 else 1
                     handler.postDelayed(this, 500)
@@ -163,7 +168,6 @@ class SubmissionDetailActivity : AppCompatActivity(),
                             if (response.isSuccessful) {
                                 if (response.body() != null) {
                                     detailData = response.body()!![0]
-                                    /*Log.e("DATA", detailData.toString())*/
                                     detailTitle.text = detailData.nomorRequest
                                     if (detailData.fotoGaprojects!!.isEmpty()) {
                                         imageContainer.visibility = View.GONE
@@ -271,7 +275,9 @@ class SubmissionDetailActivity : AppCompatActivity(),
                                             statusMessageContainer.setOnClickListener {
                                                 statusMessageContainer.showAlignTop(
                                                     createBalloonOverlay(
-                                                        "Reason: ${detailData.keteranganReject}",
+                                                        if (getString(R.string.lang) == "in")
+                                                            "Alasan: ${detailData.keteranganReject}"
+                                                        else "Reason: ${detailData.keteranganReject}",
                                                         R.color.custom_toast_background_normal_dark_gray,
                                                         R.color.custom_toast_font_normal_soft_gray
                                                     ), 0, 0
@@ -285,7 +291,10 @@ class SubmissionDetailActivity : AppCompatActivity(),
                                                 )
                                             )
                                             statusMessage.text =
-                                                "Rejected by ${detailData.nameUserReject?.trimEnd()}\nClick to see reason"
+                                                if (getString(R.string.lang) == "in")
+                                                    "Ditolak oleh ${detailData.nameUserReject?.trimEnd()}\nKetuk untuk melihat alasan"
+                                                else
+                                                    "Rejected by ${detailData.nameUserReject?.trimEnd()}\nTap to see reason"
                                             statusMessage.setTextColor(
                                                 ContextCompat.getColor(
                                                     this@SubmissionDetailActivity,
@@ -323,7 +332,9 @@ class SubmissionDetailActivity : AppCompatActivity(),
                                             statusMessageContainer.setOnClickListener {
                                                 statusMessageContainer.showAlignTop(
                                                     createBalloonOverlay(
-                                                        "Message: ${detailData.keteranganPelaporApprove}",
+                                                        if (getString(R.string.lang) == "in")
+                                                            "Pesan: ${detailData.keteranganPelaporApprove}"
+                                                        else "Message: ${detailData.keteranganPelaporApprove}",
                                                         R.color.custom_toast_font_success,
                                                         R.color.custom_toast_background_success
                                                     ), 0, 0
@@ -337,7 +348,10 @@ class SubmissionDetailActivity : AppCompatActivity(),
                                                 )
                                             )
                                             statusMessage.text =
-                                                "Approved by ${detailData.namaUserPelaporApprove?.trimEnd()}\nWait for targeted manager to approve\nClick to see message"
+                                                if (getString(R.string.lang) == "in")
+                                                    "Disetujui oleh ${detailData.namaUserPelaporApprove?.trimEnd()}\nTunggu manajer tujuan untuk menyetujui\nKetuk untuk melihat pesan"
+                                                else
+                                                    "Approved by ${detailData.namaUserPelaporApprove?.trimEnd()}\nWait for targeted manager to approve\nTap to see message"
                                             statusMessage.setTextColor(
                                                 ContextCompat.getColor(
                                                     this@SubmissionDetailActivity,
@@ -395,7 +409,9 @@ class SubmissionDetailActivity : AppCompatActivity(),
                                                     statusMessageContainer.setOnClickListener {
                                                         statusMessageContainer.showAlignTop(
                                                             createBalloonOverlay(
-                                                                "Message: ${detailData.ketApproved}",
+                                                                if (getString(R.string.lang) == "in")
+                                                                    "Pesan: ${detailData.ketApproved}"
+                                                                else "Message: ${detailData.ketApproved}",
                                                                 R.color.custom_toast_font_success,
                                                                 R.color.custom_toast_background_success
                                                             ), 0, 0
@@ -409,65 +425,18 @@ class SubmissionDetailActivity : AppCompatActivity(),
                                                         )
                                                     )
                                                     message = StringBuilder().append(
-                                                        "Approved by ${detailData.userNamaApprove?.trimEnd()}\nWaiting for action from "
+                                                        if (getString(R.string.lang) == "in")
+                                                            "Disetujui oleh ${detailData.userNamaApprove?.trimEnd()}\nKetuk untuk melihat pesan"
+                                                        else
+                                                            "Approved by ${detailData.userNamaApprove?.trimEnd()}\nTap to see message"
                                                     )
-                                                    if (detailData.usernUserTeknisi!!.isNotEmpty()) {
-                                                        for (i in 0 until detailData.usernUserTeknisi!!.size) {
-                                                            if (detailData.usernUserTeknisi!!.size > 1) {
-                                                                if (i < detailData.usernUserTeknisi!!.size - 1) {
-                                                                    message.append(
-                                                                        "${detailData.usernUserTeknisi!![i]?.namaUser?.trimEnd()} or "
-                                                                    )
-                                                                } else {
-                                                                    message.append(
-                                                                        "${detailData.usernUserTeknisi!![i]?.namaUser?.trimEnd()}"
-                                                                    )
-                                                                }
-                                                            } else
-                                                                message.append(
-                                                                    "${detailData.usernUserTeknisi!![i]?.namaUser?.trimEnd()}"
-                                                                )
-                                                        }
-                                                        statusMessage.text = message.toString()
-                                                        statusMessage.setTextColor(
-                                                            ContextCompat.getColor(
-                                                                this@SubmissionDetailActivity,
-                                                                R.color.black
-                                                            )
+                                                    statusMessage.text = message.toString()
+                                                    statusMessage.setTextColor(
+                                                        ContextCompat.getColor(
+                                                            this@SubmissionDetailActivity,
+                                                            R.color.black
                                                         )
-                                                    } else {
-                                                        if (detailData.usernUserSpv!!.isNotEmpty()) {
-                                                            for (i in 0 until detailData.usernUserSpv!!.size) {
-                                                                if (detailData.usernUserSpv!!.size > 1) {
-                                                                    if (i < detailData.usernUserSpv!!.size - 1) {
-                                                                        message.append(
-                                                                            "${detailData.usernUserSpv!![i]?.namaUser?.trimEnd()} or "
-                                                                        )
-                                                                    } else {
-                                                                        message.append(
-                                                                            "${detailData.usernUserSpv!![i]?.namaUser?.trimEnd()}"
-                                                                        )
-                                                                    }
-                                                                } else
-                                                                    message.append(
-                                                                        "${detailData.usernUserSpv!![i]?.namaUser?.trimEnd()}"
-                                                                    )
-                                                            }
-                                                            message.append(
-                                                                " to assign technicians\nClick to see message"
-                                                            )
-                                                            statusMessage.text =
-                                                                message.toString()
-                                                            statusMessage.setTextColor(
-                                                                ContextCompat.getColor(
-                                                                    this@SubmissionDetailActivity,
-                                                                    R.color.black
-                                                                )
-                                                            )
-                                                        } else {
-                                                            Log.e("ERROR SPV", "SPV null")
-                                                        }
-                                                    }
+                                                    )
                                                 }
                                             }
                                         }
@@ -493,8 +462,10 @@ class SubmissionDetailActivity : AppCompatActivity(),
                                                     holdResumeButton.setOnClickListener {
                                                         val confirmationDialog = ConfirmationDialog(
                                                             this@SubmissionDetailActivity,
-                                                            "Are you sure want to resume this issue?",
-                                                            "Yes"
+                                                            if (getString(R.string.lang) == "in")
+                                                                "Apakah Anda yakin ingin melanjutkan masalah ini?"
+                                                            else "Are you sure want to resume this issue?",
+                                                            if (getString(R.string.lang) == "in") "Ya" else "Yes"
                                                         ).also {
                                                             with(it) {
                                                                 setConfirmationDialogListener(
@@ -546,7 +517,13 @@ class SubmissionDetailActivity : AppCompatActivity(),
                                                                                                                     )
                                                                                                                 )
                                                                                                                 .setMessage(
-                                                                                                                    "Issue was resumed!"
+                                                                                                                    if (getString(
+                                                                                                                            R.string.lang
+                                                                                                                        ) == "in"
+                                                                                                                    )
+                                                                                                                        "Masalah dilanjutkan"
+                                                                                                                    else
+                                                                                                                        "Issue was resumed!"
                                                                                                                 )
                                                                                                                 .show()
                                                                                                             init()
@@ -570,7 +547,13 @@ class SubmissionDetailActivity : AppCompatActivity(),
                                                                                                                     )
                                                                                                                 )
                                                                                                                 .setMessage(
-                                                                                                                    "Failed to resume this issue"
+                                                                                                                    if (getString(
+                                                                                                                            R.string.lang
+                                                                                                                        ) == "in"
+                                                                                                                    )
+                                                                                                                        "Gagal melanjutkan masalah ini"
+                                                                                                                    else
+                                                                                                                        "Failed to resume this issue"
                                                                                                                 )
                                                                                                                 .show()
                                                                                                             Log.e(
@@ -598,7 +581,13 @@ class SubmissionDetailActivity : AppCompatActivity(),
                                                                                                                 )
                                                                                                             )
                                                                                                             .setMessage(
-                                                                                                                "Failed to resume this issue"
+                                                                                                                if (getString(
+                                                                                                                        R.string.lang
+                                                                                                                    ) == "in"
+                                                                                                                )
+                                                                                                                    "Gagal melanjutkan masalah ini"
+                                                                                                                else
+                                                                                                                    "Failed to resume this issue"
                                                                                                             )
                                                                                                             .show()
                                                                                                         Log.e(
@@ -626,7 +615,13 @@ class SubmissionDetailActivity : AppCompatActivity(),
                                                                                                             )
                                                                                                         )
                                                                                                         .setMessage(
-                                                                                                            "Failed to resume this issue"
+                                                                                                            if (getString(
+                                                                                                                    R.string.lang
+                                                                                                                ) == "in"
+                                                                                                            )
+                                                                                                                "Gagal melanjutkan masalah ini"
+                                                                                                            else
+                                                                                                                "Failed to resume this issue"
                                                                                                         )
                                                                                                         .show()
                                                                                                     Log.e(
@@ -661,7 +656,13 @@ class SubmissionDetailActivity : AppCompatActivity(),
                                                                                                         )
                                                                                                     )
                                                                                                     .setMessage(
-                                                                                                        "Something went wrong, please try again later"
+                                                                                                        if (getString(
+                                                                                                                R.string.lang
+                                                                                                            ) == "in"
+                                                                                                        )
+                                                                                                            "Terjadi kesalahan, silakan coba lagi nanti"
+                                                                                                        else
+                                                                                                            "Something went wrong, please try again later"
                                                                                                     )
                                                                                                     .show()
                                                                                                 throwable.printStackTrace()
@@ -693,7 +694,13 @@ class SubmissionDetailActivity : AppCompatActivity(),
                                                                                         )
                                                                                     )
                                                                                     .setMessage(
-                                                                                        "Something went wrong, please try again later"
+                                                                                        if (getString(
+                                                                                                R.string.lang
+                                                                                            ) == "in"
+                                                                                        )
+                                                                                            "Terjadi kesalahan, silakan coba lagi nanti"
+                                                                                        else
+                                                                                            "Something went wrong, please try again later"
                                                                                     )
                                                                                     .show()
                                                                                 jsonException.printStackTrace()
@@ -757,9 +764,15 @@ class SubmissionDetailActivity : AppCompatActivity(),
                                                 if (progressTrackingBottomSheet.window != null)
                                                     progressTrackingBottomSheet.show()
                                             }
-                                            onProgressText.text = "Issue on hold by ${
-                                                detailData.namaUserHold
-                                            }\nClick to see progress"
+                                            onProgressText.text =
+                                                if (getString(R.string.lang) == "in")
+                                                    "Masalah dijeda oleh ${
+                                                        detailData.namaUserHold
+                                                    }\nKetuk untuk melihat kemajuan"
+                                                else
+                                                    "Issue on hold by ${
+                                                        detailData.namaUserHold
+                                                    }\nTap to see progress"
                                             onProgressText.setTextColor(
                                                 ContextCompat.getColor(
                                                     this@SubmissionDetailActivity,
@@ -842,7 +855,13 @@ class SubmissionDetailActivity : AppCompatActivity(),
                                                                                                                         )
                                                                                                                     )
                                                                                                                     .setMessage(
-                                                                                                                        "Issue was hold!"
+                                                                                                                        if (getString(
+                                                                                                                                R.string.lang
+                                                                                                                            ) == "in"
+                                                                                                                        )
+                                                                                                                            "Masalah telah dijeda!"
+                                                                                                                        else
+                                                                                                                            "Issue was hold!"
                                                                                                                     )
                                                                                                                     .show()
                                                                                                                 init()
@@ -866,7 +885,13 @@ class SubmissionDetailActivity : AppCompatActivity(),
                                                                                                                         )
                                                                                                                     )
                                                                                                                     .setMessage(
-                                                                                                                        "Failed to hold this issue"
+                                                                                                                        if (getString(
+                                                                                                                                R.string.lang
+                                                                                                                            ) == "in"
+                                                                                                                        )
+                                                                                                                            "Gagal menjeda masalah ini"
+                                                                                                                        else
+                                                                                                                            "Failed to hold this issue"
                                                                                                                     )
                                                                                                                     .show()
                                                                                                                 Log.e(
@@ -894,7 +919,13 @@ class SubmissionDetailActivity : AppCompatActivity(),
                                                                                                                     )
                                                                                                                 )
                                                                                                                 .setMessage(
-                                                                                                                    "Failed to hold this issue"
+                                                                                                                    if (getString(
+                                                                                                                            R.string.lang
+                                                                                                                        ) == "in"
+                                                                                                                    )
+                                                                                                                        "Gagal menjeda masalah ini"
+                                                                                                                    else
+                                                                                                                        "Failed to hold this issue"
                                                                                                                 )
                                                                                                                 .show()
                                                                                                             Log.e(
@@ -922,7 +953,13 @@ class SubmissionDetailActivity : AppCompatActivity(),
                                                                                                                 )
                                                                                                             )
                                                                                                             .setMessage(
-                                                                                                                "Failed to hold this issue"
+                                                                                                                if (getString(
+                                                                                                                        R.string.lang
+                                                                                                                    ) == "in"
+                                                                                                                )
+                                                                                                                    "Gagal menjeda masalah ini"
+                                                                                                                else
+                                                                                                                    "Failed to hold this issue"
                                                                                                             )
                                                                                                             .show()
                                                                                                         Log.e(
@@ -957,7 +994,13 @@ class SubmissionDetailActivity : AppCompatActivity(),
                                                                                                             )
                                                                                                         )
                                                                                                         .setMessage(
-                                                                                                            "Something went wrong, please try again later"
+                                                                                                            if (getString(
+                                                                                                                    R.string.lang
+                                                                                                                ) == "in"
+                                                                                                            )
+                                                                                                                "Terjadi kesalahan, silakan coba lagi nanti"
+                                                                                                            else
+                                                                                                                "Something went wrong, please try again later"
                                                                                                         )
                                                                                                         .show()
                                                                                                     throwable.printStackTrace()
@@ -989,7 +1032,13 @@ class SubmissionDetailActivity : AppCompatActivity(),
                                                                                             )
                                                                                         )
                                                                                         .setMessage(
-                                                                                            "Something went wrong, please try again later"
+                                                                                            if (getString(
+                                                                                                    R.string.lang
+                                                                                                ) == "in"
+                                                                                            )
+                                                                                                "Terjadi kesalahan, silakan coba lagi nanti"
+                                                                                            else
+                                                                                                "Something went wrong, please try again later"
                                                                                         )
                                                                                         .show()
                                                                                     jsonException.printStackTrace()
@@ -1039,22 +1088,13 @@ class SubmissionDetailActivity : AppCompatActivity(),
                                                     R.color.custom_toast_font_normal_gray
                                                 )
                                             )
-                                            message = StringBuilder().append("On Progress by ")
-                                            for (i in 0 until detailData.usernUserTeknisi!!.size) {
-                                                if (detailData.usernUserTeknisi!!.size > 1) {
-                                                    if (i < detailData.usernUserTeknisi!!.size - 1)
-                                                        message.append(
-                                                            "${detailData.usernUserTeknisi!![i]?.namaUser?.trimEnd()}, "
-                                                        )
+                                            message =
+                                                StringBuilder().append(
+                                                    if (getString(R.string.lang) == "in")
+                                                        "Sedang dalam proses\nKetuk untuk melihat kemajuan"
                                                     else
-                                                        message.append(
-                                                            "${detailData.usernUserTeknisi!![i]?.namaUser?.trimEnd()}\nClick to see progress"
-                                                        )
-                                                } else
-                                                    message.append(
-                                                        "${detailData.usernUserTeknisi!![i]?.namaUser?.trimEnd()}\nClick to see progress"
-                                                    )
-                                            }
+                                                        "On Progress\nTap to see progress"
+                                                )
                                             onProgressText.text = message.toString()
                                             onProgressText.setTextColor(
                                                 ContextCompat.getColor(
@@ -1116,10 +1156,16 @@ class SubmissionDetailActivity : AppCompatActivity(),
                                             onProgressButton.visibility = View.VISIBLE
                                             message =
                                                 StringBuilder().append(
-                                                    "Progress marked as done by "
+                                                    if (getString(R.string.lang) == "in")
+                                                        "Kemajuan telah ditandai selesai oleh "
+                                                    else
+                                                        "Progress marked as done by "
                                                 )
                                             message.append(
-                                                "${detailData.usernUserSpv!![0]?.namaUser?.trimEnd()}\nClick to see progress"
+                                                if (getString(R.string.lang) == "in")
+                                                    "${detailData.usernUserSpv!![0]?.namaUser?.trimEnd()}\nKetuk untuk melihat kemajuan"
+                                                else
+                                                    "${detailData.usernUserSpv!![0]?.namaUser?.trimEnd()}\nTap to see progress"
                                             )
                                             onProgressText.text = message.toString()
                                             onProgressText.setTextColor(
@@ -1200,7 +1246,10 @@ class SubmissionDetailActivity : AppCompatActivity(),
                                                 )
                                             )
                                             statusMessage.text =
-                                                "Done by ${detailData.nameUserDone?.trimEnd()}\nClick to see progress"
+                                                if (getString(R.string.lang) == "in")
+                                                    "Masalah telah ditandai selesai oleh ${detailData.nameUserDone?.trimEnd()}\nKetuk untuk melihat kemajuan"
+                                                else
+                                                    "Done by ${detailData.nameUserDone?.trimEnd()}\nTap to see progress"
                                             statusMessage.setTextColor(
                                                 ContextCompat.getColor(
                                                     this@SubmissionDetailActivity,
@@ -1271,10 +1320,17 @@ class SubmissionDetailActivity : AppCompatActivity(),
                                                 )
                                             )
                                             statusMessage.text =
-                                                if (userData.id == detailData.idUser)
-                                                    "Canceled by You"
-                                                else
-                                                    "Canceled by the reporter, ${detailData.namaUserBuat?.trimEnd()}"
+                                                if (userData.id == detailData.idUser) {
+                                                    if (getString(R.string.lang) == "in")
+                                                        "Dibatalkan oleh Anda"
+                                                    else
+                                                        "Canceled by You"
+                                                } else {
+                                                    if (getString(R.string.lang) == "in")
+                                                        "Dibatalkan oleh pelapor, ${detailData.namaUserBuat?.trimEnd()}"
+                                                    else
+                                                        "Canceled by the reporter, ${detailData.namaUserBuat?.trimEnd()}"
+                                                }
                                             statusMessage.setTextColor(
                                                 ContextCompat.getColor(
                                                     this@SubmissionDetailActivity,
@@ -1305,7 +1361,10 @@ class SubmissionDetailActivity : AppCompatActivity(),
                                                 )
                                             )
                                             statusMessage.text =
-                                                "The fix is under trial. Wait until it done.\nClick to see progress"
+                                                if (getString(R.string.lang) == "in")
+                                                    "Masalah sedang dalam uji coba. Tunggu hingga selesai.\nKetuk untuk melihat kemajuan"
+                                                else
+                                                    "The fix is under trial. Wait until it done.\nTap to see progress"
                                             statusMessage.setTextColor(
                                                 ContextCompat.getColor(
                                                     this@SubmissionDetailActivity,
@@ -1360,7 +1419,8 @@ class SubmissionDetailActivity : AppCompatActivity(),
                                     user.text =
                                         "${detailData.namaUserBuat?.trimEnd()} " +
                                                 "(ID: ${detailData.idUser} | StarConnect ID: ${detailData.idStarconnectUserBuat})" +
-                                                "\nFrom ${detailData.deptUser} Department"
+                                                if (getString(R.string.lang) == "in") "\nDari Departemen ${detailData.deptUser}"
+                                                else "\nFrom ${detailData.deptUser} Department"
                                     actionCondition(detailData)
                                     department.text = detailData.subDeptTujuan
                                     category.text = detailData.namaKategori
@@ -1397,8 +1457,16 @@ class SubmissionDetailActivity : AppCompatActivity(),
                                         "-"
                                     } else {
                                         when {
-                                            detailData.userNamaApprove?.isNotEmpty() == true -> "Approved by"
-                                            detailData.nameUserReject?.isNotEmpty() == true -> "Rejected by"
+                                            detailData.userNamaApprove?.isNotEmpty() == true -> if (getString(
+                                                    R.string.lang
+                                                ) == "in"
+                                            ) "Disetujui oleh" else "Approved by"
+
+                                            detailData.nameUserReject?.isNotEmpty() == true -> if (getString(
+                                                    R.string.lang
+                                                ) == "in"
+                                            ) "Ditolak oleh" else "Rejected by"
+
                                             else -> "-"
                                         }
                                     }
@@ -1455,7 +1523,12 @@ class SubmissionDetailActivity : AppCompatActivity(),
                                                 resources, R.color.custom_toast_font_failed, theme
                                             )
                                         )
-                                        .setMessage("Failed to get submission detail")
+                                        .setMessage(
+                                            if (getString(R.string.lang) == "in")
+                                                "Gagal mendapatkan detail laporan"
+                                            else
+                                                "Failed to get submission detail"
+                                        )
                                         .show()
                                     Log.e(
                                         "ERROR",
@@ -1475,7 +1548,12 @@ class SubmissionDetailActivity : AppCompatActivity(),
                                             resources, R.color.custom_toast_font_failed, theme
                                         )
                                     )
-                                    .setMessage("Failed to get submission detail")
+                                    .setMessage(
+                                        if (getString(R.string.lang) == "in")
+                                            "Gagal mendapatkan detail laporan"
+                                        else
+                                            "Failed to get submission detail"
+                                    )
                                     .show()
                                 Log.e(
                                     "ERROR",
@@ -1502,7 +1580,12 @@ class SubmissionDetailActivity : AppCompatActivity(),
                                         resources, R.color.custom_toast_font_failed, theme
                                     )
                                 )
-                                .setMessage("Something went wrong, please try again later")
+                                .setMessage(
+                                    if (getString(R.string.lang) == "in")
+                                        "Terjadi kesalahan, silakan coba lagi nanti"
+                                    else
+                                        "Something went wrong, please try again later"
+                                )
                                 .show()
                             throwable.printStackTrace()
                             Log.e("ERROR", "Submission Detail Failure | $throwable")
@@ -1523,7 +1606,12 @@ class SubmissionDetailActivity : AppCompatActivity(),
                             resources, R.color.custom_toast_font_failed, theme
                         )
                     )
-                    .setMessage("Something went wrong, please try again later")
+                    .setMessage(
+                        if (getString(R.string.lang) == "in")
+                            "Terjadi kesalahan, silakan coba lagi nanti"
+                        else
+                            "Something went wrong, please try again later"
+                    )
                     .show()
                 exception.printStackTrace()
                 Log.e("ERROR", "Submission Detail Exception | $exception")
@@ -1747,8 +1835,11 @@ class SubmissionDetailActivity : AppCompatActivity(),
         val confirmationDialog =
             ConfirmationDialog(
                 this@SubmissionDetailActivity,
-                "Are you sure you want to mark this issue ready for trial?",
-                "Yes"
+                if (getString(R.string.lang) == "in")
+                    "Anda yakin ingin menandai masalah ini siap untuk uji coba?"
+                else
+                    "Are you sure you want to mark this issue ready for trial?",
+                if (getString(R.string.lang) == "in") "Ya" else "Yes"
             ).also {
                 with(it) {
                     setConfirmationDialogListener(object :
@@ -1791,7 +1882,10 @@ class SubmissionDetailActivity : AppCompatActivity(),
                                                                 )
                                                             )
                                                             .setMessage(
-                                                                "Issue marked as ready for Trial!"
+                                                                if (getString(R.string.lang) == "in")
+                                                                    "Masalah ditandai siap untuk uji coba!"
+                                                                else
+                                                                    "Issue marked as ready for Trial!"
                                                             ).show()
                                                         init()
                                                     } else {
@@ -1811,7 +1905,10 @@ class SubmissionDetailActivity : AppCompatActivity(),
                                                                 )
                                                             )
                                                             .setMessage(
-                                                                "Failed to mark as ready for Trial"
+                                                                if (getString(R.string.lang) == "in")
+                                                                    "Gagal menandai sebagai siap untuk uji coba"
+                                                                else
+                                                                    "Failed to mark as ready for Trial"
                                                             )
                                                             .show()
                                                         Log.e(
@@ -1836,7 +1933,10 @@ class SubmissionDetailActivity : AppCompatActivity(),
                                                             )
                                                         )
                                                         .setMessage(
-                                                            "Failed to mark as ready for trial"
+                                                            if (getString(R.string.lang) == "in")
+                                                                "Gagal menandai sebagai siap untuk uji coba"
+                                                            else
+                                                                "Failed to mark as ready for trial"
                                                         )
                                                         .show()
                                                     Log.e(
@@ -1859,7 +1959,12 @@ class SubmissionDetailActivity : AppCompatActivity(),
                                                             R.color.custom_toast_font_failed, theme
                                                         )
                                                     )
-                                                    .setMessage("Failed to mark as ready for trial")
+                                                    .setMessage(
+                                                        if (getString(R.string.lang) == "in")
+                                                            "Gagal menandai sebagai siap untuk uji coba"
+                                                        else
+                                                            "Failed to mark as ready for trial"
+                                                    )
                                                     .show()
                                                 Log.e(
                                                     "ERROR ${response.code()}",
@@ -1888,7 +1993,10 @@ class SubmissionDetailActivity : AppCompatActivity(),
                                                     )
                                                 )
                                                 .setMessage(
-                                                    "Something went wrong, please try again later"
+                                                    if (getString(R.string.lang) == "in")
+                                                        "Terjadi kesalahan, silakan coba lagi nanti"
+                                                    else
+                                                        "Something went wrong, please try again later"
                                                 )
                                                 .show()
                                             throwable.printStackTrace()
@@ -1908,7 +2016,12 @@ class SubmissionDetailActivity : AppCompatActivity(),
                                             resources, R.color.custom_toast_font_failed, theme
                                         )
                                     )
-                                    .setMessage("Something went wrong, please try again later")
+                                    .setMessage(
+                                        if (getString(R.string.lang) == "in")
+                                            "Terjadi kesalahan, silakan coba lagi nanti"
+                                        else
+                                            "Something went wrong, please try again later"
+                                    )
                                     .show()
                                 jsonException.printStackTrace()
                                 Log.e("ERROR", "Mark Ready Trial Exception | $jsonException")
@@ -1925,8 +2038,11 @@ class SubmissionDetailActivity : AppCompatActivity(),
         val confirmationDialog =
             ConfirmationDialog(
                 this@SubmissionDetailActivity,
-                "Are you sure you want to start trial?",
-                "Yes"
+                if (getString(R.string.lang) == "in")
+                    "Apakah Anda yakin ingin memulai uji coba?"
+                else
+                    "Are you sure you want to start trial?",
+                if (getString(R.string.lang) == "in") "Ya" else "Yes"
             ).also {
                 with(it) {
                     setConfirmationDialogListener(object :
@@ -1966,7 +2082,10 @@ class SubmissionDetailActivity : AppCompatActivity(),
                                                                 )
                                                             )
                                                             .setMessage(
-                                                                "Trial started!"
+                                                                if (getString(R.string.lang) == "in")
+                                                                    "Uji coba dimulai!"
+                                                                else
+                                                                    "Trial started!"
                                                             ).show()
                                                         init()
                                                     } else {
@@ -1985,7 +2104,12 @@ class SubmissionDetailActivity : AppCompatActivity(),
                                                                     theme
                                                                 )
                                                             )
-                                                            .setMessage("Failed to start Trial")
+                                                            .setMessage(
+                                                                if (getString(R.string.lang) == "in")
+                                                                    "Gagal memulai uji coba"
+                                                                else
+                                                                    "Failed to start Trial"
+                                                            )
                                                             .show()
                                                         Log.e(
                                                             "ERROR ${response.code()}",
@@ -2008,7 +2132,12 @@ class SubmissionDetailActivity : AppCompatActivity(),
                                                                 theme
                                                             )
                                                         )
-                                                        .setMessage("Failed to start trial")
+                                                        .setMessage(
+                                                            if (getString(R.string.lang) == "in")
+                                                                "Gagal memulai uji coba"
+                                                            else
+                                                                "Failed to start trial"
+                                                        )
                                                         .show()
                                                     Log.e(
                                                         "ERROR ${response.code()}",
@@ -2030,7 +2159,12 @@ class SubmissionDetailActivity : AppCompatActivity(),
                                                             R.color.custom_toast_font_failed, theme
                                                         )
                                                     )
-                                                    .setMessage("Failed to start trial")
+                                                    .setMessage(
+                                                        if (getString(R.string.lang) == "in")
+                                                            "Gagal memulai uji coba"
+                                                        else
+                                                            "Failed to start trial"
+                                                    )
                                                     .show()
                                                 Log.e(
                                                     "ERROR ${response.code()}",
@@ -2059,7 +2193,10 @@ class SubmissionDetailActivity : AppCompatActivity(),
                                                     )
                                                 )
                                                 .setMessage(
-                                                    "Something went wrong, please try again later"
+                                                    if (getString(R.string.lang) == "in")
+                                                        "Terjadi kesalahan, silakan coba lagi nanti"
+                                                    else
+                                                        "Something went wrong, please try again later"
                                                 )
                                                 .show()
                                             throwable.printStackTrace()
@@ -2079,7 +2216,12 @@ class SubmissionDetailActivity : AppCompatActivity(),
                                             resources, R.color.custom_toast_font_failed, theme
                                         )
                                     )
-                                    .setMessage("Something went wrong, please try again later")
+                                    .setMessage(
+                                        if (getString(R.string.lang) == "in")
+                                            "Terjadi kesalahan, silakan coba lagi nanti"
+                                        else
+                                            "Something went wrong, please try again later"
+                                    )
                                     .show()
                                 jsonException.printStackTrace()
                                 Log.e("ERROR", "Start Trial Exception | $jsonException")
@@ -2107,8 +2249,11 @@ class SubmissionDetailActivity : AppCompatActivity(),
         val confirmationDialog =
             ConfirmationDialog(
                 this@SubmissionDetailActivity,
-                "Are you sure you want to delete this progress?",
-                "Yes"
+                if (getString(R.string.lang) == "in")
+                    "Apakah Anda yakin ingin menghapus kemajuan ini?"
+                else
+                    "Are you sure you want to delete this progress?",
+                if (getString(R.string.lang) == "in") "Ya" else "Yes"
             ).also {
                 with(it) {
                     setConfirmationDialogListener(object :
@@ -2150,7 +2295,10 @@ class SubmissionDetailActivity : AppCompatActivity(),
                                                                 )
                                                             )
                                                             .setMessage(
-                                                                "Progress deleted successfully!"
+                                                                if (getString(R.string.lang) == "in")
+                                                                    "Kemajuan berhasil dihapus!"
+                                                                else
+                                                                    "Progress deleted successfully!"
                                                             ).show()
                                                         init()
                                                     } else {
@@ -2169,7 +2317,12 @@ class SubmissionDetailActivity : AppCompatActivity(),
                                                                     theme
                                                                 )
                                                             )
-                                                            .setMessage("Failed to delete progress")
+                                                            .setMessage(
+                                                                if (getString(R.string.lang) == "in")
+                                                                    "Gagal menghapus kemajuan"
+                                                                else
+                                                                    "Failed to delete progress"
+                                                            )
                                                             .show()
                                                         Log.e(
                                                             "ERROR ${response.code()}",
@@ -2192,7 +2345,12 @@ class SubmissionDetailActivity : AppCompatActivity(),
                                                                 theme
                                                             )
                                                         )
-                                                        .setMessage("Failed to delete progress")
+                                                        .setMessage(
+                                                            if (getString(R.string.lang) == "in")
+                                                                "Gagal menghapus kemajuan"
+                                                            else
+                                                                "Failed to delete progress"
+                                                        )
                                                         .show()
                                                     Log.e(
                                                         "ERROR ${response.code()}",
@@ -2214,7 +2372,12 @@ class SubmissionDetailActivity : AppCompatActivity(),
                                                             R.color.custom_toast_font_failed, theme
                                                         )
                                                     )
-                                                    .setMessage("Failed to delete progress")
+                                                    .setMessage(
+                                                        if (getString(R.string.lang) == "in")
+                                                            "Gagal menghapus kemajuan"
+                                                        else
+                                                            "Failed to delete progress"
+                                                    )
                                                     .show()
                                                 Log.e(
                                                     "ERROR ${response.code()}",
@@ -2243,7 +2406,10 @@ class SubmissionDetailActivity : AppCompatActivity(),
                                                     )
                                                 )
                                                 .setMessage(
-                                                    "Something went wrong, please try again later"
+                                                    if (getString(R.string.lang) == "in")
+                                                        "Terjadi kesalahan, silakan coba lagi nanti"
+                                                    else
+                                                        "Something went wrong, please try again later"
                                                 )
                                                 .show()
                                             throwable.printStackTrace()
@@ -2263,7 +2429,12 @@ class SubmissionDetailActivity : AppCompatActivity(),
                                             resources, R.color.custom_toast_font_failed, theme
                                         )
                                     )
-                                    .setMessage("Something went wrong, please try again later")
+                                    .setMessage(
+                                        if (getString(R.string.lang) == "in")
+                                            "Terjadi kesalahan, silakan coba lagi nanti"
+                                        else
+                                            "Something went wrong, please try again later"
+                                    )
                                     .show()
                                 jsonException.printStackTrace()
                                 Log.e("ERROR", "Delete Progress Exception | $jsonException")
@@ -2326,9 +2497,13 @@ class SubmissionDetailActivity : AppCompatActivity(),
         val confirmationDialog =
             ConfirmationDialog(
                 this@SubmissionDetailActivity,
-                "Are you sure you want to approve this progress materials?\n\nMake sure " +
-                        "your action are totally final before approving it!",
-                "Yes"
+                if (getString(R.string.lang) == "in")
+                    "Apakah Anda yakin ingin menyetujui penambahan bahan kemajuan ini?\n\nPastikan " +
+                            "tindakan Anda benar-benar matang sebelum menyetujuinya!"
+                else
+                    "Are you sure you want to approve this progress materials?\n\nMake sure " +
+                            "your action are totally final before approving it!",
+                if (getString(R.string.lang) == "in") "Ya" else "Yes"
             ).also {
                 with(it) {
                     setConfirmationDialogListener(object :
@@ -2369,8 +2544,10 @@ class SubmissionDetailActivity : AppCompatActivity(),
                                                             )
                                                         )
                                                         .setMessage(
-                                                            "Progress material successfully " +
-                                                                    "approved!"
+                                                            if (getString(R.string.lang) == "in")
+                                                                "Bahan kemajuan berhasil disetujui!"
+                                                            else
+                                                                "Progress material successfully approved!"
                                                         ).show()
                                                     init()
                                                 } else {
@@ -2390,7 +2567,10 @@ class SubmissionDetailActivity : AppCompatActivity(),
                                                             )
                                                         )
                                                         .setMessage(
-                                                            "Failed to mark progress as done"
+                                                            if (getString(R.string.lang) == "in")
+                                                                "Gagal menyetujui bahan kemajuan"
+                                                            else
+                                                                "Failed to approve progress materials"
                                                         )
                                                         .show()
                                                     Log.e(
@@ -2414,7 +2594,12 @@ class SubmissionDetailActivity : AppCompatActivity(),
                                                             theme
                                                         )
                                                     )
-                                                    .setMessage("Failed to mark progress as done")
+                                                    .setMessage(
+                                                        if (getString(R.string.lang) == "in")
+                                                            "Gagal menyetujui bahan kemajuan"
+                                                        else
+                                                            "Failed to approve progress materials"
+                                                    )
                                                     .show()
                                                 Log.e(
                                                     "ERROR ${response.code()}",
@@ -2436,7 +2621,12 @@ class SubmissionDetailActivity : AppCompatActivity(),
                                                         R.color.custom_toast_font_failed, theme
                                                     )
                                                 )
-                                                .setMessage("Failed to mark progress as done")
+                                                .setMessage(
+                                                    if (getString(R.string.lang) == "in")
+                                                        "Gagal menyetujui bahan kemajuan"
+                                                    else
+                                                        "Failed to approve progress materials"
+                                                )
                                                 .show()
                                             Log.e(
                                                 "ERROR ${response.code()}",
@@ -2464,7 +2654,10 @@ class SubmissionDetailActivity : AppCompatActivity(),
                                                 )
                                             )
                                             .setMessage(
-                                                "Something went wrong, please try again later"
+                                                if (getString(R.string.lang) == "in")
+                                                    "Terjadi kesalahan, silakan coba lagi nanti"
+                                                else
+                                                    "Something went wrong, please try again later"
                                             ).show()
                                         throwable.printStackTrace()
                                         Log.e(
@@ -2486,7 +2679,12 @@ class SubmissionDetailActivity : AppCompatActivity(),
                                             resources, R.color.custom_toast_font_failed, theme
                                         )
                                     )
-                                    .setMessage("Something went wrong, please try again later")
+                                    .setMessage(
+                                        if (getString(R.string.lang) == "in")
+                                            "Terjadi kesalahan, silakan coba lagi nanti"
+                                        else
+                                            "Something went wrong, please try again later"
+                                    )
                                     .show()
                                 jsonException.printStackTrace()
                                 Log.e(
@@ -2532,8 +2730,12 @@ class SubmissionDetailActivity : AppCompatActivity(),
         val confirmationDialog =
             ConfirmationDialog(
                 this@SubmissionDetailActivity,
-                "Are you sure you want to mark this as done?\n\nMake sure your issue are working properly",
-                "Yes"
+                if (getString(R.string.lang) == "in")
+                    "Apakah Anda yakin ingin menandai ini sebagai selesai?\n\nPastikan isu Anda " +
+                            "bekerja dengan baik"
+                else
+                    "Are you sure you want to mark this as done?\n\nMake sure your issue are working properly",
+                if (getString(R.string.lang) == "in") "Ya" else "Yes"
             ).also {
                 with(it) {
                     setConfirmationDialogListener(object :
@@ -2573,7 +2775,10 @@ class SubmissionDetailActivity : AppCompatActivity(),
                                                                 )
                                                             )
                                                             .setMessage(
-                                                                "Marked as done successfully!"
+                                                                if (getString(R.string.lang) == "in")
+                                                                    "Berhasil menandai sebagai selesai!"
+                                                                else
+                                                                    "Marked as done successfully!"
                                                             ).show()
                                                         init()
                                                     } else {
@@ -2592,7 +2797,12 @@ class SubmissionDetailActivity : AppCompatActivity(),
                                                                     theme
                                                                 )
                                                             )
-                                                            .setMessage("Failed to mark as done")
+                                                            .setMessage(
+                                                                if (getString(R.string.lang) == "in")
+                                                                    "Gagal menandai sebagai selesai"
+                                                                else
+                                                                    "Failed to mark as done"
+                                                            )
                                                             .show()
                                                         Log.e(
                                                             "ERROR ${response.code()}",
@@ -2615,7 +2825,12 @@ class SubmissionDetailActivity : AppCompatActivity(),
                                                                 theme
                                                             )
                                                         )
-                                                        .setMessage("Failed to mark as done")
+                                                        .setMessage(
+                                                            if (getString(R.string.lang) == "in")
+                                                                "Gagal menandai sebagai selesai"
+                                                            else
+                                                                "Failed to mark as done"
+                                                        )
                                                         .show()
                                                     Log.e(
                                                         "ERROR ${response.code()}",
@@ -2637,7 +2852,12 @@ class SubmissionDetailActivity : AppCompatActivity(),
                                                             R.color.custom_toast_font_failed, theme
                                                         )
                                                     )
-                                                    .setMessage("Failed to mark as done")
+                                                    .setMessage(
+                                                        if (getString(R.string.lang) == "in")
+                                                            "Gagal menandai sebagai selesai"
+                                                        else
+                                                            "Failed to mark as done"
+                                                    )
                                                     .show()
                                                 Log.e(
                                                     "ERROR ${response.code()}",
@@ -2665,7 +2885,10 @@ class SubmissionDetailActivity : AppCompatActivity(),
                                                     )
                                                 )
                                                 .setMessage(
-                                                    "Something went wrong, please try again later"
+                                                    if (getString(R.string.lang) == "in")
+                                                        "Terjadi kesalahan, silakan coba lagi nanti"
+                                                    else
+                                                        "Something went wrong, please try again later"
                                                 )
                                                 .show()
                                             throwable.printStackTrace()
@@ -2685,7 +2908,12 @@ class SubmissionDetailActivity : AppCompatActivity(),
                                             resources, R.color.custom_toast_font_failed, theme
                                         )
                                     )
-                                    .setMessage("Something went wrong, please try again later")
+                                    .setMessage(
+                                        if (getString(R.string.lang) == "in")
+                                            "Terjadi kesalahan, silakan coba lagi nanti"
+                                        else
+                                            "Something went wrong, please try again later"
+                                    )
                                     .show()
                                 jsonException.printStackTrace()
                                 Log.e("ERROR", "Mark Done Exception | $jsonException")
@@ -2698,3 +2926,4 @@ class SubmissionDetailActivity : AppCompatActivity(),
             confirmationDialog.show()
     }
 }
+

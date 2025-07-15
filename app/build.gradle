@@ -14,7 +14,7 @@ android {
         minSdk 26
         //noinspection EditedTargetSdkVersion
         targetSdk 36
-        versionCode 325
+        versionCode 350
         versionName "1.2.2"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
@@ -52,7 +52,6 @@ android {
     lint {
         disable 'Instantiatable'
     }
-
 }
 
 dependencies {

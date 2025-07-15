@@ -115,7 +115,12 @@ class SubmissionListActivity : AppCompatActivity(), SubmissionRvAdapter.OnSubmis
                             if (response.isSuccessful) {
                                 if (response.body() != null) {
                                     val data: ArrayList<String> = ArrayList()
-                                    data.add("Select Department")
+                                    data.add(
+                                        if (getString(R.string.lang) == "in")
+                                            "Pilih Departemen"
+                                        else
+                                            "Select Department"
+                                    )
                                     for (i in 0 until response.body()!!.size) {
                                         data.add(
                                             response.body()!![i].namaDept.toString()
@@ -155,7 +160,12 @@ class SubmissionListActivity : AppCompatActivity(), SubmissionRvAdapter.OnSubmis
                                 }
                             } else {
                                 CustomToast.getInstance(applicationContext)
-                                    .setMessage("Something went wrong, please try again.")
+                                    .setMessage(
+                                        if (getString(R.string.lang) == "in")
+                                            "Terjadi kesalahan, silakan coba lagi."
+                                        else
+                                            "Something went wrong, please try again."
+                                    )
                                     .setFontColor(
                                         ContextCompat.getColor(
                                             this@SubmissionListActivity,
@@ -180,7 +190,12 @@ class SubmissionListActivity : AppCompatActivity(), SubmissionRvAdapter.OnSubmis
                             Log.e("ERROR", throwable.toString())
                             loadingManager(false)
                             CustomToast.getInstance(applicationContext)
-                                .setMessage("Something went wrong, please try again.")
+                                .setMessage(
+                                    if (getString(R.string.lang) == "in")
+                                        "Terjadi kesalahan, silakan coba lagi."
+                                    else
+                                        "Something went wrong, please try again."
+                                )
                                 .setFontColor(
                                     ContextCompat.getColor(
                                         this@SubmissionListActivity,
@@ -200,7 +215,12 @@ class SubmissionListActivity : AppCompatActivity(), SubmissionRvAdapter.OnSubmis
             } catch (exception: Exception) {
                 loadingManager(false)
                 CustomToast.getInstance(applicationContext)
-                    .setMessage("Something went wrong, please try again.")
+                    .setMessage(
+                        if (getString(R.string.lang) == "in")
+                            "Terjadi kesalahan, silakan coba lagi."
+                        else
+                            "Something went wrong, please try again."
+                    )
                     .setFontColor(
                         ContextCompat.getColor(
                             this@SubmissionListActivity,
@@ -289,7 +309,12 @@ class SubmissionListActivity : AppCompatActivity(), SubmissionRvAdapter.OnSubmis
                                 } else {
                                     loadingManager(false)
                                     CustomToast.getInstance(applicationContext)
-                                        .setMessage("Something went wrong, please try again.")
+                                        .setMessage(
+                                            if (getString(R.string.lang) == "in")
+                                                "Terjadi kesalahan, silakan coba lagi."
+                                            else
+                                                "Something went wrong, please try again."
+                                        )
                                         .setFontColor(
                                             ContextCompat.getColor(
                                                 this@SubmissionListActivity,
@@ -312,7 +337,12 @@ class SubmissionListActivity : AppCompatActivity(), SubmissionRvAdapter.OnSubmis
                             ) {
                                 loadingManager(false)
                                 CustomToast.getInstance(applicationContext)
-                                    .setMessage("Something went wrong, please try again.")
+                                    .setMessage(
+                                        if (getString(R.string.lang) == "in")
+                                            "Terjadi kesalahan, silakan coba lagi."
+                                        else
+                                            "Something went wrong, please try again."
+                                    )
                                     .setFontColor(
                                         ContextCompat.getColor(
                                             this@SubmissionListActivity,
@@ -335,7 +365,12 @@ class SubmissionListActivity : AppCompatActivity(), SubmissionRvAdapter.OnSubmis
             } catch (exception: Exception) {
                 loadingManager(false)
                 CustomToast.getInstance(applicationContext)
-                    .setMessage("Something went wrong, please try again.")
+                    .setMessage(
+                        if (getString(R.string.lang) == "in")
+                            "Terjadi kesalahan, silakan coba lagi."
+                        else
+                            "Something went wrong, please try again."
+                    )
                     .setFontColor(
                         ContextCompat.getColor(
                             this@SubmissionListActivity,
@@ -362,17 +397,32 @@ class SubmissionListActivity : AppCompatActivity(), SubmissionRvAdapter.OnSubmis
             with(filterByText) {
                 when (filter) {
                     -2 -> {
-                        filterText.append("All (Finished)")
+                        filterText.append(
+                            if (getString(R.string.lang) == "in")
+                                "Semua (Selesai)"
+                            else
+                                "All (Finished)"
+                        )
                         setTextColor(getColor(R.color.black))
                     }
 
                     -1 -> {
-                        filterText.append("All (Unfinished)")
+                        filterText.append(
+                            if (getString(R.string.lang) == "in")
+                                "Semua (Belum Selesai)"
+                            else
+                                "All (Unfinished)"
+                        )
                         setTextColor(getColor(R.color.black))
                     }
 
                     100 -> {
-                        filterText.append("All Case")
+                        filterText.append(
+                            if (getString(R.string.lang) == "in")
+                                "Semua Kasus"
+                            else
+                                "All Case"
+                        )
                         setTextColor(getColor(R.color.black))
                     }
 
@@ -427,10 +477,10 @@ class SubmissionListActivity : AppCompatActivity(), SubmissionRvAdapter.OnSubmis
                     }
                 }
                 val complexityText = when (complexity) {
-                    "Low" -> " (Low)"
-                    "Middle" -> " (Middle)"
-                    "High" -> " (High)"
-                    else -> " (All)"
+                    "Low" -> if (getString(R.string.lang) == "in") " (Rendah)" else " (Low)"
+                    "Middle" -> if (getString(R.string.lang) == "in") " (Menengah)" else " (Middle)"
+                    "High" -> if (getString(R.string.lang) == "in") " (Tinggi)" else " (High)"
+                    else -> if (getString(R.string.lang) == "in") " (Semua)" else " (All)"
                 }
                 val startIndexOfComplexity = filterText.length
                 filterText.append(complexityText)

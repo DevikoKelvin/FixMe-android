@@ -57,7 +57,10 @@ class ProgressRvAdapter(
                     usernameText.text = item.progress.namaUserProgress?.trimEnd()
                     progressAnalysis.text = item.progress.analisa
                     progressDescription.text = item.progress.keterangan
-                    dateTimeText.text = item.progress.tglWaktu
+                    dateTimeText.text = item.progress.tglWaktu?.replace(
+                        Regex("(\\d{4})-(\\d{2})-(\\d{2}) (\\d{2}):(\\d{2}):(\\d{2})"),
+                        "$3-$2-$1 $4:$5:$6"
+                    ) ?: item.progress.tglWaktu
                     val material = StringBuilder().also {
                         with(it) {
                             for (i in 0 until item.progress.material!!.size) {
@@ -81,17 +84,27 @@ class ProgressRvAdapter(
                         if (materials.isNotEmpty()) {
                             if (item.progress.approveMaterialStatus == 1) {
                                 materialApprovedStatus.visibility = View.VISIBLE
-                                materialApprovedMessage.text = "Material approved by ${
-                                    item.progress.approveMaterialUser
-                                } on ${item.progress.approveMaterialTglWaktu}"
+                                materialApprovedMessage.text =
+                                    if (context.getString(R.string.lang) == "in")
+                                        "Material disetujui oleh ${
+                                            item.progress.approveMaterialUser
+                                        } pada ${item.progress.approveMaterialTglWaktu}"
+                                    else
+                                        "Material approved by ${
+                                            item.progress.approveMaterialUser
+                                        } on ${item.progress.approveMaterialTglWaktu}"
                             } else
                                 materialApprovedStatus.visibility = View.GONE
                         } else
                             materialApprovedStatus.visibility = View.GONE
                         materialList.text = if (materials.isNotEmpty())
                             material
-                        else
-                            "No materials needed"
+                        else {
+                            if (context.getString(R.string.lang) == "in")
+                                "Tidak ada material yang dibutuhkan"
+                            else
+                                "No materials needed"
+                        }
                     }
 
                     arrowExpandShrink.rotation = if (item.isExpanded) 90f else 270f
@@ -175,8 +188,12 @@ class ProgressRvAdapter(
                     progressResultDescription.text =
                         if (item.progress.keteranganApprove != "null" || item.progress.keteranganApprove != null)
                             item.progress.keteranganApprove
-                        else
-                            "No remarks"
+                        else {
+                            if (context.getString(R.string.lang) == "in")
+                                "Tidak ada keterangan"
+                            else
+                                "No remarks"
+                        }
                 }
 
                 imageCarouselHolder.setOnLongClickListener {

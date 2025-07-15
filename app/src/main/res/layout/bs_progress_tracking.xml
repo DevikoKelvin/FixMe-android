@@ -52,15 +52,7 @@
         android:textSize="16sp"
         android:textStyle="bold"
         android:visibility="gone"
-        tools:text="Issue on Hold status. Reason: Insufficient Material" />
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rvProgress"
-        android:layout_width="match_parent"
-        android:layout_height="450dp"
-        android:layout_marginTop="8dp"
-        tools:itemCount="2"
-        tools:listitem="@layout/list_item_progress" />
+        tools:text="Issue on Hold status. \nReason: Insufficient Material" />
 
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/progressActionButton"
@@ -85,4 +77,12 @@
             android:textSize="14sp"
             android:textStyle="bold" />
     </com.google.android.material.card.MaterialCardView>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvProgress"
+        android:layout_width="match_parent"
+        android:layout_height="450dp"
+        android:layout_marginTop="8dp"
+        tools:itemCount="2"
+        tools:listitem="@layout/list_item_progress" />
 </LinearLayout>

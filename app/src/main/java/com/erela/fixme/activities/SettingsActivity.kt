@@ -50,7 +50,7 @@ class SettingsActivity : AppCompatActivity() {
         override fun onReceive(context: Context, intent: Intent) {
             val id = intent.getLongExtra(DownloadManager.EXTRA_DOWNLOAD_ID, -1)
             if (downloadId == id) {
-                val downloadManager = getSystemService(Context.DOWNLOAD_SERVICE) as DownloadManager
+                val downloadManager = getSystemService(DOWNLOAD_SERVICE) as DownloadManager
                 val query = DownloadManager.Query().setFilterById(downloadId)
                 val cursor = downloadManager.query(query)
                 if (cursor.moveToFirst()) {
@@ -150,7 +150,10 @@ class SettingsActivity : AppCompatActivity() {
             }
 
             currentAppVersion = BuildConfig.VERSION_NAME
-            currentAppVersionText.text = "Current app version: $currentAppVersion"
+            currentAppVersionText.text = if (getString(R.string.lang) == "in")
+                "Versi aplikasi saat ini: $currentAppVersion"
+            else
+                "Current app version: $currentAppVersion"
 
             checkDownloadInstallButton.setOnClickListener {
                 if (downloadLink != null) {
@@ -162,9 +165,14 @@ class SettingsActivity : AppCompatActivity() {
                         var count = 1
                         override fun run() {
                             when (count) {
-                                1 -> checkDownloadInstallText.text = "Checking update."
-                                2 -> checkDownloadInstallText.text = "Checking update.."
-                                3 -> checkDownloadInstallText.text = "Checking update..."
+                                1 -> checkDownloadInstallText.text =
+                                    if (getString(R.string.lang) == "in") "Memeriksa pembaruan." else "Checking update."
+
+                                2 -> checkDownloadInstallText.text =
+                                    if (getString(R.string.lang) == "in") "Memeriksa pembaruan.." else "Checking update.."
+
+                                3 -> checkDownloadInstallText.text =
+                                    if (getString(R.string.lang) == "in") "Memeriksa pembaruan..." else "Checking update..."
                             }
                             count = if (count < 3) count + 1 else 1
                             handler.postDelayed(this, 500)
@@ -194,7 +202,10 @@ class SettingsActivity : AppCompatActivity() {
                                         )
                                         newAppVersion = update?.latestVersion
                                         newAppVersionText.text =
-                                            "Detected new app version: ${update?.latestVersion}"
+                                            if (getString(R.string.lang) == "in")
+                                                "Versi aplikasi baru terdeteksi: ${update?.latestVersion}"
+                                            else
+                                                "Detected new app version: ${update?.latestVersion}"
                                         newAppVersionText.visibility = View.VISIBLE
                                         downloadLink = update?.urlToDownload.toString().replace(
                                             "latest",
@@ -203,7 +214,12 @@ class SettingsActivity : AppCompatActivity() {
                                     } else {
                                         if (currentAppVersion > update?.latestVersion!!) {
                                             CustomToast.getInstance(applicationContext)
-                                                .setMessage("Your app version is higher than the latest version.")
+                                                .setMessage(
+                                                    if (getString(R.string.lang) == "in")
+                                                        "Versi aplikasi Anda lebih tinggi dari versi terbaru."
+                                                    else
+                                                        "Your app version is higher than the latest version."
+                                                )
                                                 .setFontColor(
                                                     ContextCompat.getColor(
                                                         this@SettingsActivity,
@@ -218,7 +234,12 @@ class SettingsActivity : AppCompatActivity() {
                                                 ).show()
                                         } else {
                                             CustomToast.getInstance(applicationContext)
-                                                .setMessage("No update available. Your app is on the latest version!")
+                                                .setMessage(
+                                                    if (getString(R.string.lang) == "in")
+                                                        "Tidak ada pembaruan yang tersedia. Aplikasi Anda sudah versi terbaru!"
+                                                    else
+                                                        "No update available. Your app is on the latest version!"
+                                                )
                                                 .setFontColor(
                                                     ContextCompat.getColor(
                                                         this@SettingsActivity,
@@ -249,7 +270,12 @@ class SettingsActivity : AppCompatActivity() {
                                     loadingBar.visibility = View.GONE
                                     handler.removeCallbacks(runnable)
                                     CustomToast.getInstance(applicationContext)
-                                        .setMessage("Something went wrong, please try again.")
+                                        .setMessage(
+                                            if (getString(R.string.lang) == "in")
+                                                "Terjadi kesalahan, silakan coba lagi."
+                                            else
+                                                "Something went wrong, please try again."
+                                        )
                                         .setFontColor(
                                             ContextCompat.getColor(
                                                 this@SettingsActivity,
@@ -285,7 +311,12 @@ class SettingsActivity : AppCompatActivity() {
 
     private fun showDownloadFailedToast() {
         CustomToast.getInstance(applicationContext)
-            .setMessage("Download failed.")
+            .setMessage(
+                if (getString(R.string.lang) == "in")
+                    "Unduhan gagal. Silakan coba lagi."
+                else
+                    "Download failed."
+            )
             .setFontColor(
                 ContextCompat.getColor(
                     this@SettingsActivity,
@@ -302,17 +333,32 @@ class SettingsActivity : AppCompatActivity() {
 
     private fun startDownload(url: String) {
         val request = DownloadManager.Request(url.toUri())
-            .setTitle("FixMe Updates")
-            .setDescription("Please wait while the update is downloading...")
+            .setTitle(
+                if (getString(R.string.lang) == "in")
+                    "Pembaruan FixMe"
+                else
+                    "FixMe Updates"
+            )
+            .setDescription(
+                if (getString(R.string.lang) == "in")
+                    "Silakan tunggu saat pembaruan sedang diunduh..."
+                else
+                    "Please wait while the update is downloading..."
+            )
             .setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED)
             .setDestinationInExternalPublicDir(
                 Environment.DIRECTORY_DOWNLOADS,
                 "FixMe Updates"
             )
-        val downloadManager = getSystemService(Context.DOWNLOAD_SERVICE) as DownloadManager
+        val downloadManager = getSystemService(DOWNLOAD_SERVICE) as DownloadManager
         downloadId = downloadManager.enqueue(request)
         CustomToast.getInstance(applicationContext)
-            .setMessage("Downloading update...")
+            .setMessage(
+                if (getString(R.string.lang) == "in")
+                    "Mengunduh pembaruan..."
+                else
+                    "Downloading update..."
+            )
             .setFontColor(
                 ContextCompat.getColor(
                     this@SettingsActivity,
@@ -332,7 +378,12 @@ class SettingsActivity : AppCompatActivity() {
         val builder = NotificationCompat.Builder(this, "FixMe Download Channel")
             .setSmallIcon(android.R.drawable.stat_sys_download)
             .setContentTitle("Erela_FixMe_prerelease_v${newAppVersion}")
-            .setContentText("Download in progress")
+            .setContentText(
+                if (getString(R.string.lang) == "in")
+                    "Unduhan sedang berlangsung"
+                else
+                    "Download in progress"
+            )
             .setOngoing(true)
             .setProgress(100, progress, false)
             .setOnlyAlertOnce(true)
@@ -375,7 +426,12 @@ class SettingsActivity : AppCompatActivity() {
                 startActivity(installIntent)
             } catch (ex: ActivityNotFoundException) {
                 CustomToast.getInstance(applicationContext)
-                    .setMessage("No activity found to handle APK installation.")
+                    .setMessage(
+                        if (getString(R.string.lang) == "in")
+                            "Tidak ada aktivitas yang ditemukan untuk menangani instalasi APK."
+                        else
+                            "No activity found to handle APK installation."
+                    )
                     .setFontColor(
                         ContextCompat.getColor(
                             this@SettingsActivity,
@@ -388,11 +444,17 @@ class SettingsActivity : AppCompatActivity() {
                             R.color.custom_toast_background_failed
                         )
                     ).show()
+                ex.printStackTrace()
             }
         } catch (e: Exception) {
             Log.e("InstallApk", "Error installing APK", e)
             CustomToast.getInstance(applicationContext)
-                .setMessage("Failed to install APK.")
+                .setMessage(
+                    if (getString(R.string.lang) == "in")
+                        "Gagal menginstal APK."
+                    else
+                        "Failed to install APK."
+                )
                 .setFontColor(
                     ContextCompat.getColor(
                         this@SettingsActivity,

@@ -5,6 +5,7 @@ import android.app.NotificationManager
 import android.content.Context
 import android.util.Log
 import androidx.core.app.NotificationCompat
+import androidx.core.content.edit
 import com.erela.fixme.R
 import com.erela.fixme.helpers.api.InitAPI
 import com.erela.fixme.objects.NewNotificationResponse
@@ -24,6 +25,17 @@ import retrofit2.Response
 
 object NotificationsHelper {
     private var pusher: Pusher? = null
+    private const val LAST_NOTIFICATION_ID = "last_notification_id"
+
+    private fun getLastNotificationId(context: Context): Int {
+        val prefs = SharedPreferencesHelper.getSharedPreferences(context)
+        return prefs.getInt(LAST_NOTIFICATION_ID, -1)
+    }
+
+    private fun saveLastNotificationId(context: Context, id: Int) {
+        val prefs = SharedPreferencesHelper.getSharedPreferences(context)
+        prefs.edit { putInt(LAST_NOTIFICATION_ID, id) }
+    }
 
     fun disconnectPusher() {
         pusher?.disconnect()
@@ -38,20 +50,27 @@ object NotificationsHelper {
                         call: Call<NewNotificationResponse>,
                         response: Response<NewNotificationResponse>
                     ) {
-                        if (response.isSuccessful) {
-                            if (response.body() != null) {
-                                val result = response.body()!!
-                                Log.e("NOTIFICATION", "Response: $result")
-                                if (result.notifications!!.isNotEmpty()) {
-                                    for (i in 0 until result.notifications.size) {
-                                        generateNotification(
-                                            result.notifications[i]?.actions!!,
-                                            context
-                                        )
-                                    }
+                        if (response.isSuccessful && response.body() != null) {
+                            val result = response.body()!!
+                            if (result.notifications!!.isNotEmpty()) {
+                                val latestNotification = result.notifications.first()
+                                val lastShownId = getLastNotificationId(context)
+                                Log.e(
+                                    "NOTIFICATION",
+                                    "Latest notification ID: ${latestNotification!!.idNotif}, Last shown ID: $lastShownId"
+                                )
+
+                                if (latestNotification?.idNotif?.toInt() != lastShownId) {
+                                    generateNotification(
+                                        latestNotification?.actions!!,
+                                        context
+                                    )
+
+                                    saveLastNotificationId(
+                                        context,
+                                        latestNotification.idNotif!!.toInt()
+                                    )
                                 }
-                            } else {
-                                Log.e("NOTIFICATION", "Response body is null")
                             }
                         } else {
                             Log.e("NOTIFICATION", "Response not successful")

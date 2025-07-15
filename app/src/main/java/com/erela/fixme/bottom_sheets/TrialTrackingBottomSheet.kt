@@ -64,7 +64,10 @@ class TrialTrackingBottomSheet(
                                 context, R.color.custom_toast_background_soft_blue
                             )
                         )
-                        trialActionText.text = "Mark as Done now!"
+                        trialActionText.text = if (context.getString(R.string.lang) == "in")
+                            "Tandai Selesai Sekarang!"
+                        else
+                            "Mark as Done now!"
                         trialActionText.setTextColor(
                             ContextCompat.getColor(
                                 context, R.color.custom_toast_font_blue
@@ -79,7 +82,10 @@ class TrialTrackingBottomSheet(
                                 context, R.color.status_on_trial
                             )
                         )
-                        trialActionText.text = "Report Trial"
+                        trialActionText.text = if (context.getString(R.string.lang) == "in")
+                            "Laporkan Uji Coba"
+                        else
+                            "Report Trial"
                         trialActionText.setTextColor(
                             ContextCompat.getColor(
                                 context, R.color.white

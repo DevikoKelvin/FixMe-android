@@ -40,7 +40,12 @@ class DepartmentListBottomSheet(
     private fun init() {
         binding.apply {
             val departmentList = ArrayList<String>()
-            departmentList.add("Select Department")
+            departmentList.add(
+                if (context.getString(R.string.lang) == "in")
+                    "Pilih Departemen"
+                else
+                    "Select Department"
+            )
             for (element in data) {
                 departmentList.add(
                     element.namaDept.toString()
@@ -87,7 +92,12 @@ class DepartmentListBottomSheet(
     private fun initSubDepartmentList(currentSelectedSubDept: String) {
         binding.apply {
             val subDepartmentList = ArrayList<String>()
-            subDepartmentList.add("Select Sub Department")
+            subDepartmentList.add(
+                if (context.getString(R.string.lang) == "in")
+                    "Pilih Sub Departemen"
+                else
+                    "Select Sub Department"
+            )
             for (i in data.indices) {
                 if (data[i].namaDept == selectedDepartment) {
                     subDepartmentList.add(

@@ -79,11 +79,22 @@ class ReportTrialBottomSheet(context: Context, private val detail: SubmissionDet
         binding.apply {
             val confirmationDialog = ConfirmationDialog(
                 context,
-                if (pass) "Are you sure you want to report this trial as passed?" else "Are you sure you want to report this trial as failed?",
+                if (pass) {
+                    if (context.getString(R.string.lang) == "in")
+                        "Apakah Anda yakin ingin melaporkan percobaan ini lolos uji?"
+                    else
+                        "Are you sure you want to report this trial as passed?"
+                } else {
+                    if (context.getString(R.string.lang) == "in")
+                        "Apakah Anda yakin ingin melaporkan percobaan ini sebagai gagal?"
+                    else
+                        "Are you sure you want to report this trial as failed?"
+                },
                 "Yes"
             ).also {
                 with(it) {
-                    setConfirmationDialogListener(object : ConfirmationDialog.ConfirmationDialogListener {
+                    setConfirmationDialogListener(object :
+                        ConfirmationDialog.ConfirmationDialogListener {
                         override fun onConfirm() {
                             if (pass) {
                                 passLoading.visibility = View.VISIBLE
@@ -100,7 +111,8 @@ class ReportTrialBottomSheet(context: Context, private val detail: SubmissionDet
                                     if (pass) 0 else 1
                                 ).enqueue(object : Callback<CreationResponse> {
                                     override fun onResponse(
-                                        call: Call<CreationResponse>, response: Response<CreationResponse>
+                                        call: Call<CreationResponse>,
+                                        response: Response<CreationResponse>
                                     ) {
                                         passLoading.visibility = View.GONE
                                         notPassLoading.visibility = View.GONE
@@ -123,7 +135,12 @@ class ReportTrialBottomSheet(context: Context, private val detail: SubmissionDet
                                                                 context.theme
                                                             )
                                                         )
-                                                        .setMessage("Trial report successfully submitted!")
+                                                        .setMessage(
+                                                            if (context.getString(R.string.lang) == "in")
+                                                                "Laporan uji coba berhasil dikirim!"
+                                                            else
+                                                                "Trial report successfully submitted!"
+                                                        )
                                                         .show()
                                                     onReportTrialSuccessListener.reportTrialSuccess()
                                                     dismiss()
@@ -143,7 +160,12 @@ class ReportTrialBottomSheet(context: Context, private val detail: SubmissionDet
                                                                 context.theme
                                                             )
                                                         )
-                                                        .setMessage("Failed to report the trial")
+                                                        .setMessage(
+                                                            if (context.getString(R.string.lang) == "in")
+                                                                "Gagal mengirim laporan uji coba"
+                                                            else
+                                                                "Failed to report the trial"
+                                                        )
                                                         .show()
                                                     Log.e(
                                                         "ERROR ${response.code()}",
@@ -166,7 +188,12 @@ class ReportTrialBottomSheet(context: Context, private val detail: SubmissionDet
                                                             context.theme
                                                         )
                                                     )
-                                                    .setMessage("Failed to report the trial")
+                                                    .setMessage(
+                                                        if (context.getString(R.string.lang) == "in")
+                                                            "Gagal mengirim laporan uji coba"
+                                                        else
+                                                            "Failed to report the trial"
+                                                    )
                                                     .show()
                                                 Log.e(
                                                     "ERROR ${response.code()}",
@@ -189,7 +216,12 @@ class ReportTrialBottomSheet(context: Context, private val detail: SubmissionDet
                                                         context.theme
                                                     )
                                                 )
-                                                .setMessage("Failed to report the trial")
+                                                .setMessage(
+                                                    if (context.getString(R.string.lang) == "in")
+                                                        "Gagal mengirim laporan uji coba"
+                                                    else
+                                                        "Failed to report the trial"
+                                                )
                                                 .show()
                                             Log.e(
                                                 "ERROR ${response.code()}",
@@ -198,7 +230,10 @@ class ReportTrialBottomSheet(context: Context, private val detail: SubmissionDet
                                         }
                                     }
 
-                                    override fun onFailure(call: Call<CreationResponse>, throwable: Throwable) {
+                                    override fun onFailure(
+                                        call: Call<CreationResponse>,
+                                        throwable: Throwable
+                                    ) {
                                         passLoading.visibility = View.GONE
                                         notPassLoading.visibility = View.GONE
                                         CustomToast.getInstance(context)
@@ -216,7 +251,12 @@ class ReportTrialBottomSheet(context: Context, private val detail: SubmissionDet
                                                     context.theme
                                                 )
                                             )
-                                            .setMessage("Something went wrong, please try again later")
+                                            .setMessage(
+                                                if (context.getString(R.string.lang) == "in")
+                                                    "Terjadi kesalahan, silakan coba lagi nanti"
+                                                else
+                                                    "Something went wrong, please try again later"
+                                            )
                                             .show()
                                         throwable.printStackTrace()
                                         Log.e("ERROR", "Report Trial Failure | $throwable")
@@ -228,15 +268,24 @@ class ReportTrialBottomSheet(context: Context, private val detail: SubmissionDet
                                 CustomToast.getInstance(context)
                                     .setBackgroundColor(
                                         ResourcesCompat.getColor(
-                                            context.resources, R.color.custom_toast_background_failed, context.theme
+                                            context.resources,
+                                            R.color.custom_toast_background_failed,
+                                            context.theme
                                         )
                                     )
                                     .setFontColor(
                                         ResourcesCompat.getColor(
-                                            context.resources, R.color.custom_toast_font_failed, context.theme
+                                            context.resources,
+                                            R.color.custom_toast_font_failed,
+                                            context.theme
                                         )
                                     )
-                                    .setMessage("Something went wrong, please try again later")
+                                    .setMessage(
+                                        if (context.getString(R.string.lang) == "in")
+                                            "Terjadi kesalahan, silakan coba lagi nanti"
+                                        else
+                                            "Something went wrong, please try again later"
+                                    )
                                     .show()
                                 jsonException.printStackTrace()
                                 Log.e("ERROR", "Report Trial Exception | $jsonException")

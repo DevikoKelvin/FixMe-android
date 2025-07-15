@@ -3,7 +3,6 @@ package com.erela.fixme.activities
 import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
-import android.util.Log
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import androidx.activity.enableEdgeToEdge
@@ -58,7 +57,12 @@ class LoginActivity : AppCompatActivity() {
                     loginText.visibility = View.VISIBLE
                     loadingBar.visibility = View.GONE
                     CustomToast.getInstance(applicationContext)
-                        .setMessage("Please fill in all fields.")
+                        .setMessage(
+                            if (getString(R.string.lang) == "in")
+                                "Mohon isi semua kolom."
+                            else
+                                "Please fill in all fields."
+                        )
                         .setFontColor(
                             ContextCompat.getColor(
                                 this@LoginActivity,
@@ -72,12 +76,18 @@ class LoginActivity : AppCompatActivity() {
                             )
                         ).show()
                     if (usernameField.text.isNullOrEmpty()) {
-                        usernameFieldLayout.error = "Username cannot be empty"
+                        usernameFieldLayout.error = if (getString(R.string.lang) == "in")
+                            "Username tidak boleh kosong"
+                        else
+                            "Username cannot be empty"
                     } else {
                         usernameFieldLayout.error = null
                     }
                     if (passwordField.text.isNullOrEmpty()) {
-                        passwordFieldLayout.error = "Password cannot be empty"
+                        passwordFieldLayout.error = if (getString(R.string.lang) == "in")
+                            "Kata sandi tidak boleh kosong"
+                        else
+                            "Password cannot be empty"
                     } else {
                         passwordFieldLayout.error = null
                     }
@@ -107,11 +117,16 @@ class LoginActivity : AppCompatActivity() {
                             if (response.isSuccessful) {
                                 if (response.body() != null) {
                                     val result = response.body()
-                                    val name = result?.nama!!.toString()
+                                    val name = result?.nama!!
                                     when (result.code) {
                                         0 -> {
                                             CustomToast.getInstance(applicationContext)
-                                                .setMessage("Wrong password. Please try again!")
+                                                .setMessage(
+                                                    if (getString(R.string.lang) == "in")
+                                                        "Kata sandi salah. Silakan coba lagi!"
+                                                    else
+                                                        "Wrong password. Please try again!"
+                                                )
                                                 .setFontColor(
                                                     ContextCompat.getColor(
                                                         this@LoginActivity,
@@ -124,12 +139,21 @@ class LoginActivity : AppCompatActivity() {
                                                         R.color.custom_toast_background_failed
                                                     )
                                                 ).show()
-                                            passwordFieldLayout.error = "Wrong password"
+                                            passwordFieldLayout.error =
+                                                if (getString(R.string.lang) == "in")
+                                                    "Kata sandi salah"
+                                                else
+                                                    "Wrong password"
                                         }
 
                                         1 -> {
                                             CustomToast.getInstance(applicationContext)
-                                                .setMessage("Login Successful!")
+                                                .setMessage(
+                                                    if (getString(R.string.lang) == "in")
+                                                        "Berhasil Masuk!"
+                                                    else
+                                                        "Login Successful!"
+                                                )
                                                 .setFontColor(
                                                     ContextCompat.getColor(
                                                         this@LoginActivity,
@@ -156,9 +180,10 @@ class LoginActivity : AppCompatActivity() {
                                             Handler(mainLooper).postDelayed({
                                                 CustomToast.getInstance(applicationContext)
                                                     .setMessage(
-                                                        "Welcome, ${
-                                                            name
-                                                        }!"
+                                                        if (getString(R.string.lang) == "in")
+                                                            "Selamat datang, $name!"
+                                                        else
+                                                            "Welcome, $name!"
                                                     )
                                                     .setFontColor(
                                                         ContextCompat.getColor(
@@ -186,7 +211,10 @@ class LoginActivity : AppCompatActivity() {
                                         2 -> {
                                             CustomToast.getInstance(applicationContext)
                                                 .setMessage(
-                                                    "User not found. Please contact the IT department."
+                                                    if (getString(R.string.lang) == "in")
+                                                        "Pengguna tidak ditemukan. Silakan hubungi bagian IT."
+                                                    else
+                                                        "User not found. Please contact the IT department."
                                                 )
                                                 .setFontColor(
                                                     ContextCompat.getColor(
@@ -204,7 +232,12 @@ class LoginActivity : AppCompatActivity() {
                                     }
                                 } else {
                                     CustomToast.getInstance(applicationContext)
-                                        .setMessage("Something went wrong, please try again.")
+                                        .setMessage(
+                                            if (getString(R.string.lang) == "in")
+                                                "Terjadi kesalahan, silakan coba lagi."
+                                            else
+                                                "Something went wrong, please try again."
+                                        )
                                         .setFontColor(
                                             ContextCompat.getColor(
                                                 this@LoginActivity,
@@ -220,7 +253,12 @@ class LoginActivity : AppCompatActivity() {
                                 }
                             } else {
                                 CustomToast.getInstance(applicationContext)
-                                    .setMessage("Something went wrong, please try again.")
+                                    .setMessage(
+                                        if (getString(R.string.lang) == "in")
+                                            "Terjadi kesalahan, silakan coba lagi."
+                                        else
+                                            "Something went wrong, please try again."
+                                    )
                                     .setFontColor(
                                         ContextCompat.getColor(
                                             this@LoginActivity,
@@ -242,11 +280,13 @@ class LoginActivity : AppCompatActivity() {
                         ) {
                             loginText.visibility = View.VISIBLE
                             loadingBar.visibility = View.GONE
-                            Log.e("ERROR", throwable.toString())
                             throwable.printStackTrace()
                             Snackbar.make(
                                 binding.root,
-                                "Something went wrong. Please try again!",
+                                if (getString(R.string.lang) == "in")
+                                    "Terjadi kesalahan. Silakan coba lagi!"
+                                else
+                                    "Something went wrong. Please try again!",
                                 Snackbar.LENGTH_SHORT
                             ).also {
                                 with(it) {
@@ -260,14 +300,16 @@ class LoginActivity : AppCompatActivity() {
             } catch (exception: Exception) {
                 loginText.visibility = View.VISIBLE
                 loadingBar.visibility = View.GONE
-                Log.e("ERROR", exception.toString())
                 Snackbar.make(
                     binding.root,
-                    "Something went wrong. Please try again!",
+                    if (getString(R.string.lang) == "in")
+                        "Terjadi kesalahan. Silakan coba lagi!"
+                    else
+                        "Something went wrong. Please try again!",
                     Snackbar.LENGTH_SHORT
                 ).also {
                     with(it) {
-                        setAction("Retry") {
+                        setAction(if (getString(R.string.lang) == "in") "Ulangi" else "Retry") {
                             checkLogin(username, password)
                         }
                     }

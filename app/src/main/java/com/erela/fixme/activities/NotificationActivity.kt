@@ -89,7 +89,12 @@ class NotificationActivity : AppCompatActivity() {
                                 adapter.notifyDataSetChanged()
                             } else {
                                 CustomToast.getInstance(applicationContext)
-                                    .setMessage("Something went wrong, please try again.")
+                                    .setMessage(
+                                        if (getString(R.string.lang) == "in")
+                                            "Ada yang salah, silakan coba lagi."
+                                        else
+                                            "Something went wrong, please try again."
+                                    )
                                     .setFontColor(
                                         ContextCompat.getColor(
                                             this@NotificationActivity,
@@ -113,7 +118,12 @@ class NotificationActivity : AppCompatActivity() {
                         ) {
                             loadingManager(false)
                             CustomToast.getInstance(applicationContext)
-                                .setMessage("Something went wrong, please try again.")
+                                .setMessage(
+                                    if (getString(R.string.lang) == "in")
+                                        "Ada yang salah, silakan coba lagi."
+                                    else
+                                        "Something went wrong, please try again."
+                                )
                                 .setFontColor(
                                     ContextCompat.getColor(
                                         this@NotificationActivity,
@@ -134,7 +144,12 @@ class NotificationActivity : AppCompatActivity() {
             } catch (exception: Exception) {
                 loadingManager(false)
                 CustomToast.getInstance(applicationContext)
-                    .setMessage("Something went wrong, please try again.")
+                    .setMessage(
+                        if (getString(R.string.lang) == "in")
+                            "Ada yang salah, silakan coba lagi."
+                        else
+                            "Something went wrong, please try again."
+                    )
                     .setFontColor(
                         ContextCompat.getColor(
                             this@NotificationActivity,

@@ -50,30 +50,19 @@ class ProgressTrackingBottomSheet(
     @SuppressLint("SetTextI18n")
     private fun init() {
         binding.apply {
-            val message = StringBuilder().append("Progress is being worked on by ")
-            for (i in 0 until data.usernUserTeknisi!!.size) {
-                if (data.usernUserTeknisi.size == 1)
-                    message.append("${data.usernUserTeknisi[i]?.namaUser?.trimEnd()}")
-                else {
-                    if (data.usernUserTeknisi.size == 2) {
-                        if (i == 0)
-                            message.append("${data.usernUserTeknisi[i]?.namaUser?.trimEnd()} and ")
-                        else
-                            message.append("${data.usernUserTeknisi[i]?.namaUser?.trimEnd()}")
-                    } else {
-                        if (i < data.usernUserTeknisi.size - 1)
-                            message.append("${data.usernUserTeknisi[i]?.namaUser?.trimEnd()}, ")
-                        else if (i == data.usernUserTeknisi.size - 1)
-                            message.append("${data.usernUserTeknisi[i]?.namaUser?.trimEnd()}")
-                        else
-                            message.append(" and ${data.usernUserTeknisi[i]?.namaUser?.trimEnd()}")
-                    }
-                }
-            }
+            val message = StringBuilder().append(
+                if (context.getString(R.string.lang) == "in")
+                    "Kemajuan sedang dikerjakan."
+                else
+                    "Progress is being worked on."
+            )
             progressWorkedBy.text = message.toString()
             if (data.stsGaprojects == 22) {
                 holdMessage.visibility = View.VISIBLE
-                holdMessage.text = "Issue on Hold status. Reason: ${data.keteranganHold}"
+                holdMessage.text = if (context.getString(R.string.lang) == "in")
+                    "Proyek ini sedang dalam status Jeda.\nAlasan: ${data.keteranganHold}"
+                else
+                    "Issue on Hold status.\nReason: ${data.keteranganHold}"
             } else
                 holdMessage.visibility = View.GONE
             progressItem = ArrayList()
@@ -97,9 +86,8 @@ class ProgressTrackingBottomSheet(
                 22 -> progressActionButton.visibility = View.GONE
                 3 -> {
                     if (data.idUser == userData.id) {
-                        for (i in 0 until data.usernUserTeknisi.size) {
+                        for (i in 0 until data.usernUserTeknisi!!.size) {
                             if (data.usernUserTeknisi[i]?.idUser == userData.id) {
-                                Log.e("Am I the Technicians?", "Yes")
                                 progressActionButton.visibility = View.VISIBLE
                                 progressActionButton.setCardBackgroundColor(
                                     ContextCompat.getColor(
@@ -143,7 +131,10 @@ class ProgressTrackingBottomSheet(
                                                 context, R.color.custom_toast_font_blue
                                             )
                                         )
-                                        progressActionText.text = "Mark Ready for Trial"
+                                        progressActionText.text =
+                                            if (context.getString(R.string.lang) == "in")
+                                                "Tandai Siap Uji Coba"
+                                            else "Mark Ready for Trial"
                                         progressActionButton.setOnClickListener {
                                             onProgressTrackingListener.readyForTrialClicked()
                                         }
@@ -157,7 +148,7 @@ class ProgressTrackingBottomSheet(
                             }
                         }
                     } else {
-                        for (i in 0 until data.usernUserTeknisi.size) {
+                        for (i in 0 until data.usernUserTeknisi!!.size) {
                             if (data.usernUserTeknisi[i]?.idUser == userData.id) {
                                 progressActionButton.visibility = View.VISIBLE
                                 progressActionButton.setCardBackgroundColor(
@@ -198,9 +189,16 @@ class ProgressTrackingBottomSheet(
                                             )
                                         )
                                         progressActionText.setTextColor(
-                                            ContextCompat.getColor(context, R.color.custom_toast_font_blue)
+                                            ContextCompat.getColor(
+                                                context,
+                                                R.color.custom_toast_font_blue
+                                            )
                                         )
-                                        progressActionText.text = "Mark Ready for Trial"
+                                        progressActionText.text =
+                                            if (context.getString(R.string.lang) == "in")
+                                                "Tandai Siap Uji Coba"
+                                            else
+                                                "Mark Ready for Trial"
                                         progressActionButton.setOnClickListener {
                                             onProgressTrackingListener.readyForTrialClicked()
                                         }
@@ -215,6 +213,7 @@ class ProgressTrackingBottomSheet(
                         }
                     }
                 }
+
                 4 -> progressActionButton.visibility = View.GONE
                 31 -> progressActionButton.visibility = View.GONE
                 else -> {
@@ -225,8 +224,16 @@ class ProgressTrackingBottomSheet(
                                 context, R.color.status_on_trial
                             )
                         )
-                        progressActionText.setTextColor(ContextCompat.getColor(context, R.color.white))
-                        progressActionText.text = "Start Trial"
+                        progressActionText.setTextColor(
+                            ContextCompat.getColor(
+                                context,
+                                R.color.white
+                            )
+                        )
+                        progressActionText.text = if (context.getString(R.string.lang) == "in")
+                            "Mulai Uji Coba"
+                        else
+                            "Start Trial"
                         progressActionButton.setOnClickListener {
                             onProgressTrackingListener.startTrialClicked()
                         }

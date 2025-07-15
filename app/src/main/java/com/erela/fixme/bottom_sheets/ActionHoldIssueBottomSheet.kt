@@ -7,6 +7,7 @@ import android.text.Editable
 import android.text.TextWatcher
 import android.view.ViewGroup
 import androidx.core.graphics.drawable.toDrawable
+import com.erela.fixme.R
 import com.erela.fixme.databinding.BsActionHoldIssueBinding
 import com.google.android.material.bottomsheet.BottomSheetDialog
 
@@ -43,7 +44,10 @@ class ActionHoldIssueBottomSheet(context: Context): BottomSheetDialog(context) {
                         holdIssueButton.isEnabled = true
                         holdIssueButton.alpha = 1f
                     } else {
-                        descriptionFieldLayout.error = "Make sure all fields are filled."
+                        descriptionFieldLayout.error = if (context.getString(R.string.lang) == "in")
+                            "Pastikan semua kolom terisi."
+                        else
+                            "Make sure all fields are filled."
                         holdIssueButton.isEnabled = false
                         holdIssueButton.alpha = 0.5f
                     }

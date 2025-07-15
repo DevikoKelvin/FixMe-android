@@ -87,7 +87,8 @@ class SelectSupervisorTechniciansBottomSheet(
                                             }
                                         }
                                         rvSupervisorsTechnicians.adapter = adapter
-                                        rvSupervisorsTechnicians.layoutManager = LinearLayoutManager(context)
+                                        rvSupervisorsTechnicians.layoutManager =
+                                            LinearLayoutManager(context)
                                     } else {
                                         CustomToast.getInstance(context)
                                             .setBackgroundColor(
@@ -102,7 +103,12 @@ class SelectSupervisorTechniciansBottomSheet(
                                                     R.color.custom_toast_font_failed
                                                 )
                                             )
-                                            .setMessage("Can't retrieve supervisor list.")
+                                            .setMessage(
+                                                if (context.getString(R.string.lang) == "in")
+                                                    "Tidak dapat mengambil daftar supervisor."
+                                                else
+                                                    "Can't retrieve supervisor list."
+                                            )
                                             .show()
                                         Log.e("ERROR", response.message().toString())
                                         dismiss()
@@ -121,7 +127,12 @@ class SelectSupervisorTechniciansBottomSheet(
                                                 R.color.custom_toast_font_failed
                                             )
                                         )
-                                        .setMessage("Can't retrieve supervisor list.")
+                                        .setMessage(
+                                            if (context.getString(R.string.lang) == "in")
+                                                "Tidak dapat mengambil daftar supervisor."
+                                            else
+                                                "Can't retrieve supervisor list."
+                                        )
                                         .show()
                                     Log.e("ERROR", response.message().toString())
                                     dismiss()
@@ -146,7 +157,12 @@ class SelectSupervisorTechniciansBottomSheet(
                                             R.color.custom_toast_font_failed
                                         )
                                     )
-                                    .setMessage("Can't retrieve supervisor list.")
+                                    .setMessage(
+                                        if (context.getString(R.string.lang) == "in")
+                                            "Tidak dapat mengambil daftar supervisor."
+                                        else
+                                            "Can't retrieve supervisor list."
+                                    )
                                     .show()
                                 Log.e("ERROR", throwable.toString())
                                 throwable.printStackTrace()
@@ -186,7 +202,8 @@ class SelectSupervisorTechniciansBottomSheet(
                                             }
                                         }
                                         rvSupervisorsTechnicians.adapter = adapter
-                                        rvSupervisorsTechnicians.layoutManager = LinearLayoutManager(context)
+                                        rvSupervisorsTechnicians.layoutManager =
+                                            LinearLayoutManager(context)
                                     } else {
                                         CustomToast.getInstance(context)
                                             .setBackgroundColor(
@@ -201,7 +218,12 @@ class SelectSupervisorTechniciansBottomSheet(
                                                     R.color.custom_toast_font_failed
                                                 )
                                             )
-                                            .setMessage("Can't retrieve technicians list.")
+                                            .setMessage(
+                                                if (context.getString(R.string.lang) == "in")
+                                                    "Tidak dapat mengambil daftar teknisi."
+                                                else
+                                                    "Can't retrieve technicians list."
+                                            )
                                             .show()
                                         Log.e("ERROR", response.message().toString())
                                         dismiss()
@@ -220,7 +242,12 @@ class SelectSupervisorTechniciansBottomSheet(
                                                 R.color.custom_toast_font_failed
                                             )
                                         )
-                                        .setMessage("Can't retrieve technicians list.")
+                                        .setMessage(
+                                            if (context.getString(R.string.lang) == "in")
+                                                "Tidak dapat mengambil daftar teknisi."
+                                            else
+                                                "Can't retrieve technicians list."
+                                        )
                                         .show()
                                     Log.e("ERROR", response.message().toString())
                                     dismiss()
@@ -228,7 +255,8 @@ class SelectSupervisorTechniciansBottomSheet(
                             }
 
                             override fun onFailure(
-                                call: Call<List<SupervisorTechnicianListResponse>>, throwable: Throwable
+                                call: Call<List<SupervisorTechnicianListResponse>>,
+                                throwable: Throwable
                             ) {
                                 loadingBar.visibility = View.GONE
                                 CustomToast.getInstance(context)
@@ -244,7 +272,12 @@ class SelectSupervisorTechniciansBottomSheet(
                                             R.color.custom_toast_font_failed
                                         )
                                     )
-                                    .setMessage("Can't retrieve technicians list.")
+                                    .setMessage(
+                                        if (context.getString(R.string.lang) == "in")
+                                            "Tidak dapat mengambil daftar teknisi."
+                                        else
+                                            "Can't retrieve technicians list."
+                                    )
                                     .show()
                                 Log.e("ERROR", throwable.toString())
                                 throwable.printStackTrace()
@@ -268,7 +301,12 @@ class SelectSupervisorTechniciansBottomSheet(
                             R.color.custom_toast_font_failed
                         )
                     )
-                    .setMessage("Can't retrieve user list.")
+                    .setMessage(
+                        if (context.getString(R.string.lang) == "in")
+                            "Tidak dapat mengambil daftar pengguna."
+                        else
+                            "Can't retrieve user list."
+                    )
                     .show()
                 Log.e("ERROR", jsonException.message.toString())
                 jsonException.printStackTrace()

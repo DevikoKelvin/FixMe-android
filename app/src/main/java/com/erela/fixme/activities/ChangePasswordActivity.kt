@@ -117,7 +117,10 @@ class ChangePasswordActivity : AppCompatActivity() {
                         .setBackgroundColor(getColor(R.color.custom_toast_background_failed))
                         .setFontColor(getColor(R.color.custom_toast_font_failed))
                         .setMessage(
-                            "Please check your password or confirmation password and make sure all requirement meets"
+                            if (getString(R.string.lang) == "in")
+                                "Silakan periksa kata sandi atau konfirmasi kata sandi Anda dan pastikan semua persyaratan terpenuhi"
+                            else
+                                "Please check your password or confirmation password and make sure all requirement meets"
                         ).show()
                 } else {
                     try {
@@ -140,7 +143,12 @@ class ChangePasswordActivity : AppCompatActivity() {
                                                 .setFontColor(
                                                     getColor(R.color.custom_toast_font_success)
                                                 )
-                                                .setMessage("Setting saved!")
+                                                .setMessage(
+                                                    if (getString(R.string.lang) == "in")
+                                                        "Kata sandi berhasil diubah!"
+                                                    else
+                                                        "Password successfully changed!"
+                                                )
                                                 .show()
                                             finish()
                                         } else
@@ -152,7 +160,10 @@ class ChangePasswordActivity : AppCompatActivity() {
                                                     getColor(R.color.custom_toast_font_failed)
                                                 )
                                                 .setMessage(
-                                                    "Please check your password or confirmation password and make sure all requirement meets"
+                                                    if (getString(R.string.lang) == "in")
+                                                        "Silakan periksa kata sandi atau konfirmasi kata sandi Anda dan pastikan semua persyaratan terpenuhi"
+                                                    else
+                                                        "Please check your password or confirmation password and make sure all requirement meets"
                                                 ).show()
                                     }
                                 }
@@ -168,7 +179,10 @@ class ChangePasswordActivity : AppCompatActivity() {
                                         )
                                         .setFontColor(getColor(R.color.custom_toast_font_failed))
                                         .setMessage(
-                                            "Something went wrong, please try again later"
+                                            if (getString(R.string.lang) == "in")
+                                                "Terjadi kesalahan, silakan coba lagi nanti"
+                                            else
+                                                "Something went wrong, please try again later"
                                         ).show()
                                 }
                             })

@@ -87,7 +87,10 @@ class SubmissionActionBottomSheet(context: Context, val data: SubmissionDetailRe
                     deployTechButton.visibility = View.GONE
                     reportManagerApprovalMessageContainer.visibility = View.VISIBLE
                     reportManagerApprovalMessage.text =
-                        "Report was approved by ${data.namaUserPelaporApprove}\nClick to see message"
+                        if (context.getString(R.string.lang) == "in")
+                            "Laporan telah disetujui oleh ${data.namaUserPelaporApprove}\nKetuk untuk melihat pesan"
+                        else
+                            "Report was approved by ${data.namaUserPelaporApprove}\nTap to see message"
                     reportManagerApprovalMessageContainer.setOnClickListener {
                         val balloon = Balloon.Builder(context).also {
                             with(it) {

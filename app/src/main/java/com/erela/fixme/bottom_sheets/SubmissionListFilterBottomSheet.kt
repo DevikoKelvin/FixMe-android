@@ -72,9 +72,24 @@ class SubmissionListFilterBottomSheet(
                 else -> -1
             }
             val filterList = ArrayList<String>()
-            filterList.add("All Case")
-            filterList.add("On Going Case")
-            filterList.add("Finished Case")
+            filterList.add(
+                if (context.getString(R.string.lang) == "in")
+                    "Semua Kasus"
+                else
+                    "All Case"
+            )
+            filterList.add(
+                if (context.getString(R.string.lang) == "in")
+                    "Kasus Berjalan"
+                else
+                    "On Going Case"
+            )
+            filterList.add(
+                if (context.getString(R.string.lang) == "in")
+                    "Kasus Selesai"
+                else
+                    "Finished Case"
+            )
             val filterAdapter = ArrayAdapter(
                 context,
                 R.layout.general_dropdown_item,
@@ -120,7 +135,7 @@ class SubmissionListFilterBottomSheet(
 
                 override fun onNothingSelected(parent: AdapterView<*>?) {}
             }
-            
+
             when (selectedComplexity) {
                 "All" -> allSelector.isChecked = true
                 "Low" -> lowSelector.isChecked = true

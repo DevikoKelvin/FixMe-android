@@ -138,6 +138,7 @@ class ProgressDoneFormActivity : AppCompatActivity() {
                     @Suppress("DEPRECATION") intent.getParcelableExtra("data")
                 }
             } catch (nullPointerException: NullPointerException) {
+                nullPointerException.printStackTrace()
                 null
             }
 
@@ -153,7 +154,11 @@ class ProgressDoneFormActivity : AppCompatActivity() {
 
                 override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                     if (s!!.toString().isEmpty()) {
-                        descriptionFieldLayout.error = "Description can't be empty!"
+                        descriptionFieldLayout.error =
+                            if (getString(R.string.lang) == "in")
+                                "Deskripsi tidak boleh kosong!"
+                            else
+                                "Description can't be empty!"
                         isFormEmpty[0] = false
                     } else {
                         descriptionFieldLayout.error = null
@@ -236,8 +241,11 @@ class ProgressDoneFormActivity : AppCompatActivity() {
                 val confirmationDialog =
                     ConfirmationDialog(
                         this@ProgressDoneFormActivity,
-                        "Are you sure you want to mark this progress as done?\n\nMake sure your progress are totally done before marking it as done",
-                        "Yes"
+                        if (getString(R.string.lang) == "in")
+                            "Apakah Anda yakin ingin menandai kemajuan ini sebagai selesai?\n\nPastikan kemajuan Anda sudah benar-benar selesai sebelum menandainya sebagai selesai"
+                        else
+                            "Are you sure you want to mark this progress as done?\n\nMake sure your progress are totally done before marking it as done",
+                        if (getString(R.string.lang) == "in") "Ya" else "Yes"
                     ).also {
                         with(it) {
                             setConfirmationDialogListener(object :
@@ -282,7 +290,10 @@ class ProgressDoneFormActivity : AppCompatActivity() {
                                                                                 )
                                                                             )
                                                                             .setMessage(
-                                                                                "Progress marked as done successfully!"
+                                                                                if (getString(R.string.lang) == "in")
+                                                                                    "Kemajuan berhasil ditandai sebagai selesai!"
+                                                                                else
+                                                                                    "Progress marked as done successfully!"
                                                                             ).show()
                                                                         setResult(RESULT_OK)
                                                                         finish()
@@ -306,7 +317,10 @@ class ProgressDoneFormActivity : AppCompatActivity() {
                                                                                 )
                                                                             )
                                                                             .setMessage(
-                                                                                "Failed to mark progress as done"
+                                                                                if (getString(R.string.lang) == "in")
+                                                                                    "Gagal menandai kemajuan sebagai selesai"
+                                                                                else
+                                                                                    "Failed to mark progress as done"
                                                                             ).show()
                                                                         Log.e(
                                                                             "ERROR ${response.code()}",
@@ -332,7 +346,12 @@ class ProgressDoneFormActivity : AppCompatActivity() {
                                                                                 theme
                                                                             )
                                                                         )
-                                                                        .setMessage("Failed to mark progress as done")
+                                                                        .setMessage(
+                                                                            if (getString(R.string.lang) == "in")
+                                                                                "Gagal menandai kemajuan sebagai selesai"
+                                                                            else
+                                                                                "Failed to mark progress as done"
+                                                                        )
                                                                         .show()
                                                                     Log.e(
                                                                         "ERROR ${response.code()}",
@@ -356,7 +375,12 @@ class ProgressDoneFormActivity : AppCompatActivity() {
                                                                             theme
                                                                         )
                                                                     )
-                                                                    .setMessage("Failed to mark progress as done")
+                                                                    .setMessage(
+                                                                        if (getString(R.string.lang) == "in")
+                                                                            "Gagal menandai kemajuan sebagai selesai"
+                                                                        else
+                                                                            "Failed to mark progress as done"
+                                                                    )
                                                                     .show()
                                                                 Log.e(
                                                                     "ERROR ${response.code()}",
@@ -387,7 +411,10 @@ class ProgressDoneFormActivity : AppCompatActivity() {
                                                                     )
                                                                 )
                                                                 .setMessage(
-                                                                    "Something went wrong, please try again later"
+                                                                    if (getString(R.string.lang) == "in")
+                                                                        "Terjadi kesalahan, silakan coba lagi nanti"
+                                                                    else
+                                                                        "Something went wrong, please try again later"
                                                                 )
                                                                 .show()
                                                             throwable.printStackTrace()
@@ -414,7 +441,12 @@ class ProgressDoneFormActivity : AppCompatActivity() {
                                                             theme
                                                         )
                                                     )
-                                                    .setMessage("Something went wrong, please try again later")
+                                                    .setMessage(
+                                                        if (getString(R.string.lang) == "in")
+                                                            "Terjadi kesalahan, silakan coba lagi nanti"
+                                                        else
+                                                            "Something went wrong, please try again later"
+                                                    )
                                                     .show()
                                                 jsonException.printStackTrace()
                                                 Log.e(
@@ -439,7 +471,12 @@ class ProgressDoneFormActivity : AppCompatActivity() {
                                                         theme
                                                     )
                                                 )
-                                                .setMessage("Form are not prepared. Try to check again!")
+                                                .setMessage(
+                                                    if (getString(R.string.lang) == "in")
+                                                        "Form tidak siap. Coba periksa kembali!"
+                                                    else
+                                                        "Form are not prepared. Try to check again!"
+                                                )
                                                 .show()
                                         }
                                     } else {
@@ -459,7 +496,12 @@ class ProgressDoneFormActivity : AppCompatActivity() {
                                                     theme
                                                 )
                                             )
-                                            .setMessage("Please check your input. Make sure all required fields are filled")
+                                            .setMessage(
+                                                if (getString(R.string.lang) == "in")
+                                                    "Periksa kembali masukan Anda. Pastikan semua kolom yang wajib diisi sudah terisi"
+                                                else
+                                                    "Please check your input. Make sure all required fields are filled"
+                                            )
                                             .show()
                                     }
                                 }
@@ -548,7 +590,11 @@ class ProgressDoneFormActivity : AppCompatActivity() {
                 Log.e("Form [$i]", isFormEmpty[i].toString())
             }
             if (descriptionField.text.toString().isEmpty())
-                descriptionFieldLayout.error = "Description can't be empty!"
+                descriptionFieldLayout.error =
+                    if (getString(R.string.lang) == "in")
+                        "Deskripsi tidak boleh kosong!"
+                    else
+                        "Description can't be empty!"
         }
 
         return validated == isFormEmpty.size

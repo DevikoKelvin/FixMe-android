@@ -1,6 +1,7 @@
 <resources>
     <string name="app_name">FixMe</string>
     <string name="copyright">© 2025 Erlangga Edi Laboratories Corp.\nAll rights reserved</string>
+    <string name="lang">en</string>
 
     <string name="username_title">Username</string>
     <string name="password_title">Password</string>

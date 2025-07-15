@@ -6,6 +6,14 @@
     android:layout_height="match_parent"
     tools:context=".activities.SplashScreenActivity">
 
+    <ImageView
+        android:id="@+id/fixMeLogo"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_margin="75dp"
+        android:alpha="0.2"
+        android:src="@drawable/new_fixme_logo" />
+
     <LinearLayout
         android:id="@+id/mainSplashContainer"
         android:layout_width="match_parent"

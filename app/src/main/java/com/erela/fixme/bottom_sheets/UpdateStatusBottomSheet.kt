@@ -3,7 +3,6 @@ package com.erela.fixme.bottom_sheets
 import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.Color
-import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -11,6 +10,7 @@ import android.util.Log
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
+import androidx.core.graphics.drawable.toDrawable
 import com.erela.fixme.R
 import com.erela.fixme.adapters.recycler_view.SelectedSupervisorTechniciansRvAdapter
 import com.erela.fixme.custom_views.CustomToast
@@ -34,7 +34,6 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import java.util.Locale
-import androidx.core.graphics.drawable.toDrawable
 
 class UpdateStatusBottomSheet(
     context: Context, private val dataDetail: SubmissionDetailResponse,
@@ -89,7 +88,10 @@ class UpdateStatusBottomSheet(
                         descriptionFieldLayout.error = null
                     } else {
                         isFormEmpty[0] = false
-                        descriptionFieldLayout.error = "Make sure all fields are filled."
+                        descriptionFieldLayout.error = if (context.getString(R.string.lang) == "in")
+                            "Pastikan semua kolom terisi."
+                        else
+                            "Make sure all fields are filled."
                     }
                 }
 
@@ -124,7 +126,12 @@ class UpdateStatusBottomSheet(
                         cancelButton.visibility = View.GONE
                         deployTechButton.visibility = View.GONE
                         descriptionFieldLayout.visibility = View.VISIBLE
-                        descriptionField.setText("Approved!")
+                        descriptionField.setText(
+                            if (context.getString(R.string.lang) == "in")
+                                "Disetujui!"
+                            else
+                                "Approved!"
+                        )
                         isFormEmpty[0] = true
                         if (dataDetail.deptTujuan == userData.dept) {
                             selectSupervisorText.visibility = View.VISIBLE
@@ -242,7 +249,12 @@ class UpdateStatusBottomSheet(
                         cancelButton.visibility = View.GONE
                         deployTechButton.visibility = View.GONE
                         descriptionFieldLayout.visibility = View.VISIBLE
-                        descriptionField.setText("Rejected!")
+                        descriptionField.setText(
+                            if (context.getString(R.string.lang) == "in")
+                                "Ditolak!"
+                            else
+                                "Rejected!"
+                        )
                         isFormEmpty[0] = true
                         rejectButton.setOnClickListener {
                             executeUpdate()
@@ -413,11 +425,14 @@ class UpdateStatusBottomSheet(
             if (!deployTech) {
                 if (formCheck()) {
                     if (cancel) {
-                        Log.e("Canceled", "Canceled")
                         val confirmationDialog = ConfirmationDialog(
                             context,
-                            "Are you sure you want to cancel this issue?",
-                            "Yes"
+                            if (context.getString(R.string.lang) == "in")
+                                "Apakah Anda yakin ingin membatalkan masalah ini?"
+                            else
+                                "Are you sure you want to cancel this issue?",
+                            if (context.getString(R.string.lang) == "in")
+                                "Ya" else "Yes"
                         ).also {
                             with(it) {
                                 setConfirmationDialogListener(object :
@@ -454,13 +469,21 @@ class UpdateStatusBottomSheet(
                                                                         )
                                                                     )
                                                                     .setMessage(
-                                                                        "Submission canceled successfully."
+                                                                        if (context.getString(R.string.lang) == "in")
+                                                                            "Pengajuan sukses dibatalkan."
+                                                                        else
+                                                                            "Submission canceled successfully."
                                                                     ).show()
                                                                 this@UpdateStatusBottomSheet.dismiss()
                                                                 onUpdateSuccessListener.onCanceled()
                                                             } else {
                                                                 CustomToast.getInstance(context)
-                                                                    .setMessage("Can't cancel this issue. Please try again later.")
+                                                                    .setMessage(
+                                                                        if (context.getString(R.string.lang) == "in")
+                                                                            "Tidak dapat membatalkan masalah ini. Silakan coba lagi nanti."
+                                                                        else
+                                                                            "Can't cancel this issue. Please try again later."
+                                                                    )
                                                                     .setFontColor(
                                                                         ContextCompat.getColor(
                                                                             context,
@@ -480,7 +503,12 @@ class UpdateStatusBottomSheet(
                                                             }
                                                         } else {
                                                             CustomToast.getInstance(context)
-                                                                .setMessage("Can't cancel this issue. Please try again later.")
+                                                                .setMessage(
+                                                                    if (context.getString(R.string.lang) == "in")
+                                                                        "Tidak dapat membatalkan masalah ini. Silakan coba lagi nanti."
+                                                                    else
+                                                                        "Can't cancel this issue. Please try again later."
+                                                                )
                                                                 .setFontColor(
                                                                     ContextCompat.getColor(
                                                                         context,
@@ -500,7 +528,12 @@ class UpdateStatusBottomSheet(
                                                         }
                                                     } else {
                                                         CustomToast.getInstance(context)
-                                                            .setMessage("Can't cancel this issue. Please try again later.")
+                                                            .setMessage(
+                                                                if (context.getString(R.string.lang) == "in")
+                                                                    "Tidak dapat membatalkan masalah ini. Silakan coba lagi nanti."
+                                                                else
+                                                                    "Can't cancel this issue. Please try again later."
+                                                            )
                                                             .setFontColor(
                                                                 ContextCompat.getColor(
                                                                     context,
@@ -526,7 +559,12 @@ class UpdateStatusBottomSheet(
                                                 ) {
                                                     cancelLoading.visibility = View.GONE
                                                     CustomToast.getInstance(context)
-                                                        .setMessage("Something went wrong. Please try again later.")
+                                                        .setMessage(
+                                                            if (context.getString(R.string.lang) == "in")
+                                                                "Terjadi kesalahan. Silakan coba lagi nanti."
+                                                            else
+                                                                "Something went wrong. Please try again later."
+                                                        )
                                                         .setFontColor(
                                                             ContextCompat.getColor(
                                                                 context,
@@ -550,7 +588,12 @@ class UpdateStatusBottomSheet(
                                             cancelLoading.visibility = View.GONE
                                             CustomToast
                                                 .getInstance(context)
-                                                .setMessage("Something went wrong. Please try again later.")
+                                                .setMessage(
+                                                    if (context.getString(R.string.lang) == "in")
+                                                        "Terjadi kesalahan. Silakan coba lagi nanti."
+                                                    else
+                                                        "Something went wrong. Please try again later."
+                                                )
                                                 .setFontColor(
                                                     ContextCompat.getColor(
                                                         context,
@@ -630,7 +673,10 @@ class UpdateStatusBottomSheet(
                                                                 )
                                                             )
                                                             .setMessage(
-                                                                "Submission approved successfully."
+                                                                if (context.getString(R.string.lang) == "in")
+                                                                    "Pengajuan berhasil disetujui."
+                                                                else
+                                                                    "Submission approved successfully."
                                                             ).show()
                                                         dismiss()
                                                         onUpdateSuccessListener.onApproved()
@@ -648,7 +694,12 @@ class UpdateStatusBottomSheet(
                                                                     R.color.custom_toast_font_failed
                                                                 )
                                                             )
-                                                            .setMessage("Failed to approve submission.")
+                                                            .setMessage(
+                                                                if (context.getString(R.string.lang) == "in")
+                                                                    "Gagal menyetujui pengajuan."
+                                                                else
+                                                                    "Failed to approve submission."
+                                                            )
                                                             .show()
                                                         Log.e(
                                                             "ERROR ${result?.code}",
@@ -669,7 +720,12 @@ class UpdateStatusBottomSheet(
                                                                 R.color.custom_toast_font_failed
                                                             )
                                                         )
-                                                        .setMessage("Failed to approve submission.")
+                                                        .setMessage(
+                                                            if (context.getString(R.string.lang) == "in")
+                                                                "Gagal menyetujui pengajuan."
+                                                            else
+                                                                "Failed to approve submission."
+                                                        )
                                                         .show()
                                                     Log.e(
                                                         "ERROR ${response.code()}",
@@ -690,7 +746,12 @@ class UpdateStatusBottomSheet(
                                                             R.color.custom_toast_font_failed
                                                         )
                                                     )
-                                                    .setMessage("Failed to approve submission.")
+                                                    .setMessage(
+                                                        if (context.getString(R.string.lang) == "in")
+                                                            "Gagal menyetujui pengajuan."
+                                                        else
+                                                            "Failed to approve submission."
+                                                    )
                                                     .show()
                                                 Log.e(
                                                     "ERROR ${response.code()}",
@@ -718,7 +779,12 @@ class UpdateStatusBottomSheet(
                                                         R.color.custom_toast_font_failed
                                                     )
                                                 )
-                                                .setMessage("Failed to approve submission.").show()
+                                                .setMessage(
+                                                    if (context.getString(R.string.lang) == "in")
+                                                        "Gagal menyetujui pengajuan."
+                                                    else
+                                                        "Failed to approve submission."
+                                                ).show()
                                             Log.e("ERROR", throwable.message.toString())
                                             throwable.printStackTrace()
                                         }
@@ -740,7 +806,12 @@ class UpdateStatusBottomSheet(
                                             R.color.custom_toast_font_failed
                                         )
                                     )
-                                    .setMessage("Failed to approve submission.").show()
+                                    .setMessage(
+                                        if (context.getString(R.string.lang) == "in")
+                                            "Gagal menyetujui pengajuan."
+                                        else
+                                            "Failed to approve submission."
+                                    ).show()
                                 jsonException.printStackTrace()
                             }
                         } else {
@@ -774,7 +845,10 @@ class UpdateStatusBottomSheet(
                                                             )
                                                         )
                                                         .setMessage(
-                                                            "Submission rejected successfully."
+                                                            if (context.getString(R.string.lang) == "in")
+                                                                "Pengajuan berhasil ditolak."
+                                                            else
+                                                                "Submission rejected successfully."
                                                         ).show()
                                                     dismiss()
                                                     onUpdateSuccessListener.onRejected()
@@ -792,7 +866,12 @@ class UpdateStatusBottomSheet(
                                                                 R.color.custom_toast_font_failed
                                                             )
                                                         )
-                                                        .setMessage("Failed to reject submission.")
+                                                        .setMessage(
+                                                            if (context.getString(R.string.lang) == "in")
+                                                                "Gagal menolak pengajuan."
+                                                            else
+                                                                "Failed to reject submission."
+                                                        )
                                                         .show()
                                                     Log.e(
                                                         "ERROR ${result?.code}",
@@ -813,7 +892,12 @@ class UpdateStatusBottomSheet(
                                                             R.color.custom_toast_font_failed
                                                         )
                                                     )
-                                                    .setMessage("Failed to reject submission.")
+                                                    .setMessage(
+                                                        if (context.getString(R.string.lang) == "in")
+                                                            "Gagal menolak pengajuan."
+                                                        else
+                                                            "Failed to reject submission."
+                                                    )
                                                     .show()
                                                 Log.e(
                                                     "ERROR ${response.code()}",
@@ -834,7 +918,12 @@ class UpdateStatusBottomSheet(
                                                         R.color.custom_toast_font_failed
                                                     )
                                                 )
-                                                .setMessage("Failed to reject submission.").show()
+                                                .setMessage(
+                                                    if (context.getString(R.string.lang) == "in")
+                                                        "Gagal menolak pengajuan."
+                                                    else
+                                                        "Failed to reject submission."
+                                                ).show()
                                             Log.e(
                                                 "ERROR ${response.code()}",
                                                 response.message().toString()
@@ -861,7 +950,12 @@ class UpdateStatusBottomSheet(
                                                     R.color.custom_toast_font_failed
                                                 )
                                             )
-                                            .setMessage("Failed to reject submission.").show()
+                                            .setMessage(
+                                                if (context.getString(R.string.lang) == "in")
+                                                    "Gagal menolak pengajuan."
+                                                else
+                                                    "Failed to reject submission."
+                                            ).show()
                                         Log.e("ERROR", throwable.message.toString())
                                         throwable.printStackTrace()
                                     }
@@ -883,7 +977,12 @@ class UpdateStatusBottomSheet(
                                             R.color.custom_toast_font_failed
                                         )
                                     )
-                                    .setMessage("Failed to reject submission.").show()
+                                    .setMessage(
+                                        if (context.getString(R.string.lang) == "in")
+                                            "Gagal menolak pengajuan."
+                                        else
+                                            "Failed to reject submission."
+                                    ).show()
                                 jsonException.printStackTrace()
                             }
                         }
@@ -905,7 +1004,12 @@ class UpdateStatusBottomSheet(
                                 R.color.custom_toast_font_failed
                             )
                         )
-                        .setMessage("Make sure all fields are filled.").show()
+                        .setMessage(
+                            if (context.getString(R.string.lang) == "in")
+                                "Pastikan semua kolom terisi."
+                            else
+                                "Make sure all fields are filled."
+                        ).show()
                     if (descriptionField.text.toString().isEmpty())
                         descriptionFieldLayout.error = "Make sure all fields are filled."
                 }
@@ -956,7 +1060,10 @@ class UpdateStatusBottomSheet(
                                                         )
                                                     )
                                                     .setMessage(
-                                                        "Technicians successfully deployed!"
+                                                        if (context.getString(R.string.lang) == "in")
+                                                            "Teknisi berhasil dikerahkan!"
+                                                        else
+                                                            "Technicians successfully deployed!"
                                                     ).show()
                                                 dismiss()
                                                 onUpdateSuccessListener.onTechniciansDeployed()
@@ -974,7 +1081,12 @@ class UpdateStatusBottomSheet(
                                                             R.color.custom_toast_font_failed
                                                         )
                                                     )
-                                                    .setMessage("Failed to deploy technicians.")
+                                                    .setMessage(
+                                                        if (context.getString(R.string.lang) == "in")
+                                                            "Gagal mengerahkan teknisi."
+                                                        else
+                                                            "Failed to deploy technicians."
+                                                    )
                                                     .show()
                                                 Log.e(
                                                     "ERROR ${result?.code}",
@@ -995,7 +1107,12 @@ class UpdateStatusBottomSheet(
                                                         R.color.custom_toast_font_failed
                                                     )
                                                 )
-                                                .setMessage("Failed to deploy technicians.")
+                                                .setMessage(
+                                                    if (context.getString(R.string.lang) == "in")
+                                                        "Gagal mengerahkan teknisi."
+                                                    else
+                                                        "Failed to deploy technicians."
+                                                )
                                                 .show()
                                             Log.e(
                                                 "ERROR ${response.code()}",
@@ -1016,7 +1133,12 @@ class UpdateStatusBottomSheet(
                                                     R.color.custom_toast_font_failed
                                                 )
                                             )
-                                            .setMessage("Failed to deploy technicians.").show()
+                                            .setMessage(
+                                                if (context.getString(R.string.lang) == "in")
+                                                    "Gagal mengerahkan teknisi."
+                                                else
+                                                    "Failed to deploy technicians."
+                                            ).show()
                                         Log.e(
                                             "ERROR ${response.code()}",
                                             response.message().toString()
@@ -1043,7 +1165,12 @@ class UpdateStatusBottomSheet(
                                                 R.color.custom_toast_font_failed
                                             )
                                         )
-                                        .setMessage("Failed to deploy technicians.").show()
+                                        .setMessage(
+                                            if (context.getString(R.string.lang) == "in")
+                                                "Gagal mengerahkan teknisi."
+                                            else
+                                                "Failed to deploy technicians."
+                                        ).show()
                                     Log.e("ERROR", throwable.message.toString())
                                     throwable.printStackTrace()
                                 }
@@ -1065,7 +1192,12 @@ class UpdateStatusBottomSheet(
                                     R.color.custom_toast_font_failed
                                 )
                             )
-                            .setMessage("Failed to deploy technicians.").show()
+                            .setMessage(
+                                if (context.getString(R.string.lang) == "in")
+                                    "Gagal mengerahkan teknisi."
+                                else
+                                    "Failed to deploy technicians."
+                            ).show()
                         jsonException.printStackTrace()
                     }
                 } else {
@@ -1085,7 +1217,12 @@ class UpdateStatusBottomSheet(
                                 R.color.custom_toast_font_failed
                             )
                         )
-                        .setMessage("Make sure all fields are filled.").show()
+                        .setMessage(
+                            if (context.getString(R.string.lang) == "in")
+                                "Pastikan semua kolom terisi."
+                            else
+                                "Make sure all fields are filled."
+                        ).show()
                 }
             }
         }

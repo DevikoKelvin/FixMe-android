@@ -86,7 +86,7 @@ class ProgressFormActivity : AppCompatActivity() {
                 } else {
                     @Suppress("DEPRECATION") intent.getParcelableExtra("detail")!!
                 }
-            } catch (nullPointerException: NullPointerException) {
+            } catch (_: NullPointerException) {
                 null
             }
             progressData = try {
@@ -95,14 +95,14 @@ class ProgressFormActivity : AppCompatActivity() {
                 } else {
                     @Suppress("DEPRECATION") intent.getParcelableExtra("data")
                 }
-            } catch (nullPointerException: NullPointerException) {
+            } catch (_: NullPointerException) {
                 null
             }
 
             if (progressData != null) {
                 editMaterial = try {
                     intent.getBooleanExtra("edit_material", false)
-                } catch (nullPointerException: NullPointerException) {
+                } catch (_: NullPointerException) {
                     false
                 }
                 if (editMaterial) {
@@ -112,7 +112,11 @@ class ProgressFormActivity : AppCompatActivity() {
                     repairAnalysisField.isEnabled = true
                     descriptionField.isEnabled = true
                 }
-                progressActionText.text = "Save Edited Progress"
+                progressActionText.text =
+                    if (getString(R.string.lang) == "in")
+                        "Simpan Suntingan Kemajuan"
+                    else
+                        "Save Edited Progress"
                 repairAnalysisField.setText(progressData?.analisa)
                 if (!progressData?.analisa.isNullOrEmpty())
                     isFormEmpty[0] = true
@@ -148,7 +152,10 @@ class ProgressFormActivity : AppCompatActivity() {
 
                 override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                     if (s!!.isEmpty()) {
-                        repairAnalysisFieldLayout.error = "Analysis can't be empty!"
+                        repairAnalysisFieldLayout.error = if (getString(R.string.lang) == "in")
+                            "Analisa perbaikan tidak boleh kosong!"
+                        else
+                            "Analysis can't be empty!"
                         isFormEmpty[0] = false
                     } else {
                         repairAnalysisFieldLayout.error = null
@@ -166,7 +173,10 @@ class ProgressFormActivity : AppCompatActivity() {
 
                 override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                     if (s!!.isEmpty()) {
-                        descriptionFieldLayout.error = "Description can't be empty!"
+                        descriptionFieldLayout.error = if (getString(R.string.lang) == "in")
+                            "Keterangan tidak boleh kosong!"
+                        else
+                            "Description can't be empty!"
                         isFormEmpty[1] = false
                     } else {
                         descriptionFieldLayout.error = null
@@ -185,7 +195,12 @@ class ProgressFormActivity : AppCompatActivity() {
                 if (progressData != null) {
                     if (!formCheck()) {
                         CustomToast.getInstance(applicationContext)
-                            .setMessage("Please make sure all fields in the form are filled in.")
+                            .setMessage(
+                                if (getString(R.string.lang) == "in")
+                                    "Pastikan semua kolom di formulir terisi."
+                                else
+                                    "Please make sure all fields in the form are filled in."
+                            )
                             .setBackgroundColor(
                                 ContextCompat.getColor(
                                     this@ProgressFormActivity,
@@ -244,7 +259,13 @@ class ProgressFormActivity : AppCompatActivity() {
                                                                                         applicationContext
                                                                                     )
                                                                                     .setMessage(
-                                                                                        "Progress edited successfully."
+                                                                                        if (getString(
+                                                                                                R.string.lang
+                                                                                            ) == "in"
+                                                                                        )
+                                                                                            "Kemajuan suntingan berhasil disimpan."
+                                                                                        else
+                                                                                            "Progress edited successfully."
                                                                                     )
                                                                                     .setBackgroundColor(
                                                                                         ContextCompat.getColor(
@@ -265,10 +286,13 @@ class ProgressFormActivity : AppCompatActivity() {
                                                                                     .getInstance(
                                                                                         applicationContext
                                                                                     ).setMessage(
-                                                                                        "Failed to " +
-                                                                                                "request" +
-                                                                                                " " +
-                                                                                                "material!"
+                                                                                        if (getString(
+                                                                                                R.string.lang
+                                                                                            ) == "in"
+                                                                                        )
+                                                                                            "Gagal meminta material!"
+                                                                                        else
+                                                                                            "Failed to request material!"
                                                                                     ).setFontColor(
                                                                                         ContextCompat.getColor(
                                                                                             this@ProgressFormActivity,
@@ -284,10 +308,7 @@ class ProgressFormActivity : AppCompatActivity() {
                                                                                 Log.e(
                                                                                     "ERROR " +
                                                                                             "${response1.code()}",
-                                                                                    "Request " +
-                                                                                            "Material" +
-                                                                                            " " +
-                                                                                            "Response Code 0 | ${result1?.message}"
+                                                                                    "Request Material Response Code 0 | ${result1?.message}"
                                                                                 )
                                                                             }
                                                                         }
@@ -301,7 +322,12 @@ class ProgressFormActivity : AppCompatActivity() {
                                                                             CustomToast.getInstance(
                                                                                 applicationContext
                                                                             )
-                                                                                .setMessage("Something went wrong, please try again.")
+                                                                                .setMessage(
+                                                                                    if (getString(R.string.lang) == "in")
+                                                                                        "Terjadi kesalahan, silakan coba lagi."
+                                                                                    else
+                                                                                        "Something went wrong, please try again."
+                                                                                )
                                                                                 .setFontColor(
                                                                                     ContextCompat.getColor(
                                                                                         this@ProgressFormActivity,
@@ -316,9 +342,7 @@ class ProgressFormActivity : AppCompatActivity() {
                                                                                 ).show()
                                                                             Log.e(
                                                                                 "ERROR",
-                                                                                "Request Material" +
-                                                                                        " Failure" +
-                                                                                        " | $throwable"
+                                                                                "Request Material Failure | $throwable"
                                                                             )
                                                                             throwable.printStackTrace()
                                                                         }
@@ -328,7 +352,12 @@ class ProgressFormActivity : AppCompatActivity() {
                                                                 loadingBar.visibility = View.GONE
                                                                 CustomToast
                                                                     .getInstance(applicationContext)
-                                                                    .setMessage("Something went wrong, please try again.")
+                                                                    .setMessage(
+                                                                        if (getString(R.string.lang) == "in")
+                                                                            "Terjadi kesalahan, silakan coba lagi."
+                                                                        else
+                                                                            "Something went wrong, please try again."
+                                                                    )
                                                                     .setFontColor(
                                                                         ContextCompat.getColor(
                                                                             this@ProgressFormActivity,
@@ -350,7 +379,10 @@ class ProgressFormActivity : AppCompatActivity() {
                                                             CustomToast
                                                                 .getInstance(applicationContext)
                                                                 .setMessage(
-                                                                    "Progress edited successfully."
+                                                                    if (getString(R.string.lang) == "in")
+                                                                        "Kemajuan berhasil disunting."
+                                                                    else
+                                                                        "Progress edited successfully."
                                                                 )
                                                                 .setBackgroundColor(
                                                                     ContextCompat.getColor(
@@ -369,7 +401,12 @@ class ProgressFormActivity : AppCompatActivity() {
                                                         }
                                                     } else {
                                                         CustomToast.getInstance(applicationContext)
-                                                            .setMessage("Failed to create progress!")
+                                                            .setMessage(
+                                                                if (getString(R.string.lang) == "in")
+                                                                    "Gagal membuat kemajuan!"
+                                                                else
+                                                                    "Failed to create progress!"
+                                                            )
                                                             .setFontColor(
                                                                 ContextCompat.getColor(
                                                                     this@ProgressFormActivity,
@@ -389,7 +426,12 @@ class ProgressFormActivity : AppCompatActivity() {
                                                     }
                                                 } else {
                                                     CustomToast.getInstance(applicationContext)
-                                                        .setMessage("Failed to create progress!")
+                                                        .setMessage(
+                                                            if (getString(R.string.lang) == "in")
+                                                                "Gagal membuat kemajuan!"
+                                                            else
+                                                                "Failed to create progress!"
+                                                        )
                                                         .setFontColor(
                                                             ContextCompat.getColor(
                                                                 this@ProgressFormActivity,
@@ -409,7 +451,12 @@ class ProgressFormActivity : AppCompatActivity() {
                                                 }
                                             } else {
                                                 CustomToast.getInstance(applicationContext)
-                                                    .setMessage("Failed to create progress!")
+                                                    .setMessage(
+                                                        if (getString(R.string.lang) == "in")
+                                                            "Gagal membuat kemajuan!"
+                                                        else
+                                                            "Failed to create progress!"
+                                                    )
                                                     .setFontColor(
                                                         ContextCompat.getColor(
                                                             this@ProgressFormActivity,
@@ -435,7 +482,12 @@ class ProgressFormActivity : AppCompatActivity() {
                                         ) {
                                             loadingBar.visibility = View.GONE
                                             CustomToast.getInstance(applicationContext)
-                                                .setMessage("Something went wrong, please try again.")
+                                                .setMessage(
+                                                    if (getString(R.string.lang) == "in")
+                                                        "Terjadi kesalahan, silakan coba lagi."
+                                                    else
+                                                        "Something went wrong, please try again."
+                                                )
                                                 .setFontColor(
                                                     ContextCompat.getColor(
                                                         this@ProgressFormActivity,
@@ -455,7 +507,12 @@ class ProgressFormActivity : AppCompatActivity() {
                             } catch (jsonException: JSONException) {
                                 loadingBar.visibility = View.GONE
                                 CustomToast.getInstance(applicationContext)
-                                    .setMessage("Something went wrong, please try again.")
+                                    .setMessage(
+                                        if (getString(R.string.lang) == "in")
+                                            "Terjadi kesalahan, silakan coba lagi."
+                                        else
+                                            "Something went wrong, please try again."
+                                    )
                                     .setFontColor(
                                         ContextCompat.getColor(
                                             this@ProgressFormActivity,
@@ -474,7 +531,12 @@ class ProgressFormActivity : AppCompatActivity() {
                         } else {
                             loadingBar.visibility = View.GONE
                             CustomToast.getInstance(applicationContext)
-                                .setMessage("Something went wrong, please try again.")
+                                .setMessage(
+                                    if (getString(R.string.lang) == "in")
+                                        "Terjadi kesalahan, silakan coba lagi."
+                                    else
+                                        "Something went wrong, please try again."
+                                )
                                 .setFontColor(
                                     ContextCompat.getColor(
                                         this@ProgressFormActivity,
@@ -494,7 +556,12 @@ class ProgressFormActivity : AppCompatActivity() {
                     if (!formCheck()) {
                         loadingBar.visibility = View.GONE
                         CustomToast.getInstance(applicationContext)
-                            .setMessage("Please make sure all fields in the form are filled in.")
+                            .setMessage(
+                                if (getString(R.string.lang) == "in")
+                                    "Pastikan semua kolom di formulir terisi."
+                                else
+                                    "Please make sure all fields in the form are filled in."
+                            )
                             .setBackgroundColor(
                                 ContextCompat.getColor(
                                     this@ProgressFormActivity,
@@ -546,7 +613,13 @@ class ProgressFormActivity : AppCompatActivity() {
                                                                                         applicationContext
                                                                                     )
                                                                                     .setMessage(
-                                                                                        "Progress created successfully."
+                                                                                        if (getString(
+                                                                                                R.string.lang
+                                                                                            ) == "in"
+                                                                                        )
+                                                                                            "Material berhasil diminta."
+                                                                                        else
+                                                                                            "Materials requested successfully."
                                                                                     )
                                                                                     .setBackgroundColor(
                                                                                         ContextCompat.getColor(
@@ -569,10 +642,13 @@ class ProgressFormActivity : AppCompatActivity() {
                                                                                     .getInstance(
                                                                                         applicationContext
                                                                                     ).setMessage(
-                                                                                        "Failed to " +
-                                                                                                "request" +
-                                                                                                " " +
-                                                                                                "material!"
+                                                                                        if (getString(
+                                                                                                R.string.lang
+                                                                                            ) == "in"
+                                                                                        )
+                                                                                            "Gagal meminta material!"
+                                                                                        else
+                                                                                            "Failed to request material!"
                                                                                     ).setFontColor(
                                                                                         ContextCompat.getColor(
                                                                                             this@ProgressFormActivity,
@@ -588,10 +664,7 @@ class ProgressFormActivity : AppCompatActivity() {
                                                                                 Log.e(
                                                                                     "ERROR " +
                                                                                             "${response1.code()}",
-                                                                                    "Request " +
-                                                                                            "Material" +
-                                                                                            " " +
-                                                                                            "Response Code 0 | ${result1?.message}"
+                                                                                    "Request Material Response Code 0 | ${result1?.message}"
                                                                                 )
                                                                             }
                                                                         }
@@ -605,7 +678,12 @@ class ProgressFormActivity : AppCompatActivity() {
                                                                             CustomToast.getInstance(
                                                                                 applicationContext
                                                                             )
-                                                                                .setMessage("Something went wrong, please try again.")
+                                                                                .setMessage(
+                                                                                    if (getString(R.string.lang) == "in")
+                                                                                        "Terjadi kesalahan, silakan coba lagi."
+                                                                                    else
+                                                                                        "Something went wrong, please try again."
+                                                                                )
                                                                                 .setFontColor(
                                                                                     ContextCompat.getColor(
                                                                                         this@ProgressFormActivity,
@@ -620,9 +698,7 @@ class ProgressFormActivity : AppCompatActivity() {
                                                                                 ).show()
                                                                             Log.e(
                                                                                 "ERROR",
-                                                                                "Request Material" +
-                                                                                        " Failure" +
-                                                                                        " | $throwable"
+                                                                                "Request Material Failure | $throwable"
                                                                             )
                                                                             throwable.printStackTrace()
                                                                         }
@@ -632,7 +708,12 @@ class ProgressFormActivity : AppCompatActivity() {
                                                                 loadingBar.visibility = View.GONE
                                                                 CustomToast
                                                                     .getInstance(applicationContext)
-                                                                    .setMessage("Something went wrong, please try again.")
+                                                                    .setMessage(
+                                                                        if (getString(R.string.lang) == "in")
+                                                                            "Terjadi kesalahan, silakan coba lagi."
+                                                                        else
+                                                                            "Something went wrong, please try again."
+                                                                    )
                                                                     .setFontColor(
                                                                         ContextCompat.getColor(
                                                                             this@ProgressFormActivity,
@@ -657,7 +738,10 @@ class ProgressFormActivity : AppCompatActivity() {
                                                                     applicationContext
                                                                 )
                                                                 .setMessage(
-                                                                    "Progress created successfully."
+                                                                    if (getString(R.string.lang) == "in")
+                                                                        "Kemajuan berhasil dibuat."
+                                                                    else
+                                                                        "Progress created successfully."
                                                                 )
                                                                 .setBackgroundColor(
                                                                     ContextCompat.getColor(
@@ -676,7 +760,12 @@ class ProgressFormActivity : AppCompatActivity() {
                                                         }
                                                     } else {
                                                         CustomToast.getInstance(applicationContext)
-                                                            .setMessage("Failed to create progress!")
+                                                            .setMessage(
+                                                                if (getString(R.string.lang) == "in")
+                                                                    "Gagal membuat kemajuan!"
+                                                                else
+                                                                    "Failed to create progress!"
+                                                            )
                                                             .setFontColor(
                                                                 ContextCompat.getColor(
                                                                     this@ProgressFormActivity,
@@ -696,7 +785,12 @@ class ProgressFormActivity : AppCompatActivity() {
                                                     }
                                                 } else {
                                                     CustomToast.getInstance(applicationContext)
-                                                        .setMessage("Failed to create progress!")
+                                                        .setMessage(
+                                                            if (getString(R.string.lang) == "in")
+                                                                "Gagal membuat kemajuan!"
+                                                            else
+                                                                "Failed to create progress!"
+                                                        )
                                                         .setFontColor(
                                                             ContextCompat.getColor(
                                                                 this@ProgressFormActivity,
@@ -716,7 +810,12 @@ class ProgressFormActivity : AppCompatActivity() {
                                                 }
                                             } else {
                                                 CustomToast.getInstance(applicationContext)
-                                                    .setMessage("Failed to create progress!")
+                                                    .setMessage(
+                                                        if (getString(R.string.lang) == "in")
+                                                            "Gagal membuat kemajuan!"
+                                                        else
+                                                            "Failed to create progress!"
+                                                    )
                                                     .setFontColor(
                                                         ContextCompat.getColor(
                                                             this@ProgressFormActivity,
@@ -742,7 +841,12 @@ class ProgressFormActivity : AppCompatActivity() {
                                         ) {
                                             loadingBar.visibility = View.GONE
                                             CustomToast.getInstance(applicationContext)
-                                                .setMessage("Something went wrong, please try again.")
+                                                .setMessage(
+                                                    if (getString(R.string.lang) == "in")
+                                                        "Terjadi kesalahan, silakan coba lagi."
+                                                    else
+                                                        "Something went wrong, please try again."
+                                                )
                                                 .setFontColor(
                                                     ContextCompat.getColor(
                                                         this@ProgressFormActivity,
@@ -762,7 +866,12 @@ class ProgressFormActivity : AppCompatActivity() {
                             } catch (jsonException: JSONException) {
                                 loadingBar.visibility = View.GONE
                                 CustomToast.getInstance(applicationContext)
-                                    .setMessage("Something went wrong, please try again.")
+                                    .setMessage(
+                                        if (getString(R.string.lang) == "in")
+                                            "Terjadi kesalahan, silakan coba lagi."
+                                        else
+                                            "Something went wrong, please try again."
+                                    )
                                     .setFontColor(
                                         ContextCompat.getColor(
                                             this@ProgressFormActivity,
@@ -781,7 +890,12 @@ class ProgressFormActivity : AppCompatActivity() {
                         } else {
                             loadingBar.visibility = View.GONE
                             CustomToast.getInstance(applicationContext)
-                                .setMessage("Something went wrong, please try again.")
+                                .setMessage(
+                                    if (getString(R.string.lang) == "in")
+                                        "Terjadi kesalahan, silakan coba lagi."
+                                    else
+                                        "Something went wrong, please try again."
+                                )
                                 .setFontColor(
                                     ContextCompat.getColor(
                                         this@ProgressFormActivity,
@@ -908,9 +1022,15 @@ class ProgressFormActivity : AppCompatActivity() {
                     validated++
             }
             if (repairAnalysisField.text!!.toString().isEmpty())
-                repairAnalysisFieldLayout.error = "Analysis can't be empty!"
+                repairAnalysisFieldLayout.error = if (getString(R.string.lang) == "in")
+                    "Analisa perbaikan tidak boleh kosong!"
+            else
+                    "Analysis can't be empty!"
             if (descriptionField.text!!.toString().isEmpty())
-                descriptionFieldLayout.error = "Description can't be empty!"
+                descriptionFieldLayout.error = if (getString(R.string.lang) == "in")
+                    "Keterangan perbaikan tidak boleh kosong!"
+            else
+                    "Description can't be empty!"
         }
 
         return validated == isFormEmpty.size

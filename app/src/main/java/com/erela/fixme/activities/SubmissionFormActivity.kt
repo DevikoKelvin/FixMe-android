@@ -153,7 +153,7 @@ class SubmissionFormActivity : AppCompatActivity() {
                 } else {
                     @Suppress("DEPRECATION") intent.getParcelableExtra("data")!!
                 }
-            } catch (nullPointerException: NullPointerException) {
+            } catch (_: NullPointerException) {
                 null
             }
 
@@ -173,10 +173,10 @@ class SubmissionFormActivity : AppCompatActivity() {
                 isFormEmpty[0] = true
                 locationField.setText("${detail?.lokasi}")
                 isFormEmpty[1] = true
-                selectedDepartment = detail?.idDeptTujuan!!.toInt()
+                selectedDepartment = detail?.idDeptTujuan!!
                 getDepartmentList()
                 isFormEmpty[2] = true
-                selectedCategory = detail?.idKategori!!.toInt()
+                selectedCategory = detail?.idKategori!!
                 getCategoryList()
                 isFormEmpty[4] = detail?.kodeMesin!!.isNotEmpty()
                 machineCodeField.setText("${detail?.kodeMesin}".ifEmpty { "" })
@@ -230,7 +230,10 @@ class SubmissionFormActivity : AppCompatActivity() {
                         loadingBar.visibility = View.GONE
                         CustomToast.getInstance(applicationContext)
                             .setMessage(
-                                "Please make sure all fields in the form are filled in."
+                                if (getString(R.string.lang) == "in")
+                                    "Pastikan semua kolom di formulir terisi."
+                                else
+                                    "Please make sure all fields in the form are filled in."
                             )
                             .setBackgroundColor(
                                 ContextCompat.getColor(
@@ -300,7 +303,12 @@ class SubmissionFormActivity : AppCompatActivity() {
                                             }
                                         } else {
                                             CustomToast.getInstance(applicationContext)
-                                                .setMessage("Update submission failed.")
+                                                .setMessage(
+                                                    if (getString(R.string.lang) == "in")
+                                                        "Gagal memperbarui pengajuan."
+                                                    else
+                                                        "Update submission failed."
+                                                )
                                                 .setFontColor(
                                                     ContextCompat.getColor(
                                                         this@SubmissionFormActivity,
@@ -323,7 +331,12 @@ class SubmissionFormActivity : AppCompatActivity() {
                                         submitButton.visibility = View.VISIBLE
                                         loadingBar.visibility = View.GONE
                                         CustomToast.getInstance(applicationContext)
-                                            .setMessage("Something went wrong, please try again.")
+                                            .setMessage(
+                                                if (getString(R.string.lang) == "in")
+                                                    "Terjadi kesalahan, silakan coba lagi."
+                                                else
+                                                    "Something went wrong, please try again."
+                                            )
                                             .setFontColor(
                                                 ContextCompat.getColor(
                                                     this@SubmissionFormActivity,
@@ -344,7 +357,12 @@ class SubmissionFormActivity : AppCompatActivity() {
                                 submitButton.visibility = View.VISIBLE
                                 loadingBar.visibility = View.GONE
                                 CustomToast.getInstance(applicationContext)
-                                    .setMessage("Something went wrong, please try again.")
+                                    .setMessage(
+                                        if (getString(R.string.lang) == "in")
+                                            "Terjadi kesalahan, silakan coba lagi."
+                                        else
+                                            "Something went wrong, please try again."
+                                    )
                                     .setFontColor(
                                         ContextCompat.getColor(
                                             this@SubmissionFormActivity,
@@ -379,7 +397,12 @@ class SubmissionFormActivity : AppCompatActivity() {
                         submitButton.visibility = View.VISIBLE
                         loadingBar.visibility = View.GONE
                         CustomToast.getInstance(applicationContext)
-                            .setMessage("Please make sure all fields in the form are filled in.")
+                            .setMessage(
+                                if (getString(R.string.lang) == "in")
+                                    "Pastikan semua kolom di formulir terisi."
+                                else
+                                    "Please make sure all fields in the form are filled in."
+                            )
                             .setBackgroundColor(
                                 ContextCompat.getColor(
                                     this@SubmissionFormActivity,
@@ -412,7 +435,10 @@ class SubmissionFormActivity : AppCompatActivity() {
                                                 if (response.body()?.code == 1) {
                                                     CustomToast.getInstance(applicationContext)
                                                         .setMessage(
-                                                            "${response.body()?.message.toString()}. Form submitted successfully."
+                                                            if (getString(R.string.lang) == "in")
+                                                                "${response.body()?.message.toString()}. Formulir berhasil dikirim."
+                                                            else
+                                                                "${response.body()?.message.toString()}. Form submitted successfully."
                                                         )
                                                         .setBackgroundColor(
                                                             ContextCompat.getColor(
@@ -448,7 +474,12 @@ class SubmissionFormActivity : AppCompatActivity() {
                                             }
                                         } else {
                                             CustomToast.getInstance(applicationContext)
-                                                .setMessage("Form submission failed.")
+                                                .setMessage(
+                                                    if (getString(R.string.lang) == "in")
+                                                        "Pengajuan gagal dikirim."
+                                                    else
+                                                        "Form submission failed."
+                                                )
                                                 .setFontColor(
                                                     ContextCompat.getColor(
                                                         this@SubmissionFormActivity,
@@ -472,7 +503,12 @@ class SubmissionFormActivity : AppCompatActivity() {
                                         submitButton.visibility = View.VISIBLE
                                         loadingBar.visibility = View.GONE
                                         CustomToast.getInstance(applicationContext)
-                                            .setMessage("Something went wrong, please try again.")
+                                            .setMessage(
+                                                if (getString(R.string.lang) == "in")
+                                                    "Terjadi kesalahan, silakan coba lagi."
+                                                else
+                                                    "Something went wrong, please try again."
+                                            )
                                             .setFontColor(
                                                 ContextCompat.getColor(
                                                     this@SubmissionFormActivity,
@@ -493,7 +529,12 @@ class SubmissionFormActivity : AppCompatActivity() {
                                 submitButton.visibility = View.VISIBLE
                                 loadingBar.visibility = View.GONE
                                 CustomToast.getInstance(applicationContext)
-                                    .setMessage("Something went wrong, please try again.")
+                                    .setMessage(
+                                        if (getString(R.string.lang) == "in")
+                                            "Terjadi kesalahan, silakan coba lagi."
+                                        else
+                                            "Something went wrong, please try again."
+                                    )
                                     .setFontColor(
                                         ContextCompat.getColor(
                                             this@SubmissionFormActivity,
@@ -708,7 +749,10 @@ class SubmissionFormActivity : AppCompatActivity() {
                     count: Int
                 ) {
                     if (s!!.isEmpty()) {
-                        caseTitleFieldLayout.error = "Title can't be empty!"
+                        caseTitleFieldLayout.error = if (getString(R.string.lang) == "in")
+                            "Judul tidak boleh kosong!"
+                        else
+                            "Title can't be empty!"
                         isFormEmpty[0] = false
                     } else {
                         caseTitleFieldLayout.error = null
@@ -729,7 +773,10 @@ class SubmissionFormActivity : AppCompatActivity() {
                     count: Int
                 ) {
                     if (s!!.isEmpty()) {
-                        locationFieldLayout.error = "Location can't be empty!"
+                        locationFieldLayout.error = if (getString(R.string.lang) == "in")
+                            "Lokasi tidak boleh kosong!"
+                        else
+                            "Location can't be empty!"
                         isFormEmpty[1] = false
                     } else {
                         locationFieldLayout.error = null
@@ -750,7 +797,10 @@ class SubmissionFormActivity : AppCompatActivity() {
                     count: Int
                 ) {
                     if (s!!.isEmpty()) {
-                        descriptionFieldLayout.error = "Description"
+                        descriptionFieldLayout.error = if (getString(R.string.lang) == "in")
+                            "Deskripsi tidak boleh kosong!"
+                        else
+                            "Description can't be empty!"
                         isFormEmpty[6] = false
                     } else {
                         descriptionFieldLayout.error = null
@@ -772,7 +822,10 @@ class SubmissionFormActivity : AppCompatActivity() {
                     count: Int
                 ) {
                     if (s!!.isEmpty()) {
-                        machineCodeFieldLayout.error = "Enter the Machine Code!"
+                        machineCodeFieldLayout.error = if (getString(R.string.lang) == "in")
+                            "Masukkan Kode Mesin!"
+                        else
+                            "Enter the Machine Code!"
                         isFormEmpty[4] = false
                     } else {
                         machineCodeFieldLayout.error = null
@@ -794,7 +847,10 @@ class SubmissionFormActivity : AppCompatActivity() {
                     count: Int
                 ) {
                     if (s!!.isEmpty()) {
-                        machineNameFieldLayout.error = "Enter the Machine Name!"
+                        machineNameFieldLayout.error = if (getString(R.string.lang) == "in")
+                            "Masukkan Nama Mesin!"
+                        else
+                            "Enter the Machine Name!"
                         isFormEmpty[5] = false
                     } else {
                         machineNameFieldLayout.error = null
@@ -817,13 +873,22 @@ class SubmissionFormActivity : AppCompatActivity() {
                 }
             }
             if (caseTitleField.text!!.isEmpty())
-                caseTitleFieldLayout.error = "Title can't be empty!"
+                caseTitleFieldLayout.error = if (getString(R.string.lang) == "in")
+                    "Judul tidak boleh kosong!"
+                else
+                    "Title can't be empty!"
 
             if (locationField.text!!.isEmpty())
-                locationFieldLayout.error = "Location can't be empty!"
+                locationFieldLayout.error = if (getString(R.string.lang) == "in")
+                    "Lokasi tidak boleh kosong!"
+                else
+                    "Location can't be empty!"
 
             if (descriptionField.text!!.isEmpty())
-                descriptionFieldLayout.error = "Description can't be empty!"
+                descriptionFieldLayout.error = if (getString(R.string.lang) == "in")
+                    "Deskripsi tidak boleh kosong!"
+                else
+                    "Description can't be empty!"
 
             if (selectedCategory == 0)
                 categoryDropdownLayout.strokeColor = ContextCompat.getColor(
@@ -838,20 +903,20 @@ class SubmissionFormActivity : AppCompatActivity() {
                 )
                 false
             } else {
-                Log.e("Selected Department", selectedDepartmentText.text.toString())
-                Log.e(
-                    "Is Selected Dept is Engineering?",
-                    selectedDepartmentText.text.toString()
-                        .contains("Engineering", ignoreCase = true).toString()
-                )
                 if (selectedDepartmentText.text.toString()
                         .contains("Engineering", ignoreCase = true)
                 ) {
                     if (machineCodeField.text!!.isEmpty())
-                        machineCodeFieldLayout.error = "Enter the Machine Code!"
+                        machineCodeFieldLayout.error = if (getString(R.string.lang) == "in")
+                            "Masukkan Kode Mesin!"
+                        else
+                            "Enter the Machine Code!"
 
                     if (machineNameField.text!!.isEmpty())
-                        machineNameFieldLayout.error = "Enter the Machine Name!"
+                        machineNameFieldLayout.error = if (getString(R.string.lang) == "in")
+                            "Masukkan Nama Mesin!"
+                        else
+                            "Enter the Machine Name!"
                     Log.e("Validated", validated.toString())
                     validated == 7
                 } else {
@@ -1056,7 +1121,12 @@ class SubmissionFormActivity : AppCompatActivity() {
                             } else {
                                 Log.e("ERROR", response.message())
                                 CustomToast.getInstance(applicationContext)
-                                    .setMessage("Something went wrong, please try again.")
+                                    .setMessage(
+                                        if (getString(R.string.lang) == "in")
+                                            "Terjadi kesalahan, silakan coba lagi."
+                                        else
+                                            "Something went wrong, please try again."
+                                    )
                                     .setFontColor(
                                         ContextCompat.getColor(
                                             this@SubmissionFormActivity,
@@ -1079,7 +1149,12 @@ class SubmissionFormActivity : AppCompatActivity() {
                         ) {
                             throwable.printStackTrace()
                             CustomToast.getInstance(applicationContext)
-                                .setMessage("Something went wrong, please try again.")
+                                .setMessage(
+                                    if (getString(R.string.lang) == "in")
+                                        "Terjadi kesalahan, silakan coba lagi."
+                                    else
+                                        "Something went wrong, please try again."
+                                )
                                 .setFontColor(
                                     ContextCompat.getColor(
                                         this@SubmissionFormActivity,
@@ -1098,7 +1173,12 @@ class SubmissionFormActivity : AppCompatActivity() {
             } catch (exception: Exception) {
                 exception.printStackTrace()
                 CustomToast.getInstance(applicationContext)
-                    .setMessage("Something went wrong, please try again.")
+                    .setMessage(
+                        if (getString(R.string.lang) == "in")
+                            "Terjadi kesalahan, silakan coba lagi."
+                        else
+                            "Something went wrong, please try again."
+                    )
                     .setFontColor(
                         ContextCompat.getColor(
                             this@SubmissionFormActivity,
@@ -1128,7 +1208,12 @@ class SubmissionFormActivity : AppCompatActivity() {
                             if (response.isSuccessful) {
                                 if (response.body() != null) {
                                     val data: ArrayList<String> = ArrayList()
-                                    data.add("Select Category")
+                                    data.add(
+                                        if (getString(R.string.lang) == "in")
+                                            "Pilih Kategori"
+                                        else
+                                            "Select Category"
+                                    )
                                     val categoryList = response.body()
                                     for (i in 0 until categoryList!!.size) {
                                         data.add(
@@ -1183,7 +1268,12 @@ class SubmissionFormActivity : AppCompatActivity() {
                             } else {
                                 Log.e("ERROR", response.message())
                                 CustomToast.getInstance(applicationContext)
-                                    .setMessage("Something went wrong, please try again.")
+                                    .setMessage(
+                                        if (getString(R.string.lang) == "in")
+                                            "Terjadi kesalahan, silakan coba lagi."
+                                        else
+                                            "Something went wrong, please try again."
+                                    )
                                     .setFontColor(
                                         ContextCompat.getColor(
                                             this@SubmissionFormActivity,
@@ -1209,7 +1299,12 @@ class SubmissionFormActivity : AppCompatActivity() {
             } catch (exception: Exception) {
                 exception.printStackTrace()
                 CustomToast.getInstance(applicationContext)
-                    .setMessage("Something went wrong, please try again.")
+                    .setMessage(
+                        if (getString(R.string.lang) == "in")
+                            "Terjadi kesalahan, silakan coba lagi."
+                        else
+                            "Something went wrong, please try again."
+                    )
                     .setFontColor(
                         ContextCompat.getColor(
                             this@SubmissionFormActivity,

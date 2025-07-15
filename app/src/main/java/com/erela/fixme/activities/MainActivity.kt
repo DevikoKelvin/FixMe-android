@@ -26,7 +26,6 @@ import androidx.core.content.FileProvider
 import androidx.core.net.toUri
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
-import androidx.lifecycle.lifecycleScope
 import com.erela.fixme.BuildConfig
 import com.erela.fixme.R
 import com.erela.fixme.bottom_sheets.UserInfoBottomSheet
@@ -60,7 +59,7 @@ class MainActivity : AppCompatActivity() {
         override fun onReceive(context: Context, intent: Intent) {
             val id = intent.getLongExtra(DownloadManager.EXTRA_DOWNLOAD_ID, -1)
             if (downloadId == id) {
-                val downloadManager = getSystemService(Context.DOWNLOAD_SERVICE) as DownloadManager
+                val downloadManager = getSystemService(DOWNLOAD_SERVICE) as DownloadManager
                 val query = DownloadManager.Query().setFilterById(downloadId)
                 val cursor = downloadManager.query(query)
                 if (cursor.moveToFirst()) {
@@ -182,7 +181,10 @@ class MainActivity : AppCompatActivity() {
                     if (UserDataHelper(this@MainActivity).getNotification())
                         NotificationsHelper.receiveNotifications(applicationContext, userData)
 
-                    PushNotifications.start(applicationContext, "66b9148d-50f4-4114-b258-e9e9485ce75c")
+                    PushNotifications.start(
+                        applicationContext,
+                        "66b9148d-50f4-4114-b258-e9e9485ce75c"
+                    )
                 }
             }
 
@@ -192,7 +194,10 @@ class MainActivity : AppCompatActivity() {
                         applicationContext, R
                             .drawable.toolbar_background_owner
                     )
-                    privilegeText.text = "Owner"
+                    privilegeText.text = if (getString(R.string.lang) == "in")
+                        "Pemilik"
+                    else
+                        "Owner"
                     privilegeText.setTextColor(
                         ContextCompat.getColor(
                             applicationContext, R.color.white
@@ -205,7 +210,10 @@ class MainActivity : AppCompatActivity() {
                         applicationContext, R
                             .drawable.toolbar_background_manager
                     )
-                    privilegeText.text = "Manager/Assistant/Admin"
+                    privilegeText.text = if (getString(R.string.lang) == "in")
+                        "Manajer/Asisten/Admin"
+                    else
+                        "Manager/Assistant/Admin"
                     privilegeText.setTextColor(
                         ContextCompat.getColor(
                             applicationContext, R.color.white
@@ -231,7 +239,10 @@ class MainActivity : AppCompatActivity() {
                         applicationContext, R
                             .drawable.toolbar_background_technician
                     )
-                    privilegeText.text = "Technician"
+                    privilegeText.text = if (getString(R.string.lang) == "in")
+                        "Teknisi"
+                    else
+                        "Technician"
                     privilegeText.setTextColor(
                         ContextCompat.getColor(
                             applicationContext, R.color.black
@@ -244,7 +255,10 @@ class MainActivity : AppCompatActivity() {
                         applicationContext, R
                             .drawable.toolbar_background_staff
                     )
-                    privilegeText.text = "Staff/Reporter"
+                    privilegeText.text = if (getString(R.string.lang) == "in")
+                        "Staf/Pelapor"
+                    else
+                        "Staff/Reporter"
                     privilegeText.setTextColor(
                         ContextCompat.getColor(
                             applicationContext, R.color.black
@@ -253,13 +267,23 @@ class MainActivity : AppCompatActivity() {
                 }
             }
             val currentDateTime = LocalDateTime.now()
-            greetingText.text = "Good ${
-                when (currentDateTime.hour) {
-                    in 0..11 -> "morning,"
-                    in 12..18 -> "afternoon,"
-                    else -> "evening,"
-                }
-            }"
+            greetingText.text =
+                if (getString(R.string.lang) == "in")
+                    "Selamat ${
+                        when (currentDateTime.hour) {
+                            in 0..11 -> "pagi,"
+                            in 12..18 -> "siang,"
+                            else -> "malam,"
+                        }
+                    }"
+                else
+                    "Good ${
+                        when (currentDateTime.hour) {
+                            in 0..11 -> "morning,"
+                            in 12..18 -> "afternoon,"
+                            else -> "evening,"
+                        }
+                    }"
             usernameText.text = "${userData.name.trimEnd()}!"
             userInfoButton.setOnClickListener {
                 UserInfoBottomSheet(this@MainActivity).also {
@@ -295,8 +319,11 @@ class MainActivity : AppCompatActivity() {
                 val confirmationDialog =
                     ConfirmationDialog(
                         this@MainActivity,
-                        "Are you sure you want to log out?",
-                        "Yes"
+                        if (getString(R.string.lang) == "in")
+                            "Apakah Anda yakin ingin keluar?"
+                        else
+                            "Are you sure you want to log out?",
+                        if (getString(R.string.lang) == "in") "Ya" else "Yes"
                     ).also {
                         with(it) {
                             setConfirmationDialogListener(object :
@@ -311,7 +338,10 @@ class MainActivity : AppCompatActivity() {
                                     UserDataHelper(this@MainActivity).purgeUserData()
                                     Toast.makeText(
                                         this@MainActivity,
-                                        "Successfully logged out!",
+                                        if (getString(R.string.lang) == "in")
+                                            "Berhasil keluar!"
+                                        else
+                                            "Successfully logged out!",
                                         Toast.LENGTH_SHORT
                                     ).show()
                                     startActivity(
@@ -387,7 +417,12 @@ class MainActivity : AppCompatActivity() {
 
     private fun showDownloadFailedToast() {
         CustomToast.getInstance(applicationContext)
-            .setMessage("Download failed.")
+            .setMessage(
+                if (getString(R.string.lang) == "in")
+                    "Gagal mengunduh pembaruan."
+                else
+                    "Download failed."
+            )
             .setFontColor(
                 ContextCompat.getColor(
                     this@MainActivity,
@@ -404,17 +439,32 @@ class MainActivity : AppCompatActivity() {
 
     private fun startDownload(url: String) {
         val request = DownloadManager.Request(url.toUri())
-            .setTitle("FixMe Updates")
-            .setDescription("Please wait while the update is downloading...")
+            .setTitle(
+                if (getString(R.string.lang) == "in")
+                    "Pembaruan FixMe"
+                else
+                    "FixMe Updates"
+            )
+            .setDescription(
+                if (getString(R.string.lang) == "in")
+                    "Mohon tunggu, pembaruan sedang diunduh..."
+                else
+                    "Please wait while the update is downloading..."
+            )
             .setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED)
             .setDestinationInExternalPublicDir(
                 Environment.DIRECTORY_DOWNLOADS,
                 "FixMe Updates"
             )
-        val downloadManager = getSystemService(Context.DOWNLOAD_SERVICE) as DownloadManager
+        val downloadManager = getSystemService(DOWNLOAD_SERVICE) as DownloadManager
         downloadId = downloadManager.enqueue(request)
         CustomToast.getInstance(applicationContext)
-            .setMessage("Downloading update...")
+            .setMessage(
+                if (getString(R.string.lang) == "in")
+                    "Mengunduh pembaruan..."
+                else
+                    "Downloading update..."
+            )
             .setFontColor(
                 ContextCompat.getColor(
                     this@MainActivity,
@@ -449,7 +499,12 @@ class MainActivity : AppCompatActivity() {
                 startActivity(installIntent)
             } catch (ex: ActivityNotFoundException) {
                 CustomToast.getInstance(applicationContext)
-                    .setMessage("No activity found to handle APK installation.")
+                    .setMessage(
+                        if (getString(R.string.lang) == "in")
+                            "Tidak ada aktivitas yang ditemukan untuk menangani instalasi APK."
+                        else
+                            "No activity found to handle APK installation."
+                    )
                     .setFontColor(
                         ContextCompat.getColor(
                             this@MainActivity,
@@ -462,11 +517,17 @@ class MainActivity : AppCompatActivity() {
                             R.color.custom_toast_background_failed
                         )
                     ).show()
+                ex.printStackTrace()
             }
         } catch (e: Exception) {
             Log.e("InstallApk", "Error installing APK", e)
             CustomToast.getInstance(applicationContext)
-                .setMessage("Failed to install APK.")
+                .setMessage(
+                    if (getString(R.string.lang) == "in")
+                        "Gagal menginstal APK."
+                    else
+                        "Failed to install APK."
+                )
                 .setFontColor(
                     ContextCompat.getColor(
                         this@MainActivity,
@@ -485,8 +546,18 @@ class MainActivity : AppCompatActivity() {
     private fun showDownloadProgressNotification(notificationId: Int, progress: Int) {
         val builder = NotificationCompat.Builder(this, "FixMe Download Channel")
             .setSmallIcon(android.R.drawable.stat_sys_download)
-            .setContentTitle("FixMe Updates")
-            .setContentText("Download in progress")
+            .setContentTitle(
+                if (getString(R.string.lang) == "in")
+                    "Pembaruan FixMe"
+                else
+                    "FixMe Updates"
+            )
+            .setContentText(
+                if (getString(R.string.lang) == "in")
+                    "Sedang mengunduh..."
+                else
+                    "Download in progress"
+            )
             .setOngoing(true)
             .setProgress(100, progress, false)
             .setOnlyAlertOnce(true)

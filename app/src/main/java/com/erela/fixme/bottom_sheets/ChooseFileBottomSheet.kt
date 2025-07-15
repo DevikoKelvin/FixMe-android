@@ -5,6 +5,7 @@ import android.graphics.Color
 import android.os.Bundle
 import android.view.ViewGroup
 import androidx.core.graphics.drawable.toDrawable
+import com.erela.fixme.R
 import com.erela.fixme.databinding.BsChooseFileBinding
 import com.google.android.material.bottomsheet.BottomSheetDialog
 
@@ -27,6 +28,16 @@ class ChooseFileBottomSheet(context: Context): BottomSheetDialog(context) {
 
     private fun init() {
         binding.apply {
+            cameraText.text = if (context.getString(R.string.lang) == "in") {
+                "Kamera"
+            } else {
+                "Camera"
+            }
+            galleryText.text = if (context.getString(R.string.lang) == "in") {
+                "Galeri"
+            } else {
+                "Gallery"
+            }
             openCameraButton.setOnClickListener {
                 onChooseFileListener.onOpenCameraClicked()
             }

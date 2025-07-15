@@ -1,0 +1,146 @@
+<resources>
+    <string name="app_name">FixMe</string>
+    <string name="copyright">© 2025 Erlangga Edi Laboratories Corp.\nSeluruh hak cipta dilindungi undang-undang</string>
+    <string name="lang">in</string>
+
+    <string name="username_title">Username</string>
+    <string name="password_title">Password</string>
+
+    <string name="login_text">MASUK</string>
+    <string name="main_menu">Menu Utama</string>
+    <string name="welcome_message">Selamat datang, </string>
+    <string name="logout_text">Keluar</string>
+    <string name="logout_confirmation_dialog_message">Anda yakin ingin keluar?</string>
+    <string name="logout_confirmation_yes">Ya</string>
+    <string name="cancel_confirmation">Batal</string>
+    <string name="confirm">Setuju</string>
+    <string name="ok">OK</string>
+
+    <string name="user_info_title">Informasi Pengguna FixMe</string>
+    <string name="name">Nama</string>
+    <string name="id_starconnect">ID StarConnect</string>
+    <string name="fixme_username">Username FixMe</string>
+    <string name="privilege_access">Hak Akses</string>
+    <string name="department">Departemen</string>
+    <string name="sub_department">Sub-Departemen</string>
+
+    <string name="notification_title">Notifikasi / Pesan Masuk</string>
+    <string name="inbox_sent">Terkirim</string>
+    <string name="inbox_read">Dibaca</string>
+
+    <string name="change_password_title">Ubah Kata Sandi</string>
+    <string name="password_minimum_char_error">Kata sandi harus setidaknya minimal 4 karakter!</string>
+    <string name="password_not_match_error">Kata sandi tidak cocok! Tolong periksa ulang.</string>
+    <string name="new_password_title">Kata sandi baru</string>
+    <string name="confirm_password_title">Konfirmasi Kata Sandi</string>
+    <string name="save_settings">SIMPAN</string>
+
+    <string name="make_submission_title">Buat Laporan</string>
+    <string name="case_title">Judul Kasus</string>
+    <string name="location">Lokasi</string>
+    <string name="department_destination">Pilih Departemen Tujuan</string>
+    <string name="case_description">Deskripsi</string>
+    <string name="report_time_and_date">Tanggal dan Waktu Laporan</string>
+    <string name="start_work_time_and_date">Tanggal dan Waktu Mulai Bekerja</string>
+    <string name="pick_a_date">Pilih Tanggal</string>
+    <string name="pick_a_time">Pilih Waktu</string>
+    <string name="materials">Material</string>
+    <string name="select_materials">Pilih Material</string>
+    <string name="search_materials">Cari Material</string>
+    <string name="materials_quantity">Jumlah Material</string>
+    <string name="quantity_title">Berapa banyak material yang dibutuhkan?</string>
+    <string name="attach_photo">Lampirkan foto</string>
+    <string name="choose_file">Pilih file</string>
+    <string name="choose_file_title">Pilih file dari…</string>
+    <string name="manage_photo">Atur foto</string>
+    <string name="manage_old_photo">Atur foto lama</string>
+    <string name="manage_new_photo">Atur foto lama</string>
+    <string name="see_photo">Lihat Foto</string>
+    <string name="delete">Hapus</string>
+
+    <string name="submission_list_title">Daftar Laporan</string>
+    <string name="department_title">Departemen</string>
+    <string name="filter_list_title">Saring Daftar: Saring berdasarkan</string>
+    <string name="filter_list">Saring Daftar berdasarkan</string>
+    <string name="pending">Pending</string>
+    <string name="waiting">Waiting</string>
+    <string name="rejected">Rejected</string>
+    <string name="approved">Approved</string>
+    <string name="on_progress">On Progress</string>
+    <string name="hold">Hold</string>
+    <string name="resume">Resume</string>
+    <string name="progress_done">Progress Done</string>
+    <string name="on_trial">On Trial</string>
+    <string name="done">Done</string>
+    <string name="canceled">Canceled</string>
+    <string name="clear_filter">Hapus saringan</string>
+    <string name="machine_code">Kode Mesin</string>
+    <string name="machine_name">Nama Mesin</string>
+    <string name="reported_by">Dilaporkan oleh:</string>
+    <string name="department_from">Dari:</string>
+
+    <string name="submission_detail_title">Detail Laporan</string>
+    <string name="submission_description">Deskripsi</string>
+    <string name="submission_report">Waktu lapor:</string>
+    <string name="submission_start_working">Waktu mulai bekerja:</string>
+    <string name="submission_end_working">Waktu selesai bekerja:</string>
+    <string name="action_text">Aksi</string>
+    <string name="action_approve">Setujui</string>
+    <string name="action_reject">Tolak</string>
+    <string name="action_deploy">Utus Teknisi</string>
+    <string name="action_deploy_tech">Utus Teknisi sekarang!</string>
+    <string name="message_on_progress">Dalam Kemajuan</string>
+    <string name="see_trial">Lihat Riwayat Uji Coba</string>
+    <string name="trial_tracking">Pelacakan Uji Coba</string>
+    <string name="report_trial">Laporan Uji Coba</string>
+    <string name="pass">Lolos</string>
+    <string name="not_pass">Tidak Lolos</string>
+    <string name="action_on_progress">Mulai Kemajuan Sekarang</string>
+    <string name="see_progress">Lihat Kemajuan</string>
+    <string name="progress_tracking">Pelacakan Kemajuan</string>
+    <string name="hold_issue">Jeda Masalah Ini</string>
+    <string name="create_new_progress">Buat Kemajuan Baru</string>
+    <string name="approve_material">Setujui Permintaan Material</string>
+    <string name="edit_material">Sunting Material</string>
+    <string name="edit_progress">Sunting Kemajuan</string>
+    <string name="mark_progress_done">Tandai Kemajuan Ini sudah Selesai</string>
+    <string name="action_ready_trial">Siap untuk Uji Coba!</string>
+    <string name="action_on_trial">Mulai Uji Coba</string>
+    <string name="more_options">Selengkapnya</string>
+    <string name="action_edit">Sunting</string>
+    <string name="action_cancel">Batal</string>
+    <string name="action_cancel_this_issue">Batalkan Masalah Ini</string>
+    <string name="action_done">Selesaikan Masalah Ini</string>
+
+    <string name="mark_progress_done_title">Tandai Kemajuan sudah Selesai</string>
+
+    <string name="repair_analysis">Analisis Perbaikan</string>
+    <string name="progress_result_description">Deskripsi Hasil Kemajuan</string>
+    <string name="materials_hint">Ketuk \"×\" untuk menghapus barang.\nKetuk barang untuk sunting jumlah barang.\nKetuk \"+\" untuk tambah barang material.</string>
+
+    <string name="hold_issue_description_title">Mengapa Anda ingin menjeda isu ini??</string>
+    <string name="hold_issue_description_hint">Jelaskan alasanmu</string>
+
+    <string name="action_question">Apa yang akan kamu lakukan?</string>
+    <string name="update_status">Perbarui Status</string>
+    <string name="select_supervisor">Pilih Supervisor</string>
+    <string name="select_complexity">Kompleksitas</string>
+    <string name="complexity_low">Rendah</string>
+    <string name="complexity_mid">Menengah</string>
+    <string name="complexity_high">Tinggi</string>
+    <string name="select_technicians">Pilih Teknisi</string>
+
+    <string name="edit_submission_title">Sunting Laporan</string>
+
+    <string name="app_settings_title">Pengaturan</string>
+    <string name="about">Tentang aplikasi</string>
+    <string name="about_fixme">Aplikasi pelaporan dan pengelolaan kerusakan peralatan dan infrastruktur di PT Erlangga Edi Laboratories (ERELA) Semarang</string>
+    <string name="app_update">Pembaruan aplikasi</string>
+    <string name="check_for_update_now">Periksa pembaruan aplikasi</string>
+    <string name="update_available_title">Pembaruan Tersedia</string>
+    <string name="download_update_message">Unduh pembaruan sekarang?</string>
+    <string name="update_available">Pembaruan tersedia! Silakan instal sekarang.</string>
+    <string name="download_update">Unduh pembaruan</string>
+    <string name="install_update">Instal pembaruan sekarang!</string>
+    <string name="not_now">Tidak sekarang</string>
+</resources>

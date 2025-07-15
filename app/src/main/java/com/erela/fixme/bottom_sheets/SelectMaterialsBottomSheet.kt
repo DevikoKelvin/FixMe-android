@@ -123,7 +123,12 @@ class SelectMaterialsBottomSheet(
                                                 R.color.custom_toast_font_failed
                                             )
                                         )
-                                        .setMessage("Can't retrieve material list.")
+                                        .setMessage(
+                                            if (context.getString(R.string.lang) == "in")
+                                                "Tidak dapat mengambil daftar material."
+                                            else
+                                                "Can't retrieve material list."
+                                        )
                                         .show()
                                     Log.e("ERROR", response.message().toString())
                                     dismiss()
@@ -142,7 +147,12 @@ class SelectMaterialsBottomSheet(
                                             R.color.custom_toast_font_failed
                                         )
                                     )
-                                    .setMessage("Can't retrieve material list.")
+                                    .setMessage(
+                                        if (context.getString(R.string.lang) == "in")
+                                            "Tidak dapat mengambil daftar material."
+                                        else
+                                            "Can't retrieve material list."
+                                    )
                                     .show()
                                 Log.e("ERROR", response.message().toString())
                                 dismiss()
@@ -167,7 +177,12 @@ class SelectMaterialsBottomSheet(
                                         R.color.custom_toast_font_failed
                                     )
                                 )
-                                .setMessage("Can't retrieve material list.")
+                                .setMessage(
+                                    if (context.getString(R.string.lang) == "in")
+                                        "Tidak dapat mengambil daftar material."
+                                    else
+                                        "Can't retrieve material list."
+                                )
                                 .show()
                             Log.e("ERROR", throwable.message.toString())
                             throwable.printStackTrace()
@@ -189,7 +204,12 @@ class SelectMaterialsBottomSheet(
                             R.color.custom_toast_font_failed
                         )
                     )
-                    .setMessage("Can't retrieve material list.")
+                    .setMessage(
+                        if (context.getString(R.string.lang) == "in")
+                            "Tidak dapat mengambil daftar material."
+                        else
+                            "Can't retrieve material list."
+                    )
                     .show()
                 Log.e("ERROR", jsonException.message.toString())
                 jsonException.printStackTrace()
