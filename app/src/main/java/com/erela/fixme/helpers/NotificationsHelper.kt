@@ -2,11 +2,14 @@ package com.erela.fixme.helpers
 
 import android.app.Activity
 import android.app.NotificationManager
+import android.app.PendingIntent
 import android.content.Context
+import android.content.Intent
 import android.util.Log
 import androidx.core.app.NotificationCompat
 import androidx.core.content.edit
 import com.erela.fixme.R
+import com.erela.fixme.activities.SubmissionDetailActivity
 import com.erela.fixme.helpers.api.InitAPI
 import com.erela.fixme.objects.NewNotificationResponse
 import com.erela.fixme.objects.PusherData
@@ -55,20 +58,18 @@ object NotificationsHelper {
                             if (result.notifications!!.isNotEmpty()) {
                                 val latestNotification = result.notifications.first()
                                 val lastShownId = getLastNotificationId(context)
-                                Log.e(
-                                    "NOTIFICATION",
-                                    "Latest notification ID: ${latestNotification!!.idNotif}, Last shown ID: $lastShownId"
-                                )
 
                                 if (latestNotification?.idNotif?.toInt() != lastShownId) {
                                     generateNotification(
-                                        latestNotification?.actions!!,
-                                        context
+                                        latestNotification?.actions
+                                            ?: "You have a new notification",
+                                        context,
+                                        latestNotification?.caseId ?: 0
                                     )
 
                                     saveLastNotificationId(
                                         context,
-                                        latestNotification.idNotif!!.toInt()
+                                        latestNotification?.idNotif!!.toInt()
                                     )
                                 }
                             }
@@ -175,9 +176,23 @@ object NotificationsHelper {
     private fun parseToJson(jsonString: String): PusherData =
         Gson().fromJson(jsonString, PusherData::class.java)
 
-    private fun generateNotification(message: String, context: Context) {
+    private fun generateNotification(message: String, context: Context, caseId: Int? = null) {
         val notificationManager =
             context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+
+        val intent = Intent(context, SubmissionDetailActivity::class.java).apply {
+            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP
+            if (caseId != null)
+                putExtra(SubmissionDetailActivity.DETAIL_ID, caseId)
+        }
+
+        val pendingIntent = PendingIntent.getActivity(
+            context,
+            0,
+            intent,
+            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+        )
+
         val notificationBuilder =
             NotificationCompat.Builder(context, NotificationService.CHANNEL_ID)
                 .setSmallIcon(R.drawable.fixme_logo)
@@ -185,6 +200,13 @@ object NotificationsHelper {
                 .setContentText(message)
                 .setAutoCancel(true)
                 .setVibrate(longArrayOf(1000, 1000, 1000, 1000))
+                .also {
+                    with(it) {
+                        if (caseId != null)
+                            setContentIntent(pendingIntent)
+                    }
+                }
+
         notificationManager.notify(NotificationService.NOTIFICATION_ID, notificationBuilder.build())
     }
 }

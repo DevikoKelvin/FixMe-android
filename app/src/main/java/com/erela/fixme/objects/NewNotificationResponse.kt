@@ -22,6 +22,8 @@ data class NotificationsItem(
 	val stsBaca: String? = null,
 	val actions: String? = null,
 	@SerializedName("tgl_waktu")
-	val tglWaktu: String? = null
+	val tglWaktu: String? = null,
+	@SerializedName("id_gaprojects")
+	val caseId: Int? = null,
 )
 

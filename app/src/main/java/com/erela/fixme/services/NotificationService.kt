@@ -3,7 +3,6 @@ package com.erela.fixme.services
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.Service
-import android.content.Context
 import android.content.Intent
 import android.os.IBinder
 import androidx.core.app.NotificationCompat
@@ -66,7 +65,7 @@ class NotificationService : Service() {
 
     private fun createNotificationChannel() {
         val notificationManager =
-            getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+            getSystemService(NOTIFICATION_SERVICE) as NotificationManager
         val channel = NotificationChannel(
             CHANNEL_ID,
             CHANNEL_NAME,
