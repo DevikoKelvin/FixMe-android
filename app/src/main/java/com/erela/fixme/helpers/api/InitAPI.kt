@@ -21,7 +21,7 @@ object InitAPI {
 
     private const val MAIN_URL = "http://$IP/fixme"
     private const val BASE_URL = "$MAIN_URL/apimobile/"
-    const val IMAGE_URL = "$MAIN_URL/assets/upload/"
+    const val IMAGE_URL = "$MAIN_URL/public/assets/upload/"
 
     private val client = OkHttpClient().newBuilder()
         .addInterceptor(HttpLoggingInterceptor().apply {
