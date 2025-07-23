@@ -29,7 +29,7 @@ interface GetAPI {
     @POST("checkLogin")
     fun login(
         @Field("usern") username: String,
-        @Field("pass") password: String
+        @Field("passw") password: String
     ): Call<LoginResponse>
 
     @FormUrlEncoded
