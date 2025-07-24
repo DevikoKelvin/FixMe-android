@@ -21,3 +21,4 @@ FixMe Keystore.txt
 .idea/deploymentTargetSelector.xml
 /app/debug
 app/src/main/java/com/erela/fixme/helpers/networking/InitAPI.kt
+keystore
