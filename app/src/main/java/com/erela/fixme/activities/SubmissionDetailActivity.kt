@@ -120,7 +120,13 @@ class SubmissionDetailActivity : AppCompatActivity(),
             editButton.shrink()
             cancelButton.hide()
             cancelButton.shrink()
-            detailId = intent.getStringExtra(DETAIL_ID).toString()
+
+            detailId = intent.getStringExtra(DETAIL_ID) ?: run {
+                Log.e("Detail ID", "No DETAIL_ID found in intent")
+                finish()
+                return@apply
+            }
+            Log.e("Detail ID", "Received DETAIL_ID: $detailId")
 
             backButton.setOnClickListener {
                 if (isUpdated) {
@@ -167,6 +173,10 @@ class SubmissionDetailActivity : AppCompatActivity(),
                             content.visibility = View.VISIBLE
                             if (response.isSuccessful) {
                                 if (response.body() != null) {
+                                    Log.e(
+                                        "SubmissionDetailActivity",
+                                        "Response: ${response.body()}"
+                                    )
                                     detailData = response.body()!![0]
                                     detailTitle.text = detailData.nomorRequest
                                     if (detailData.fotoGaprojects!!.isEmpty()) {

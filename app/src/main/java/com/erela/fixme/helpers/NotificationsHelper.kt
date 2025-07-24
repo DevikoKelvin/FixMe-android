@@ -60,11 +60,18 @@ object NotificationsHelper {
                                 val lastShownId = getLastNotificationId(context)
 
                                 if (latestNotification?.idNotif?.toInt() != lastShownId) {
+                                    Log.e(
+                                        "NOTIFICATION",
+                                        "New notification received: $latestNotification"
+                                    )
                                     generateNotification(
                                         latestNotification?.actions
                                             ?: "You have a new notification",
                                         context,
-                                        latestNotification?.caseId ?: 0
+                                        if (latestNotification?.caseId == null)
+                                            0
+                                        else
+                                            latestNotification.caseId
                                     )
 
                                     saveLastNotificationId(
@@ -167,7 +174,7 @@ object NotificationsHelper {
             if (context is Activity && !context.isFinishing) {
                 val pusherData = parseToJson(event.data)
                 if (pusherData.idUser == userData.id) {
-                    generateNotification(pusherData.message, context)
+                    generateNotification(pusherData.message, context, 0)
                 }
             }
         }
@@ -176,14 +183,16 @@ object NotificationsHelper {
     private fun parseToJson(jsonString: String): PusherData =
         Gson().fromJson(jsonString, PusherData::class.java)
 
-    private fun generateNotification(message: String, context: Context, caseId: Int? = null) {
+    private fun generateNotification(message: String, context: Context, caseId: Int) {
         val notificationManager =
             context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
 
         val intent = Intent(context, SubmissionDetailActivity::class.java).apply {
             flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP
-            if (caseId != null)
-                putExtra(SubmissionDetailActivity.DETAIL_ID, caseId)
+            if (caseId != 0) {
+                putExtra(SubmissionDetailActivity.DETAIL_ID, caseId.toString())
+                Log.e("NOTIFICATION", "Passing DETAIL_ID: $caseId")
+            }
         }
 
         val pendingIntent = PendingIntent.getActivity(
@@ -192,6 +201,8 @@ object NotificationsHelper {
             intent,
             PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
         )
+
+        Log.e("NOTIFICATION", "Generating notification with message: $message, caseId: $caseId")
 
         val notificationBuilder =
             NotificationCompat.Builder(context, NotificationService.CHANNEL_ID)
@@ -202,7 +213,7 @@ object NotificationsHelper {
                 .setVibrate(longArrayOf(1000, 1000, 1000, 1000))
                 .also {
                     with(it) {
-                        if (caseId != null)
+                        if (caseId != 0)
                             setContentIntent(pendingIntent)
                     }
                 }
