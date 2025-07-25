@@ -50,6 +50,7 @@ class ManagePhotoBottomSheet(context: Context, val imageArrayUri: ArrayList<Uri>
                 }
             }
             attachmentRv.adapter = adapter
+            attachmentRv.setItemViewCacheSize(1000)
             attachmentRv.layoutManager = LinearLayoutManager(context)
         }
     }

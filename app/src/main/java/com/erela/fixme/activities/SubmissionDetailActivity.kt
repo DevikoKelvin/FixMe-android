@@ -126,7 +126,6 @@ class SubmissionDetailActivity : AppCompatActivity(),
                 finish()
                 return@apply
             }
-            Log.e("Detail ID", "Received DETAIL_ID: $detailId")
 
             backButton.setOnClickListener {
                 if (isUpdated) {

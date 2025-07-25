@@ -191,7 +191,6 @@ object NotificationsHelper {
             flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP
             if (caseId != 0) {
                 putExtra(SubmissionDetailActivity.DETAIL_ID, caseId.toString())
-                Log.e("NOTIFICATION", "Passing DETAIL_ID: $caseId")
             }
         }
 
@@ -201,8 +200,6 @@ object NotificationsHelper {
             intent,
             PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
         )
-
-        Log.e("NOTIFICATION", "Generating notification with message: $message, caseId: $caseId")
 
         val notificationBuilder =
             NotificationCompat.Builder(context, NotificationService.CHANNEL_ID)

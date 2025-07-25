@@ -87,6 +87,7 @@ class SelectSupervisorTechniciansBottomSheet(
                                             }
                                         }
                                         rvSupervisorsTechnicians.adapter = adapter
+                                        rvSupervisorsTechnicians.setItemViewCacheSize(1000)
                                         rvSupervisorsTechnicians.layoutManager =
                                             LinearLayoutManager(context)
                                     } else {
@@ -110,7 +111,7 @@ class SelectSupervisorTechniciansBottomSheet(
                                                     "Can't retrieve supervisor list."
                                             )
                                             .show()
-                                        Log.e("ERROR", response.message().toString())
+                                        Log.e("ERROR Selecting SPV Body null", response.message().toString())
                                         dismiss()
                                     }
                                 } else {
@@ -134,7 +135,7 @@ class SelectSupervisorTechniciansBottomSheet(
                                                 "Can't retrieve supervisor list."
                                         )
                                         .show()
-                                    Log.e("ERROR", response.message().toString())
+                                    Log.e("ERROR Selecting SPV Unsuccessful", response.message().toString())
                                     dismiss()
                                 }
                             }
@@ -164,7 +165,7 @@ class SelectSupervisorTechniciansBottomSheet(
                                             "Can't retrieve supervisor list."
                                     )
                                     .show()
-                                Log.e("ERROR", throwable.toString())
+                                Log.e("ERROR Selecting SPV Failure", throwable.toString())
                                 throwable.printStackTrace()
                                 dismiss()
                             }
@@ -202,6 +203,7 @@ class SelectSupervisorTechniciansBottomSheet(
                                             }
                                         }
                                         rvSupervisorsTechnicians.adapter = adapter
+                                        rvSupervisorsTechnicians.setItemViewCacheSize(1000)
                                         rvSupervisorsTechnicians.layoutManager =
                                             LinearLayoutManager(context)
                                     } else {
@@ -225,7 +227,7 @@ class SelectSupervisorTechniciansBottomSheet(
                                                     "Can't retrieve technicians list."
                                             )
                                             .show()
-                                        Log.e("ERROR", response.message().toString())
+                                        Log.e("ERROR Deploying Tech Body null", response.message().toString())
                                         dismiss()
                                     }
                                 } else {
@@ -249,7 +251,7 @@ class SelectSupervisorTechniciansBottomSheet(
                                                 "Can't retrieve technicians list."
                                         )
                                         .show()
-                                    Log.e("ERROR", response.message().toString())
+                                    Log.e("ERROR Deploying Tech Unsuccessful", response.message().toString())
                                     dismiss()
                                 }
                             }
@@ -279,7 +281,7 @@ class SelectSupervisorTechniciansBottomSheet(
                                             "Can't retrieve technicians list."
                                     )
                                     .show()
-                                Log.e("ERROR", throwable.toString())
+                                Log.e("ERROR Deploying Tech Failure", throwable.toString())
                                 throwable.printStackTrace()
                                 dismiss()
                             }

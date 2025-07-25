@@ -80,6 +80,7 @@ class ProgressTrackingBottomSheet(
                 }
             }
             rvProgress.adapter = progressAdapter
+            rvProgress.setItemViewCacheSize(1000)
             rvProgress.layoutManager = LinearLayoutManager(context)
 
             when (data.stsGaprojects) {
