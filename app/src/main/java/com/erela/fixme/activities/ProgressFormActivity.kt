@@ -583,6 +583,7 @@ class ProgressFormActivity : AppCompatActivity() {
                                             call: Call<CreationResponse>,
                                             response: Response<CreationResponse>
                                         ) {
+                                            Log.e("Create Progress Response", response.toString())
                                             if (response.isSuccessful) {
                                                 if (response.body() != null) {
                                                     val result = response.body()
