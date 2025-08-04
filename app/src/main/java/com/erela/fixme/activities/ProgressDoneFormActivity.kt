@@ -586,9 +586,6 @@ class ProgressDoneFormActivity : AppCompatActivity() {
                 if (element)
                     validated++
             }
-            for (i in isFormEmpty.indices) {
-                Log.e("Form [$i]", isFormEmpty[i].toString())
-            }
             if (descriptionField.text.toString().isEmpty())
                 descriptionFieldLayout.error =
                     if (getString(R.string.lang) == "in")

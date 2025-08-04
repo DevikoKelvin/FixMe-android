@@ -230,9 +230,7 @@ class ProgressFormActivity : AppCompatActivity() {
                                                 if (response.body() != null) {
                                                     val result = response.body()
                                                     if (result?.code == 1) {
-                                                        if (selectedMaterialsArrayList.size >
-                                                            oldMaterialCount
-                                                        ) {
+                                                        if (selectedMaterialsArrayList.size - 1 > oldMaterialCount) {
                                                             if (prepareRequestMaterialForm(
                                                                     progressData!!
                                                                         .idGaprojectsDetail!!
@@ -403,9 +401,9 @@ class ProgressFormActivity : AppCompatActivity() {
                                                         CustomToast.getInstance(applicationContext)
                                                             .setMessage(
                                                                 if (getString(R.string.lang) == "in")
-                                                                    "Gagal membuat kemajuan!"
+                                                                    "Gagal menyunting kemajuan!"
                                                                 else
-                                                                    "Failed to create progress!"
+                                                                    "Failed to edit progress!"
                                                             )
                                                             .setFontColor(
                                                                 ContextCompat.getColor(
@@ -428,9 +426,9 @@ class ProgressFormActivity : AppCompatActivity() {
                                                     CustomToast.getInstance(applicationContext)
                                                         .setMessage(
                                                             if (getString(R.string.lang) == "in")
-                                                                "Gagal membuat kemajuan!"
+                                                                "Gagal menyunting kemajuan!"
                                                             else
-                                                                "Failed to create progress!"
+                                                                "Failed to edit progress!"
                                                         )
                                                         .setFontColor(
                                                             ContextCompat.getColor(
@@ -453,9 +451,9 @@ class ProgressFormActivity : AppCompatActivity() {
                                                 CustomToast.getInstance(applicationContext)
                                                     .setMessage(
                                                         if (getString(R.string.lang) == "in")
-                                                            "Gagal membuat kemajuan!"
+                                                            "Gagal menyunting kemajuan!"
                                                         else
-                                                            "Failed to create progress!"
+                                                            "Failed to edit progress!"
                                                     )
                                                     .setFontColor(
                                                         ContextCompat.getColor(
@@ -1025,12 +1023,12 @@ class ProgressFormActivity : AppCompatActivity() {
             if (repairAnalysisField.text!!.toString().isEmpty())
                 repairAnalysisFieldLayout.error = if (getString(R.string.lang) == "in")
                     "Analisa perbaikan tidak boleh kosong!"
-            else
+                else
                     "Analysis can't be empty!"
             if (descriptionField.text!!.toString().isEmpty())
                 descriptionFieldLayout.error = if (getString(R.string.lang) == "in")
                     "Keterangan perbaikan tidak boleh kosong!"
-            else
+                else
                     "Description can't be empty!"
         }
 

@@ -43,8 +43,14 @@ import com.github.tutorialsandroid.appxupdater.enums.AppUpdaterError
 import com.github.tutorialsandroid.appxupdater.enums.UpdateFrom
 import com.github.tutorialsandroid.appxupdater.objects.Update
 import com.pusher.pushnotifications.PushNotifications
+import okhttp3.OkHttpClient
+import okhttp3.Request
+import okhttp3.Response
+import okhttp3.WebSocket
+import okhttp3.WebSocketListener
 import java.io.File
 import java.time.LocalDateTime
+import java.util.concurrent.TimeUnit
 
 class MainActivity : AppCompatActivity() {
     private val binding: ActivityMainBinding by lazy {

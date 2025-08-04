@@ -29,6 +29,7 @@ import retrofit2.Response
 object NotificationsHelper {
     private var pusher: Pusher? = null
     private const val LAST_NOTIFICATION_ID = "last_notification_id"
+    private var pusherNotificationCounter = 1000 // Counter for Pusher notification IDs
 
     private fun getLastNotificationId(context: Context): Int {
         val prefs = SharedPreferencesHelper.getSharedPreferences(context)
@@ -55,19 +56,22 @@ object NotificationsHelper {
                     ) {
                         if (response.isSuccessful && response.body() != null) {
                             val result = response.body()!!
+                            Log.e(
+                                "NOTIFICATION",
+                                "New notification received: $result"
+                            )
                             if (result.notifications!!.isNotEmpty()) {
                                 val latestNotification = result.notifications.first()
                                 val lastShownId = getLastNotificationId(context)
 
-                                if (latestNotification?.idNotif?.toInt() != lastShownId) {
-                                    Log.e(
-                                        "NOTIFICATION",
-                                        "New notification received: $latestNotification"
-                                    )
+                                // This logic still processes one notification at a time from the API call
+                                // but if latestNotification.idNotif is unique, it will show as a new notification
+                                if (latestNotification?.idNotif != lastShownId) {
                                     generateNotification(
                                         latestNotification?.actions
                                             ?: "You have a new notification",
                                         context,
+                                        latestNotification?.idNotif ?: 0, // Using server-provided ID
                                         if (latestNotification?.caseId == null)
                                             0
                                         else
@@ -76,7 +80,7 @@ object NotificationsHelper {
 
                                     saveLastNotificationId(
                                         context,
-                                        latestNotification?.idNotif!!.toInt()
+                                        latestNotification?.idNotif!!
                                     )
                                 }
                             }
@@ -174,7 +178,8 @@ object NotificationsHelper {
             if (context is Activity && !context.isFinishing) {
                 val pusherData = parseToJson(event.data)
                 if (pusherData.idUser == userData.id) {
-                    generateNotification(pusherData.message, context, 0)
+                    val uniquePusherNotificationId = pusherNotificationCounter++ // Generate unique ID for Pusher notification
+                    generateNotification(pusherData.message, context, uniquePusherNotificationId, 0)
                 }
             }
         }
@@ -183,7 +188,12 @@ object NotificationsHelper {
     private fun parseToJson(jsonString: String): PusherData =
         Gson().fromJson(jsonString, PusherData::class.java)
 
-    private fun generateNotification(message: String, context: Context, caseId: Int) {
+    private fun generateNotification(
+        message: String,
+        context: Context,
+        notificationId: Int, // This ID will now be used
+        caseId: Int
+    ) {
         val notificationManager =
             context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
 
@@ -191,12 +201,16 @@ object NotificationsHelper {
             flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP
             if (caseId != 0) {
                 putExtra(SubmissionDetailActivity.DETAIL_ID, caseId.toString())
+                putExtra(SubmissionDetailActivity.NOTIFICATION_ID, notificationId)
             }
         }
 
+        // Using a unique request code for PendingIntent for each notification to ensure intents are distinct if needed
+        val pendingIntentRequestCode = notificationId 
+
         val pendingIntent = PendingIntent.getActivity(
             context,
-            0,
+            pendingIntentRequestCode,
             intent,
             PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
         )
@@ -215,6 +229,7 @@ object NotificationsHelper {
                     }
                 }
 
-        notificationManager.notify(NotificationService.NOTIFICATION_ID, notificationBuilder.build())
+        // Use the unique notificationId here
+        notificationManager.notify(notificationId, notificationBuilder.build())
     }
 }

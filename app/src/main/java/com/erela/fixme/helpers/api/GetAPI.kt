@@ -73,7 +73,8 @@ interface GetAPI {
     @FormUrlEncoded
     @POST("reportDetail")
     fun getSubmissionDetail(
-        @Field("id") submissionID: String
+        @Field("id") submissionID: String,
+        @Field("id_notif") notificationID: Int? = null
     ): Call<List<SubmissionDetailResponse>>
 
     @Multipart

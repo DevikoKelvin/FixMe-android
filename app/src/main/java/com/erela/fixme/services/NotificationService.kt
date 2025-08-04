@@ -17,7 +17,6 @@ class NotificationService : Service() {
         const val CHANNEL_NAME_FOREGROUND = "Erela FixMe Services"
         const val CHANNEL_NAME = "Erela FixMe"
         const val NOTIFICATION_ID_FOREGROUND = 1001
-        const val NOTIFICATION_ID = 1002
     }
 
     override fun onBind(intent: Intent?): IBinder? = null
@@ -29,15 +28,13 @@ class NotificationService : Service() {
                     NotificationChannel(
                         CHANNEL_ID_FOREGROUND,
                         CHANNEL_NAME_FOREGROUND,
-                        NotificationManager.IMPORTANCE_NONE
+                        NotificationManager.IMPORTANCE_MIN
                     )
                 getSystemService(NotificationManager::class.java).createNotificationChannel(channel)
                 val notificationBuilder = NotificationCompat.Builder(this, CHANNEL_ID_FOREGROUND)
                     .setSmallIcon(R.drawable.fixme_logo)
                     .setContentText("FixMe is running on background")
                     .setContentTitle(CHANNEL_NAME_FOREGROUND)
-                    .setAutoCancel(true)
-                    .setSilent(true)
                     .build()
 
                 startForeground(NOTIFICATION_ID_FOREGROUND, notificationBuilder)
@@ -53,7 +50,7 @@ class NotificationService : Service() {
                 }
 
                 try {
-                    Thread.sleep(2000)
+                    Thread.sleep(60000)
                 } catch (interruptedException: InterruptedException) {
                     interruptedException.printStackTrace()
                 }

@@ -49,6 +49,7 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import java.util.Locale
+import kotlin.properties.Delegates
 
 class SubmissionDetailActivity : AppCompatActivity(),
     SubmissionActionBottomSheet.OnButtonActionClickedListener,
@@ -65,6 +66,7 @@ class SubmissionDetailActivity : AppCompatActivity(),
     private lateinit var imageData: ArrayList<FotoGaprojectsItem>
     private lateinit var imageCarouselAdapter: ImageCarouselPagerAdapter
     private lateinit var detailId: String
+    private var notificationId by Delegates.notNull<Int>()
     private lateinit var detailData: SubmissionDetailResponse
     private lateinit var progressTrackingBottomSheet: ProgressTrackingBottomSheet
     private var message: StringBuilder = StringBuilder()
@@ -81,6 +83,7 @@ class SubmissionDetailActivity : AppCompatActivity(),
 
     companion object {
         const val DETAIL_ID = "DETAIL_ID"
+        const val NOTIFICATION_ID = "NOTIFICATION_ID"
         fun initiate(context: Context, detailId: String): Intent {
             return Intent(
                 context, SubmissionDetailActivity::class.java
@@ -127,6 +130,8 @@ class SubmissionDetailActivity : AppCompatActivity(),
                 return@apply
             }
 
+            notificationId = intent.getIntExtra(NOTIFICATION_ID, 0)
+
             backButton.setOnClickListener {
                 if (isUpdated) {
                     onBackPressedDispatcher.onBackPressed()
@@ -161,7 +166,10 @@ class SubmissionDetailActivity : AppCompatActivity(),
             handler.post(runnable)
 
             try {
-                InitAPI.getAPI.getSubmissionDetail(detailId)
+                (if (notificationId != 0) InitAPI.getAPI.getSubmissionDetail(
+                    detailId,
+                    notificationId
+                ) else InitAPI.getAPI.getSubmissionDetail(detailId))
                     .enqueue(object : Callback<List<SubmissionDetailResponse>> {
                         override fun onResponse(
                             call: Call<List<SubmissionDetailResponse>?>,
@@ -172,10 +180,6 @@ class SubmissionDetailActivity : AppCompatActivity(),
                             content.visibility = View.VISIBLE
                             if (response.isSuccessful) {
                                 if (response.body() != null) {
-                                    Log.e(
-                                        "SubmissionDetailActivity",
-                                        "Response: ${response.body()}"
-                                    )
                                     detailData = response.body()!![0]
                                     detailTitle.text = detailData.nomorRequest
                                     if (detailData.fotoGaprojects!!.isEmpty()) {
