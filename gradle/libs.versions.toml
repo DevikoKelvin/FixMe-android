@@ -1,11 +1,11 @@
 [versions]
 # Plugins
-agp = "8.12.0"
-kotlin = "2.2.0"
+agp = "8.12.1"
+kotlin = "2.2.10"
 googleServices = "4.4.3"
 
 # Dependencies
-coreKtx = "1.16.0"
+coreKtx = "1.17.0"
 appcompat = "1.7.1"
 activity = "1.10.1"
 material = "1.12.0"
@@ -17,7 +17,7 @@ espressoCore = "3.7.0"
 
 # Third-party Dependencies
 firebaseCore = "21.1.1"
-firebaseBom = "34.0.0"
+firebaseBom = "34.1.0"
 firebaseAnalytic="23.0.0"
 firebaseIid="21.1.0"
 retrofit = "3.0.0"
@@ -32,7 +32,7 @@ circleIndicator = "2.1.6"
 appxupdater = "v2.0.20"
 pusherJavaClient = "2.4.2"
 pushNotificationsAndroid = "1.9.0"
-balloon = "1.6.12"
+balloon = "1.6.13"
 shimmer = "0.5.0"
 
 [libraries]

@@ -29,11 +29,11 @@ import retrofit2.Response
 object NotificationsHelper {
     private var pusher: Pusher? = null
     private const val LAST_NOTIFICATION_ID = "last_notification_id"
-    private var pusherNotificationCounter = 1000 // Counter for Pusher notification IDs
+    private var pusherNotificationCounter = 1000 // Counter for Pusher and fallback notification IDs
 
     private fun getLastNotificationId(context: Context): Int {
         val prefs = SharedPreferencesHelper.getSharedPreferences(context)
-        return prefs.getInt(LAST_NOTIFICATION_ID, -1)
+        return prefs.getInt(LAST_NOTIFICATION_ID, -1) // -1 can indicate no ID stored yet
     }
 
     private fun saveLastNotificationId(context: Context, id: Int) {
@@ -56,36 +56,81 @@ object NotificationsHelper {
                     ) {
                         if (response.isSuccessful && response.body() != null) {
                             val result = response.body()!!
-                            Log.e(
-                                "NOTIFICATION",
-                                "New notification received: $result"
-                            )
-                            if (result.notifications!!.isNotEmpty()) {
-                                val latestNotification = result.notifications.first()
-                                val lastShownId = getLastNotificationId(context)
+                            Log.d("NOTIFICATION", "API response received. Body: $result")
+                            val notificationsFromServer = result.notifications
 
-                                // This logic still processes one notification at a time from the API call
-                                // but if latestNotification.idNotif is unique, it will show as a new notification
-                                if (latestNotification?.idNotif != lastShownId) {
-                                    generateNotification(
-                                        latestNotification?.actions
-                                            ?: "You have a new notification",
-                                        context,
-                                        latestNotification?.idNotif ?: 0, // Using server-provided ID
-                                        if (latestNotification?.caseId == null)
-                                            0
-                                        else
-                                            latestNotification.caseId
-                                    )
+                            if (!notificationsFromServer.isNullOrEmpty()) {
+                                val latestNotificationInBatch =
+                                    notificationsFromServer.first() // Assuming newest is first
+                                val lastShownApiNotificationId = getLastNotificationId(context)
 
-                                    saveLastNotificationId(
-                                        context,
-                                        latestNotification?.idNotif!!
+                                var processThisBatch = false
+                                var idToSaveAsLast: Int? = null
+
+                                // Determine if this batch should be processed
+                                if (latestNotificationInBatch?.idNotif != null) {
+                                    if (latestNotificationInBatch.idNotif != lastShownApiNotificationId) {
+                                        processThisBatch = true
+                                        idToSaveAsLast = latestNotificationInBatch.idNotif
+                                        Log.d(
+                                            "NOTIFICATION",
+                                            "New batch. Latest ID: ${latestNotificationInBatch.idNotif}, Last shown: $lastShownApiNotificationId"
+                                        )
+                                    } else {
+                                        Log.d(
+                                            "NOTIFICATION",
+                                            "Latest notification in batch (ID: ${latestNotificationInBatch.idNotif}) is same as last shown ($lastShownApiNotificationId). Assuming batch already processed."
+                                        )
+                                    }
+                                } else {
+                                    // If latest in batch has null ID, we process it as potentially new,
+                                    // but we can't update lastShownApiNotificationId with a null.
+                                    processThisBatch = true
+                                    idToSaveAsLast = null // Cannot save a null ID
+                                    Log.d(
+                                        "NOTIFICATION",
+                                        "Latest notification in batch has null ID. Processing batch, but lastNotificationId won't be updated from this batch's latest."
                                     )
                                 }
+
+                                if (processThisBatch) {
+                                    Log.d(
+                                        "NOTIFICATION",
+                                        "Processing batch of ${notificationsFromServer.size} notifications."
+                                    )
+                                    notificationsFromServer.forEach { notificationItem ->
+                                        // Use server-provided ID if available, otherwise use a local counter for uniqueness.
+                                        val notificationIdForManager =
+                                            notificationItem?.idNotif ?: pusherNotificationCounter++
+
+                                        generateNotification(
+                                            notificationItem?.actions
+                                                ?: "You have a new notification",
+                                            context,
+                                            notificationIdForManager, // This is now unique per notification
+                                            notificationItem?.caseId ?: 0
+                                        )
+                                    }
+                                    // Save the ID of the latest notification from THIS batch, if it was non-null
+                                    if (idToSaveAsLast != null) {
+                                        saveLastNotificationId(context, idToSaveAsLast)
+                                        Log.d(
+                                            "NOTIFICATION",
+                                            "Saved $idToSaveAsLast as last shown API notification ID."
+                                        )
+                                    }
+                                }
+                            } else {
+                                Log.d(
+                                    "NOTIFICATION",
+                                    "Received empty or null list of notifications from API."
+                                )
                             }
                         } else {
-                            Log.e("NOTIFICATION", "Response not successful")
+                            Log.e(
+                                "NOTIFICATION",
+                                "Response not successful or body is null. Code: ${response.code()}, Message: ${response.message()}"
+                            )
                         }
                     }
 
@@ -94,13 +139,13 @@ object NotificationsHelper {
                         throwable: Throwable
                     ) {
                         throwable.printStackTrace()
-                        Log.e("NOTIFICATION", "Error: ${throwable.message}")
+                        Log.e("NOTIFICATION", "Error: ${throwable.message}", throwable)
                     }
-
                 }
             )
         } catch (jsonException: JSONException) {
             jsonException.printStackTrace()
+            Log.e("NOTIFICATION", "JSON Exception: ${jsonException.message}", jsonException)
         }
     }
 
@@ -110,76 +155,36 @@ object NotificationsHelper {
         if (pusher?.connection?.state == ConnectionState.DISCONNECTED) {
             pusher?.connect(object : ConnectionEventListener {
                 override fun onConnectionStateChange(change: ConnectionStateChange) {
-                    Log.e(
+                    Log.e( // Consider changing to Log.i or Log.d for non-error states
                         "PUSHER",
                         "State changed from ${change.previousState} to ${change.currentState}"
                     )
                 }
 
                 override fun onError(message: String?, code: String?, e: Exception?) {
-                    if (code != null) {
-                        if (message != null) {
-                            if (e != null) {
-                                Log.e(
-                                    "PUSHER",
-                                    "There was a problem on connecting! Error code: $code, message: $message, error: $e"
-                                )
-                            } else {
-                                Log.e(
-                                    "PUSHER",
-                                    "There was a problem on connecting! Error code: $code, message: $message"
-                                )
-                            }
-                        } else {
-                            if (e != null) {
-                                Log.e(
-                                    "PUSHER",
-                                    "There was a problem on connecting! Error code: $code, error: $e"
-                                )
-                            } else {
-                                Log.e(
-                                    "PUSHER",
-                                    "There was a problem on connecting! Error code: $code"
-                                )
-                            }
-                        }
-                    } else {
-                        if (message != null) {
-                            if (e != null) {
-                                Log.e(
-                                    "PUSHER",
-                                    "There was a problem on connecting! Error message: $message, error: $e"
-                                )
-                            } else {
-                                Log.e(
-                                    "PUSHER",
-                                    "There was a problem on connecting! Error message: $message"
-                                )
-                            }
-                        } else {
-                            if (e != null) {
-                                Log.e(
-                                    "PUSHER",
-                                    "There was a problem on connecting! Error exception: $e"
-                                )
-                            } else {
-                                Log.e(
-                                    "PUSHER",
-                                    "There was a problem on connecting!"
-                                )
-                            }
-                        }
-                    }
+                    val errorMessage = "PUSHER: There was a problem connecting! " +
+                            "Code: ${code ?: "N/A"}, Message: ${message ?: "N/A"}, Exception: ${e?.toString() ?: "N/A"}"
+                    Log.e("PUSHER", errorMessage, e)
                 }
             }, ConnectionState.CONNECTED)
         }
         val channel = pusher?.subscribe("my-channel")
         channel?.bind("my-event") { event ->
             if (context is Activity && !context.isFinishing) {
-                val pusherData = parseToJson(event.data)
-                if (pusherData.idUser == userData.id) {
-                    val uniquePusherNotificationId = pusherNotificationCounter++ // Generate unique ID for Pusher notification
-                    generateNotification(pusherData.message, context, uniquePusherNotificationId, 0)
+                try {
+                    val pusherData = parseToJson(event.data)
+                    if (pusherData.idUser == userData.id) {
+                        val uniquePusherNotificationId =
+                            pusherNotificationCounter++ // Generate unique ID for Pusher notification
+                        generateNotification(
+                            pusherData.message,
+                            context,
+                            uniquePusherNotificationId,
+                            0
+                        ) // caseId is 0 for Pusher notifs
+                    }
+                } catch (e: Exception) {
+                    Log.e("PUSHER_EVENT", "Error processing Pusher event: ${event.data}", e)
                 }
             }
         }
@@ -191,7 +196,7 @@ object NotificationsHelper {
     private fun generateNotification(
         message: String,
         context: Context,
-        notificationId: Int, // This ID will now be used
+        notificationId: Int, // This ID will now be used and should be unique
         caseId: Int
     ) {
         val notificationManager =
@@ -205,8 +210,8 @@ object NotificationsHelper {
             }
         }
 
-        // Using a unique request code for PendingIntent for each notification to ensure intents are distinct if needed
-        val pendingIntentRequestCode = notificationId 
+        // Using a unique request code for PendingIntent for each notification
+        val pendingIntentRequestCode = notificationId
 
         val pendingIntent = PendingIntent.getActivity(
             context,
@@ -222,14 +227,18 @@ object NotificationsHelper {
                 .setContentText(message)
                 .setAutoCancel(true)
                 .setVibrate(longArrayOf(1000, 1000, 1000, 1000))
+                .setPriority(NotificationCompat.PRIORITY_HIGH) // Ensure visibility for important notifications
                 .also {
-                    with(it) {
-                        if (caseId != 0)
-                            setContentIntent(pendingIntent)
+                    // Only set content intent if there's a caseId to navigate to
+                    if (caseId != 0) {
+                        it.setContentIntent(pendingIntent)
                     }
                 }
 
-        // Use the unique notificationId here
+        Log.d(
+            "NOTIFICATION_GEN",
+            "Generating notification. ID: $notificationId, Message: $message, CaseID: $caseId"
+        )
         notificationManager.notify(notificationId, notificationBuilder.build())
     }
 }
