@@ -24,6 +24,15 @@
 -dontwarn com.google.firebase.messaging.RemoteMessage$Notification
 -dontwarn com.google.firebase.messaging.RemoteMessage
 
--keep,allowobfuscation,allowshrinking interface retrofit2.Call
--keep,allowobfuscation,allowshrinking class retrofit2.Response
--keep,allowobfuscation,allowshrinking class kotlin.coroutines.Continuation
+-keep class com.google.gson.stream.** { *; }
+-keep class com.google.gson.examples.android.model.** { <fields>; }
+-keep class * implements com.google.gson.TypeAdapter
+-keep class * implements com.google.gson.TypeAdapterFactory
+-keep class * implements com.google.gson.JsonSerializer
+-keep class * implements com.google.gson.JsonDeserializer
+-keepclasseswithmembers,allowobfuscation class * {
+    @com.google.gson.annotations.SerializedName <fields>;
+}
+
+-keep class android.support.v8.renderscript.** { *; }
+-keep class androidx.renderscript.** { *; }

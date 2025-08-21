@@ -1,8 +1,8 @@
 package com.erela.fixme.helpers
 
 import android.content.Context
-import com.erela.fixme.objects.UserData
 import androidx.core.content.edit
+import com.erela.fixme.objects.UserData
 
 class UserDataHelper(private val context: Context) {
     private val keyId = "key.id"
