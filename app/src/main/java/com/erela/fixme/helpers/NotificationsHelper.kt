@@ -1,6 +1,5 @@
 package com.erela.fixme.helpers
 
-import android.app.Activity
 import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.Context
@@ -12,15 +11,9 @@ import com.erela.fixme.R
 import com.erela.fixme.activities.SubmissionDetailActivity
 import com.erela.fixme.helpers.api.InitAPI
 import com.erela.fixme.objects.NewNotificationResponse
-import com.erela.fixme.objects.PusherData
 import com.erela.fixme.objects.UserData
 import com.erela.fixme.services.NotificationService
-import com.google.gson.Gson
 import com.pusher.client.Pusher
-import com.pusher.client.PusherOptions
-import com.pusher.client.connection.ConnectionEventListener
-import com.pusher.client.connection.ConnectionState
-import com.pusher.client.connection.ConnectionStateChange
 import org.json.JSONException
 import retrofit2.Call
 import retrofit2.Callback
@@ -149,7 +142,7 @@ object NotificationsHelper {
         }
     }
 
-    fun receiveNotifications(context: Context, userData: UserData) {
+    /*fun receiveNotifications(context: Context, userData: UserData) {
         pusher = Pusher("4ae6ab89bbc42534b759", PusherOptions().setCluster("ap1"))
 
         if (pusher?.connection?.state == ConnectionState.DISCONNECTED) {
@@ -191,7 +184,7 @@ object NotificationsHelper {
     }
 
     private fun parseToJson(jsonString: String): PusherData =
-        Gson().fromJson(jsonString, PusherData::class.java)
+        Gson().fromJson(jsonString, PusherData::class.java)*/
 
     private fun generateNotification(
         message: String,

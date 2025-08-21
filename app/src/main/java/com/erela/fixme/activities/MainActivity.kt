@@ -184,8 +184,8 @@ class MainActivity : AppCompatActivity() {
                         }
                     }
 
-                    if (UserDataHelper(this@MainActivity).getNotification())
-                        NotificationsHelper.receiveNotifications(applicationContext, userData)
+                    /*if (UserDataHelper(this@MainActivity).getNotification())
+                        NotificationsHelper.receiveNotifications(applicationContext, userData)*/
 
                     PushNotifications.start(
                         applicationContext,
