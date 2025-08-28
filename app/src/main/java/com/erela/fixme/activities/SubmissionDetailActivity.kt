@@ -2537,7 +2537,7 @@ class SubmissionDetailActivity : AppCompatActivity(),
                             if (loadingDialog.window != null)
                                 loadingDialog.show()
                             try {
-                                InitAPI.getAPI.approveMaterialAddition(
+                                InitAPI.getAPI.approveMaterialRequest(
                                     data.idGaprojectsDetail!!,
                                     userData.id
                                 ).enqueue(object : Callback<GenericSimpleResponse> {

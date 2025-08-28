@@ -178,8 +178,8 @@ interface GetAPI {
     ): Call<GenericSimpleResponse>
 
     @FormUrlEncoded
-    @POST("approveMaterialAdd")
-    fun approveMaterialAddition(
+    @POST("approveMaterialRequest")
+    fun approveMaterialRequest(
         @Field("id") idGaProjectsDetail: Int,
         @Field("id_user") idUser: Int
     ): Call<GenericSimpleResponse>
