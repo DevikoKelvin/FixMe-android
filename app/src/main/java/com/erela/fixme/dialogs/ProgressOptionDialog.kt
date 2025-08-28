@@ -40,9 +40,21 @@ class ProgressOptionDialog(
                     dismiss()
                 }
                 approveMaterialButton.visibility = View.VISIBLE
-                approveMaterialButton.setOnClickListener {
-                    onProgressOptionDialogListener.onMaterialApproved(progress)
-                    dismiss()
+                if (progress.material!!.isNotEmpty()) {
+                    if (progress.approveMaterialStatus == 0) {
+                        approveMaterialButton.isEnabled = true
+                        approveMaterialButton.alpha = 1.0f
+                        approveMaterialButton.setOnClickListener {
+                            onProgressOptionDialogListener.onMaterialApproved(progress)
+                            dismiss()
+                        }
+                    } else if (progress.approveMaterialStatus == 1) {
+                        approveMaterialButton.isEnabled = false
+                        approveMaterialButton.alpha = 0.5f
+                    }
+                } else {
+                    approveMaterialButton.isEnabled = false
+                    approveMaterialButton.alpha = 0.5f
                 }
             } else {
                 divider3.visibility = View.VISIBLE

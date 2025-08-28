@@ -84,7 +84,13 @@ class ProgressRvAdapter(
                         if (materials.isNotEmpty()) {
                             if (item.progress.approveMaterialStatus == 1) {
                                 materialApprovedStatus.visibility = View.VISIBLE
-                                materialApprovedMessage.text =
+                                materialApprovalIcon.setImageDrawable(
+                                    ContextCompat.getDrawable(
+                                        context,
+                                        R.drawable.baseline_check_circle_outline_24
+                                    )
+                                )
+                                materialApprovalMessage.text =
                                     if (context.getString(R.string.lang) == "in")
                                         "Material disetujui oleh ${
                                             item.progress.approveMaterialUser
@@ -93,8 +99,32 @@ class ProgressRvAdapter(
                                         "Material approved by ${
                                             item.progress.approveMaterialUser
                                         } on ${item.progress.approveMaterialTglWaktu}"
-                            } else
-                                materialApprovedStatus.visibility = View.GONE
+                                materialApprovalMessage.setTextColor(
+                                    ContextCompat.getColor(
+                                        context,
+                                        R.color.custom_toast_font_success
+                                    )
+                                )
+                            } else {
+                                materialApprovedStatus.visibility = View.VISIBLE
+                                materialApprovalIcon.setImageDrawable(
+                                    ContextCompat.getDrawable(
+                                        context,
+                                        R.drawable.outline_cancel_24
+                                    )
+                                )
+                                materialApprovalMessage.text =
+                                    if (context.getString(R.string.lang) == "in")
+                                        "Material butuh persetujuan oleh Supervisor sebelum bisa diselesaikan."
+                                    else
+                                        "Material need to be approved by Supervisors before it can be done."
+                                materialApprovalMessage.setTextColor(
+                                    ContextCompat.getColor(
+                                        context,
+                                        R.color.custom_toast_font_failed
+                                    )
+                                )
+                            }
                         } else
                             materialApprovedStatus.visibility = View.GONE
                         materialList.text = if (materials.isNotEmpty())
@@ -139,7 +169,7 @@ class ProgressRvAdapter(
                         )
                         val imageData = ArrayList<String>()
                         for (i in 0 until item.progress.foto.size) {
-                            imageData.add(item.progress.foto[i]?.foto!!.toString())
+                            imageData.add(item.progress.foto[i]?.foto!!)
                         }
                         imageCarouselAdapter = ImageCarouselPagerAdapter(
                             context, imageData, activity
@@ -239,8 +269,7 @@ class ProgressRvAdapter(
                     } else {
                         for (i in 0 until detail.usernUserSpv!!.size) {
                             if (userData.id == detail.usernUserSpv[i]?.idUser) {
-                                if (detail.stsGaprojects == 3 && item.progress?.stsDetail == 0 &&
-                                    item.progress.approveMaterialStatus == 0
+                                if (detail.stsGaprojects == 3 && item.progress?.stsDetail == 0
                                 )
                                     onItemHoldTapListener.onItemHoldTap(item.progress, true)
                                 break

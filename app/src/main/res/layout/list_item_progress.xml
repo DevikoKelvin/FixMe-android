@@ -82,14 +82,15 @@
             tools:ignore="UseCompoundDrawables">
 
             <ImageView
+                android:id="@+id/materialApprovalIcon"
                 android:layout_width="16dp"
                 android:layout_height="16dp"
                 android:layout_gravity="center"
-                android:src="@drawable/baseline_check_circle_outline_24"
-                tools:ignore="ContentDescription" />
+                tools:ignore="ContentDescription"
+                tools:src="@drawable/baseline_check_circle_outline_24" />
 
             <TextView
-                android:id="@+id/materialApprovedMessage"
+                android:id="@+id/materialApprovalMessage"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="2dp"
