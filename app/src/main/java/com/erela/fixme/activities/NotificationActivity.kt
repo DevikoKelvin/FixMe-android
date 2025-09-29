@@ -1,10 +1,13 @@
 package com.erela.fixme.activities
 
 import android.annotation.SuppressLint
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.View
 import androidx.activity.enableEdgeToEdge
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
@@ -22,13 +25,24 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class NotificationActivity : AppCompatActivity() {
+class NotificationActivity : AppCompatActivity(), InboxRvAdapter.OnNotificationItemClickListener {
     private val binding: ActivityNotificationBinding by lazy {
         ActivityNotificationBinding.inflate(layoutInflater)
     }
     private lateinit var userData: UserData
     private lateinit var adapter: InboxRvAdapter
     private var inboxArrayList: ArrayList<InboxResponse> = ArrayList()
+
+    @SuppressLint("NotifyDataSetChanged")
+    private val activityResultLauncher: ActivityResultLauncher<Intent> = registerForActivityResult(
+        ActivityResultContracts.StartActivityForResult()
+    ) {
+        if (it.resultCode == RESULT_OK) {
+            inboxArrayList.clear()
+            adapter.notifyDataSetChanged()
+            getNotification()
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -53,7 +67,9 @@ class NotificationActivity : AppCompatActivity() {
                 onBackPressedDispatcher.onBackPressed()
             }
 
-            adapter = InboxRvAdapter(applicationContext, inboxArrayList)
+            adapter = InboxRvAdapter(applicationContext, inboxArrayList).also {
+                it.setOnItemClickListener(this@NotificationActivity)
+            }
             rvInbox.layoutManager = LinearLayoutManager(applicationContext)
             rvInbox.adapter = adapter
 
@@ -185,5 +201,14 @@ class NotificationActivity : AppCompatActivity() {
                 rvInbox.visibility = View.VISIBLE
             }
         }
+    }
+
+    override fun onItemClick(item: InboxResponse) {
+        activityResultLauncher.launch(
+            SubmissionDetailActivity.initiate(
+                this@NotificationActivity,
+                item.idGaprojects.toString()
+            )
+        )
     }
 }

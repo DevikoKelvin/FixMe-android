@@ -13,6 +13,7 @@ import com.erela.fixme.objects.UserData
 class InboxRvAdapter(val context: Context, val data: ArrayList<InboxResponse>) :
     RecyclerView.Adapter<InboxRvAdapter.ViewHolder>() {
     private lateinit var userData: UserData
+    private lateinit var onItemClickListener: OnNotificationItemClickListener
 
     override fun onCreateViewHolder(
         parent: ViewGroup, viewType: Int
@@ -37,6 +38,12 @@ class InboxRvAdapter(val context: Context, val data: ArrayList<InboxResponse>) :
                 sentTime.text = item.tglWaktu
                 readTime.text = item.tglWaktuBaca
             }
+
+            itemView.setOnClickListener {
+                if (::onItemClickListener.isInitialized) {
+                    onItemClickListener.onItemClick(item)
+                }
+            }
         }
     }
 
@@ -44,5 +51,13 @@ class InboxRvAdapter(val context: Context, val data: ArrayList<InboxResponse>) :
 
     inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val binding = ListItemInboxBinding.bind(view)
+    }
+
+    fun setOnItemClickListener(listener: OnNotificationItemClickListener) {
+        onItemClickListener = listener
+    }
+
+    interface OnNotificationItemClickListener {
+        fun onItemClick(item: InboxResponse)
     }
 }

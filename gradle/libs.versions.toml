@@ -1,14 +1,14 @@
 [versions]
 # Plugins
-agp = "8.12.2"
-kotlin = "2.2.10"
+agp = "8.13.0"
+kotlin = "2.2.20"
 googleServices = "4.4.3"
 
 # Dependencies
 coreKtx = "1.17.0"
 appcompat = "1.7.1"
-activity = "1.10.1"
-material = "1.12.0"
+activity = "1.11.0"
+material = "1.13.0"
 design = "28.0.0"
 constraintlayout = "2.2.1"
 junit = "4.13.2"
@@ -26,7 +26,7 @@ converterGson = "3.0.0"
 loggingInterceptor = "5.1.0"
 flexbox = "3.0.0"
 lottie = "6.6.7"
-glide = "4.16.0"
+glide = "5.0.5"
 swipeRefreshLayout = "1.1.0"
 circleIndicator = "2.1.6"
 appxupdater = "v2.0.20"

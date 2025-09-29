@@ -16,5 +16,7 @@ data class InboxResponse(
     @field:SerializedName("actions")
     val actions: String? = null,
     @field:SerializedName("tgl_waktu")
-    val tglWaktu: String? = null
+    val tglWaktu: String? = null,
+    @field:SerializedName("id_gaprojects")
+    val idGaprojects: Int? = null
 )
