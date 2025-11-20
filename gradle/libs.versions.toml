@@ -1,8 +1,8 @@
 [versions]
 # Plugins
-agp = "8.13.0"
-kotlin = "2.2.20"
-googleServices = "4.4.3"
+agp = "8.13.1"
+kotlin = "2.2.21"
+googleServices = "4.4.4"
 
 # Dependencies
 coreKtx = "1.17.0"
@@ -17,13 +17,13 @@ espressoCore = "3.7.0"
 
 # Third-party Dependencies
 firebaseCore = "21.1.1"
-firebaseBom = "34.2.0"
+firebaseBom = "34.6.0"
 firebaseAnalytic="23.0.0"
 firebaseIid="21.1.0"
 retrofit = "3.0.0"
-okhttp3 = "5.1.0"
+okhttp3 = "5.3.0"
 converterGson = "3.0.0"
-loggingInterceptor = "5.1.0"
+loggingInterceptor = "5.3.0"
 flexbox = "3.0.0"
 lottie = "6.6.7"
 glide = "5.0.5"

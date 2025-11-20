@@ -30,6 +30,8 @@
             android:id="@+id/notificationContent"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:maxLines="4"
             android:paddingHorizontal="16dp"
             android:paddingVertical="8dp"
             android:textColor="@color/black"
