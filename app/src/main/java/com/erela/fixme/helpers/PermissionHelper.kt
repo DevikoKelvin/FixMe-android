@@ -21,11 +21,14 @@ object PermissionHelper {
     const val READ_EXTERNAL_STORAGE = Manifest.permission.READ_EXTERNAL_STORAGE
     const val WRITE_EXTERNAL_STORAGE = Manifest.permission.WRITE_EXTERNAL_STORAGE
 
+    const val INSTALL_PACKAGES = Manifest.permission.REQUEST_INSTALL_PACKAGES
+
     const val CAMERA = Manifest.permission.CAMERA
     const val REQUEST_CODE_GALLERY = 100
     const val REQUEST_CODE_CAMERA = 101
     const val REQUEST_CODE_NOTIFICATION = 102
     const val REQUEST_WRITE_EXTERNAL_STORAGE = 103
+    const val REQUEST_INSTALL_PACKAGES = 104
 
     fun isPermissionGranted(activity: Activity, permission: String): Boolean {
         return ContextCompat.checkSelfPermission(

@@ -2,8 +2,8 @@ package com.erela.fixme.activities
 
 import android.content.ClipData
 import android.content.ContentResolver
-import android.content.ContentValues
 import android.content.Intent
+import android.graphics.Rect
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
@@ -12,11 +12,15 @@ import android.provider.OpenableColumns
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
+import android.view.MotionEvent
 import android.view.View
+import android.view.inputmethod.InputMethodManager
+import android.widget.EditText
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.FileProvider
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
@@ -33,6 +37,7 @@ import com.erela.fixme.helpers.api.InitAPI
 import com.erela.fixme.objects.GenericSimpleResponse
 import com.erela.fixme.objects.ProgressItem
 import com.erela.fixme.objects.UserData
+import com.google.android.material.textfield.TextInputEditText
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
@@ -127,6 +132,23 @@ class ProgressDoneFormActivity : AppCompatActivity() {
 
             init()
         }
+    }
+
+    override fun dispatchTouchEvent(motionEvent: MotionEvent): Boolean {
+        if (motionEvent.action == MotionEvent.ACTION_DOWN) {
+            val view: View? = currentFocus
+            if (view is TextInputEditText || view is EditText) {
+                val rect = Rect()
+                view.getGlobalVisibleRect(rect)
+                if (!rect.contains(motionEvent.rawX.toInt(), motionEvent.rawY.toInt())) {
+                    view.clearFocus()
+                    val inputMethodManager =
+                        getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
+                    inputMethodManager.hideSoftInputFromWindow(view.windowToken, 0)
+                }
+            }
+        }
+        return super.dispatchTouchEvent(motionEvent)
     }
 
     private fun init() {
@@ -559,21 +581,17 @@ class ProgressDoneFormActivity : AppCompatActivity() {
     private fun openCamera() {
         val timeStamp = SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(Date())
         cameraCaptureFileName = "FixMe_Capture_$timeStamp.jpg"
-        imageUri = contentResolver.insert(
-            MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
-            ContentValues().also {
-                with(it) {
-                    put(MediaStore.Images.Media.TITLE, cameraCaptureFileName)
-                    put(MediaStore.Images.Media.DESCRIPTION, "Image capture by camera")
-                }
-            }
-        )!!
+        val imageFile = File(externalCacheDir, cameraCaptureFileName)
+
+        imageUri = FileProvider.getUriForFile(
+            this,
+            "${applicationContext.packageName}.provider",
+            imageFile
+        )
 
         cameraLauncher.launch(
             Intent(MediaStore.ACTION_IMAGE_CAPTURE).also {
-                with(it) {
-                    putExtra(MediaStore.EXTRA_OUTPUT, imageUri)
-                }
+                it.putExtra(MediaStore.EXTRA_OUTPUT, imageUri)
             }
         )
     }

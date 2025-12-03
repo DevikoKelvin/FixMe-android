@@ -42,7 +42,6 @@ import com.github.tutorialsandroid.appxupdater.AppUpdaterUtils
 import com.github.tutorialsandroid.appxupdater.enums.AppUpdaterError
 import com.github.tutorialsandroid.appxupdater.enums.UpdateFrom
 import com.github.tutorialsandroid.appxupdater.objects.Update
-import com.pusher.pushnotifications.PushNotifications
 import java.io.File
 import java.time.LocalDateTime
 
@@ -131,8 +130,8 @@ class MainActivity : AppCompatActivity() {
             insets
         }
         /*createNotificationChannel()*/
-        checkNewUpdate()
         init()
+        checkNewUpdate()
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             registerReceiver(
                 onDownloadComplete,
@@ -170,6 +169,16 @@ class MainActivity : AppCompatActivity() {
                 )
             }
 
+            if (!PermissionHelper.isPermissionGranted(
+                    this@MainActivity, PermissionHelper.INSTALL_PACKAGES
+                )
+            ) {
+                PermissionHelper.requestPermission(
+                    this@MainActivity, arrayOf(PermissionHelper.INSTALL_PACKAGES),
+                    PermissionHelper.REQUEST_INSTALL_PACKAGES
+                )
+            }
+
             if (!isFinishing) {
                 runOnUiThread {
                     if (!isServiceRunning(NotificationService::class.java)) {
@@ -181,10 +190,10 @@ class MainActivity : AppCompatActivity() {
                     /*if (UserDataHelper(this@MainActivity).getNotification())
                         NotificationsHelper.receiveNotifications(applicationContext, userData)*/
 
-                    PushNotifications.start(
+                    /*PushNotifications.start(
                         applicationContext,
                         "66b9148d-50f4-4114-b258-e9e9485ce75c"
-                    )
+                    )*/
                 }
             }
 
