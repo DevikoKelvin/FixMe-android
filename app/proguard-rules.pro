@@ -20,10 +20,6 @@
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
 
--dontwarn com.google.firebase.messaging.FirebaseMessagingService
--dontwarn com.google.firebase.messaging.RemoteMessage$Notification
--dontwarn com.google.firebase.messaging.RemoteMessage
-
 -keep class com.google.gson.stream.** { *; }
 -keep class com.google.gson.examples.android.model.** { <fields>; }
 -keep class * implements com.google.gson.TypeAdapter

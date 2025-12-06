@@ -1,7 +1,6 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
-    alias(libs.plugins.google.services)
     id 'kotlin-parcelize'
 }
 
@@ -71,17 +70,12 @@ dependencies {
     implementation libs.lottie
     implementation libs.glide
     implementation libs.circleIndicator
-    implementation platform(libs.firebase.bom)
-    implementation libs.firebase.core
-    implementation libs.firebase.analytics
-    implementation libs.firebase.iid
     implementation libs.retrofit
     implementation libs.okhttp3
     implementation libs.converter.gson
     implementation libs.logging.interceptor
     implementation libs.appxupdater
     implementation libs.pusher.java.client
-    implementation libs.push.notifications.android
     implementation libs.balloon
     implementation libs.shimmer
 
