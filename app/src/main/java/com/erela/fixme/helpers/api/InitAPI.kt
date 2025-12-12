@@ -9,15 +9,8 @@ import retrofit2.converter.gson.GsonConverterFactory
 import java.util.concurrent.TimeUnit
 
 object InitAPI {
-    // Local IP
-    /*private const val IP = "192.168.3.109:88"*/
-    /*private const val IP = "192.168.3.245"*/
-
-    private const val IP = "192.168.3.213:81"
-
-    private const val MAIN_URL = "http://$IP/fixme"
-    private const val BASE_URL = "$MAIN_URL/apimobile/"
-    const val IMAGE_URL = "$MAIN_URL/public/assets/upload/"
+    private const val API_BASE_URL = "${BuildConfig.BASE_URL}apimobile/"
+    const val IMAGE_URL = "${BuildConfig.BASE_URL}public/assets/upload/"
 
     private val client = OkHttpClient().newBuilder()
         .addInterceptor(HttpLoggingInterceptor().apply {
@@ -31,7 +24,7 @@ object InitAPI {
         .build()
 
     private fun getInstance(): Retrofit = Retrofit.Builder()
-        .baseUrl(BASE_URL)
+        .baseUrl(API_BASE_URL)
         .client(client)
         .addConverterFactory(GsonConverterFactory.create(GsonBuilder().setLenient().create()))
         .build()

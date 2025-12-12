@@ -2,7 +2,6 @@ package com.erela.fixme.activities
 
 import android.Manifest
 import android.annotation.SuppressLint
-import android.app.ActivityManager
 import android.app.DownloadManager
 import android.content.ActivityNotFoundException
 import android.content.BroadcastReceiver
@@ -181,7 +180,7 @@ class MainActivity : AppCompatActivity() {
 
             if (!isFinishing) {
                 runOnUiThread {
-                    if (!isServiceRunning(NotificationService::class.java)) {
+                    if (!NotificationService.isServiceRunning) {
                         Intent(this@MainActivity, NotificationService::class.java).also {
                             startForegroundService(it)
                         }
@@ -372,16 +371,6 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun isServiceRunning(serviceClass: Class<*>): Boolean {
-        val manager = getSystemService(ACTIVITY_SERVICE) as ActivityManager
-        for (service in manager.getRunningServices(Int.MAX_VALUE)) {
-            if (serviceClass.name == service.service.className) {
-                return true
-            }
-        }
-        return false
-    }
-
     private fun checkNewUpdate() {
         AppUpdaterUtils(this@MainActivity).also {
             with(it) {
@@ -416,7 +405,7 @@ class MainActivity : AppCompatActivity() {
                     override fun onFailed(error: AppUpdaterError?) {
                         Log.e(
                             "ERROR Update Check",
-                            "Can't retrieve update channel | ERROR ${error.toString()}"
+                            "Can\'t retrieve update channel | ERROR ${error.toString()}"
                         )
                     }
                 })

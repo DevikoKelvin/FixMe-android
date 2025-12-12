@@ -4,25 +4,63 @@ plugins {
     id 'kotlin-parcelize'
 }
 
+def getVerCode(boolean increment = false) {
+    def propFile = file("../buildNumber.properties")
+    def properties = new Properties()
+    properties.load(new FileInputStream(propFile))
+    def versionCode = properties['VERSION_CODE'].toInteger()
+
+    if (increment) {
+        properties['VERSION_CODE'] = (versionCode + 1).toString()
+        properties.store(propFile.newWriter(), null)
+    }
+
+    return versionCode
+}
+
 android {
     namespace 'com.erela.fixme'
-    compileSdk 36
+    compileSdk = 36
 
     defaultConfig {
         applicationId "com.erela.fixme"
         minSdk 26
         //noinspection EditedTargetSdkVersion
         targetSdk 36
-        versionCode 750
-        versionName "1.3.1"
+
+        versionCode getVerCode(!project.gradle.startParameter.taskNames.any { it.contains('assemble') || it.contains('bundle') })
+        versionName "1.3.2"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+
+        renderscriptSupportModeEnabled true
+
+        ndk {
+            abiFilters 'armeabi-v7a', 'arm64-v8a', 'x86_64'
+        }
+    }
+
+    signingConfigs {
+        release {
+            storeFile file('D:\\ERELA_Projects\\Android_Mobile_Apps\\FixMe-android\\keystore.jks')
+            storePassword "erela_fixme"
+            keyAlias "fixme_erela"
+            keyPassword "erela_fixme"
+        }
     }
 
     buildTypes {
         release {
+            buildConfigField 'String', 'BASE_URL', "\"http://182.23.21.202:8282/fixme/\""
             minifyEnabled true
+            shrinkResources true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.release
+        }
+        debug {
+            buildConfigField 'String', 'BASE_URL', "\"http://182.23.21.202:8282/fixme/\""
+            minifyEnabled false
+            shrinkResources false
         }
     }
 
@@ -43,13 +81,7 @@ android {
 
     buildFeatures {
         viewBinding true
-    }
-
-    buildFeatures {
         buildConfig true
-    }
-    lint {
-        disable 'Instantiatable'
     }
 }
 

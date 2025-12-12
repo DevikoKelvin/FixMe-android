@@ -17,13 +17,15 @@ class NotificationService : Service() {
         const val CHANNEL_NAME_FOREGROUND = "Erela FixMe Services"
         const val CHANNEL_NAME = "Erela FixMe"
         const val NOTIFICATION_ID_FOREGROUND = 1001
+        var isServiceRunning = false
     }
 
     override fun onBind(intent: Intent?): IBinder? = null
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
+        isServiceRunning = true
         Thread {
-            while (true) {
+            while (isServiceRunning) {
                 val channel =
                     NotificationChannel(
                         CHANNEL_ID_FOREGROUND,
@@ -58,6 +60,11 @@ class NotificationService : Service() {
         }.start()
 
         return super.onStartCommand(intent, flags, startId)
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        isServiceRunning = false
     }
 
     private fun createNotificationChannel() {
