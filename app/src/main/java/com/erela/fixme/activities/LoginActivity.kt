@@ -4,6 +4,7 @@ import android.content.Intent
 import android.graphics.Rect
 import android.os.Bundle
 import android.os.Handler
+import android.util.Log
 import android.view.MotionEvent
 import android.view.View
 import android.view.inputmethod.InputMethodManager
@@ -230,6 +231,7 @@ class LoginActivity : AppCompatActivity() {
                                         }
 
                                         2 -> {
+                                            Log.e("LoginActivity", "Error: ${response.message()}")
                                             CustomToast.getInstance(applicationContext)
                                                 .setMessage(
                                                     if (getString(R.string.lang) == "in")
@@ -252,6 +254,7 @@ class LoginActivity : AppCompatActivity() {
                                         }
                                     }
                                 } else {
+                                    Log.e("LoginActivity", "Error: ${response.message()}")
                                     CustomToast.getInstance(applicationContext)
                                         .setMessage(
                                             if (getString(R.string.lang) == "in")
@@ -273,6 +276,7 @@ class LoginActivity : AppCompatActivity() {
                                         ).show()
                                 }
                             } else {
+                                Log.e("LoginActivity", "Error: ${response.message()}")
                                 CustomToast.getInstance(applicationContext)
                                     .setMessage(
                                         if (getString(R.string.lang) == "in")
@@ -301,6 +305,7 @@ class LoginActivity : AppCompatActivity() {
                         ) {
                             loginText.visibility = View.VISIBLE
                             loadingBar.visibility = View.GONE
+                            Log.e("LoginActivity", "Error: ${throwable.message}")
                             throwable.printStackTrace()
                             Snackbar.make(
                                 binding.root,
@@ -335,6 +340,7 @@ class LoginActivity : AppCompatActivity() {
                         }
                     }
                 }.show()
+                Log.e("LoginActivity", "Error: ${exception.message}")
                 exception.printStackTrace()
             }
         }
