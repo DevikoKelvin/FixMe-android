@@ -1,6 +1,7 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
+    id 'com.google.gms.google-services'
     id 'kotlin-parcelize'
 }
 
@@ -110,6 +111,9 @@ dependencies {
     implementation libs.pusher.java.client
     implementation libs.balloon
     implementation libs.shimmer
+
+    implementation platform(libs.firebase.bom)
+    implementation libs.firebase.analytics
 
     // Testing
     testImplementation libs.junit
