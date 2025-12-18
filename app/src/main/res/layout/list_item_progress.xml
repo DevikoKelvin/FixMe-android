@@ -5,11 +5,11 @@
     android:id="@+id/mainContainer"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginHorizontal="16dp"
-    android:layout_marginVertical="8dp"
+    android:layout_marginHorizontal="@dimen/list_item_progress_margin_horizontal"
+    android:layout_marginVertical="@dimen/list_item_progress_margin_vertical"
     app:cardBackgroundColor="#FBFBFB"
-    app:cardCornerRadius="16dp"
-    app:cardElevation="4dp"
+    app:cardCornerRadius="@dimen/list_item_progress_card_corner_radius"
+    app:cardElevation="@dimen/list_item_progress_card_elevation"
     app:strokeWidth="0dp">
 
     <LinearLayout
@@ -22,8 +22,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@color/highlight_blue"
-            android:paddingHorizontal="16dp"
-            android:paddingVertical="8dp"
+            android:paddingHorizontal="@dimen/list_item_progress_header_padding_horizontal"
+            android:paddingVertical="@dimen/list_item_progress_header_padding_vertical"
             android:textColor="@color/white"
             tools:text="Name holder" />
 
@@ -31,10 +31,10 @@
             android:id="@+id/progressAnalysis"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="4dp"
-            android:paddingHorizontal="16dp"
+            android:layout_marginTop="@dimen/list_item_progress_content_margin_top"
+            android:paddingHorizontal="@dimen/list_item_progress_content_padding_horizontal"
             android:textColor="@color/black"
-            android:textSize="14sp"
+            android:textSize="@dimen/text_size_small"
             android:textStyle="bold"
             tools:text="Progress Analysis" />
 
@@ -42,21 +42,21 @@
             android:id="@+id/progressDescription"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="2dp"
-            android:layout_marginBottom="8dp"
-            android:paddingHorizontal="16dp"
+            android:layout_marginTop="@dimen/list_item_progress_content_margin_top_small"
+            android:layout_marginBottom="@dimen/list_item_progress_content_margin_bottom"
+            android:paddingHorizontal="@dimen/list_item_progress_content_padding_horizontal"
             android:textColor="@color/black"
-            android:textSize="12sp"
+            android:textSize="@dimen/text_size_micro"
             tools:text="Progress Description" />
 
         <TextView
             android:id="@+id/materialTitle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingHorizontal="16dp"
+            android:paddingHorizontal="@dimen/list_item_progress_content_padding_horizontal"
             android:text="@string/materials"
             android:textColor="@color/black"
-            android:textSize="14sp"
+            android:textSize="@dimen/text_size_small"
             android:textStyle="bold"
             android:visibility="gone" />
 
@@ -64,10 +64,10 @@
             android:id="@+id/materialList"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp"
-            android:paddingHorizontal="16dp"
+            android:layout_marginBottom="@dimen/list_item_progress_content_margin_bottom"
+            android:paddingHorizontal="@dimen/list_item_progress_content_padding_horizontal"
             android:textColor="@color/black"
-            android:textSize="12sp"
+            android:textSize="@dimen/text_size_micro"
             android:visibility="gone"
             tools:text="No materials needed" />
 
@@ -75,16 +75,16 @@
             android:id="@+id/materialApprovedStatus"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp"
+            android:layout_marginBottom="@dimen/list_item_progress_content_margin_bottom"
             android:orientation="horizontal"
-            android:paddingHorizontal="16dp"
+            android:paddingHorizontal="@dimen/list_item_progress_content_padding_horizontal"
             android:visibility="gone"
             tools:ignore="UseCompoundDrawables">
 
             <ImageView
                 android:id="@+id/materialApprovalIcon"
-                android:layout_width="16dp"
-                android:layout_height="16dp"
+                android:layout_width="@dimen/list_item_progress_approval_icon_size"
+                android:layout_height="@dimen/list_item_progress_approval_icon_size"
                 android:layout_gravity="center"
                 tools:ignore="ContentDescription"
                 tools:src="@drawable/baseline_check_circle_outline_24" />
@@ -93,10 +93,10 @@
                 android:id="@+id/materialApprovalMessage"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="2dp"
+                android:layout_marginStart="@dimen/list_item_progress_approval_icon_margin_start"
                 android:text="@string/approved"
                 android:textColor="@color/custom_toast_font_success"
-                android:textSize="12sp"
+                android:textSize="@dimen/text_size_micro"
                 android:textStyle="bold" />
         </LinearLayout>
 
@@ -104,13 +104,13 @@
             android:id="@+id/progressDoneContainer"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp"
+            android:layout_marginBottom="@dimen/list_item_progress_content_margin_bottom"
             android:orientation="vertical"
             android:visibility="gone">
 
             <com.google.android.material.card.MaterialCardView
                 android:layout_width="match_parent"
-                android:layout_height="2dp"
+                android:layout_height="@dimen/list_item_progress_divider_height"
                 app:cardBackgroundColor="@color/custom_toast_font_normal_soft_gray"
                 app:cardCornerRadius="0dp"
                 app:cardElevation="0dp" />
@@ -118,8 +118,8 @@
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/imageContainer"
                 android:layout_width="match_parent"
-                android:layout_height="225dp"
-                android:layout_marginTop="4dp"
+                android:layout_height="@dimen/list_item_progress_image_container_height"
+                android:layout_marginTop="@dimen/list_item_progress_content_margin_top"
                 app:cardBackgroundColor="@android:color/transparent"
                 app:cardCornerRadius="0dp"
                 app:cardElevation="0dp"
@@ -154,29 +154,29 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="bottom"
-                android:padding="5dp"
+                android:padding="@dimen/list_item_progress_indicator_padding"
                 app:ci_drawable="@drawable/circle_indicator_color"
-                app:ci_height="5dp"
-                app:ci_width="5dp" />
+                app:ci_height="@dimen/list_item_progress_indicator_size"
+                app:ci_width="@dimen/list_item_progress_indicator_size" />
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="4dp"
-                android:paddingHorizontal="16dp"
+                android:layout_marginTop="@dimen/list_item_progress_content_margin_top"
+                android:paddingHorizontal="@dimen/list_item_progress_content_padding_horizontal"
                 android:text="@string/progress_result_description"
                 android:textColor="@color/black"
-                android:textSize="14sp"
+                android:textSize="@dimen/text_size_small"
                 android:textStyle="bold" />
 
             <TextView
                 android:id="@+id/progressResultDescription"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="2dp"
-                android:paddingHorizontal="16dp"
+                android:layout_marginTop="@dimen/list_item_progress_content_margin_top_small"
+                android:paddingHorizontal="@dimen/list_item_progress_content_padding_horizontal"
                 android:textColor="@color/black"
-                android:textSize="12sp"
+                android:textSize="@dimen/text_size_micro"
                 tools:text="Description" />
         </LinearLayout>
 
@@ -184,7 +184,7 @@
             android:id="@+id/expandShrinkButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="4dp"
+            android:layout_marginBottom="@dimen/list_item_progress_expand_button_margin_bottom"
             android:visibility="gone"
             app:cardBackgroundColor="@android:color/transparent"
             app:cardCornerRadius="0dp"
@@ -193,8 +193,8 @@
 
             <ImageView
                 android:id="@+id/arrowExpandShrink"
-                android:layout_width="16dp"
-                android:layout_height="16dp"
+                android:layout_width="@dimen/list_item_progress_expand_arrow_size"
+                android:layout_height="@dimen/list_item_progress_expand_arrow_size"
                 android:layout_gravity="center"
                 android:rotation="270"
                 android:src="@drawable/baseline_arrow_back_ios_new_24"
@@ -205,10 +205,10 @@
             android:id="@+id/dateTimeText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp"
-            android:paddingHorizontal="16dp"
+            android:layout_marginBottom="@dimen/list_item_progress_datetime_margin_bottom"
+            android:paddingHorizontal="@dimen/list_item_progress_content_padding_horizontal"
             android:textAlignment="textEnd"
-            android:textSize="11sp"
+            android:textSize="@dimen/copyright_text_size"
             android:textStyle="bold"
             tools:text="2024-11-29 16:15:24" />
     </LinearLayout>

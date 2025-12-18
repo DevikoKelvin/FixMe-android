@@ -4,58 +4,58 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:elevation="8dp"
+    android:elevation="@dimen/login_button_elevation"
     android:orientation="vertical"
-    android:paddingBottom="32dp">
+    android:paddingBottom="@dimen/login_button_margin_vertical">
 
     <com.google.android.material.card.MaterialCardView
-        android:layout_width="75dp"
-        android:layout_height="5dp"
+        android:layout_width="@dimen/bottom_sheet_drawer_width"
+        android:layout_height="@dimen/bottom_sheet_drawer_height"
         android:layout_gravity="center"
-        android:layout_marginVertical="18dp"
+        android:layout_marginVertical="@dimen/bottom_sheet_drawer_margin_vertical"
         app:cardBackgroundColor="@color/custom_toast_font_normal_soft_gray"
-        app:cardCornerRadius="50dp"
+        app:cardCornerRadius="@dimen/login_button_corner_radius"
         app:strokeWidth="0dp" />
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginHorizontal="16dp"
+        android:layout_marginHorizontal="@dimen/list_item_padding"
         android:text="@string/materials_quantity"
         android:textAlignment="center"
         android:textColor="@color/black"
-        android:textSize="18sp"
+        android:textSize="@dimen/text_size_large"
         android:textStyle="bold" />
 
     <TextView
         android:id="@+id/materialNameText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginHorizontal="16dp"
+        android:layout_marginHorizontal="@dimen/list_item_padding"
         android:textAlignment="center"
         android:textColor="@color/black"
-        android:textSize="14sp"
+        android:textSize="@dimen/text_size_small"
         tools:text="Motherboard" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginHorizontal="16dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginHorizontal="@dimen/list_item_padding"
+        android:layout_marginTop="@dimen/list_item_padding"
         android:text="@string/quantity_title"
         android:textColor="@color/black"
-        android:textSize="14sp"
+        android:textSize="@dimen/text_size_small"
         android:textStyle="bold" />
 
     <com.google.android.material.card.MaterialCardView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:layout_marginHorizontal="16dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginBottom="16dp"
-        app:cardCornerRadius="50dp"
-        app:cardElevation="4dp">
+        android:layout_marginHorizontal="@dimen/list_item_padding"
+        android:layout_marginTop="@dimen/list_item_padding"
+        android:layout_marginBottom="@dimen/list_item_padding"
+        app:cardCornerRadius="@dimen/login_button_corner_radius"
+        app:cardElevation="@dimen/card_elevation">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -68,22 +68,22 @@
                 android:layout_height="wrap_content"
                 app:cardCornerRadius="0dp"
                 app:cardElevation="0dp"
-                app:contentPadding="6dp">
+                app:contentPadding="@dimen/dialog_loading_content_padding">
 
                 <ImageView
-                    android:layout_width="24dp"
-                    android:layout_height="24dp"
+                    android:layout_width="@dimen/text_size_xlarge"
+                    android:layout_height="@dimen/text_size_xlarge"
                     android:src="@drawable/baseline_remove_24"
                     tools:ignore="ContentDescription" />
             </com.google.android.material.card.MaterialCardView>
 
             <TextView
                 android:id="@+id/counterText"
-                android:layout_width="150dp"
+                android:layout_width="@dimen/main_menu_item_height"
                 android:layout_height="match_parent"
                 android:gravity="center"
                 android:textColor="@color/black"
-                android:textSize="18sp"
+                android:textSize="@dimen/text_size_large"
                 android:textStyle="bold"
                 tools:text="1" />
 
@@ -93,11 +93,11 @@
                 android:layout_height="wrap_content"
                 app:cardCornerRadius="0dp"
                 app:cardElevation="0dp"
-                app:contentPadding="6dp">
+                app:contentPadding="@dimen/dialog_loading_content_padding">
 
                 <ImageView
-                    android:layout_width="24dp"
-                    android:layout_height="24dp"
+                    android:layout_width="@dimen/text_size_xlarge"
+                    android:layout_height="@dimen/text_size_xlarge"
                     android:src="@drawable/baseline_add_24"
                     tools:ignore="ContentDescription" />
             </com.google.android.material.card.MaterialCardView>
@@ -107,11 +107,11 @@
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/confirmButton"
         android:layout_width="match_parent"
-        android:layout_height="46dp"
-        android:layout_marginHorizontal="16dp"
-        android:layout_marginBottom="8dp"
+        android:layout_height="@dimen/bottom_sheet_padding_bottom"
+        android:layout_marginHorizontal="@dimen/list_item_padding"
+        android:layout_marginBottom="@dimen/dialog_margin"
         app:cardBackgroundColor="@color/button_color"
-        app:cardCornerRadius="50dp"
+        app:cardCornerRadius="@dimen/login_button_corner_radius"
         app:strokeWidth="0dp">
 
         <TextView
@@ -120,7 +120,7 @@
             android:layout_gravity="center"
             android:text="@string/confirm"
             android:textColor="@color/white"
-            android:textSize="16sp"
+            android:textSize="@dimen/text_size_medium"
             android:textStyle="bold" />
     </com.google.android.material.card.MaterialCardView>
 </LinearLayout>

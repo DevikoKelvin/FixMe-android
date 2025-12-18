@@ -12,7 +12,7 @@
         android:id="@+id/watermarkLogo"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_margin="36dp"
+        android:layout_margin="@dimen/login_logo_margin"
         android:alpha="0.5"
         android:src="@drawable/new_fixme_logo"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -25,8 +25,8 @@
         android:id="@+id/linearLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginHorizontal="16dp"
-        android:layout_marginVertical="16dp"
+        android:layout_marginHorizontal="@dimen/activity_horizontal_margin"
+        android:layout_marginVertical="@dimen/activity_vertical_margin"
         android:gravity="center"
         android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -40,7 +40,7 @@
             android:layout_height="wrap_content"
             android:text="@string/app_name"
             android:textColor="@color/black"
-            android:textSize="32sp"
+            android:textSize="@dimen/text_size_xxlarge"
             android:textStyle="bold"
             app:layout_constraintBottom_toTopOf="@+id/linearLayout"
             app:layout_constraintEnd_toEndOf="parent"
@@ -52,15 +52,15 @@
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginVertical="16dp"
+            android:layout_marginVertical="@dimen/activity_vertical_margin"
             android:background="@color/white"
             android:hint="@string/username_title"
-            app:boxCornerRadiusBottomEnd="25dp"
-            app:boxCornerRadiusBottomStart="25dp"
-            app:boxCornerRadiusTopEnd="25dp"
-            app:boxCornerRadiusTopStart="25dp"
+            app:boxCornerRadiusBottomEnd="@dimen/login_field_corner_radius"
+            app:boxCornerRadiusBottomStart="@dimen/login_field_corner_radius"
+            app:boxCornerRadiusTopEnd="@dimen/login_field_corner_radius"
+            app:boxCornerRadiusTopStart="@dimen/login_field_corner_radius"
             app:boxStrokeColor="@color/black"
-            app:boxStrokeWidth="2dp"
+            app:boxStrokeWidth="@dimen/login_field_stroke_width"
             app:expandedHintEnabled="true"
             app:hintAnimationEnabled="true"
             app:hintTextColor="@color/black">
@@ -70,7 +70,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="text"
-                android:textSize="14sp" />
+                android:textSize="@dimen/text_size_small" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
@@ -80,12 +80,12 @@
             android:layout_height="wrap_content"
             android:background="@color/white"
             android:hint="@string/password_title"
-            app:boxCornerRadiusBottomEnd="25dp"
-            app:boxCornerRadiusBottomStart="25dp"
-            app:boxCornerRadiusTopEnd="25dp"
-            app:boxCornerRadiusTopStart="25dp"
+            app:boxCornerRadiusBottomEnd="@dimen/login_field_corner_radius"
+            app:boxCornerRadiusBottomStart="@dimen/login_field_corner_radius"
+            app:boxCornerRadiusTopEnd="@dimen/login_field_corner_radius"
+            app:boxCornerRadiusTopStart="@dimen/login_field_corner_radius"
             app:boxStrokeColor="@color/black"
-            app:boxStrokeWidth="2dp"
+            app:boxStrokeWidth="@dimen/login_field_stroke_width"
             app:expandedHintEnabled="true"
             app:hintAnimationEnabled="true"
             app:hintTextColor="@color/black"
@@ -96,22 +96,22 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="textPassword"
-                android:textSize="14sp" />
+                android:textSize="@dimen/text_size_small" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/loginButton"
             android:layout_width="match_parent"
-            android:layout_height="48dp"
-            android:layout_marginHorizontal="16dp"
-            android:layout_marginVertical="32dp"
+            android:layout_height="@dimen/button_height"
+            android:layout_marginHorizontal="@dimen/activity_horizontal_margin"
+            android:layout_marginVertical="@dimen/login_button_margin_vertical"
             app:cardBackgroundColor="@color/button_color"
-            app:cardCornerRadius="50dp"
-            app:cardElevation="8dp">
+            app:cardCornerRadius="@dimen/login_button_corner_radius"
+            app:cardElevation="@dimen/login_button_elevation">
 
             <ProgressBar
                 android:id="@+id/loadingBar"
-                android:layout_width="32dp"
+                android:layout_width="@dimen/login_progress_bar_size"
                 android:layout_height="match_parent"
                 android:layout_gravity="center"
                 android:indeterminateTint="@color/white"
@@ -124,7 +124,7 @@
                 android:layout_gravity="center"
                 android:text="@string/login_text"
                 android:textColor="@color/white"
-                android:textSize="16sp"
+                android:textSize="@dimen/text_size_medium"
                 android:textStyle="bold" />
         </com.google.android.material.card.MaterialCardView>
     </LinearLayout>

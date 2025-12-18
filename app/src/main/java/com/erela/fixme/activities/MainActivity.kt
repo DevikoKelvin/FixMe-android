@@ -32,11 +32,9 @@ import com.erela.fixme.custom_views.CustomToast
 import com.erela.fixme.databinding.ActivityMainBinding
 import com.erela.fixme.dialogs.ConfirmationDialog
 import com.erela.fixme.dialogs.UpdateAvailableDialog
-import com.erela.fixme.helpers.NotificationsHelper
 import com.erela.fixme.helpers.PermissionHelper
 import com.erela.fixme.helpers.UserDataHelper
 import com.erela.fixme.objects.UserData
-import com.erela.fixme.services.NotificationService
 import com.github.tutorialsandroid.appxupdater.AppUpdaterUtils
 import com.github.tutorialsandroid.appxupdater.enums.AppUpdaterError
 import com.github.tutorialsandroid.appxupdater.enums.UpdateFrom
@@ -152,7 +150,6 @@ class MainActivity : AppCompatActivity() {
 
     override fun onPause() {
         super.onPause()
-        NotificationsHelper.disconnectPusher()
     }
 
     @SuppressLint("SetTextI18n", "InlinedApi")
@@ -176,24 +173,6 @@ class MainActivity : AppCompatActivity() {
                     this@MainActivity, arrayOf(PermissionHelper.INSTALL_PACKAGES),
                     PermissionHelper.REQUEST_INSTALL_PACKAGES
                 )
-            }
-
-            if (!isFinishing) {
-                runOnUiThread {
-                    if (!NotificationService.isServiceRunning) {
-                        Intent(this@MainActivity, NotificationService::class.java).also {
-                            startForegroundService(it)
-                        }
-                    }
-
-                    /*if (UserDataHelper(this@MainActivity).getNotification())
-                        NotificationsHelper.receiveNotifications(applicationContext, userData)*/
-
-                    /*PushNotifications.start(
-                        applicationContext,
-                        "66b9148d-50f4-4114-b258-e9e9485ce75c"
-                    )*/
-                }
             }
 
             when (userData.privilege) {
@@ -337,12 +316,6 @@ class MainActivity : AppCompatActivity() {
                             setConfirmationDialogListener(object :
                                 ConfirmationDialog.ConfirmationDialogListener {
                                 override fun onConfirm() {
-                                    Intent(
-                                        this@MainActivity,
-                                        NotificationService::class.java
-                                    ).also { intent ->
-                                        stopService(intent)
-                                    }
                                     UserDataHelper(this@MainActivity).purgeUserData()
                                     Toast.makeText(
                                         this@MainActivity,

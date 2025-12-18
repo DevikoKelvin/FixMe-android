@@ -11,9 +11,9 @@
     <RelativeLayout
         android:id="@+id/toolBar"
         android:layout_width="match_parent"
-        android:layout_height="48dp"
+        android:layout_height="@dimen/button_height"
         android:background="@color/white"
-        android:elevation="8dp"
+        android:elevation="@dimen/login_button_elevation"
         android:theme="?attr/actionBarTheme"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -25,11 +25,11 @@
             android:layout_height="wrap_content"
             android:layout_alignParentStart="true"
             android:layout_centerVertical="true"
-            android:layout_marginStart="4dp"
+            android:layout_marginStart="@dimen/card_elevation"
             app:cardBackgroundColor="@android:color/transparent"
             app:cardCornerRadius="50dp"
             app:cardElevation="0dp"
-            app:contentPadding="8dp"
+            app:contentPadding="@dimen/dialog_margin"
             app:strokeWidth="0dp">
 
             <ImageView
@@ -45,7 +45,7 @@
             android:layout_centerInParent="true"
             android:text="@string/notification_title"
             android:textColor="@color/black"
-            android:textSize="16sp"
+            android:textSize="@dimen/text_size_medium"
             android:textStyle="bold" />
     </RelativeLayout>
 
@@ -71,74 +71,74 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_margin="16dp"
+                    android:layout_margin="@dimen/activity_horizontal_margin"
                     android:orientation="vertical">
 
                     <include
                         layout="@layout/list_item_inbox_shimmer"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginVertical="8dp" />
+                        android:layout_marginVertical="@dimen/dialog_margin" />
 
                     <include
                         layout="@layout/list_item_inbox_shimmer"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginVertical="8dp" />
+                        android:layout_marginVertical="@dimen/dialog_margin" />
 
                     <include
                         layout="@layout/list_item_inbox_shimmer"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginVertical="8dp" />
+                        android:layout_marginVertical="@dimen/dialog_margin" />
 
                     <include
                         layout="@layout/list_item_inbox_shimmer"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginVertical="8dp" />
+                        android:layout_marginVertical="@dimen/dialog_margin" />
 
                     <include
                         layout="@layout/list_item_inbox_shimmer"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginVertical="8dp" />
+                        android:layout_marginVertical="@dimen/dialog_margin" />
 
                     <include
                         layout="@layout/list_item_inbox_shimmer"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginVertical="8dp" />
+                        android:layout_marginVertical="@dimen/dialog_margin" />
 
                     <include
                         layout="@layout/list_item_inbox_shimmer"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginVertical="8dp" />
+                        android:layout_marginVertical="@dimen/dialog_margin" />
 
                     <include
                         layout="@layout/list_item_inbox_shimmer"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginVertical="8dp" />
+                        android:layout_marginVertical="@dimen/dialog_margin" />
 
                     <include
                         layout="@layout/list_item_inbox_shimmer"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginVertical="8dp" />
+                        android:layout_marginVertical="@dimen/dialog_margin" />
 
                     <include
                         layout="@layout/list_item_inbox_shimmer"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginVertical="8dp" />
+                        android:layout_marginVertical="@dimen/dialog_margin" />
 
                     <include
                         layout="@layout/list_item_inbox_shimmer"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginVertical="8dp" />
+                        android:layout_marginVertical="@dimen/dialog_margin" />
                 </LinearLayout>
             </com.facebook.shimmer.ShimmerFrameLayout>
 

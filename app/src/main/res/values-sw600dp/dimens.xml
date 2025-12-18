@@ -1,0 +1,176 @@
+<resources>
+    <!-- Default screen margins, per the Android Design guidelines. -->
+    <dimen name="activity_horizontal_margin">64dp</dimen>
+    <dimen name="activity_vertical_margin">64dp</dimen>
+
+    <!-- Text sizes -->
+    <dimen name="text_size_micro">18sp</dimen>
+    <dimen name="text_size_small">21sp</dimen>
+    <dimen name="text_size_medium">24sp</dimen>
+    <dimen name="text_size_large">30sp</dimen>
+    <dimen name="text_size_xlarge">36sp</dimen>
+    <dimen name="text_size_xxlarge">48sp</dimen>
+
+    <!-- Component specific dimensions -->
+    <dimen name="button_height">72dp</dimen>
+    <dimen name="button_padding">24dp</dimen>
+    <dimen name="toolbar_height">84dp</dimen>
+    <dimen name="list_item_height">108dp</dimen>
+    <dimen name="list_item_padding">24dp</dimen>
+    <dimen name="card_corner_radius">12dp</dimen>
+    <dimen name="card_elevation">6dp</dimen>
+    <dimen name="copyright_text_size">16sp</dimen>
+
+    <!-- Login screen dimensions -->
+    <dimen name="login_logo_margin">54dp</dimen>
+    <dimen name="login_field_corner_radius">37dp</dimen>
+    <dimen name="login_field_stroke_width">3dp</dimen>
+    <dimen name="login_button_margin_vertical">48dp</dimen>
+    <dimen name="login_button_corner_radius">75dp</dimen>
+    <dimen name="login_button_elevation">12dp</dimen>
+    <dimen name="login_progress_bar_size">48dp</dimen>
+
+    <!-- Main menu dimensions -->
+    <dimen name="main_menu_item_height">225dp</dimen>
+    <dimen name="main_menu_item_margin">24dp</dimen>
+    <dimen name="main_menu_item_icon_size">75dp</dimen>
+    <dimen name="main_menu_notification_icon">54dp</dimen>
+
+    <!-- Dialog dimensions -->
+    <dimen name="dialog_margin">12dp</dimen>
+    <dimen name="dialog_corner_radius">24dp</dimen>
+    <dimen name="dialog_elevation">3dp</dimen>
+    <dimen name="dialog_message_margin_vertical">36dp</dimen>
+    <dimen name="dialog_divider_height">2dp</dimen>
+    <dimen name="dialog_loading_content_padding">6dp</dimen>
+
+    <!-- Bottom sheet dimensions -->
+    <dimen name="bottom_sheet_padding_bottom">69dp</dimen>
+    <dimen name="bottom_sheet_drawer_width">112dp</dimen>
+    <dimen name="bottom_sheet_drawer_height">7dp</dimen>
+    <dimen name="bottom_sheet_drawer_margin_vertical">27dp</dimen>
+    <dimen name="bottom_sheet_content_margin_top">36dp</dimen>
+    <dimen name="user_info_item_margin_top">12dp</dimen>
+
+    <!-- Department list item dimensions -->
+    <dimen name="list_item_department_margin_horizontal">24dp</dimen>
+    <dimen name="list_item_department_margin_vertical">6dp</dimen>
+    <dimen name="list_item_department_card_corner_radius">6dp</dimen>
+    <dimen name="list_item_department_card_elevation">6dp</dimen>
+    <dimen name="list_item_department_content_padding_vertical">12dp</dimen>
+    <dimen name="list_item_department_content_padding_horizontal">24dp</dimen>
+
+    <!-- Progress list item dimensions -->
+    <dimen name="list_item_progress_margin_horizontal">24dp</dimen>
+    <dimen name="list_item_progress_margin_vertical">12dp</dimen>
+    <dimen name="list_item_progress_card_corner_radius">24dp</dimen>
+    <dimen name="list_item_progress_card_elevation">6dp</dimen>
+    <dimen name="list_item_progress_header_padding_horizontal">24dp</dimen>
+    <dimen name="list_item_progress_header_padding_vertical">12dp</dimen>
+    <dimen name="list_item_progress_content_margin_top">6dp</dimen>
+    <dimen name="list_item_progress_content_margin_top_small">6dp</dimen>
+    <dimen name="list_item_progress_content_margin_bottom">12dp</dimen>
+    <dimen name="list_item_progress_content_padding_horizontal">24dp</dimen>
+    <dimen name="list_item_progress_approval_icon_size">24dp</dimen>
+    <dimen name="list_item_progress_approval_icon_margin_start">3dp</dimen>
+    <dimen name="list_item_progress_divider_height">3dp</dimen>
+    <dimen name="list_item_progress_image_container_height">338dp</dimen>
+    <dimen name="list_item_progress_indicator_padding">8dp</dimen>
+    <dimen name="list_item_progress_indicator_size">8dp</dimen>
+    <dimen name="list_item_progress_expand_button_margin_bottom">6dp</dimen>
+    <dimen name="list_item_progress_expand_arrow_size">24dp</dimen>
+    <dimen name="list_item_progress_datetime_margin_bottom">12dp</dimen>
+
+    <!-- Selected items list item dimensions -->
+    <dimen name="list_item_selected_items_margin_vertical">6dp</dimen>
+    <dimen name="list_item_selected_items_margin_end">12dp</dimen>
+    <dimen name="list_item_selected_items_card_corner_radius">24dp</dimen>
+    <dimen name="list_item_selected_items_content_padding_vertical">12dp</dimen>
+    <dimen name="list_item_selected_items_content_padding_horizontal">24dp</dimen>
+    <dimen name="list_item_selected_items_delete_button_size">27dp</dimen>
+    <dimen name="list_item_selected_items_delete_button_margin_end">12dp</dimen>
+    <dimen name="list_item_selected_items_amount_text_margin_start">6dp</dimen>
+
+    <!-- Selection list item dimensions -->
+    <dimen name="list_item_selection_margin_horizontal">24dp</dimen>
+    <dimen name="list_item_selection_margin_vertical">6dp</dimen>
+    <dimen name="list_item_selection_card_corner_radius">24dp</dimen>
+    <dimen name="list_item_selection_card_elevation">3dp</dimen>
+    <dimen name="list_item_selection_content_padding_vertical">6dp</dimen>
+    <dimen name="list_item_selection_content_padding_horizontal">12dp</dimen>
+
+    <!-- Shimmer list item dimensions -->
+    <dimen name="list_item_shimmer_margin_horizontal">24dp</dimen>
+    <dimen name="list_item_shimmer_margin_vertical">12dp</dimen>
+    <dimen name="list_item_shimmer_card_corner_radius">24dp</dimen>
+    <dimen name="list_item_shimmer_card_elevation">6dp</dimen>
+    <dimen name="list_item_shimmer_header_padding_horizontal">24dp</dimen>
+    <dimen name="list_item_shimmer_header_padding_vertical">12dp</dimen>
+    <dimen name="list_item_shimmer_description_margin_horizontal">24dp</dimen>
+    <dimen name="list_item_shimmer_description_margin_vertical">12dp</dimen>
+    <dimen name="list_item_shimmer_description_padding_horizontal">24dp</dimen>
+    <dimen name="list_item_shimmer_description_padding_vertical">12dp</dimen>
+    <dimen name="list_item_shimmer_machine_info_padding_horizontal">24dp</dimen>
+    <dimen name="list_item_shimmer_machine_name_margin_top">3dp</dimen>
+    <dimen name="list_item_shimmer_machine_code_margin_start">6dp</dimen>
+    <dimen name="list_item_shimmer_location_margin_horizontal">24dp</dimen>
+    <dimen name="list_item_shimmer_location_margin_top">12dp</dimen>
+    <dimen name="list_item_shimmer_location_icon_size">32dp</dimen>
+    <dimen name="list_item_shimmer_location_text_margin_start">6dp</dimen>
+    <dimen name="list_item_shimmer_reported_by_margin_top">12dp</dimen>
+    <dimen name="list_item_shimmer_reported_by_padding_horizontal">24dp</dimen>
+    <dimen name="list_item_shimmer_reported_by_text_margin_start">6dp</dimen>
+    <dimen name="list_item_shimmer_department_margin_top">6dp</dimen>
+    <dimen name="list_item_shimmer_department_padding_horizontal">24dp</dimen>
+    <dimen name="list_item_shimmer_department_text_margin_start">6dp</dimen>
+    <dimen name="list_item_shimmer_tags_container_margin">12dp</dimen>
+    <dimen name="list_item_shimmer_tag_margin_end">6dp</dimen>
+    <dimen name="list_item_shimmer_tag_padding">6dp</dimen>
+    <dimen name="list_item_shimmer_tag_padding_horizontal">12dp</dimen>
+
+    <!-- Submission list item dimensions -->
+    <dimen name="list_item_submission_margin_horizontal">24dp</dimen>
+    <dimen name="list_item_submission_margin_vertical">12dp</dimen>
+    <dimen name="list_item_submission_card_corner_radius">24dp</dimen>
+    <dimen name="list_item_submission_card_elevation">6dp</dimen>
+    <dimen name="list_item_submission_header_padding_horizontal">24dp</dimen>
+    <dimen name="list_item_submission_header_padding_vertical">12dp</dimen>
+    <dimen name="list_item_submission_description_padding_horizontal">24dp</dimen>
+    <dimen name="list_item_submission_description_padding_vertical">12dp</dimen>
+    <dimen name="list_item_submission_machine_info_padding_horizontal">24dp</dimen>
+    <dimen name="list_item_submission_machine_code_margin_start">6dp</dimen>
+    <dimen name="list_item_submission_location_margin_top">12dp</dimen>
+    <dimen name="list_item_submission_location_padding_horizontal">24dp</dimen>
+    <dimen name="list_item_submission_location_icon_size">32dp</dimen>
+    <dimen name="list_item_submission_location_text_margin_start">6dp</dimen>
+    <dimen name="list_item_submission_reported_by_margin_top">12dp</dimen>
+    <dimen name="list_item_submission_reported_by_padding_horizontal">24dp</dimen>
+    <dimen name="list_item_submission_reported_by_text_margin_start">6dp</dimen>
+    <dimen name="list_item_submission_department_padding_horizontal">24dp</dimen>
+    <dimen name="list_item_submission_department_text_margin_start">6dp</dimen>
+    <dimen name="list_item_submission_tags_container_margin">12dp</dimen>
+    <dimen name="list_item_submission_tag_margin_end">6dp</dimen>
+    <dimen name="list_item_submission_tag_card_corner_radius">75dp</dimen>
+    <dimen name="list_item_submission_tag_content_padding">6dp</dimen>
+    <dimen name="list_item_submission_tag_content_padding_horizontal">12dp</dimen>
+    
+    <!-- Submission list dimensions -->
+    <dimen name="submission_list_lottie_padding">78dp</dimen>
+    <dimen name="submission_list_filter_by_text_margin_start">5dp</dimen>
+
+    <!-- Image carousel dimensions -->
+    <dimen name="view_image_carousel_padding">32dp</dimen>
+
+    <!-- General dropdown item dimensions -->
+    <dimen name="dropdown_item_padding_horizontal">24dp</dimen>
+    <dimen name="dropdown_item_padding_vertical">12dp</dimen>
+
+    <!-- Custom Toast -->
+    <dimen name="toast_padding">20dp</dimen>
+    <dimen name="toast_card_corner_radius">32dp</dimen>
+    <dimen name="toast_internal_padding">30dp</dimen>
+    <dimen name="toast_text_size">21sp</dimen>
+    
+    <dimen name="submission_detail_image_height">600dp</dimen>
+    <dimen name="submission_detail_bottom_margin">150dp</dimen>
+</resources>

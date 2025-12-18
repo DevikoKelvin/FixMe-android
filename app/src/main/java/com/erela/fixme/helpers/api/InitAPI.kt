@@ -57,8 +57,8 @@ object InitAPI {
                 else
                     HttpLoggingInterceptor.Level.NONE
             })
-            .readTimeout(30, TimeUnit.SECONDS)
-            .writeTimeout(30, TimeUnit.SECONDS)
+            .readTimeout(60, TimeUnit.SECONDS)
+            .writeTimeout(60, TimeUnit.SECONDS)
             .build()
 
     private fun getInstance(): Retrofit = Retrofit.Builder()

@@ -10,9 +10,9 @@
     <RelativeLayout
         android:id="@+id/toolBar"
         android:layout_width="match_parent"
-        android:layout_height="48dp"
+        android:layout_height="@dimen/toolbar_height"
         android:background="@color/white"
-        android:elevation="8dp"
+        android:elevation="@dimen/card_elevation"
         android:theme="?attr/actionBarTheme"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -44,7 +44,7 @@
             android:layout_centerInParent="true"
             android:text="@string/app_settings_title"
             android:textColor="@color/black"
-            android:textSize="16sp"
+            android:textSize="@dimen/text_size_medium"
             android:textStyle="bold" />
     </RelativeLayout>
 
@@ -60,7 +60,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:paddingVertical="32dp">
+            android:paddingVertical="@dimen/activity_vertical_margin">
 
             <ImageView
                 android:layout_width="200dp"
@@ -72,48 +72,48 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginHorizontal="16dp"
-                android:layout_marginTop="16dp"
+                android:layout_marginHorizontal="@dimen/activity_horizontal_margin"
+                android:layout_marginTop="@dimen/activity_vertical_margin"
                 android:text="@string/about"
                 android:textColor="@color/black"
-                android:textSize="21sp"
+                android:textSize="@dimen/text_size_large"
                 android:textStyle="bold" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginHorizontal="16dp"
+                android:layout_marginHorizontal="@dimen/activity_horizontal_margin"
                 android:layout_marginTop="4dp"
                 android:text="@string/about_fixme"
                 android:textColor="@color/black"
-                android:textSize="14sp"
+                android:textSize="@dimen/text_size_small"
                 android:textStyle="italic" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginHorizontal="16dp"
-                android:layout_marginTop="24dp"
+                android:layout_marginHorizontal="@dimen/activity_horizontal_margin"
+                android:layout_marginTop="@dimen/text_size_xlarge"
                 android:text="@string/app_update"
                 android:textColor="@color/black"
-                android:textSize="21sp"
+                android:textSize="@dimen/text_size_large"
                 android:textStyle="bold" />
 
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/checkDownloadInstallButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginHorizontal="16dp"
+                android:layout_marginHorizontal="@dimen/activity_horizontal_margin"
                 android:layout_marginTop="8dp"
                 app:cardBackgroundColor="@color/button_color"
-                app:cardCornerRadius="16dp">
+                app:cardCornerRadius="@dimen/card_corner_radius">
 
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
-                    android:paddingStart="8dp"
-                    android:paddingEnd="16dp">
+                    android:paddingStart="@dimen/button_padding"
+                    android:paddingEnd="@dimen/button_padding">
 
                     <ProgressBar
                         android:id="@+id/loadingBar"
@@ -127,7 +127,7 @@
                         android:id="@+id/checkDownloadInstallText"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="8dp"
+                        android:paddingHorizontal="8dp"
                         android:paddingVertical="8dp"
                         android:text="@string/check_for_update_now"
                         android:textColor="@color/white"
@@ -139,7 +139,7 @@
                 android:id="@+id/updateAvailableStatus"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginHorizontal="16dp"
+                android:layout_marginHorizontal="@dimen/activity_horizontal_margin"
                 android:layout_marginTop="4dp"
                 android:text="@string/update_available"
                 android:visibility="gone" />
@@ -148,7 +148,7 @@
                 android:id="@+id/currentAppVersionText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginHorizontal="16dp"
+                android:layout_marginHorizontal="@dimen/activity_horizontal_margin"
                 android:layout_marginTop="4dp"
                 android:textColor="@color/black"
                 tools:text="Current app version: 1.1.5" />
@@ -157,7 +157,7 @@
                 android:id="@+id/newAppVersionText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginHorizontal="16dp"
+                android:layout_marginHorizontal="@dimen/activity_horizontal_margin"
                 android:layout_marginTop="4dp"
                 android:textColor="@color/black"
                 android:textStyle="bold"
@@ -169,11 +169,11 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginHorizontal="16dp"
-        android:layout_marginBottom="16dp"
+        android:layout_marginHorizontal="@dimen/activity_horizontal_margin"
+        android:layout_marginBottom="@dimen/activity_vertical_margin"
         android:text="@string/copyright"
         android:textAlignment="center"
-        android:textSize="11sp"
+        android:textSize="@dimen/copyright_text_size"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

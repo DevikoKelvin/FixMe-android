@@ -4,15 +4,15 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:elevation="8dp"
+    android:elevation="@dimen/login_button_elevation"
     android:orientation="vertical"
-    android:paddingBottom="46dp">
+    android:paddingBottom="@dimen/bottom_sheet_padding_bottom">
 
     <com.google.android.material.card.MaterialCardView
-        android:layout_width="75dp"
-        android:layout_height="5dp"
+        android:layout_width="@dimen/bottom_sheet_drawer_width"
+        android:layout_height="@dimen/bottom_sheet_drawer_height"
         android:layout_gravity="center"
-        android:layout_marginVertical="18dp"
+        android:layout_marginVertical="@dimen/bottom_sheet_drawer_margin_vertical"
         app:cardBackgroundColor="@color/custom_toast_font_normal_soft_gray"
         app:cardCornerRadius="50dp"
         app:strokeWidth="0dp" />
@@ -20,18 +20,18 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginHorizontal="16dp"
+        android:layout_marginHorizontal="@dimen/activity_horizontal_margin"
         android:text="@string/user_info_title"
         android:textAlignment="center"
         android:textColor="@color/black"
-        android:textSize="18sp"
+        android:textSize="@dimen/text_size_medium"
         android:textStyle="bold" />
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginHorizontal="16dp"
-        android:layout_marginTop="24dp"
+        android:layout_marginHorizontal="@dimen/activity_horizontal_margin"
+        android:layout_marginTop="@dimen/bottom_sheet_content_margin_top"
         android:orientation="vertical">
 
         <LinearLayout
@@ -45,7 +45,7 @@
                 android:layout_weight="5"
                 android:text="@string/name"
                 android:textColor="@color/custom_toast_font_blue"
-                android:textSize="14sp" />
+                android:textSize="@dimen/text_size_small" />
 
             <TextView
                 android:id="@+id/nameText"
@@ -53,7 +53,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:textColor="@color/black"
-                android:textSize="16sp"
+                android:textSize="@dimen/text_size_medium"
                 android:textStyle="bold"
                 tools:text="Lie, Ignatius Hendrick Soetikno" />
         </LinearLayout>
@@ -61,7 +61,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
+            android:layout_marginTop="@dimen/user_info_item_margin_top"
             android:orientation="vertical">
 
             <TextView
@@ -70,7 +70,7 @@
                 android:layout_weight="5"
                 android:text="@string/id_starconnect"
                 android:textColor="@color/custom_toast_font_blue"
-                android:textSize="14sp" />
+                android:textSize="@dimen/text_size_small" />
 
             <TextView
                 android:id="@+id/starConnectIdText"
@@ -78,7 +78,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:textColor="@color/black"
-                android:textSize="16sp"
+                android:textSize="@dimen/text_size_medium"
                 android:textStyle="bold"
                 tools:text="4738" />
         </LinearLayout>
@@ -86,7 +86,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
+            android:layout_marginTop="@dimen/user_info_item_margin_top"
             android:orientation="vertical">
 
             <TextView
@@ -95,7 +95,7 @@
                 android:layout_weight="5"
                 android:text="@string/fixme_username"
                 android:textColor="@color/custom_toast_font_blue"
-                android:textSize="14sp" />
+                android:textSize="@dimen/text_size_small" />
 
             <TextView
                 android:id="@+id/fixMeUsernameText"
@@ -103,7 +103,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:textColor="@color/black"
-                android:textSize="16sp"
+                android:textSize="@dimen/text_size_medium"
                 android:textStyle="bold"
                 tools:text="hendrick" />
         </LinearLayout>
@@ -111,7 +111,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
+            android:layout_marginTop="@dimen/user_info_item_margin_top"
             android:orientation="vertical">
 
             <TextView
@@ -120,7 +120,7 @@
                 android:layout_weight="5"
                 android:text="@string/privilege_access"
                 android:textColor="@color/custom_toast_font_blue"
-                android:textSize="14sp" />
+                android:textSize="@dimen/text_size_small" />
 
             <TextView
                 android:id="@+id/privilegeText"
@@ -128,7 +128,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:textColor="@color/black"
-                android:textSize="16sp"
+                android:textSize="@dimen/text_size_medium"
                 android:textStyle="bold"
                 tools:text="Owner/App Developer &amp; Maintainer" />
         </LinearLayout>
@@ -136,7 +136,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
+            android:layout_marginTop="@dimen/user_info_item_margin_top"
             android:orientation="vertical">
 
             <TextView
@@ -145,7 +145,7 @@
                 android:layout_weight="5"
                 android:text="@string/department"
                 android:textColor="@color/custom_toast_font_blue"
-                android:textSize="14sp" />
+                android:textSize="@dimen/text_size_small" />
 
             <TextView
                 android:id="@+id/departmentText"
@@ -153,7 +153,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:textColor="@color/black"
-                android:textSize="16sp"
+                android:textSize="@dimen/text_size_medium"
                 android:textStyle="bold"
                 tools:text="Information Technology" />
         </LinearLayout>
@@ -161,7 +161,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
+            android:layout_marginTop="@dimen/user_info_item_margin_top"
             android:orientation="vertical">
 
             <TextView
@@ -170,7 +170,7 @@
                 android:layout_weight="5"
                 android:text="@string/sub_department"
                 android:textColor="@color/custom_toast_font_blue"
-                android:textSize="14sp" />
+                android:textSize="@dimen/text_size_small" />
 
             <TextView
                 android:id="@+id/subDepartmentText"
@@ -178,7 +178,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:textColor="@color/black"
-                android:textSize="16sp"
+                android:textSize="@dimen/text_size_medium"
                 android:textStyle="bold"
                 tools:text="Software Information Technology" />
         </LinearLayout>

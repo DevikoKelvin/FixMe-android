@@ -1,12 +1,8 @@
 *.iml
 .gradle
 /local.properties
-/.idea/caches
-/.idea/libraries
-/.idea/modules.xml
-/.idea/workspace.xml
-/.idea/navEditor.xml
-/.idea/assetWizardSettings.xml
+/.gradle
+/.idea
 /.kotlin/sessions
 .DS_Store
 /build
@@ -18,7 +14,4 @@ keystore.jks
 FixMe Keystore.txt
 /app/release
 /app/google-services.json
-.idea/deploymentTargetSelector.xml
 /app/debug
-app/src/main/java/com/erela/fixme/helpers/networking/InitAPI.kt
-keystore

@@ -4,18 +4,18 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:elevation="8dp"
+    android:elevation="@dimen/login_button_elevation"
     android:orientation="vertical"
-    android:paddingBottom="32dp">
+    android:paddingBottom="@dimen/login_button_margin_vertical">
 
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/sliderDrawer"
-        android:layout_width="75dp"
-        android:layout_height="5dp"
+        android:layout_width="@dimen/bottom_sheet_drawer_width"
+        android:layout_height="@dimen/bottom_sheet_drawer_height"
         android:layout_gravity="center"
-        android:layout_marginTop="18dp"
+        android:layout_marginTop="@dimen/bottom_sheet_drawer_margin_vertical"
         app:cardBackgroundColor="@color/custom_toast_font_normal_soft_gray"
-        app:cardCornerRadius="50dp"
+        app:cardCornerRadius="@dimen/login_button_corner_radius"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -25,31 +25,31 @@
         android:id="@+id/progressTrackingTitle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginHorizontal="16dp"
-        android:layout_marginTop="18dp"
+        android:layout_marginHorizontal="@dimen/list_item_padding"
+        android:layout_marginTop="@dimen/bottom_sheet_drawer_margin_vertical"
         android:text="@string/progress_tracking"
         android:textAlignment="center"
         android:textColor="@color/black"
-        android:textSize="18sp"
+        android:textSize="@dimen/text_size_large"
         android:textStyle="bold" />
 
     <TextView
         android:id="@+id/progressWorkedBy"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginHorizontal="16dp"
+        android:layout_marginHorizontal="@dimen/list_item_padding"
         android:textAlignment="center"
-        android:textSize="14sp"
+        android:textSize="@dimen/text_size_small"
         tools:text="Progress is being worked on by hendrick" />
 
     <TextView
         android:id="@+id/holdMessage"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginHorizontal="16dp"
+        android:layout_marginHorizontal="@dimen/list_item_padding"
         android:textAlignment="center"
         android:textColor="@color/status_hold"
-        android:textSize="16sp"
+        android:textSize="@dimen/text_size_medium"
         android:textStyle="bold"
         android:visibility="gone"
         tools:text="Issue on Hold status. \nReason: Insufficient Material" />
@@ -57,12 +57,12 @@
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/progressActionButton"
         android:layout_width="match_parent"
-        android:layout_height="46dp"
-        android:layout_marginHorizontal="16dp"
-        android:layout_marginTop="8dp"
+        android:layout_height="@dimen/bottom_sheet_padding_bottom"
+        android:layout_marginHorizontal="@dimen/list_item_padding"
+        android:layout_marginTop="@dimen/user_info_item_margin_top"
         android:visibility="gone"
         app:cardBackgroundColor="@color/button_color"
-        app:cardCornerRadius="50dp"
+        app:cardCornerRadius="@dimen/login_button_corner_radius"
         app:cardElevation="0dp"
         app:strokeWidth="0dp">
 
@@ -74,15 +74,15 @@
             android:text="@string/create_new_progress"
             android:textAlignment="center"
             android:textColor="@color/white"
-            android:textSize="14sp"
+            android:textSize="@dimen/text_size_small"
             android:textStyle="bold" />
     </com.google.android.material.card.MaterialCardView>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvProgress"
         android:layout_width="match_parent"
-        android:layout_height="450dp"
-        android:layout_marginTop="8dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/user_info_item_margin_top"
         tools:itemCount="2"
         tools:listitem="@layout/list_item_progress" />
 </LinearLayout>

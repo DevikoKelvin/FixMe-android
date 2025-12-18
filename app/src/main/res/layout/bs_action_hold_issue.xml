@@ -3,18 +3,18 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:elevation="8dp"
+    android:elevation="@dimen/login_button_elevation"
     android:orientation="vertical"
-    android:paddingBottom="32dp">
+    android:paddingBottom="@dimen/login_button_margin_vertical">
 
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/sliderDrawer"
-        android:layout_width="75dp"
-        android:layout_height="5dp"
+        android:layout_width="@dimen/bottom_sheet_drawer_width"
+        android:layout_height="@dimen/bottom_sheet_drawer_height"
         android:layout_gravity="center"
-        android:layout_marginTop="18dp"
+        android:layout_marginTop="@dimen/bottom_sheet_drawer_margin_vertical"
         app:cardBackgroundColor="@color/custom_toast_font_normal_soft_gray"
-        app:cardCornerRadius="50dp"
+        app:cardCornerRadius="@dimen/login_button_corner_radius"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -24,23 +24,23 @@
         android:id="@+id/trialTitle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginHorizontal="16dp"
-        android:layout_marginTop="18dp"
+        android:layout_marginHorizontal="@dimen/activity_horizontal_margin"
+        android:layout_marginTop="@dimen/bottom_sheet_drawer_margin_vertical"
         android:text="@string/hold"
         android:textAlignment="center"
         android:textColor="@color/black"
-        android:textSize="18sp"
+        android:textSize="@dimen/text_size_large"
         android:textStyle="bold" />
 
     <TextView
         android:id="@+id/selectSupervisorText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginHorizontal="16dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginHorizontal="@dimen/activity_horizontal_margin"
+        android:layout_marginTop="@dimen/user_info_item_margin_top"
         android:text="@string/hold_issue_description_title"
         android:textColor="@color/black"
-        android:textSize="14sp"
+        android:textSize="@dimen/text_size_small"
         android:textStyle="bold" />
 
     <com.google.android.material.textfield.TextInputLayout
@@ -48,15 +48,15 @@
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginHorizontal="16dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginHorizontal="@dimen/activity_horizontal_margin"
+        android:layout_marginTop="@dimen/user_info_item_margin_top"
         android:visibility="visible"
-        app:boxCornerRadiusBottomEnd="25dp"
-        app:boxCornerRadiusBottomStart="25dp"
-        app:boxCornerRadiusTopEnd="25dp"
-        app:boxCornerRadiusTopStart="25dp"
+        app:boxCornerRadiusBottomEnd="@dimen/login_field_corner_radius"
+        app:boxCornerRadiusBottomStart="@dimen/login_field_corner_radius"
+        app:boxCornerRadiusTopEnd="@dimen/login_field_corner_radius"
+        app:boxCornerRadiusTopStart="@dimen/login_field_corner_radius"
         app:boxStrokeColor="@color/black"
-        app:boxStrokeWidth="2dp"
+        app:boxStrokeWidth="@dimen/login_field_stroke_width"
         app:expandedHintEnabled="false"
         app:hintAnimationEnabled="false"
         app:hintEnabled="false"
@@ -65,20 +65,20 @@
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/descriptionField"
             android:layout_width="match_parent"
-            android:layout_height="150dp"
+            android:layout_height="@dimen/main_menu_item_height"
             android:gravity="top"
             android:inputType="textMultiLine"
-            android:textSize="14sp" />
+            android:textSize="@dimen/text_size_small" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/holdIssueButton"
         android:layout_width="match_parent"
-        android:layout_height="46dp"
-        android:layout_marginHorizontal="16dp"
-        android:layout_marginVertical="16dp"
+        android:layout_height="@dimen/button_height"
+        android:layout_marginHorizontal="@dimen/activity_horizontal_margin"
+        android:layout_marginVertical="@dimen/activity_vertical_margin"
         app:cardBackgroundColor="@color/status_hold"
-        app:cardCornerRadius="50dp"
+        app:cardCornerRadius="@dimen/login_button_corner_radius"
         app:strokeWidth="0dp">
 
         <TextView
@@ -87,7 +87,7 @@
             android:layout_gravity="center"
             android:text="@string/hold_issue"
             android:textColor="@color/white"
-            android:textSize="16sp"
+            android:textSize="@dimen/text_size_medium"
             android:textStyle="bold" />
     </com.google.android.material.card.MaterialCardView>
 </LinearLayout>

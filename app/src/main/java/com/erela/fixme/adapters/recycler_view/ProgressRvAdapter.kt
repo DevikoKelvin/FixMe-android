@@ -3,6 +3,8 @@ package com.erela.fixme.adapters.recycler_view
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
+import android.graphics.drawable.Drawable
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,6 +15,10 @@ import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import androidx.transition.TransitionManager
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.DataSource
+import com.bumptech.glide.load.engine.GlideException
+import com.bumptech.glide.request.RequestListener
+import com.bumptech.glide.request.target.Target
 import com.erela.fixme.R
 import com.erela.fixme.adapters.pager.ImageCarouselPagerAdapter
 import com.erela.fixme.databinding.ListItemProgressBinding
@@ -208,6 +214,27 @@ class ProgressRvAdapter(
                         val image = item.progress.foto[0]?.foto
                         Glide.with(context)
                             .load(InitAPI.IMAGE_URL + image)
+                            .listener(object : RequestListener<Drawable> {
+                                override fun onLoadFailed(
+                                    e: GlideException?,
+                                    model: Any?,
+                                    target: com.bumptech.glide.request.target.Target<Drawable?>?,
+                                    isFirstResource: Boolean
+                                ): Boolean {
+                                    Log.e("ProgressImage", "Glide onLoadFailed: ", e)
+                                    return false
+                                }
+
+                                override fun onResourceReady(
+                                    resource: Drawable?,
+                                    model: Any?,
+                                    target: Target<Drawable?>?,
+                                    dataSource: DataSource?,
+                                    isFirstResource: Boolean
+                                ): Boolean {
+                                    return false
+                                }
+                            })
                             .placeholder(R.drawable.image_placeholder)
                             .into(submissionImage)
                     } else {

@@ -11,9 +11,9 @@
     <RelativeLayout
         android:id="@+id/toolBar"
         android:layout_width="match_parent"
-        android:layout_height="48dp"
+        android:layout_height="@dimen/toolbar_height"
         android:background="@color/white"
-        android:elevation="8dp"
+        android:elevation="@dimen/dialog_margin"
         android:theme="?attr/actionBarTheme"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -25,11 +25,11 @@
             android:layout_height="wrap_content"
             android:layout_alignParentStart="true"
             android:layout_centerVertical="true"
-            android:layout_marginStart="4dp"
+            android:layout_marginStart="@dimen/list_item_progress_content_margin_top_small"
             app:cardBackgroundColor="@android:color/transparent"
-            app:cardCornerRadius="50dp"
+            app:cardCornerRadius="@dimen/main_menu_item_icon_size"
             app:cardElevation="0dp"
-            app:contentPadding="8dp"
+            app:contentPadding="@dimen/dialog_margin"
             app:strokeWidth="0dp">
 
             <ImageView
@@ -45,7 +45,7 @@
             android:layout_centerInParent="true"
             android:text="@string/submission_list_title"
             android:textColor="@color/black"
-            android:textSize="16sp"
+            android:textSize="@dimen/text_size_medium"
             android:textStyle="bold" />
     </RelativeLayout>
 
@@ -61,27 +61,27 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginHorizontal="16dp"
-            android:layout_marginTop="24dp"
+            android:layout_marginHorizontal="@dimen/activity_horizontal_margin"
+            android:layout_marginTop="@dimen/dialog_message_margin_vertical"
             android:text="@string/department_title"
             android:textColor="@color/black"
-            android:textSize="16sp"
+            android:textSize="@dimen/text_size_medium"
             android:textStyle="bold" />
 
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/materialCardView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginHorizontal="16dp"
-            android:layout_marginTop="8dp"
-            android:layout_marginBottom="8dp"
+            android:layout_marginHorizontal="@dimen/activity_horizontal_margin"
+            android:layout_marginTop="@dimen/dialog_margin"
+            android:layout_marginBottom="@dimen/dialog_margin"
             app:cardBackgroundColor="@color/white"
-            app:cardCornerRadius="50dp"
-            app:cardElevation="4dp"
-            app:contentPaddingBottom="4dp"
-            app:contentPaddingLeft="8dp"
-            app:contentPaddingRight="8dp"
-            app:contentPaddingTop="4dp"
+            app:cardCornerRadius="@dimen/main_menu_item_icon_size"
+            app:cardElevation="@dimen/list_item_progress_content_margin_top_small"
+            app:contentPaddingBottom="@dimen/list_item_progress_content_margin_top_small"
+            app:contentPaddingLeft="@dimen/dialog_margin"
+            app:contentPaddingRight="@dimen/dialog_margin"
+            app:contentPaddingTop="@dimen/list_item_progress_content_margin_top_small"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/toolBar"
@@ -99,16 +99,16 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="end"
-            android:layout_marginHorizontal="16dp"
-            android:layout_marginBottom="8dp"
+            android:layout_marginHorizontal="@dimen/activity_horizontal_margin"
+            android:layout_marginBottom="@dimen/dialog_margin"
             android:visibility="visible"
             app:cardBackgroundColor="@color/white"
-            app:cardCornerRadius="50dp"
+            app:cardCornerRadius="@dimen/main_menu_item_icon_size"
             app:cardElevation="0dp"
-            app:contentPaddingBottom="4dp"
-            app:contentPaddingLeft="8dp"
-            app:contentPaddingRight="8dp"
-            app:contentPaddingTop="4dp"
+            app:contentPaddingBottom="@dimen/list_item_progress_content_margin_top_small"
+            app:contentPaddingLeft="@dimen/dialog_margin"
+            app:contentPaddingRight="@dimen/dialog_margin"
+            app:contentPaddingTop="@dimen/list_item_progress_content_margin_top_small"
             app:strokeWidth="0dp">
 
             <LinearLayout
@@ -119,7 +119,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:drawablePadding="4dp"
+                    android:drawablePadding="@dimen/list_item_progress_content_margin_top_small"
                     android:gravity="center_vertical"
                     android:text="@string/filter_list_title"
                     app:drawableStartCompat="@drawable/baseline_filter_list_24" />
@@ -158,68 +158,68 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_margin="16dp"
+                    android:layout_margin="@dimen/activity_horizontal_margin"
                     android:orientation="vertical">
 
                     <include
                         layout="@layout/list_item_shimmer"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginVertical="8dp" />
+                        android:layout_marginVertical="@dimen/dialog_margin" />
 
                     <include
                         layout="@layout/list_item_shimmer"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginVertical="8dp" />
+                        android:layout_marginVertical="@dimen/dialog_margin" />
 
                     <include
                         layout="@layout/list_item_shimmer"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginVertical="8dp" />
+                        android:layout_marginVertical="@dimen/dialog_margin" />
 
                     <include
                         layout="@layout/list_item_shimmer"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginVertical="8dp" />
+                        android:layout_marginVertical="@dimen/dialog_margin" />
 
                     <include
                         layout="@layout/list_item_shimmer"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginVertical="8dp" />
+                        android:layout_marginVertical="@dimen/dialog_margin" />
 
                     <include
                         layout="@layout/list_item_shimmer"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginVertical="8dp" />
+                        android:layout_marginVertical="@dimen/dialog_margin" />
 
                     <include
                         layout="@layout/list_item_shimmer"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginVertical="8dp" />
+                        android:layout_marginVertical="@dimen/dialog_margin" />
 
                     <include
                         layout="@layout/list_item_shimmer"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginVertical="8dp" />
+                        android:layout_marginVertical="@dimen/dialog_margin" />
 
                     <include
                         layout="@layout/list_item_shimmer"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginVertical="8dp" />
+                        android:layout_marginVertical="@dimen/dialog_margin" />
 
                     <include
                         layout="@layout/list_item_shimmer"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginVertical="8dp" />
+                        android:layout_marginVertical="@dimen/dialog_margin" />
                 </LinearLayout>
             </com.facebook.shimmer.ShimmerFrameLayout>
 
@@ -227,7 +227,7 @@
                 android:id="@+id/rvSubmission"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginBottom="16dp"
+                android:layout_marginBottom="@dimen/activity_horizontal_margin"
                 android:layout_weight="1"
                 android:visibility="visible"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -248,7 +248,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_gravity="center"
-                    android:padding="52dp"
+                    android:padding="@dimen/login_logo_margin"
                     app:lottie_autoPlay="true"
                     app:lottie_loop="true"
                     app:lottie_rawRes="@raw/empty_list_animation" />

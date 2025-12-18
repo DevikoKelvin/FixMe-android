@@ -4,44 +4,44 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:elevation="8dp"
+    android:elevation="@dimen/login_button_elevation"
     android:orientation="vertical"
-    android:paddingBottom="32dp">
+    android:paddingBottom="@dimen/login_button_margin_vertical">
 
     <com.google.android.material.card.MaterialCardView
-        android:layout_width="75dp"
-        android:layout_height="5dp"
+        android:layout_width="@dimen/bottom_sheet_drawer_width"
+        android:layout_height="@dimen/bottom_sheet_drawer_height"
         android:layout_gravity="center"
-        android:layout_marginVertical="18dp"
+        android:layout_marginVertical="@dimen/bottom_sheet_drawer_margin_vertical"
         app:cardBackgroundColor="@color/custom_toast_font_normal_soft_gray"
-        app:cardCornerRadius="50dp"
+        app:cardCornerRadius="@dimen/login_button_corner_radius"
         app:strokeWidth="0dp" />
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginHorizontal="16dp"
+        android:layout_marginHorizontal="@dimen/activity_horizontal_margin"
         android:text="@string/choose_file_title"
         android:textAlignment="center"
         android:textColor="@color/black"
-        android:textSize="18sp"
+        android:textSize="@dimen/text_size_large"
         android:textStyle="bold" />
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginHorizontal="16dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginHorizontal="@dimen/activity_horizontal_margin"
+        android:layout_marginTop="@dimen/activity_vertical_margin"
         android:orientation="horizontal">
 
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/openCameraButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginHorizontal="8dp"
+            android:layout_marginHorizontal="@dimen/dialog_margin"
             android:layout_weight="1"
             app:cardBackgroundColor="@color/custom_toast_background_normal"
-            app:cardCornerRadius="16dp"
+            app:cardCornerRadius="@dimen/dialog_corner_radius"
             app:cardElevation="0dp"
             app:strokeWidth="0dp">
 
@@ -49,12 +49,12 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="vertical"
-                android:paddingVertical="16dp"
+                android:paddingVertical="@dimen/activity_vertical_margin"
                 tools:ignore="UseCompoundDrawables">
 
                 <ImageView
-                    android:layout_width="32dp"
-                    android:layout_height="32dp"
+                    android:layout_width="@dimen/login_progress_bar_size"
+                    android:layout_height="@dimen/login_progress_bar_size"
                     android:layout_gravity="center"
                     android:src="@drawable/camera_icon"
                     tools:ignore="ContentDescription" />
@@ -64,9 +64,9 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:layout_marginTop="4dp"
+                    android:layout_marginTop="@dimen/card_elevation"
                     android:textColor="@color/black"
-                    android:textSize="18sp"
+                    android:textSize="@dimen/text_size_large"
                     android:textStyle="bold" />
             </LinearLayout>
         </com.google.android.material.card.MaterialCardView>
@@ -75,10 +75,10 @@
             android:id="@+id/openGalleryButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginHorizontal="8dp"
+            android:layout_marginHorizontal="@dimen/dialog_margin"
             android:layout_weight="1"
             app:cardBackgroundColor="@color/custom_toast_background_normal"
-            app:cardCornerRadius="16dp"
+            app:cardCornerRadius="@dimen/dialog_corner_radius"
             app:cardElevation="0dp"
             app:strokeWidth="0dp">
 
@@ -86,12 +86,12 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="vertical"
-                android:paddingVertical="16dp"
+                android:paddingVertical="@dimen/activity_vertical_margin"
                 tools:ignore="UseCompoundDrawables">
 
                 <ImageView
-                    android:layout_width="32dp"
-                    android:layout_height="32dp"
+                    android:layout_width="@dimen/login_progress_bar_size"
+                    android:layout_height="@dimen/login_progress_bar_size"
                     android:layout_gravity="center"
                     android:src="@drawable/gallery_icon"
                     tools:ignore="ContentDescription" />
@@ -101,9 +101,9 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:layout_marginTop="4dp"
+                    android:layout_marginTop="@dimen/card_elevation"
                     android:textColor="@color/black"
-                    android:textSize="18sp"
+                    android:textSize="@dimen/text_size_large"
                     android:textStyle="bold" />
             </LinearLayout>
         </com.google.android.material.card.MaterialCardView>

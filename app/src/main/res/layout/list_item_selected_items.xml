@@ -5,14 +5,14 @@
     android:id="@+id/mainContainer"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:layout_marginVertical="4dp"
-    android:layout_marginEnd="8dp"
-    app:cardCornerRadius="16dp"
+    android:layout_marginVertical="@dimen/list_item_selected_items_margin_vertical"
+    android:layout_marginEnd="@dimen/list_item_selected_items_margin_end"
+    app:cardCornerRadius="@dimen/list_item_selected_items_card_corner_radius"
     app:cardElevation="0dp"
-    app:contentPaddingBottom="8dp"
-    app:contentPaddingLeft="16dp"
-    app:contentPaddingRight="16dp"
-    app:contentPaddingTop="8dp">
+    app:contentPaddingBottom="@dimen/list_item_selected_items_content_padding_vertical"
+    app:contentPaddingLeft="@dimen/list_item_selected_items_content_padding_horizontal"
+    app:contentPaddingRight="@dimen/list_item_selected_items_content_padding_horizontal"
+    app:contentPaddingTop="@dimen/list_item_selected_items_content_padding_vertical">
 
     <LinearLayout
         android:layout_width="wrap_content"
@@ -21,10 +21,10 @@
 
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/deleteButton"
-            android:layout_width="18dp"
-            android:layout_height="18dp"
+            android:layout_width="@dimen/list_item_selected_items_delete_button_size"
+            android:layout_height="@dimen/list_item_selected_items_delete_button_size"
             android:layout_gravity="center_vertical"
-            android:layout_marginEnd="8dp"
+            android:layout_marginEnd="@dimen/list_item_selected_items_delete_button_margin_end"
             app:cardBackgroundColor="@android:color/transparent"
             app:cardCornerRadius="50dp"
             app:cardElevation="0dp"
@@ -50,7 +50,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
-            android:layout_marginStart="4dp"
+            android:layout_marginStart="@dimen/list_item_selected_items_amount_text_margin_start"
             android:textColor="@color/black"
             android:visibility="gone"
             tools:text="(2)" />

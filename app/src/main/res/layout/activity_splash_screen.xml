@@ -10,7 +10,7 @@
         android:id="@+id/fixMeLogo"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_margin="75dp"
+        android:layout_margin="@dimen/bottom_sheet_drawer_width"
         android:alpha="0.2"
         android:src="@drawable/new_fixme_logo" />
 
@@ -19,7 +19,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:padding="50dp"
+        android:padding="@dimen/login_button_corner_radius"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -28,13 +28,13 @@
         <ImageView
             android:id="@+id/erelaLogoSplash"
             android:layout_width="match_parent"
-            android:layout_height="150dp"
+            android:layout_height="@dimen/main_menu_item_height"
             android:src="@drawable/erela_logo" />
 
         <ImageView
             android:id="@+id/erelaMotoSplash"
             android:layout_width="match_parent"
-            android:layout_height="40dp"
+            android:layout_height="@dimen/main_menu_notification_icon"
             android:src="@drawable/erela_moto"
             android:visibility="gone" />
     </LinearLayout>

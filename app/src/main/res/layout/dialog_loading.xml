@@ -10,12 +10,12 @@
         android:id="@+id/dialogContainer"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginHorizontal="8dp"
-        android:layout_marginVertical="8dp"
+        android:layout_marginHorizontal="@dimen/dialog_margin"
+        android:layout_marginVertical="@dimen/dialog_margin"
         app:cardBackgroundColor="@color/white"
-        app:cardCornerRadius="8dp"
-        app:cardElevation="2dp"
-        app:contentPadding="4dp"
+        app:cardCornerRadius="@dimen/card_corner_radius"
+        app:cardElevation="@dimen/dialog_elevation"
+        app:contentPadding="@dimen/dialog_loading_content_padding"
         app:strokeWidth="0dp">
 
         <ProgressBar

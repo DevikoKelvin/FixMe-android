@@ -1,13 +1,13 @@
 [versions]
 # Plugins
 agp = "8.13.2"
-kotlin = "2.2.21"
+kotlin = "2.3.0"
 gms = "4.4.4"
 
 # Dependencies
 coreKtx = "1.17.0"
 appcompat = "1.7.1"
-activity = "1.12.1"
+activity = "1.12.2"
 material = "1.13.0"
 design = "28.0.0"
 constraintlayout = "2.2.1"
@@ -31,6 +31,7 @@ balloon = "1.6.13"
 shimmer = "0.5.0"
 
 firebaseBom = "34.7.0"
+firebaseMessaging = "25.0.1"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -51,6 +52,8 @@ logging-interceptor = { group = "com.squareup.okhttp3", name = "logging-intercep
 flexbox = { module = "com.google.android.flexbox:flexbox", version.ref = "flexbox" }
 lottie = { group = "com.airbnb.android", name = "lottie", version.ref = "lottie" }
 glide = { group = "com.github.bumptech.glide", name = "glide", version.ref = "glide" }
+glide-compiler = { group = "com.github.bumptech.glide", name = "compiler", version.ref = "glide" }
+glide-okhttp-integration = { group = "com.github.bumptech.glide", name = "okhttp3-integration", version.ref = "glide" }
 swipeRefreshLayout = { group = "androidx.swiperefreshlayout", name = "swiperefreshlayout", version.ref = "swipeRefreshLayout" }
 circleIndicator = { group = "me.relex", name = "circleIndicator", version.ref = "circleIndicator" }
 appxupdater = { module = "com.github.TutorialsAndroid:AppXUpdater", version.ref = "appxupdater" }
@@ -60,8 +63,10 @@ shimmer = { module = "com.facebook.shimmer:shimmer", version.ref = "shimmer" }
 
 firebase-bom = { module = "com.google.firebase:firebase-bom", name = "firebase-bom", version.ref = "firebaseBom" }
 firebase-analytics = { module = "com.google.firebase:firebase-analytics", name = "firebase-analytics" }
+firebase-messaging = { module = "com.google.firebase:firebase-messaging", version.ref = "firebaseMessaging" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
+kotlin-kapt = { id = "org.jetbrains.kotlin.kapt" }
 gms-services = { id = "com.google.gms.google-services", version.ref = "gms" }

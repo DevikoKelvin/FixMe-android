@@ -9,11 +9,11 @@
         android:id="@+id/dialogContainer"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginHorizontal="8dp"
-        android:layout_marginVertical="8dp"
+        android:layout_marginHorizontal="@dimen/dialog_margin"
+        android:layout_marginVertical="@dimen/dialog_margin"
         app:cardBackgroundColor="@color/white"
-        app:cardCornerRadius="16dp"
-        app:cardElevation="2dp"
+        app:cardCornerRadius="@dimen/dialog_corner_radius"
+        app:cardElevation="@dimen/dialog_elevation"
         app:strokeWidth="0dp">
 
         <LinearLayout
@@ -25,16 +25,16 @@
                 android:id="@+id/messageText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginVertical="24dp"
+                android:layout_marginVertical="@dimen/dialog_message_margin_vertical"
                 android:text="@string/action_question"
                 android:textAlignment="center"
                 android:textColor="@color/black"
-                android:textSize="18sp"
+                android:textSize="@dimen/text_size_large"
                 android:textStyle="bold" />
 
             <com.google.android.material.card.MaterialCardView
                 android:layout_width="match_parent"
-                android:layout_height="1dp"
+                android:layout_height="@dimen/dialog_divider_height"
                 app:cardBackgroundColor="@color/custom_toast_font_normal_soft_gray"
                 app:cardElevation="0dp"
                 app:strokeWidth="0dp" />
@@ -47,7 +47,7 @@
                 <com.google.android.material.card.MaterialCardView
                     android:id="@+id/approveMaterialButton"
                     android:layout_width="match_parent"
-                    android:layout_height="56dp"
+                    android:layout_height="@dimen/toolbar_height"
                     android:layout_weight="1"
                     android:visibility="gone"
                     app:cardBackgroundColor="@android:color/transparent"
@@ -61,14 +61,14 @@
                         android:gravity="center"
                         android:text="@string/approve_material"
                         android:textColor="@color/custom_toast_font_success"
-                        android:textSize="14sp"
+                        android:textSize="@dimen/text_size_small"
                         android:textStyle="bold" />
                 </com.google.android.material.card.MaterialCardView>
 
                 <com.google.android.material.card.MaterialCardView
                     android:id="@+id/doneButton"
                     android:layout_width="match_parent"
-                    android:layout_height="56dp"
+                    android:layout_height="@dimen/toolbar_height"
                     android:layout_weight="1"
                     android:visibility="gone"
                     app:cardBackgroundColor="@android:color/transparent"
@@ -82,13 +82,13 @@
                         android:gravity="center"
                         android:text="@string/mark_progress_done"
                         android:textColor="@color/custom_toast_font_success"
-                        android:textSize="14sp"
+                        android:textSize="@dimen/text_size_small"
                         android:textStyle="bold" />
                 </com.google.android.material.card.MaterialCardView>
 
                 <com.google.android.material.card.MaterialCardView
                     android:layout_width="match_parent"
-                    android:layout_height="1dp"
+                    android:layout_height="@dimen/dialog_divider_height"
                     app:cardBackgroundColor="@color/custom_toast_font_normal_soft_gray"
                     app:cardElevation="0dp"
                     app:strokeWidth="0dp" />
@@ -96,7 +96,7 @@
                 <com.google.android.material.card.MaterialCardView
                     android:id="@+id/editMaterialsButton"
                     android:layout_width="match_parent"
-                    android:layout_height="56dp"
+                    android:layout_height="@dimen/toolbar_height"
                     android:layout_weight="1"
                     android:visibility="gone"
                     app:cardBackgroundColor="@android:color/transparent"
@@ -110,14 +110,14 @@
                         android:gravity="center"
                         android:text="@string/edit_material"
                         android:textColor="@color/black"
-                        android:textSize="14sp"
+                        android:textSize="@dimen/text_size_small"
                         android:textStyle="bold" />
                 </com.google.android.material.card.MaterialCardView>
 
                 <com.google.android.material.card.MaterialCardView
                     android:id="@+id/editButton"
                     android:layout_width="match_parent"
-                    android:layout_height="56dp"
+                    android:layout_height="@dimen/toolbar_height"
                     android:layout_weight="1"
                     android:visibility="gone"
                     app:cardBackgroundColor="@android:color/transparent"
@@ -131,14 +131,14 @@
                         android:gravity="center"
                         android:text="@string/edit_progress"
                         android:textColor="@color/black"
-                        android:textSize="14sp"
+                        android:textSize="@dimen/text_size_small"
                         android:textStyle="bold" />
                 </com.google.android.material.card.MaterialCardView>
 
                 <com.google.android.material.card.MaterialCardView
                     android:id="@+id/divider3"
                     android:layout_width="match_parent"
-                    android:layout_height="1dp"
+                    android:layout_height="@dimen/dialog_divider_height"
                     app:cardBackgroundColor="@color/custom_toast_font_normal_soft_gray"
                     app:cardElevation="0dp"
                     app:strokeWidth="0dp" />
@@ -146,7 +146,7 @@
                 <com.google.android.material.card.MaterialCardView
                     android:id="@+id/deleteButton"
                     android:layout_width="match_parent"
-                    android:layout_height="56dp"
+                    android:layout_height="@dimen/toolbar_height"
                     android:layout_weight="1"
                     android:visibility="gone"
                     app:cardBackgroundColor="@android:color/transparent"
@@ -160,7 +160,7 @@
                         android:gravity="center"
                         android:text="@string/delete"
                         android:textColor="@color/custom_toast_font_failed"
-                        android:textSize="14sp"
+                        android:textSize="@dimen/text_size_small"
                         android:textStyle="bold" />
                 </com.google.android.material.card.MaterialCardView>
             </LinearLayout>

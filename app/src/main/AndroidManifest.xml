@@ -114,17 +114,12 @@
             tools:ignore="DiscouragedApi,LockedOrientationActivity" />
 
         <service
-            android:name=".services.NotificationService"
-            android:foregroundServiceType="dataSync" />
-
-        <receiver
-            android:name=".services.BroadcastReceiver"
-            android:exported="true">
+            android:name=".services.FCMService"
+            android:exported="false">
             <intent-filter>
-                <action android:name="android.intent.action.REBOOT" />
-                <action android:name="android.intent.action.SCREEN_ON" />
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
-        </receiver>
+        </service>
 
         <provider
             android:name="androidx.core.content.FileProvider"

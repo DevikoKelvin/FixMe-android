@@ -4,11 +4,11 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginHorizontal="16dp"
-    android:layout_marginVertical="8dp"
+    android:layout_marginHorizontal="@dimen/list_item_shimmer_margin_horizontal"
+    android:layout_marginVertical="@dimen/list_item_shimmer_margin_vertical"
     app:cardBackgroundColor="#FBFBFB"
-    app:cardCornerRadius="16dp"
-    app:cardElevation="4dp"
+    app:cardCornerRadius="@dimen/list_item_shimmer_card_corner_radius"
+    app:cardElevation="@dimen/list_item_shimmer_card_elevation"
     app:strokeWidth="0dp">
 
     <LinearLayout
@@ -21,8 +21,8 @@
             android:layout_height="wrap_content"
             android:background="@color/custom_toast_font_normal_soft_gray"
             android:orientation="vertical"
-            android:paddingHorizontal="16dp"
-            android:paddingVertical="8dp"
+            android:paddingHorizontal="@dimen/list_item_shimmer_header_padding_horizontal"
+            android:paddingVertical="@dimen/list_item_shimmer_header_padding_vertical"
             tools:ignore="UselessParent">
 
             <TextView
@@ -30,7 +30,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textColor="@color/white"
-                android:textSize="14sp"
+                android:textSize="@dimen/text_size_small"
                 android:textStyle="bold" />
 
             <LinearLayout
@@ -44,7 +44,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:textColor="@color/white"
-                    android:textSize="11sp" />
+                    android:textSize="@dimen/copyright_text_size" />
 
                 <TextView
                     android:id="@+id/noRequest"
@@ -53,7 +53,7 @@
                     android:layout_weight="1"
                     android:textAlignment="viewEnd"
                     android:textColor="@color/white"
-                    android:textSize="12sp"
+                    android:textSize="@dimen/text_size_micro"
                     android:textStyle="bold" />
             </LinearLayout>
         </LinearLayout>
@@ -62,19 +62,19 @@
             android:id="@+id/submissionDescription"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginHorizontal="16dp"
-            android:layout_marginVertical="8dp"
+            android:layout_marginHorizontal="@dimen/list_item_shimmer_description_margin_horizontal"
+            android:layout_marginVertical="@dimen/list_item_shimmer_description_margin_vertical"
             android:background="@color/custom_toast_font_normal_soft_gray"
-            android:paddingHorizontal="16dp"
-            android:paddingVertical="8dp"
+            android:paddingHorizontal="@dimen/list_item_shimmer_description_padding_horizontal"
+            android:paddingVertical="@dimen/list_item_shimmer_description_padding_vertical"
             android:textColor="@color/black"
-            android:textSize="14sp" />
+            android:textSize="@dimen/text_size_small" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:paddingHorizontal="16dp"
+            android:paddingHorizontal="@dimen/list_item_shimmer_machine_info_padding_horizontal"
             tools:ignore="DisableBaselineAlignment">
 
             <LinearLayout
@@ -92,7 +92,7 @@
                     android:id="@+id/machineNameText"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="2dp"
+                    android:layout_marginTop="@dimen/list_item_shimmer_machine_name_margin_top"
                     android:background="@color/custom_toast_font_normal_soft_gray"
                     android:text="@string/machine_name"
                     android:textColor="@color/custom_toast_font_normal_soft_gray" />
@@ -101,7 +101,7 @@
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="4dp"
+                android:layout_marginStart="@dimen/list_item_shimmer_machine_code_margin_start"
                 android:layout_weight="1"
                 android:orientation="vertical">
 
@@ -118,7 +118,7 @@
                     android:id="@+id/machineName"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="2dp"
+                    android:layout_marginTop="@dimen/list_item_shimmer_machine_name_margin_top"
                     android:background="@color/custom_toast_font_normal_soft_gray"
                     android:textColor="@color/custom_toast_font_normal_soft_gray"
                     android:textStyle="bold"
@@ -129,15 +129,15 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginHorizontal="16dp"
-            android:layout_marginTop="8dp"
+            android:layout_marginHorizontal="@dimen/list_item_shimmer_location_margin_horizontal"
+            android:layout_marginTop="@dimen/list_item_shimmer_location_margin_top"
             android:background="@color/custom_toast_font_normal_soft_gray"
             android:orientation="horizontal"
             tools:ignore="UseCompoundDrawables">
 
             <ImageView
-                android:layout_width="21dp"
-                android:layout_height="21dp"
+                android:layout_width="@dimen/list_item_shimmer_location_icon_size"
+                android:layout_height="@dimen/list_item_shimmer_location_icon_size"
                 tools:ignore="ContentDescription" />
 
             <TextView
@@ -145,7 +145,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:layout_marginStart="4dp"
+                android:layout_marginStart="@dimen/list_item_shimmer_location_text_margin_start"
                 android:textColor="@color/custom_toast_font_normal_soft_gray"
                 tools:text="Erela HQ" />
         </LinearLayout>
@@ -153,9 +153,9 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
+            android:layout_marginTop="@dimen/list_item_shimmer_reported_by_margin_top"
             android:orientation="horizontal"
-            android:paddingHorizontal="16dp">
+            android:paddingHorizontal="@dimen/list_item_shimmer_reported_by_padding_horizontal">
 
             <TextView
                 android:layout_width="wrap_content"
@@ -168,7 +168,7 @@
                 android:id="@+id/reportedBy"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="4dp"
+                android:layout_marginStart="@dimen/list_item_shimmer_reported_by_text_margin_start"
                 android:background="@color/custom_toast_font_normal_soft_gray"
                 android:textColor="@color/custom_toast_font_normal_soft_gray"
                 android:textStyle="bold"
@@ -178,9 +178,9 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="4dp"
+            android:layout_marginTop="@dimen/list_item_shimmer_department_margin_top"
             android:orientation="horizontal"
-            android:paddingHorizontal="16dp">
+            android:paddingHorizontal="@dimen/list_item_shimmer_department_padding_horizontal">
 
             <TextView
                 android:layout_width="wrap_content"
@@ -193,7 +193,7 @@
                 android:id="@+id/departmentFrom"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="4dp"
+                android:layout_marginStart="@dimen/list_item_shimmer_department_text_margin_start"
                 android:background="@color/custom_toast_font_normal_soft_gray"
                 android:textColor="@color/custom_toast_font_normal_soft_gray"
                 android:textStyle="bold"
@@ -204,20 +204,20 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="end"
-            android:layout_margin="8dp"
+            android:layout_margin="@dimen/list_item_shimmer_tags_container_margin"
             android:orientation="horizontal">
 
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/complexity"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="4dp"
+                android:layout_marginEnd="@dimen/list_item_shimmer_tag_margin_end"
                 app:cardBackgroundColor="@android:color/transparent"
                 app:cardCornerRadius="50dp"
                 app:cardElevation="0dp"
-                app:contentPadding="4dp"
-                app:contentPaddingLeft="8dp"
-                app:contentPaddingRight="8dp"
+                app:contentPadding="@dimen/list_item_shimmer_tag_padding"
+                app:contentPaddingLeft="@dimen/list_item_shimmer_tag_padding_horizontal"
+                app:contentPaddingRight="@dimen/list_item_shimmer_tag_padding_horizontal"
                 app:strokeWidth="0dp">
 
                 <TextView
@@ -225,7 +225,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textColor="@color/white"
-                    android:textSize="12sp"
+                    android:textSize="@dimen/text_size_micro"
                     android:textStyle="bold"
                     tools:text="Low" />
             </com.google.android.material.card.MaterialCardView>
@@ -237,9 +237,9 @@
                 app:cardBackgroundColor="@android:color/transparent"
                 app:cardCornerRadius="50dp"
                 app:cardElevation="0dp"
-                app:contentPadding="4dp"
-                app:contentPaddingLeft="8dp"
-                app:contentPaddingRight="8dp"
+                app:contentPadding="@dimen/list_item_shimmer_tag_padding"
+                app:contentPaddingLeft="@dimen/list_item_shimmer_tag_padding_horizontal"
+                app:contentPaddingRight="@dimen/list_item_shimmer_tag_padding_horizontal"
                 app:strokeWidth="0dp">
 
                 <TextView
@@ -247,7 +247,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textColor="@color/white"
-                    android:textSize="12sp"
+                    android:textSize="@dimen/text_size_micro"
                     android:textStyle="bold"
                     tools:text="On Progress" />
             </com.google.android.material.card.MaterialCardView>

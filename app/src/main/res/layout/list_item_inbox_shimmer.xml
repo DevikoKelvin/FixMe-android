@@ -4,11 +4,11 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginHorizontal="16dp"
-    android:layout_marginVertical="8dp"
+    android:layout_marginHorizontal="@dimen/activity_horizontal_margin"
+    android:layout_marginVertical="@dimen/dialog_margin"
     app:cardBackgroundColor="#FBFBFB"
-    app:cardCornerRadius="16dp"
-    app:cardElevation="4dp"
+    app:cardCornerRadius="@dimen/dialog_corner_radius"
+    app:cardElevation="@dimen/card_elevation"
     app:strokeWidth="0dp">
 
     <LinearLayout
@@ -21,36 +21,36 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@color/custom_toast_font_normal_soft_gray"
-            android:paddingHorizontal="16dp"
-            android:paddingVertical="8dp" />
+            android:paddingHorizontal="@dimen/list_item_padding"
+            android:paddingVertical="@dimen/dialog_margin" />
 
         <TextView
             android:id="@+id/notificationContent"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginHorizontal="16dp"
-            android:layout_marginVertical="8dp"
+            android:layout_marginHorizontal="@dimen/list_item_padding"
+            android:layout_marginVertical="@dimen/dialog_margin"
             android:background="@color/custom_toast_font_normal_soft_gray"
             android:textColor="@color/custom_toast_font_normal_soft_gray"
             tools:text="@tools:sample/lorem" />
 
         <View
             android:layout_width="match_parent"
-            android:layout_height="1dp"
+            android:layout_height="@dimen/dialog_divider_height"
             android:background="@color/custom_toast_font_normal_soft_gray" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:paddingHorizontal="16dp"
-            android:paddingVertical="8dp"
+            android:paddingHorizontal="@dimen/list_item_padding"
+            android:paddingVertical="@dimen/dialog_margin"
             tools:ignore="DisableBaselineAlignment">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="4dp"
+                android:layout_marginEnd="@dimen/card_elevation"
                 android:layout_weight="1"
                 android:orientation="vertical">
 
@@ -66,16 +66,16 @@
                     android:id="@+id/sentTime"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="2dp"
+                    android:layout_marginTop="@dimen/dialog_elevation"
                     android:background="@color/custom_toast_font_normal_soft_gray"
                     android:textColor="@color/custom_toast_font_normal_soft_gray"
-                    android:textSize="11sp" />
+                    android:textSize="@dimen/copyright_text_size" />
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="4dp"
+                android:layout_marginStart="@dimen/card_elevation"
                 android:layout_weight="1"
                 android:orientation="vertical">
 
@@ -92,11 +92,11 @@
                     android:id="@+id/readTime"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="2dp"
+                    android:layout_marginTop="@dimen/dialog_elevation"
                     android:background="@color/custom_toast_font_normal_soft_gray"
                     android:textAlignment="textEnd"
                     android:textColor="@color/custom_toast_font_normal_soft_gray"
-                    android:textSize="11sp" />
+                    android:textSize="@dimen/copyright_text_size" />
             </LinearLayout>
         </LinearLayout>
     </LinearLayout>

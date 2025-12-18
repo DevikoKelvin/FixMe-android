@@ -4,18 +4,18 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:elevation="8dp"
+    android:elevation="@dimen/login_button_elevation"
     android:orientation="vertical"
-    android:paddingBottom="32dp">
+    android:paddingBottom="@dimen/login_button_margin_vertical">
 
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/sliderDrawer"
-        android:layout_width="75dp"
-        android:layout_height="5dp"
+        android:layout_width="@dimen/bottom_sheet_drawer_width"
+        android:layout_height="@dimen/bottom_sheet_drawer_height"
         android:layout_gravity="center"
-        android:layout_marginTop="18dp"
+        android:layout_marginTop="@dimen/bottom_sheet_drawer_margin_vertical"
         app:cardBackgroundColor="@color/custom_toast_font_normal_soft_gray"
-        app:cardCornerRadius="50dp"
+        app:cardCornerRadius="@dimen/login_button_corner_radius"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -24,12 +24,12 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginHorizontal="16dp"
-        android:layout_marginTop="18dp"
+        android:layout_marginHorizontal="@dimen/list_item_padding"
+        android:layout_marginTop="@dimen/bottom_sheet_drawer_margin_vertical"
         android:text="@string/report_trial"
         android:textAlignment="center"
         android:textColor="@color/black"
-        android:textSize="18sp"
+        android:textSize="@dimen/text_size_large"
         android:textStyle="bold" />
 
     <com.google.android.material.textfield.TextInputLayout
@@ -37,15 +37,15 @@
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginHorizontal="16dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginHorizontal="@dimen/list_item_padding"
+        android:layout_marginTop="@dimen/user_info_item_margin_top"
         android:hint="@string/case_description"
-        app:boxCornerRadiusBottomEnd="25dp"
-        app:boxCornerRadiusBottomStart="25dp"
-        app:boxCornerRadiusTopEnd="25dp"
-        app:boxCornerRadiusTopStart="25dp"
+        app:boxCornerRadiusBottomEnd="@dimen/login_field_corner_radius"
+        app:boxCornerRadiusBottomStart="@dimen/login_field_corner_radius"
+        app:boxCornerRadiusTopEnd="@dimen/login_field_corner_radius"
+        app:boxCornerRadiusTopStart="@dimen/login_field_corner_radius"
         app:boxStrokeColor="@color/black"
-        app:boxStrokeWidth="2dp"
+        app:boxStrokeWidth="@dimen/login_field_stroke_width"
         app:expandedHintEnabled="true"
         app:hintAnimationEnabled="true"
         app:hintTextColor="@color/black">
@@ -53,33 +53,33 @@
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/descriptionField"
             android:layout_width="match_parent"
-            android:layout_height="150dp"
+            android:layout_height="@dimen/main_menu_item_height"
             android:gravity="top"
             android:inputType="textMultiLine"
-            android:textSize="14sp" />
+            android:textSize="@dimen/text_size_small" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <LinearLayout
         android:id="@+id/actionsButtonContainer"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginHorizontal="16dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginHorizontal="@dimen/list_item_padding"
+        android:layout_marginTop="@dimen/user_info_item_margin_top"
         android:orientation="horizontal"
         android:visibility="gone">
 
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/notPassButton"
             android:layout_width="match_parent"
-            android:layout_height="46dp"
-            android:layout_marginVertical="8dp"
-            android:layout_marginEnd="4dp"
+            android:layout_height="@dimen/bottom_sheet_padding_bottom"
+            android:layout_marginVertical="@dimen/user_info_item_margin_top"
+            android:layout_marginEnd="@dimen/dialog_loading_content_padding"
             android:layout_weight="1"
             android:visibility="visible"
             app:cardBackgroundColor="@color/white"
-            app:cardCornerRadius="50dp"
+            app:cardCornerRadius="@dimen/login_button_corner_radius"
             app:strokeColor="@color/custom_toast_font_failed"
-            app:strokeWidth="2dp">
+            app:strokeWidth="@dimen/login_field_stroke_width">
 
             <TextView
                 android:layout_width="wrap_content"
@@ -87,15 +87,15 @@
                 android:layout_gravity="center"
                 android:text="@string/not_pass"
                 android:textColor="@color/custom_toast_font_failed"
-                android:textSize="16sp"
+                android:textSize="@dimen/text_size_medium"
                 android:textStyle="bold" />
 
             <ProgressBar
                 android:id="@+id/notPassLoading"
-                android:layout_width="38dp"
-                android:layout_height="38dp"
+                android:layout_width="@dimen/login_progress_bar_size"
+                android:layout_height="@dimen/login_progress_bar_size"
                 android:layout_gravity="center_vertical"
-                android:layout_marginStart="4dp"
+                android:layout_marginStart="@dimen/dialog_loading_content_padding"
                 android:indeterminateTint="@color/custom_toast_font_failed"
                 android:visibility="gone" />
         </com.google.android.material.card.MaterialCardView>
@@ -103,13 +103,13 @@
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/passButton"
             android:layout_width="match_parent"
-            android:layout_height="46dp"
-            android:layout_marginVertical="8dp"
-            android:layout_marginStart="4dp"
+            android:layout_height="@dimen/bottom_sheet_padding_bottom"
+            android:layout_marginVertical="@dimen/user_info_item_margin_top"
+            android:layout_marginStart="@dimen/dialog_loading_content_padding"
             android:layout_weight="1"
             android:visibility="visible"
             app:cardBackgroundColor="@color/custom_toast_background_success"
-            app:cardCornerRadius="50dp"
+            app:cardCornerRadius="@dimen/login_button_corner_radius"
             app:strokeWidth="0dp">
 
             <TextView
@@ -118,15 +118,15 @@
                 android:layout_gravity="center"
                 android:text="@string/pass"
                 android:textColor="@color/custom_toast_font_success"
-                android:textSize="16sp"
+                android:textSize="@dimen/text_size_medium"
                 android:textStyle="bold" />
 
             <ProgressBar
                 android:id="@+id/passLoading"
-                android:layout_width="38dp"
-                android:layout_height="38dp"
+                android:layout_width="@dimen/login_progress_bar_size"
+                android:layout_height="@dimen/login_progress_bar_size"
                 android:layout_gravity="center_vertical"
-                android:layout_marginStart="4dp"
+                android:layout_marginStart="@dimen/dialog_loading_content_padding"
                 android:indeterminateTint="@color/custom_toast_font_success"
                 android:visibility="gone" />
         </com.google.android.material.card.MaterialCardView>

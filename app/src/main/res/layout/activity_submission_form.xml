@@ -11,9 +11,9 @@
     <RelativeLayout
         android:id="@+id/toolBar"
         android:layout_width="match_parent"
-        android:layout_height="48dp"
+        android:layout_height="@dimen/toolbar_height"
         android:background="@color/white"
-        android:elevation="8dp"
+        android:elevation="@dimen/login_button_elevation"
         android:theme="?attr/actionBarTheme"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -25,11 +25,11 @@
             android:layout_height="wrap_content"
             android:layout_alignParentStart="true"
             android:layout_centerVertical="true"
-            android:layout_marginStart="4dp"
+            android:layout_marginStart="@dimen/dialog_loading_content_padding"
             app:cardBackgroundColor="@android:color/transparent"
-            app:cardCornerRadius="50dp"
+            app:cardCornerRadius="@dimen/login_button_corner_radius"
             app:cardElevation="0dp"
-            app:contentPadding="8dp"
+            app:contentPadding="@dimen/dialog_margin"
             app:strokeWidth="0dp">
 
             <ImageView
@@ -46,7 +46,7 @@
             android:layout_centerInParent="true"
             android:text="@string/make_submission_title"
             android:textColor="@color/black"
-            android:textSize="16sp"
+            android:textSize="@dimen/text_size_medium"
             android:textStyle="bold"
             tools:ignore="RelativeOverlap" />
 
@@ -56,27 +56,27 @@
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
             android:layout_centerVertical="true"
-            android:layout_marginEnd="4dp"
+            android:layout_marginEnd="@dimen/dialog_loading_content_padding"
             app:cardBackgroundColor="@android:color/transparent"
-            app:cardCornerRadius="50dp"
+            app:cardCornerRadius="@dimen/login_button_corner_radius"
             app:cardElevation="0dp"
-            app:contentPadding="8dp"
+            app:contentPadding="@dimen/dialog_margin"
             app:strokeWidth="0dp">
 
             <ImageView
-                android:layout_width="21dp"
-                android:layout_height="21dp"
+                android:layout_width="@dimen/list_item_shimmer_location_icon_size"
+                android:layout_height="@dimen/list_item_shimmer_location_icon_size"
                 android:src="@drawable/done_icon"
                 tools:ignore="ContentDescription" />
         </com.google.android.material.card.MaterialCardView>
 
         <ProgressBar
             android:id="@+id/loadingBar"
-            android:layout_width="36dp"
-            android:layout_height="36dp"
+            android:layout_width="@dimen/main_menu_notification_icon"
+            android:layout_height="@dimen/main_menu_notification_icon"
             android:layout_alignParentEnd="true"
             android:layout_centerVertical="true"
-            android:layout_marginEnd="4dp"
+            android:layout_marginEnd="@dimen/dialog_loading_content_padding"
             android:indeterminateTint="@color/button_color"
             android:visibility="gone" />
     </RelativeLayout>
@@ -94,21 +94,21 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:paddingTop="16dp">
+            android:paddingTop="@dimen/list_item_padding">
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/caseTitleFieldLayout"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginHorizontal="16dp"
+                android:layout_marginHorizontal="@dimen/list_item_padding"
                 android:hint="@string/case_title"
-                app:boxCornerRadiusBottomEnd="25dp"
-                app:boxCornerRadiusBottomStart="25dp"
-                app:boxCornerRadiusTopEnd="25dp"
-                app:boxCornerRadiusTopStart="25dp"
+                app:boxCornerRadiusBottomEnd="@dimen/login_field_corner_radius"
+                app:boxCornerRadiusBottomStart="@dimen/login_field_corner_radius"
+                app:boxCornerRadiusTopEnd="@dimen/login_field_corner_radius"
+                app:boxCornerRadiusTopStart="@dimen/login_field_corner_radius"
                 app:boxStrokeColor="@color/black"
-                app:boxStrokeWidth="2dp"
+                app:boxStrokeWidth="@dimen/login_field_stroke_width"
                 app:expandedHintEnabled="true"
                 app:hintAnimationEnabled="true"
                 app:hintTextColor="@color/black">
@@ -118,7 +118,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="text"
-                    android:textSize="14sp" />
+                    android:textSize="@dimen/text_size_small" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
@@ -126,15 +126,15 @@
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginHorizontal="16dp"
-                android:layout_marginTop="8dp"
+                android:layout_marginHorizontal="@dimen/list_item_padding"
+                android:layout_marginTop="@dimen/user_info_item_margin_top"
                 android:hint="@string/location"
-                app:boxCornerRadiusBottomEnd="25dp"
-                app:boxCornerRadiusBottomStart="25dp"
-                app:boxCornerRadiusTopEnd="25dp"
-                app:boxCornerRadiusTopStart="25dp"
+                app:boxCornerRadiusBottomEnd="@dimen/login_field_corner_radius"
+                app:boxCornerRadiusBottomStart="@dimen/login_field_corner_radius"
+                app:boxCornerRadiusTopEnd="@dimen/login_field_corner_radius"
+                app:boxCornerRadiusTopStart="@dimen/login_field_corner_radius"
                 app:boxStrokeColor="@color/black"
-                app:boxStrokeWidth="2dp"
+                app:boxStrokeWidth="@dimen/login_field_stroke_width"
                 app:expandedHintEnabled="true"
                 app:hintAnimationEnabled="true"
                 app:hintTextColor="@color/black">
@@ -144,58 +144,54 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="text"
-                    android:textSize="14sp" />
+                    android:textSize="@dimen/text_size_small" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/departmentDropdownLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginHorizontal="16dp"
-                android:layout_marginTop="8dp"
-                android:minHeight="54dp"
+                android:layout_marginHorizontal="@dimen/list_item_padding"
+                android:layout_marginTop="@dimen/user_info_item_margin_top"
+                android:minHeight="@dimen/toolbar_height"
                 app:cardBackgroundColor="@android:color/transparent"
-                app:cardCornerRadius="50dp"
+                app:cardCornerRadius="@dimen/login_button_corner_radius"
                 app:cardElevation="0dp"
-                app:contentPaddingBottom="8dp"
-                app:contentPaddingLeft="8dp"
-                app:contentPaddingRight="8dp"
-                app:contentPaddingTop="8dp"
+                app:contentPadding="@dimen/dialog_margin"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/toolBar"
                 app:strokeColor="@color/form_field_stroke"
-                app:strokeWidth="2dp">
+                app:strokeWidth="@dimen/login_field_stroke_width">
 
                 <TextView
                     android:id="@+id/selectedDepartmentText"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
-                    android:layout_marginHorizontal="8dp"
+                    android:layout_marginHorizontal="@dimen/dialog_margin"
                     android:text="@string/department_destination"
                     android:textColor="@color/black"
-                    android:textSize="14sp" />
+                    android:textSize="@dimen/text_size_small" />
             </com.google.android.material.card.MaterialCardView>
 
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/categoryDropdownLayout"
                 android:layout_width="match_parent"
-                android:layout_height="54dp"
-                android:layout_marginHorizontal="16dp"
-                android:layout_marginTop="8dp"
+                android:layout_height="@dimen/toolbar_height"
+                android:layout_marginHorizontal="@dimen/list_item_padding"
+                android:layout_marginTop="@dimen/user_info_item_margin_top"
                 app:cardBackgroundColor="@android:color/transparent"
-                app:cardCornerRadius="50dp"
+                app:cardCornerRadius="@dimen/login_button_corner_radius"
                 app:cardElevation="0dp"
-                app:contentPaddingBottom="2dp"
-                app:contentPaddingLeft="4dp"
-                app:contentPaddingRight="4dp"
-                app:contentPaddingTop="2dp"
+                app:contentPadding="@dimen/list_item_progress_content_margin_top_small"
+                app:contentPaddingLeft="@dimen/dialog_loading_content_padding"
+                app:contentPaddingRight="@dimen/dialog_loading_content_padding"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/toolBar"
                 app:strokeColor="@color/form_field_stroke"
-                app:strokeWidth="2dp">
+                app:strokeWidth="@dimen/login_field_stroke_width">
 
                 <Spinner
                     android:id="@+id/categoryDropdown"
@@ -210,15 +206,15 @@
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginHorizontal="16dp"
-                android:layout_marginTop="8dp"
+                android:layout_marginHorizontal="@dimen/list_item_padding"
+                android:layout_marginTop="@dimen/user_info_item_margin_top"
                 android:hint="@string/machine_code"
-                app:boxCornerRadiusBottomEnd="25dp"
-                app:boxCornerRadiusBottomStart="25dp"
-                app:boxCornerRadiusTopEnd="25dp"
-                app:boxCornerRadiusTopStart="25dp"
+                app:boxCornerRadiusBottomEnd="@dimen/login_field_corner_radius"
+                app:boxCornerRadiusBottomStart="@dimen/login_field_corner_radius"
+                app:boxCornerRadiusTopEnd="@dimen/login_field_corner_radius"
+                app:boxCornerRadiusTopStart="@dimen/login_field_corner_radius"
                 app:boxStrokeColor="@color/black"
-                app:boxStrokeWidth="2dp"
+                app:boxStrokeWidth="@dimen/login_field_stroke_width"
                 app:expandedHintEnabled="true"
                 app:hintAnimationEnabled="true"
                 app:hintTextColor="@color/black">
@@ -228,7 +224,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="text"
-                    android:textSize="14sp" />
+                    android:textSize="@dimen/text_size_small" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
@@ -236,15 +232,15 @@
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginHorizontal="16dp"
-                android:layout_marginTop="8dp"
+                android:layout_marginHorizontal="@dimen/list_item_padding"
+                android:layout_marginTop="@dimen/user_info_item_margin_top"
                 android:hint="@string/machine_name"
-                app:boxCornerRadiusBottomEnd="25dp"
-                app:boxCornerRadiusBottomStart="25dp"
-                app:boxCornerRadiusTopEnd="25dp"
-                app:boxCornerRadiusTopStart="25dp"
+                app:boxCornerRadiusBottomEnd="@dimen/login_field_corner_radius"
+                app:boxCornerRadiusBottomStart="@dimen/login_field_corner_radius"
+                app:boxCornerRadiusTopEnd="@dimen/login_field_corner_radius"
+                app:boxCornerRadiusTopStart="@dimen/login_field_corner_radius"
                 app:boxStrokeColor="@color/black"
-                app:boxStrokeWidth="2dp"
+                app:boxStrokeWidth="@dimen/login_field_stroke_width"
                 app:expandedHintEnabled="true"
                 app:hintAnimationEnabled="true"
                 app:hintTextColor="@color/black">
@@ -254,7 +250,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="text"
-                    android:textSize="14sp" />
+                    android:textSize="@dimen/text_size_small" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
@@ -262,15 +258,15 @@
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginHorizontal="16dp"
-                android:layout_marginTop="8dp"
+                android:layout_marginHorizontal="@dimen/list_item_padding"
+                android:layout_marginTop="@dimen/user_info_item_margin_top"
                 android:hint="@string/case_description"
-                app:boxCornerRadiusBottomEnd="25dp"
-                app:boxCornerRadiusBottomStart="25dp"
-                app:boxCornerRadiusTopEnd="25dp"
-                app:boxCornerRadiusTopStart="25dp"
+                app:boxCornerRadiusBottomEnd="@dimen/login_field_corner_radius"
+                app:boxCornerRadiusBottomStart="@dimen/login_field_corner_radius"
+                app:boxCornerRadiusTopEnd="@dimen/login_field_corner_radius"
+                app:boxCornerRadiusTopStart="@dimen/login_field_corner_radius"
                 app:boxStrokeColor="@color/black"
-                app:boxStrokeWidth="2dp"
+                app:boxStrokeWidth="@dimen/login_field_stroke_width"
                 app:expandedHintEnabled="true"
                 app:hintAnimationEnabled="true"
                 app:hintTextColor="@color/black">
@@ -278,10 +274,10 @@
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/descriptionField"
                     android:layout_width="match_parent"
-                    android:layout_height="250dp"
+                    android:layout_height="@dimen/list_item_progress_image_container_height"
                     android:gravity="top"
                     android:inputType="textMultiLine"
-                    android:textSize="14sp" />
+                    android:textSize="@dimen/text_size_small" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <!--<TextView
@@ -307,33 +303,33 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginHorizontal="16dp"
-                android:layout_marginTop="8dp"
+                android:layout_marginHorizontal="@dimen/list_item_padding"
+                android:layout_marginTop="@dimen/user_info_item_margin_top"
                 android:text="@string/attach_photo"
                 android:textColor="@color/black"
-                android:textSize="14sp"
+                android:textSize="@dimen/text_size_small"
                 android:textStyle="bold" />
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginHorizontal="16dp"
-                android:layout_marginTop="4dp"
-                android:layout_marginBottom="16dp"
+                android:layout_marginHorizontal="@dimen/list_item_padding"
+                android:layout_marginTop="@dimen/dialog_loading_content_padding"
+                android:layout_marginBottom="@dimen/list_item_padding"
                 android:orientation="horizontal">
 
                 <com.google.android.material.card.MaterialCardView
                     android:id="@+id/chooseFileButton"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginVertical="4dp"
+                    android:layout_marginVertical="@dimen/dialog_loading_content_padding"
                     app:cardBackgroundColor="@color/button_color"
-                    app:cardCornerRadius="50dp"
-                    app:cardElevation="2dp"
-                    app:contentPaddingBottom="8dp"
-                    app:contentPaddingLeft="16dp"
-                    app:contentPaddingRight="16dp"
-                    app:contentPaddingTop="8dp"
+                    app:cardCornerRadius="@dimen/login_button_corner_radius"
+                    app:cardElevation="@dimen/dialog_elevation"
+                    app:contentPaddingBottom="@dimen/dialog_margin"
+                    app:contentPaddingLeft="@dimen/list_item_padding"
+                    app:contentPaddingRight="@dimen/list_item_padding"
+                    app:contentPaddingTop="@dimen/dialog_margin"
                     app:strokeWidth="0dp">
 
                     <TextView
@@ -341,7 +337,7 @@
                         android:layout_height="wrap_content"
                         android:text="@string/choose_file"
                         android:textColor="@color/white"
-                        android:textSize="16sp"
+                        android:textSize="@dimen/text_size_medium"
                         android:textStyle="bold" />
                 </com.google.android.material.card.MaterialCardView>
 
@@ -350,15 +346,12 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:layout_marginStart="8dp"
+                    android:layout_marginStart="@dimen/dialog_margin"
                     android:visibility="gone"
                     app:cardBackgroundColor="@android:color/transparent"
-                    app:cardCornerRadius="50dp"
+                    app:cardCornerRadius="@dimen/login_button_corner_radius"
                     app:cardElevation="0dp"
-                    app:contentPaddingBottom="8dp"
-                    app:contentPaddingLeft="16dp"
-                    app:contentPaddingRight="16dp"
-                    app:contentPaddingTop="8dp"
+                    app:contentPadding="@dimen/dialog_margin"
                     app:strokeWidth="0dp">
 
                     <TextView
@@ -367,7 +360,7 @@
                         android:layout_height="wrap_content"
                         android:text="@string/manage_photo"
                         android:textColor="@color/black"
-                        android:textSize="12sp"
+                        android:textSize="@dimen/text_size_micro"
                         android:textStyle="bold" />
                 </com.google.android.material.card.MaterialCardView>
 
@@ -376,15 +369,12 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:layout_marginStart="8dp"
+                    android:layout_marginStart="@dimen/dialog_margin"
                     android:visibility="gone"
                     app:cardBackgroundColor="@android:color/transparent"
-                    app:cardCornerRadius="50dp"
+                    app:cardCornerRadius="@dimen/login_button_corner_radius"
                     app:cardElevation="0dp"
-                    app:contentPaddingBottom="8dp"
-                    app:contentPaddingLeft="16dp"
-                    app:contentPaddingRight="16dp"
-                    app:contentPaddingTop="8dp"
+                    app:contentPadding="@dimen/dialog_margin"
                     app:strokeWidth="0dp">
 
                     <TextView
@@ -392,7 +382,7 @@
                         android:layout_height="wrap_content"
                         android:text="@string/manage_old_photo"
                         android:textColor="@color/black"
-                        android:textSize="12sp"
+                        android:textSize="@dimen/text_size_micro"
                         android:textStyle="bold" />
                 </com.google.android.material.card.MaterialCardView>
             </LinearLayout>

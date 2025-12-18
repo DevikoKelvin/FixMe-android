@@ -11,9 +11,9 @@
     <RelativeLayout
         android:id="@+id/toolBar"
         android:layout_width="match_parent"
-        android:layout_height="48dp"
+        android:layout_height="@dimen/toolbar_height"
         android:background="@color/white"
-        android:elevation="8dp"
+        android:elevation="@dimen/card_elevation"
         android:theme="?attr/actionBarTheme"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -25,11 +25,11 @@
             android:layout_height="wrap_content"
             android:layout_alignParentStart="true"
             android:layout_centerVertical="true"
-            android:layout_marginStart="4dp"
+            android:layout_marginStart="@dimen/dialog_loading_content_padding"
             app:cardBackgroundColor="@android:color/transparent"
-            app:cardCornerRadius="50dp"
+            app:cardCornerRadius="@dimen/login_button_corner_radius"
             app:cardElevation="0dp"
-            app:contentPadding="8dp"
+            app:contentPadding="@dimen/dialog_margin"
             app:strokeWidth="0dp">
 
             <ImageView
@@ -45,7 +45,7 @@
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
             android:textColor="@color/black"
-            android:textSize="16sp"
+            android:textSize="@dimen/text_size_medium"
             android:textStyle="bold"
             tools:ignore="RelativeOverlap"
             tools:text="@string/submission_detail_title" />
@@ -56,12 +56,12 @@
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
             android:layout_centerVertical="true"
-            android:layout_marginEnd="4dp"
+            android:layout_marginEnd="@dimen/dialog_loading_content_padding"
             android:visibility="visible"
             app:cardBackgroundColor="@android:color/transparent"
-            app:cardCornerRadius="8dp"
+            app:cardCornerRadius="@dimen/card_corner_radius"
             app:cardElevation="0dp"
-            app:contentPadding="8dp"
+            app:contentPadding="@dimen/dialog_margin"
             app:strokeWidth="0dp">
 
             <ImageView
@@ -86,7 +86,7 @@
             android:id="@+id/contentScrollContainer"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_marginTop="8dp"
+            android:layout_marginTop="@dimen/dialog_margin"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -109,13 +109,13 @@
                         tools:ignore="UselessLeaf">
 
                         <com.google.android.material.card.MaterialCardView
-                            android:layout_width="wrap_content"
-                            android:layout_height="425dp"
+                            android:layout_width="match_parent"
+                            android:layout_height="@dimen/submission_detail_image_height"
                             android:layout_gravity="center"
-                            android:layout_margin="8dp"
+                            android:layout_margin="@dimen/dialog_margin"
                             app:cardBackgroundColor="@color/custom_toast_font_normal_soft_gray"
-                            app:cardCornerRadius="16dp"
-                            app:cardElevation="2dp">
+                            app:cardCornerRadius="@dimen/list_item_progress_card_corner_radius"
+                            app:cardElevation="@dimen/dialog_elevation">
 
                             <androidx.viewpager.widget.ViewPager
                                 android:layout_width="match_parent"
@@ -131,18 +131,18 @@
                         <TextView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginHorizontal="16dp"
-                            android:layout_marginTop="16dp"
+                            android:layout_marginHorizontal="@dimen/activity_horizontal_margin"
+                            android:layout_marginTop="@dimen/activity_horizontal_margin"
                             android:background="@color/custom_toast_font_normal_soft_gray"
                             android:textColor="@color/custom_toast_font_normal_soft_gray"
-                            android:textSize="16sp"
+                            android:textSize="@dimen/text_size_medium"
                             android:textStyle="bold"
                             tools:text="PINTU AUTOCLAVE ECHUNG D-14 TIDAK DAPAT MENUTUP" />
 
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginHorizontal="16dp"
+                            android:layout_marginHorizontal="@dimen/activity_horizontal_margin"
                             android:orientation="horizontal">
 
                             <TextView
@@ -151,26 +151,26 @@
                                 android:layout_gravity="center"
                                 android:layout_weight="1"
                                 android:background="@color/custom_toast_font_normal_soft_gray"
-                                android:textSize="14sp" />
+                                android:textSize="@dimen/text_size_small" />
 
                             <com.google.android.material.card.MaterialCardView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="end|center"
-                                android:layout_margin="4dp"
+                                android:layout_margin="@dimen/dialog_loading_content_padding"
                                 app:cardBackgroundColor="@android:color/transparent"
-                                app:cardCornerRadius="50dp"
+                                app:cardCornerRadius="@dimen/login_button_corner_radius"
                                 app:cardElevation="0dp"
-                                app:contentPadding="4dp"
-                                app:contentPaddingLeft="8dp"
-                                app:contentPaddingRight="8dp"
+                                app:contentPadding="@dimen/dialog_loading_content_padding"
+                                app:contentPaddingLeft="@dimen/dialog_margin"
+                                app:contentPaddingRight="@dimen/dialog_margin"
                                 app:strokeWidth="0dp">
 
                                 <TextView
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:textColor="@color/white"
-                                    android:textSize="12sp"
+                                    android:textSize="@dimen/text_size_micro"
                                     android:textStyle="bold"
                                     tools:text="Low" />
                             </com.google.android.material.card.MaterialCardView>
@@ -179,20 +179,20 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="end|center"
-                                android:layout_margin="4dp"
+                                android:layout_margin="@dimen/dialog_loading_content_padding"
                                 app:cardBackgroundColor="@android:color/transparent"
-                                app:cardCornerRadius="50dp"
+                                app:cardCornerRadius="@dimen/login_button_corner_radius"
                                 app:cardElevation="0dp"
-                                app:contentPadding="4dp"
-                                app:contentPaddingLeft="8dp"
-                                app:contentPaddingRight="8dp"
+                                app:contentPadding="@dimen/dialog_loading_content_padding"
+                                app:contentPaddingLeft="@dimen/dialog_margin"
+                                app:contentPaddingRight="@dimen/dialog_margin"
                                 app:strokeWidth="0dp">
 
                                 <TextView
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:textColor="@color/white"
-                                    android:textSize="12sp"
+                                    android:textSize="@dimen/text_size_micro"
                                     android:textStyle="bold"
                                     tools:text="On Progress" />
                             </com.google.android.material.card.MaterialCardView>
@@ -201,23 +201,23 @@
                         <TextView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginHorizontal="16dp"
-                            android:layout_marginTop="8dp"
+                            android:layout_marginHorizontal="@dimen/activity_horizontal_margin"
+                            android:layout_marginTop="@dimen/dialog_margin"
                             android:background="@color/custom_toast_font_normal_soft_gray"
-                            android:textSize="16sp"
+                            android:textSize="@dimen/text_size_medium"
                             android:textStyle="bold" />
 
                         <TextView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginHorizontal="16dp"
+                            android:layout_marginHorizontal="@dimen/activity_horizontal_margin"
                             android:background="@color/custom_toast_font_normal_soft_gray" />
 
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginHorizontal="16dp"
-                            android:layout_marginVertical="8dp"
+                            android:layout_marginHorizontal="@dimen/activity_horizontal_margin"
+                            android:layout_marginVertical="@dimen/dialog_margin"
                             android:orientation="horizontal"
                             tools:ignore="DisableBaselineAlignment">
 
@@ -245,7 +245,7 @@
                             <LinearLayout
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
-                                android:layout_marginStart="4dp"
+                                android:layout_marginStart="@dimen/dialog_loading_content_padding"
                                 android:layout_weight="1"
                                 android:orientation="vertical">
 
@@ -271,13 +271,13 @@
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginHorizontal="16dp"
+                            android:layout_marginHorizontal="@dimen/activity_horizontal_margin"
                             android:orientation="horizontal"
                             tools:ignore="UseCompoundDrawables">
 
                             <ImageView
-                                android:layout_width="21dp"
-                                android:layout_height="21dp"
+                                android:layout_width="@dimen/list_item_shimmer_location_icon_size"
+                                android:layout_height="@dimen/list_item_shimmer_location_icon_size"
                                 android:layout_gravity="center"
                                 android:background="@color/custom_toast_font_normal_soft_gray"
                                 tools:ignore="ContentDescription" />
@@ -285,7 +285,7 @@
                             <TextView
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
-                                android:layout_marginStart="8dp"
+                                android:layout_marginStart="@dimen/dialog_margin"
                                 android:layout_weight="1"
                                 android:background="@color/custom_toast_font_normal_soft_gray"
                                 android:textColor="@color/custom_toast_font_normal_soft_gray"
@@ -295,21 +295,21 @@
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginHorizontal="16dp"
-                            android:layout_marginTop="4dp"
+                            android:layout_marginHorizontal="@dimen/activity_horizontal_margin"
+                            android:layout_marginTop="@dimen/dialog_loading_content_padding"
                             android:orientation="horizontal"
                             tools:ignore="UseCompoundDrawables">
 
                             <ImageView
-                                android:layout_width="21dp"
-                                android:layout_height="21dp"
+                                android:layout_width="@dimen/list_item_shimmer_location_icon_size"
+                                android:layout_height="@dimen/list_item_shimmer_location_icon_size"
                                 android:background="@color/custom_toast_font_normal_soft_gray"
                                 tools:ignore="ContentDescription" />
 
                             <TextView
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
-                                android:layout_marginStart="8dp"
+                                android:layout_marginStart="@dimen/dialog_margin"
                                 android:layout_weight="1"
                                 android:background="@color/custom_toast_font_normal_soft_gray"
                                 android:textColor="@color/custom_toast_font_normal_soft_gray"
@@ -319,21 +319,21 @@
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginHorizontal="16dp"
-                            android:layout_marginTop="4dp"
+                            android:layout_marginHorizontal="@dimen/activity_horizontal_margin"
+                            android:layout_marginTop="@dimen/dialog_loading_content_padding"
                             android:orientation="horizontal"
                             tools:ignore="UseCompoundDrawables">
 
                             <ImageView
-                                android:layout_width="21dp"
-                                android:layout_height="21dp"
+                                android:layout_width="@dimen/list_item_shimmer_location_icon_size"
+                                android:layout_height="@dimen/list_item_shimmer_location_icon_size"
                                 android:background="@color/custom_toast_font_normal_soft_gray"
                                 tools:ignore="ContentDescription" />
 
                             <TextView
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
-                                android:layout_marginStart="8dp"
+                                android:layout_marginStart="@dimen/dialog_margin"
                                 android:layout_weight="1"
                                 android:background="@color/custom_toast_font_normal_soft_gray"
                                 android:textColor="@color/custom_toast_font_normal_soft_gray"
@@ -343,21 +343,21 @@
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginHorizontal="16dp"
-                            android:layout_marginTop="4dp"
+                            android:layout_marginHorizontal="@dimen/activity_horizontal_margin"
+                            android:layout_marginTop="@dimen/dialog_loading_content_padding"
                             android:orientation="horizontal"
                             tools:ignore="UseCompoundDrawables">
 
                             <ImageView
-                                android:layout_width="21dp"
-                                android:layout_height="21dp"
+                                android:layout_width="@dimen/list_item_shimmer_location_icon_size"
+                                android:layout_height="@dimen/list_item_shimmer_location_icon_size"
                                 android:background="@color/custom_toast_font_normal_soft_gray"
                                 tools:ignore="ContentDescription" />
 
                             <TextView
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
-                                android:layout_marginStart="8dp"
+                                android:layout_marginStart="@dimen/dialog_margin"
                                 android:layout_weight="1"
                                 android:background="@color/custom_toast_font_normal_soft_gray"
                                 android:textColor="@color/custom_toast_font_normal_soft_gray"
@@ -367,21 +367,21 @@
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginHorizontal="16dp"
-                            android:layout_marginTop="4dp"
+                            android:layout_marginHorizontal="@dimen/activity_horizontal_margin"
+                            android:layout_marginTop="@dimen/dialog_loading_content_padding"
                             android:orientation="horizontal"
                             tools:ignore="UseCompoundDrawables">
 
                             <ImageView
-                                android:layout_width="21dp"
-                                android:layout_height="21dp"
+                                android:layout_width="@dimen/list_item_shimmer_location_icon_size"
+                                android:layout_height="@dimen/list_item_shimmer_location_icon_size"
                                 android:background="@color/custom_toast_font_normal_soft_gray"
                                 tools:ignore="ContentDescription" />
 
                             <TextView
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
-                                android:layout_marginStart="8dp"
+                                android:layout_marginStart="@dimen/dialog_margin"
                                 android:layout_weight="1"
                                 android:background="@color/custom_toast_font_normal_soft_gray"
                                 android:textColor="@color/custom_toast_font_normal_soft_gray"
@@ -391,13 +391,13 @@
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginHorizontal="16dp"
-                            android:layout_marginTop="4dp"
+                            android:layout_marginHorizontal="@dimen/activity_horizontal_margin"
+                            android:layout_marginTop="@dimen/dialog_loading_content_padding"
                             android:orientation="horizontal">
 
                             <ImageView
-                                android:layout_width="21dp"
-                                android:layout_height="21dp"
+                                android:layout_width="@dimen/list_item_shimmer_location_icon_size"
+                                android:layout_height="@dimen/list_item_shimmer_location_icon_size"
                                 android:layout_gravity="center"
                                 android:background="@color/custom_toast_font_normal_soft_gray"
                                 tools:ignore="ContentDescription" />
@@ -405,7 +405,7 @@
                             <LinearLayout
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:layout_marginStart="8dp"
+                                android:layout_marginStart="@dimen/dialog_margin"
                                 android:orientation="vertical">
 
                                 <LinearLayout
@@ -423,7 +423,7 @@
                                     <TextView
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
-                                        android:layout_marginStart="4dp"
+                                        android:layout_marginStart="@dimen/dialog_loading_content_padding"
                                         android:background="@color/custom_toast_font_normal_soft_gray"
                                         android:textColor="@color/custom_toast_font_normal_soft_gray"
                                         tools:text="2024-07-15 10:44:00" />
@@ -445,7 +445,7 @@
                                     <TextView
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
-                                        android:layout_marginStart="4dp"
+                                        android:layout_marginStart="@dimen/dialog_loading_content_padding"
                                         android:layout_marginTop="2dp"
                                         android:background="@color/custom_toast_font_normal_soft_gray"
                                         android:textColor="@color/custom_toast_font_normal_soft_gray"
@@ -468,7 +468,7 @@
                                     <TextView
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
-                                        android:layout_marginStart="4dp"
+                                        android:layout_marginStart="@dimen/dialog_loading_content_padding"
                                         android:layout_marginTop="2dp"
                                         android:background="@color/custom_toast_font_normal_soft_gray"
                                         android:textColor="@color/custom_toast_font_normal_soft_gray"
@@ -480,14 +480,14 @@
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginHorizontal="16dp"
-                            android:layout_marginTop="4dp"
-                            android:layout_marginBottom="100dp"
+                            android:layout_marginHorizontal="@dimen/activity_horizontal_margin"
+                            android:layout_marginTop="@dimen/dialog_loading_content_padding"
+                            android:layout_marginBottom="@dimen/submission_detail_bottom_margin"
                             android:orientation="horizontal">
 
                             <ImageView
-                                android:layout_width="21dp"
-                                android:layout_height="21dp"
+                                android:layout_width="@dimen/list_item_shimmer_location_icon_size"
+                                android:layout_height="@dimen/list_item_shimmer_location_icon_size"
                                 android:layout_gravity="center"
                                 android:background="@color/custom_toast_font_normal_soft_gray"
                                 tools:ignore="ContentDescription" />
@@ -495,7 +495,7 @@
                             <LinearLayout
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:layout_marginStart="8dp"
+                                android:layout_marginStart="@dimen/dialog_margin"
                                 android:orientation="vertical">
 
                                 <LinearLayout
@@ -583,13 +583,13 @@
 
                     <com.google.android.material.card.MaterialCardView
                         android:id="@+id/imageContainer"
-                        android:layout_width="wrap_content"
-                        android:layout_height="425dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/submission_detail_image_height"
                         android:layout_gravity="center"
-                        android:layout_margin="8dp"
+                        android:layout_margin="@dimen/dialog_margin"
                         app:cardBackgroundColor="@color/white"
-                        app:cardCornerRadius="16dp"
-                        app:cardElevation="2dp">
+                        app:cardCornerRadius="@dimen/list_item_progress_card_corner_radius"
+                        app:cardElevation="@dimen/dialog_elevation">
 
                         <androidx.viewpager.widget.ViewPager
                             android:id="@+id/imageCarouselHolder"
@@ -599,12 +599,12 @@
                         <me.relex.circleindicator.CircleIndicator
                             android:id="@+id/circleIndicator"
                             android:layout_width="match_parent"
-                            android:layout_height="36dp"
+                            android:layout_height="@dimen/main_menu_notification_icon"
                             android:layout_gravity="bottom"
-                            android:padding="5dp"
+                            android:padding="@dimen/list_item_progress_indicator_padding"
                             app:ci_drawable="@drawable/circle_indicator_color"
-                            app:ci_height="5dp"
-                            app:ci_width="5dp" />
+                            app:ci_height="@dimen/list_item_progress_indicator_size"
+                            app:ci_width="@dimen/list_item_progress_indicator_size" />
 
                         <ImageView
                             android:id="@+id/submissionImage"
@@ -619,17 +619,17 @@
                         android:id="@+id/submissionName"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginHorizontal="16dp"
-                        android:layout_marginTop="16dp"
+                        android:layout_marginHorizontal="@dimen/activity_horizontal_margin"
+                        android:layout_marginTop="@dimen/activity_horizontal_margin"
                         android:textColor="@color/black"
-                        android:textSize="16sp"
+                        android:textSize="@dimen/text_size_medium"
                         android:textStyle="bold"
                         tools:text="PINTU AUTOCLAVE ECHUNG D-14 TIDAK DAPAT MENUTUP" />
 
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginHorizontal="16dp"
+                        android:layout_marginHorizontal="@dimen/activity_horizontal_margin"
                         android:orientation="horizontal">
 
                         <TextView
@@ -638,7 +638,7 @@
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
                             android:layout_weight="1"
-                            android:textSize="14sp"
+                            android:textSize="@dimen/text_size_small"
                             tools:text="07 November 2024" />
 
                         <com.google.android.material.card.MaterialCardView
@@ -646,13 +646,13 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="end|center"
-                            android:layout_margin="4dp"
+                            android:layout_margin="@dimen/dialog_loading_content_padding"
                             app:cardBackgroundColor="@android:color/transparent"
-                            app:cardCornerRadius="50dp"
+                            app:cardCornerRadius="@dimen/login_button_corner_radius"
                             app:cardElevation="0dp"
-                            app:contentPadding="4dp"
-                            app:contentPaddingLeft="8dp"
-                            app:contentPaddingRight="8dp"
+                            app:contentPadding="@dimen/dialog_loading_content_padding"
+                            app:contentPaddingLeft="@dimen/dialog_margin"
+                            app:contentPaddingRight="@dimen/dialog_margin"
                             app:strokeWidth="0dp">
 
                             <TextView
@@ -660,7 +660,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:textColor="@color/white"
-                                android:textSize="12sp"
+                                android:textSize="@dimen/text_size_micro"
                                 android:textStyle="bold"
                                 tools:text="Low" />
                         </com.google.android.material.card.MaterialCardView>
@@ -670,13 +670,13 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="end|center"
-                            android:layout_margin="4dp"
+                            android:layout_margin="@dimen/dialog_loading_content_padding"
                             app:cardBackgroundColor="@android:color/transparent"
-                            app:cardCornerRadius="50dp"
+                            app:cardCornerRadius="@dimen/login_button_corner_radius"
                             app:cardElevation="0dp"
-                            app:contentPadding="4dp"
-                            app:contentPaddingLeft="8dp"
-                            app:contentPaddingRight="8dp"
+                            app:contentPadding="@dimen/dialog_loading_content_padding"
+                            app:contentPaddingLeft="@dimen/dialog_margin"
+                            app:contentPaddingRight="@dimen/dialog_margin"
                             app:strokeWidth="0dp">
 
                             <TextView
@@ -684,7 +684,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:textColor="@color/white"
-                                android:textSize="12sp"
+                                android:textSize="@dimen/text_size_micro"
                                 android:textStyle="bold"
                                 tools:text="On Progress" />
                         </com.google.android.material.card.MaterialCardView>
@@ -693,26 +693,26 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginHorizontal="16dp"
-                        android:layout_marginTop="8dp"
+                        android:layout_marginHorizontal="@dimen/activity_horizontal_margin"
+                        android:layout_marginTop="@dimen/dialog_margin"
                         android:text="@string/submission_description"
                         android:textColor="@color/black"
-                        android:textSize="16sp"
+                        android:textSize="@dimen/text_size_medium"
                         android:textStyle="bold" />
 
                     <TextView
                         android:id="@+id/submissionDescription"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginHorizontal="16dp"
+                        android:layout_marginHorizontal="@dimen/activity_horizontal_margin"
                         android:textColor="@color/black"
                         tools:text="@tools:sample/lorem" />
 
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginHorizontal="16dp"
-                        android:layout_marginVertical="8dp"
+                        android:layout_marginHorizontal="@dimen/activity_horizontal_margin"
+                        android:layout_marginVertical="@dimen/dialog_margin"
                         android:orientation="horizontal"
                         tools:ignore="DisableBaselineAlignment">
 
@@ -737,7 +737,7 @@
                         <LinearLayout
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:layout_marginStart="4dp"
+                            android:layout_marginStart="@dimen/dialog_loading_content_padding"
                             android:layout_weight="1"
                             android:orientation="vertical">
 
@@ -762,13 +762,13 @@
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginHorizontal="16dp"
+                        android:layout_marginHorizontal="@dimen/activity_horizontal_margin"
                         android:orientation="horizontal"
                         tools:ignore="UseCompoundDrawables">
 
                         <ImageView
-                            android:layout_width="21dp"
-                            android:layout_height="21dp"
+                            android:layout_width="@dimen/list_item_shimmer_location_icon_size"
+                            android:layout_height="@dimen/list_item_shimmer_location_icon_size"
                             android:layout_gravity="center"
                             android:src="@drawable/baseline_account_circle_24"
                             tools:ignore="ContentDescription" />
@@ -777,7 +777,7 @@
                             android:id="@+id/user"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:layout_marginStart="8dp"
+                            android:layout_marginStart="@dimen/dialog_margin"
                             android:layout_weight="1"
                             android:textColor="@color/black"
                             tools:text="Hendrick\nFrom Information Technology Department" />
@@ -786,14 +786,14 @@
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginHorizontal="16dp"
-                        android:layout_marginTop="4dp"
+                        android:layout_marginHorizontal="@dimen/activity_horizontal_margin"
+                        android:layout_marginTop="@dimen/dialog_loading_content_padding"
                         android:orientation="horizontal"
                         tools:ignore="UseCompoundDrawables">
 
                         <ImageView
-                            android:layout_width="21dp"
-                            android:layout_height="21dp"
+                            android:layout_width="@dimen/list_item_shimmer_location_icon_size"
+                            android:layout_height="@dimen/list_item_shimmer_location_icon_size"
                             android:src="@drawable/baseline_work_24"
                             tools:ignore="ContentDescription" />
 
@@ -801,7 +801,7 @@
                             android:id="@+id/department"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:layout_marginStart="8dp"
+                            android:layout_marginStart="@dimen/dialog_margin"
                             android:layout_weight="1"
                             android:textColor="@color/black"
                             tools:text="Engineering" />
@@ -810,14 +810,14 @@
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginHorizontal="16dp"
-                        android:layout_marginTop="4dp"
+                        android:layout_marginHorizontal="@dimen/activity_horizontal_margin"
+                        android:layout_marginTop="@dimen/dialog_loading_content_padding"
                         android:orientation="horizontal"
                         tools:ignore="UseCompoundDrawables">
 
                         <ImageView
-                            android:layout_width="21dp"
-                            android:layout_height="21dp"
+                            android:layout_width="@dimen/list_item_shimmer_location_icon_size"
+                            android:layout_height="@dimen/list_item_shimmer_location_icon_size"
                             android:src="@drawable/category_icon"
                             tools:ignore="ContentDescription" />
 
@@ -825,7 +825,7 @@
                             android:id="@+id/category"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:layout_marginStart="8dp"
+                            android:layout_marginStart="@dimen/dialog_margin"
                             android:layout_weight="1"
                             android:textColor="@color/black"
                             tools:text="IT" />
@@ -834,14 +834,14 @@
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginHorizontal="16dp"
-                        android:layout_marginTop="4dp"
+                        android:layout_marginHorizontal="@dimen/activity_horizontal_margin"
+                        android:layout_marginTop="@dimen/dialog_loading_content_padding"
                         android:orientation="horizontal"
                         tools:ignore="UseCompoundDrawables">
 
                         <ImageView
-                            android:layout_width="21dp"
-                            android:layout_height="21dp"
+                            android:layout_width="@dimen/list_item_shimmer_location_icon_size"
+                            android:layout_height="@dimen/list_item_shimmer_location_icon_size"
                             android:src="@drawable/baseline_access_time_24"
                             tools:ignore="ContentDescription" />
 
@@ -849,7 +849,7 @@
                             android:id="@+id/inputTime"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:layout_marginStart="8dp"
+                            android:layout_marginStart="@dimen/dialog_margin"
                             android:layout_weight="1"
                             android:textColor="@color/black"
                             tools:text="2024-07-15 11:02:03" />
@@ -858,14 +858,14 @@
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginHorizontal="16dp"
-                        android:layout_marginTop="4dp"
+                        android:layout_marginHorizontal="@dimen/activity_horizontal_margin"
+                        android:layout_marginTop="@dimen/dialog_loading_content_padding"
                         android:orientation="horizontal"
                         tools:ignore="UseCompoundDrawables">
 
                         <ImageView
-                            android:layout_width="21dp"
-                            android:layout_height="21dp"
+                            android:layout_width="@dimen/list_item_shimmer_location_icon_size"
+                            android:layout_height="@dimen/list_item_shimmer_location_icon_size"
                             android:src="@drawable/baseline_location_on_24"
                             tools:ignore="ContentDescription" />
 
@@ -873,7 +873,7 @@
                             android:id="@+id/location"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:layout_marginStart="8dp"
+                            android:layout_marginStart="@dimen/dialog_margin"
                             android:layout_weight="1"
                             android:textColor="@color/black"
                             tools:text="ERELA HQ" />
@@ -882,13 +882,13 @@
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginHorizontal="16dp"
-                        android:layout_marginTop="4dp"
+                        android:layout_marginHorizontal="@dimen/activity_horizontal_margin"
+                        android:layout_marginTop="@dimen/dialog_loading_content_padding"
                         android:orientation="horizontal">
 
                         <ImageView
-                            android:layout_width="21dp"
-                            android:layout_height="21dp"
+                            android:layout_width="@dimen/list_item_shimmer_location_icon_size"
+                            android:layout_height="@dimen/list_item_shimmer_location_icon_size"
                             android:layout_gravity="center"
                             android:src="@drawable/baseline_calendar_month_24"
                             tools:ignore="ContentDescription" />
@@ -896,7 +896,7 @@
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginStart="8dp"
+                            android:layout_marginStart="@dimen/dialog_margin"
                             android:orientation="vertical">
 
                             <LinearLayout
@@ -913,7 +913,7 @@
                                     android:id="@+id/reportTime"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:layout_marginStart="4dp"
+                                    android:layout_marginStart="@dimen/dialog_loading_content_padding"
                                     android:textColor="@color/black"
                                     tools:text="2024-07-15 10:44:00" />
                             </LinearLayout>
@@ -932,7 +932,7 @@
                                     android:id="@+id/startWork"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:layout_marginStart="4dp"
+                                    android:layout_marginStart="@dimen/dialog_loading_content_padding"
                                     android:textColor="@color/black"
                                     tools:text="2024-07-15 10:44:00" />
                             </LinearLayout>
@@ -951,7 +951,7 @@
                                     android:id="@+id/endWork"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:layout_marginStart="4dp"
+                                    android:layout_marginStart="@dimen/dialog_loading_content_padding"
                                     android:textColor="@color/black"
                                     tools:text="2024-07-15 10:44:00" />
                             </LinearLayout>
@@ -961,14 +961,14 @@
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginHorizontal="16dp"
-                        android:layout_marginTop="4dp"
-                        android:layout_marginBottom="100dp"
+                        android:layout_marginHorizontal="@dimen/activity_horizontal_margin"
+                        android:layout_marginTop="@dimen/dialog_loading_content_padding"
+                        android:layout_marginBottom="@dimen/submission_detail_bottom_margin"
                         android:orientation="horizontal">
 
                         <ImageView
-                            android:layout_width="21dp"
-                            android:layout_height="21dp"
+                            android:layout_width="@dimen/list_item_shimmer_location_icon_size"
+                            android:layout_height="@dimen/list_item_shimmer_location_icon_size"
                             android:layout_gravity="center"
                             android:src="@drawable/pic_icon"
                             tools:ignore="ContentDescription" />
@@ -976,7 +976,7 @@
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginStart="8dp"
+                            android:layout_marginStart="@dimen/dialog_margin"
                             android:orientation="vertical">
 
                             <LinearLayout
@@ -1063,7 +1063,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentStart="true"
             android:layout_centerVertical="true"
-            android:layout_marginBottom="4dp"
+            android:layout_marginBottom="@dimen/dialog_loading_content_padding"
             android:layout_toStartOf="@+id/actionSelfButton"
             android:orientation="horizontal"
             android:visibility="gone"
@@ -1075,15 +1075,15 @@
                 android:id="@+id/statusMessageContainer"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginVertical="16dp"
-                android:layout_marginStart="16dp"
-                android:layout_marginEnd="16dp"
+                android:layout_marginVertical="@dimen/activity_horizontal_margin"
+                android:layout_marginStart="@dimen/activity_horizontal_margin"
+                android:layout_marginEnd="@dimen/activity_horizontal_margin"
                 android:layout_weight="1"
-                android:minHeight="46dp"
+                android:minHeight="@dimen/bottom_sheet_padding_bottom"
                 android:visibility="gone"
                 app:cardBackgroundColor="@color/custom_toast_background_soft_blue"
-                app:cardCornerRadius="50dp"
-                app:cardElevation="4dp"
+                app:cardCornerRadius="@dimen/login_button_corner_radius"
+                app:cardElevation="@dimen/card_elevation"
                 app:strokeWidth="0dp">
 
                 <TextView
@@ -1091,10 +1091,10 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:drawablePadding="4dp"
+                    android:drawablePadding="@dimen/dialog_loading_content_padding"
                     android:textAlignment="center"
                     android:textColor="@color/custom_toast_background_normal_dark_gray"
-                    android:textSize="14sp"
+                    android:textSize="@dimen/text_size_small"
                     android:textStyle="bold"
                     tools:text="Waiting for action from hendrick\nClick to see progress" />
             </com.google.android.material.card.MaterialCardView>
@@ -1103,15 +1103,15 @@
                 android:id="@+id/onProgressButton"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginVertical="16dp"
-                android:layout_marginStart="16dp"
-                android:layout_marginEnd="16dp"
+                android:layout_marginVertical="@dimen/activity_horizontal_margin"
+                android:layout_marginStart="@dimen/activity_horizontal_margin"
+                android:layout_marginEnd="@dimen/activity_horizontal_margin"
                 android:layout_weight="1"
-                android:minHeight="46dp"
+                android:minHeight="@dimen/bottom_sheet_padding_bottom"
                 android:visibility="visible"
                 app:cardBackgroundColor="@color/custom_toast_font_normal_gray"
-                app:cardCornerRadius="50dp"
-                app:cardElevation="4dp"
+                app:cardCornerRadius="@dimen/login_button_corner_radius"
+                app:cardElevation="@dimen/card_elevation"
                 app:strokeWidth="0dp">
 
                 <TextView
@@ -1120,11 +1120,11 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:drawableStart="@drawable/baseline_timelapse_24"
-                    android:drawablePadding="4dp"
+                    android:drawablePadding="@dimen/dialog_loading_content_padding"
                     android:text="@string/message_on_progress"
                     android:textAlignment="center"
                     android:textColor="@color/custom_toast_background_normal_dark_gray"
-                    android:textSize="14sp"
+                    android:textSize="@dimen/text_size_small"
                     android:textStyle="bold"
                     tools:ignore="UseCompatTextViewDrawableXml" />
             </com.google.android.material.card.MaterialCardView>
@@ -1133,15 +1133,15 @@
                 android:id="@+id/seeTrialContainer"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:layout_marginVertical="16dp"
-                android:layout_marginEnd="16dp"
-                android:minHeight="46dp"
+                android:layout_marginVertical="@dimen/activity_horizontal_margin"
+                android:layout_marginEnd="@dimen/activity_horizontal_margin"
+                android:minHeight="@dimen/bottom_sheet_padding_bottom"
                 android:visibility="gone"
                 app:cardBackgroundColor="@color/status_on_trial"
-                app:cardCornerRadius="50dp"
-                app:cardElevation="4dp"
-                app:contentPaddingLeft="16dp"
-                app:contentPaddingRight="16dp"
+                app:cardCornerRadius="@dimen/login_button_corner_radius"
+                app:cardElevation="@dimen/card_elevation"
+                app:contentPaddingLeft="@dimen/activity_horizontal_margin"
+                app:contentPaddingRight="@dimen/activity_horizontal_margin"
                 app:strokeWidth="0dp">
 
                 <ImageView
@@ -1159,14 +1159,14 @@
             android:layout_height="wrap_content"
             android:layout_alignParentStart="true"
             android:layout_centerVertical="true"
-            android:layout_marginHorizontal="16dp"
-            android:layout_marginBottom="16dp"
+            android:layout_marginHorizontal="@dimen/activity_horizontal_margin"
+            android:layout_marginBottom="@dimen/activity_horizontal_margin"
             android:layout_toStartOf="@+id/actionSelfButton"
-            android:minHeight="46dp"
+            android:minHeight="@dimen/bottom_sheet_padding_bottom"
             android:visibility="gone"
             app:cardBackgroundColor="@color/button_color"
-            app:cardCornerRadius="50dp"
-            app:cardElevation="4dp"
+            app:cardCornerRadius="@dimen/login_button_corner_radius"
+            app:cardElevation="@dimen/card_elevation"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/actionSelfButton"
             app:layout_constraintStart_toStartOf="parent"
@@ -1179,7 +1179,7 @@
                 android:layout_gravity="center"
                 android:text="@string/action_text"
                 android:textColor="@color/white"
-                android:textSize="14sp"
+                android:textSize="@dimen/text_size_small"
                 android:textStyle="bold" />
         </com.google.android.material.card.MaterialCardView>
 
@@ -1187,8 +1187,8 @@
             android:id="@+id/actionSelfButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="16dp"
-            android:layout_marginBottom="16dp"
+            android:layout_marginEnd="@dimen/activity_horizontal_margin"
+            android:layout_marginBottom="@dimen/activity_horizontal_margin"
             android:text="@string/more_options"
             android:visibility="gone"
             app:backgroundTint="@color/custom_toast_background_soft_blue"
@@ -1203,8 +1203,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_above="@id/actionSelfButton"
-            android:layout_marginEnd="16dp"
-            android:layout_marginBottom="16dp"
+            android:layout_marginEnd="@dimen/activity_horizontal_margin"
+            android:layout_marginBottom="@dimen/activity_horizontal_margin"
             android:text="@string/action_edit"
             android:visibility="gone"
             app:backgroundTint="@color/custom_toast_background_normal"
@@ -1219,8 +1219,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_above="@id/actionSelfButton"
-            android:layout_marginEnd="16dp"
-            android:layout_marginBottom="16dp"
+            android:layout_marginEnd="@dimen/activity_horizontal_margin"
+            android:layout_marginBottom="@dimen/activity_horizontal_margin"
             android:text="@string/action_cancel"
             android:visibility="gone"
             app:backgroundTint="@color/custom_toast_font_failed"

@@ -13,7 +13,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/toolbar_background_staff"
-        android:elevation="8dp"
+        android:elevation="@dimen/card_elevation"
         android:minHeight="?attr/actionBarSize"
         android:theme="?attr/actionBarTheme"
         app:layout_constraintEnd_toEndOf="parent"
@@ -35,7 +35,7 @@
                 android:text="@string/app_name"
                 android:textAlignment="center"
                 android:textColor="@color/black"
-                android:textSize="18sp"
+                android:textSize="@dimen/text_size_large"
                 android:textStyle="bold" />
 
             <TextView
@@ -45,16 +45,16 @@
                 android:text="@string/main_menu"
                 android:textAlignment="center"
                 android:textColor="@color/status_pending"
-                android:textSize="14sp" />
+                android:textSize="@dimen/text_size_small" />
         </LinearLayout>
 
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/notificationButton"
-            android:layout_width="36dp"
-            android:layout_height="36dp"
+            android:layout_width="@dimen/main_menu_notification_icon"
+            android:layout_height="@dimen/main_menu_notification_icon"
             android:layout_alignParentEnd="true"
             android:layout_centerVertical="true"
-            android:layout_marginEnd="16dp"
+            android:layout_marginEnd="@dimen/activity_horizontal_margin"
             app:cardBackgroundColor="@android:color/transparent"
             app:cardCornerRadius="25dp"
             app:cardElevation="0dp"
@@ -85,6 +85,7 @@
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="36dp"
             android:layout_marginVertical="4dp"
+            android:textSize="@dimen/text_size_micro"
             android:textStyle="bold"
             tools:text="Owner" />
     </LinearLayout>
@@ -93,15 +94,15 @@
         android:id="@+id/contentContainer"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginHorizontal="16dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginHorizontal="@dimen/activity_horizontal_margin"
+        android:layout_marginTop="@dimen/activity_vertical_margin"
         android:orientation="horizontal"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/privilegeContainer"
         tools:ignore="DisableBaselineAlignment">
 
         <LinearLayout
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
             android:layout_weight="1"
@@ -112,7 +113,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="4dp"
-                android:textSize="16sp"
+                android:textSize="@dimen/text_size_medium"
                 tools:text="@string/welcome_message" />
 
             <com.google.android.material.card.MaterialCardView
@@ -120,7 +121,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:cardBackgroundColor="@android:color/transparent"
-                app:cardCornerRadius="8dp"
+                app:cardCornerRadius="@dimen/card_corner_radius"
                 app:cardElevation="0dp"
                 app:contentPadding="4dp">
 
@@ -129,7 +130,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:textColor="@color/black"
-                    android:textSize="20sp"
+                    android:textSize="@dimen/text_size_large"
                     android:textStyle="bold"
                     tools:text="Lie Ignatius Hendrick!" />
             </com.google.android.material.card.MaterialCardView>
@@ -137,18 +138,18 @@
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="wrap_content"
-            android:layout_height="56dp"
+            android:layout_height="wrap_content"
             android:gravity="top|end">
 
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/logOutButton"
                 android:layout_width="wrap_content"
-                android:layout_height="48dp"
+                android:layout_height="wrap_content"
                 android:layout_margin="8dp"
                 app:cardBackgroundColor="#FFEBEE"
-                app:cardCornerRadius="8dp"
-                app:cardElevation="2dp"
-                app:contentPadding="8dp"
+                app:cardCornerRadius="@dimen/card_corner_radius"
+                app:cardElevation="@dimen/card_elevation"
+                app:contentPadding="@dimen/button_padding"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -172,6 +173,7 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
                         android:layout_marginStart="4dp"
+                        android:textSize="@dimen/text_size_small"
                         android:text="@string/logout_text"
                         android:textColor="@color/black"
                         android:textStyle="bold" />
@@ -190,9 +192,9 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_marginHorizontal="16dp"
-            android:layout_marginVertical="16dp"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/activity_horizontal_margin"
+            android:layout_marginVertical="@dimen/activity_vertical_margin"
             android:orientation="vertical">
 
             <LinearLayout
@@ -203,12 +205,12 @@
                 <com.google.android.material.card.MaterialCardView
                     android:id="@+id/changePasswordMenu"
                     android:layout_width="match_parent"
-                    android:layout_height="150dp"
-                    android:layout_margin="16dp"
+                    android:layout_height="@dimen/main_menu_item_height"
+                    android:layout_margin="@dimen/main_menu_item_margin"
                     android:layout_weight="1"
                     app:cardBackgroundColor="#E0F2F1"
-                    app:cardCornerRadius="8dp"
-                    app:cardElevation="4dp"
+                    app:cardCornerRadius="@dimen/card_corner_radius"
+                    app:cardElevation="@dimen/card_elevation"
                     app:strokeWidth="0dp">
 
                     <LinearLayout
@@ -219,8 +221,8 @@
                         tools:ignore="UseCompoundDrawables">
 
                         <ImageView
-                            android:layout_width="50dp"
-                            android:layout_height="50dp"
+                            android:layout_width="@dimen/main_menu_item_icon_size"
+                            android:layout_height="@dimen/main_menu_item_icon_size"
                             android:src="@drawable/change_password_icon"
                             tools:ignore="ContentDescription" />
 
@@ -232,7 +234,7 @@
                             android:text="@string/change_password_title"
                             android:textAlignment="center"
                             android:textColor="@color/black"
-                            android:textSize="16sp"
+                            android:textSize="@dimen/text_size_medium"
                             android:textStyle="bold" />
                     </LinearLayout>
                 </com.google.android.material.card.MaterialCardView>
@@ -240,13 +242,13 @@
                 <com.google.android.material.card.MaterialCardView
                     android:id="@+id/makeSubmissionMenu"
                     android:layout_width="match_parent"
-                    android:layout_height="150dp"
-                    android:layout_margin="16dp"
+                    android:layout_height="@dimen/main_menu_item_height"
+                    android:layout_margin="@dimen/main_menu_item_margin"
                     android:layout_marginStart="8dp"
                     android:layout_weight="1"
                     app:cardBackgroundColor="#E0F2F1"
-                    app:cardCornerRadius="8dp"
-                    app:cardElevation="4dp"
+                    app:cardCornerRadius="@dimen/card_corner_radius"
+                    app:cardElevation="@dimen/card_elevation"
                     app:strokeWidth="0dp">
 
                     <LinearLayout
@@ -257,8 +259,8 @@
                         tools:ignore="UseCompoundDrawables">
 
                         <ImageView
-                            android:layout_width="50dp"
-                            android:layout_height="50dp"
+                            android:layout_width="@dimen/main_menu_item_icon_size"
+                            android:layout_height="@dimen/main_menu_item_icon_size"
                             android:src="@drawable/make_submission_icon"
                             tools:ignore="ContentDescription" />
 
@@ -270,7 +272,7 @@
                             android:text="@string/make_submission_title"
                             android:textAlignment="center"
                             android:textColor="@color/black"
-                            android:textSize="16sp"
+                            android:textSize="@dimen/text_size_medium"
                             android:textStyle="bold" />
                     </LinearLayout>
                 </com.google.android.material.card.MaterialCardView>
@@ -284,12 +286,12 @@
                 <com.google.android.material.card.MaterialCardView
                     android:id="@+id/submissionListMenu"
                     android:layout_width="0dp"
-                    android:layout_height="150dp"
-                    android:layout_margin="16dp"
+                    android:layout_height="@dimen/main_menu_item_height"
+                    android:layout_margin="@dimen/main_menu_item_margin"
                     android:layout_weight="1"
                     app:cardBackgroundColor="#E0F2F1"
-                    app:cardCornerRadius="8dp"
-                    app:cardElevation="4dp"
+                    app:cardCornerRadius="@dimen/card_corner_radius"
+                    app:cardElevation="@dimen/card_elevation"
                     app:strokeWidth="0dp">
 
                     <LinearLayout
@@ -300,8 +302,8 @@
                         tools:ignore="UseCompoundDrawables">
 
                         <ImageView
-                            android:layout_width="50dp"
-                            android:layout_height="50dp"
+                            android:layout_width="@dimen/main_menu_item_icon_size"
+                            android:layout_height="@dimen/main_menu_item_icon_size"
                             android:src="@drawable/submission_list_icon"
                             tools:ignore="ContentDescription" />
 
@@ -313,7 +315,7 @@
                             android:text="@string/submission_list_title"
                             android:textAlignment="center"
                             android:textColor="@color/black"
-                            android:textSize="16sp"
+                            android:textSize="@dimen/text_size_medium"
                             android:textStyle="bold" />
                     </LinearLayout>
                 </com.google.android.material.card.MaterialCardView>
@@ -321,12 +323,12 @@
                 <com.google.android.material.card.MaterialCardView
                     android:id="@+id/settingsMenu"
                     android:layout_width="0dp"
-                    android:layout_height="150dp"
-                    android:layout_margin="16dp"
+                    android:layout_height="@dimen/main_menu_item_height"
+                    android:layout_margin="@dimen/main_menu_item_margin"
                     android:layout_weight="1"
                     app:cardBackgroundColor="#E0F2F1"
-                    app:cardCornerRadius="8dp"
-                    app:cardElevation="4dp"
+                    app:cardCornerRadius="@dimen/card_corner_radius"
+                    app:cardElevation="@dimen/card_elevation"
                     app:strokeWidth="0dp">
 
                     <LinearLayout
@@ -337,8 +339,8 @@
                         tools:ignore="UseCompoundDrawables">
 
                         <ImageView
-                            android:layout_width="50dp"
-                            android:layout_height="50dp"
+                            android:layout_width="@dimen/main_menu_item_icon_size"
+                            android:layout_height="@dimen/main_menu_item_icon_size"
                             android:src="@drawable/settings_icon"
                             tools:ignore="ContentDescription" />
 
@@ -350,7 +352,7 @@
                             android:text="@string/app_settings_title"
                             android:textAlignment="center"
                             android:textColor="@color/black"
-                            android:textSize="16sp"
+                            android:textSize="@dimen/text_size_medium"
                             android:textStyle="bold" />
                     </LinearLayout>
                 </com.google.android.material.card.MaterialCardView>
