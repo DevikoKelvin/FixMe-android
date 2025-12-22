@@ -1,6 +1,7 @@
 package com.erela.fixme.adapters.recycler_view
 
 import android.content.Context
+import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
@@ -16,13 +17,13 @@ class SupervisorTechniciansRvAdapter(
     private lateinit var onTechniciansSetListener: OnTechniciansSetListener
     private lateinit var onSupervisorSetListener: OnSupervisorSetListener
 
-    inner class ViewHolder(view: View): RecyclerView.ViewHolder(view) {
+    class ViewHolder(view: View): RecyclerView.ViewHolder(view) {
         val binding = ListItemSelectionBinding.bind(view)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder = ViewHolder(
         ListItemSelectionBinding.inflate(
-            android.view.LayoutInflater.from(parent.context), parent, false
+            LayoutInflater.from(parent.context), parent, false
         ).root
     )
 

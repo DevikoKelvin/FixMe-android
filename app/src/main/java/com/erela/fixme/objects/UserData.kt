@@ -8,5 +8,5 @@ data class UserData(
     val privilege: Int,
     val idDept: Int,
     val dept: String,
-    val subDept: String,
+    val subDept: String
 )

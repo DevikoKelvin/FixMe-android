@@ -272,9 +272,9 @@ class SubmissionFormActivity : AppCompatActivity() {
                         if (prepareUpdateForm()) {
                             try {
                                 (if (photoFiles.isNotEmpty()) {
-                                    InitAPI.getAPI.updateSubmission(requestBodyMap, photoFiles)
+                                    InitAPI.getEndpoint.updateSubmission(requestBodyMap, photoFiles)
                                 } else {
-                                    InitAPI.getAPI.updateSubmissionNoAttachment(requestBodyMap)
+                                    InitAPI.getEndpoint.updateSubmissionNoAttachment(requestBodyMap)
                                 }).enqueue(object : Callback<GenericSimpleResponse> {
                                     override fun onResponse(
                                         call: Call<GenericSimpleResponse>,
@@ -440,9 +440,9 @@ class SubmissionFormActivity : AppCompatActivity() {
                         if (prepareSubmitForm()) {
                             try {
                                 (if (photoFiles.isNotEmpty()) {
-                                    InitAPI.getAPI.submitSubmission(requestBodyMap, photoFiles)
+                                    InitAPI.getEndpoint.submitSubmission(requestBodyMap, photoFiles)
                                 } else {
-                                    InitAPI.getAPI.submitSubmissionNoAttachment(requestBodyMap)
+                                    InitAPI.getEndpoint.submitSubmissionNoAttachment(requestBodyMap)
                                 }).enqueue(object :
                                     Callback<CreationResponse> {
                                     override fun onResponse(
@@ -1053,7 +1053,7 @@ class SubmissionFormActivity : AppCompatActivity() {
     private fun getDepartmentList() {
         binding.apply {
             try {
-                InitAPI.getAPI.getDepartmentList()
+                InitAPI.getEndpoint.getDepartmentList()
                     .enqueue(object : Callback<List<DepartmentListResponse>> {
                         override fun onResponse(
                             call: Call<List<DepartmentListResponse>>,
@@ -1216,7 +1216,7 @@ class SubmissionFormActivity : AppCompatActivity() {
     private fun getCategoryList() {
         binding.apply {
             try {
-                InitAPI.getAPI.getCategoryList()
+                InitAPI.getEndpoint.getCategoryList()
                     .enqueue(object : Callback<List<CategoryListResponse>> {
                         override fun onResponse(
                             call: Call<List<CategoryListResponse>?>,

@@ -105,7 +105,7 @@ class SubmissionListActivity : AppCompatActivity(), SubmissionRvAdapter.OnSubmis
 
             loadingManager(true)
             try {
-                InitAPI.getAPI.getDepartmentList()
+                InitAPI.getEndpoint.getDepartmentList()
                     .enqueue(object : Callback<List<DepartmentListResponse>> {
                         override fun onResponse(
                             call: Call<List<DepartmentListResponse>>,
@@ -246,7 +246,7 @@ class SubmissionListActivity : AppCompatActivity(), SubmissionRvAdapter.OnSubmis
             emptyListContainer.visibility = View.GONE
             try {
                 if (selectedDepartment != "") {
-                    InitAPI.getAPI.getSubmissionList(userData.id, selectedDepartment)
+                    InitAPI.getEndpoint.getSubmissionList(userData.id, selectedDepartment)
                         .enqueue(object : Callback<List<SubmissionListResponse>> {
                             @SuppressLint("NotifyDataSetChanged")
                             override fun onResponse(

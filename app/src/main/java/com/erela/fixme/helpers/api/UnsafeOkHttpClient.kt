@@ -1,5 +1,6 @@
 package com.erela.fixme.helpers.api
 
+import android.annotation.SuppressLint
 import okhttp3.OkHttpClient
 import java.security.SecureRandom
 import java.security.cert.X509Certificate
@@ -14,13 +15,16 @@ object UnsafeOkHttpClient {
         get() = try {
             // Create a trust manager that does not validate certificate chains
             val trustAllCerts = arrayOf<TrustManager>(
+                @SuppressLint("CustomX509TrustManager")
                 object : X509TrustManager {
+                    @SuppressLint("TrustAllX509TrustManager")
                     override fun checkClientTrusted(
                         chain: Array<X509Certificate?>?,
                         authType: String?
                     ) {
                     }
 
+                    @SuppressLint("TrustAllX509TrustManager")
                     override fun checkServerTrusted(
                         chain: Array<X509Certificate?>?,
                         authType: String?

@@ -2,6 +2,7 @@ package com.erela.fixme.adapters.recycler_view
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.CheckBox
@@ -26,7 +27,7 @@ class SelectedMaterialsRvAdapters(
         parent: ViewGroup, viewType: Int
     ): ViewHolder = ViewHolder(
         ListItemSelectedItemsBinding.inflate(
-            android.view.LayoutInflater.from(parent.context), parent, false
+            LayoutInflater.from(parent.context), parent, false
         ).root
     )
 
@@ -112,7 +113,7 @@ class SelectedMaterialsRvAdapters(
 
     override fun getItemCount(): Int = selectedMaterialsArrayList.size
 
-    inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+    class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val binding = ListItemSelectedItemsBinding.bind(view)
     }
 

@@ -361,7 +361,7 @@ class SubmissionRvAdapter(val context: Context, val data: ArrayList<SubmissionLi
         }
     }
 
-    inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+    class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val binding = ListItemSubmissionBinding.bind(view)
     }
 

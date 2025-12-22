@@ -19,9 +19,11 @@ import com.erela.fixme.custom_views.CustomToast
 import com.erela.fixme.databinding.ActivityLoginBinding
 import com.erela.fixme.helpers.UserDataHelper
 import com.erela.fixme.helpers.api.InitAPI
+import com.erela.fixme.objects.GenericSimpleResponse
 import com.erela.fixme.objects.LoginResponse
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.textfield.TextInputEditText
+import com.google.firebase.messaging.FirebaseMessaging
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -128,7 +130,7 @@ class LoginActivity : AppCompatActivity() {
             loadingBar.visibility = View.VISIBLE
 
             try {
-                InitAPI.getAPI.login(username, password)
+                InitAPI.getEndpoint.login(username, password)
                     .enqueue(object : Callback<LoginResponse> {
                         override fun onResponse(
                             call: Call<LoginResponse?>,
@@ -188,17 +190,62 @@ class LoginActivity : AppCompatActivity() {
                                                         R.color.custom_toast_background_success
                                                     )
                                                 ).show()
-                                            UserDataHelper(this@LoginActivity)
-                                                .setUserData(
-                                                    result.idUser!!,
-                                                    result.idStarConnect!!,
-                                                    username,
-                                                    name,
-                                                    result.hakAkses!!,
-                                                    result.idDept!!,
-                                                    result.dept!!,
-                                                    result.subDept!!
-                                                )
+                                            FirebaseMessaging.getInstance().token.addOnCompleteListener { task ->
+                                                if (!task.isSuccessful) {
+                                                    Log.e(
+                                                        "LoginActivity",
+                                                        "Fetching FCM registration token failed",
+                                                        task.exception
+                                                    )
+                                                    return@addOnCompleteListener
+                                                }
+                                                val token = task.result
+                                                Log.e("LoginActivity", "FCM Token: $token")
+                                                UserDataHelper(this@LoginActivity)
+                                                    .setUserData(
+                                                        result.idUser!!,
+                                                        result.idStarConnect!!,
+                                                        username,
+                                                        name,
+                                                        result.hakAkses!!,
+                                                        result.idDept!!,
+                                                        result.dept!!,
+                                                        result.subDept!!
+                                                    )
+
+                                                InitAPI.getEndpoint.updateFcmToken(
+                                                    result.idUser,
+                                                    token
+                                                ).enqueue(object : Callback<GenericSimpleResponse> {
+                                                    override fun onResponse(
+                                                        call: Call<GenericSimpleResponse>,
+                                                        response: Response<GenericSimpleResponse>
+                                                    ) {
+                                                        if (response.isSuccessful) {
+                                                            Log.e(
+                                                                "LoginActivity",
+                                                                "FCM token updated successfully"
+                                                            )
+                                                        } else {
+                                                            Log.e(
+                                                                "LoginActivity",
+                                                                "Failed to update FCM token: ${response.code()} ${response.message()}"
+                                                            )
+                                                        }
+                                                    }
+
+                                                    override fun onFailure(
+                                                        call: Call<GenericSimpleResponse>,
+                                                        t: Throwable
+                                                    ) {
+                                                        Log.e(
+                                                            "LoginActivity",
+                                                            "Failed to update FCM token",
+                                                            t
+                                                        )
+                                                    }
+                                                })
+                                            }
                                             Handler(mainLooper).postDelayed({
                                                 CustomToast.getInstance(applicationContext)
                                                     .setMessage(

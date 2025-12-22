@@ -104,7 +104,7 @@ class ReportTrialBottomSheet(context: Context, private val detail: SubmissionDet
                                 notPassLoading.visibility = View.VISIBLE
                             }
                             try {
-                                InitAPI.getAPI.reportTrial(
+                                InitAPI.getEndpoint.reportTrial(
                                     userData.id,
                                     detail.idGaprojects!!,
                                     descriptionField.text.toString(),

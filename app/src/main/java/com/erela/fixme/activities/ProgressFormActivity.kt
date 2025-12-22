@@ -238,9 +238,9 @@ class ProgressFormActivity : AppCompatActivity() {
                         if (prepareEditForm()) {
                             try {
                                 (if (editMaterial)
-                                    InitAPI.getAPI.editMaterialProgress(requestBodyMap)
+                                    InitAPI.getEndpoint.editMaterialProgress(requestBodyMap)
                                 else
-                                    InitAPI.getAPI.editProgress(requestBodyMap))
+                                    InitAPI.getEndpoint.editProgress(requestBodyMap))
                                     .enqueue(object : Callback<GenericSimpleResponse> {
                                         override fun onResponse(
                                             call: Call<GenericSimpleResponse>,
@@ -257,7 +257,7 @@ class ProgressFormActivity : AppCompatActivity() {
                                                                         .idGaprojectsDetail!!
                                                                 )
                                                             ) {
-                                                                InitAPI.getAPI.requestMaterialAdd(
+                                                                InitAPI.getEndpoint.requestMaterialAdd(
                                                                     requestBodyMapMaterial
                                                                 ).enqueue(
                                                                     object :
@@ -596,7 +596,7 @@ class ProgressFormActivity : AppCompatActivity() {
                     } else {
                         if (prepareSubmitForm()) {
                             try {
-                                InitAPI.getAPI.createProgress(requestBodyMap)
+                                InitAPI.getEndpoint.createProgress(requestBodyMap)
                                     .enqueue(object : Callback<CreationResponse> {
                                         override fun onResponse(
                                             call: Call<CreationResponse>,
@@ -611,7 +611,7 @@ class ProgressFormActivity : AppCompatActivity() {
                                                                     result.lastId!!
                                                                 )
                                                             ) {
-                                                                InitAPI.getAPI.requestMaterialAdd(
+                                                                InitAPI.getEndpoint.requestMaterialAdd(
                                                                     requestBodyMapMaterial
                                                                 ).enqueue(
                                                                     object :

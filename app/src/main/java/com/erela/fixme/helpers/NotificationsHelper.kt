@@ -7,10 +7,10 @@ import android.content.Context
 import android.content.Intent
 import androidx.core.app.NotificationCompat
 import com.erela.fixme.R
+import com.erela.fixme.activities.MainActivity
 import com.erela.fixme.activities.SubmissionDetailActivity
 
 object NotificationsHelper {
-
     const val CHANNEL_ID = "FixMe Notification Channel"
     private const val CHANNEL_NAME = "Erela FixMe"
 
@@ -36,18 +36,20 @@ object NotificationsHelper {
         val notificationManager =
             context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
 
-        val intent = Intent(context, SubmissionDetailActivity::class.java).apply {
+        val notificationId = System.currentTimeMillis().toInt()
+
+        val resultIntent = Intent(context, MainActivity::class.java).apply {
             flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP
             if (caseId != 0) {
                 putExtra(SubmissionDetailActivity.DETAIL_ID, caseId.toString())
-                putExtra(SubmissionDetailActivity.NOTIFICATION_ID, caseId)
+                putExtra(SubmissionDetailActivity.NOTIFICATION_ID, notificationId)
             }
         }
 
         val pendingIntent = PendingIntent.getActivity(
             context,
-            caseId,
-            intent,
+            notificationId,
+            resultIntent,
             PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
         )
 
@@ -59,12 +61,8 @@ object NotificationsHelper {
                 .setAutoCancel(true)
                 .setVibrate(longArrayOf(1000, 1000, 1000, 1000))
                 .setPriority(NotificationCompat.PRIORITY_HIGH)
-                .also {
-                    if (caseId != 0) {
-                        it.setContentIntent(pendingIntent)
-                    }
-                }
+                .setContentIntent(pendingIntent)
 
-        notificationManager.notify(caseId, notificationBuilder.build())
+        notificationManager.notify(notificationId, notificationBuilder.build())
     }
 }

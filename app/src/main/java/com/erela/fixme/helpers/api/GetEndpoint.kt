@@ -7,7 +7,6 @@ import com.erela.fixme.objects.GenericSimpleResponse
 import com.erela.fixme.objects.InboxResponse
 import com.erela.fixme.objects.LoginResponse
 import com.erela.fixme.objects.MaterialListResponse
-import com.erela.fixme.objects.NewNotificationResponse
 import com.erela.fixme.objects.SubmissionDetailResponse
 import com.erela.fixme.objects.SubmissionListResponse
 import com.erela.fixme.objects.SupervisorTechnicianListResponse
@@ -22,13 +21,20 @@ import retrofit2.http.POST
 import retrofit2.http.Part
 import retrofit2.http.PartMap
 
-interface GetAPI {
+interface GetEndpoint {
     @FormUrlEncoded
     @POST("checkLogin")
     fun login(
         @Field("usern") username: String,
         @Field("passw") password: String
     ): Call<LoginResponse>
+
+    @FormUrlEncoded
+    @POST("fcmTokenUpdate")
+    fun updateFcmToken(
+        @Field("id_user") id: Int,
+        @Field("token") token: String
+    ): Call<GenericSimpleResponse>
 
     @FormUrlEncoded
     @POST("changePassword")
@@ -42,12 +48,6 @@ interface GetAPI {
     fun showInbox(
         @Field("id_user") id: Int
     ): Call<List<InboxResponse>>
-
-    @FormUrlEncoded
-    @POST("userNotif")
-    fun getNotificationCall(
-        @Field("id_user") id: Int
-    ): Call<NewNotificationResponse>
 
     @GET("getDeptartmentList")
     fun getDepartmentList(): Call<List<DepartmentListResponse>>

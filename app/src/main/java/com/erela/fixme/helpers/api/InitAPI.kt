@@ -20,6 +20,7 @@ object InitAPI {
 
     private fun getUnsafeOkHttpClient(): OkHttpClient.Builder {
         val trustAllCerts = arrayOf<TrustManager>(
+            @SuppressLint("CustomX509TrustManager")
             object : X509TrustManager {
                 @SuppressLint("TrustAllX509TrustManager")
                 override fun checkClientTrusted(
@@ -61,11 +62,12 @@ object InitAPI {
             .writeTimeout(60, TimeUnit.SECONDS)
             .build()
 
+    @Suppress("DEPRECATION")
     private fun getInstance(): Retrofit = Retrofit.Builder()
         .baseUrl(API_BASE_URL)
         .client(client)
         .addConverterFactory(GsonConverterFactory.create(GsonBuilder().setLenient().create()))
         .build()
 
-    val getAPI: GetAPI = getInstance().create(GetAPI::class.java)
+    val getEndpoint: GetEndpoint = getInstance().create(GetEndpoint::class.java)
 }

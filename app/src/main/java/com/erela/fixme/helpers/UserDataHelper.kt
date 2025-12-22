@@ -14,7 +14,7 @@ class UserDataHelper(private val context: Context) {
     private val keyDept = "key.dept"
     private val keySubDept = "key.sub.dept"
 
-    private val notificationKey = "key.notification"
+    /*private val notificationKey = "key.notification"*/
 
     fun setUserData(
         id: Int, idStarConnect: Int, username: String, name: String, privilege: Int, idDept: Int,
@@ -65,12 +65,12 @@ class UserDataHelper(private val context: Context) {
         SharedPreferencesHelper.getSharedPreferences(context).edit { clear() }
     }
 
-    fun setNotification(value: Boolean) {
+    /*fun setNotification(value: Boolean) {
         SharedPreferencesHelper.getSharedPreferences(context).edit {
             putBoolean(notificationKey, value)
         }
     }
 
     fun getNotification(): Boolean =
-        SharedPreferencesHelper.getSharedPreferences(context).getBoolean(notificationKey, false)
+        SharedPreferencesHelper.getSharedPreferences(context).getBoolean(notificationKey, false)*/
 }

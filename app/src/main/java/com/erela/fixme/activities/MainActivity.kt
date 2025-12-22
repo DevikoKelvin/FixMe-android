@@ -126,9 +126,10 @@ class MainActivity : AppCompatActivity() {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
-        /*createNotificationChannel()*/
+
         init()
         checkNewUpdate()
+        handleNotificationIntent(intent)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             registerReceiver(
                 onDownloadComplete,
@@ -141,6 +142,11 @@ class MainActivity : AppCompatActivity() {
                 IntentFilter(DownloadManager.ACTION_DOWNLOAD_COMPLETE)
             )
         }
+    }
+
+    override fun onNewIntent(intent: Intent) {
+        super.onNewIntent(intent)
+        handleNotificationIntent(intent)
     }
 
     override fun onDestroy() {
@@ -341,6 +347,19 @@ class MainActivity : AppCompatActivity() {
                 if (confirmationDialog.window != null)
                     confirmationDialog.show()
             }
+        }
+    }
+
+    private fun handleNotificationIntent(intent: Intent) {
+        val detailId = intent.getStringExtra(SubmissionDetailActivity.DETAIL_ID)
+        val notificationId = intent.getIntExtra(SubmissionDetailActivity.NOTIFICATION_ID, 0)
+
+        if (detailId != null) {
+            val submissionDetailIntent = Intent(this, SubmissionDetailActivity::class.java).apply {
+                putExtra(SubmissionDetailActivity.DETAIL_ID, detailId)
+                putExtra(SubmissionDetailActivity.NOTIFICATION_ID, notificationId)
+            }
+            startActivity(submissionDetailIntent)
         }
     }
 

@@ -171,10 +171,10 @@ class SubmissionDetailActivity : AppCompatActivity(),
             handler.post(runnable)
 
             try {
-                (if (notificationId != 0) InitAPI.getAPI.getSubmissionDetail(
+                (if (notificationId != 0) InitAPI.getEndpoint.getSubmissionDetail(
                     detailId,
                     notificationId
-                ) else InitAPI.getAPI.getSubmissionDetail(detailId))
+                ) else InitAPI.getEndpoint.getSubmissionDetail(detailId))
                     .enqueue(object : Callback<List<SubmissionDetailResponse>> {
                         override fun onResponse(
                             call: Call<List<SubmissionDetailResponse>?>,
@@ -249,7 +249,6 @@ class SubmissionDetailActivity : AppCompatActivity(),
                                                     .placeholder(R.drawable.image_placeholder)
                                                     .into(submissionImage)
                                             } else {
-                                                Log.e("ImageURL", (InitAPI.IMAGE_URL + image?.foto))
                                                 Glide.with(applicationContext)
                                                     .load(InitAPI.IMAGE_URL + image?.foto)
                                                     .listener(object: RequestListener<Drawable> {
@@ -541,7 +540,7 @@ class SubmissionDetailActivity : AppCompatActivity(),
                                                                             if (loadingDialog.window != null)
                                                                                 loadingDialog.show()
                                                                             try {
-                                                                                InitAPI.getAPI
+                                                                                InitAPI.getEndpoint
                                                                                     .resumeIssue(
                                                                                         detailData.idGaprojects!!,
                                                                                         userData.id
@@ -878,7 +877,7 @@ class SubmissionDetailActivity : AppCompatActivity(),
                                                                                 if (loadingDialog.window != null)
                                                                                     loadingDialog.show()
                                                                                 try {
-                                                                                    InitAPI.getAPI
+                                                                                    InitAPI.getEndpoint
                                                                                         .holdIssue(
                                                                                             detailData.idGaprojects!!,
                                                                                             userData.id,
@@ -1922,7 +1921,7 @@ class SubmissionDetailActivity : AppCompatActivity(),
                             if (loadingDialog.window != null)
                                 loadingDialog.show()
                             try {
-                                InitAPI.getAPI.markAsReadyForTrial(
+                                InitAPI.getEndpoint.markAsReadyForTrial(
                                     detailData.idGaprojects!!,
                                     userData.id
                                 )
@@ -2125,7 +2124,7 @@ class SubmissionDetailActivity : AppCompatActivity(),
                             if (loadingDialog.window != null)
                                 loadingDialog.show()
                             try {
-                                InitAPI.getAPI.startTrial(detailData.idGaprojects!!, userData.id)
+                                InitAPI.getEndpoint.startTrial(detailData.idGaprojects!!, userData.id)
                                     .enqueue(object :
                                         Callback<GenericSimpleResponse> {
                                         override fun onResponse(
@@ -2336,7 +2335,7 @@ class SubmissionDetailActivity : AppCompatActivity(),
                             if (loadingDialog.window != null)
                                 loadingDialog.show()
                             try {
-                                InitAPI.getAPI.deleteProgress(
+                                InitAPI.getEndpoint.deleteProgress(
                                     data.idGaprojectsDetail!!, userData.id
                                 )
                                     .enqueue(object :
@@ -2586,7 +2585,7 @@ class SubmissionDetailActivity : AppCompatActivity(),
                             if (loadingDialog.window != null)
                                 loadingDialog.show()
                             try {
-                                InitAPI.getAPI.approveMaterialRequest(
+                                InitAPI.getEndpoint.approveMaterialRequest(
                                     data.idGaprojectsDetail!!,
                                     userData.id
                                 ).enqueue(object : Callback<GenericSimpleResponse> {
@@ -2819,7 +2818,7 @@ class SubmissionDetailActivity : AppCompatActivity(),
                             if (loadingDialog.window != null)
                                 loadingDialog.show()
                             try {
-                                InitAPI.getAPI.markIssueDone(detailData.idGaprojects!!, userData.id)
+                                InitAPI.getEndpoint.markIssueDone(detailData.idGaprojects!!, userData.id)
                                     .enqueue(object : Callback<GenericSimpleResponse> {
                                         override fun onResponse(
                                             call: Call<GenericSimpleResponse>,

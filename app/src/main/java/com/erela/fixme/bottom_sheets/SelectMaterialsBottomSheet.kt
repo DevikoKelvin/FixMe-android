@@ -77,7 +77,7 @@ class SelectMaterialsBottomSheet(
             loadingBar.visibility = View.VISIBLE
             searchFieldLayout.visibility = View.GONE
             try {
-                InitAPI.getAPI.getMaterialList(detailData.idKategori!!)
+                InitAPI.getEndpoint.getMaterialList(detailData.idKategori!!)
                     .enqueue(object : Callback<List<MaterialListResponse>> {
                         override fun onResponse(
                             call: Call<List<MaterialListResponse>?>,

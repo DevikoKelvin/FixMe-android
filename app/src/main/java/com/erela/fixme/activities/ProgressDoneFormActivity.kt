@@ -280,7 +280,7 @@ class ProgressDoneFormActivity : AppCompatActivity() {
                                     if (formCheck()) {
                                         if (prepareSubmitForm()) {
                                             try {
-                                                InitAPI.getAPI
+                                                InitAPI.getEndpoint
                                                     .markProgressDone(requestBodyMap, photoFiles)
                                                     .enqueue(object :
                                                         Callback<GenericSimpleResponse> {

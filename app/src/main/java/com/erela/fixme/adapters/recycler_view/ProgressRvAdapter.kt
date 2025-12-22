@@ -39,7 +39,7 @@ class ProgressRvAdapter(
         UserDataHelper(context).getUserData()
     }
 
-    inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+    class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val binding = ListItemProgressBinding.bind(view)
     }
 

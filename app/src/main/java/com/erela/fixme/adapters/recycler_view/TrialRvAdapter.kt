@@ -14,7 +14,7 @@ import com.erela.fixme.objects.TrialItem
 class TrialRvAdapter(
     val context: Context, private val detail: SubmissionDetailResponse, val data: List<TrialItem?>?
 ) : RecyclerView.Adapter<TrialRvAdapter.ViewHolder>() {
-    inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+    class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val binding = ListItemProgressBinding.bind(view)
     }
 

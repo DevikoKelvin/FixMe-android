@@ -47,7 +47,7 @@ class AttachmentRvAdapter(private val context: Context, val data: ArrayList<Uri>
 
     override fun getItemCount(): Int = data.size
 
-    inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+    class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val binding = ListItemAttachmentBinding.bind(view)
     }
 

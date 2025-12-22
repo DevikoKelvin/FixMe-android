@@ -147,7 +147,7 @@ class ChangePasswordActivity : AppCompatActivity() {
                         ).show()
                 } else {
                     try {
-                        InitAPI.getAPI.changePassword(
+                        InitAPI.getEndpoint.changePassword(
                             userData.id, confirmPasswordField.text.toString()
                         )
                             .enqueue(object : Callback<GenericSimpleResponse> {

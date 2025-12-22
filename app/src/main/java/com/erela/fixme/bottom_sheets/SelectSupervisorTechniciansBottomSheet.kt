@@ -57,7 +57,7 @@ class SelectSupervisorTechniciansBottomSheet(
             try {
                 if (isForManager) {
                     title.text = context.getString(R.string.select_supervisor)
-                    InitAPI.getAPI.getSupervisorList(detailData.idGaprojects!!).enqueue(
+                    InitAPI.getEndpoint.getSupervisorList(detailData.idGaprojects!!).enqueue(
                         object : Callback<List<SupervisorTechnicianListResponse>> {
                             override fun onResponse(
                                 call: Call<List<SupervisorTechnicianListResponse>>,
@@ -173,7 +173,7 @@ class SelectSupervisorTechniciansBottomSheet(
                     )
                 } else {
                     title.text = context.getString(R.string.select_technicians)
-                    InitAPI.getAPI.getTechnicianList(detailData.idGaprojects!!).enqueue(
+                    InitAPI.getEndpoint.getTechnicianList(detailData.idGaprojects!!).enqueue(
                         object : Callback<List<SupervisorTechnicianListResponse>> {
                             override fun onResponse(
                                 call: Call<List<SupervisorTechnicianListResponse>>,

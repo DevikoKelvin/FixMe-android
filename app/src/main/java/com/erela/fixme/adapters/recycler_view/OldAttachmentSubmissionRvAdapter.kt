@@ -14,7 +14,7 @@ class OldAttachmentSubmissionRvAdapter(
 ) : RecyclerView.Adapter<OldAttachmentSubmissionRvAdapter.ViewHolder>() {
     private lateinit var onAttachmentItemActionListener: OnAttachmentItemActionListener
 
-    inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+    class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val binding = ListItemAttachmentBinding.bind(view)
     }
 

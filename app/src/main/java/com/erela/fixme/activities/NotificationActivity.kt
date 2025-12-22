@@ -88,7 +88,7 @@ class NotificationActivity : AppCompatActivity(), InboxRvAdapter.OnNotificationI
         binding.apply {
             loadingManager(true)
             try {
-                InitAPI.getAPI.showInbox(userData.id)
+                InitAPI.getEndpoint.showInbox(userData.id)
                     .enqueue(object : Callback<List<InboxResponse>> {
                         @SuppressLint("NotifyDataSetChanged")
                         override fun onResponse(

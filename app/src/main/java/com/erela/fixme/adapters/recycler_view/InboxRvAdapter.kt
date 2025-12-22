@@ -49,7 +49,7 @@ class InboxRvAdapter(val context: Context, val data: ArrayList<InboxResponse>) :
 
     override fun getItemCount(): Int = data.size
 
-    inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+    class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val binding = ListItemInboxBinding.bind(view)
     }
 

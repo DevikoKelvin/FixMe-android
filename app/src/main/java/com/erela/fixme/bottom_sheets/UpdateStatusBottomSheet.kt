@@ -440,7 +440,7 @@ class UpdateStatusBottomSheet(
                                     override fun onConfirm() {
                                         cancelLoading.visibility = View.VISIBLE
                                         try {
-                                            InitAPI.getAPI.cancelSubmission(
+                                            InitAPI.getEndpoint.cancelSubmission(
                                                 userData.id,
                                                 dataDetail.idGaprojects!!,
                                                 descriptionField.text.toString()
@@ -645,8 +645,8 @@ class UpdateStatusBottomSheet(
                                     }
                                 }
                                 (if (dataDetail.deptTujuan == userData.dept)
-                                    InitAPI.getAPI.approveTargetManagerSubmission(data)
-                                else InitAPI.getAPI.approveReportManagerSubmission(data)).enqueue(
+                                    InitAPI.getEndpoint.approveTargetManagerSubmission(data)
+                                else InitAPI.getEndpoint.approveReportManagerSubmission(data)).enqueue(
                                     object : Callback<GenericSimpleResponse> {
                                         override fun onResponse(
                                             call: Call<GenericSimpleResponse>,
@@ -816,7 +816,7 @@ class UpdateStatusBottomSheet(
                             }
                         } else {
                             try {
-                                InitAPI.getAPI.rejectSubmission(
+                                InitAPI.getEndpoint.rejectSubmission(
                                     userData.id, dataDetail.idGaprojects!!,
                                     descriptionField.text.toString()
                                 ).enqueue(object : Callback<GenericSimpleResponse> {
@@ -1033,7 +1033,7 @@ class UpdateStatusBottomSheet(
                             }
                             put("difficulty", createPartFromString(complexity)!!)
                         }
-                        InitAPI.getAPI.deployTechnicians(data)
+                        InitAPI.getEndpoint.deployTechnicians(data)
                             .enqueue(object : Callback<GenericSimpleResponse> {
                                 override fun onResponse(
                                     call: Call<GenericSimpleResponse>,
