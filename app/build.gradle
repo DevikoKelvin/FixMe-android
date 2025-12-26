@@ -44,7 +44,8 @@ android {
 
     signingConfigs {
         release {
-            storeFile file('D:\\ERELA_Projects\\Android_Mobile_Apps\\FixMe-android\\keystore.jks')
+            /*storeFile file('D:/ERELA_Projects/Android_Mobile_Apps/FixMe-android/keystore.jks')*/
+            storeFile file('D:/Coding/Android_Studio_Projects/ERELA/FixMe/keystore.jks')
             storePassword "erela_fixme"
             keyAlias "fixme_erela"
             keyPassword "erela_fixme"
