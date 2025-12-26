@@ -6,6 +6,8 @@
     <string name="username_title">Username</string>
     <string name="password_title">Password</string>
 
+    <string name="search_title">Search</string>
+
     <string name="login_text">LOGIN</string>
     <string name="main_menu">Main Menu</string>
     <string name="welcome_message">Welcome, </string>

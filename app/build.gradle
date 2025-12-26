@@ -53,14 +53,14 @@ android {
 
     buildTypes {
         release {
-            buildConfigField 'String', 'BASE_URL', "\"https://182.23.21.202:8282/fixme/\""
+            buildConfigField 'String', 'BASE_URL', '"https://182.23.21.202:8282/fixme/"'
             minifyEnabled true
             shrinkResources true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
             signingConfig signingConfigs.release
         }
         debug {
-            buildConfigField 'String', 'BASE_URL', "\"http://192.168.3.109:81/fixme/\""
+            buildConfigField 'String', 'BASE_URL', '"http://192.168.3.109:81/fixme/"'
             minifyEnabled false
             shrinkResources false
         }
@@ -108,6 +108,7 @@ dependencies {
     implementation libs.circleIndicator
     implementation libs.retrofit
     implementation libs.okhttp3
+    implementation libs.okhttp3.sse
     implementation libs.converter.gson
     implementation libs.logging.interceptor
     implementation libs.appxupdater

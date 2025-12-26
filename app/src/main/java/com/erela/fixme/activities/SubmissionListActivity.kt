@@ -7,6 +7,7 @@ import android.text.Spannable
 import android.text.SpannableStringBuilder
 import android.text.style.ForegroundColorSpan
 import android.util.Log
+import android.view.Menu
 import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
@@ -14,6 +15,7 @@ import androidx.activity.enableEdgeToEdge
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.SearchView
 import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
@@ -51,6 +53,8 @@ class SubmissionListActivity : AppCompatActivity(), SubmissionRvAdapter.OnSubmis
     private var selectedComplexity = ""
     private var selectedDepartment: String = ""
     private var submissionArrayList: ArrayList<SubmissionListResponse> = ArrayList()
+    private var originalSubmissionArrayList: ArrayList<SubmissionListResponse> = ArrayList()
+    private var listFilteredByStatusAndComplexity: ArrayList<SubmissionListResponse> = ArrayList()
 
     @SuppressLint("NotifyDataSetChanged")
     private val activityResultLauncher: ActivityResultLauncher<Intent> = registerForActivityResult(
@@ -77,8 +81,74 @@ class SubmissionListActivity : AppCompatActivity(), SubmissionRvAdapter.OnSubmis
         init()
     }
 
+    override fun onPrepareOptionsMenu(menu: Menu): Boolean {
+        val searchItem = menu.findItem(R.id.action_search)
+        searchItem?.isVisible = selectedDepartment.isNotEmpty()
+        return super.onPrepareOptionsMenu(menu)
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        menuInflater.inflate(R.menu.submission_list_menu, menu)
+        val searchItem = menu.findItem(R.id.action_search)
+        val searchView = searchItem.actionView as SearchView
+        searchView.maxWidth = Int.MAX_VALUE
+        searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                return false
+            }
+
+            override fun onQueryTextChange(newText: String?): Boolean {
+                filter(newText)
+                return false
+            }
+        })
+        return true
+    }
+
+    @SuppressLint("NotifyDataSetChanged")
+    private fun filter(text: String?) {
+        val filteredList: ArrayList<SubmissionListResponse> = ArrayList()
+        if (text.isNullOrEmpty()) {
+            submissionArrayList.clear()
+            submissionArrayList.addAll(listFilteredByStatusAndComplexity)
+            adapter.notifyDataSetChanged()
+            binding.apply {
+                rvSubmission.visibility = View.VISIBLE
+                emptyListContainer.visibility = View.GONE
+            }
+            return
+        }
+        for (item in listFilteredByStatusAndComplexity) {
+            if (item.idGaprojects.toString().lowercase(Locale.getDefault())
+                    .contains(text.lowercase(Locale.getDefault())) ||
+                item.judulKasus?.lowercase(Locale.getDefault())
+                    ?.contains(text.lowercase(Locale.getDefault())) == true ||
+                item.keterangan?.lowercase(Locale.getDefault())
+                    ?.contains(text.lowercase(Locale.getDefault())) == true
+            ) {
+                filteredList.add(item)
+            }
+        }
+        if (filteredList.isEmpty()) {
+            binding.apply {
+                rvSubmission.visibility = View.GONE
+                emptyListContainer.visibility = View.VISIBLE
+            }
+        }
+        submissionArrayList.clear()
+        submissionArrayList.addAll(filteredList)
+        adapter.notifyDataSetChanged()
+        binding.apply {
+            rvSubmission.visibility = View.VISIBLE
+            emptyListContainer.visibility = View.GONE
+        }
+    }
+
     @SuppressLint("NotifyDataSetChanged")
     private fun init() {
+        setSupportActionBar(binding.toolBar)
+        supportActionBar?.setDisplayShowTitleEnabled(false)
+
         binding.apply {
             backButton.setOnClickListener {
                 onBackPressedDispatcher.onBackPressed()
@@ -145,6 +215,7 @@ class SubmissionListActivity : AppCompatActivity(), SubmissionRvAdapter.OnSubmis
                                                     ""
                                                 else
                                                     data.distinct()[position]
+                                                invalidateOptionsMenu()
                                                 if (selectedDepartment == "") {
                                                     filterListButton.visibility = View.GONE
                                                     rvSubmission.visibility = View.VISIBLE
@@ -256,6 +327,8 @@ class SubmissionListActivity : AppCompatActivity(), SubmissionRvAdapter.OnSubmis
                                 loadingManager(false)
                                 if (response.isSuccessful) {
                                     if (response.body() != null) {
+                                        originalSubmissionArrayList.clear()
+                                        originalSubmissionArrayList.addAll(response.body()!!)
                                         if (firstInit) {
                                             filterList(
                                                 response.body(),
@@ -605,6 +678,8 @@ class SubmissionListActivity : AppCompatActivity(), SubmissionRvAdapter.OnSubmis
                 }
             }
             adapter.notifyDataSetChanged()
+            listFilteredByStatusAndComplexity.clear()
+            listFilteredByStatusAndComplexity.addAll(submissionArrayList)
             emptyListAnimation.playAnimation()
             if (adapter.itemCount == 0) {
                 if (selectedDepartment == "") {

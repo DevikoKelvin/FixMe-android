@@ -1,5 +1,6 @@
 package com.erela.fixme.services
 
+import android.content.Intent
 import android.util.Log
 import com.erela.fixme.R
 import com.erela.fixme.helpers.NotificationsHelper
@@ -33,13 +34,16 @@ class FCMService : FirebaseMessagingService() {
             val body = remoteMessage.notification?.body ?: remoteMessage.data["body"]
             ?: ""
 
-            if (UserDataHelper(applicationContext).isUserDataExist() && userData.id == notificationData.relatedUserId)
+            if (UserDataHelper(applicationContext).isUserDataExist() && userData.id == notificationData.relatedUserId) {
+                stopService(Intent(this, SseService::class.java))
+                lastNotificationId = notificationData.idGaProjects
                 NotificationsHelper.generateNotification(
                     title,
                     body,
                     this,
                     notificationData.idGaProjects
                 )
+            }
         }
     }
 
@@ -81,5 +85,6 @@ class FCMService : FirebaseMessagingService() {
 
     companion object {
         private const val TAG = "Firebase Messaging Service"
+        var lastNotificationId: Int? = null
     }
 }

@@ -8,23 +8,25 @@
     android:background="#FDFDFD"
     tools:context=".activities.SubmissionListActivity">
 
-    <RelativeLayout
+    <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolBar"
         android:layout_width="match_parent"
         android:layout_height="@dimen/toolbar_height"
         android:background="@color/white"
         android:elevation="@dimen/dialog_margin"
         android:theme="?attr/actionBarTheme"
+        app:buttonGravity="center_vertical"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toTopOf="parent"
+        app:menu="@menu/submission_list_menu">
 
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/backButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentStart="true"
             android:layout_centerVertical="true"
+            android:layout_gravity="start"
             android:layout_marginStart="@dimen/list_item_progress_content_margin_top_small"
             app:cardBackgroundColor="@android:color/transparent"
             app:cardCornerRadius="@dimen/main_menu_item_icon_size"
@@ -40,14 +42,15 @@
         </com.google.android.material.card.MaterialCardView>
 
         <TextView
+            android:id="@+id/title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
+            android:layout_gravity="center"
             android:text="@string/submission_list_title"
             android:textColor="@color/black"
             android:textSize="@dimen/text_size_medium"
             android:textStyle="bold" />
-    </RelativeLayout>
+    </androidx.appcompat.widget.Toolbar>
 
     <LinearLayout
         android:id="@+id/filterContainer"

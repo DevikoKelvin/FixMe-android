@@ -121,6 +121,11 @@
             </intent-filter>
         </service>
 
+        <service
+            android:name=".services.SseService"
+            android:foregroundServiceType="dataSync"
+            android:exported="false" />
+
         <provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="${applicationId}.provider"
@@ -131,4 +136,5 @@
                 android:resource="@xml/path_provider" />
         </provider>
     </application>
+
 </manifest>

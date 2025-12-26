@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import com.erela.fixme.BuildConfig
 import com.google.gson.GsonBuilder
 import okhttp3.OkHttpClient
+import okhttp3.Protocol
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -53,13 +54,12 @@ object InitAPI {
     private val client =
         getUnsafeOkHttpClient()
             .addInterceptor(HttpLoggingInterceptor().apply {
-                level = if (BuildConfig.DEBUG)
-                    HttpLoggingInterceptor.Level.BODY
-                else
-                    HttpLoggingInterceptor.Level.NONE
+                level = HttpLoggingInterceptor.Level.BODY
             })
             .readTimeout(60, TimeUnit.SECONDS)
             .writeTimeout(60, TimeUnit.SECONDS)
+            .retryOnConnectionFailure(true)
+            .protocols(listOf(Protocol.HTTP_1_1))
             .build()
 
     @Suppress("DEPRECATION")

@@ -35,6 +35,7 @@ import com.erela.fixme.dialogs.UpdateAvailableDialog
 import com.erela.fixme.helpers.PermissionHelper
 import com.erela.fixme.helpers.UserDataHelper
 import com.erela.fixme.objects.UserData
+import com.erela.fixme.services.SseService
 import com.github.tutorialsandroid.appxupdater.AppUpdaterUtils
 import com.github.tutorialsandroid.appxupdater.enums.AppUpdaterError
 import com.github.tutorialsandroid.appxupdater.enums.UpdateFrom
@@ -130,6 +131,7 @@ class MainActivity : AppCompatActivity() {
         init()
         checkNewUpdate()
         handleNotificationIntent(intent)
+        startService(Intent(this, SseService::class.java))
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             registerReceiver(
                 onDownloadComplete,

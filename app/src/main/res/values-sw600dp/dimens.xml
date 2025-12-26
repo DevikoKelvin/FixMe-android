@@ -15,10 +15,12 @@
     <dimen name="button_height">72dp</dimen>
     <dimen name="button_padding">24dp</dimen>
     <dimen name="toolbar_height">84dp</dimen>
+    <dimen name="search_icon_size">36dp</dimen>
+    <dimen name="search_view_max_width">480dp</dimen>
     <dimen name="list_item_height">108dp</dimen>
     <dimen name="list_item_padding">24dp</dimen>
     <dimen name="card_corner_radius">12dp</dimen>
-    <dimen name="card_elevation">6dp</dimen>
+    <dimen name="card_elevation">4dp</dimen>
     <dimen name="copyright_text_size">16sp</dimen>
 
     <!-- Login screen dimensions -->
@@ -27,7 +29,7 @@
     <dimen name="login_field_stroke_width">3dp</dimen>
     <dimen name="login_button_margin_vertical">48dp</dimen>
     <dimen name="login_button_corner_radius">75dp</dimen>
-    <dimen name="login_button_elevation">12dp</dimen>
+    <dimen name="login_button_elevation">8dp</dimen>
     <dimen name="login_progress_bar_size">48dp</dimen>
 
     <!-- Main menu dimensions -->
@@ -39,7 +41,7 @@
     <!-- Dialog dimensions -->
     <dimen name="dialog_margin">12dp</dimen>
     <dimen name="dialog_corner_radius">24dp</dimen>
-    <dimen name="dialog_elevation">3dp</dimen>
+    <dimen name="dialog_elevation">2dp</dimen>
     <dimen name="dialog_message_margin_vertical">36dp</dimen>
     <dimen name="dialog_divider_height">2dp</dimen>
     <dimen name="dialog_loading_content_padding">6dp</dimen>
@@ -56,7 +58,7 @@
     <dimen name="list_item_department_margin_horizontal">24dp</dimen>
     <dimen name="list_item_department_margin_vertical">6dp</dimen>
     <dimen name="list_item_department_card_corner_radius">6dp</dimen>
-    <dimen name="list_item_department_card_elevation">6dp</dimen>
+    <dimen name="list_item_department_card_elevation">4dp</dimen>
     <dimen name="list_item_department_content_padding_vertical">12dp</dimen>
     <dimen name="list_item_department_content_padding_horizontal">24dp</dimen>
 
@@ -64,7 +66,7 @@
     <dimen name="list_item_progress_margin_horizontal">24dp</dimen>
     <dimen name="list_item_progress_margin_vertical">12dp</dimen>
     <dimen name="list_item_progress_card_corner_radius">24dp</dimen>
-    <dimen name="list_item_progress_card_elevation">6dp</dimen>
+    <dimen name="list_item_progress_card_elevation">4dp</dimen>
     <dimen name="list_item_progress_header_padding_horizontal">24dp</dimen>
     <dimen name="list_item_progress_header_padding_vertical">12dp</dimen>
     <dimen name="list_item_progress_content_margin_top">6dp</dimen>
@@ -95,7 +97,7 @@
     <dimen name="list_item_selection_margin_horizontal">24dp</dimen>
     <dimen name="list_item_selection_margin_vertical">6dp</dimen>
     <dimen name="list_item_selection_card_corner_radius">24dp</dimen>
-    <dimen name="list_item_selection_card_elevation">3dp</dimen>
+    <dimen name="list_item_selection_card_elevation">2dp</dimen>
     <dimen name="list_item_selection_content_padding_vertical">6dp</dimen>
     <dimen name="list_item_selection_content_padding_horizontal">12dp</dimen>
 
@@ -103,7 +105,7 @@
     <dimen name="list_item_shimmer_margin_horizontal">24dp</dimen>
     <dimen name="list_item_shimmer_margin_vertical">12dp</dimen>
     <dimen name="list_item_shimmer_card_corner_radius">24dp</dimen>
-    <dimen name="list_item_shimmer_card_elevation">6dp</dimen>
+    <dimen name="list_item_shimmer_card_elevation">4dp</dimen>
     <dimen name="list_item_shimmer_header_padding_horizontal">24dp</dimen>
     <dimen name="list_item_shimmer_header_padding_vertical">12dp</dimen>
     <dimen name="list_item_shimmer_description_margin_horizontal">24dp</dimen>
@@ -132,7 +134,7 @@
     <dimen name="list_item_submission_margin_horizontal">24dp</dimen>
     <dimen name="list_item_submission_margin_vertical">12dp</dimen>
     <dimen name="list_item_submission_card_corner_radius">24dp</dimen>
-    <dimen name="list_item_submission_card_elevation">6dp</dimen>
+    <dimen name="list_item_submission_card_elevation">4dp</dimen>
     <dimen name="list_item_submission_header_padding_horizontal">24dp</dimen>
     <dimen name="list_item_submission_header_padding_vertical">12dp</dimen>
     <dimen name="list_item_submission_description_padding_horizontal">24dp</dimen>

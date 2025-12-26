@@ -6,6 +6,8 @@
     <string name="username_title">Username</string>
     <string name="password_title">Password</string>
 
+    <string name="search_title">Cari</string>
+
     <string name="login_text">MASUK</string>
     <string name="main_menu">Menu Utama</string>
     <string name="welcome_message">Selamat datang, </string>

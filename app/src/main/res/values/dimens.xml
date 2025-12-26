@@ -15,6 +15,8 @@
     <dimen name="button_height">48dp</dimen>
     <dimen name="button_padding">16dp</dimen>
     <dimen name="toolbar_height">48dp</dimen>
+    <dimen name="search_icon_size">24dp</dimen>
+    <dimen name="search_view_max_width">320dp</dimen>
     <dimen name="list_item_height">72dp</dimen>
     <dimen name="list_item_padding">16dp</dimen>
     <dimen name="card_corner_radius">8dp</dimen>

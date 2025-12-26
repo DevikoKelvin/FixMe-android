@@ -9,6 +9,9 @@ data class NotificationData(
     @SerializedName("status")
     val status: String,
 
+    @SerializedName("click_action")
+    val clickAction: String,
+
     @SerializedName("id_gaprojects")
     val idGaProjects: Int
 )
