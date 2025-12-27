@@ -20,6 +20,14 @@ def getVerCode(boolean increment = false) {
     return versionCode
 }
 
+def getKeystoreFile() {
+    def projectKeystore = file("${rootDir}/keystore.jks")
+    if (projectKeystore.exists()) {
+        return projectKeystore
+    }
+    return file('D:/Coding/Android_Studio_Projects/ERELA/FixMe/keystore.jks')
+}
+
 android {
     namespace 'com.erela.fixme'
     compileSdk = 36
@@ -44,8 +52,7 @@ android {
 
     signingConfigs {
         release {
-            /*storeFile file('D:/ERELA_Projects/Android_Mobile_Apps/FixMe-android/keystore.jks')*/
-            storeFile file('D:/Coding/Android_Studio_Projects/ERELA/FixMe/keystore.jks')
+            storeFile = getKeystoreFile()
             storePassword "erela_fixme"
             keyAlias "fixme_erela"
             keyPassword "erela_fixme"
