@@ -27,7 +27,6 @@
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:layout_gravity="start"
-            android:layout_marginStart="@dimen/list_item_progress_content_margin_top_small"
             app:cardBackgroundColor="@android:color/transparent"
             app:cardCornerRadius="@dimen/main_menu_item_icon_size"
             app:cardElevation="0dp"

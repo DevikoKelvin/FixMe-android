@@ -119,11 +119,13 @@ class SubmissionListActivity : AppCompatActivity(), SubmissionRvAdapter.OnSubmis
             return
         }
         for (item in listFilteredByStatusAndComplexity) {
-            if (item.idGaprojects.toString().lowercase(Locale.getDefault())
+            if (item.nomorRequest.toString().lowercase(Locale.getDefault())
                     .contains(text.lowercase(Locale.getDefault())) ||
                 item.judulKasus?.lowercase(Locale.getDefault())
                     ?.contains(text.lowercase(Locale.getDefault())) == true ||
                 item.keterangan?.lowercase(Locale.getDefault())
+                    ?.contains(text.lowercase(Locale.getDefault())) == true ||
+                item.namaUser?.lowercase(Locale.getDefault())
                     ?.contains(text.lowercase(Locale.getDefault())) == true
             ) {
                 filteredList.add(item)
