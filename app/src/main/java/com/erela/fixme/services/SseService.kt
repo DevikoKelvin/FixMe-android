@@ -3,23 +3,41 @@ package com.erela.fixme.services
 import android.app.Service
 import android.content.Intent
 import android.os.IBinder
+import android.util.Log
+import com.erela.fixme.BuildConfig
 import com.erela.fixme.R
 import com.erela.fixme.helpers.NotificationsHelper
-import okhttp3.OkHttpClient
+import com.erela.fixme.helpers.UserDataHelper
+import com.erela.fixme.helpers.api.InitAPI
+import com.erela.fixme.objects.UserData
 import okhttp3.Request
+import okhttp3.Response
 import okhttp3.sse.EventSource
 import okhttp3.sse.EventSourceListener
 import okhttp3.sse.EventSources
 import org.json.JSONObject
+import java.util.concurrent.TimeUnit
 
 class SseService : Service() {
-
     private lateinit var eventSource: EventSource
+    private val userData: UserData by lazy {
+        UserDataHelper(applicationContext).getUserData()
+    }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-        val client = OkHttpClient.Builder().build()
+        initSse()
+        return START_STICKY
+    }
+
+    private fun initSse() {
+        val client = InitAPI.getUnsafeOkHttpClient()
+            .callTimeout(10, TimeUnit.MINUTES)
+            .readTimeout(10, TimeUnit.MINUTES)
+            .writeTimeout(10, TimeUnit.MINUTES)
+            .retryOnConnectionFailure(true)
+            .build()
         val request = Request.Builder()
-            .url("http://192.168.3.109:81/fixme/ntfy/show-notif")
+            .url("${BuildConfig.BASE_URL}ntfy/show-notif")
             .header("Accept", "text/event-stream")
             .build()
 
@@ -31,44 +49,77 @@ class SseService : Service() {
                     type: String?,
                     data: String
                 ) {
-                    // The response is nested inside a "data:" field, so we need to extract it.
-                    val jsonData = data.substringAfter("data: ")
                     try {
-                        val outerJson = JSONObject(jsonData)
-                        val messageString = outerJson.getString("message")
-                        val messageJson = JSONObject(messageString)
-                        val notificationId = messageJson.getInt("id_ga_projects")
+                        // The data might come with a "data: " prefix.
+                        val cleanData = if (data.startsWith("data:")) {
+                            data.substring(5).trim()
+                        } else {
+                            data
+                        }
 
-                        if (FCMService.lastNotificationId != notificationId) {
+                        if (!cleanData.startsWith("{")) {
+                            // Not a JSON object, ignore.
+                            Log.d(TAG, "Received non-JSON event data: $cleanData")
+                            return
+                        }
+
+                        val outerJson = JSONObject(cleanData)
+
+                        if (!outerJson.has("message")) {
+                            Log.d(TAG, "Received JSON without a message field: $cleanData")
+                            return
+                        }
+
+                        val message = outerJson.get("message")
+                        val messageJson: JSONObject = when (message) {
+                            is String -> {
+                                JSONObject(message)
+                            }
+
+                            is JSONObject -> {
+                                message
+                            }
+
+                            else -> {
+                                Log.e(TAG, "Message field is not a string or JSON object")
+                                return
+                            }
+                        }
+
+                        val notificationId = messageJson.getInt("id_gaprojects")
+                        val relatedUserId = messageJson.getInt("id_user")
+
+                        if (UserDataHelper(applicationContext).isUserDataExist() && FCMService.lastNotificationId != notificationId) {
                             val title =
                                 if (getString(R.string.lang) == "in") "Kamu mendapatkan notifikasi baru!" else "You have a new notification!"
                             val body = messageJson.getString("body")
-                            NotificationsHelper.generateNotification(
-                                title,
-                                body,
-                                applicationContext,
-                                notificationId
-                            )
+                            if (userData.id == relatedUserId) {
+                                NotificationsHelper.generateNotification(
+                                    title,
+                                    body,
+                                    applicationContext,
+                                    notificationId
+                                )
+                            }
                         }
                     } catch (e: Exception) {
-                        // ignore
+                        Log.e(TAG, "onEvent error: ${e.toString()}\nData was: $data")
                     }
                 }
 
                 override fun onFailure(
                     eventSource: EventSource,
                     t: Throwable?,
-                    response: okhttp3.Response?
+                    response: Response?
                 ) {
-                    // handle failure
+                    Log.e(TAG, "onFailure: ${t?.message}", t)
                 }
 
                 override fun onClosed(eventSource: EventSource) {
-                    // handle closed
+                    Log.d(TAG, "onClosed: SSE Connection Closed, reconnecting...")
+                    initSse()
                 }
             })
-
-        return START_STICKY
     }
 
     override fun onDestroy() {
@@ -78,5 +129,9 @@ class SseService : Service() {
 
     override fun onBind(intent: Intent?): IBinder? {
         return null
+    }
+
+    companion object {
+        private const val TAG = "SseService"
     }
 }

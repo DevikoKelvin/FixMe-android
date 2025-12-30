@@ -22,28 +22,32 @@ class FCMService : FirebaseMessagingService() {
     }
 
     override fun onMessageReceived(remoteMessage: RemoteMessage) {
-        Log.e(TAG, "Data: ${remoteMessage.data}")
+        try {
+            Log.e(TAG, "Received Message Data: ${remoteMessage.data}")
 
-        val notificationData =
-            Gson().fromJson(Gson().toJson(remoteMessage.data), NotificationData::class.java)
+            val notificationData =
+                Gson().fromJson(Gson().toJson(remoteMessage.data), NotificationData::class.java)
 
-        if (notificationData.relatedUserId == userData.id) {
-            val title =
-                if (getString(R.string.lang) == "in") "Kamu mendapatkan notifikasi baru!" else "You have a new notification!"
-            /*remoteMessage.notification?.title ?: remoteMessage.data["title"] ?: "FixMe"*/
-            val body = remoteMessage.notification?.body ?: remoteMessage.data["body"]
-            ?: ""
+            if (notificationData.relatedUserId == userData.id) {
+                val title =
+                    if (getString(R.string.lang) == "in") "Kamu mendapatkan notifikasi baru!" else "You have a new notification!"
+                val body = remoteMessage.notification?.body ?: remoteMessage.data["body"]
+                ?: ""
 
-            if (UserDataHelper(applicationContext).isUserDataExist() && userData.id == notificationData.relatedUserId) {
-                stopService(Intent(this, SseService::class.java))
-                lastNotificationId = notificationData.idGaProjects
-                NotificationsHelper.generateNotification(
-                    title,
-                    body,
-                    this,
-                    notificationData.idGaProjects
-                )
+                if (UserDataHelper(applicationContext).isUserDataExist() && userData.id == notificationData.relatedUserId) {
+                    stopService(Intent(this, SseService::class.java))
+                    lastNotificationId = notificationData.idGaProjects
+                    NotificationsHelper.generateNotification(
+                        title,
+                        body,
+                        this,
+                        notificationData.idGaProjects
+                    )
+                }
             }
+        } catch (e: Exception) {
+            Log.e(TAG, "onMessageReceived error: ${e.message}", e)
+            startService(Intent(this, SseService::class.java))
         }
     }
 

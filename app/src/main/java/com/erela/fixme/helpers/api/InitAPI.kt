@@ -19,7 +19,7 @@ object InitAPI {
     private const val API_BASE_URL = "${BuildConfig.BASE_URL}apimobile/"
     const val IMAGE_URL = "${BuildConfig.BASE_URL}public/assets/upload/"
 
-    private fun getUnsafeOkHttpClient(): OkHttpClient.Builder {
+    fun getUnsafeOkHttpClient(): OkHttpClient.Builder {
         val trustAllCerts = arrayOf<TrustManager>(
             @SuppressLint("CustomX509TrustManager")
             object : X509TrustManager {
