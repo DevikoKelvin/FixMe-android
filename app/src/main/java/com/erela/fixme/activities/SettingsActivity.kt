@@ -31,6 +31,7 @@ import com.erela.fixme.BuildConfig
 import com.erela.fixme.R
 import com.erela.fixme.custom_views.CustomToast
 import com.erela.fixme.databinding.ActivitySettingsBinding
+import com.erela.fixme.helpers.VersionHelper
 import com.github.tutorialsandroid.appxupdater.AppUpdaterUtils
 import com.github.tutorialsandroid.appxupdater.enums.AppUpdaterError
 import com.github.tutorialsandroid.appxupdater.enums.UpdateFrom
@@ -190,7 +191,8 @@ class SettingsActivity : AppCompatActivity() {
                                 ) {
                                     loadingBar.visibility = View.GONE
                                     handler.removeCallbacks(runnable)
-                                    if (isUpdateAvailable == true) {
+                                    val comparison = VersionHelper.compareVersions(update?.latestVersion, currentAppVersion)
+                                    if (comparison > 0) {
                                         checkDownloadInstallText.text =
                                             getString(R.string.download_update)
                                         updateAvailableStatus.visibility = View.VISIBLE
@@ -212,7 +214,7 @@ class SettingsActivity : AppCompatActivity() {
                                             "download/v${update?.latestVersion}/Erela_FixMe_prerelease_v${update?.latestVersion}.apk"
                                         )
                                     } else {
-                                        if (currentAppVersion > update?.latestVersion!!) {
+                                        if (comparison < 0) {
                                             CustomToast.getInstance(applicationContext)
                                                 .setMessage(
                                                     if (getString(R.string.lang) == "in")

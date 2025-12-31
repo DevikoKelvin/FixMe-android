@@ -37,7 +37,7 @@ class SseService : Service() {
             .retryOnConnectionFailure(true)
             .build()
         val request = Request.Builder()
-            .url("${BuildConfig.BASE_URL}ntfy/show-notif")
+            .url(BuildConfig.SSE_URL)
             .header("Accept", "text/event-stream")
             .build()
 

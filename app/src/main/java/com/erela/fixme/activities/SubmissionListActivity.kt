@@ -148,11 +148,11 @@ class SubmissionListActivity : AppCompatActivity(), SubmissionRvAdapter.OnSubmis
 
     @SuppressLint("NotifyDataSetChanged")
     private fun init() {
-        setSupportActionBar(binding.toolBar)
-        supportActionBar?.setDisplayShowTitleEnabled(false)
-
         binding.apply {
-            backButton.setOnClickListener {
+            setSupportActionBar(toolBar)
+            supportActionBar?.setDisplayShowTitleEnabled(false)
+
+            toolBar.setNavigationOnClickListener {
                 onBackPressedDispatcher.onBackPressed()
             }
 

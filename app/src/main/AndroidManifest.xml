@@ -113,13 +113,13 @@
             android:screenOrientation="userPortrait"
             tools:ignore="DiscouragedApi,LockedOrientationActivity" />
 
-        <service
+        <!--<service
             android:name=".services.FCMService"
             android:exported="false">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
-        </service>
+        </service>-->
 
         <service
             android:name=".services.SseService"

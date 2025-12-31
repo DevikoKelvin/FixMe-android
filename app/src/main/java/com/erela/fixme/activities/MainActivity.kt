@@ -34,6 +34,7 @@ import com.erela.fixme.dialogs.ConfirmationDialog
 import com.erela.fixme.dialogs.UpdateAvailableDialog
 import com.erela.fixme.helpers.PermissionHelper
 import com.erela.fixme.helpers.UserDataHelper
+import com.erela.fixme.helpers.VersionHelper
 import com.erela.fixme.objects.UserData
 import com.erela.fixme.services.SseService
 import com.github.tutorialsandroid.appxupdater.AppUpdaterUtils
@@ -50,6 +51,7 @@ class MainActivity : AppCompatActivity() {
     private val userData: UserData by lazy {
         UserDataHelper(this@MainActivity).getUserData()
     }
+    private var newAppVersion: String? = null
     private var downloadProgress: Int = 0
     private var downloadId: Long = 0
     private val onDownloadComplete = object : BroadcastReceiver() {
@@ -366,13 +368,16 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun checkNewUpdate() {
+        val currentAppVersion = BuildConfig.VERSION_NAME
         AppUpdaterUtils(this@MainActivity).also {
             with(it) {
                 setUpdateFrom(UpdateFrom.GITHUB)
                 setGitHubUserAndRepo("DevikoKelvin", "FixMe-android")
                 withListener(object : AppUpdaterUtils.UpdateListener {
                     override fun onSuccess(update: Update?, isUpdateAvailable: Boolean?) {
-                        if (isUpdateAvailable == true) {
+                        val comparison = VersionHelper.compareVersions(update?.latestVersion, currentAppVersion)
+                        if (comparison > 0) {
+                            newAppVersion = update?.latestVersion
                             val dialog = UpdateAvailableDialog(
                                 this@MainActivity,
                                 update?.urlToDownload.toString().replace(
@@ -392,8 +397,7 @@ class MainActivity : AppCompatActivity() {
 
                             if (dialog.window != null)
                                 dialog.show()
-                        } else
-                            return
+                        }
                     }
 
                     override fun onFailed(error: AppUpdaterError?) {
@@ -538,12 +542,7 @@ class MainActivity : AppCompatActivity() {
     private fun showDownloadProgressNotification(notificationId: Int, progress: Int) {
         val builder = NotificationCompat.Builder(this, "FixMe Download Channel")
             .setSmallIcon(android.R.drawable.stat_sys_download)
-            .setContentTitle(
-                if (getString(R.string.lang) == "in")
-                    "Pembaruan FixMe"
-                else
-                    "FixMe Updates"
-            )
+            .setContentTitle("Erela_FixMe_prerelease_v${newAppVersion}")
             .setContentText(
                 if (getString(R.string.lang) == "in")
                     "Sedang mengunduh..."

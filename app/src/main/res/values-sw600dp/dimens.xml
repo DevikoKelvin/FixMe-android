@@ -44,7 +44,7 @@
     <dimen name="dialog_elevation">2dp</dimen>
     <dimen name="dialog_message_margin_vertical">36dp</dimen>
     <dimen name="dialog_divider_height">2dp</dimen>
-    <dimen name="dialog_loading_content_padding">6dp</dimen>
+    <dimen name="dialog_loading_content_padding">10dp</dimen>
 
     <!-- Bottom sheet dimensions -->
     <dimen name="bottom_sheet_padding_bottom">69dp</dimen>

@@ -35,7 +35,7 @@ class FCMService : FirebaseMessagingService() {
                 ?: ""
 
                 if (UserDataHelper(applicationContext).isUserDataExist() && userData.id == notificationData.relatedUserId) {
-                    stopService(Intent(this, SseService::class.java))
+                    /*stopService(Intent(this, SseService::class.java))*/
                     lastNotificationId = notificationData.idGaProjects
                     NotificationsHelper.generateNotification(
                         title,
