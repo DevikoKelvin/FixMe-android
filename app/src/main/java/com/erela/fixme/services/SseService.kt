@@ -15,6 +15,7 @@ import okhttp3.Response
 import okhttp3.sse.EventSource
 import okhttp3.sse.EventSourceListener
 import okhttp3.sse.EventSources
+import org.json.JSONException
 import org.json.JSONObject
 import java.util.concurrent.TimeUnit
 
@@ -73,7 +74,16 @@ class SseService : Service() {
                         val message = outerJson.get("message")
                         val messageJson: JSONObject = when (message) {
                             is String -> {
-                                JSONObject(message)
+                                var jsonString = message.trim()
+                                if (!jsonString.endsWith("}")) {
+                                    jsonString += "}"
+                                }
+                                try {
+                                    JSONObject(jsonString)
+                                } catch (e: JSONException) {
+                                    Log.e(TAG, "Could not parse message JSON: $jsonString", e)
+                                    return
+                                }
                             }
 
                             is JSONObject -> {
