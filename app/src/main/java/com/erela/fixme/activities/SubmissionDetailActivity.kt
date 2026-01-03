@@ -32,6 +32,7 @@ import com.erela.fixme.bottom_sheets.SubmissionActionBottomSheet
 import com.erela.fixme.bottom_sheets.TrialTrackingBottomSheet
 import com.erela.fixme.bottom_sheets.UpdateStatusBottomSheet
 import com.erela.fixme.custom_views.CustomToast
+import com.erela.fixme.custom_views.zoom_helper.ImageZoomHelper
 import com.erela.fixme.databinding.ActivitySubmissionDetailBinding
 import com.erela.fixme.dialogs.ConfirmationDialog
 import com.erela.fixme.dialogs.LoadingDialog
@@ -176,6 +177,7 @@ class SubmissionDetailActivity : AppCompatActivity(),
                     notificationId
                 ) else InitAPI.getEndpoint.getSubmissionDetail(detailId))
                     .enqueue(object : Callback<List<SubmissionDetailResponse>> {
+                        @SuppressLint("ClickableViewAccessibility")
                         override fun onResponse(
                             call: Call<List<SubmissionDetailResponse>?>,
                             response: Response<List<SubmissionDetailResponse>?>
@@ -248,6 +250,11 @@ class SubmissionDetailActivity : AppCompatActivity(),
                                                     })
                                                     .placeholder(R.drawable.image_placeholder)
                                                     .into(submissionImage)
+                                                val imageZoomHelper = ImageZoomHelper(this@SubmissionDetailActivity, submissionImage)
+                                                submissionImage.setOnTouchListener { _, event ->
+                                                    imageZoomHelper.init(event!!)
+                                                    true
+                                                }
                                             } else {
                                                 Glide.with(applicationContext)
                                                     .load(InitAPI.IMAGE_URL + image?.foto)
@@ -274,6 +281,11 @@ class SubmissionDetailActivity : AppCompatActivity(),
                                                     })
                                                     .placeholder(R.drawable.image_placeholder)
                                                     .into(submissionImage)
+                                                val imageZoomHelper = ImageZoomHelper(this@SubmissionDetailActivity, submissionImage)
+                                                submissionImage.setOnTouchListener { _, event ->
+                                                    imageZoomHelper.init(event!!)
+                                                    true
+                                                }
                                             }
                                         }
                                     }
