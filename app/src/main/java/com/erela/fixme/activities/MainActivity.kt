@@ -14,7 +14,9 @@ import android.os.Build
 import android.os.Bundle
 import android.os.Environment
 import android.util.Log
+import android.view.View
 import android.widget.Toast
+import androidx.activity.addCallback
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
@@ -165,6 +167,35 @@ class MainActivity : AppCompatActivity() {
     @SuppressLint("SetTextI18n", "InlinedApi")
     private fun init() {
         binding.apply {
+            if (BuildConfig.BUILD_TYPE ==  "debug")
+                identifierWatermark.visibility = View.VISIBLE
+            else
+                identifierWatermark.visibility = View.GONE
+
+            onBackPressedDispatcher.addCallback {
+                val confirmationDialog =
+                    ConfirmationDialog(
+                        this@MainActivity,
+                        if (getString(R.string.lang) == "in")
+                            "Apakah Anda yakin ingin menutup aplikasi ini?"
+                        else
+                            "Are you sure you want to close the app?",
+                        if (getString(R.string.lang) == "in") "Ya" else "Yes"
+                    ).also {
+                        with(it) {
+                            setConfirmationDialogListener(object :
+                                ConfirmationDialog.ConfirmationDialogListener {
+                                override fun onConfirm() {
+                                    finish()
+                                }
+                            })
+                        }
+                    }
+
+                if (confirmationDialog.window != null)
+                    confirmationDialog.show()
+            }
+
             if (!PermissionHelper.isPermissionGranted(
                     this@MainActivity, PermissionHelper.POST_NOTIFICATIONS
                 )

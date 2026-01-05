@@ -63,11 +63,18 @@ object InitAPI {
             .build()
 
     @Suppress("DEPRECATION")
-    private fun getInstance(): Retrofit = Retrofit.Builder()
-        .baseUrl(API_BASE_URL)
-        .client(client)
-        .addConverterFactory(GsonConverterFactory.create(GsonBuilder().setLenient().create()))
-        .build()
+    private fun getInstance(): Retrofit {
+        val gson = GsonBuilder()
+            .registerTypeAdapter(Int::class.java, IntegerTypeAdapter())
+            .setLenient()
+            .create()
+
+        return Retrofit.Builder()
+            .baseUrl(API_BASE_URL)
+            .client(client)
+            .addConverterFactory(GsonConverterFactory.create(gson))
+            .build()
+    }
 
     val getEndpoint: GetEndpoint = getInstance().create(GetEndpoint::class.java)
 }

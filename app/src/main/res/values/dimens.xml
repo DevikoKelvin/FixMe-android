@@ -24,6 +24,7 @@
     <dimen name="copyright_text_size">11sp</dimen>
 
     <!-- Login screen dimensions -->
+    <dimen name="splash_logo_margin">150dp</dimen>
     <dimen name="login_logo_margin">36dp</dimen>
     <dimen name="login_field_corner_radius">25dp</dimen>
     <dimen name="login_field_stroke_width">2dp</dimen>
@@ -33,7 +34,7 @@
     <dimen name="login_progress_bar_size">32dp</dimen>
 
     <!-- Main menu dimensions -->
-    <dimen name="main_menu_item_height">150dp</dimen>
+    <dimen name="main_menu_item_height">56dp</dimen>
     <dimen name="main_menu_item_margin">16dp</dimen>
     <dimen name="main_menu_item_icon_size">50dp</dimen>
     <dimen name="main_menu_notification_icon">36dp</dimen>

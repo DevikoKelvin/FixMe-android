@@ -326,10 +326,10 @@
                     app:cardBackgroundColor="@color/button_color"
                     app:cardCornerRadius="@dimen/login_button_corner_radius"
                     app:cardElevation="@dimen/dialog_elevation"
-                    app:contentPaddingBottom="@dimen/dialog_margin"
-                    app:contentPaddingLeft="@dimen/list_item_padding"
-                    app:contentPaddingRight="@dimen/list_item_padding"
-                    app:contentPaddingTop="@dimen/dialog_margin"
+                    app:contentPaddingBottom="@dimen/list_item_department_content_padding_vertical"
+                    app:contentPaddingLeft="@dimen/list_item_department_content_padding_horizontal"
+                    app:contentPaddingRight="@dimen/list_item_department_content_padding_horizontal"
+                    app:contentPaddingTop="@dimen/list_item_department_content_padding_vertical"
                     app:strokeWidth="0dp">
 
                     <TextView

@@ -650,9 +650,10 @@
                             app:cardBackgroundColor="@android:color/transparent"
                             app:cardCornerRadius="@dimen/login_button_corner_radius"
                             app:cardElevation="0dp"
-                            app:contentPadding="@dimen/dialog_loading_content_padding"
-                            app:contentPaddingLeft="@dimen/dialog_margin"
-                            app:contentPaddingRight="@dimen/dialog_margin"
+                            app:contentPaddingBottom="@dimen/list_item_selection_content_padding_vertical"
+                            app:contentPaddingLeft="@dimen/list_item_selection_content_padding_horizontal"
+                            app:contentPaddingRight="@dimen/list_item_selection_content_padding_horizontal"
+                            app:contentPaddingTop="@dimen/list_item_selection_content_padding_vertical"
                             app:strokeWidth="0dp">
 
                             <TextView
@@ -662,6 +663,7 @@
                                 android:textColor="@color/white"
                                 android:textSize="@dimen/text_size_micro"
                                 android:textStyle="bold"
+                                tools:ignore="TooManyViews"
                                 tools:text="Low" />
                         </com.google.android.material.card.MaterialCardView>
 
@@ -674,9 +676,10 @@
                             app:cardBackgroundColor="@android:color/transparent"
                             app:cardCornerRadius="@dimen/login_button_corner_radius"
                             app:cardElevation="0dp"
-                            app:contentPadding="@dimen/dialog_loading_content_padding"
-                            app:contentPaddingLeft="@dimen/dialog_margin"
-                            app:contentPaddingRight="@dimen/dialog_margin"
+                            app:contentPaddingBottom="@dimen/list_item_selection_content_padding_vertical"
+                            app:contentPaddingLeft="@dimen/list_item_selection_content_padding_horizontal"
+                            app:contentPaddingRight="@dimen/list_item_selection_content_padding_horizontal"
+                            app:contentPaddingTop="@dimen/list_item_selection_content_padding_vertical"
                             app:strokeWidth="0dp">
 
                             <TextView

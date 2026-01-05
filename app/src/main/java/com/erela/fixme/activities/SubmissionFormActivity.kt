@@ -453,7 +453,9 @@ class SubmissionFormActivity : AppCompatActivity() {
                                         loadingBar.visibility = View.GONE
                                         if (response.isSuccessful) {
                                             if (response.body() != null) {
-                                                if (response.body()?.code == 1) {
+                                                val body = response.body()
+                                                Log.e("Response Body", body.toString())
+                                                if (body?.code == 1) {
                                                     CustomToast.getInstance(applicationContext)
                                                         .setMessage(
                                                             if (getString(R.string.lang) == "in")
@@ -474,6 +476,12 @@ class SubmissionFormActivity : AppCompatActivity() {
                                                             )
                                                         ).show()
                                                     finish()
+                                                    startActivity(
+                                                        SubmissionDetailActivity.initiate(
+                                                            this@SubmissionFormActivity,
+                                                            body.lastId.toString()
+                                                        )
+                                                    )
                                                 } else {
                                                     CustomToast.getInstance(applicationContext)
                                                         .setMessage(

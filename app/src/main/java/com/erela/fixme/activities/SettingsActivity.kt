@@ -150,11 +150,13 @@ class SettingsActivity : AppCompatActivity() {
                 onBackPressedDispatcher.onBackPressed()
             }
 
+            val buildType = if (BuildConfig.BUILD_TYPE == "debug") "dev_${BuildConfig.BUILD_TYPE}" else "pre_${BuildConfig.BUILD_TYPE}"
             currentAppVersion = BuildConfig.VERSION_NAME
+            val appVersionText = "${BuildConfig.VERSION_NAME}.${BuildConfig.VERSION_CODE}.${buildType}.${BuildConfig.BUILD_TIMESTAMP}"
             currentAppVersionText.text = if (getString(R.string.lang) == "in")
-                "Versi aplikasi saat ini: $currentAppVersion"
+                "Versi aplikasi saat ini: $appVersionText"
             else
-                "Current app version: $currentAppVersion"
+                "Current app version: $appVersionText"
 
             checkDownloadInstallButton.setOnClickListener {
                 if (downloadLink != null) {

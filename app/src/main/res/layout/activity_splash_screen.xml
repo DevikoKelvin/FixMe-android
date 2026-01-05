@@ -28,7 +28,7 @@
         <ImageView
             android:id="@+id/erelaLogoSplash"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/main_menu_item_height"
+            android:layout_height="@dimen/splash_logo_margin"
             android:src="@drawable/erela_logo" />
 
         <ImageView
