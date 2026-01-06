@@ -198,42 +198,6 @@
             android:orientation="vertical">
 
             <com.google.android.material.card.MaterialCardView
-                android:id="@+id/changePasswordMenu"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="@dimen/main_menu_item_margin"
-                android:layout_weight="1"
-                app:cardBackgroundColor="#E0F2F1"
-                app:cardCornerRadius="@dimen/card_corner_radius"
-                app:cardElevation="@dimen/card_elevation"
-                app:strokeWidth="0dp">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:gravity="center"
-                    android:orientation="horizontal"
-                    android:padding="@dimen/activity_horizontal_margin"
-                    tools:ignore="UseCompoundDrawables">
-
-                    <ImageView
-                        android:layout_width="@dimen/main_menu_item_icon_size"
-                        android:layout_height="@dimen/main_menu_item_icon_size"
-                        android:src="@drawable/change_password_icon"
-                        tools:ignore="ContentDescription" />
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginHorizontal="@dimen/button_padding"
-                        android:text="@string/change_password_title"
-                        android:textColor="@color/black"
-                        android:textSize="@dimen/text_size_medium"
-                        android:textStyle="bold" />
-                </LinearLayout>
-            </com.google.android.material.card.MaterialCardView>
-
-            <com.google.android.material.card.MaterialCardView
                 android:id="@+id/makeSubmissionMenu"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -299,6 +263,42 @@
                         android:layout_height="wrap_content"
                         android:layout_marginHorizontal="@dimen/button_padding"
                         android:text="@string/submission_list_title"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/text_size_medium"
+                        android:textStyle="bold" />
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/changePasswordMenu"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/main_menu_item_margin"
+                android:layout_weight="1"
+                app:cardBackgroundColor="#E0F2F1"
+                app:cardCornerRadius="@dimen/card_corner_radius"
+                app:cardElevation="@dimen/card_elevation"
+                app:strokeWidth="0dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:orientation="horizontal"
+                    android:padding="@dimen/activity_horizontal_margin"
+                    tools:ignore="UseCompoundDrawables">
+
+                    <ImageView
+                        android:layout_width="@dimen/main_menu_item_icon_size"
+                        android:layout_height="@dimen/main_menu_item_icon_size"
+                        android:src="@drawable/change_password_icon"
+                        tools:ignore="ContentDescription" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginHorizontal="@dimen/button_padding"
+                        android:text="@string/change_password_title"
                         android:textColor="@color/black"
                         android:textSize="@dimen/text_size_medium"
                         android:textStyle="bold" />
