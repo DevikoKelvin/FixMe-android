@@ -64,7 +64,8 @@ android {
     buildTypes {
         release {
             buildConfigField 'String', 'BASE_URL', '"https://182.23.21.202:8282/fixme/"'
-            buildConfigField 'String', 'SSE_URL', '"http://103.96.147.242:8081/erelaMurbei_fixme25/sse"'
+            buildConfigField 'String', 'SSE_URL', '"http://103.96.147.242:8081/erelaMurbei_fixme25_mobile/sse"'
+            buildConfigField 'String', 'MAP_API_KEY', '"AIzaSyBVIOv7TiZmcyPet64GSYD1vID6NDjSj4o"'
             minifyEnabled true
             shrinkResources true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
@@ -73,7 +74,8 @@ android {
         }
         debug {
             buildConfigField 'String', 'BASE_URL', '"http://192.168.3.109:81/fixme/"'
-            buildConfigField 'String', 'SSE_URL', '"http://103.96.147.242:8081/erelaMurbei_fixme25/sse"'
+            buildConfigField 'String', 'SSE_URL', '"http://103.96.147.242:8081/erelaMurbei_fixme25_mobile/sse"'
+            buildConfigField 'String', 'MAP_API_KEY', '"AIzaSyBVIOv7TiZmcyPet64GSYD1vID6NDjSj4o"'
             minifyEnabled false
             shrinkResources false
         }
@@ -128,6 +130,8 @@ dependencies {
     implementation libs.pusher.java.client
     implementation libs.balloon
     implementation libs.shimmer
+    implementation libs.play.services.maps
+    implementation libs.play.services.location
 
     implementation platform(libs.firebase.bom)
     implementation libs.firebase.analytics

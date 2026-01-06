@@ -1,5 +1,6 @@
 package com.erela.fixme.activities
 
+import android.content.Context
 import android.content.Intent
 import android.graphics.Rect
 import android.os.Bundle
@@ -27,6 +28,7 @@ import com.google.firebase.messaging.FirebaseMessaging
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import androidx.core.content.edit
 
 class LoginActivity : AppCompatActivity() {
     private val binding: ActivityLoginBinding by lazy {
@@ -246,6 +248,10 @@ class LoginActivity : AppCompatActivity() {
                                                     }
                                                 })
                                             }
+                                            val sharedPreferences = getSharedPreferences("app_prefs", Context.MODE_PRIVATE)
+                                            sharedPreferences.edit {
+                                                putBoolean("first_login", true)
+                                            }
                                             Handler(mainLooper).postDelayed({
                                                 CustomToast.getInstance(applicationContext)
                                                     .setMessage(
@@ -366,7 +372,7 @@ class LoginActivity : AppCompatActivity() {
                                     setAction("Retry") {
                                         checkLogin(username, password)
                                     }
-                                }
+                                 }
                             }.show()
                         }
                     })

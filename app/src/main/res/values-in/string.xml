@@ -40,6 +40,8 @@
     <string name="make_submission_title">Buat Laporan</string>
     <string name="case_title">Judul Kasus</string>
     <string name="location">Lokasi</string>
+    <string name="refresh_location">Segarkan Lokasi</string>
+    <string name="location_desc">Deskripsi Lokasi</string>
     <string name="department_destination">Pilih Departemen Tujuan</string>
     <string name="case_description">Deskripsi</string>
     <string name="report_time_and_date">Tanggal dan Waktu Laporan</string>

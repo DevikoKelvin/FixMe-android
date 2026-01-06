@@ -45,6 +45,7 @@ import com.github.tutorialsandroid.appxupdater.enums.UpdateFrom
 import com.github.tutorialsandroid.appxupdater.objects.Update
 import java.io.File
 import java.time.LocalDateTime
+import androidx.core.content.edit
 
 class MainActivity : AppCompatActivity() {
     private val binding: ActivityMainBinding by lazy {
@@ -135,7 +136,13 @@ class MainActivity : AppCompatActivity() {
         init()
         checkNewUpdate()
         handleNotificationIntent(intent)
-        startService(Intent(this, SseService::class.java))
+        val sharedPreferences = getSharedPreferences("app_prefs", Context.MODE_PRIVATE)
+        if (sharedPreferences.getBoolean("first_login", false)) {
+            startService(Intent(this, SseService::class.java))
+            sharedPreferences.edit {
+                putBoolean("first_login", false)
+            }
+        }
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             registerReceiver(
                 onDownloadComplete,
@@ -167,7 +174,7 @@ class MainActivity : AppCompatActivity() {
     @SuppressLint("SetTextI18n", "InlinedApi")
     private fun init() {
         binding.apply {
-            if (BuildConfig.BUILD_TYPE ==  "debug")
+            if (BuildConfig.BUILD_TYPE == "debug")
                 identifierWatermark.visibility = View.VISIBLE
             else
                 identifierWatermark.visibility = View.GONE
@@ -323,7 +330,6 @@ class MainActivity : AppCompatActivity() {
             }
 
             notificationButton.setOnClickListener {
-                notificationAnimation.playAnimation()
                 startActivity(Intent(this@MainActivity, NotificationActivity::class.java))
             }
 
@@ -366,6 +372,7 @@ class MainActivity : AppCompatActivity() {
                                             "Successfully logged out!",
                                         Toast.LENGTH_SHORT
                                     ).show()
+                                    stopService(Intent(this@MainActivity, SseService::class.java))
                                     startActivity(
                                         Intent(
                                             this@MainActivity,
@@ -386,15 +393,17 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun handleNotificationIntent(intent: Intent) {
-        val detailId = intent.getStringExtra(SubmissionDetailActivity.DETAIL_ID)
-        val notificationId = intent.getIntExtra(SubmissionDetailActivity.NOTIFICATION_ID, 0)
+        if (intent.action == "OPEN_TICKET_DETAIL") {
+            val ticketId = intent.getStringExtra("ticket_id")
+            val ticketStatus = intent.getStringExtra("ticket_status")
 
-        if (detailId != null) {
-            val submissionDetailIntent = Intent(this, SubmissionDetailActivity::class.java).apply {
-                putExtra(SubmissionDetailActivity.DETAIL_ID, detailId)
-                putExtra(SubmissionDetailActivity.NOTIFICATION_ID, notificationId)
+            if (ticketId != null && ticketStatus != null) {
+                val detailIntent =
+                    Intent(this, Class.forName("com.erela.fixme.activities.TicketDetailActivity"))
+                detailIntent.putExtra("id_ticket", ticketId)
+                detailIntent.putExtra("status", ticketStatus)
+                startActivity(detailIntent)
             }
-            startActivity(submissionDetailIntent)
         }
     }
 
@@ -406,7 +415,8 @@ class MainActivity : AppCompatActivity() {
                 setGitHubUserAndRepo("DevikoKelvin", "FixMe-android")
                 withListener(object : AppUpdaterUtils.UpdateListener {
                     override fun onSuccess(update: Update?, isUpdateAvailable: Boolean?) {
-                        val comparison = VersionHelper.compareVersions(update?.latestVersion, currentAppVersion)
+                        val comparison =
+                            VersionHelper.compareVersions(update?.latestVersion, currentAppVersion)
                         if (comparison > 0) {
                             newAppVersion = update?.latestVersion
                             val dialog = UpdateAvailableDialog(

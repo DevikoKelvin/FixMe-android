@@ -32,6 +32,8 @@ shimmer = "0.5.0"
 
 firebaseBom = "34.7.0"
 firebaseMessaging = "25.0.1"
+playServicesMaps = "19.2.0"
+playServicesLocation = "21.3.0"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -65,6 +67,8 @@ shimmer = { module = "com.facebook.shimmer:shimmer", version.ref = "shimmer" }
 firebase-bom = { module = "com.google.firebase:firebase-bom", name = "firebase-bom", version.ref = "firebaseBom" }
 firebase-analytics = { module = "com.google.firebase:firebase-analytics", name = "firebase-analytics" }
 firebase-messaging = { module = "com.google.firebase:firebase-messaging", version.ref = "firebaseMessaging" }
+play-services-maps = { group = "com.google.android.gms", name = "play-services-maps", version.ref = "playServicesMaps" }
+play-services-location = { group = "com.google.android.gms", name = "play-services-location", version.ref = "playServicesLocation" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

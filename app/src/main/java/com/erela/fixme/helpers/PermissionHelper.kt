@@ -24,11 +24,14 @@ object PermissionHelper {
     const val INSTALL_PACKAGES = Manifest.permission.REQUEST_INSTALL_PACKAGES
 
     const val CAMERA = Manifest.permission.CAMERA
+    const val ACCESS_FINE_LOCATION = Manifest.permission.ACCESS_FINE_LOCATION
+    const val ACCESS_COARSE_LOCATION = Manifest.permission.ACCESS_COARSE_LOCATION
     const val REQUEST_CODE_GALLERY = 100
     const val REQUEST_CODE_CAMERA = 101
     const val REQUEST_CODE_NOTIFICATION = 102
     const val REQUEST_WRITE_EXTERNAL_STORAGE = 103
     const val REQUEST_INSTALL_PACKAGES = 104
+    const val REQUEST_CODE_LOCATION = 105
 
     fun isPermissionGranted(activity: Activity, permission: String): Boolean {
         return ContextCompat.checkSelfPermission(
@@ -36,7 +39,7 @@ object PermissionHelper {
         ) == PackageManager.PERMISSION_GRANTED
     }
 
-    fun requestPermission(activity: Activity, permissions: Array<String>, requestCode: Int) {
+    fun requestPermission(activity: Activity, permissions: Array<out String>, requestCode: Int) {
         ActivityCompat.requestPermissions(activity, permissions, requestCode)
     }
 }

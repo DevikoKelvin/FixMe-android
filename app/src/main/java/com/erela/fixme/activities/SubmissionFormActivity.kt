@@ -6,6 +6,8 @@ import android.content.ContentResolver
 import android.content.Intent
 import android.content.pm.PackageManager.PERMISSION_GRANTED
 import android.graphics.Rect
+import android.location.Location
+import android.location.LocationManager
 import android.net.Uri
 import android.os.Build.VERSION
 import android.os.Build.VERSION_CODES
@@ -45,6 +47,13 @@ import com.erela.fixme.objects.DepartmentListResponse
 import com.erela.fixme.objects.FotoGaprojectsItem
 import com.erela.fixme.objects.GenericSimpleResponse
 import com.erela.fixme.objects.SubmissionDetailResponse
+import com.google.android.gms.location.FusedLocationProviderClient
+import com.google.android.gms.location.LocationServices
+import com.google.android.gms.maps.CameraUpdateFactory
+import com.google.android.gms.maps.GoogleMap
+import com.google.android.gms.maps.OnMapReadyCallback
+import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.MarkerOptions
 import com.google.android.material.textfield.TextInputEditText
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
@@ -62,7 +71,7 @@ import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
 
-class SubmissionFormActivity : AppCompatActivity() {
+class SubmissionFormActivity : AppCompatActivity(), OnMapReadyCallback {
     private val binding: ActivitySubmissionFormBinding by lazy {
         ActivitySubmissionFormBinding.inflate(layoutInflater)
     }
@@ -77,6 +86,10 @@ class SubmissionFormActivity : AppCompatActivity() {
     private lateinit var imageUri: Uri
     private val photoFiles: ArrayList<MultipartBody.Part?> = ArrayList()
     private val requestBodyMap: MutableMap<String, RequestBody> = mutableMapOf()
+    private lateinit var fusedLocationClient: FusedLocationProviderClient
+    private var googleMap: GoogleMap? = null
+    private var latitude: Double = 0.0
+    private var longitude: Double = 0.0
     private var isFormEmpty = arrayOf(
         false,
         false,
@@ -137,6 +150,11 @@ class SubmissionFormActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
 
+        binding.mapPreview.onCreate(savedInstanceState)
+        binding.mapPreview.getMapAsync(this)
+
+        fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
+
         enableEdgeToEdge()
         ViewCompat.setOnApplyWindowInsetsListener(binding.main) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
@@ -183,6 +201,10 @@ class SubmissionFormActivity : AppCompatActivity() {
                 if (detail != null) {
                     setResult(RESULT_OK)
                 }
+            }
+
+            refreshButton.setOnClickListener {
+                checkLocationPermission()
             }
 
             machineCodeFieldLayout.visibility = View.GONE
@@ -997,6 +1019,14 @@ class SubmissionFormActivity : AppCompatActivity() {
                 }
             }
         }
+
+        if (requestCode == PermissionHelper.REQUEST_CODE_LOCATION) {
+            if (grantResults.isNotEmpty()) {
+                if (grantResults[0] == PERMISSION_GRANTED) {
+                    checkLocationPermission()
+                }
+            }
+        }
     }
 
     private fun openGallery() {
@@ -1403,5 +1433,109 @@ class SubmissionFormActivity : AppCompatActivity() {
 
     private fun createPartFromString(stringData: String?): RequestBody? {
         return stringData?.toRequestBody("text/plain".toMediaTypeOrNull())
+    }
+
+    private fun showLocationError() {
+        CustomToast(applicationContext)
+            .setMessage(
+                if (getString(R.string.lang) == "en") "Please turn on your location first!"
+                else "Harap aktifkan lokasi terlebih dahulu!"
+            )
+            .setBackgroundColor(
+                ContextCompat.getColor(
+                    applicationContext,
+                    R.color.custom_toast_background_failed
+                )
+            )
+            .setFontColor(
+                ContextCompat.getColor(
+                    applicationContext,
+                    R.color.custom_toast_font_failed
+                )
+            ).show()
+    }
+
+    private fun isLocationEnabled(): Boolean {
+        val locationManager: LocationManager =
+            getSystemService(LOCATION_SERVICE) as LocationManager
+        return locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER) || locationManager.isProviderEnabled(
+            LocationManager.NETWORK_PROVIDER
+        )
+    }
+
+    override fun onMapReady(gMap: GoogleMap) {
+        googleMap = gMap
+        checkLocationPermission()
+    }
+
+    private fun checkLocationPermission() {
+        if (PermissionHelper.isPermissionGranted(
+                this,
+                PermissionHelper.ACCESS_FINE_LOCATION
+            ) && PermissionHelper.isPermissionGranted(this, PermissionHelper.ACCESS_COARSE_LOCATION)
+        ) {
+            fusedLocationClient.lastLocation.addOnSuccessListener {
+                if (it != null) {
+                    showLocationOnMap(it)
+                } else {
+                    CustomToast.getInstance(this)
+                        .setMessage("Couldn't get your location. Please try again.")
+                        .show()
+                }
+            }
+        } else {
+            PermissionHelper.requestPermission(
+                this,
+                arrayOf(
+                    PermissionHelper.ACCESS_FINE_LOCATION,
+                    PermissionHelper.ACCESS_COARSE_LOCATION
+                ),
+                PermissionHelper.REQUEST_CODE_LOCATION
+            )
+        }
+    }
+
+    private fun showLocationOnMap(location: Location) {
+        val latLng = LatLng(location.latitude, location.longitude)
+        googleMap?.clear()
+        googleMap?.addMarker(MarkerOptions().position(latLng))
+        googleMap?.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 15f))
+        googleMap?.uiSettings?.setAllGesturesEnabled(false)
+
+    }
+
+    override fun onStart() {
+        super.onStart()
+        binding.mapPreview.onStart()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        binding.mapPreview.onResume()
+    }
+
+    override fun onPause() {
+        super.onPause()
+        binding.mapPreview.onPause()
+    }
+
+    override fun onStop() {
+        super.onStop()
+        binding.mapPreview.onStop()
+    }
+
+    override fun onLowMemory() {
+        super.onLowMemory()
+        binding.mapPreview.onLowMemory()
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        binding.mapPreview.onSaveInstanceState(outState)
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        binding.mapPreview.onDestroy()
     }
 }

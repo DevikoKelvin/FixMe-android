@@ -50,7 +50,7 @@
             android:textStyle="bold"
             tools:ignore="RelativeOverlap" />
 
-        <com.google.android.material.card.MaterialCardView
+        <!--<com.google.android.material.card.MaterialCardView
             android:id="@+id/submitButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -68,7 +68,7 @@
                 android:layout_height="@dimen/list_item_shimmer_location_icon_size"
                 android:src="@drawable/done_icon"
                 tools:ignore="ContentDescription" />
-        </com.google.android.material.card.MaterialCardView>
+        </com.google.android.material.card.MaterialCardView>-->
 
         <ProgressBar
             android:id="@+id/loadingBar"
@@ -94,7 +94,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:paddingTop="@dimen/list_item_padding">
+            android:paddingTop="@dimen/list_item_padding"
+            android:paddingBottom="@dimen/splash_logo_margin">
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/caseTitleFieldLayout"
@@ -128,7 +129,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="@dimen/list_item_padding"
                 android:layout_marginTop="@dimen/user_info_item_margin_top"
-                android:hint="@string/location"
+                android:hint="@string/location_desc"
                 app:boxCornerRadiusBottomEnd="@dimen/login_field_corner_radius"
                 app:boxCornerRadiusBottomStart="@dimen/login_field_corner_radius"
                 app:boxCornerRadiusTopEnd="@dimen/login_field_corner_radius"
@@ -157,10 +158,8 @@
                 app:cardBackgroundColor="@android:color/transparent"
                 app:cardCornerRadius="@dimen/login_button_corner_radius"
                 app:cardElevation="0dp"
-                app:contentPadding="@dimen/dialog_margin"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/toolBar"
+                app:contentPaddingLeft="12dp"
+                app:contentPaddingRight="12dp"
                 app:strokeColor="@color/form_field_stroke"
                 app:strokeWidth="@dimen/login_field_stroke_width">
 
@@ -176,6 +175,67 @@
             </com.google.android.material.card.MaterialCardView>
 
             <com.google.android.material.card.MaterialCardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="@dimen/list_item_padding"
+                android:layout_marginTop="@dimen/user_info_item_margin_top"
+                app:cardBackgroundColor="@android:color/transparent"
+                app:cardCornerRadius="@dimen/login_field_corner_radius"
+                app:cardElevation="2dp">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <com.google.android.gms.maps.MapView
+                        android:id="@+id/mapPreview"
+                        android:layout_width="match_parent"
+                        android:layout_height="250dp"
+                        app:liteMode="true"
+                        app:cameraZoom="15"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <com.google.android.material.card.MaterialCardView
+                        android:id="@+id/refreshButton"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:layout_marginEnd="8dp"
+                        app:cardBackgroundColor="@color/white"
+                        app:cardCornerRadius="50dp"
+                        app:cardElevation="0dp"
+                        app:contentPadding="4dp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:strokeWidth="0dp">
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            tools:ignore="UseCompoundDrawables">
+
+                            <ImageView
+                                android:layout_width="@dimen/list_item_shimmer_location_icon_size"
+                                android:layout_height="@dimen/list_item_shimmer_location_icon_size"
+                                android:src="@drawable/refresh_icon"
+                                tools:ignore="ContentDescription" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:layout_marginStart="4dp"
+                                android:text="@string/refresh_location" />
+                        </LinearLayout>
+                    </com.google.android.material.card.MaterialCardView>
+                </androidx.constraintlayout.widget.ConstraintLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <com.google.android.material.card.MaterialCardView
                 android:id="@+id/categoryDropdownLayout"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/toolbar_height"
@@ -187,9 +247,6 @@
                 app:contentPadding="@dimen/list_item_progress_content_margin_top_small"
                 app:contentPaddingLeft="@dimen/dialog_loading_content_padding"
                 app:contentPaddingRight="@dimen/dialog_loading_content_padding"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/toolBar"
                 app:strokeColor="@color/form_field_stroke"
                 app:strokeWidth="@dimen/login_field_stroke_width">
 
@@ -280,26 +337,6 @@
                     android:textSize="@dimen/text_size_small" />
             </com.google.android.material.textfield.TextInputLayout>
 
-            <!--<TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginHorizontal="16dp"
-                android:layout_marginTop="8dp"
-                android:text="@string/materials"
-                android:textColor="@color/black"
-                android:textSize="14sp"
-                android:textStyle="bold" />
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/rvMaterials"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginHorizontal="16dp"
-                android:layout_marginTop="4dp"
-                app:layoutManager="com.google.android.flexbox.FlexboxLayoutManager"
-                tools:itemCount="2"
-                tools:listitem="@layout/list_item_selected_items" />-->
-
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -314,27 +351,30 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="@dimen/list_item_padding"
-                android:layout_marginTop="@dimen/dialog_loading_content_padding"
-                android:layout_marginBottom="@dimen/list_item_padding"
-                android:orientation="horizontal">
+                android:layout_marginVertical="@dimen/dialog_loading_content_padding"
+                android:orientation="vertical">
 
                 <com.google.android.material.card.MaterialCardView
                     android:id="@+id/chooseFileButton"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/button_height"
                     android:layout_marginVertical="@dimen/dialog_loading_content_padding"
-                    app:cardBackgroundColor="@color/button_color"
                     app:cardCornerRadius="@dimen/login_button_corner_radius"
                     app:cardElevation="@dimen/dialog_elevation"
-                    app:contentPaddingBottom="@dimen/list_item_department_content_padding_vertical"
-                    app:contentPaddingLeft="@dimen/list_item_department_content_padding_horizontal"
-                    app:contentPaddingRight="@dimen/list_item_department_content_padding_horizontal"
-                    app:contentPaddingTop="@dimen/list_item_department_content_padding_vertical"
                     app:strokeWidth="0dp">
+
+                    <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:src="@drawable/gradient_accent_color"
+                        tools:ignore="ContentDescription" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginHorizontal="@dimen/list_item_department_content_padding_horizontal"
+                        android:layout_marginVertical="@dimen/list_item_department_content_padding_vertical"
                         android:text="@string/choose_file"
                         android:textColor="@color/white"
                         android:textSize="@dimen/text_size_medium"
@@ -343,10 +383,10 @@
 
                 <com.google.android.material.card.MaterialCardView
                     android:id="@+id/manageAttachmentButton"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/button_height"
                     android:layout_marginStart="@dimen/dialog_margin"
+                    android:layout_marginBottom="@dimen/dialog_loading_content_padding"
                     android:visibility="gone"
                     app:cardBackgroundColor="@android:color/transparent"
                     app:cardCornerRadius="@dimen/login_button_corner_radius"
@@ -358,6 +398,8 @@
                         android:id="@+id/manageAttachmentText"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:gravity="center"
                         android:text="@string/manage_photo"
                         android:textColor="@color/black"
                         android:textSize="@dimen/text_size_micro"
@@ -367,7 +409,7 @@
                 <com.google.android.material.card.MaterialCardView
                     android:id="@+id/manageOldAttachmentButton"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_height="@dimen/button_height"
                     android:layout_gravity="center"
                     android:layout_marginStart="@dimen/dialog_margin"
                     android:visibility="gone"
@@ -380,6 +422,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_gravity="center"
                         android:text="@string/manage_old_photo"
                         android:textColor="@color/black"
                         android:textSize="@dimen/text_size_micro"
@@ -388,4 +431,33 @@
             </LinearLayout>
         </LinearLayout>
     </ScrollView>
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/submitButton"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/button_height"
+        android:layout_margin="@dimen/main_menu_item_margin"
+        app:cardCornerRadius="@dimen/login_button_corner_radius"
+        app:cardElevation="@dimen/card_elevation"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:strokeWidth="0dp">
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:src="@drawable/gradient_green"
+            tools:ignore="ContentDescription" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:text="@string/save_settings"
+            android:textColor="@color/white"
+            android:textSize="@dimen/text_size_medium"
+            android:textStyle="bold" />
+
+    </com.google.android.material.card.MaterialCardView>
 </androidx.constraintlayout.widget.ConstraintLayout>
