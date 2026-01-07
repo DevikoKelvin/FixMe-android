@@ -203,6 +203,28 @@ class SubmissionFormActivity : AppCompatActivity(), OnMapReadyCallback {
                 }
             }
 
+            if (!isLocationEnabled()) {
+                CustomToast(this@SubmissionFormActivity)
+                    .setMessage(
+                        if (getString(R.string.lang) == "en") "Please turn on your location first!"
+                        else "Harap aktifkan lokasi terlebih dahulu!"
+                    )
+                    .setBackgroundColor(
+                        ContextCompat.getColor(
+                            applicationContext,
+                            R.color.custom_toast_background_failed
+                        )
+                    )
+                    .setFontColor(
+                        ContextCompat.getColor(
+                            applicationContext,
+                            R.color.custom_toast_font_failed
+                        )
+                    )
+                    .show()
+                finish()
+            }
+
             refreshButton.setOnClickListener {
                 checkLocationPermission()
             }
@@ -264,12 +286,12 @@ class SubmissionFormActivity : AppCompatActivity(), OnMapReadyCallback {
                     }
                 }
                 submitButton.setOnClickListener {
-                    submitButton.visibility = View.GONE
+                    submitText.visibility = View.GONE
                     loadingBar.visibility = View.VISIBLE
                     val imm = getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
                     imm.hideSoftInputFromWindow(currentFocus?.windowToken, 0)
                     if (!formCheck()) {
-                        submitButton.visibility = View.VISIBLE
+                        submitText.visibility = View.VISIBLE
                         loadingBar.visibility = View.GONE
                         CustomToast.getInstance(applicationContext)
                             .setMessage(
@@ -302,7 +324,7 @@ class SubmissionFormActivity : AppCompatActivity(), OnMapReadyCallback {
                                         call: Call<GenericSimpleResponse>,
                                         response: Response<GenericSimpleResponse>
                                     ) {
-                                        submitButton.visibility = View.VISIBLE
+                                        submitText.visibility = View.VISIBLE
                                         loadingBar.visibility = View.GONE
                                         if (response.isSuccessful) {
                                             if (response.body() != null) {
@@ -371,7 +393,7 @@ class SubmissionFormActivity : AppCompatActivity(), OnMapReadyCallback {
                                     override fun onFailure(
                                         call: Call<GenericSimpleResponse>, throwable: Throwable
                                     ) {
-                                        submitButton.visibility = View.VISIBLE
+                                        submitText.visibility = View.VISIBLE
                                         loadingBar.visibility = View.GONE
                                         CustomToast.getInstance(applicationContext)
                                             .setMessage(
@@ -397,7 +419,7 @@ class SubmissionFormActivity : AppCompatActivity(), OnMapReadyCallback {
                                     }
                                 })
                             } catch (jsonException: JSONException) {
-                                submitButton.visibility = View.VISIBLE
+                                submitText.visibility = View.VISIBLE
                                 loadingBar.visibility = View.GONE
                                 CustomToast.getInstance(applicationContext)
                                     .setMessage(
@@ -431,13 +453,13 @@ class SubmissionFormActivity : AppCompatActivity(), OnMapReadyCallback {
                 /*prepareMaterials()*/
 
                 submitButton.setOnClickListener {
-                    submitButton.visibility = View.GONE
+                    submitText.visibility = View.GONE
                     loadingBar.visibility = View.VISIBLE
                     val inputMethodManager =
                         getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
                     inputMethodManager.hideSoftInputFromWindow(currentFocus?.windowToken, 0)
                     if (!formCheck()) {
-                        submitButton.visibility = View.VISIBLE
+                        submitText.visibility = View.VISIBLE
                         loadingBar.visibility = View.GONE
                         CustomToast.getInstance(applicationContext)
                             .setMessage(
@@ -471,7 +493,7 @@ class SubmissionFormActivity : AppCompatActivity(), OnMapReadyCallback {
                                         call: Call<CreationResponse?>,
                                         response: Response<CreationResponse?>
                                     ) {
-                                        submitButton.visibility = View.VISIBLE
+                                        submitText.visibility = View.VISIBLE
                                         loadingBar.visibility = View.GONE
                                         if (response.isSuccessful) {
                                             if (response.body() != null) {
@@ -551,7 +573,7 @@ class SubmissionFormActivity : AppCompatActivity(), OnMapReadyCallback {
                                         call: Call<CreationResponse?>,
                                         throwable: Throwable
                                     ) {
-                                        submitButton.visibility = View.VISIBLE
+                                        submitText.visibility = View.VISIBLE
                                         loadingBar.visibility = View.GONE
                                         CustomToast.getInstance(applicationContext)
                                             .setMessage(
@@ -577,7 +599,7 @@ class SubmissionFormActivity : AppCompatActivity(), OnMapReadyCallback {
                                     }
                                 })
                             } catch (jsonException: JSONException) {
-                                submitButton.visibility = View.VISIBLE
+                                submitText.visibility = View.VISIBLE
                                 loadingBar.visibility = View.GONE
                                 CustomToast.getInstance(applicationContext)
                                     .setMessage(
@@ -1469,15 +1491,19 @@ class SubmissionFormActivity : AppCompatActivity(), OnMapReadyCallback {
     }
 
     private fun checkLocationPermission() {
-        if (PermissionHelper.isPermissionGranted(
+        if (ContextCompat.checkSelfPermission(
                 this,
-                PermissionHelper.ACCESS_FINE_LOCATION
-            ) && PermissionHelper.isPermissionGranted(this, PermissionHelper.ACCESS_COARSE_LOCATION)
+                android.Manifest.permission.ACCESS_FINE_LOCATION
+            ) == PERMISSION_GRANTED && ContextCompat.checkSelfPermission(
+                this,
+                android.Manifest.permission.ACCESS_COARSE_LOCATION
+            ) == PERMISSION_GRANTED
         ) {
             fusedLocationClient.lastLocation.addOnSuccessListener {
                 if (it != null) {
                     showLocationOnMap(it)
                 } else {
+                    showLocationError()
                     CustomToast.getInstance(this)
                         .setMessage("Couldn't get your location. Please try again.")
                         .show()
@@ -1497,11 +1523,20 @@ class SubmissionFormActivity : AppCompatActivity(), OnMapReadyCallback {
 
     private fun showLocationOnMap(location: Location) {
         val latLng = LatLng(location.latitude, location.longitude)
-        googleMap?.clear()
-        googleMap?.addMarker(MarkerOptions().position(latLng))
-        googleMap?.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 15f))
-        googleMap?.uiSettings?.setAllGesturesEnabled(false)
-
+        latitude = location.latitude
+        longitude = location.longitude
+        googleMap?.apply {
+            clear()
+            addMarker(MarkerOptions().position(latLng))
+            animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 17f))
+            uiSettings.apply {
+                setAllGesturesEnabled(false)
+                isMapToolbarEnabled = false
+                isZoomControlsEnabled = false
+                isCompassEnabled = false
+                isMyLocationButtonEnabled = false
+            }
+        }
     }
 
     override fun onStart() {

@@ -1,1048 +1,320 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/main"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="#FDFDFD"
-    tools:context=".activities.SubmissionDetailActivity">
+    xmlns:tools="http://schemas.android.com/tools" android:id="@+id/main" android:layout_width="match_parent" android:layout_height="match_parent" android:background="#FDFDFD" tools:context=".activities.SubmissionDetailActivity">
 
-    <RelativeLayout
-        android:id="@+id/toolBar"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/toolbar_height"
-        android:background="@color/white"
-        android:elevation="@dimen/card_elevation"
-        android:theme="?attr/actionBarTheme"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+    <RelativeLayout android:id="@+id/toolBar" android:layout_width="match_parent" android:layout_height="@dimen/toolbar_height" android:background="@color/white" android:elevation="@dimen/card_elevation" android:theme="?attr/actionBarTheme" app:layout_constraintEnd_toEndOf="parent" app:layout_constraintStart_toStartOf="parent" app:layout_constraintTop_toTopOf="parent">
 
-        <com.google.android.material.card.MaterialCardView
-            android:id="@+id/backButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentStart="true"
-            android:layout_centerVertical="true"
-            android:layout_marginStart="@dimen/dialog_loading_content_padding"
-            app:cardBackgroundColor="@android:color/transparent"
-            app:cardCornerRadius="@dimen/login_button_corner_radius"
-            app:cardElevation="0dp"
-            app:contentPadding="@dimen/dialog_margin"
-            app:strokeWidth="0dp">
+        <com.google.android.material.card.MaterialCardView android:id="@+id/backButton" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_alignParentStart="true" android:layout_centerVertical="true" android:layout_marginStart="@dimen/dialog_loading_content_padding" app:cardBackgroundColor="@android:color/transparent" app:cardCornerRadius="@dimen/login_button_corner_radius" app:cardElevation="0dp" app:contentPadding="@dimen/dialog_margin" app:strokeWidth="0dp">
 
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/baseline_arrow_back_ios_new_24"
-                tools:ignore="ContentDescription" />
+            <ImageView android:layout_width="wrap_content" android:layout_height="wrap_content" android:src="@drawable/baseline_arrow_back_ios_new_24" tools:ignore="ContentDescription" />
         </com.google.android.material.card.MaterialCardView>
 
-        <TextView
-            android:id="@+id/detailTitle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:textColor="@color/black"
-            android:textSize="@dimen/text_size_medium"
-            android:textStyle="bold"
-            tools:ignore="RelativeOverlap"
-            tools:text="@string/submission_detail_title" />
+        <TextView android:id="@+id/detailTitle" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_centerInParent="true" android:textColor="@color/black" android:textSize="@dimen/text_size_medium" android:textStyle="bold" tools:ignore="RelativeOverlap" tools:text="@string/submission_detail_title" />
 
-        <com.google.android.material.card.MaterialCardView
-            android:id="@+id/holdResumeButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
-            android:layout_centerVertical="true"
-            android:layout_marginEnd="@dimen/dialog_loading_content_padding"
-            android:visibility="visible"
-            app:cardBackgroundColor="@android:color/transparent"
-            app:cardCornerRadius="@dimen/card_corner_radius"
-            app:cardElevation="0dp"
-            app:contentPadding="@dimen/dialog_margin"
-            app:strokeWidth="0dp">
+        <com.google.android.material.card.MaterialCardView android:id="@+id/holdResumeButton" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_alignParentEnd="true" android:layout_centerVertical="true" android:layout_marginEnd="@dimen/dialog_loading_content_padding" android:visibility="gone" app:cardBackgroundColor="@android:color/transparent" app:cardCornerRadius="@dimen/card_corner_radius" app:cardElevation="0dp" app:strokeWidth="0dp">
 
-            <ImageView
-                android:id="@+id/holdResumeIcon"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                tools:ignore="ContentDescription"
-                tools:src="@drawable/baseline_pause_24" />
+            <LinearLayout android:id="@+id/holdResumeColor" android:layout_width="match_parent" android:layout_height="match_parent" android:padding="@dimen/dialog_margin" tools:background="@drawable/gradient_accent_color">
+
+                <ImageView android:id="@+id/holdResumeIcon" android:layout_width="wrap_content" android:layout_height="wrap_content" tools:ignore="ContentDescription" tools:src="@drawable/baseline_pause_24" />
+            </LinearLayout>
         </com.google.android.material.card.MaterialCardView>
     </RelativeLayout>
 
-    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-        android:id="@+id/swipeRefresh"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/toolBar">
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout android:id="@+id/swipeRefresh" android:layout_width="match_parent" android:layout_height="0dp" app:layout_constraintBottom_toBottomOf="parent" app:layout_constraintEnd_toEndOf="parent" app:layout_constraintStart_toStartOf="parent" app:layout_constraintTop_toBottomOf="@+id/toolBar">
 
-        <ScrollView
-            android:id="@+id/contentScrollContainer"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_marginTop="@dimen/dialog_margin"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/toolBar">
+        <ScrollView android:id="@+id/contentScrollContainer" android:layout_width="match_parent" android:layout_height="0dp" android:layout_marginTop="@dimen/dialog_margin" app:layout_constraintBottom_toBottomOf="parent" app:layout_constraintEnd_toEndOf="parent" app:layout_constraintStart_toStartOf="parent" app:layout_constraintTop_toBottomOf="@+id/toolBar">
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical">
+            <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical">
 
-                <com.facebook.shimmer.ShimmerFrameLayout
-                    android:id="@+id/shimmer"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                <com.facebook.shimmer.ShimmerFrameLayout android:id="@+id/shimmer" android:layout_width="match_parent" android:layout_height="wrap_content" android:visibility="visible">
 
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical"
-                        tools:ignore="UselessLeaf">
+                    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:visibility="visible" tools:ignore="UselessLeaf">
 
-                        <com.google.android.material.card.MaterialCardView
-                            android:layout_width="match_parent"
-                            android:layout_height="@dimen/submission_detail_image_height"
-                            android:layout_gravity="center"
-                            android:layout_margin="@dimen/dialog_margin"
-                            app:cardBackgroundColor="@color/custom_toast_font_normal_soft_gray"
-                            app:cardCornerRadius="@dimen/list_item_progress_card_corner_radius"
-                            app:cardElevation="@dimen/dialog_elevation">
+                        <com.google.android.material.card.MaterialCardView android:layout_width="match_parent" android:layout_height="@dimen/submission_detail_image_height" android:layout_gravity="center" android:layout_margin="@dimen/dialog_margin" app:cardBackgroundColor="@color/custom_toast_font_normal_soft_gray" app:cardCornerRadius="@dimen/list_item_progress_card_corner_radius" app:cardElevation="@dimen/dialog_elevation">
 
-                            <androidx.viewpager.widget.ViewPager
-                                android:layout_width="match_parent"
-                                android:layout_height="match_parent" />
+                            <androidx.viewpager.widget.ViewPager android:layout_width="match_parent" android:layout_height="match_parent" />
 
-                            <ImageView
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_gravity="center"
-                                tools:ignore="ContentDescription" />
+                            <ImageView android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_gravity="center" tools:ignore="ContentDescription" />
                         </com.google.android.material.card.MaterialCardView>
 
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginHorizontal="@dimen/activity_horizontal_margin"
-                            android:layout_marginTop="@dimen/activity_horizontal_margin"
-                            android:background="@color/custom_toast_font_normal_soft_gray"
-                            android:textColor="@color/custom_toast_font_normal_soft_gray"
-                            android:textSize="@dimen/text_size_medium"
-                            android:textStyle="bold"
-                            tools:text="PINTU AUTOCLAVE ECHUNG D-14 TIDAK DAPAT MENUTUP" />
+                        <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginHorizontal="@dimen/activity_horizontal_margin" android:layout_marginTop="@dimen/activity_horizontal_margin" android:background="@color/custom_toast_font_normal_soft_gray" android:textColor="@color/custom_toast_font_normal_soft_gray" android:textSize="@dimen/text_size_medium" android:textStyle="bold" tools:text="PINTU AUTOCLAVE ECHUNG D-14 TIDAK DAPAT MENUTUP" />
 
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginHorizontal="@dimen/activity_horizontal_margin"
-                            android:orientation="horizontal">
+                        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginHorizontal="@dimen/activity_horizontal_margin" android:orientation="horizontal">
 
-                            <TextView
-                                android:layout_width="0dp"
-                                android:layout_height="wrap_content"
-                                android:layout_gravity="center"
-                                android:layout_weight="1"
-                                android:background="@color/custom_toast_font_normal_soft_gray"
-                                android:textSize="@dimen/text_size_small" />
+                            <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_gravity="center" android:layout_weight="1" android:background="@color/custom_toast_font_normal_soft_gray" android:textSize="@dimen/text_size_small" />
 
-                            <com.google.android.material.card.MaterialCardView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_gravity="end|center"
-                                android:layout_margin="@dimen/dialog_loading_content_padding"
-                                app:cardBackgroundColor="@android:color/transparent"
-                                app:cardCornerRadius="@dimen/login_button_corner_radius"
-                                app:cardElevation="0dp"
-                                app:contentPadding="@dimen/dialog_loading_content_padding"
-                                app:contentPaddingLeft="@dimen/dialog_margin"
-                                app:contentPaddingRight="@dimen/dialog_margin"
-                                app:strokeWidth="0dp">
+                            <com.google.android.material.card.MaterialCardView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_gravity="end|center" android:layout_margin="@dimen/dialog_loading_content_padding" app:cardBackgroundColor="@android:color/transparent" app:cardCornerRadius="@dimen/login_button_corner_radius" app:cardElevation="0dp" app:contentPadding="@dimen/dialog_loading_content_padding" app:contentPaddingLeft="@dimen/dialog_margin" app:contentPaddingRight="@dimen/dialog_margin" app:strokeWidth="0dp">
 
-                                <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:textColor="@color/white"
-                                    android:textSize="@dimen/text_size_micro"
-                                    android:textStyle="bold"
-                                    tools:text="Low" />
+                                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:textColor="@color/white" android:textSize="@dimen/text_size_micro" android:textStyle="bold" tools:text="Low" />
                             </com.google.android.material.card.MaterialCardView>
 
-                            <com.google.android.material.card.MaterialCardView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_gravity="end|center"
-                                android:layout_margin="@dimen/dialog_loading_content_padding"
-                                app:cardBackgroundColor="@android:color/transparent"
-                                app:cardCornerRadius="@dimen/login_button_corner_radius"
-                                app:cardElevation="0dp"
-                                app:contentPadding="@dimen/dialog_loading_content_padding"
-                                app:contentPaddingLeft="@dimen/dialog_margin"
-                                app:contentPaddingRight="@dimen/dialog_margin"
-                                app:strokeWidth="0dp">
+                            <com.google.android.material.card.MaterialCardView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_gravity="end|center" android:layout_margin="@dimen/dialog_loading_content_padding" app:cardBackgroundColor="@android:color/transparent" app:cardCornerRadius="@dimen/login_button_corner_radius" app:cardElevation="0dp" app:contentPadding="@dimen/dialog_loading_content_padding" app:contentPaddingLeft="@dimen/dialog_margin" app:contentPaddingRight="@dimen/dialog_margin" app:strokeWidth="0dp">
 
-                                <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:textColor="@color/white"
-                                    android:textSize="@dimen/text_size_micro"
-                                    android:textStyle="bold"
-                                    tools:text="On Progress" />
+                                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:textColor="@color/white" android:textSize="@dimen/text_size_micro" android:textStyle="bold" tools:text="On Progress" />
                             </com.google.android.material.card.MaterialCardView>
                         </LinearLayout>
 
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginHorizontal="@dimen/activity_horizontal_margin"
-                            android:layout_marginTop="@dimen/dialog_margin"
-                            android:background="@color/custom_toast_font_normal_soft_gray"
-                            android:textSize="@dimen/text_size_medium"
-                            android:textStyle="bold" />
+                        <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginHorizontal="@dimen/activity_horizontal_margin" android:layout_marginTop="@dimen/dialog_margin" android:background="@color/custom_toast_font_normal_soft_gray" android:textSize="@dimen/text_size_medium" android:textStyle="bold" />
 
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginHorizontal="@dimen/activity_horizontal_margin"
-                            android:background="@color/custom_toast_font_normal_soft_gray" />
+                        <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginHorizontal="@dimen/activity_horizontal_margin" android:background="@color/custom_toast_font_normal_soft_gray" />
 
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginHorizontal="@dimen/activity_horizontal_margin"
-                            android:layout_marginVertical="@dimen/dialog_margin"
-                            android:orientation="horizontal"
-                            tools:ignore="DisableBaselineAlignment">
+                        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginHorizontal="@dimen/activity_horizontal_margin" android:layout_marginVertical="@dimen/dialog_margin" android:orientation="horizontal" tools:ignore="DisableBaselineAlignment">
 
-                            <LinearLayout
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:orientation="vertical">
+                            <LinearLayout android:layout_width="wrap_content" android:layout_height="wrap_content" android:orientation="vertical">
 
-                                <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:background="@color/custom_toast_font_normal_soft_gray"
-                                    android:text="@string/machine_code"
-                                    android:textColor="@color/custom_toast_font_normal_soft_gray" />
+                                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:background="@color/custom_toast_font_normal_soft_gray" android:text="@string/machine_code" android:textColor="@color/custom_toast_font_normal_soft_gray" />
 
-                                <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginTop="2dp"
-                                    android:background="@color/custom_toast_font_normal_soft_gray"
-                                    android:text="@string/machine_name"
-                                    android:textColor="@color/custom_toast_font_normal_soft_gray" />
+                                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="2dp" android:background="@color/custom_toast_font_normal_soft_gray" android:text="@string/machine_name" android:textColor="@color/custom_toast_font_normal_soft_gray" />
                             </LinearLayout>
 
-                            <LinearLayout
-                                android:layout_width="0dp"
-                                android:layout_height="wrap_content"
-                                android:layout_marginStart="@dimen/dialog_loading_content_padding"
-                                android:layout_weight="1"
-                                android:orientation="vertical">
+                            <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_marginStart="@dimen/dialog_loading_content_padding" android:layout_weight="1" android:orientation="vertical">
 
-                                <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:background="@color/custom_toast_font_normal_soft_gray"
-                                    android:textColor="@color/custom_toast_font_normal_soft_gray"
-                                    android:textStyle="bold"
-                                    tools:text="D-14" />
+                                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:background="@color/custom_toast_font_normal_soft_gray" android:textColor="@color/custom_toast_font_normal_soft_gray" android:textStyle="bold" tools:text="D-14" />
 
-                                <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginTop="2dp"
-                                    android:background="@color/custom_toast_font_normal_soft_gray"
-                                    android:textColor="@color/custom_toast_font_normal_soft_gray"
-                                    android:textStyle="bold"
-                                    tools:text="Autoclave E-Chung" />
+                                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="2dp" android:background="@color/custom_toast_font_normal_soft_gray" android:textColor="@color/custom_toast_font_normal_soft_gray" android:textStyle="bold" tools:text="Autoclave E-Chung" />
                             </LinearLayout>
                         </LinearLayout>
 
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginHorizontal="@dimen/activity_horizontal_margin"
-                            android:orientation="horizontal"
-                            tools:ignore="UseCompoundDrawables">
+                        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginHorizontal="@dimen/activity_horizontal_margin" android:orientation="horizontal" tools:ignore="UseCompoundDrawables">
 
-                            <ImageView
-                                android:layout_width="@dimen/list_item_shimmer_location_icon_size"
-                                android:layout_height="@dimen/list_item_shimmer_location_icon_size"
-                                android:layout_gravity="center"
-                                android:background="@color/custom_toast_font_normal_soft_gray"
-                                tools:ignore="ContentDescription" />
+                            <ImageView android:layout_width="@dimen/list_item_shimmer_location_icon_size" android:layout_height="@dimen/list_item_shimmer_location_icon_size" android:layout_gravity="center" android:background="@color/custom_toast_font_normal_soft_gray" tools:ignore="ContentDescription" />
 
-                            <TextView
-                                android:layout_width="0dp"
-                                android:layout_height="wrap_content"
-                                android:layout_marginStart="@dimen/dialog_margin"
-                                android:layout_weight="1"
-                                android:background="@color/custom_toast_font_normal_soft_gray"
-                                android:textColor="@color/custom_toast_font_normal_soft_gray"
-                                tools:text="Hendrick\nFrom Information Technology Department" />
+                            <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_marginStart="@dimen/dialog_margin" android:layout_weight="1" android:background="@color/custom_toast_font_normal_soft_gray" android:textColor="@color/custom_toast_font_normal_soft_gray" tools:text="Hendrick\nFrom Information Technology Department" />
                         </LinearLayout>
 
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginHorizontal="@dimen/activity_horizontal_margin"
-                            android:layout_marginTop="@dimen/dialog_loading_content_padding"
-                            android:orientation="horizontal"
-                            tools:ignore="UseCompoundDrawables">
+                        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginHorizontal="@dimen/activity_horizontal_margin" android:layout_marginTop="@dimen/dialog_loading_content_padding" android:orientation="horizontal" tools:ignore="UseCompoundDrawables">
 
-                            <ImageView
-                                android:layout_width="@dimen/list_item_shimmer_location_icon_size"
-                                android:layout_height="@dimen/list_item_shimmer_location_icon_size"
-                                android:background="@color/custom_toast_font_normal_soft_gray"
-                                tools:ignore="ContentDescription" />
+                            <ImageView android:layout_width="@dimen/list_item_shimmer_location_icon_size" android:layout_height="@dimen/list_item_shimmer_location_icon_size" android:background="@color/custom_toast_font_normal_soft_gray" tools:ignore="ContentDescription" />
 
-                            <TextView
-                                android:layout_width="0dp"
-                                android:layout_height="wrap_content"
-                                android:layout_marginStart="@dimen/dialog_margin"
-                                android:layout_weight="1"
-                                android:background="@color/custom_toast_font_normal_soft_gray"
-                                android:textColor="@color/custom_toast_font_normal_soft_gray"
-                                tools:text="Engineering" />
+                            <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_marginStart="@dimen/dialog_margin" android:layout_weight="1" android:background="@color/custom_toast_font_normal_soft_gray" android:textColor="@color/custom_toast_font_normal_soft_gray" tools:text="Engineering" />
                         </LinearLayout>
 
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginHorizontal="@dimen/activity_horizontal_margin"
-                            android:layout_marginTop="@dimen/dialog_loading_content_padding"
-                            android:orientation="horizontal"
-                            tools:ignore="UseCompoundDrawables">
+                        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginHorizontal="@dimen/activity_horizontal_margin" android:layout_marginTop="@dimen/dialog_loading_content_padding" android:orientation="horizontal" tools:ignore="UseCompoundDrawables">
 
-                            <ImageView
-                                android:layout_width="@dimen/list_item_shimmer_location_icon_size"
-                                android:layout_height="@dimen/list_item_shimmer_location_icon_size"
-                                android:background="@color/custom_toast_font_normal_soft_gray"
-                                tools:ignore="ContentDescription" />
+                            <ImageView android:layout_width="@dimen/list_item_shimmer_location_icon_size" android:layout_height="@dimen/list_item_shimmer_location_icon_size" android:background="@color/custom_toast_font_normal_soft_gray" tools:ignore="ContentDescription" />
 
-                            <TextView
-                                android:layout_width="0dp"
-                                android:layout_height="wrap_content"
-                                android:layout_marginStart="@dimen/dialog_margin"
-                                android:layout_weight="1"
-                                android:background="@color/custom_toast_font_normal_soft_gray"
-                                android:textColor="@color/custom_toast_font_normal_soft_gray"
-                                tools:text="IT" />
+                            <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_marginStart="@dimen/dialog_margin" android:layout_weight="1" android:background="@color/custom_toast_font_normal_soft_gray" android:textColor="@color/custom_toast_font_normal_soft_gray" tools:text="IT" />
                         </LinearLayout>
 
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginHorizontal="@dimen/activity_horizontal_margin"
-                            android:layout_marginTop="@dimen/dialog_loading_content_padding"
-                            android:orientation="horizontal"
-                            tools:ignore="UseCompoundDrawables">
+                        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginHorizontal="@dimen/activity_horizontal_margin" android:layout_marginTop="@dimen/dialog_loading_content_padding" android:orientation="horizontal" tools:ignore="UseCompoundDrawables">
 
-                            <ImageView
-                                android:layout_width="@dimen/list_item_shimmer_location_icon_size"
-                                android:layout_height="@dimen/list_item_shimmer_location_icon_size"
-                                android:background="@color/custom_toast_font_normal_soft_gray"
-                                tools:ignore="ContentDescription" />
+                            <ImageView android:layout_width="@dimen/list_item_shimmer_location_icon_size" android:layout_height="@dimen/list_item_shimmer_location_icon_size" android:background="@color/custom_toast_font_normal_soft_gray" tools:ignore="ContentDescription" />
 
-                            <TextView
-                                android:layout_width="0dp"
-                                android:layout_height="wrap_content"
-                                android:layout_marginStart="@dimen/dialog_margin"
-                                android:layout_weight="1"
-                                android:background="@color/custom_toast_font_normal_soft_gray"
-                                android:textColor="@color/custom_toast_font_normal_soft_gray"
-                                tools:text="2024-07-15 11:02:03" />
+                            <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_marginStart="@dimen/dialog_margin" android:layout_weight="1" android:background="@color/custom_toast_font_normal_soft_gray" android:textColor="@color/custom_toast_font_normal_soft_gray" tools:text="2024-07-15 11:02:03" />
                         </LinearLayout>
 
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginHorizontal="@dimen/activity_horizontal_margin"
-                            android:layout_marginTop="@dimen/dialog_loading_content_padding"
-                            android:orientation="horizontal"
-                            tools:ignore="UseCompoundDrawables">
+                        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginHorizontal="@dimen/activity_horizontal_margin" android:layout_marginTop="@dimen/dialog_loading_content_padding" android:orientation="horizontal" tools:ignore="UseCompoundDrawables">
 
-                            <ImageView
-                                android:layout_width="@dimen/list_item_shimmer_location_icon_size"
-                                android:layout_height="@dimen/list_item_shimmer_location_icon_size"
-                                android:background="@color/custom_toast_font_normal_soft_gray"
-                                tools:ignore="ContentDescription" />
+                            <ImageView android:layout_width="@dimen/list_item_shimmer_location_icon_size" android:layout_height="@dimen/list_item_shimmer_location_icon_size" android:background="@color/custom_toast_font_normal_soft_gray" tools:ignore="ContentDescription" />
 
-                            <TextView
-                                android:layout_width="0dp"
-                                android:layout_height="wrap_content"
-                                android:layout_marginStart="@dimen/dialog_margin"
-                                android:layout_weight="1"
-                                android:background="@color/custom_toast_font_normal_soft_gray"
-                                android:textColor="@color/custom_toast_font_normal_soft_gray"
-                                tools:text="ERELA HQ" />
+                            <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_marginStart="@dimen/dialog_margin" android:layout_weight="1" android:background="@color/custom_toast_font_normal_soft_gray" android:textColor="@color/custom_toast_font_normal_soft_gray" tools:text="ERELA HQ" />
                         </LinearLayout>
 
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginHorizontal="@dimen/activity_horizontal_margin"
-                            android:layout_marginTop="@dimen/dialog_loading_content_padding"
-                            android:orientation="horizontal">
+                        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginHorizontal="@dimen/activity_horizontal_margin" android:layout_marginTop="@dimen/dialog_loading_content_padding" android:orientation="horizontal">
 
-                            <ImageView
-                                android:layout_width="@dimen/list_item_shimmer_location_icon_size"
-                                android:layout_height="@dimen/list_item_shimmer_location_icon_size"
-                                android:layout_gravity="center"
-                                android:background="@color/custom_toast_font_normal_soft_gray"
-                                tools:ignore="ContentDescription" />
+                            <ImageView android:layout_width="@dimen/list_item_shimmer_location_icon_size" android:layout_height="@dimen/list_item_shimmer_location_icon_size" android:layout_gravity="center" android:background="@color/custom_toast_font_normal_soft_gray" tools:ignore="ContentDescription" />
 
-                            <LinearLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_marginStart="@dimen/dialog_margin"
-                                android:orientation="vertical">
+                            <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginStart="@dimen/dialog_margin" android:orientation="vertical">
 
-                                <LinearLayout
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:orientation="horizontal">
+                                <LinearLayout android:layout_width="wrap_content" android:layout_height="wrap_content" android:orientation="horizontal">
 
-                                    <TextView
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:background="@color/custom_toast_font_normal_soft_gray"
-                                        android:text="@string/submission_report"
-                                        android:textColor="@color/custom_toast_font_normal_soft_gray" />
+                                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:background="@color/custom_toast_font_normal_soft_gray" android:text="@string/submission_report" android:textColor="@color/custom_toast_font_normal_soft_gray" tools:ignore="TooDeepLayout" />
 
-                                    <TextView
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:layout_marginStart="@dimen/dialog_loading_content_padding"
-                                        android:background="@color/custom_toast_font_normal_soft_gray"
-                                        android:textColor="@color/custom_toast_font_normal_soft_gray"
-                                        tools:text="2024-07-15 10:44:00" />
+                                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginStart="@dimen/dialog_loading_content_padding" android:background="@color/custom_toast_font_normal_soft_gray" android:textColor="@color/custom_toast_font_normal_soft_gray" tools:text="2024-07-15 10:44:00" />
                                 </LinearLayout>
 
-                                <LinearLayout
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:orientation="horizontal">
+                                <LinearLayout android:layout_width="wrap_content" android:layout_height="wrap_content" android:orientation="horizontal">
 
-                                    <TextView
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:layout_marginTop="2dp"
-                                        android:background="@color/custom_toast_font_normal_soft_gray"
-                                        android:text="@string/submission_start_working"
-                                        android:textColor="@color/custom_toast_font_normal_soft_gray" />
+                                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="2dp" android:background="@color/custom_toast_font_normal_soft_gray" android:text="@string/submission_start_working" android:textColor="@color/custom_toast_font_normal_soft_gray" />
 
-                                    <TextView
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:layout_marginStart="@dimen/dialog_loading_content_padding"
-                                        android:layout_marginTop="2dp"
-                                        android:background="@color/custom_toast_font_normal_soft_gray"
-                                        android:textColor="@color/custom_toast_font_normal_soft_gray"
-                                        tools:text="2024-07-15 10:44:00" />
+                                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginStart="@dimen/dialog_loading_content_padding" android:layout_marginTop="2dp" android:background="@color/custom_toast_font_normal_soft_gray" android:textColor="@color/custom_toast_font_normal_soft_gray" tools:text="2024-07-15 10:44:00" />
                                 </LinearLayout>
 
-                                <LinearLayout
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:orientation="horizontal">
+                                <LinearLayout android:layout_width="wrap_content" android:layout_height="wrap_content" android:orientation="horizontal">
 
-                                    <TextView
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:layout_marginTop="2dp"
-                                        android:background="@color/custom_toast_font_normal_soft_gray"
-                                        android:text="@string/submission_end_working"
-                                        android:textColor="@color/custom_toast_font_normal_soft_gray" />
+                                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="2dp" android:background="@color/custom_toast_font_normal_soft_gray" android:text="@string/submission_end_working" android:textColor="@color/custom_toast_font_normal_soft_gray" />
 
-                                    <TextView
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:layout_marginStart="@dimen/dialog_loading_content_padding"
-                                        android:layout_marginTop="2dp"
-                                        android:background="@color/custom_toast_font_normal_soft_gray"
-                                        android:textColor="@color/custom_toast_font_normal_soft_gray"
-                                        tools:text="2024-07-15 10:44:00" />
+                                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginStart="@dimen/dialog_loading_content_padding" android:layout_marginTop="2dp" android:background="@color/custom_toast_font_normal_soft_gray" android:textColor="@color/custom_toast_font_normal_soft_gray" tools:text="2024-07-15 10:44:00" />
                                 </LinearLayout>
                             </LinearLayout>
                         </LinearLayout>
 
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginHorizontal="@dimen/activity_horizontal_margin"
-                            android:layout_marginTop="@dimen/dialog_loading_content_padding"
-                            android:layout_marginBottom="@dimen/submission_detail_bottom_margin"
-                            android:orientation="horizontal">
+                        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginHorizontal="@dimen/activity_horizontal_margin" android:layout_marginTop="@dimen/dialog_loading_content_padding" android:layout_marginBottom="@dimen/submission_detail_bottom_margin" android:orientation="horizontal">
 
-                            <ImageView
-                                android:layout_width="@dimen/list_item_shimmer_location_icon_size"
-                                android:layout_height="@dimen/list_item_shimmer_location_icon_size"
-                                android:layout_gravity="center"
-                                android:background="@color/custom_toast_font_normal_soft_gray"
-                                tools:ignore="ContentDescription" />
+                            <ImageView android:layout_width="@dimen/list_item_shimmer_location_icon_size" android:layout_height="@dimen/list_item_shimmer_location_icon_size" android:layout_gravity="center" android:background="@color/custom_toast_font_normal_soft_gray" tools:ignore="ContentDescription" />
 
-                            <LinearLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_marginStart="@dimen/dialog_margin"
-                                android:orientation="vertical">
+                            <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginStart="@dimen/dialog_margin" android:orientation="vertical">
 
-                                <LinearLayout
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:orientation="vertical"
-                                    tools:ignore="UselessParent">
+                                <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" tools:ignore="UselessParent">
 
-                                    <TextView
-                                        android:layout_width="match_parent"
-                                        android:layout_height="wrap_content"
-                                        android:background="@color/custom_toast_font_normal_soft_gray"
-                                        android:textColor="@color/custom_toast_font_normal_soft_gray"
-                                        android:textStyle="bold"
-                                        tools:text="Approved by" />
+                                    <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:background="@color/custom_toast_font_normal_soft_gray" android:textColor="@color/custom_toast_font_normal_soft_gray" android:textStyle="bold" tools:text="Approved by" />
 
-                                    <TextView
-                                        android:layout_width="match_parent"
-                                        android:layout_height="wrap_content"
-                                        android:layout_marginTop="2dp"
-                                        android:background="@color/custom_toast_font_normal_soft_gray"
-                                        android:textColor="@color/custom_toast_font_normal_soft_gray"
-                                        tools:text="Yunanto Widinugroho" />
+                                    <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="2dp" android:background="@color/custom_toast_font_normal_soft_gray" android:textColor="@color/custom_toast_font_normal_soft_gray" tools:text="Yunanto Widinugroho" />
                                 </LinearLayout>
 
-                                <LinearLayout
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginTop="2dp"
-                                    android:orientation="vertical">
+                                <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="2dp" android:orientation="vertical">
 
-                                    <TextView
-                                        android:layout_width="match_parent"
-                                        android:layout_height="wrap_content"
-                                        android:background="@color/custom_toast_font_normal_soft_gray"
-                                        android:text="Supervisors"
-                                        android:textColor="@color/custom_toast_font_normal_soft_gray"
-                                        android:textStyle="bold"
-                                        tools:ignore="HardcodedText" />
+                                    <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:background="@color/custom_toast_font_normal_soft_gray" android:text="Supervisors" android:textColor="@color/custom_toast_font_normal_soft_gray" android:textStyle="bold" tools:ignore="HardcodedText" />
 
-                                    <TextView
-                                        android:layout_width="match_parent"
-                                        android:layout_height="wrap_content"
-                                        android:layout_marginTop="2dp"
-                                        android:background="@color/custom_toast_font_normal_soft_gray"
-                                        android:textColor="@color/custom_toast_font_normal_soft_gray"
-                                        tools:text="Riky Dwi Cahya\nLianto Budi Setiawan" />
+                                    <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="2dp" android:background="@color/custom_toast_font_normal_soft_gray" android:textColor="@color/custom_toast_font_normal_soft_gray" tools:text="Riky Dwi Cahya\nLianto Budi Setiawan" />
                                 </LinearLayout>
 
-                                <LinearLayout
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginTop="2dp"
-                                    android:orientation="vertical">
+                                <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="2dp" android:orientation="vertical">
 
-                                    <TextView
-                                        android:layout_width="match_parent"
-                                        android:layout_height="wrap_content"
-                                        android:background="@color/custom_toast_font_normal_soft_gray"
-                                        android:text="Technicians"
-                                        android:textColor="@color/custom_toast_font_normal_soft_gray"
-                                        android:textStyle="bold"
-                                        tools:ignore="HardcodedText" />
+                                    <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:background="@color/custom_toast_font_normal_soft_gray" android:text="Technicians" android:textColor="@color/custom_toast_font_normal_soft_gray" android:textStyle="bold" tools:ignore="HardcodedText" />
 
-                                    <TextView
-                                        android:layout_width="match_parent"
-                                        android:layout_height="wrap_content"
-                                        android:layout_marginTop="2dp"
-                                        android:background="@color/custom_toast_font_normal_soft_gray"
-                                        android:textColor="@color/custom_toast_font_normal_soft_gray"
-                                        tools:text="Eko Prasetyo\nFatnur Ali Ustadzi" />
+                                    <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="2dp" android:background="@color/custom_toast_font_normal_soft_gray" android:textColor="@color/custom_toast_font_normal_soft_gray" tools:text="Eko Prasetyo\nFatnur Ali Ustadzi" />
                                 </LinearLayout>
                             </LinearLayout>
                         </LinearLayout>
                     </LinearLayout>
                 </com.facebook.shimmer.ShimmerFrameLayout>
 
-                <LinearLayout
-                    android:id="@+id/content"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:visibility="gone"
-                    tools:ignore="UselessLeaf">
+                <LinearLayout android:id="@+id/content" android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:visibility="gone" tools:ignore="UselessLeaf">
 
-                    <com.google.android.material.card.MaterialCardView
-                        android:id="@+id/imageContainer"
-                        android:layout_width="match_parent"
-                        android:layout_height="@dimen/submission_detail_image_height"
-                        android:layout_gravity="center"
-                        android:layout_margin="@dimen/dialog_margin"
-                        app:cardBackgroundColor="@color/white"
-                        app:cardCornerRadius="@dimen/list_item_progress_card_corner_radius"
-                        app:cardElevation="@dimen/dialog_elevation">
+                    <com.google.android.material.card.MaterialCardView android:id="@+id/imageContainer" android:layout_width="match_parent" android:layout_height="@dimen/submission_detail_image_height" android:layout_gravity="center" android:layout_margin="@dimen/dialog_margin" app:cardBackgroundColor="@color/white" app:cardCornerRadius="@dimen/list_item_progress_card_corner_radius" app:cardElevation="@dimen/dialog_elevation">
 
-                        <androidx.viewpager.widget.ViewPager
-                            android:id="@+id/imageCarouselHolder"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent" />
+                        <androidx.viewpager.widget.ViewPager android:id="@+id/imageCarouselHolder" android:layout_width="match_parent" android:layout_height="match_parent" />
 
-                        <me.relex.circleindicator.CircleIndicator
-                            android:id="@+id/circleIndicator"
-                            android:layout_width="match_parent"
-                            android:layout_height="@dimen/main_menu_notification_icon"
-                            android:layout_gravity="bottom"
-                            android:padding="@dimen/list_item_progress_indicator_padding"
-                            app:ci_drawable="@drawable/circle_indicator_color"
-                            app:ci_height="@dimen/list_item_progress_indicator_size"
-                            app:ci_width="@dimen/list_item_progress_indicator_size" />
+                        <me.relex.circleindicator.CircleIndicator android:id="@+id/circleIndicator" android:layout_width="match_parent" android:layout_height="@dimen/main_menu_notification_icon" android:layout_gravity="bottom" android:padding="@dimen/list_item_progress_indicator_padding" app:ci_drawable="@drawable/circle_indicator_color" app:ci_height="@dimen/list_item_progress_indicator_size" app:ci_width="@dimen/list_item_progress_indicator_size" />
 
-                        <ImageView
-                            android:id="@+id/submissionImage"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center"
-                            tools:ignore="ContentDescription"
-                            tools:src="@drawable/image_placeholder" />
+                        <ImageView android:id="@+id/submissionImage" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_gravity="center" tools:ignore="ContentDescription" tools:src="@drawable/image_placeholder" />
                     </com.google.android.material.card.MaterialCardView>
 
-                    <TextView
-                        android:id="@+id/submissionName"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginHorizontal="@dimen/activity_horizontal_margin"
-                        android:layout_marginTop="@dimen/activity_horizontal_margin"
-                        android:textColor="@color/black"
-                        android:textSize="@dimen/text_size_medium"
-                        android:textStyle="bold"
-                        tools:text="PINTU AUTOCLAVE ECHUNG D-14 TIDAK DAPAT MENUTUP" />
+                    <TextView android:id="@+id/submissionName" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginHorizontal="@dimen/activity_horizontal_margin" android:layout_marginTop="@dimen/activity_horizontal_margin" android:textColor="@color/black" android:textSize="@dimen/text_size_medium" android:textStyle="bold" tools:text="PINTU AUTOCLAVE ECHUNG D-14 TIDAK DAPAT MENUTUP" />
 
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginHorizontal="@dimen/activity_horizontal_margin"
-                        android:orientation="horizontal">
+                    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginHorizontal="@dimen/activity_horizontal_margin" android:orientation="horizontal">
 
-                        <TextView
-                            android:id="@+id/inputDate"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center"
-                            android:layout_weight="1"
-                            android:textSize="@dimen/text_size_small"
-                            tools:text="07 November 2024" />
+                        <TextView android:id="@+id/inputDate" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_gravity="center" android:layout_weight="1" android:textSize="@dimen/text_size_small" tools:text="07 November 2024" />
 
-                        <com.google.android.material.card.MaterialCardView
-                            android:id="@+id/submissionComplexity"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="end|center"
-                            android:layout_margin="@dimen/dialog_loading_content_padding"
-                            app:cardBackgroundColor="@android:color/transparent"
-                            app:cardCornerRadius="@dimen/login_button_corner_radius"
-                            app:cardElevation="0dp"
-                            app:contentPaddingBottom="@dimen/list_item_selection_content_padding_vertical"
-                            app:contentPaddingLeft="@dimen/list_item_selection_content_padding_horizontal"
-                            app:contentPaddingRight="@dimen/list_item_selection_content_padding_horizontal"
-                            app:contentPaddingTop="@dimen/list_item_selection_content_padding_vertical"
-                            app:strokeWidth="0dp">
+                        <com.google.android.material.card.MaterialCardView android:id="@+id/submissionComplexity" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_gravity="end|center" app:cardBackgroundColor="@android:color/transparent" app:cardCornerRadius="@dimen/login_button_corner_radius" app:cardElevation="0dp" app:strokeWidth="0dp" tools:ignore="TooManyViews">
 
-                            <TextView
-                                android:id="@+id/submissionComplexityText"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:textColor="@color/white"
-                                android:textSize="@dimen/text_size_micro"
-                                android:textStyle="bold"
-                                tools:ignore="TooManyViews"
-                                tools:text="Low" />
+                            <LinearLayout android:id="@+id/complexityColor" android:layout_width="match_parent" android:layout_height="match_parent" android:paddingHorizontal="@dimen/list_item_selection_content_padding_horizontal" android:paddingVertical="@dimen/list_item_selection_content_padding_vertical" tools:background="@drawable/gradient_low_complexity" tools:ignore="TooManyViews">
+
+                                <TextView android:id="@+id/submissionComplexityText" android:layout_width="wrap_content" android:layout_height="wrap_content" android:textColor="@color/white" android:textSize="@dimen/text_size_micro" android:textStyle="bold" tools:ignore="TooManyViews" tools:text="Low" />
+                            </LinearLayout>
                         </com.google.android.material.card.MaterialCardView>
 
-                        <com.google.android.material.card.MaterialCardView
-                            android:id="@+id/submissionStatus"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="end|center"
-                            android:layout_margin="@dimen/dialog_loading_content_padding"
-                            app:cardBackgroundColor="@android:color/transparent"
-                            app:cardCornerRadius="@dimen/login_button_corner_radius"
-                            app:cardElevation="0dp"
-                            app:contentPaddingBottom="@dimen/list_item_selection_content_padding_vertical"
-                            app:contentPaddingLeft="@dimen/list_item_selection_content_padding_horizontal"
-                            app:contentPaddingRight="@dimen/list_item_selection_content_padding_horizontal"
-                            app:contentPaddingTop="@dimen/list_item_selection_content_padding_vertical"
-                            app:strokeWidth="0dp">
+                        <com.google.android.material.card.MaterialCardView android:id="@+id/submissionStatus" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_gravity="end|center" android:layout_margin="@dimen/dialog_loading_content_padding" app:cardBackgroundColor="@android:color/transparent" app:cardCornerRadius="@dimen/login_button_corner_radius" app:cardElevation="0dp" app:strokeWidth="0dp">
 
-                            <TextView
-                                android:id="@+id/submissionStatusText"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:textColor="@color/white"
-                                android:textSize="@dimen/text_size_micro"
-                                android:textStyle="bold"
-                                tools:text="On Progress" />
+                            <LinearLayout android:id="@+id/statusColor" android:layout_width="match_parent" android:layout_height="match_parent" android:paddingHorizontal="@dimen/list_item_selection_content_padding_horizontal" android:paddingVertical="@dimen/list_item_selection_content_padding_vertical" tools:background="@drawable/gradient_on_progress_color" tools:ignore="TooManyViews">
+
+                                <TextView android:id="@+id/submissionStatusText" android:layout_width="wrap_content" android:layout_height="wrap_content" android:textColor="@color/white" android:textSize="@dimen/text_size_micro" android:textStyle="bold" tools:text="On Progress" />
+                            </LinearLayout>
                         </com.google.android.material.card.MaterialCardView>
                     </LinearLayout>
 
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginHorizontal="@dimen/activity_horizontal_margin"
-                        android:layout_marginTop="@dimen/dialog_margin"
-                        android:text="@string/submission_description"
-                        android:textColor="@color/black"
-                        android:textSize="@dimen/text_size_medium"
-                        android:textStyle="bold" />
+                    <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginHorizontal="@dimen/activity_horizontal_margin" android:layout_marginTop="@dimen/dialog_margin" android:text="@string/submission_description" android:textColor="@color/black" android:textSize="@dimen/text_size_medium" android:textStyle="bold" />
 
-                    <TextView
-                        android:id="@+id/submissionDescription"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginHorizontal="@dimen/activity_horizontal_margin"
-                        android:textColor="@color/black"
-                        tools:text="@tools:sample/lorem" />
+                    <TextView android:id="@+id/submissionDescription" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginHorizontal="@dimen/activity_horizontal_margin" android:textColor="@color/black" tools:text="@tools:sample/lorem" />
 
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginHorizontal="@dimen/activity_horizontal_margin"
-                        android:layout_marginVertical="@dimen/dialog_margin"
-                        android:orientation="horizontal"
-                        tools:ignore="DisableBaselineAlignment">
+                    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginHorizontal="@dimen/activity_horizontal_margin" android:layout_marginVertical="@dimen/dialog_margin" android:orientation="horizontal" tools:ignore="DisableBaselineAlignment">
 
-                        <LinearLayout
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:orientation="vertical">
+                        <LinearLayout android:layout_width="wrap_content" android:layout_height="wrap_content" android:orientation="vertical">
 
-                            <TextView
-                                android:id="@+id/machineCodeText"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="@string/machine_code" />
+                            <TextView android:id="@+id/machineCodeText" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/machine_code" />
 
-                            <TextView
-                                android:id="@+id/machineNameText"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="@string/machine_name" />
+                            <TextView android:id="@+id/machineNameText" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/machine_name" />
                         </LinearLayout>
 
-                        <LinearLayout
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="@dimen/dialog_loading_content_padding"
-                            android:layout_weight="1"
-                            android:orientation="vertical">
+                        <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_marginStart="@dimen/dialog_loading_content_padding" android:layout_weight="1" android:orientation="vertical">
 
-                            <TextView
-                                android:id="@+id/machineCode"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:textColor="@color/black"
-                                android:textStyle="bold"
-                                tools:text="D-14" />
+                            <TextView android:id="@+id/machineCode" android:layout_width="wrap_content" android:layout_height="wrap_content" android:textColor="@color/black" android:textStyle="bold" tools:text="D-14" />
 
-                            <TextView
-                                android:id="@+id/machineName"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:textColor="@color/black"
-                                android:textStyle="bold"
-                                tools:text="Autoclave E-Chung" />
+                            <TextView android:id="@+id/machineName" android:layout_width="wrap_content" android:layout_height="wrap_content" android:textColor="@color/black" android:textStyle="bold" tools:text="Autoclave E-Chung" />
                         </LinearLayout>
                     </LinearLayout>
 
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginHorizontal="@dimen/activity_horizontal_margin"
-                        android:orientation="horizontal"
-                        tools:ignore="UseCompoundDrawables">
+                    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginHorizontal="@dimen/activity_horizontal_margin" android:orientation="horizontal" tools:ignore="UseCompoundDrawables">
 
-                        <ImageView
-                            android:layout_width="@dimen/list_item_shimmer_location_icon_size"
-                            android:layout_height="@dimen/list_item_shimmer_location_icon_size"
-                            android:layout_gravity="center"
-                            android:src="@drawable/baseline_account_circle_24"
-                            tools:ignore="ContentDescription" />
+                        <ImageView android:layout_width="@dimen/list_item_shimmer_location_icon_size" android:layout_height="@dimen/list_item_shimmer_location_icon_size" android:layout_gravity="center" android:src="@drawable/baseline_account_circle_24" tools:ignore="ContentDescription" />
 
-                        <TextView
-                            android:id="@+id/user"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="@dimen/dialog_margin"
-                            android:layout_weight="1"
-                            android:textColor="@color/black"
-                            tools:text="Hendrick\nFrom Information Technology Department" />
+                        <TextView android:id="@+id/user" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_marginStart="@dimen/dialog_margin" android:layout_weight="1" android:textColor="@color/black" tools:text="Hendrick\nFrom Information Technology Department" />
                     </LinearLayout>
 
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginHorizontal="@dimen/activity_horizontal_margin"
-                        android:layout_marginTop="@dimen/dialog_loading_content_padding"
-                        android:orientation="horizontal"
-                        tools:ignore="UseCompoundDrawables">
+                    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginHorizontal="@dimen/activity_horizontal_margin" android:layout_marginTop="@dimen/dialog_loading_content_padding" android:orientation="horizontal" tools:ignore="UseCompoundDrawables">
 
-                        <ImageView
-                            android:layout_width="@dimen/list_item_shimmer_location_icon_size"
-                            android:layout_height="@dimen/list_item_shimmer_location_icon_size"
-                            android:src="@drawable/baseline_work_24"
-                            tools:ignore="ContentDescription" />
+                        <ImageView android:layout_width="@dimen/list_item_shimmer_location_icon_size" android:layout_height="@dimen/list_item_shimmer_location_icon_size" android:src="@drawable/baseline_work_24" tools:ignore="ContentDescription" />
 
-                        <TextView
-                            android:id="@+id/department"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="@dimen/dialog_margin"
-                            android:layout_weight="1"
-                            android:textColor="@color/black"
-                            tools:text="Engineering" />
+                        <TextView android:id="@+id/department" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_marginStart="@dimen/dialog_margin" android:layout_weight="1" android:textColor="@color/black" tools:text="Engineering" />
                     </LinearLayout>
 
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginHorizontal="@dimen/activity_horizontal_margin"
-                        android:layout_marginTop="@dimen/dialog_loading_content_padding"
-                        android:orientation="horizontal"
-                        tools:ignore="UseCompoundDrawables">
+                    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginHorizontal="@dimen/activity_horizontal_margin" android:layout_marginTop="@dimen/dialog_loading_content_padding" android:orientation="horizontal" tools:ignore="UseCompoundDrawables">
 
-                        <ImageView
-                            android:layout_width="@dimen/list_item_shimmer_location_icon_size"
-                            android:layout_height="@dimen/list_item_shimmer_location_icon_size"
-                            android:src="@drawable/category_icon"
-                            tools:ignore="ContentDescription" />
+                        <ImageView android:layout_width="@dimen/list_item_shimmer_location_icon_size" android:layout_height="@dimen/list_item_shimmer_location_icon_size" android:src="@drawable/category_icon" tools:ignore="ContentDescription" />
 
-                        <TextView
-                            android:id="@+id/category"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="@dimen/dialog_margin"
-                            android:layout_weight="1"
-                            android:textColor="@color/black"
-                            tools:text="IT" />
+                        <TextView android:id="@+id/category" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_marginStart="@dimen/dialog_margin" android:layout_weight="1" android:textColor="@color/black" tools:text="IT" />
                     </LinearLayout>
 
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginHorizontal="@dimen/activity_horizontal_margin"
-                        android:layout_marginTop="@dimen/dialog_loading_content_padding"
-                        android:orientation="horizontal"
-                        tools:ignore="UseCompoundDrawables">
+                    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginHorizontal="@dimen/activity_horizontal_margin" android:layout_marginTop="@dimen/dialog_loading_content_padding" android:orientation="horizontal" tools:ignore="UseCompoundDrawables">
 
-                        <ImageView
-                            android:layout_width="@dimen/list_item_shimmer_location_icon_size"
-                            android:layout_height="@dimen/list_item_shimmer_location_icon_size"
-                            android:src="@drawable/baseline_access_time_24"
-                            tools:ignore="ContentDescription" />
+                        <ImageView android:layout_width="@dimen/list_item_shimmer_location_icon_size" android:layout_height="@dimen/list_item_shimmer_location_icon_size" android:src="@drawable/baseline_access_time_24" tools:ignore="ContentDescription" />
 
-                        <TextView
-                            android:id="@+id/inputTime"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="@dimen/dialog_margin"
-                            android:layout_weight="1"
-                            android:textColor="@color/black"
-                            tools:text="2024-07-15 11:02:03" />
+                        <TextView android:id="@+id/inputTime" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_marginStart="@dimen/dialog_margin" android:layout_weight="1" android:textColor="@color/black" tools:text="2024-07-15 11:02:03" />
                     </LinearLayout>
 
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginHorizontal="@dimen/activity_horizontal_margin"
-                        android:layout_marginTop="@dimen/dialog_loading_content_padding"
-                        android:orientation="horizontal"
-                        tools:ignore="UseCompoundDrawables">
+                    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginHorizontal="@dimen/activity_horizontal_margin" android:layout_marginTop="@dimen/dialog_loading_content_padding" android:orientation="horizontal" tools:ignore="UseCompoundDrawables">
 
-                        <ImageView
-                            android:layout_width="@dimen/list_item_shimmer_location_icon_size"
-                            android:layout_height="@dimen/list_item_shimmer_location_icon_size"
-                            android:src="@drawable/baseline_location_on_24"
-                            tools:ignore="ContentDescription" />
+                        <ImageView android:layout_width="@dimen/list_item_shimmer_location_icon_size" android:layout_height="@dimen/list_item_shimmer_location_icon_size" android:src="@drawable/baseline_location_on_24" tools:ignore="ContentDescription" />
 
-                        <TextView
-                            android:id="@+id/location"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="@dimen/dialog_margin"
-                            android:layout_weight="1"
-                            android:textColor="@color/black"
-                            tools:text="ERELA HQ" />
+                        <TextView android:id="@+id/location" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_marginStart="@dimen/dialog_margin" android:layout_weight="1" android:textColor="@color/black" tools:text="ERELA HQ" />
                     </LinearLayout>
 
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginHorizontal="@dimen/activity_horizontal_margin"
-                        android:layout_marginTop="@dimen/dialog_loading_content_padding"
-                        android:orientation="horizontal">
+                    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginHorizontal="@dimen/activity_horizontal_margin" android:layout_marginTop="@dimen/dialog_loading_content_padding" android:orientation="horizontal">
 
-                        <ImageView
-                            android:layout_width="@dimen/list_item_shimmer_location_icon_size"
-                            android:layout_height="@dimen/list_item_shimmer_location_icon_size"
-                            android:layout_gravity="center"
-                            android:src="@drawable/baseline_calendar_month_24"
-                            tools:ignore="ContentDescription" />
+                        <ImageView android:layout_width="@dimen/list_item_shimmer_location_icon_size" android:layout_height="@dimen/list_item_shimmer_location_icon_size" android:layout_gravity="center" android:src="@drawable/baseline_calendar_month_24" tools:ignore="ContentDescription" />
 
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="@dimen/dialog_margin"
-                            android:orientation="vertical">
+                        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginStart="@dimen/dialog_margin" android:orientation="vertical">
 
-                            <LinearLayout
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:orientation="horizontal">
+                            <LinearLayout android:layout_width="wrap_content" android:layout_height="wrap_content" android:orientation="horizontal">
 
-                                <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:text="@string/submission_report" />
+                                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/submission_report" />
 
-                                <TextView
-                                    android:id="@+id/reportTime"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginStart="@dimen/dialog_loading_content_padding"
-                                    android:textColor="@color/black"
-                                    tools:text="2024-07-15 10:44:00" />
+                                <TextView android:id="@+id/reportTime" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginStart="@dimen/dialog_loading_content_padding" android:textColor="@color/black" tools:text="2024-07-15 10:44:00" />
                             </LinearLayout>
 
-                            <LinearLayout
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:orientation="horizontal">
+                            <LinearLayout android:layout_width="wrap_content" android:layout_height="wrap_content" android:orientation="horizontal">
 
-                                <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:text="@string/submission_start_working" />
+                                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/submission_start_working" />
 
-                                <TextView
-                                    android:id="@+id/startWork"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginStart="@dimen/dialog_loading_content_padding"
-                                    android:textColor="@color/black"
-                                    tools:text="2024-07-15 10:44:00" />
+                                <TextView android:id="@+id/startWork" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginStart="@dimen/dialog_loading_content_padding" android:textColor="@color/black" tools:text="2024-07-15 10:44:00" />
                             </LinearLayout>
 
-                            <LinearLayout
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:orientation="horizontal">
+                            <LinearLayout android:layout_width="wrap_content" android:layout_height="wrap_content" android:orientation="horizontal">
 
-                                <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:text="@string/submission_end_working" />
+                                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/submission_end_working" />
 
-                                <TextView
-                                    android:id="@+id/endWork"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginStart="@dimen/dialog_loading_content_padding"
-                                    android:textColor="@color/black"
-                                    tools:text="2024-07-15 10:44:00" />
+                                <TextView android:id="@+id/endWork" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginStart="@dimen/dialog_loading_content_padding" android:textColor="@color/black" tools:text="2024-07-15 10:44:00" />
                             </LinearLayout>
                         </LinearLayout>
                     </LinearLayout>
 
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginHorizontal="@dimen/activity_horizontal_margin"
-                        android:layout_marginTop="@dimen/dialog_loading_content_padding"
-                        android:layout_marginBottom="@dimen/submission_detail_bottom_margin"
-                        android:orientation="horizontal">
+                    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginHorizontal="@dimen/activity_horizontal_margin" android:layout_marginTop="@dimen/dialog_loading_content_padding" android:layout_marginBottom="@dimen/submission_detail_bottom_margin" android:orientation="horizontal">
 
-                        <ImageView
-                            android:layout_width="@dimen/list_item_shimmer_location_icon_size"
-                            android:layout_height="@dimen/list_item_shimmer_location_icon_size"
-                            android:layout_gravity="center"
-                            android:src="@drawable/pic_icon"
-                            tools:ignore="ContentDescription" />
+                        <ImageView android:layout_width="@dimen/list_item_shimmer_location_icon_size" android:layout_height="@dimen/list_item_shimmer_location_icon_size" android:layout_gravity="center" android:src="@drawable/pic_icon" tools:ignore="ContentDescription" />
 
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="@dimen/dialog_margin"
-                            android:orientation="vertical">
+                        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginStart="@dimen/dialog_margin" android:orientation="vertical">
 
-                            <LinearLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:orientation="vertical"
-                                tools:ignore="UselessParent">
+                            <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" tools:ignore="UselessParent">
 
-                                <TextView
-                                    android:id="@+id/userApprovedOrRejectedTitle"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:textColor="@color/black"
-                                    android:textStyle="bold"
-                                    tools:text="Approved by" />
+                                <TextView android:id="@+id/userApprovedOrRejectedTitle" android:layout_width="match_parent" android:layout_height="wrap_content" android:textColor="@color/black" android:textStyle="bold" tools:text="Approved by" />
 
-                                <TextView
-                                    android:id="@+id/userApprovedOrRejected"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    tools:text="Yunanto Widinugroho" />
+                                <TextView android:id="@+id/userApprovedOrRejected" android:layout_width="match_parent" android:layout_height="wrap_content" tools:text="Yunanto Widinugroho" />
                             </LinearLayout>
 
-                            <LinearLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_marginTop="2dp"
-                                android:orientation="vertical">
+                            <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="2dp" android:orientation="vertical">
 
-                                <TextView
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:text="Supervisors"
-                                    android:textColor="@color/black"
-                                    android:textStyle="bold"
-                                    tools:ignore="HardcodedText" />
+                                <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:text="Supervisors" android:textColor="@color/black" android:textStyle="bold" tools:ignore="HardcodedText" />
 
-                                <TextView
-                                    android:id="@+id/userSupervisors"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    tools:text="Riky Dwi Cahya\nLianto Budi Setiawan" />
+                                <TextView android:id="@+id/userSupervisors" android:layout_width="match_parent" android:layout_height="wrap_content" tools:text="Riky Dwi Cahya\nLianto Budi Setiawan" />
                             </LinearLayout>
 
-                            <LinearLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_marginTop="2dp"
-                                android:orientation="vertical">
+                            <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="2dp" android:orientation="vertical">
 
-                                <TextView
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:text="Technicians"
-                                    android:textColor="@color/black"
-                                    android:textStyle="bold"
-                                    tools:ignore="HardcodedText" />
+                                <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:text="Technicians" android:textColor="@color/black" android:textStyle="bold" tools:ignore="HardcodedText" />
 
-                                <TextView
-                                    android:id="@+id/userTechnicians"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    tools:text="Eko Prasetyo\nFatnur Ali Ustadzi" />
+                                <TextView android:id="@+id/userTechnicians" android:layout_width="match_parent" android:layout_height="wrap_content" tools:text="Eko Prasetyo\nFatnur Ali Ustadzi" />
                             </LinearLayout>
                         </LinearLayout>
                     </LinearLayout>
@@ -1051,186 +323,47 @@
         </ScrollView>
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/buttonContainer"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:visibility="visible"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent">
+    <androidx.constraintlayout.widget.ConstraintLayout android:id="@+id/buttonContainer" android:layout_width="match_parent" android:layout_height="wrap_content" android:visibility="visible" app:layout_constraintBottom_toBottomOf="parent" app:layout_constraintEnd_toEndOf="parent" app:layout_constraintStart_toStartOf="parent">
 
-        <LinearLayout
-            android:id="@+id/messageProgressAndTrialButtonContainer"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_alignParentStart="true"
-            android:layout_centerVertical="true"
-            android:layout_marginBottom="@dimen/dialog_loading_content_padding"
-            android:layout_toStartOf="@+id/actionSelfButton"
-            android:orientation="horizontal"
-            android:visibility="gone"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/actionSelfButton"
-            app:layout_constraintStart_toStartOf="parent">
+        <LinearLayout android:id="@+id/messageProgressAndTrialButtonContainer" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_alignParentStart="true" android:layout_centerVertical="true" android:layout_marginBottom="@dimen/dialog_loading_content_padding" android:layout_toStartOf="@+id/actionSelfButton" android:orientation="horizontal" android:visibility="visible" app:layout_constraintBottom_toBottomOf="parent" app:layout_constraintEnd_toStartOf="@+id/actionSelfButton" app:layout_constraintStart_toStartOf="parent">
 
-            <com.google.android.material.card.MaterialCardView
-                android:id="@+id/statusMessageContainer"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginVertical="@dimen/activity_horizontal_margin"
-                android:layout_marginStart="@dimen/activity_horizontal_margin"
-                android:layout_marginEnd="@dimen/activity_horizontal_margin"
-                android:layout_weight="1"
-                android:minHeight="@dimen/bottom_sheet_padding_bottom"
-                android:visibility="gone"
-                app:cardBackgroundColor="@color/custom_toast_background_soft_blue"
-                app:cardCornerRadius="@dimen/login_button_corner_radius"
-                app:cardElevation="@dimen/card_elevation"
-                app:strokeWidth="0dp">
+            <com.google.android.material.card.MaterialCardView android:id="@+id/statusMessageContainer" android:layout_width="0dp" android:layout_height="@dimen/bottom_sheet_padding_bottom" android:layout_marginVertical="@dimen/activity_horizontal_margin" android:layout_marginStart="@dimen/activity_horizontal_margin" android:layout_marginEnd="@dimen/activity_horizontal_margin" android:layout_weight="1" android:visibility="gone" app:cardCornerRadius="@dimen/login_button_corner_radius" app:cardElevation="@dimen/card_elevation" app:strokeWidth="0dp">
 
-                <TextView
-                    android:id="@+id/statusMessage"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:drawablePadding="@dimen/dialog_loading_content_padding"
-                    android:textAlignment="center"
-                    android:textColor="@color/custom_toast_background_normal_dark_gray"
-                    android:textSize="@dimen/text_size_small"
-                    android:textStyle="bold"
-                    tools:text="Waiting for action from hendrick\nClick to see progress" />
+                <LinearLayout android:id="@+id/statusMessageColor" android:layout_width="match_parent" android:layout_height="match_parent" android:background="@drawable/gradient_menu_color" android:gravity="center">
+
+                    <TextView android:id="@+id/statusMessage" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_gravity="center" android:drawablePadding="@dimen/dialog_loading_content_padding" android:textAlignment="center" android:textColor="@color/custom_toast_background_normal_dark_gray" android:textSize="@dimen/text_size_small" android:textStyle="bold" tools:text="Waiting for action from hendrick\nClick to see progress" />
+                </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
 
-            <com.google.android.material.card.MaterialCardView
-                android:id="@+id/onProgressButton"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginVertical="@dimen/activity_horizontal_margin"
-                android:layout_marginStart="@dimen/activity_horizontal_margin"
-                android:layout_marginEnd="@dimen/activity_horizontal_margin"
-                android:layout_weight="1"
-                android:minHeight="@dimen/bottom_sheet_padding_bottom"
-                android:visibility="visible"
-                app:cardBackgroundColor="@color/custom_toast_font_normal_gray"
-                app:cardCornerRadius="@dimen/login_button_corner_radius"
-                app:cardElevation="@dimen/card_elevation"
-                app:strokeWidth="0dp">
+            <com.google.android.material.card.MaterialCardView android:id="@+id/onProgressButton" android:layout_width="0dp" android:layout_height="@dimen/bottom_sheet_padding_bottom" android:layout_marginVertical="@dimen/activity_horizontal_margin" android:layout_marginStart="@dimen/activity_horizontal_margin" android:layout_marginEnd="@dimen/activity_horizontal_margin" android:layout_weight="1" android:visibility="gone" app:cardCornerRadius="@dimen/login_button_corner_radius" app:cardElevation="@dimen/card_elevation" app:strokeWidth="0dp">
 
-                <TextView
-                    android:id="@+id/onProgressText"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:drawableStart="@drawable/baseline_timelapse_24"
-                    android:drawablePadding="@dimen/dialog_loading_content_padding"
-                    android:text="@string/message_on_progress"
-                    android:textAlignment="center"
-                    android:textColor="@color/custom_toast_background_normal_dark_gray"
-                    android:textSize="@dimen/text_size_small"
-                    android:textStyle="bold"
-                    tools:ignore="UseCompatTextViewDrawableXml" />
+                <LinearLayout android:id="@+id/onProgressColor" android:layout_width="match_parent" android:layout_height="match_parent" android:background="@drawable/gradient_progress_action_color" android:gravity="center">
+
+                    <TextView android:id="@+id/onProgressText" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_gravity="center" android:drawableStart="@drawable/baseline_timelapse_24" android:drawablePadding="@dimen/dialog_loading_content_padding" android:drawableTint="@color/white" android:text="@string/message_on_progress" android:textAlignment="center" android:textColor="@color/white" android:textSize="@dimen/text_size_small" android:textStyle="bold" tools:ignore="UseCompatTextViewDrawableXml" />
+                </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
 
-            <com.google.android.material.card.MaterialCardView
-                android:id="@+id/seeTrialContainer"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_marginVertical="@dimen/activity_horizontal_margin"
-                android:layout_marginEnd="@dimen/activity_horizontal_margin"
-                android:minHeight="@dimen/bottom_sheet_padding_bottom"
-                android:visibility="gone"
-                app:cardBackgroundColor="@color/status_on_trial"
-                app:cardCornerRadius="@dimen/login_button_corner_radius"
-                app:cardElevation="@dimen/card_elevation"
-                app:contentPaddingLeft="@dimen/activity_horizontal_margin"
-                app:contentPaddingRight="@dimen/activity_horizontal_margin"
-                app:strokeWidth="0dp">
+            <com.google.android.material.card.MaterialCardView android:id="@+id/seeTrialContainer" android:layout_width="wrap_content" android:layout_height="@dimen/bottom_sheet_padding_bottom" android:layout_marginVertical="@dimen/activity_horizontal_margin" android:layout_marginEnd="@dimen/activity_horizontal_margin" android:visibility="gone" app:cardBackgroundColor="@color/status_on_trial" app:cardCornerRadius="@dimen/login_button_corner_radius" app:cardElevation="@dimen/card_elevation" app:strokeWidth="0dp">
 
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:src="@drawable/baseline_rule_24"
-                    tools:ignore="ContentDescription" />
+                <LinearLayout android:layout_width="match_parent" android:layout_height="match_parent" android:background="@drawable/gradient_on_trial_color" android:paddingHorizontal="@dimen/activity_horizontal_margin" android:gravity="center">
+
+                    <ImageView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_gravity="center" android:src="@drawable/baseline_rule_24" tools:ignore="ContentDescription" />
+                </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
         </LinearLayout>
 
-        <com.google.android.material.card.MaterialCardView
-            android:id="@+id/actionButton"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_alignParentStart="true"
-            android:layout_centerVertical="true"
-            android:layout_marginHorizontal="@dimen/activity_horizontal_margin"
-            android:layout_marginBottom="@dimen/activity_horizontal_margin"
-            android:layout_toStartOf="@+id/actionSelfButton"
-            android:minHeight="@dimen/bottom_sheet_padding_bottom"
-            android:visibility="gone"
-            app:cardBackgroundColor="@color/button_color"
-            app:cardCornerRadius="@dimen/login_button_corner_radius"
-            app:cardElevation="@dimen/card_elevation"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/actionSelfButton"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:strokeWidth="0dp">
+        <com.google.android.material.card.MaterialCardView android:id="@+id/actionButton" android:layout_width="0dp" android:layout_height="@dimen/bottom_sheet_padding_bottom" android:layout_alignParentStart="true" android:layout_marginHorizontal="@dimen/activity_horizontal_margin" android:layout_marginBottom="@dimen/activity_horizontal_margin" android:layout_toStartOf="@+id/actionSelfButton" android:visibility="gone" app:cardCornerRadius="@dimen/login_button_corner_radius" app:cardElevation="@dimen/card_elevation" app:layout_constraintBottom_toBottomOf="parent" app:layout_constraintEnd_toStartOf="@+id/actionSelfButton" app:layout_constraintStart_toStartOf="parent" app:layout_constraintTop_toTopOf="parent" app:strokeWidth="0dp">
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:text="@string/action_text"
-                android:textColor="@color/white"
-                android:textSize="@dimen/text_size_small"
-                android:textStyle="bold" />
+            <LinearLayout android:layout_width="match_parent" android:layout_height="match_parent" android:gravity="center" android:background="@drawable/gradient_accent_color">
+
+                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/action_text" android:textColor="@color/white" android:textSize="@dimen/text_size_small" android:textStyle="bold" />
+            </LinearLayout>
         </com.google.android.material.card.MaterialCardView>
 
-        <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
-            android:id="@+id/actionSelfButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="@dimen/activity_horizontal_margin"
-            android:layout_marginBottom="@dimen/activity_horizontal_margin"
-            android:text="@string/more_options"
-            android:visibility="gone"
-            app:backgroundTint="@color/custom_toast_background_soft_blue"
-            app:fabSize="normal"
-            app:icon="@drawable/baseline_more_vert_24"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            tools:ignore="ContentDescription,TooManyViews" />
+        <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton android:id="@+id/actionSelfButton" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginEnd="@dimen/activity_horizontal_margin" android:layout_marginBottom="@dimen/activity_horizontal_margin" android:background="@drawable/fab_more_gradient" android:text="@string/more_options" android:textColor="@color/white" android:visibility="visible" app:backgroundTint="@color/custom_toast_background_soft_blue" app:icon="@drawable/baseline_more_vert_24" app:layout_constraintBottom_toBottomOf="parent" app:layout_constraintEnd_toEndOf="parent" tools:ignore="ContentDescription,TooManyViews" />
 
-        <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
-            android:id="@+id/editButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_above="@id/actionSelfButton"
-            android:layout_marginEnd="@dimen/activity_horizontal_margin"
-            android:layout_marginBottom="@dimen/activity_horizontal_margin"
-            android:text="@string/action_edit"
-            android:visibility="gone"
-            app:backgroundTint="@color/custom_toast_background_normal"
-            app:fabSize="normal"
-            app:icon="@drawable/baseline_edit_24"
-            app:layout_constraintBottom_toTopOf="@+id/actionSelfButton"
-            app:layout_constraintEnd_toEndOf="parent"
-            tools:ignore="ContentDescription" />
+        <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton android:id="@+id/editButton" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_above="@id/actionSelfButton" android:layout_marginEnd="@dimen/activity_horizontal_margin" android:layout_marginBottom="@dimen/activity_horizontal_margin" android:background="@drawable/fab_edit_gradient" android:text="@string/action_edit" android:visibility="gone" app:layout_constraintBottom_toTopOf="@+id/actionSelfButton" app:layout_constraintEnd_toEndOf="parent" tools:ignore="ContentDescription" />
 
-        <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
-            android:id="@+id/cancelButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_above="@id/actionSelfButton"
-            android:layout_marginEnd="@dimen/activity_horizontal_margin"
-            android:layout_marginBottom="@dimen/activity_horizontal_margin"
-            android:text="@string/action_cancel"
-            android:visibility="gone"
-            app:backgroundTint="@color/custom_toast_font_failed"
-            app:fabSize="normal"
-            app:icon="@drawable/baseline_close_24"
-            app:layout_constraintBottom_toTopOf="@+id/editButton"
-            app:layout_constraintEnd_toEndOf="parent"
-            tools:ignore="ContentDescription,TooManyViews" />
+        <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton android:id="@+id/cancelButton" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_above="@id/actionSelfButton" android:layout_marginEnd="@dimen/activity_horizontal_margin" android:layout_marginBottom="@dimen/activity_horizontal_margin" android:background="@drawable/fab_cancel_gradient" android:text="@string/action_cancel" android:textColor="@color/white" android:visibility="gone" app:layout_constraintBottom_toTopOf="@+id/editButton" app:layout_constraintEnd_toEndOf="parent" tools:ignore="ContentDescription,TooManyViews" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

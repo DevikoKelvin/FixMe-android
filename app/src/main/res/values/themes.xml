@@ -24,4 +24,22 @@
         parent="Widget.MaterialComponents.BottomSheet.Modal">
         <item name="android:background">@drawable/bottom_sheets_background</item>
     </style>
+
+    <style name="FloatingButtonCancel" parent="Widget.MaterialComponents.ExtendedFloatingActionButton">
+        <item name="android:background">@drawable/fab_cancel_gradient</item>
+        <item name="icon">@drawable/baseline_close_24</item>
+        <item name="iconTint">@color/white</item>
+    </style>
+
+    <style name="FloatingButtonEdit" parent="Widget.MaterialComponents.ExtendedFloatingActionButton">
+        <item name="android:background">@drawable/fab_edit_gradient</item>
+        <item name="icon">@drawable/baseline_edit_24</item>
+        <item name="iconTint">@color/black</item>
+    </style>
+
+    <style name="FloatingButtonMore" parent="Widget.MaterialComponents.ExtendedFloatingActionButton">
+        <item name="android:background">@drawable/fab_more_gradient</item>
+        <item name="icon">@drawable/baseline_more_vert_24</item>
+        <item name="iconTint">@color/white</item>
+    </style>
 </resources>

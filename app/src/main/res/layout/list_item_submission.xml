@@ -20,10 +20,10 @@
             android:id="@+id/header"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/highlight_blue"
             android:orientation="vertical"
             android:paddingHorizontal="@dimen/list_item_submission_header_padding_horizontal"
             android:paddingVertical="@dimen/list_item_submission_header_padding_vertical"
+            tools:background="@drawable/gradient_notification_color"
             tools:ignore="UselessParent">
 
             <TextView
@@ -206,26 +206,25 @@
                 app:cardBackgroundColor="@android:color/transparent"
                 app:cardCornerRadius="@dimen/list_item_submission_tag_card_corner_radius"
                 app:cardElevation="0dp"
-                app:contentPadding="@dimen/list_item_submission_tag_content_padding"
-                app:contentPaddingLeft="@dimen/list_item_submission_tag_content_padding_horizontal"
-                app:contentPaddingRight="@dimen/list_item_submission_tag_content_padding_horizontal"
                 app:strokeWidth="0dp">
 
-                <ImageView
+                <LinearLayout
                     android:id="@+id/complexityColor"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    tools:src="@drawable/gradient_low_complexity"
-                    tools:ignore="ContentDescription" />
-
-                <TextView
-                    android:id="@+id/complexityText"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textColor="@color/white"
-                    android:textSize="@dimen/text_size_micro"
-                    android:textStyle="bold"
-                    tools:text="Low" />
+                    android:paddingHorizontal="@dimen/list_item_submission_tag_content_padding_horizontal"
+                    android:paddingVertical="@dimen/list_item_submission_tag_content_padding"
+                    tools:background="@drawable/gradient_low_complexity">
+
+                    <TextView
+                        android:id="@+id/complexityText"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/text_size_micro"
+                        android:textStyle="bold"
+                        tools:text="Low" />
+                </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
 
             <com.google.android.material.card.MaterialCardView
@@ -235,19 +234,25 @@
                 app:cardBackgroundColor="@android:color/transparent"
                 app:cardCornerRadius="@dimen/list_item_submission_tag_card_corner_radius"
                 app:cardElevation="0dp"
-                app:contentPadding="@dimen/list_item_submission_tag_content_padding"
-                app:contentPaddingLeft="@dimen/list_item_submission_tag_content_padding_horizontal"
-                app:contentPaddingRight="@dimen/list_item_submission_tag_content_padding_horizontal"
                 app:strokeWidth="0dp">
 
-                <TextView
-                    android:id="@+id/submissionStatusText"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textColor="@color/white"
-                    android:textSize="@dimen/text_size_micro"
-                    android:textStyle="bold"
-                    tools:text="On Progress" />
+                <LinearLayout
+                    android:id="@+id/statusColor"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:paddingHorizontal="@dimen/list_item_submission_tag_content_padding_horizontal"
+                    android:paddingVertical="@dimen/list_item_submission_tag_content_padding"
+                    tools:background="@drawable/gradient_on_progress_color">
+
+                    <TextView
+                        android:id="@+id/submissionStatusText"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/text_size_micro"
+                        android:textStyle="bold"
+                        tools:text="On Progress" />
+                </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
         </LinearLayout>
     </LinearLayout>

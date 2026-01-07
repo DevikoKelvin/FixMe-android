@@ -298,46 +298,44 @@ class SubmissionDetailActivity : AppCompatActivity(),
                                             else
                                                 it.toString()
                                         }
+
+                                    submissionComplexity.visibility = if (detailData.difficulty == "null" || detailData.difficulty == null)
+                                        View.GONE
+                                    else
+                                        View.VISIBLE
+
                                     when (detailData.difficulty) {
                                         "low" -> {
-                                            submissionComplexity.setCardBackgroundColor(
-                                                ResourcesCompat.getColor(
-                                                    resources,
-                                                    R.color.custom_toast_font_success,
-                                                    theme
-                                                )
+                                            complexityColor.background = ResourcesCompat.getDrawable(
+                                                resources,
+                                                R.drawable.gradient_low_complexity,
+                                                theme
                                             )
                                         }
 
                                         "middle" -> {
-                                            submissionComplexity.setCardBackgroundColor(
-                                                ResourcesCompat.getColor(
-                                                    resources,
-                                                    R.color.custom_toast_font_warning,
-                                                    theme
-                                                )
+                                            complexityColor.background = ResourcesCompat.getDrawable(
+                                                resources,
+                                                R.drawable.gradient_middle_complexity,
+                                                theme
                                             )
                                         }
 
                                         "high" -> {
-                                            submissionComplexity.setCardBackgroundColor(
-                                                ResourcesCompat.getColor(
-                                                    resources,
-                                                    R.color.custom_toast_font_failed,
-                                                    theme
-                                                )
+                                            complexityColor.background = ResourcesCompat.getDrawable(
+                                                resources,
+                                                R.drawable.gradient_high_complexity,
+                                                theme
                                             )
                                         }
                                     }
                                     when (detailData.stsGaprojects) {
                                         // Rejected
                                         0 -> {
-                                            submissionStatus.setCardBackgroundColor(
-                                                ResourcesCompat.getColor(
-                                                    resources,
-                                                    R.color.status_rejected,
-                                                    theme
-                                                )
+                                            statusColor.background = ResourcesCompat.getDrawable(
+                                                resources,
+                                                R.drawable.gradient_rejected_color,
+                                                theme
                                             )
                                             submissionStatusText.text = "Rejected"
                                             actionButton.visibility = View.GONE
@@ -357,11 +355,10 @@ class SubmissionDetailActivity : AppCompatActivity(),
                                                 )
                                             }
                                             statusMessageContainer.visibility = View.VISIBLE
-                                            statusMessageContainer.setCardBackgroundColor(
-                                                ContextCompat.getColor(
-                                                    this@SubmissionDetailActivity,
-                                                    R.color.custom_toast_font_failed
-                                                )
+                                            statusMessageColor.background = ResourcesCompat.getDrawable(
+                                                resources,
+                                                R.drawable.gradient_rejected_color,
+                                                theme
                                             )
                                             statusMessage.text =
                                                 if (getString(R.string.lang) == "in")
@@ -377,12 +374,10 @@ class SubmissionDetailActivity : AppCompatActivity(),
                                         }
                                         // Pending
                                         1 -> {
-                                            submissionStatus.setCardBackgroundColor(
-                                                ResourcesCompat.getColor(
-                                                    resources,
-                                                    R.color.status_pending,
-                                                    theme
-                                                )
+                                            statusColor.background = ResourcesCompat.getDrawable(
+                                                resources,
+                                                R.drawable.gradient_pending_color,
+                                                theme
                                             )
                                             submissionStatusText.text = "Pending"
                                             onProgressButton.visibility = View.GONE
@@ -391,12 +386,10 @@ class SubmissionDetailActivity : AppCompatActivity(),
                                         }
                                         // Waiting
                                         11 -> {
-                                            submissionStatus.setCardBackgroundColor(
-                                                ResourcesCompat.getColor(
-                                                    resources,
-                                                    R.color.status_waiting,
-                                                    theme
-                                                )
+                                            statusColor.background = ResourcesCompat.getDrawable(
+                                                resources,
+                                                R.drawable.gradient_waiting_color,
+                                                theme
                                             )
                                             submissionStatusText.text = "Waiting"
                                             onProgressButton.visibility = View.GONE
@@ -414,11 +407,10 @@ class SubmissionDetailActivity : AppCompatActivity(),
                                                 )
                                             }
                                             statusMessageContainer.visibility = View.VISIBLE
-                                            statusMessageContainer.setCardBackgroundColor(
-                                                ContextCompat.getColor(
-                                                    this@SubmissionDetailActivity,
-                                                    R.color.custom_toast_background_soft_blue
-                                                )
+                                            statusMessageColor.background = ResourcesCompat.getDrawable(
+                                                resources,
+                                                R.drawable.gradient_menu_color,
+                                                theme
                                             )
                                             statusMessage.text =
                                                 if (getString(R.string.lang) == "in")
@@ -434,12 +426,10 @@ class SubmissionDetailActivity : AppCompatActivity(),
                                         }
                                         // Approved
                                         2 -> {
-                                            submissionStatus.setCardBackgroundColor(
-                                                ResourcesCompat.getColor(
-                                                    resources,
-                                                    R.color.status_approved,
-                                                    theme
-                                                )
+                                            statusColor.background = ResourcesCompat.getDrawable(
+                                                resources,
+                                                R.drawable.gradient_approved_color,
+                                                theme
                                             )
                                             submissionStatusText.text = "Approved"
                                             var tech = false
@@ -491,11 +481,10 @@ class SubmissionDetailActivity : AppCompatActivity(),
                                                         )
                                                     }
                                                     statusMessageContainer.visibility = View.VISIBLE
-                                                    statusMessageContainer.setCardBackgroundColor(
-                                                        ContextCompat.getColor(
-                                                            this@SubmissionDetailActivity,
-                                                            R.color.custom_toast_background_soft_blue
-                                                        )
+                                                    statusMessageColor.background = ResourcesCompat.getDrawable(
+                                                        resources,
+                                                        R.drawable.gradient_menu_color,
+                                                        theme
                                                     )
                                                     message = StringBuilder().append(
                                                         if (getString(R.string.lang) == "in")
@@ -526,11 +515,10 @@ class SubmissionDetailActivity : AppCompatActivity(),
                                                         )
                                                     )
                                                     holdResumeButton.visibility = View.VISIBLE
-                                                    holdResumeButton.setCardBackgroundColor(
-                                                        ContextCompat.getColor(
-                                                            applicationContext,
-                                                            R.color.status_approved
-                                                        )
+                                                    holdResumeColor.background = ResourcesCompat.getDrawable(
+                                                        resources,
+                                                        R.drawable.gradient_approved_color,
+                                                        theme
                                                     )
                                                     holdResumeButton.setOnClickListener {
                                                         val confirmationDialog = ConfirmationDialog(
@@ -794,12 +782,10 @@ class SubmissionDetailActivity : AppCompatActivity(),
                                                     break
                                                 }
                                             }
-                                            submissionStatus.setCardBackgroundColor(
-                                                ResourcesCompat.getColor(
-                                                    resources,
-                                                    R.color.status_hold,
-                                                    theme
-                                                )
+                                            statusColor.background = ResourcesCompat.getDrawable(
+                                                resources,
+                                                R.drawable.gradient_hold_color,
+                                                theme
                                             )
                                             submissionStatusText.text = "Hold"
                                             messageProgressAndTrialButtonContainer.visibility =
@@ -812,11 +798,10 @@ class SubmissionDetailActivity : AppCompatActivity(),
                                                 null,
                                                 null
                                             )
-                                            onProgressButton.setCardBackgroundColor(
-                                                ContextCompat.getColor(
-                                                    this@SubmissionDetailActivity,
-                                                    R.color.status_hold
-                                                )
+                                            onProgressColor.background = ResourcesCompat.getDrawable(
+                                                resources,
+                                                R.drawable.gradient_hold_color,
+                                                theme
                                             )
                                             onProgressButton.setOnClickListener {
                                                 progressTrackingBottomSheet =
@@ -866,11 +851,10 @@ class SubmissionDetailActivity : AppCompatActivity(),
                                                         )
                                                     )
                                                     holdResumeButton.visibility = View.VISIBLE
-                                                    holdResumeButton.setCardBackgroundColor(
-                                                        ContextCompat.getColor(
-                                                            applicationContext,
-                                                            R.color.status_hold
-                                                        )
+                                                    holdResumeColor.background = ResourcesCompat.getDrawable(
+                                                        resources,
+                                                        R.drawable.gradient_hold_color,
+                                                        theme
                                                     )
                                                     holdResumeButton.setOnClickListener {
                                                         val holdBottomSheet =
@@ -1132,12 +1116,10 @@ class SubmissionDetailActivity : AppCompatActivity(),
                                                     break
                                                 }
                                             }
-                                            submissionStatus.setCardBackgroundColor(
-                                                ResourcesCompat.getColor(
-                                                    resources,
-                                                    R.color.status_on_progress,
-                                                    theme
-                                                )
+                                            statusColor.background = ResourcesCompat.getDrawable(
+                                                resources,
+                                                R.drawable.gradient_on_progress_color,
+                                                theme
                                             )
                                             submissionStatusText.text = "On Progress"
                                             actionButton.visibility = View.GONE
@@ -1155,11 +1137,10 @@ class SubmissionDetailActivity : AppCompatActivity(),
                                                 null,
                                                 null
                                             )
-                                            onProgressButton.setCardBackgroundColor(
-                                                ContextCompat.getColor(
-                                                    this@SubmissionDetailActivity,
-                                                    R.color.custom_toast_font_normal_gray
-                                                )
+                                            onProgressColor.background = ResourcesCompat.getDrawable(
+                                                resources,
+                                                R.drawable.gradient_progress_action_color,
+                                                theme
                                             )
                                             message =
                                                 StringBuilder().append(
@@ -1172,7 +1153,7 @@ class SubmissionDetailActivity : AppCompatActivity(),
                                             onProgressText.setTextColor(
                                                 ContextCompat.getColor(
                                                     applicationContext,
-                                                    R.color.custom_toast_background_normal_dark_gray
+                                                    R.color.white
                                                 )
                                             )
                                             onProgressButton.setOnClickListener {
@@ -1214,12 +1195,10 @@ class SubmissionDetailActivity : AppCompatActivity(),
                                         }
                                         // Progress Done
                                         30 -> {
-                                            submissionStatus.setCardBackgroundColor(
-                                                ResourcesCompat.getColor(
-                                                    resources,
-                                                    R.color.status_progress_done,
-                                                    theme
-                                                )
+                                            statusColor.background = ResourcesCompat.getDrawable(
+                                                resources,
+                                                R.drawable.gradient_progress_done_color,
+                                                theme
                                             )
                                             submissionStatusText.text = "Progress Done"
                                             actionButton.visibility = View.GONE
@@ -1253,11 +1232,10 @@ class SubmissionDetailActivity : AppCompatActivity(),
                                                 null,
                                                 null
                                             )
-                                            onProgressButton.setCardBackgroundColor(
-                                                ContextCompat.getColor(
-                                                    this@SubmissionDetailActivity,
-                                                    R.color.status_progress_done
-                                                )
+                                            onProgressColor.background = ResourcesCompat.getDrawable(
+                                                resources,
+                                                R.drawable.gradient_progress_done_color,
+                                                theme
                                             )
                                             onProgressButton.setOnClickListener {
                                                 progressTrackingBottomSheet =
@@ -1298,12 +1276,10 @@ class SubmissionDetailActivity : AppCompatActivity(),
                                         }
                                         // Done
                                         4 -> {
-                                            submissionStatus.setCardBackgroundColor(
-                                                ResourcesCompat.getColor(
-                                                    resources,
-                                                    R.color.status_done,
-                                                    theme
-                                                )
+                                            statusColor.background = ResourcesCompat.getDrawable(
+                                                resources,
+                                                R.drawable.gradient_done_color,
+                                                theme
                                             )
                                             submissionStatusText.text = "Done"
                                             actionButton.visibility = View.GONE
@@ -1312,6 +1288,11 @@ class SubmissionDetailActivity : AppCompatActivity(),
                                             messageProgressAndTrialButtonContainer.visibility =
                                                 View.VISIBLE
                                             statusMessageContainer.visibility = View.VISIBLE
+                                            statusMessageColor.background = ResourcesCompat.getDrawable(
+                                                resources,
+                                                R.drawable.gradient_approved_color,
+                                                theme
+                                            )
                                             statusMessageContainer.setCardBackgroundColor(
                                                 ContextCompat.getColor(
                                                     this@SubmissionDetailActivity,
@@ -1366,12 +1347,10 @@ class SubmissionDetailActivity : AppCompatActivity(),
                                         }
                                         // Canceled
                                         5 -> {
-                                            submissionStatus.setCardBackgroundColor(
-                                                ResourcesCompat.getColor(
-                                                    resources,
-                                                    R.color.custom_toast_background_failed,
-                                                    theme
-                                                )
+                                            statusColor.background = ResourcesCompat.getDrawable(
+                                                resources,
+                                                R.drawable.gradient_canceled_color,
+                                                theme
                                             )
                                             submissionStatusText.text = "Canceled"
                                             submissionStatusText.setTextColor(
@@ -1386,11 +1365,10 @@ class SubmissionDetailActivity : AppCompatActivity(),
                                             messageProgressAndTrialButtonContainer.visibility =
                                                 View.VISIBLE
                                             statusMessageContainer.visibility = View.VISIBLE
-                                            statusMessageContainer.setCardBackgroundColor(
-                                                ContextCompat.getColor(
-                                                    this@SubmissionDetailActivity,
-                                                    R.color.custom_toast_background_failed
-                                                )
+                                            statusMessageColor.background = ResourcesCompat.getDrawable(
+                                                resources,
+                                                R.drawable.gradient_canceled_color,
+                                                theme
                                             )
                                             statusMessage.text =
                                                 if (userData.id == detailData.idUser) {
@@ -1413,12 +1391,10 @@ class SubmissionDetailActivity : AppCompatActivity(),
                                         }
                                         // On-Trial
                                         31 -> {
-                                            submissionStatus.setCardBackgroundColor(
-                                                ResourcesCompat.getColor(
-                                                    resources,
-                                                    R.color.status_on_trial,
-                                                    theme
-                                                )
+                                            statusColor.background = ResourcesCompat.getDrawable(
+                                                resources,
+                                                R.drawable.gradient_on_trial_color,
+                                                theme
                                             )
                                             submissionStatusText.text = "On Trial"
                                             actionButton.visibility = View.GONE

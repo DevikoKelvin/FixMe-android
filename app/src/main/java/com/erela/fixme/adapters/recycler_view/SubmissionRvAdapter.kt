@@ -53,6 +53,11 @@ class SubmissionRvAdapter(val context: Context, val data: ArrayList<SubmissionLi
                 reportedBy.text = item.namaUser
                 departmentFrom.text = item.deptUser
 
+                complexity.visibility = if (item.complexity == "null" || item.complexity == null)
+                    View.GONE
+                else
+                    View.VISIBLE
+
                 complexityText.text =
                     item.complexity.toString().replaceFirstChar {
                         if (it.isLowerCase())
@@ -62,61 +67,49 @@ class SubmissionRvAdapter(val context: Context, val data: ArrayList<SubmissionLi
                     }
                 when (item.complexity) {
                     "low" -> {
-                        complexity.setCardBackgroundColor(
-                            ResourcesCompat.getColor(
-                                context.resources,
-                                R.color.custom_toast_font_success,
-                                context.theme
-                            )
+                        complexityColor.background = ResourcesCompat.getDrawable(
+                            context.resources,
+                            R.drawable.gradient_low_complexity,
+                            context.theme
                         )
                     }
 
                     "middle" -> {
-                        complexity.setCardBackgroundColor(
-                            ResourcesCompat.getColor(
-                                context.resources,
-                                R.color.custom_toast_font_warning,
-                                context.theme
-                            )
+                        complexityColor.background = ResourcesCompat.getDrawable(
+                            context.resources,
+                            R.drawable.gradient_middle_complexity,
+                            context.theme
                         )
                     }
 
                     "high" -> {
-                        complexity.setCardBackgroundColor(
-                            ResourcesCompat.getColor(
-                                context.resources,
-                                R.color.custom_toast_font_failed,
-                                context.theme
-                            )
+                        complexityColor.background = ResourcesCompat.getDrawable(
+                            context.resources,
+                            R.drawable.gradient_high_complexity,
+                            context.theme
                         )
                     }
 
                     else -> {
-                        complexity.setCardBackgroundColor(
-                            ResourcesCompat.getColor(
-                                context.resources,
-                                R.color.white,
-                                context.theme
-                            )
+                        complexityColor.background = ResourcesCompat.getDrawable(
+                            context.resources,
+                            R.drawable.gradient_logout_color,
+                            context.theme
                         )
                     }
                 }
 
                 when (item.stsGaprojects) {
                     0 -> {
-                        header.setBackgroundColor(
-                            ResourcesCompat.getColor(
-                                context.resources,
-                                R.color.status_rejected,
-                                context.theme
-                            )
+                        header.background = ResourcesCompat.getDrawable(
+                            context.resources,
+                            R.drawable.gradient_rejected_color,
+                            context.theme
                         )
-                        submissionStatus.setCardBackgroundColor(
-                            ResourcesCompat.getColor(
-                                context.resources,
-                                R.color.status_rejected,
-                                context.theme
-                            )
+                        statusColor.background = ResourcesCompat.getDrawable(
+                            context.resources,
+                            R.drawable.gradient_rejected_color,
+                            context.theme
                         )
                         submissionStatusText.text = "Rejected"
                         submissionStatusText.setTextColor(
@@ -129,19 +122,15 @@ class SubmissionRvAdapter(val context: Context, val data: ArrayList<SubmissionLi
                     }
 
                     1 -> {
-                        header.setBackgroundColor(
-                            ResourcesCompat.getColor(
-                                context.resources,
-                                R.color.status_pending,
-                                context.theme
-                            )
+                        header.background = ResourcesCompat.getDrawable(
+                            context.resources,
+                            R.drawable.gradient_pending_color,
+                            context.theme
                         )
-                        submissionStatus.setCardBackgroundColor(
-                            ResourcesCompat.getColor(
-                                context.resources,
-                                R.color.status_pending,
-                                context.theme
-                            )
+                        statusColor.background = ResourcesCompat.getDrawable(
+                            context.resources,
+                            R.drawable.gradient_pending_color,
+                            context.theme
                         )
                         submissionStatusText.text = "Pending"
                         submissionStatusText.setTextColor(
@@ -154,19 +143,15 @@ class SubmissionRvAdapter(val context: Context, val data: ArrayList<SubmissionLi
                     }
 
                     11 -> {
-                        header.setBackgroundColor(
-                            ResourcesCompat.getColor(
-                                context.resources,
-                                R.color.status_waiting,
-                                context.theme
-                            )
+                        header.background = ResourcesCompat.getDrawable(
+                            context.resources,
+                            R.drawable.gradient_waiting_color,
+                            context.theme
                         )
-                        submissionStatus.setCardBackgroundColor(
-                            ResourcesCompat.getColor(
-                                context.resources,
-                                R.color.status_waiting,
-                                context.theme
-                            )
+                        statusColor.background = ResourcesCompat.getDrawable(
+                            context.resources,
+                            R.drawable.gradient_waiting_color,
+                            context.theme
                         )
                         submissionStatusText.text = "Waiting"
                         submissionStatusText.setTextColor(
@@ -179,19 +164,15 @@ class SubmissionRvAdapter(val context: Context, val data: ArrayList<SubmissionLi
                     }
 
                     2 -> {
-                        header.setBackgroundColor(
-                            ResourcesCompat.getColor(
-                                context.resources,
-                                R.color.status_approved,
-                                context.theme
-                            )
+                        header.background = ResourcesCompat.getDrawable(
+                            context.resources,
+                            R.drawable.gradient_approved_color,
+                            context.theme
                         )
-                        submissionStatus.setCardBackgroundColor(
-                            ResourcesCompat.getColor(
-                                context.resources,
-                                R.color.status_approved,
-                                context.theme
-                            )
+                        statusColor.background = ResourcesCompat.getDrawable(
+                            context.resources,
+                            R.drawable.gradient_approved_color,
+                            context.theme
                         )
                         submissionStatusText.text = "Approved"
                         submissionStatusText.setTextColor(
@@ -204,19 +185,15 @@ class SubmissionRvAdapter(val context: Context, val data: ArrayList<SubmissionLi
                     }
 
                     22 -> {
-                        header.setBackgroundColor(
-                            ResourcesCompat.getColor(
-                                context.resources,
-                                R.color.status_hold,
-                                context.theme
-                            )
+                        header.background = ResourcesCompat.getDrawable(
+                            context.resources,
+                            R.drawable.gradient_hold_color,
+                            context.theme
                         )
-                        submissionStatus.setCardBackgroundColor(
-                            ResourcesCompat.getColor(
-                                context.resources,
-                                R.color.status_hold,
-                                context.theme
-                            )
+                        statusColor.background = ResourcesCompat.getDrawable(
+                            context.resources,
+                            R.drawable.gradient_hold_color,
+                            context.theme
                         )
                         submissionStatusText.text = "Hold"
                         submissionStatusText.setTextColor(
@@ -229,19 +206,15 @@ class SubmissionRvAdapter(val context: Context, val data: ArrayList<SubmissionLi
                     }
 
                     3 -> {
-                        header.setBackgroundColor(
-                            ResourcesCompat.getColor(
-                                context.resources,
-                                R.color.status_on_progress,
-                                context.theme
-                            )
+                        header.background = ResourcesCompat.getDrawable(
+                            context.resources,
+                            R.drawable.gradient_on_progress_color,
+                            context.theme
                         )
-                        submissionStatus.setCardBackgroundColor(
-                            ResourcesCompat.getColor(
-                                context.resources,
-                                R.color.status_on_progress,
-                                context.theme
-                            )
+                        statusColor.background = ResourcesCompat.getDrawable(
+                            context.resources,
+                            R.drawable.gradient_on_progress_color,
+                            context.theme
                         )
                         submissionStatusText.text = "On Progress"
                         submissionStatusText.setTextColor(
@@ -254,19 +227,15 @@ class SubmissionRvAdapter(val context: Context, val data: ArrayList<SubmissionLi
                     }
 
                     30 -> {
-                        header.setBackgroundColor(
-                            ResourcesCompat.getColor(
-                                context.resources,
-                                R.color.status_progress_done,
-                                context.theme
-                            )
+                        header.background = ResourcesCompat.getDrawable(
+                            context.resources,
+                            R.drawable.gradient_progress_done_color,
+                            context.theme
                         )
-                        submissionStatus.setCardBackgroundColor(
-                            ResourcesCompat.getColor(
-                                context.resources,
-                                R.color.status_progress_done,
-                                context.theme
-                            )
+                        statusColor.background = ResourcesCompat.getDrawable(
+                            context.resources,
+                            R.drawable.gradient_progress_done_color,
+                            context.theme
                         )
                         submissionStatusText.text = "Progress Done"
                         submissionStatusText.setTextColor(
@@ -279,19 +248,15 @@ class SubmissionRvAdapter(val context: Context, val data: ArrayList<SubmissionLi
                     }
 
                     4 -> {
-                        header.setBackgroundColor(
-                            ResourcesCompat.getColor(
-                                context.resources,
-                                R.color.status_done,
-                                context.theme
-                            )
+                        header.background = ResourcesCompat.getDrawable(
+                            context.resources,
+                            R.drawable.gradient_done_color,
+                            context.theme
                         )
-                        submissionStatus.setCardBackgroundColor(
-                            ResourcesCompat.getColor(
-                                context.resources,
-                                R.color.status_done,
-                                context.theme
-                            )
+                        statusColor.background = ResourcesCompat.getDrawable(
+                            context.resources,
+                            R.drawable.gradient_done_color,
+                            context.theme
                         )
                         submissionStatusText.text = "Done"
                         submissionStatusText.setTextColor(
@@ -304,44 +269,36 @@ class SubmissionRvAdapter(val context: Context, val data: ArrayList<SubmissionLi
                     }
 
                     5 -> {
-                        header.setBackgroundColor(
-                            ResourcesCompat.getColor(
-                                context.resources,
-                                R.color.custom_toast_background_failed,
-                                context.theme
-                            )
+                        header.background = ResourcesCompat.getDrawable(
+                            context.resources,
+                            R.drawable.gradient_canceled_color,
+                            context.theme
                         )
-                        submissionStatus.setCardBackgroundColor(
-                            ResourcesCompat.getColor(
-                                context.resources,
-                                R.color.custom_toast_background_failed,
-                                context.theme
-                            )
+                        statusColor.background = ResourcesCompat.getDrawable(
+                            context.resources,
+                            R.drawable.gradient_canceled_color,
+                            context.theme
                         )
                         submissionStatusText.text = "Canceled"
                         submissionStatusText.setTextColor(
                             ResourcesCompat.getColor(
                                 context.resources,
-                                R.color.custom_toast_font_failed,
+                                R.color.white,
                                 context.theme
                             )
                         )
                     }
 
                     31 -> {
-                        header.setBackgroundColor(
-                            ResourcesCompat.getColor(
-                                context.resources,
-                                R.color.status_on_trial,
-                                context.theme
-                            )
+                        header.background = ResourcesCompat.getDrawable(
+                            context.resources,
+                            R.drawable.gradient_on_trial_color,
+                            context.theme
                         )
-                        submissionStatus.setCardBackgroundColor(
-                            ResourcesCompat.getColor(
-                                context.resources,
-                                R.color.status_on_trial,
-                                context.theme
-                            )
+                        statusColor.background = ResourcesCompat.getDrawable(
+                            context.resources,
+                            R.drawable.gradient_on_trial_color,
+                            context.theme
                         )
                         submissionStatusText.text = "On Trial"
                         submissionStatusText.setTextColor(
