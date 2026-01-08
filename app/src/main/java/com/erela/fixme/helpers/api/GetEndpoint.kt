@@ -9,6 +9,8 @@ import com.erela.fixme.objects.LoginResponse
 import com.erela.fixme.objects.MaterialListResponse
 import com.erela.fixme.objects.SubmissionDetailResponse
 import com.erela.fixme.objects.SubmissionListResponse
+import com.erela.fixme.objects.SubmissionProgressResponse
+import com.erela.fixme.objects.SubmissionTrialResponse
 import com.erela.fixme.objects.SupervisorTechnicianListResponse
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
@@ -74,6 +76,12 @@ interface GetEndpoint {
         @Field("id") submissionID: String,
         @Field("id_notif") notificationID: Int? = null
     ): Call<List<SubmissionDetailResponse>>
+
+    @FormUrlEncoded
+    @POST("getProgress")
+    fun getSubmissionProgress(
+        @Field("id_gaprojects") idGaProjects: Int
+    ): Call<SubmissionProgressResponse>
 
     @Multipart
     @POST("submitReport")
@@ -205,6 +213,12 @@ interface GetEndpoint {
         @Field("id") idGaProjects: Int,
         @Field("id_user") idUser: Int
     ): Call<GenericSimpleResponse>
+
+    @FormUrlEncoded
+    @POST("getTrial")
+    fun getTrial(
+        @Field("id_gaprojects") idGaProjects: Int
+    ): Call<SubmissionTrialResponse>
 
     @FormUrlEncoded
     @POST("startTrial")

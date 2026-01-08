@@ -27,7 +27,7 @@ import com.erela.fixme.helpers.api.InitAPI
 import com.erela.fixme.objects.CreationResponse
 import com.erela.fixme.objects.GenericSimpleResponse
 import com.erela.fixme.objects.MaterialListResponse
-import com.erela.fixme.objects.ProgressItem
+import com.erela.fixme.objects.ProgressItems
 import com.erela.fixme.objects.SubmissionDetailResponse
 import com.erela.fixme.objects.UserData
 import com.google.android.flexbox.FlexDirection
@@ -50,7 +50,7 @@ class ProgressFormActivity : AppCompatActivity() {
         UserDataHelper(applicationContext).getUserData()
     }
     private var detail: SubmissionDetailResponse? = null
-    private var progressData: ProgressItem? = null
+    private var progressData: ProgressItems? = null
     private var editMaterial: Boolean = false
     private var selectedMaterialsArrayList: ArrayList<MaterialListResponse> = ArrayList()
     private lateinit var materialAdapter: SelectedMaterialsRvAdapters
@@ -112,7 +112,7 @@ class ProgressFormActivity : AppCompatActivity() {
             }
             progressData = try {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-                    intent.getParcelableExtra("data", ProgressItem::class.java)!!
+                    intent.getParcelableExtra("data", ProgressItems::class.java)!!
                 } else {
                     @Suppress("DEPRECATION") intent.getParcelableExtra("data")
                 }
@@ -138,27 +138,27 @@ class ProgressFormActivity : AppCompatActivity() {
                         "Simpan Suntingan Kemajuan"
                     else
                         "Save Edited Progress"
-                repairAnalysisField.setText(progressData?.analisa)
-                if (!progressData?.analisa.isNullOrEmpty())
+                repairAnalysisField.setText(progressData?.progress?.analisa)
+                if (!progressData?.progress?.analisa.isNullOrEmpty())
                     isFormEmpty[0] = true
-                descriptionField.setText(progressData?.keterangan)
-                if (!progressData?.keterangan.isNullOrEmpty())
+                descriptionField.setText(progressData?.progress?.keterangan)
+                if (!progressData?.progress?.keterangan.isNullOrEmpty())
                     isFormEmpty[1] = true
-                if (progressData?.material!!.isNotEmpty()) {
-                    oldMaterialCount = progressData?.material!!.size
-                    for (i in 0 until progressData?.material!!.size) {
+                if (progressData?.progress?.material!!.isNotEmpty()) {
+                    oldMaterialCount = progressData?.progress?.material!!.size
+                    for (i in 0 until progressData?.progress?.material!!.size) {
                         selectedMaterialsArrayList.add(
                             MaterialListResponse(
-                                progressData?.material!![i]?.stsAktif,
-                                progressData?.material!![i]?.harga,
-                                progressData?.material!![i]?.namaMaterial,
-                                progressData?.material!![i]?.satuan,
-                                progressData?.material!![i]?.idMaterial,
-                                progressData?.material!![i]?.kodeMaterial,
-                                progressData?.material!![i]?.idKategori
+                                progressData?.progress?.material!![i]?.stsAktif,
+                                progressData?.progress?.material!![i]?.harga,
+                                progressData?.progress?.material!![i]?.namaMaterial,
+                                progressData?.progress?.material!![i]?.satuan,
+                                progressData?.progress?.material!![i]?.idMaterial,
+                                progressData?.progress?.material!![i]?.kodeMaterial,
+                                progressData?.progress?.material!![i]?.idKategori
                             )
                         )
-                        materialQuantityList.add(progressData?.material!![i]?.qtyMaterial!!)
+                        materialQuantityList.add(progressData?.progress?.material!![i]?.qtyMaterial!!)
                     }
                 }
             }
@@ -253,7 +253,7 @@ class ProgressFormActivity : AppCompatActivity() {
                                                     if (result?.code == 1) {
                                                         if (selectedMaterialsArrayList.size - 1 > oldMaterialCount) {
                                                             if (prepareRequestMaterialForm(
-                                                                    progressData!!
+                                                                    progressData!!.progress!!
                                                                         .idGaprojectsDetail!!
                                                                 )
                                                             ) {
@@ -1106,10 +1106,13 @@ class ProgressFormActivity : AppCompatActivity() {
         binding.apply {
             with(requestBodyMap) {
                 put("id_user", createPartFromString(userData.id.toString())!!)
-                put("id_gaprojects", createPartFromString(progressData?.idGaprojects.toString())!!)
+                put(
+                    "id_gaprojects",
+                    createPartFromString(progressData?.progress?.idGaprojects.toString())!!
+                )
                 put(
                     "id_gaprojects_detail",
-                    createPartFromString(progressData?.idGaprojectsDetail.toString())!!
+                    createPartFromString(progressData?.progress?.idGaprojectsDetail.toString())!!
                 )
                 if (!editMaterial) {
                     put(

@@ -33,34 +33,51 @@
         android:textSize="@dimen/text_size_large"
         android:textStyle="bold" />
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rvTrial"
-        android:layout_width="match_parent"
-        android:layout_height="450dp"
-        android:layout_marginTop="@dimen/user_info_item_margin_top"
-        tools:itemCount="2"
-        tools:listitem="@layout/list_item_progress" />
-
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/trialActionButton"
         android:layout_width="match_parent"
         android:layout_height="@dimen/bottom_sheet_padding_bottom"
         android:layout_marginHorizontal="@dimen/list_item_padding"
         android:layout_marginTop="@dimen/user_info_item_margin_top"
-        app:cardBackgroundColor="@color/status_on_trial"
+        android:visibility="gone"
         app:cardCornerRadius="@dimen/login_button_corner_radius"
         app:cardElevation="0dp"
         app:strokeWidth="0dp">
 
-        <TextView
-            android:id="@+id/trialActionText"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:textAlignment="center"
-            android:textColor="@color/white"
-            android:textSize="@dimen/text_size_small"
-            android:textStyle="bold"
-            tools:text="@string/report_trial" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/gradient_on_trial_color"
+            android:gravity="center">
+
+            <TextView
+                android:id="@+id/trialActionText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:textAlignment="center"
+                android:textColor="@color/white"
+                android:textSize="@dimen/text_size_small"
+                android:textStyle="bold"
+                tools:text="@string/report_trial" />
+        </LinearLayout>
     </com.google.android.material.card.MaterialCardView>
+
+    <ProgressBar
+        android:id="@+id/loadingBar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="@dimen/user_info_item_margin_top"
+        android:indeterminateTint="@color/button_color"
+        android:visibility="gone" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvTrial"
+        android:layout_width="match_parent"
+        android:layout_height="450dp"
+        android:layout_marginTop="@dimen/user_info_item_margin_top"
+        android:visibility="gone"
+        tools:itemCount="2"
+        tools:listitem="@layout/list_item_progress" />
 </LinearLayout>

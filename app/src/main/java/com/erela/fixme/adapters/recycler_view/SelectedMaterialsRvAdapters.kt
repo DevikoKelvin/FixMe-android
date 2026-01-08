@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.CheckBox
 import androidx.core.content.ContextCompat
+import androidx.core.content.res.ResourcesCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.erela.fixme.R
 import com.erela.fixme.bottom_sheets.MaterialQuantityBottomSheet
@@ -42,19 +43,17 @@ class SelectedMaterialsRvAdapters(
                 itemText.text = item.namaMaterial
                 if (adapterPosition == selectedMaterialsArrayList.size - 1) {
                     amountText.visibility = View.GONE
-                    mainContainer.setCardBackgroundColor(
-                        ContextCompat.getColor(
-                            context,
-                            R.color.custom_toast_background_success
-                        )
+                    mainContainerColor.background = ResourcesCompat.getDrawable(
+                        context.resources,
+                        R.drawable.gradient_add_color,
+                        context.theme
                     )
                 } else {
                     amountText.visibility = View.VISIBLE
-                    mainContainer.setCardBackgroundColor(
-                        ContextCompat.getColor(
-                            context,
-                            R.color.custom_toast_background_normal
-                        )
+                    mainContainerColor.background = ResourcesCompat.getDrawable(
+                        context.resources,
+                        R.drawable.gradient_logout_color,
+                        context.theme
                     )
                 }
                 amountText.text = if (materialQuantityList.isNotEmpty())

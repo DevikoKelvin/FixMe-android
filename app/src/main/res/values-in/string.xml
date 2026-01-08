@@ -139,6 +139,7 @@
     <string name="app_settings_title">Pengaturan</string>
     <string name="about">Tentang aplikasi</string>
     <string name="about_fixme">Aplikasi pelaporan dan pengelolaan kerusakan peralatan dan infrastruktur di PT Erlangga Edi Laboratories (ERELA) Semarang</string>
+    <string name="account_settings">Pengaturan akun</string>
     <string name="app_update">Pembaruan aplikasi</string>
     <string name="check_for_update_now">Periksa pembaruan aplikasi</string>
     <string name="update_available_title">Pembaruan Tersedia</string>

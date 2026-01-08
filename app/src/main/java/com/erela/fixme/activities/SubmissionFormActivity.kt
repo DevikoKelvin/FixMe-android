@@ -234,20 +234,20 @@ class SubmissionFormActivity : AppCompatActivity(), OnMapReadyCallback {
 
             if (detail != null) {
                 pageTitle.text = getString(R.string.edit_submission_title)
-                caseTitleField.setText("${detail?.judulKasus}")
+                caseTitleField.setText(detail?.judulKasus ?: "")
                 isFormEmpty[0] = true
-                locationField.setText("${detail?.lokasi}")
+                locationField.setText(detail?.lokasi ?: "")
                 isFormEmpty[1] = true
-                selectedDepartment = detail?.idDeptTujuan!!
+                selectedDepartment = detail?.idDeptTujuan ?: 0
                 getDepartmentList()
                 isFormEmpty[2] = true
-                selectedCategory = detail?.idKategori!!
+                selectedCategory = detail?.idKategori ?: 0
                 getCategoryList()
-                isFormEmpty[4] = detail?.kodeMesin!!.isNotEmpty()
-                machineCodeField.setText("${detail?.kodeMesin}".ifEmpty { "" })
-                isFormEmpty[5] = detail?.namaMesin!!.isNotEmpty()
-                machineNameField.setText("${detail?.namaMesin}".ifEmpty { "" })
-                descriptionField.setText("${detail?.keterangan}")
+                isFormEmpty[4] = !detail?.kodeMesin.isNullOrEmpty()
+                machineCodeField.setText(detail?.kodeMesin ?: "")
+                isFormEmpty[5] = !detail?.namaMesin.isNullOrEmpty()
+                machineNameField.setText(detail?.namaMesin ?: "")
+                descriptionField.setText(detail?.keterangan ?: "")
                 isFormEmpty[6] = true
                 if (detail?.fotoGaprojects!!.isNotEmpty()) {
                     manageAttachmentText.text = getString(R.string.manage_new_photo)
@@ -796,6 +796,14 @@ class SubmissionFormActivity : AppCompatActivity(), OnMapReadyCallback {
                 put(
                     "keterangan",
                     createPartFromString(descriptionField.text.toString())!!
+                )
+                put(
+                    "lat",
+                    createPartFromString(latitude.toString())!!
+                )
+                put(
+                    "long",
+                    createPartFromString(longitude.toString())!!
                 )
             }
         }

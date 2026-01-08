@@ -150,9 +150,15 @@ class SettingsActivity : AppCompatActivity() {
                 onBackPressedDispatcher.onBackPressed()
             }
 
-            val buildType = if (BuildConfig.BUILD_TYPE == "debug") "dev_${BuildConfig.BUILD_TYPE}" else "pre_${BuildConfig.BUILD_TYPE}"
+            changePasswordButton.setOnClickListener {
+                startActivity(Intent(this@SettingsActivity, ChangePasswordActivity::class.java))
+            }
+
+            val buildType =
+                if (BuildConfig.BUILD_TYPE == "debug") "dev_${BuildConfig.BUILD_TYPE}" else "pre_${BuildConfig.BUILD_TYPE}"
             currentAppVersion = BuildConfig.VERSION_NAME
-            val appVersionText = "${BuildConfig.VERSION_NAME}.${BuildConfig.VERSION_CODE}.${buildType}.${BuildConfig.BUILD_TIMESTAMP}"
+            val appVersionText =
+                "${BuildConfig.VERSION_NAME}.${BuildConfig.VERSION_CODE}.${buildType}.${BuildConfig.BUILD_TIMESTAMP}"
             currentAppVersionText.text = if (getString(R.string.lang) == "in")
                 "Versi aplikasi saat ini: $appVersionText"
             else
@@ -163,6 +169,7 @@ class SettingsActivity : AppCompatActivity() {
                     startDownload(downloadLink!!)
                 } else {
                     loadingBar.visibility = View.VISIBLE
+                    statusIcon.visibility = View.GONE
                     val handler = Handler(Looper.getMainLooper())
                     val runnable = object : Runnable {
                         var count = 1
@@ -193,7 +200,10 @@ class SettingsActivity : AppCompatActivity() {
                                 ) {
                                     loadingBar.visibility = View.GONE
                                     handler.removeCallbacks(runnable)
-                                    val comparison = VersionHelper.compareVersions(update?.latestVersion, currentAppVersion)
+                                    val comparison = VersionHelper.compareVersions(
+                                        update?.latestVersion,
+                                        currentAppVersion
+                                    )
                                     if (comparison > 0) {
                                         checkDownloadInstallText.text =
                                             getString(R.string.download_update)
@@ -211,12 +221,16 @@ class SettingsActivity : AppCompatActivity() {
                                             else
                                                 "Detected new app version: ${update?.latestVersion}"
                                         newAppVersionText.visibility = View.VISIBLE
+                                        statusIcon.setImageDrawable(getDrawable(R.drawable.caution_icon))
+                                        statusIcon.visibility = View.VISIBLE
                                         downloadLink = update?.urlToDownload.toString().replace(
                                             "latest",
                                             "download/v${update?.latestVersion}/Erela_FixMe_prerelease_v${update?.latestVersion}.apk"
                                         )
                                     } else {
                                         if (comparison < 0) {
+                                            statusIcon.setImageDrawable(getDrawable(R.drawable.question_mark_icon))
+                                            statusIcon.visibility = View.VISIBLE
                                             CustomToast.getInstance(applicationContext)
                                                 .setMessage(
                                                     if (getString(R.string.lang) == "in")
@@ -237,6 +251,7 @@ class SettingsActivity : AppCompatActivity() {
                                                     )
                                                 ).show()
                                         } else {
+                                            statusIcon.visibility = View.GONE
                                             CustomToast.getInstance(applicationContext)
                                                 .setMessage(
                                                     if (getString(R.string.lang) == "in")
@@ -302,6 +317,8 @@ class SettingsActivity : AppCompatActivity() {
                                         getString(R.string.check_for_update_now)
                                     updateAvailableStatus.visibility = View.GONE
                                     newAppVersionText.visibility = View.GONE
+                                    statusIcon.setImageDrawable(getDrawable(R.drawable.connection_error_icon))
+                                    statusIcon.visibility = View.VISIBLE
                                     Log.e("ERROR Update", error.toString())
                                 }
                             })

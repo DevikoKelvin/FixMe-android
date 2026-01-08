@@ -12,6 +12,7 @@ import android.widget.ImageView
 import android.widget.LinearLayout
 import androidx.cardview.widget.CardView
 import androidx.core.content.ContextCompat
+import androidx.core.content.res.ResourcesCompat
 import androidx.recyclerview.widget.RecyclerView
 import androidx.transition.TransitionManager
 import com.bumptech.glide.Glide
@@ -24,7 +25,6 @@ import com.erela.fixme.adapters.pager.ImageCarouselPagerAdapter
 import com.erela.fixme.databinding.ListItemProgressBinding
 import com.erela.fixme.helpers.UserDataHelper
 import com.erela.fixme.helpers.api.InitAPI
-import com.erela.fixme.objects.ProgressItem
 import com.erela.fixme.objects.ProgressItems
 import com.erela.fixme.objects.SubmissionDetailResponse
 import com.erela.fixme.objects.UserData
@@ -57,10 +57,18 @@ class ProgressRvAdapter(
             binding.apply {
                 if (item.progress != null) {
                     usernameText.background = if (item.progress.stsDetail == 1)
-                        ContextCompat.getDrawable(context, R.color.status_approved)
+                        ResourcesCompat.getDrawable(
+                            context.resources,
+                            R.drawable.gradient_approved_color,
+                            context.theme
+                        )
                     else
-                        ContextCompat.getDrawable(context, R.color.highlight_blue)
-                    usernameText.text = item.progress.namaUserProgress?.trimEnd()
+                        ResourcesCompat.getDrawable(
+                            context.resources,
+                            R.drawable.gradient_notification_color,
+                            context.theme
+                        )
+                    usernameText.text = item.progress.namaUser
                     progressAnalysis.text = item.progress.analisa
                     progressDescription.text = item.progress.keterangan
                     dateTimeText.text = item.progress.tglWaktu?.replace(
@@ -218,7 +226,7 @@ class ProgressRvAdapter(
                                 override fun onLoadFailed(
                                     e: GlideException?,
                                     model: Any?,
-                                    target: com.bumptech.glide.request.target.Target<Drawable?>?,
+                                    target: Target<Drawable?>?,
                                     isFirstResource: Boolean
                                 ): Boolean {
                                     Log.e("ProgressImage", "Glide onLoadFailed: ", e)
@@ -256,14 +264,14 @@ class ProgressRvAdapter(
                 imageCarouselHolder.setOnLongClickListener {
                     if (userData.id == item.progress?.idUser) {
                         if (detail.stsGaprojects == 3 && item.progress.stsDetail == 0)
-                            onItemHoldTapListener.onItemHoldTap(item.progress, false)
+                            onItemHoldTapListener.onItemHoldTap(item, false)
                     } else {
                         for (i in 0 until detail.usernUserSpv!!.size) {
                             if (userData.id == detail.usernUserSpv[i]?.idUser) {
                                 if (detail.stsGaprojects == 3 && item.progress?.stsDetail == 0 &&
                                     item.progress.approveMaterialStatus == 0
                                 )
-                                    onItemHoldTapListener.onItemHoldTap(item.progress, true)
+                                    onItemHoldTapListener.onItemHoldTap(item, true)
                                 break
                             }
                         }
@@ -274,14 +282,14 @@ class ProgressRvAdapter(
                 submissionImage.setOnLongClickListener {
                     if (userData.id == item.progress?.idUser) {
                         if (detail.stsGaprojects == 3 && item.progress.stsDetail == 0)
-                            onItemHoldTapListener.onItemHoldTap(item.progress, false)
+                            onItemHoldTapListener.onItemHoldTap(item, false)
                     } else {
                         for (i in 0 until detail.usernUserSpv!!.size) {
                             if (userData.id == detail.usernUserSpv[i]?.idUser) {
                                 if (detail.stsGaprojects == 3 && item.progress?.stsDetail == 0 &&
                                     item.progress.approveMaterialStatus == 0
                                 )
-                                    onItemHoldTapListener.onItemHoldTap(item.progress, true)
+                                    onItemHoldTapListener.onItemHoldTap(item, true)
                                 break
                             }
                         }
@@ -292,13 +300,13 @@ class ProgressRvAdapter(
                 itemView.setOnLongClickListener {
                     if (userData.id == item.progress?.idUser) {
                         if (detail.stsGaprojects == 3 && item.progress.stsDetail == 0)
-                            onItemHoldTapListener.onItemHoldTap(item.progress, false)
+                            onItemHoldTapListener.onItemHoldTap(item, false)
                     } else {
                         for (i in 0 until detail.usernUserSpv!!.size) {
                             if (userData.id == detail.usernUserSpv[i]?.idUser) {
                                 if (detail.stsGaprojects == 3 && item.progress?.stsDetail == 0
                                 )
-                                    onItemHoldTapListener.onItemHoldTap(item.progress, true)
+                                    onItemHoldTapListener.onItemHoldTap(item, true)
                                 break
                             }
                         }
@@ -333,6 +341,6 @@ class ProgressRvAdapter(
     }
 
     interface OnItemHoldTapListener {
-        fun onItemHoldTap(item: ProgressItem?, forSpv: Boolean)
+        fun onItemHoldTap(item: ProgressItems?, forSpv: Boolean)
     }
 }

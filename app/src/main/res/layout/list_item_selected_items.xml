@@ -8,16 +8,16 @@
     android:layout_marginVertical="@dimen/list_item_selected_items_margin_vertical"
     android:layout_marginEnd="@dimen/list_item_selected_items_margin_end"
     app:cardCornerRadius="@dimen/list_item_selected_items_card_corner_radius"
-    app:cardElevation="0dp"
-    app:contentPaddingBottom="@dimen/list_item_selected_items_content_padding_vertical"
-    app:contentPaddingLeft="@dimen/list_item_selected_items_content_padding_horizontal"
-    app:contentPaddingRight="@dimen/list_item_selected_items_content_padding_horizontal"
-    app:contentPaddingTop="@dimen/list_item_selected_items_content_padding_vertical">
+    app:cardElevation="0dp">
 
     <LinearLayout
+        android:id="@+id/mainContainerColor"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        tools:background="@drawable/gradient_add_color"
+        android:paddingHorizontal="@dimen/list_item_selected_items_content_padding_horizontal"
+        android:paddingVertical="@dimen/list_item_selected_items_content_padding_vertical">
 
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/deleteButton"
@@ -34,6 +34,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:src="@drawable/baseline_close_24"
+                android:tint="@color/black"
                 tools:ignore="ContentDescription" />
         </com.google.android.material.card.MaterialCardView>
 

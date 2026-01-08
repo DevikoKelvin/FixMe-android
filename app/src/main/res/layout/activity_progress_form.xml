@@ -142,102 +142,10 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="@dimen/list_item_padding"
+                android:layout_marginTop="@dimen/toast_internal_padding"
                 android:layout_marginBottom="@dimen/bottom_sheet_drawer_width"
-                android:textSize="@dimen/text_size_micro"
-                android:text="@string/materials_hint" />
-
-            <!--<TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginHorizontal="16dp"
-                android:layout_marginTop="8dp"
-                android:text="@string/attach_photo"
-                android:textColor="@color/black"
-                android:textSize="14sp"
-                android:textStyle="bold" />
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginHorizontal="16dp"
-                android:layout_marginTop="4dp"
-                android:layout_marginBottom="16dp"
-                android:orientation="horizontal">
-
-                <com.google.android.material.card.MaterialCardView
-                    android:id="@+id/chooseFileButton"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginVertical="4dp"
-                    app:cardBackgroundColor="@color/button_color"
-                    app:cardCornerRadius="50dp"
-                    app:cardElevation="2dp"
-                    app:contentPaddingBottom="8dp"
-                    app:contentPaddingLeft="16dp"
-                    app:contentPaddingRight="16dp"
-                    app:contentPaddingTop="8dp"
-                    app:strokeWidth="0dp">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/choose_file"
-                        android:textColor="@color/white"
-                        android:textSize="16sp"
-                        android:textStyle="bold" />
-                </com.google.android.material.card.MaterialCardView>
-
-                <com.google.android.material.card.MaterialCardView
-                    android:id="@+id/manageAttachmentButton"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_marginStart="8dp"
-                    android:visibility="gone"
-                    app:cardBackgroundColor="@android:color/transparent"
-                    app:cardCornerRadius="50dp"
-                    app:cardElevation="0dp"
-                    app:contentPaddingBottom="8dp"
-                    app:contentPaddingLeft="16dp"
-                    app:contentPaddingRight="16dp"
-                    app:contentPaddingTop="8dp"
-                    app:strokeWidth="0dp">
-
-                    <TextView
-                        android:id="@+id/manageAttachmentText"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/manage_photo"
-                        android:textColor="@color/black"
-                        android:textSize="12sp"
-                        android:textStyle="bold" />
-                </com.google.android.material.card.MaterialCardView>
-
-                <com.google.android.material.card.MaterialCardView
-                    android:id="@+id/manageOldAttachmentButton"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_marginStart="8dp"
-                    android:visibility="gone"
-                    app:cardBackgroundColor="@android:color/transparent"
-                    app:cardCornerRadius="50dp"
-                    app:cardElevation="0dp"
-                    app:contentPaddingBottom="8dp"
-                    app:contentPaddingLeft="16dp"
-                    app:contentPaddingRight="16dp"
-                    app:contentPaddingTop="8dp"
-                    app:strokeWidth="0dp">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/manage_old_photo"
-                        android:textColor="@color/black"
-                        android:textSize="12sp"
-                        android:textStyle="bold" />
-                </com.google.android.material.card.MaterialCardView>
-            </LinearLayout>-->
+                android:text="@string/materials_hint"
+                android:textSize="@dimen/text_size_micro" />
         </LinearLayout>
     </ScrollView>
 
@@ -246,7 +154,6 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/bottom_sheet_padding_bottom"
         android:layout_margin="@dimen/list_item_padding"
-        app:cardBackgroundColor="@color/button_color"
         app:cardCornerRadius="@dimen/login_button_corner_radius"
         app:cardElevation="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -256,11 +163,11 @@
 
         <TextView
             android:id="@+id/progressActionText"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/gradient_accent_color"
+            android:gravity="center"
             android:text="@string/create_new_progress"
-            android:textAlignment="center"
             android:textColor="@color/white"
             android:textSize="@dimen/text_size_medium"
             android:textStyle="bold" />

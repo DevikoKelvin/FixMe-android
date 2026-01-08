@@ -66,7 +66,7 @@
         android:layout_marginHorizontal="@dimen/list_item_padding"
         android:layout_marginTop="@dimen/user_info_item_margin_top"
         android:orientation="horizontal"
-        android:visibility="gone">
+        android:visibility="visible">
 
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/notPassButton"
@@ -128,7 +128,7 @@
                 android:layout_gravity="center_vertical"
                 android:layout_marginStart="@dimen/dialog_loading_content_padding"
                 android:indeterminateTint="@color/custom_toast_font_success"
-                android:visibility="gone" />
+                android:visibility="visible" />
         </com.google.android.material.card.MaterialCardView>
     </LinearLayout>
 </LinearLayout>

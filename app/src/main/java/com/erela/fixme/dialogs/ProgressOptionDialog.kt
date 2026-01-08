@@ -7,10 +7,10 @@ import android.os.Bundle
 import android.view.View
 import androidx.core.graphics.drawable.toDrawable
 import com.erela.fixme.databinding.DialogProgressOptionBinding
-import com.erela.fixme.objects.ProgressItem
+import com.erela.fixme.objects.ProgressItems
 
 class ProgressOptionDialog(
-    context: Context, private val progress: ProgressItem, private val forSpv: Boolean
+    context: Context, private val progress: ProgressItems, private val forSpv: Boolean
 ) : Dialog(context) {
     private val binding: DialogProgressOptionBinding by lazy {
         DialogProgressOptionBinding.inflate(layoutInflater)
@@ -40,15 +40,15 @@ class ProgressOptionDialog(
                     dismiss()
                 }
                 approveMaterialButton.visibility = View.VISIBLE
-                if (progress.material!!.isNotEmpty()) {
-                    if (progress.approveMaterialStatus == 0) {
+                if (progress.progress?.material!!.isNotEmpty()) {
+                    if (progress.progress.approveMaterialStatus == 0) {
                         approveMaterialButton.isEnabled = true
                         approveMaterialButton.alpha = 1.0f
                         approveMaterialButton.setOnClickListener {
                             onProgressOptionDialogListener.onMaterialApproved(progress)
                             dismiss()
                         }
-                    } else if (progress.approveMaterialStatus == 1) {
+                    } else if (progress.progress.approveMaterialStatus == 1) {
                         approveMaterialButton.isEnabled = false
                         approveMaterialButton.alpha = 0.5f
                     }
@@ -68,9 +68,9 @@ class ProgressOptionDialog(
                 onProgressOptionDialogListener.onProgressDeleted(progress)
                 dismiss()
             }
-            if (progress.stsDetail == 0) {
-                if (progress.material!!.isNotEmpty()) {
-                    if (progress.approveMaterialStatus == 0) {
+            if (progress.progress?.stsDetail == 0) {
+                if (progress.progress.material!!.isNotEmpty()) {
+                    if (progress.progress.approveMaterialStatus == 0) {
                         doneButton.isEnabled = false
                         doneButton.alpha = 0.5f
                         editButton.isEnabled = true
@@ -78,7 +78,7 @@ class ProgressOptionDialog(
                             onProgressOptionDialogListener.onProgressEdited(progress)
                             dismiss()
                         }
-                    } else if (progress.approveMaterialStatus == 1) {
+                    } else if (progress.progress.approveMaterialStatus == 1) {
                         doneButton.isEnabled = true
                         doneButton.setOnClickListener {
                             onProgressOptionDialogListener.onProgressSetDone(progress)
@@ -117,10 +117,10 @@ class ProgressOptionDialog(
     }
 
     interface OnProgressOptionDialogListener {
-        fun onProgressDeleted(data: ProgressItem)
-        fun onProgressEdited(data: ProgressItem)
-        fun onProgressSetDone(data: ProgressItem)
-        fun onMaterialEdited(data: ProgressItem)
-        fun onMaterialApproved(data: ProgressItem)
+        fun onProgressDeleted(data: ProgressItems)
+        fun onProgressEdited(data: ProgressItems)
+        fun onProgressSetDone(data: ProgressItems)
+        fun onMaterialEdited(data: ProgressItems)
+        fun onMaterialApproved(data: ProgressItems)
     }
 }

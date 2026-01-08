@@ -77,14 +77,14 @@
         android:layout_height="@dimen/button_height"
         android:layout_marginHorizontal="@dimen/activity_horizontal_margin"
         android:layout_marginVertical="@dimen/activity_vertical_margin"
-        app:cardBackgroundColor="@color/status_hold"
         app:cardCornerRadius="@dimen/login_button_corner_radius"
         app:strokeWidth="0dp">
 
         <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/gradient_hold_color"
+            android:gravity="center"
             android:text="@string/hold_issue"
             android:textColor="@color/white"
             android:textSize="@dimen/text_size_medium"

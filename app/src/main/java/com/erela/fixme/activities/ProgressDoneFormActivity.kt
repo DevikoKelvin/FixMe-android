@@ -35,7 +35,7 @@ import com.erela.fixme.helpers.PermissionHelper
 import com.erela.fixme.helpers.UserDataHelper
 import com.erela.fixme.helpers.api.InitAPI
 import com.erela.fixme.objects.GenericSimpleResponse
-import com.erela.fixme.objects.ProgressItem
+import com.erela.fixme.objects.ProgressItems
 import com.erela.fixme.objects.UserData
 import com.google.android.material.textfield.TextInputEditText
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
@@ -61,7 +61,7 @@ class ProgressDoneFormActivity : AppCompatActivity() {
     private val userData: UserData by lazy {
         UserDataHelper(applicationContext).getUserData()
     }
-    private var progressData: ProgressItem? = null
+    private var progressData: ProgressItems? = null
     private val imageArrayUri = ArrayList<Uri>()
     private var cameraCaptureFileName: String = ""
     private lateinit var imageUri: Uri
@@ -155,7 +155,7 @@ class ProgressDoneFormActivity : AppCompatActivity() {
         binding.apply {
             progressData = try {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-                    intent.getParcelableExtra("data", ProgressItem::class.java)!!
+                    intent.getParcelableExtra("data", ProgressItems::class.java)!!
                 } else {
                     @Suppress("DEPRECATION") intent.getParcelableExtra("data")
                 }
@@ -626,7 +626,10 @@ class ProgressDoneFormActivity : AppCompatActivity() {
             }
 
             with(requestBodyMap) {
-                put("id", createPartFromString(progressData?.idGaprojectsDetail.toString())!!)
+                put(
+                    "id",
+                    createPartFromString(progressData?.progress?.idGaprojectsDetail.toString())!!
+                )
                 put("id_user", createPartFromString(userData.id.toString())!!)
                 put("keterangan", createPartFromString(descriptionField.text.toString())!!)
             }

@@ -94,46 +94,106 @@
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="@dimen/activity_horizontal_margin"
                 android:layout_marginTop="@dimen/text_size_xlarge"
+                android:text="@string/account_settings"
+                android:textColor="@color/black"
+                android:textSize="@dimen/text_size_large"
+                android:textStyle="bold" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp">
+
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/changePasswordButton"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="@dimen/activity_horizontal_margin"
+                    android:layout_marginTop="@dimen/dropdown_item_padding_vertical"
+                    android:layout_weight="1"
+                    app:cardCornerRadius="@dimen/card_corner_radius"
+                    app:cardElevation="0dp"
+                    app:strokeWidth="0dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@drawable/gradient_card_color"
+                        android:orientation="horizontal"
+                        android:padding="@dimen/activity_horizontal_margin"
+                        tools:ignore="UseCompoundDrawables">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/change_password_title"
+                            android:textColor="@color/black"
+                            android:textSize="@dimen/text_size_medium"
+                            android:textStyle="bold" />
+                    </LinearLayout>
+                </com.google.android.material.card.MaterialCardView>
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="@dimen/activity_horizontal_margin"
+                android:layout_marginTop="@dimen/text_size_xlarge"
                 android:text="@string/app_update"
                 android:textColor="@color/black"
                 android:textSize="@dimen/text_size_large"
                 android:textStyle="bold" />
 
-            <com.google.android.material.card.MaterialCardView
-                android:id="@+id/checkDownloadInstallButton"
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginHorizontal="@dimen/activity_horizontal_margin"
-                android:layout_marginTop="8dp"
-                app:cardBackgroundColor="@color/button_color"
-                app:cardCornerRadius="@dimen/login_button_corner_radius">
+                android:layout_marginTop="4dp">
 
-                <LinearLayout
-                    android:layout_width="wrap_content"
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/checkDownloadInstallButton"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:paddingStart="@dimen/button_padding"
-                    android:paddingEnd="@dimen/button_padding">
+                    android:layout_marginHorizontal="@dimen/activity_horizontal_margin"
+                    android:layout_marginTop="@dimen/dropdown_item_padding_vertical"
+                    android:layout_weight="1"
+                    app:cardCornerRadius="@dimen/card_corner_radius"
+                    app:cardElevation="0dp"
+                    app:strokeWidth="0dp">
 
-                    <ProgressBar
-                        android:id="@+id/loadingBar"
-                        android:layout_width="24dp"
-                        android:layout_height="24dp"
-                        android:layout_gravity="center_vertical"
-                        android:indeterminateTint="@color/white"
-                        android:visibility="gone" />
-
-                    <TextView
-                        android:id="@+id/checkDownloadInstallText"
-                        android:layout_width="wrap_content"
+                    <LinearLayout
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:paddingHorizontal="8dp"
-                        android:paddingVertical="8dp"
-                        android:text="@string/check_for_update_now"
-                        android:textColor="@color/white"
-                        android:textStyle="bold" />
-                </LinearLayout>
-            </com.google.android.material.card.MaterialCardView>
+                        android:background="@drawable/gradient_card_color"
+                        android:orientation="horizontal"
+                        android:padding="@dimen/activity_horizontal_margin">
+
+                        <TextView
+                            android:id="@+id/checkDownloadInstallText"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="@string/check_for_update_now"
+                            android:textColor="@color/black"
+                            android:textSize="@dimen/text_size_medium"
+                            android:textStyle="bold" />
+
+                        <ImageView
+                            android:id="@+id/statusIcon"
+                            android:layout_width="@dimen/search_icon_size"
+                            android:layout_height="@dimen/search_icon_size"
+                            android:visibility="gone"
+                            tools:src="@drawable/caution_icon" />
+
+                        <ProgressBar
+                            android:id="@+id/loadingBar"
+                            android:layout_width="@dimen/search_icon_size"
+                            android:layout_height="@dimen/search_icon_size"
+                            android:layout_gravity="center_vertical"
+                            android:indeterminateTint="@color/black"
+                            android:visibility="gone" />
+                    </LinearLayout>
+                </com.google.android.material.card.MaterialCardView>
+            </LinearLayout>
 
             <TextView
                 android:id="@+id/updateAvailableStatus"

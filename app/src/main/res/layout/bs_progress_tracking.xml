@@ -61,28 +61,44 @@
         android:layout_marginHorizontal="@dimen/list_item_padding"
         android:layout_marginTop="@dimen/user_info_item_margin_top"
         android:visibility="gone"
-        app:cardBackgroundColor="@color/button_color"
         app:cardCornerRadius="@dimen/login_button_corner_radius"
         app:cardElevation="0dp"
         app:strokeWidth="0dp">
 
-        <TextView
-            android:id="@+id/progressActionText"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:text="@string/create_new_progress"
-            android:textAlignment="center"
-            android:textColor="@color/white"
-            android:textSize="@dimen/text_size_small"
-            android:textStyle="bold" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/gradient_accent_color"
+            android:gravity="center">
+
+            <TextView
+                android:id="@+id/progressActionText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="@string/create_new_progress"
+                android:textAlignment="center"
+                android:textColor="@color/white"
+                android:textSize="@dimen/text_size_small"
+                android:textStyle="bold" />
+        </LinearLayout>
     </com.google.android.material.card.MaterialCardView>
+
+    <ProgressBar
+        android:id="@+id/loadingBar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="@dimen/user_info_item_margin_top"
+        android:indeterminateTint="@color/button_color"
+        android:visibility="gone" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvProgress"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/user_info_item_margin_top"
+        android:visibility="gone"
         tools:itemCount="2"
         tools:listitem="@layout/list_item_progress" />
 </LinearLayout>

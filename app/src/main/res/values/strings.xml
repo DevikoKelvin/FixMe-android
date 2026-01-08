@@ -139,6 +139,7 @@
     <string name="app_settings_title">Settings</string>
     <string name="about">About app</string>
     <string name="about_fixme">An app for reporting and managing damage to equipment and infrastructure at PT Erlangga Edi Laboratories (ERELA) Semarang</string>
+    <string name="account_settings">Account settings</string>
     <string name="app_update">App update</string>
     <string name="check_for_update_now">Check for app update</string>
     <string name="update_available_title">Update Available</string>

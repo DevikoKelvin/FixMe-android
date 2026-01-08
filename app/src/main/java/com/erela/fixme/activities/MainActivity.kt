@@ -333,10 +333,6 @@ class MainActivity : AppCompatActivity() {
                 startActivity(Intent(this@MainActivity, NotificationActivity::class.java))
             }
 
-            changePasswordMenu.setOnClickListener {
-                startActivity(Intent(this@MainActivity, ChangePasswordActivity::class.java))
-            }
-
             makeSubmissionMenu.setOnClickListener {
                 startActivity(Intent(this@MainActivity, SubmissionFormActivity::class.java))
             }

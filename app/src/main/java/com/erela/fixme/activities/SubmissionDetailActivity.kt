@@ -3,11 +3,15 @@ package com.erela.fixme.activities
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
+import android.graphics.Rect
 import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.transition.AutoTransition
+import android.transition.TransitionManager
 import android.util.Log
+import android.view.MotionEvent
 import android.view.View
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.result.ActivityResultLauncher
@@ -42,7 +46,7 @@ import com.erela.fixme.helpers.UserDataHelper
 import com.erela.fixme.helpers.api.InitAPI
 import com.erela.fixme.objects.FotoGaprojectsItem
 import com.erela.fixme.objects.GenericSimpleResponse
-import com.erela.fixme.objects.ProgressItem
+import com.erela.fixme.objects.ProgressItems
 import com.erela.fixme.objects.SubmissionDetailResponse
 import com.erela.fixme.objects.UserData
 import com.skydoves.balloon.ArrowPositionRules
@@ -54,6 +58,11 @@ import org.json.JSONException
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import com.google.android.gms.maps.CameraUpdateFactory
+import com.google.android.gms.maps.GoogleMap
+import com.google.android.gms.maps.OnMapReadyCallback
+import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.MarkerOptions
 import java.util.Locale
 import kotlin.properties.Delegates
 
@@ -62,7 +71,8 @@ class SubmissionDetailActivity : AppCompatActivity(),
     ProgressTrackingBottomSheet.OnProgressTrackingListener,
     ProgressTrackingBottomSheet.OnProgressItemLongTapListener,
     ProgressOptionDialog.OnProgressOptionDialogListener,
-    TrialTrackingBottomSheet.OnTrialTrackingListener {
+    TrialTrackingBottomSheet.OnTrialTrackingListener,
+    OnMapReadyCallback {
     private val binding: ActivitySubmissionDetailBinding by lazy {
         ActivitySubmissionDetailBinding.inflate(layoutInflater)
     }
@@ -76,6 +86,7 @@ class SubmissionDetailActivity : AppCompatActivity(),
     private lateinit var detailData: SubmissionDetailResponse
     private lateinit var progressTrackingBottomSheet: ProgressTrackingBottomSheet
     private var message: StringBuilder = StringBuilder()
+    private var googleMap: GoogleMap? = null
     private var isFabVisible = false
     private var isUpdated = false
     private val activityResultLauncher: ActivityResultLauncher<Intent> = registerForActivityResult(
@@ -85,6 +96,29 @@ class SubmissionDetailActivity : AppCompatActivity(),
             isUpdated = true
             init()
         }
+    }
+
+    override fun dispatchTouchEvent(ev: MotionEvent?): Boolean {
+        if (ev?.action == MotionEvent.ACTION_DOWN) {
+            if (isFabVisible) {
+                val outRect = Rect()
+                binding.actionSelfButton.getGlobalVisibleRect(outRect)
+                if (!outRect.contains(ev.rawX.toInt(), ev.rawY.toInt())) {
+                    val editRect = Rect()
+                    binding.editButton.getGlobalVisibleRect(editRect)
+                    val cancelRect = Rect()
+                    binding.cancelButton.getGlobalVisibleRect(cancelRect)
+
+                    if (!editRect.contains(ev.rawX.toInt(), ev.rawY.toInt()) &&
+                        !cancelRect.contains(ev.rawX.toInt(), ev.rawY.toInt())
+                    ) {
+                        closeFabMenu()
+                        return true
+                    }
+                }
+            }
+        }
+        return super.dispatchTouchEvent(ev)
     }
 
     companion object {
@@ -111,6 +145,9 @@ class SubmissionDetailActivity : AppCompatActivity(),
                 insets
             }
 
+            mapPreview.onCreate(savedInstanceState)
+            mapPreview.getMapAsync(this@SubmissionDetailActivity)
+
             swipeRefresh.setOnRefreshListener {
                 init()
                 swipeRefresh.isRefreshing = false
@@ -124,11 +161,7 @@ class SubmissionDetailActivity : AppCompatActivity(),
     private fun init() {
         binding.apply {
             isFabVisible = false
-            actionSelfButton.extend()
-            editButton.hide()
-            editButton.shrink()
-            cancelButton.hide()
-            cancelButton.shrink()
+            closeFabMenu()
 
             detailId = intent.getStringExtra(DETAIL_ID) ?: run {
                 Log.e("Detail ID", "No DETAIL_ID found in intent")
@@ -188,6 +221,7 @@ class SubmissionDetailActivity : AppCompatActivity(),
                             if (response.isSuccessful) {
                                 if (response.body() != null) {
                                     detailData = response.body()!![0]
+                                    showLocationOnMap()
                                     detailTitle.text = detailData.nomorRequest
                                     if (detailData.fotoGaprojects!!.isEmpty()) {
                                         imageContainer.visibility = View.GONE
@@ -227,14 +261,18 @@ class SubmissionDetailActivity : AppCompatActivity(),
                                                 Log.e("ImageURL", decodedImageURL)
                                                 Glide.with(applicationContext)
                                                     .load(decodedImageURL)
-                                                    .listener(object: RequestListener<Drawable> {
+                                                    .listener(object : RequestListener<Drawable> {
                                                         override fun onLoadFailed(
                                                             e: GlideException?,
                                                             model: Any?,
                                                             target: Target<Drawable?>?,
                                                             isFirstResource: Boolean
                                                         ): Boolean {
-                                                            Log.e("PhotoDetail", "Glide onLoadFailed: ", e)
+                                                            Log.e(
+                                                                "PhotoDetail",
+                                                                "Glide onLoadFailed: ",
+                                                                e
+                                                            )
                                                             return false
                                                         }
 
@@ -250,7 +288,10 @@ class SubmissionDetailActivity : AppCompatActivity(),
                                                     })
                                                     .placeholder(R.drawable.image_placeholder)
                                                     .into(submissionImage)
-                                                val imageZoomHelper = ImageZoomHelper(this@SubmissionDetailActivity, submissionImage)
+                                                val imageZoomHelper = ImageZoomHelper(
+                                                    this@SubmissionDetailActivity,
+                                                    submissionImage
+                                                )
                                                 submissionImage.setOnTouchListener { _, event ->
                                                     imageZoomHelper.init(event!!)
                                                     true
@@ -258,14 +299,18 @@ class SubmissionDetailActivity : AppCompatActivity(),
                                             } else {
                                                 Glide.with(applicationContext)
                                                     .load(InitAPI.IMAGE_URL + image?.foto)
-                                                    .listener(object: RequestListener<Drawable> {
+                                                    .listener(object : RequestListener<Drawable> {
                                                         override fun onLoadFailed(
                                                             e: GlideException?,
                                                             model: Any?,
                                                             target: Target<Drawable?>?,
                                                             isFirstResource: Boolean
                                                         ): Boolean {
-                                                            Log.e("PhotoDetail", "Glide onLoadFailed: ", e)
+                                                            Log.e(
+                                                                "PhotoDetail",
+                                                                "Glide onLoadFailed: ",
+                                                                e
+                                                            )
                                                             return false
                                                         }
 
@@ -281,7 +326,10 @@ class SubmissionDetailActivity : AppCompatActivity(),
                                                     })
                                                     .placeholder(R.drawable.image_placeholder)
                                                     .into(submissionImage)
-                                                val imageZoomHelper = ImageZoomHelper(this@SubmissionDetailActivity, submissionImage)
+                                                val imageZoomHelper = ImageZoomHelper(
+                                                    this@SubmissionDetailActivity,
+                                                    submissionImage
+                                                )
                                                 submissionImage.setOnTouchListener { _, event ->
                                                     imageZoomHelper.init(event!!)
                                                     true
@@ -299,34 +347,38 @@ class SubmissionDetailActivity : AppCompatActivity(),
                                                 it.toString()
                                         }
 
-                                    submissionComplexity.visibility = if (detailData.difficulty == "null" || detailData.difficulty == null)
-                                        View.GONE
-                                    else
-                                        View.VISIBLE
+                                    submissionComplexity.visibility =
+                                        if (detailData.difficulty == "null" || detailData.difficulty == null)
+                                            View.GONE
+                                        else
+                                            View.VISIBLE
 
                                     when (detailData.difficulty) {
                                         "low" -> {
-                                            complexityColor.background = ResourcesCompat.getDrawable(
-                                                resources,
-                                                R.drawable.gradient_low_complexity,
-                                                theme
-                                            )
+                                            complexityColor.background =
+                                                ResourcesCompat.getDrawable(
+                                                    resources,
+                                                    R.drawable.gradient_low_complexity,
+                                                    theme
+                                                )
                                         }
 
                                         "middle" -> {
-                                            complexityColor.background = ResourcesCompat.getDrawable(
-                                                resources,
-                                                R.drawable.gradient_middle_complexity,
-                                                theme
-                                            )
+                                            complexityColor.background =
+                                                ResourcesCompat.getDrawable(
+                                                    resources,
+                                                    R.drawable.gradient_middle_complexity,
+                                                    theme
+                                                )
                                         }
 
                                         "high" -> {
-                                            complexityColor.background = ResourcesCompat.getDrawable(
-                                                resources,
-                                                R.drawable.gradient_high_complexity,
-                                                theme
-                                            )
+                                            complexityColor.background =
+                                                ResourcesCompat.getDrawable(
+                                                    resources,
+                                                    R.drawable.gradient_high_complexity,
+                                                    theme
+                                                )
                                         }
                                     }
                                     when (detailData.stsGaprojects) {
@@ -355,11 +407,12 @@ class SubmissionDetailActivity : AppCompatActivity(),
                                                 )
                                             }
                                             statusMessageContainer.visibility = View.VISIBLE
-                                            statusMessageColor.background = ResourcesCompat.getDrawable(
-                                                resources,
-                                                R.drawable.gradient_rejected_color,
-                                                theme
-                                            )
+                                            statusMessageColor.background =
+                                                ResourcesCompat.getDrawable(
+                                                    resources,
+                                                    R.drawable.gradient_rejected_color,
+                                                    theme
+                                                )
                                             statusMessage.text =
                                                 if (getString(R.string.lang) == "in")
                                                     "Ditolak oleh ${detailData.nameUserReject?.trimEnd()}\nKetuk untuk melihat alasan"
@@ -407,11 +460,12 @@ class SubmissionDetailActivity : AppCompatActivity(),
                                                 )
                                             }
                                             statusMessageContainer.visibility = View.VISIBLE
-                                            statusMessageColor.background = ResourcesCompat.getDrawable(
-                                                resources,
-                                                R.drawable.gradient_menu_color,
-                                                theme
-                                            )
+                                            statusMessageColor.background =
+                                                ResourcesCompat.getDrawable(
+                                                    resources,
+                                                    R.drawable.gradient_menu_color,
+                                                    theme
+                                                )
                                             statusMessage.text =
                                                 if (getString(R.string.lang) == "in")
                                                     "Disetujui oleh ${detailData.namaUserPelaporApprove?.trimEnd()}\nTunggu manajer tujuan untuk menyetujui\nKetuk untuk melihat pesan"
@@ -420,7 +474,7 @@ class SubmissionDetailActivity : AppCompatActivity(),
                                             statusMessage.setTextColor(
                                                 ContextCompat.getColor(
                                                     this@SubmissionDetailActivity,
-                                                    R.color.black
+                                                    R.color.white
                                                 )
                                             )
                                         }
@@ -481,11 +535,12 @@ class SubmissionDetailActivity : AppCompatActivity(),
                                                         )
                                                     }
                                                     statusMessageContainer.visibility = View.VISIBLE
-                                                    statusMessageColor.background = ResourcesCompat.getDrawable(
-                                                        resources,
-                                                        R.drawable.gradient_menu_color,
-                                                        theme
-                                                    )
+                                                    statusMessageColor.background =
+                                                        ResourcesCompat.getDrawable(
+                                                            resources,
+                                                            R.drawable.gradient_approved_color,
+                                                            theme
+                                                        )
                                                     message = StringBuilder().append(
                                                         if (getString(R.string.lang) == "in")
                                                             "Disetujui oleh ${detailData.userNamaApprove?.trimEnd()}\nKetuk untuk melihat pesan"
@@ -496,7 +551,7 @@ class SubmissionDetailActivity : AppCompatActivity(),
                                                     statusMessage.setTextColor(
                                                         ContextCompat.getColor(
                                                             this@SubmissionDetailActivity,
-                                                            R.color.black
+                                                            R.color.white
                                                         )
                                                     )
                                                 }
@@ -515,11 +570,12 @@ class SubmissionDetailActivity : AppCompatActivity(),
                                                         )
                                                     )
                                                     holdResumeButton.visibility = View.VISIBLE
-                                                    holdResumeColor.background = ResourcesCompat.getDrawable(
-                                                        resources,
-                                                        R.drawable.gradient_approved_color,
-                                                        theme
-                                                    )
+                                                    holdResumeColor.background =
+                                                        ResourcesCompat.getDrawable(
+                                                            resources,
+                                                            R.drawable.gradient_approved_color,
+                                                            theme
+                                                        )
                                                     holdResumeButton.setOnClickListener {
                                                         val confirmationDialog = ConfirmationDialog(
                                                             this@SubmissionDetailActivity,
@@ -798,11 +854,12 @@ class SubmissionDetailActivity : AppCompatActivity(),
                                                 null,
                                                 null
                                             )
-                                            onProgressColor.background = ResourcesCompat.getDrawable(
-                                                resources,
-                                                R.drawable.gradient_hold_color,
-                                                theme
-                                            )
+                                            onProgressColor.background =
+                                                ResourcesCompat.getDrawable(
+                                                    resources,
+                                                    R.drawable.gradient_hold_color,
+                                                    theme
+                                                )
                                             onProgressButton.setOnClickListener {
                                                 progressTrackingBottomSheet =
                                                     ProgressTrackingBottomSheet(
@@ -851,11 +908,12 @@ class SubmissionDetailActivity : AppCompatActivity(),
                                                         )
                                                     )
                                                     holdResumeButton.visibility = View.VISIBLE
-                                                    holdResumeColor.background = ResourcesCompat.getDrawable(
-                                                        resources,
-                                                        R.drawable.gradient_hold_color,
-                                                        theme
-                                                    )
+                                                    holdResumeColor.background =
+                                                        ResourcesCompat.getDrawable(
+                                                            resources,
+                                                            R.drawable.gradient_hold_color,
+                                                            theme
+                                                        )
                                                     holdResumeButton.setOnClickListener {
                                                         val holdBottomSheet =
                                                             ActionHoldIssueBottomSheet(this@SubmissionDetailActivity).also {
@@ -1137,11 +1195,12 @@ class SubmissionDetailActivity : AppCompatActivity(),
                                                 null,
                                                 null
                                             )
-                                            onProgressColor.background = ResourcesCompat.getDrawable(
-                                                resources,
-                                                R.drawable.gradient_progress_action_color,
-                                                theme
-                                            )
+                                            onProgressColor.background =
+                                                ResourcesCompat.getDrawable(
+                                                    resources,
+                                                    R.drawable.gradient_progress_action_color,
+                                                    theme
+                                                )
                                             message =
                                                 StringBuilder().append(
                                                     if (getString(R.string.lang) == "in")
@@ -1175,7 +1234,7 @@ class SubmissionDetailActivity : AppCompatActivity(),
                                                 if (progressTrackingBottomSheet.window != null)
                                                     progressTrackingBottomSheet.show()
                                             }
-                                            if (detailData.trial!!.isNotEmpty()) {
+                                            if (detailData.isAlreadyTrial!!) {
                                                 seeTrialContainer.visibility = View.VISIBLE
                                                 seeTrialContainer.setOnClickListener {
                                                     val trialBottomSheet = TrialTrackingBottomSheet(
@@ -1223,7 +1282,7 @@ class SubmissionDetailActivity : AppCompatActivity(),
                                             onProgressText.setTextColor(
                                                 ContextCompat.getColor(
                                                     this@SubmissionDetailActivity,
-                                                    R.color.black
+                                                    R.color.white
                                                 )
                                             )
                                             onProgressText.setCompoundDrawablesWithIntrinsicBounds(
@@ -1232,11 +1291,12 @@ class SubmissionDetailActivity : AppCompatActivity(),
                                                 null,
                                                 null
                                             )
-                                            onProgressColor.background = ResourcesCompat.getDrawable(
-                                                resources,
-                                                R.drawable.gradient_progress_done_color,
-                                                theme
-                                            )
+                                            onProgressColor.background =
+                                                ResourcesCompat.getDrawable(
+                                                    resources,
+                                                    R.drawable.gradient_progress_done_color,
+                                                    theme
+                                                )
                                             onProgressButton.setOnClickListener {
                                                 progressTrackingBottomSheet =
                                                     ProgressTrackingBottomSheet(
@@ -1256,7 +1316,7 @@ class SubmissionDetailActivity : AppCompatActivity(),
                                                 if (progressTrackingBottomSheet.window != null)
                                                     progressTrackingBottomSheet.show()
                                             }
-                                            if (detailData.trial!!.isNotEmpty()) {
+                                            if (detailData.isAlreadyTrial!!) {
                                                 seeTrialContainer.visibility = View.VISIBLE
                                                 seeTrialContainer.setOnClickListener {
                                                     val trialBottomSheet = TrialTrackingBottomSheet(
@@ -1288,11 +1348,12 @@ class SubmissionDetailActivity : AppCompatActivity(),
                                             messageProgressAndTrialButtonContainer.visibility =
                                                 View.VISIBLE
                                             statusMessageContainer.visibility = View.VISIBLE
-                                            statusMessageColor.background = ResourcesCompat.getDrawable(
-                                                resources,
-                                                R.drawable.gradient_approved_color,
-                                                theme
-                                            )
+                                            statusMessageColor.background =
+                                                ResourcesCompat.getDrawable(
+                                                    resources,
+                                                    R.drawable.gradient_approved_color,
+                                                    theme
+                                                )
                                             statusMessageContainer.setCardBackgroundColor(
                                                 ContextCompat.getColor(
                                                     this@SubmissionDetailActivity,
@@ -1353,23 +1414,18 @@ class SubmissionDetailActivity : AppCompatActivity(),
                                                 theme
                                             )
                                             submissionStatusText.text = "Canceled"
-                                            submissionStatusText.setTextColor(
-                                                ContextCompat.getColor(
-                                                    this@SubmissionDetailActivity,
-                                                    R.color.black
-                                                )
-                                            )
                                             actionButton.visibility = View.GONE
                                             actionSelfButton.visibility = View.GONE
                                             onProgressButton.visibility = View.GONE
                                             messageProgressAndTrialButtonContainer.visibility =
                                                 View.VISIBLE
                                             statusMessageContainer.visibility = View.VISIBLE
-                                            statusMessageColor.background = ResourcesCompat.getDrawable(
-                                                resources,
-                                                R.drawable.gradient_canceled_color,
-                                                theme
-                                            )
+                                            statusMessageColor.background =
+                                                ResourcesCompat.getDrawable(
+                                                    resources,
+                                                    R.drawable.gradient_canceled_color,
+                                                    theme
+                                                )
                                             statusMessage.text =
                                                 if (userData.id == detailData.idUser) {
                                                     if (getString(R.string.lang) == "in")
@@ -1385,7 +1441,7 @@ class SubmissionDetailActivity : AppCompatActivity(),
                                             statusMessage.setTextColor(
                                                 ContextCompat.getColor(
                                                     this@SubmissionDetailActivity,
-                                                    R.color.black
+                                                    R.color.white
                                                 )
                                             )
                                         }
@@ -1417,7 +1473,7 @@ class SubmissionDetailActivity : AppCompatActivity(),
                                             statusMessage.setTextColor(
                                                 ContextCompat.getColor(
                                                     this@SubmissionDetailActivity,
-                                                    R.color.black
+                                                    R.color.white
                                                 )
                                             )
                                             statusMessageContainer.setOnClickListener {
@@ -1699,7 +1755,6 @@ class SubmissionDetailActivity : AppCompatActivity(),
                         Log.e("SubmissionDetailActivity", "I'm a reporter")
                         actionButton.visibility = View.GONE
                         actionSelfButton.visibility = View.VISIBLE
-                        actionSelfButton.extend()
                         onProgressButton.visibility = View.GONE
                     } else {
                         // If logged in user are not the reporter but..
@@ -1759,12 +1814,7 @@ class SubmissionDetailActivity : AppCompatActivity(),
 
             actionSelfButton.setOnClickListener {
                 if (!isFabVisible) {
-                    isFabVisible = true
-                    actionSelfButton.shrink()
-                    editButton.show()
-                    editButton.extend()
-                    cancelButton.show()
-                    cancelButton.extend()
+                    openFabMenu()
 
                     editButton.setOnClickListener {
                         activityResultLauncher.launch(
@@ -1780,12 +1830,7 @@ class SubmissionDetailActivity : AppCompatActivity(),
                     }
 
                     cancelButton.setOnClickListener {
-                        actionSelfButton.extend()
-                        editButton.hide()
-                        editButton.shrink()
-                        cancelButton.hide()
-                        cancelButton.shrink()
-                        isFabVisible = false
+                        closeFabMenu()
                         val bottomSheet = UpdateStatusBottomSheet(
                             this@SubmissionDetailActivity,
                             data,
@@ -1814,12 +1859,7 @@ class SubmissionDetailActivity : AppCompatActivity(),
                             bottomSheet.show()
                     }
                 } else {
-                    isFabVisible = false
-                    actionSelfButton.extend()
-                    editButton.hide()
-                    editButton.shrink()
-                    cancelButton.hide()
-                    cancelButton.shrink()
+                    closeFabMenu()
                 }
             }
             actionButton.setOnClickListener {
@@ -2112,7 +2152,10 @@ class SubmissionDetailActivity : AppCompatActivity(),
                             if (loadingDialog.window != null)
                                 loadingDialog.show()
                             try {
-                                InitAPI.getEndpoint.startTrial(detailData.idGaprojects!!, userData.id)
+                                InitAPI.getEndpoint.startTrial(
+                                    detailData.idGaprojects!!,
+                                    userData.id
+                                )
                                     .enqueue(object :
                                         Callback<GenericSimpleResponse> {
                                         override fun onResponse(
@@ -2293,7 +2336,7 @@ class SubmissionDetailActivity : AppCompatActivity(),
             confirmationDialog.show()
     }
 
-    override fun onLongTapListener(data: ProgressItem?, forSpv: Boolean) {
+    override fun onLongTapListener(data: ProgressItems?, forSpv: Boolean) {
         val dialog = ProgressOptionDialog(this@SubmissionDetailActivity, data!!, forSpv).also {
             with(it) {
                 setOnProgressOptionDialogListener(this@SubmissionDetailActivity)
@@ -2304,7 +2347,7 @@ class SubmissionDetailActivity : AppCompatActivity(),
             dialog.show()
     }
 
-    override fun onProgressDeleted(data: ProgressItem) {
+    override fun onProgressDeleted(data: ProgressItems) {
         val confirmationDialog =
             ConfirmationDialog(
                 this@SubmissionDetailActivity,
@@ -2324,7 +2367,7 @@ class SubmissionDetailActivity : AppCompatActivity(),
                                 loadingDialog.show()
                             try {
                                 InitAPI.getEndpoint.deleteProgress(
-                                    data.idGaprojectsDetail!!, userData.id
+                                    data.progress?.idGaprojectsDetail!!, userData.id
                                 )
                                     .enqueue(object :
                                         Callback<GenericSimpleResponse> {
@@ -2507,7 +2550,7 @@ class SubmissionDetailActivity : AppCompatActivity(),
             confirmationDialog.show()
     }
 
-    override fun onProgressEdited(data: ProgressItem) {
+    override fun onProgressEdited(data: ProgressItems) {
         progressTrackingBottomSheet.dismiss()
         activityResultLauncher.launch(
             Intent(
@@ -2522,7 +2565,7 @@ class SubmissionDetailActivity : AppCompatActivity(),
         )
     }
 
-    override fun onProgressSetDone(data: ProgressItem) {
+    override fun onProgressSetDone(data: ProgressItems) {
         progressTrackingBottomSheet.dismiss()
         activityResultLauncher.launch(
             Intent(
@@ -2536,7 +2579,7 @@ class SubmissionDetailActivity : AppCompatActivity(),
         )
     }
 
-    override fun onMaterialEdited(data: ProgressItem) {
+    override fun onMaterialEdited(data: ProgressItems) {
         progressTrackingBottomSheet.dismiss()
         activityResultLauncher.launch(
             Intent(
@@ -2552,7 +2595,7 @@ class SubmissionDetailActivity : AppCompatActivity(),
         )
     }
 
-    override fun onMaterialApproved(data: ProgressItem) {
+    override fun onMaterialApproved(data: ProgressItems) {
         val confirmationDialog =
             ConfirmationDialog(
                 this@SubmissionDetailActivity,
@@ -2574,7 +2617,7 @@ class SubmissionDetailActivity : AppCompatActivity(),
                                 loadingDialog.show()
                             try {
                                 InitAPI.getEndpoint.approveMaterialRequest(
-                                    data.idGaprojectsDetail!!,
+                                    data.progress?.idGaprojectsDetail!!,
                                     userData.id
                                 ).enqueue(object : Callback<GenericSimpleResponse> {
                                     override fun onResponse(
@@ -2806,7 +2849,10 @@ class SubmissionDetailActivity : AppCompatActivity(),
                             if (loadingDialog.window != null)
                                 loadingDialog.show()
                             try {
-                                InitAPI.getEndpoint.markIssueDone(detailData.idGaprojects!!, userData.id)
+                                InitAPI.getEndpoint.markIssueDone(
+                                    detailData.idGaprojects!!,
+                                    userData.id
+                                )
                                     .enqueue(object : Callback<GenericSimpleResponse> {
                                         override fun onResponse(
                                             call: Call<GenericSimpleResponse>,
@@ -2983,6 +3029,114 @@ class SubmissionDetailActivity : AppCompatActivity(),
             }
         if (confirmationDialog.window != null)
             confirmationDialog.show()
+    }
+
+    private fun openFabMenu() {
+        binding.apply {
+            isFabVisible = true
+            TransitionManager.beginDelayedTransition(buttonContainer, AutoTransition())
+            actionSelfText.visibility = View.GONE
+
+            animShow(editButton)
+            animShow(cancelButton)
+        }
+    }
+
+    private fun closeFabMenu() {
+        binding.apply {
+            isFabVisible = false
+            TransitionManager.beginDelayedTransition(buttonContainer, AutoTransition())
+            actionSelfText.visibility = View.VISIBLE
+
+            animHide(editButton)
+            animHide(cancelButton)
+        }
+    }
+
+    private fun animShow(view: View) {
+        view.apply {
+            visibility = View.VISIBLE
+            alpha = 0f
+            scaleX = 0f
+            scaleY = 0f
+            animate()
+                .alpha(1f)
+                .scaleX(1f)
+                .scaleY(1f)
+                .setDuration(150)
+                .start()
+        }
+    }
+
+    private fun animHide(view: View) {
+        view.animate()
+            .alpha(0f)
+            .scaleX(0f)
+            .scaleY(0f)
+            .setDuration(150)
+            .withEndAction {
+                view.visibility = View.GONE
+            }
+            .start()
+    }
+
+    override fun onMapReady(map: GoogleMap) {
+        googleMap = map
+        googleMap?.uiSettings?.apply {
+            setAllGesturesEnabled(false)
+            isMapToolbarEnabled = false
+        }
+        showLocationOnMap()
+    }
+
+    private fun showLocationOnMap() {
+        if (googleMap == null || !::detailData.isInitialized) return
+        try {
+            val position =
+                LatLng(detailData.latitude!!.toDouble(), detailData.longitude!!.toDouble())
+            googleMap?.apply {
+                clear()
+                addMarker(MarkerOptions().position(position).title(detailData.lokasi))
+                moveCamera(CameraUpdateFactory.newLatLngZoom(position, 15f))
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+    }
+
+    override fun onStart() {
+        super.onStart()
+        binding.mapPreview.onStart()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        binding.mapPreview.onResume()
+    }
+
+    override fun onPause() {
+        super.onPause()
+        binding.mapPreview.onPause()
+    }
+
+    override fun onStop() {
+        super.onStop()
+        binding.mapPreview.onStop()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        binding.mapPreview.onDestroy()
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        binding.mapPreview.onSaveInstanceState(outState)
+    }
+
+    override fun onLowMemory() {
+        super.onLowMemory()
+        binding.mapPreview.onLowMemory()
     }
 }
 

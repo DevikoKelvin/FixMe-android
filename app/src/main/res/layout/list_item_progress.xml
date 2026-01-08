@@ -21,10 +21,10 @@
             android:id="@+id/usernameText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/highlight_blue"
             android:paddingHorizontal="@dimen/list_item_progress_header_padding_horizontal"
             android:paddingVertical="@dimen/list_item_progress_header_padding_vertical"
             android:textColor="@color/white"
+            tools:background="@drawable/gradient_notification_color"
             tools:text="Name holder" />
 
         <TextView
