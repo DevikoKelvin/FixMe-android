@@ -25,6 +25,33 @@ class SseService : Service() {
         UserDataHelper(applicationContext).getUserData()
     }
 
+    override fun onCreate() {
+        super.onCreate()
+        createNotificationChannel()
+        startForeground(NOTIFICATION_ID, getNotification())
+    }
+
+    private fun createNotificationChannel() {
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+            val channel = android.app.NotificationChannel(
+                CHANNEL_ID,
+                "FixMe Background Service",
+                android.app.NotificationManager.IMPORTANCE_MIN
+            )
+            val manager = getSystemService(android.app.NotificationManager::class.java)
+            manager.createNotificationChannel(channel)
+        }
+    }
+
+    private fun getNotification(): android.app.Notification {
+        return androidx.core.app.NotificationCompat.Builder(this, CHANNEL_ID)
+            .setContentTitle("FixMe Service")
+            .setContentText("Listening for updates...")
+            .setSmallIcon(R.drawable.fixme_logo)
+            .setPriority(androidx.core.app.NotificationCompat.PRIORITY_MIN)
+            .build()
+    }
+
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         initSse()
         return START_STICKY
@@ -143,5 +170,7 @@ class SseService : Service() {
 
     companion object {
         private const val TAG = "SseService"
+        private const val CHANNEL_ID = "FixMe_SSE_Channel"
+        private const val NOTIFICATION_ID = 101
     }
 }

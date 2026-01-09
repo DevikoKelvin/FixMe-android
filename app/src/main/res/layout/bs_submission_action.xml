@@ -60,14 +60,14 @@
         android:layout_marginHorizontal="@dimen/list_item_padding"
         android:layout_marginVertical="@dimen/bottom_sheet_content_margin_top"
         android:visibility="gone"
-        app:cardBackgroundColor="@color/button_color"
         app:cardCornerRadius="@dimen/login_button_corner_radius"
         app:strokeWidth="0dp">
 
         <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/gradient_accent_color"
+            android:gravity="center"
             android:text="@string/action_on_progress"
             android:textColor="@color/white"
             android:textSize="@dimen/text_size_medium"
@@ -89,16 +89,15 @@
             android:layout_height="@dimen/bottom_sheet_padding_bottom"
             android:layout_marginEnd="@dimen/dialog_loading_content_padding"
             android:layout_weight="1"
-            app:cardBackgroundColor="@color/white"
             app:cardCornerRadius="@dimen/login_button_corner_radius"
-            app:strokeColor="@color/custom_toast_background_normal_dark_gray"
-            app:strokeWidth="@dimen/login_field_stroke_width">
+            app:strokeWidth="0dp">
 
             <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
                 android:text="@string/on_trial"
+                android:background="@drawable/gradient_logout_color"
                 android:textColor="@color/custom_toast_background_normal_dark_gray"
                 android:textSize="@dimen/text_size_medium"
                 android:textStyle="bold" />
@@ -110,14 +109,14 @@
             android:layout_height="@dimen/bottom_sheet_padding_bottom"
             android:layout_marginStart="@dimen/dialog_loading_content_padding"
             android:layout_weight="1"
-            app:cardBackgroundColor="@color/button_color"
             app:cardCornerRadius="@dimen/login_button_corner_radius"
             app:strokeWidth="0dp">
 
             <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:background="@drawable/gradient_done_color"
                 android:text="@string/action_done"
                 android:textColor="@color/white"
                 android:textSize="@dimen/text_size_medium"
@@ -141,17 +140,16 @@
             android:layout_marginEnd="@dimen/dialog_loading_content_padding"
             android:layout_weight="1"
             android:visibility="gone"
-            app:cardBackgroundColor="@color/white"
             app:cardCornerRadius="@dimen/login_button_corner_radius"
-            app:strokeColor="@color/custom_toast_font_failed"
-            app:strokeWidth="@dimen/login_field_stroke_width">
+            app:strokeWidth="0dp">
 
             <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
                 android:text="@string/action_reject"
-                android:textColor="@color/custom_toast_font_failed"
+                android:background="@drawable/gradient_rejected_color"
+                android:textColor="@color/white"
                 android:textSize="@dimen/text_size_medium"
                 android:textStyle="bold" />
         </com.google.android.material.card.MaterialCardView>
@@ -169,11 +167,12 @@
             app:strokeWidth="0dp">
 
             <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
                 android:text="@string/action_approve"
-                android:textColor="@color/custom_toast_font_success"
+                android:background="@drawable/gradient_approved_color"
+                android:textColor="@color/white"
                 android:textSize="@dimen/text_size_medium"
                 android:textStyle="bold" />
         </com.google.android.material.card.MaterialCardView>
@@ -186,16 +185,16 @@
             android:layout_marginStart="@dimen/dialog_loading_content_padding"
             android:layout_weight="1"
             android:visibility="gone"
-            app:cardBackgroundColor="@color/custom_toast_default_background"
             app:cardCornerRadius="@dimen/login_button_corner_radius"
             app:strokeWidth="0dp">
 
             <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
                 android:text="@string/action_deploy"
                 android:textAlignment="center"
+                android:background="@drawable/gradient_pending_color"
                 android:textColor="@color/white"
                 android:textSize="@dimen/text_size_medium"
                 android:textStyle="bold" />

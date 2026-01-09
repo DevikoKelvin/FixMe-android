@@ -1,13 +1,18 @@
 package com.erela.fixme.bottom_sheets
 
 import android.content.Context
+import android.content.Context.INPUT_METHOD_SERVICE
 import android.graphics.Color
+import android.graphics.Rect
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
+import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.InputMethodManager
+import android.widget.EditText
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.graphics.drawable.toDrawable
 import com.erela.fixme.R
@@ -20,6 +25,7 @@ import com.erela.fixme.objects.CreationResponse
 import com.erela.fixme.objects.SubmissionDetailResponse
 import com.erela.fixme.objects.UserData
 import com.google.android.material.bottomsheet.BottomSheetDialog
+import com.google.android.material.textfield.TextInputEditText
 import org.json.JSONException
 import retrofit2.Call
 import retrofit2.Callback
@@ -44,6 +50,23 @@ class ReportTrialBottomSheet(context: Context, private val detail: SubmissionDet
         setCancelable(true)
 
         init()
+    }
+
+    override fun dispatchTouchEvent(motionEvent: MotionEvent): Boolean {
+        if (motionEvent.action == MotionEvent.ACTION_DOWN) {
+            val view: View? = currentFocus
+            if (view is TextInputEditText || view is EditText) {
+                val rect = Rect()
+                view.getGlobalVisibleRect(rect)
+                if (!rect.contains(motionEvent.rawX.toInt(), motionEvent.rawY.toInt())) {
+                    view.clearFocus()
+                    val inputMethodManager =
+                        context.getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
+                    inputMethodManager.hideSoftInputFromWindow(view.windowToken, 0)
+                }
+            }
+        }
+        return super.dispatchTouchEvent(motionEvent)
     }
 
     private fun init() {

@@ -66,6 +66,113 @@
     </com.google.android.material.textfield.TextInputLayout>
 
     <TextView
+        android:id="@+id/workByText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/list_item_padding"
+        android:layout_marginTop="@dimen/user_info_item_margin_top"
+        android:text="@string/work_by"
+        android:textColor="@color/black"
+        android:textSize="@dimen/text_size_small"
+        android:textStyle="bold"
+        android:visibility="gone" />
+
+    <LinearLayout
+        android:id="@+id/workBySelectorContainer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:visibility="gone">
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/internalButton"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/bottom_sheet_padding_bottom"
+            android:layout_marginHorizontal="@dimen/list_item_padding"
+            android:layout_marginVertical="@dimen/user_info_item_margin_top"
+            android:layout_weight="1"
+            app:cardCornerRadius="@dimen/login_button_corner_radius"
+            app:cardElevation="@dimen/card_elevation"
+            app:strokeColor="@color/button_color"
+            app:strokeWidth="1dp">
+
+            <LinearLayout
+                android:id="@+id/internalColor"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/gradient_accent_color"
+                android:gravity="center">
+
+                <TextView
+                    android:id="@+id/internalText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/internal"
+                    android:textSize="@dimen/text_size_small"
+                    android:textStyle="bold"
+                    tools:textColor="@color/white" />
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/vendorButton"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/bottom_sheet_padding_bottom"
+            android:layout_marginHorizontal="@dimen/list_item_padding"
+            android:layout_marginBottom="@dimen/user_info_item_margin_top"
+            android:layout_weight="1"
+            app:cardCornerRadius="@dimen/login_button_corner_radius"
+            app:cardElevation="@dimen/card_elevation"
+            app:strokeColor="@color/button_color"
+            app:strokeWidth="1dp">
+
+            <LinearLayout
+                android:id="@+id/vendorColor"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center">
+
+                <TextView
+                    android:id="@+id/vendorText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/vendors"
+                    android:textSize="@dimen/text_size_small"
+                    android:textStyle="bold"
+                    tools:textColor="@color/black" />
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+    </LinearLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/vendorNameFieldLayout"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/list_item_padding"
+        android:layout_marginTop="@dimen/user_info_item_margin_top"
+        android:hint="@string/vendors_name"
+        android:visibility="gone"
+        app:boxCornerRadiusBottomEnd="@dimen/login_field_corner_radius"
+        app:boxCornerRadiusBottomStart="@dimen/login_field_corner_radius"
+        app:boxCornerRadiusTopEnd="@dimen/login_field_corner_radius"
+        app:boxCornerRadiusTopStart="@dimen/login_field_corner_radius"
+        app:boxStrokeColor="@color/black"
+        app:boxStrokeWidth="@dimen/login_field_stroke_width"
+        app:expandedHintEnabled="true"
+        app:hintAnimationEnabled="true"
+        app:hintTextColor="@color/black">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/vendorNameField"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/main_menu_item_height"
+            android:gravity="top"
+            android:inputType="textMultiLine"
+            android:textSize="@dimen/text_size_small" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <TextView
         android:id="@+id/selectSupervisorText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -167,7 +274,7 @@
         android:layout_marginHorizontal="@dimen/list_item_padding"
         android:layout_marginTop="@dimen/bottom_sheet_content_margin_top"
         android:orientation="vertical"
-        android:visibility="gone">
+        android:visibility="visible">
 
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/rejectButton"
@@ -177,26 +284,33 @@
             android:visibility="gone"
             app:cardBackgroundColor="@color/white"
             app:cardCornerRadius="@dimen/login_button_corner_radius"
-            app:strokeColor="@color/custom_toast_font_failed"
-            app:strokeWidth="@dimen/login_field_stroke_width">
+            app:strokeWidth="0dp">
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:text="@string/action_reject"
-                android:textColor="@color/custom_toast_font_failed"
-                android:textSize="@dimen/text_size_medium"
-                android:textStyle="bold" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/gradient_rejected_color"
+                android:gravity="center">
 
-            <ProgressBar
-                android:id="@+id/rejectLoading"
-                android:layout_width="@dimen/login_progress_bar_size"
-                android:layout_height="@dimen/login_progress_bar_size"
-                android:layout_gravity="center_vertical"
-                android:layout_marginStart="@dimen/dialog_loading_content_padding"
-                android:indeterminateTint="@color/custom_toast_font_failed"
-                android:visibility="gone" />
+                <TextView
+                    android:id="@+id/rejectText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text="@string/action_reject"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/text_size_medium"
+                    android:textStyle="bold"
+                    android:visibility="visible" />
+
+                <ProgressBar
+                    android:id="@+id/rejectLoading"
+                    android:layout_width="@dimen/login_progress_bar_size"
+                    android:layout_height="@dimen/login_progress_bar_size"
+                    android:layout_marginStart="@dimen/dialog_loading_content_padding"
+                    android:indeterminateTint="@color/white"
+                    android:visibility="gone" />
+            </LinearLayout>
         </com.google.android.material.card.MaterialCardView>
 
         <com.google.android.material.card.MaterialCardView
@@ -209,23 +323,32 @@
             app:cardCornerRadius="@dimen/login_button_corner_radius"
             app:strokeWidth="0dp">
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:text="@string/action_approve"
-                android:textColor="@color/custom_toast_font_success"
-                android:textSize="@dimen/text_size_medium"
-                android:textStyle="bold" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/gradient_approved_color"
+                android:gravity="center">
 
-            <ProgressBar
-                android:id="@+id/approveLoading"
-                android:layout_width="@dimen/login_progress_bar_size"
-                android:layout_height="@dimen/login_progress_bar_size"
-                android:layout_gravity="center_vertical"
-                android:layout_marginStart="@dimen/dialog_loading_content_padding"
-                android:indeterminateTint="@color/custom_toast_font_success"
-                android:visibility="gone" />
+                <TextView
+                    android:id="@+id/approveText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text="@string/action_approve"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/text_size_medium"
+                    android:textStyle="bold"
+                    android:visibility="visible" />
+
+                <ProgressBar
+                    android:id="@+id/approveLoading"
+                    android:layout_width="@dimen/login_progress_bar_size"
+                    android:layout_height="@dimen/login_progress_bar_size"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginStart="@dimen/dialog_loading_content_padding"
+                    android:indeterminateTint="@color/white"
+                    android:visibility="gone" />
+            </LinearLayout>
         </com.google.android.material.card.MaterialCardView>
 
         <com.google.android.material.card.MaterialCardView
@@ -236,26 +359,34 @@
             android:visibility="gone"
             app:cardBackgroundColor="@color/white"
             app:cardCornerRadius="@dimen/login_button_corner_radius"
-            app:strokeColor="@color/custom_toast_font_failed"
-            app:strokeWidth="@dimen/login_field_stroke_width">
+            app:strokeWidth="0dp">
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:text="@string/action_cancel_this_issue"
-                android:textColor="@color/custom_toast_font_failed"
-                android:textSize="@dimen/text_size_medium"
-                android:textStyle="bold" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/gradient_canceled_color"
+                android:gravity="center">
 
-            <ProgressBar
-                android:id="@+id/cancelLoading"
-                android:layout_width="@dimen/login_progress_bar_size"
-                android:layout_height="@dimen/login_progress_bar_size"
-                android:layout_gravity="center_vertical"
-                android:layout_marginStart="@dimen/dialog_loading_content_padding"
-                android:indeterminateTint="@color/custom_toast_font_failed"
-                android:visibility="gone" />
+                <TextView
+                    android:id="@+id/cancelText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text="@string/action_cancel_this_issue"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/text_size_medium"
+                    android:textStyle="bold"
+                    android:visibility="visible" />
+
+                <ProgressBar
+                    android:id="@+id/cancelLoading"
+                    android:layout_width="@dimen/login_progress_bar_size"
+                    android:layout_height="@dimen/login_progress_bar_size"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginStart="@dimen/dialog_loading_content_padding"
+                    android:indeterminateTint="@color/black"
+                    android:visibility="gone" />
+            </LinearLayout>
         </com.google.android.material.card.MaterialCardView>
 
         <com.google.android.material.card.MaterialCardView
@@ -269,23 +400,32 @@
             app:cardCornerRadius="@dimen/login_button_corner_radius"
             app:strokeWidth="0dp">
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:text="@string/action_deploy_tech"
-                android:textColor="@color/white"
-                android:textSize="@dimen/text_size_medium"
-                android:textStyle="bold" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/gradient_pending_color"
+                android:gravity="center">
 
-            <ProgressBar
-                android:id="@+id/deployTechLoading"
-                android:layout_width="@dimen/login_progress_bar_size"
-                android:layout_height="@dimen/login_progress_bar_size"
-                android:layout_gravity="center_vertical"
-                android:layout_marginStart="@dimen/dialog_loading_content_padding"
-                android:indeterminateTint="@color/custom_toast_font_blue"
-                android:visibility="gone" />
+                <TextView
+                    android:id="@+id/deployTechText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text="@string/action_deploy_tech"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/text_size_medium"
+                    android:textStyle="bold"
+                    android:visibility="visible" />
+
+                <ProgressBar
+                    android:id="@+id/deployTechLoading"
+                    android:layout_width="@dimen/login_progress_bar_size"
+                    android:layout_height="@dimen/login_progress_bar_size"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginStart="@dimen/dialog_loading_content_padding"
+                    android:indeterminateTint="@color/white"
+                    android:visibility="gone" />
+            </LinearLayout>
         </com.google.android.material.card.MaterialCardView>
     </LinearLayout>
 </LinearLayout>

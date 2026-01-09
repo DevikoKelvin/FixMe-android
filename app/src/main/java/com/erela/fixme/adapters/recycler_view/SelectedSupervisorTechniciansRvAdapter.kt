@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
+import androidx.core.content.res.ResourcesCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.erela.fixme.R
 import com.erela.fixme.bottom_sheets.SelectSupervisorTechniciansBottomSheet
@@ -41,19 +42,19 @@ class SelectedSupervisorTechniciansRvAdapter(
             binding.apply {
                 itemText.text = item.namaUser
                 if (position == selectedSupervisorTechniciansList.size - 1) {
-                    mainContainer.setCardBackgroundColor(
-                        ContextCompat.getColor(
-                            context,
-                            R.color.custom_toast_background_success
-                        )
+                    mainContainerColor.background = ResourcesCompat.getDrawable(
+                        context.resources,
+                        R.drawable.gradient_add_color,
+                        context.theme
                     )
+                    itemText.setTextColor(ContextCompat.getColorStateList(context, R.color.white))
                 } else {
-                    mainContainer.setCardBackgroundColor(
-                        ContextCompat.getColor(
-                            context,
-                            R.color.custom_toast_background_normal
-                        )
+                    mainContainerColor.background = ResourcesCompat.getDrawable(
+                        context.resources,
+                        R.drawable.gradient_card_color,
+                        context.theme
                     )
+                    itemText.setTextColor(ContextCompat.getColorStateList(context, R.color.black))
                 }
                 if (position == selectedSupervisorTechniciansList.size - 1) {
                     deleteButton.visibility = View.GONE

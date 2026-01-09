@@ -37,6 +37,7 @@ import com.github.tutorialsandroid.appxupdater.enums.AppUpdaterError
 import com.github.tutorialsandroid.appxupdater.enums.UpdateFrom
 import com.github.tutorialsandroid.appxupdater.objects.Update
 import java.io.File
+import java.util.Calendar
 
 class SettingsActivity : AppCompatActivity() {
     private val binding: ActivitySettingsBinding by lazy {
@@ -153,6 +154,12 @@ class SettingsActivity : AppCompatActivity() {
             changePasswordButton.setOnClickListener {
                 startActivity(Intent(this@SettingsActivity, ChangePasswordActivity::class.java))
             }
+
+            copyright.text =
+                if (getString(R.string.lang) == "in")
+                    "@ ${Calendar.getInstance().get(Calendar.YEAR)} PT Erlangga Edi Laboratories\n Seluruh hak cipta dilindungi"
+                else
+                    "@ ${Calendar.getInstance().get(Calendar.YEAR)} Erlangga Edi Laboratories Corporation\n All rights reserved"
 
             val buildType =
                 if (BuildConfig.BUILD_TYPE == "debug") "dev_${BuildConfig.BUILD_TYPE}" else "pre_${BuildConfig.BUILD_TYPE}"

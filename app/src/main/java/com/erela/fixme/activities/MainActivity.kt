@@ -138,10 +138,12 @@ class MainActivity : AppCompatActivity() {
         handleNotificationIntent(intent)
         val sharedPreferences = getSharedPreferences("app_prefs", Context.MODE_PRIVATE)
         if (sharedPreferences.getBoolean("first_login", false)) {
-            startService(Intent(this, SseService::class.java))
             sharedPreferences.edit {
                 putBoolean("first_login", false)
             }
+        }
+        if (UserDataHelper(this).isUserDataExist()) {
+            ContextCompat.startForegroundService(this, Intent(this, SseService::class.java))
         }
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             registerReceiver(

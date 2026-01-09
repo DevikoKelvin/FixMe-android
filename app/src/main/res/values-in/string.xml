@@ -127,6 +127,10 @@
 
     <string name="action_question">Apa yang akan kamu lakukan?</string>
     <string name="update_status">Perbarui Status</string>
+    <string name="work_by">Akan Diproses oleh</string>
+    <string name="internal">Bagian Dalam ERELA</string>
+    <string name="vendors">Vendor/Bagian Luar</string>
+    <string name="vendors_name">Nama Vendor</string>
     <string name="select_supervisor">Pilih Supervisor</string>
     <string name="select_complexity">Kompleksitas</string>
     <string name="complexity_low">Rendah</string>

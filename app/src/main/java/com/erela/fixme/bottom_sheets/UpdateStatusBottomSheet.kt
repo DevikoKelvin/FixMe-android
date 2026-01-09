@@ -2,14 +2,20 @@ package com.erela.fixme.bottom_sheets
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.content.Context.INPUT_METHOD_SERVICE
 import android.graphics.Color
+import android.graphics.Rect
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
+import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.InputMethodManager
+import android.widget.EditText
 import androidx.core.content.ContextCompat
+import androidx.core.content.res.ResourcesCompat
 import androidx.core.graphics.drawable.toDrawable
 import com.erela.fixme.R
 import com.erela.fixme.adapters.recycler_view.SelectedSupervisorTechniciansRvAdapter
@@ -26,6 +32,7 @@ import com.google.android.flexbox.FlexDirection
 import com.google.android.flexbox.FlexWrap
 import com.google.android.flexbox.FlexboxLayoutManager
 import com.google.android.material.bottomsheet.BottomSheetDialog
+import com.google.android.material.textfield.TextInputEditText
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.RequestBody
 import okhttp3.RequestBody.Companion.toRequestBody
@@ -57,6 +64,7 @@ class UpdateStatusBottomSheet(
         false
     )
     private lateinit var complexity: String
+    private var workByVendor = "n"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -67,6 +75,23 @@ class UpdateStatusBottomSheet(
         setCancelable(true)
 
         init()
+    }
+
+    override fun dispatchTouchEvent(motionEvent: MotionEvent): Boolean {
+        if (motionEvent.action == MotionEvent.ACTION_DOWN) {
+            val view: View? = currentFocus
+            if (view is TextInputEditText || view is EditText) {
+                val rect = Rect()
+                view.getGlobalVisibleRect(rect)
+                if (!rect.contains(motionEvent.rawX.toInt(), motionEvent.rawY.toInt())) {
+                    view.clearFocus()
+                    val inputMethodManager =
+                        context.getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
+                    inputMethodManager.hideSoftInputFromWindow(view.windowToken, 0)
+                }
+            }
+        }
+        return super.dispatchTouchEvent(motionEvent)
     }
 
     @SuppressLint("SetTextI18n", "NotifyDataSetChanged")
@@ -132,6 +157,94 @@ class UpdateStatusBottomSheet(
                             else
                                 "Approved!"
                         )
+                        workByText.visibility = View.VISIBLE
+                        workBySelectorContainer.visibility = View.VISIBLE
+                        if (workByVendor == "n") {
+                            internalButton.strokeColor =
+                                ContextCompat.getColor(context, android.R.color.transparent)
+                            internalColor.background = ResourcesCompat.getDrawable(
+                                context.resources,
+                                R.drawable.gradient_accent_color,
+                                context.theme
+                            )
+                            internalText.setTextColor(
+                                ContextCompat.getColor(
+                                    context,
+                                    R.color.white
+                                )
+                            )
+                            vendorButton.strokeColor =
+                                ContextCompat.getColor(context, R.color.button_color)
+                            vendorColor.background = null
+                            vendorText.setTextColor(ContextCompat.getColor(context, R.color.black))
+                            vendorNameFieldLayout.visibility = View.GONE
+                            vendorNameField.setText("")
+                        } else {
+                            internalButton.strokeColor =
+                                ContextCompat.getColor(context, R.color.button_color)
+                            internalColor.background = null
+                            internalText.setTextColor(
+                                ContextCompat.getColor(
+                                    context,
+                                    R.color.black
+                                )
+                            )
+                            vendorButton.strokeColor =
+                                ContextCompat.getColor(context, android.R.color.transparent)
+                            vendorColor.background = ResourcesCompat.getDrawable(
+                                context.resources,
+                                R.drawable.gradient_accent_color,
+                                context.theme
+                            )
+                            vendorText.setTextColor(ContextCompat.getColor(context, R.color.white))
+                            vendorNameFieldLayout.visibility = View.VISIBLE
+                        }
+
+                        internalButton.setOnClickListener {
+                            workByVendor = "n"
+                            internalButton.strokeColor =
+                                ContextCompat.getColor(context, android.R.color.transparent)
+                            internalColor.background = ResourcesCompat.getDrawable(
+                                context.resources,
+                                R.drawable.gradient_accent_color,
+                                context.theme
+                            )
+                            internalText.setTextColor(
+                                ContextCompat.getColor(
+                                    context,
+                                    R.color.white
+                                )
+                            )
+                            vendorButton.strokeColor =
+                                ContextCompat.getColor(context, R.color.button_color)
+                            vendorColor.background = null
+                            vendorText.setTextColor(ContextCompat.getColor(context, R.color.black))
+                            vendorNameFieldLayout.visibility = View.GONE
+                            vendorNameField.setText("")
+                        }
+
+                        vendorButton.setOnClickListener {
+                            workByVendor = "y"
+                            internalButton.strokeColor =
+                                ContextCompat.getColor(context, R.color.button_color)
+                            internalColor.background = null
+                            internalText.setTextColor(
+                                ContextCompat.getColor(
+                                    context,
+                                    R.color.black
+                                )
+                            )
+                            vendorButton.strokeColor =
+                                ContextCompat.getColor(context, android.R.color.transparent)
+                            vendorColor.background = ResourcesCompat.getDrawable(
+                                context.resources,
+                                R.drawable.gradient_accent_color,
+                                context.theme
+                            )
+                            vendorText.setTextColor(ContextCompat.getColor(context, R.color.white))
+                            vendorNameFieldLayout.visibility = View.VISIBLE
+                        }
+
                         isFormEmpty[0] = true
                         if (dataDetail.deptTujuan == userData.dept) {
                             selectSupervisorText.visibility = View.VISIBLE
@@ -422,6 +535,9 @@ class UpdateStatusBottomSheet(
             approveLoading.visibility = View.VISIBLE
             rejectLoading.visibility = View.VISIBLE
             deployTechLoading.visibility = View.VISIBLE
+            approveText.visibility = View.GONE
+            rejectText.visibility = View.GONE
+            deployTechText.visibility = View.GONE
             if (!deployTech) {
                 if (formCheck()) {
                     if (cancel) {
@@ -439,6 +555,7 @@ class UpdateStatusBottomSheet(
                                     ConfirmationDialog.ConfirmationDialogListener {
                                     override fun onConfirm() {
                                         cancelLoading.visibility = View.VISIBLE
+                                        cancelText.visibility = View.GONE
                                         try {
                                             InitAPI.getEndpoint.cancelSubmission(
                                                 userData.id,
@@ -451,6 +568,7 @@ class UpdateStatusBottomSheet(
                                                     response1: Response<GenericSimpleResponse>
                                                 ) {
                                                     cancelLoading.visibility = View.GONE
+                                                    cancelText.visibility = View.VISIBLE
                                                     if (response1.isSuccessful) {
                                                         val result = response1.body()
                                                         if (result != null) {
@@ -558,6 +676,7 @@ class UpdateStatusBottomSheet(
                                                     throwable: Throwable
                                                 ) {
                                                     cancelLoading.visibility = View.GONE
+                                                    cancelText.visibility = View.VISIBLE
                                                     CustomToast.getInstance(context)
                                                         .setMessage(
                                                             if (context.getString(R.string.lang) == "in")
@@ -586,6 +705,7 @@ class UpdateStatusBottomSheet(
                                             })
                                         } catch (jsonException: JSONException) {
                                             cancelLoading.visibility = View.GONE
+                                            cancelText.visibility = View.VISIBLE
                                             CustomToast
                                                 .getInstance(context)
                                                 .setMessage(
@@ -644,8 +764,38 @@ class UpdateStatusBottomSheet(
                                         }
                                     }
                                 }
+                                val targetData: MutableMap<String, RequestBody> = mutableMapOf()
+                                with(targetData) {
+                                    put("id_user", createPartFromString(userData.id.toString())!!)
+                                    put(
+                                        "id_gaprojects",
+                                        createPartFromString(dataDetail.idGaprojects.toString())!!
+                                    )
+                                    put(
+                                        "keterangan",
+                                        createPartFromString(descriptionField.text.toString())!!
+                                    )
+                                    put(
+                                        "progress_vendor",
+                                        createPartFromString(workByVendor)!!
+                                    )
+                                    put(
+                                        "progress_vendor_nama",
+                                        createPartFromString(vendorNameField.text.toString())!!
+                                    )
+                                    if (dataDetail.deptTujuan == userData.dept) {
+                                        for (i in 0 until selectedSupervisorsArrayList.size - 1) {
+                                            put(
+                                                "user_supervisor[$i]",
+                                                createPartFromString(
+                                                    selectedSupervisorsArrayList[i].idUser.toString()
+                                                )!!
+                                            )
+                                        }
+                                    }
+                                }
                                 (if (dataDetail.deptTujuan == userData.dept)
-                                    InitAPI.getEndpoint.approveTargetManagerSubmission(data)
+                                    InitAPI.getEndpoint.approveTargetManagerSubmission(targetData)
                                 else InitAPI.getEndpoint.approveReportManagerSubmission(data)).enqueue(
                                     object : Callback<GenericSimpleResponse> {
                                         override fun onResponse(
@@ -655,6 +805,9 @@ class UpdateStatusBottomSheet(
                                             approveLoading.visibility = View.GONE
                                             rejectLoading.visibility = View.GONE
                                             deployTechLoading.visibility = View.GONE
+                                            approveText.visibility = View.VISIBLE
+                                            rejectText.visibility = View.VISIBLE
+                                            deployTechText.visibility = View.VISIBLE
                                             if (response.isSuccessful) {
                                                 if (response.body() != null) {
                                                     val result = response.body()
@@ -766,6 +919,9 @@ class UpdateStatusBottomSheet(
                                             approveLoading.visibility = View.GONE
                                             rejectLoading.visibility = View.GONE
                                             deployTechLoading.visibility = View.GONE
+                                            approveText.visibility = View.VISIBLE
+                                            rejectText.visibility = View.VISIBLE
+                                            deployTechText.visibility = View.VISIBLE
                                             CustomToast.getInstance(context)
                                                 .setBackgroundColor(
                                                     ContextCompat.getColor(
@@ -793,6 +949,9 @@ class UpdateStatusBottomSheet(
                                 approveLoading.visibility = View.GONE
                                 rejectLoading.visibility = View.GONE
                                 deployTechLoading.visibility = View.GONE
+                                approveText.visibility = View.VISIBLE
+                                rejectText.visibility = View.VISIBLE
+                                deployTechText.visibility = View.VISIBLE
                                 CustomToast.getInstance(context)
                                     .setBackgroundColor(
                                         ContextCompat.getColor(
@@ -827,6 +986,9 @@ class UpdateStatusBottomSheet(
                                         approveLoading.visibility = View.GONE
                                         rejectLoading.visibility = View.GONE
                                         deployTechLoading.visibility = View.GONE
+                                        approveText.visibility = View.VISIBLE
+                                        rejectText.visibility = View.VISIBLE
+                                        deployTechText.visibility = View.VISIBLE
                                         if (response.isSuccessful) {
                                             if (response.body() != null) {
                                                 val result = response.body()
@@ -937,6 +1099,9 @@ class UpdateStatusBottomSheet(
                                         approveLoading.visibility = View.GONE
                                         rejectLoading.visibility = View.GONE
                                         deployTechLoading.visibility = View.GONE
+                                        approveText.visibility = View.VISIBLE
+                                        rejectText.visibility = View.VISIBLE
+                                        deployTechText.visibility = View.VISIBLE
                                         CustomToast.getInstance(context)
                                             .setBackgroundColor(
                                                 ContextCompat.getColor(
@@ -964,6 +1129,9 @@ class UpdateStatusBottomSheet(
                                 approveLoading.visibility = View.GONE
                                 rejectLoading.visibility = View.GONE
                                 deployTechLoading.visibility = View.GONE
+                                approveText.visibility = View.VISIBLE
+                                rejectText.visibility = View.VISIBLE
+                                deployTechText.visibility = View.VISIBLE
                                 CustomToast.getInstance(context)
                                     .setBackgroundColor(
                                         ContextCompat.getColor(
@@ -991,6 +1159,9 @@ class UpdateStatusBottomSheet(
                     approveLoading.visibility = View.GONE
                     rejectLoading.visibility = View.GONE
                     deployTechLoading.visibility = View.GONE
+                    approveText.visibility = View.VISIBLE
+                    rejectText.visibility = View.VISIBLE
+                    deployTechText.visibility = View.VISIBLE
                     CustomToast.getInstance(context)
                         .setBackgroundColor(
                             ContextCompat.getColor(
@@ -1042,6 +1213,9 @@ class UpdateStatusBottomSheet(
                                     approveLoading.visibility = View.GONE
                                     rejectLoading.visibility = View.GONE
                                     deployTechLoading.visibility = View.GONE
+                                    approveText.visibility = View.VISIBLE
+                                    rejectText.visibility = View.VISIBLE
+                                    deployTechText.visibility = View.VISIBLE
                                     if (response.isSuccessful) {
                                         if (response.body() != null) {
                                             val result = response.body()
@@ -1152,6 +1326,9 @@ class UpdateStatusBottomSheet(
                                     approveLoading.visibility = View.GONE
                                     rejectLoading.visibility = View.GONE
                                     deployTechLoading.visibility = View.GONE
+                                    approveText.visibility = View.VISIBLE
+                                    rejectText.visibility = View.VISIBLE
+                                    deployTechText.visibility = View.VISIBLE
                                     CustomToast.getInstance(context)
                                         .setBackgroundColor(
                                             ContextCompat.getColor(
@@ -1179,6 +1356,9 @@ class UpdateStatusBottomSheet(
                         approveLoading.visibility = View.GONE
                         rejectLoading.visibility = View.GONE
                         deployTechLoading.visibility = View.GONE
+                        approveText.visibility = View.VISIBLE
+                        rejectText.visibility = View.VISIBLE
+                        deployTechText.visibility = View.VISIBLE
                         CustomToast.getInstance(context)
                             .setBackgroundColor(
                                 ContextCompat.getColor(
@@ -1204,6 +1384,9 @@ class UpdateStatusBottomSheet(
                     approveLoading.visibility = View.GONE
                     rejectLoading.visibility = View.GONE
                     deployTechLoading.visibility = View.GONE
+                    approveText.visibility = View.VISIBLE
+                    rejectText.visibility = View.VISIBLE
+                    deployTechText.visibility = View.VISIBLE
                     CustomToast.getInstance(context)
                         .setBackgroundColor(
                             ContextCompat.getColor(
