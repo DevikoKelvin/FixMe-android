@@ -98,7 +98,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="@dimen/list_item_padding"
-                android:layout_marginTop="@dimen/user_info_item_margin_top"
+                android:layout_marginVertical="@dimen/user_info_item_margin_top"
                 android:hint="@string/location_desc"
                 app:boxCornerRadiusBottomEnd="@dimen/login_field_corner_radius"
                 app:boxCornerRadiusBottomStart="@dimen/login_field_corner_radius"
@@ -117,32 +117,6 @@
                     android:inputType="text"
                     android:textSize="@dimen/text_size_small" />
             </com.google.android.material.textfield.TextInputLayout>
-
-            <com.google.android.material.card.MaterialCardView
-                android:id="@+id/departmentDropdownLayout"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginHorizontal="@dimen/list_item_padding"
-                android:layout_marginVertical="@dimen/user_info_item_margin_top"
-                android:minHeight="@dimen/toolbar_height"
-                app:cardBackgroundColor="@android:color/transparent"
-                app:cardCornerRadius="@dimen/login_button_corner_radius"
-                app:cardElevation="0dp"
-                app:contentPaddingLeft="12dp"
-                app:contentPaddingRight="12dp"
-                app:strokeColor="@color/form_field_stroke"
-                app:strokeWidth="@dimen/login_field_stroke_width">
-
-                <TextView
-                    android:id="@+id/selectedDepartmentText"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:layout_marginHorizontal="@dimen/dialog_margin"
-                    android:text="@string/department_destination"
-                    android:textColor="@color/black"
-                    android:textSize="@dimen/text_size_small" />
-            </com.google.android.material.card.MaterialCardView>
 
             <com.google.android.material.card.MaterialCardView
                 android:layout_width="match_parent"
@@ -203,6 +177,32 @@
                         </LinearLayout>
                     </com.google.android.material.card.MaterialCardView>
                 </androidx.constraintlayout.widget.ConstraintLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/departmentDropdownLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="@dimen/list_item_padding"
+                android:layout_marginTop="@dimen/user_info_item_margin_top"
+                android:minHeight="@dimen/toolbar_height"
+                app:cardBackgroundColor="@android:color/transparent"
+                app:cardCornerRadius="@dimen/login_button_corner_radius"
+                app:cardElevation="0dp"
+                app:contentPaddingLeft="12dp"
+                app:contentPaddingRight="12dp"
+                app:strokeColor="@color/form_field_stroke"
+                app:strokeWidth="@dimen/login_field_stroke_width">
+
+                <TextView
+                    android:id="@+id/selectedDepartmentText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginHorizontal="@dimen/dialog_margin"
+                    android:text="@string/department_destination"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/text_size_small" />
             </com.google.android.material.card.MaterialCardView>
 
             <com.google.android.material.card.MaterialCardView

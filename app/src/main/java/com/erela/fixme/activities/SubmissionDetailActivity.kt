@@ -1752,7 +1752,6 @@ class SubmissionDetailActivity : AppCompatActivity(),
                 // Pending
                 1 -> {
                     if (userData.id == data.idUser) { // If logged in user is reporter
-                        Log.e("SubmissionDetailActivity", "I'm a reporter")
                         actionButton.visibility = View.GONE
                         actionSelfButton.visibility = View.VISIBLE
                         onProgressButton.visibility = View.GONE
@@ -1762,25 +1761,16 @@ class SubmissionDetailActivity : AppCompatActivity(),
                             if (userData.dept == data.deptUser
                                 || data.deptUser!!.contains(userData.dept, true)
                             ) { // If reporter's department are same as manager's/owner's department
-                                Log.e("SubmissionDetailActivity", "I'm a manager or owner")
                                 actionButton.visibility = View.VISIBLE
                                 actionSelfButton.visibility = View.GONE
                                 onProgressButton.visibility = View.GONE
                             } else {
-                                Log.e(
-                                    "SubmissionDetailActivity",
-                                    "I'm a manager or owner but not in the same department as reporter"
-                                )
                                 // If reporter's department are not the same as manager's/owner's department
                                 actionButton.visibility = View.GONE
                                 actionSelfButton.visibility = View.GONE
                                 onProgressButton.visibility = View.GONE
                             }
                         } else {
-                            Log.e(
-                                "SubmissionDetailActivity",
-                                "I'm not a manager or owner, just a regular user"
-                            )
                             // If logged in user is not a manager or owner
                             actionButton.visibility = View.GONE
                             actionSelfButton.visibility = View.GONE
