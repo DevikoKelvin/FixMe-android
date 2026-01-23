@@ -63,7 +63,7 @@ android {
 
     buildTypes {
         release {
-            buildConfigField 'String', 'BASE_URL', '"https://182.23.21.202:8282/fixme/"'
+            buildConfigField 'String', 'BASE_URL', '"http://182.23.21.202:8282/fixme/"'
             buildConfigField 'String', 'SSE_URL', '"http://103.96.147.242:8081/erelaMurbei_fixme25_mobile/sse"'
             buildConfigField 'String', 'MAP_API_KEY', '"AIzaSyBVIOv7TiZmcyPet64GSYD1vID6NDjSj4o"'
             minifyEnabled true

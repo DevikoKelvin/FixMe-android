@@ -1,6 +1,5 @@
 package com.erela.fixme.activities
 
-import android.content.Context
 import android.content.Intent
 import android.graphics.Rect
 import android.os.Bundle
@@ -13,6 +12,7 @@ import android.widget.EditText
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+import androidx.core.content.edit
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.erela.fixme.R
@@ -28,7 +28,6 @@ import com.google.firebase.messaging.FirebaseMessaging
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import androidx.core.content.edit
 
 class LoginActivity : AppCompatActivity() {
     private val binding: ActivityLoginBinding by lazy {
@@ -192,6 +191,17 @@ class LoginActivity : AppCompatActivity() {
                                                         R.color.custom_toast_background_success
                                                     )
                                                 ).show()
+                                            UserDataHelper(this@LoginActivity)
+                                                .setUserData(
+                                                    result.idUser!!,
+                                                    result.idStarConnect!!,
+                                                    username,
+                                                    name,
+                                                    result.hakAkses!!,
+                                                    result.idDept!!,
+                                                    result.dept!!,
+                                                    result.subDept!!
+                                                )
                                             FirebaseMessaging.getInstance().token.addOnCompleteListener { task ->
                                                 if (!task.isSuccessful) {
                                                     Log.e(
@@ -203,17 +213,6 @@ class LoginActivity : AppCompatActivity() {
                                                 }
                                                 val token = task.result
                                                 Log.e("LoginActivity", "FCM Token: $token")
-                                                UserDataHelper(this@LoginActivity)
-                                                    .setUserData(
-                                                        result.idUser!!,
-                                                        result.idStarConnect!!,
-                                                        username,
-                                                        name,
-                                                        result.hakAkses!!,
-                                                        result.idDept!!,
-                                                        result.dept!!,
-                                                        result.subDept!!
-                                                    )
 
                                                 InitAPI.getEndpoint.updateFcmToken(
                                                     result.idUser,
@@ -248,7 +247,9 @@ class LoginActivity : AppCompatActivity() {
                                                     }
                                                 })
                                             }
-                                            val sharedPreferences = getSharedPreferences("app_prefs", Context.MODE_PRIVATE)
+                                            val sharedPreferences = getSharedPreferences("app_prefs",
+                                                MODE_PRIVATE
+                                            )
                                             sharedPreferences.edit {
                                                 putBoolean("first_login", true)
                                             }

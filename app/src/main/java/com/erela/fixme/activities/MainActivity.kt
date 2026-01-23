@@ -24,6 +24,7 @@ import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
+import androidx.core.content.edit
 import androidx.core.net.toUri
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
@@ -45,7 +46,6 @@ import com.github.tutorialsandroid.appxupdater.enums.UpdateFrom
 import com.github.tutorialsandroid.appxupdater.objects.Update
 import java.io.File
 import java.time.LocalDateTime
-import androidx.core.content.edit
 
 class MainActivity : AppCompatActivity() {
     private val binding: ActivityMainBinding by lazy {
@@ -136,7 +136,7 @@ class MainActivity : AppCompatActivity() {
         init()
         checkNewUpdate()
         handleNotificationIntent(intent)
-        val sharedPreferences = getSharedPreferences("app_prefs", Context.MODE_PRIVATE)
+        val sharedPreferences = getSharedPreferences("app_prefs", MODE_PRIVATE)
         if (sharedPreferences.getBoolean("first_login", false)) {
             sharedPreferences.edit {
                 putBoolean("first_login", false)

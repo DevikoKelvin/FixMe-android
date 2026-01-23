@@ -215,8 +215,6 @@
                 app:cardCornerRadius="@dimen/login_button_corner_radius"
                 app:cardElevation="0dp"
                 app:contentPadding="@dimen/list_item_progress_content_margin_top_small"
-                app:contentPaddingLeft="@dimen/dialog_loading_content_padding"
-                app:contentPaddingRight="@dimen/dialog_loading_content_padding"
                 app:strokeColor="@color/form_field_stroke"
                 app:strokeWidth="@dimen/login_field_stroke_width">
 

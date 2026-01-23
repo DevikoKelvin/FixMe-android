@@ -52,8 +52,13 @@ class SseService : Service() {
             .build()
     }
 
+    private var isRunning = false
+
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-        initSse()
+        if (!isRunning) {
+            initSse()
+            isRunning = true
+        }
         return START_STICKY
     }
 
@@ -162,6 +167,7 @@ class SseService : Service() {
     override fun onDestroy() {
         super.onDestroy()
         eventSource.cancel()
+        isRunning = false
     }
 
     override fun onBind(intent: Intent?): IBinder? {

@@ -195,6 +195,7 @@
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="@dimen/activity_horizontal_margin"
             android:layout_marginVertical="@dimen/activity_vertical_margin"
+            android:paddingBottom="@dimen/submission_detail_bottom_margin"
             android:orientation="vertical">
 
             <com.google.android.material.card.MaterialCardView

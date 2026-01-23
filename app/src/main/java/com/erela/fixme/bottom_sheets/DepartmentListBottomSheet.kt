@@ -24,7 +24,7 @@ class DepartmentListBottomSheet(
     private lateinit var onDepartmentClickListener: OnDepartmentClickListener
     private var selectedDepartment: String = ""
     private var currentSelectedSubDepartment: String = ""
-    private lateinit var selectedSubDepartment: DepartmentListResponse
+    /*private lateinit var selectedSubDepartment: DepartmentListResponse*/
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -64,8 +64,14 @@ class DepartmentListBottomSheet(
                     departmentList.distinct().indexOf(selectedDepartment)
                 )
                 currentSelectedSubDepartment = selectedDept!!.subDept.toString()
-                subDeptartmentDropdownLayout.visibility = View.VISIBLE
-                initSubDepartmentList(currentSelectedSubDepartment)
+                selectDepartmentButton.visibility = View.VISIBLE
+                selectDepartmentButton.setOnClickListener {
+                    onDepartmentClickListener.onDepartmentClick(
+                        selectedDept!!
+                    )
+                }
+                /*subDeptartmentDropdownLayout.visibility = View.VISIBLE
+                initSubDepartmentList(currentSelectedSubDepartment)*/
             }
             departmentDropdown.onItemSelectedListener =
                 object : AdapterView.OnItemSelectedListener {
@@ -75,11 +81,17 @@ class DepartmentListBottomSheet(
                     ) {
                         if (position != 0) {
                             selectedDepartment = departmentList.distinct()[position]
-                            subDeptartmentDropdownLayout.visibility = View.VISIBLE
-                            initSubDepartmentList(currentSelectedSubDepartment)
+                            selectDepartmentButton.visibility = View.VISIBLE
+                            selectDepartmentButton.setOnClickListener {
+                                onDepartmentClickListener.onDepartmentClick(
+                                    data[departmentList.distinct().indexOf(selectedDepartment)]
+                                )
+                            }
+                            /*subDeptartmentDropdownLayout.visibility = View.VISIBLE
+                            initSubDepartmentList(currentSelectedSubDepartment)*/
                         } else {
                             selectedDepartment = ""
-                            subDeptartmentDropdownLayout.visibility = View.GONE
+                            /*subDeptartmentDropdownLayout.visibility = View.GONE*/
                             selectDepartmentButton.visibility = View.GONE
                         }
                     }
@@ -89,7 +101,7 @@ class DepartmentListBottomSheet(
         }
     }
 
-    private fun initSubDepartmentList(currentSelectedSubDept: String) {
+    /*private fun initSubDepartmentList(currentSelectedSubDept: String) {
         binding.apply {
             val subDepartmentList = ArrayList<String>()
             subDepartmentList.add(
@@ -144,7 +156,7 @@ class DepartmentListBottomSheet(
                     override fun onNothingSelected(parent: AdapterView<*>?) {}
                 }
         }
-    }
+    }*/
 
     fun onDepartmentClickListener(onDepartmentClickListener: OnDepartmentClickListener) {
         this.onDepartmentClickListener = onDepartmentClickListener

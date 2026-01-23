@@ -1170,7 +1170,7 @@ class SubmissionFormActivity : AppCompatActivity(), OnMapReadyCallback {
                                                         this@SubmissionFormActivity.selectedDept =
                                                             data
                                                         selectedDepartmentText.text =
-                                                            "${data.namaDept}\n\"${data.subDept}\""
+                                                            "${data.namaDept}"
                                                         isFormEmpty[2] = selectedDepartment != 0
                                                         if (selectedDepartment != 0) {
                                                             departmentDropdownLayout.strokeColor =
