@@ -2,8 +2,7 @@ package com.erela.fixme.objects
 
 import com.google.gson.annotations.SerializedName
 
-data class DepartmentListResponse(
-
+data class SubDepartmentListResponse(
     @field:SerializedName("sub_dept")
     val subDept: String? = null,
     @field:SerializedName("sts_aktif")

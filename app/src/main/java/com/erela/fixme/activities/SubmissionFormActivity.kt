@@ -1128,12 +1128,13 @@ class SubmissionFormActivity : AppCompatActivity(), OnMapReadyCallback {
                             response: Response<List<DepartmentListResponse>>
                         ) {
                             if (response.isSuccessful) {
+                                Log.e("Department List Response", response.body().toString())
                                 if (response.body() != null) {
                                     if (selectedDepartment != 0) {
                                         for (i in 0 until response.body()!!.size) {
-                                            if (response.body()!![i].idDept!!.toInt() == selectedDepartment) {
+                                            if (response.body()!![i].idDept!! == selectedDepartment) {
                                                 selectedDepartmentText.text =
-                                                    "${response.body()!![i].namaDept}\n\"${response.body()!![i].subDept}\""
+                                                    "${response.body()!![i].namaDept}"
                                                 this@SubmissionFormActivity.selectedDept =
                                                     response.body()!![i]
                                             }
@@ -1166,7 +1167,7 @@ class SubmissionFormActivity : AppCompatActivity(), OnMapReadyCallback {
                                                         data: DepartmentListResponse
                                                     ) {
                                                         selectedDepartment =
-                                                            data.idDept!!.toInt()
+                                                            data.idDept!!
                                                         this@SubmissionFormActivity.selectedDept =
                                                             data
                                                         selectedDepartmentText.text =
@@ -1204,7 +1205,7 @@ class SubmissionFormActivity : AppCompatActivity(), OnMapReadyCallback {
                                     }
                                 }
                             } else {
-                                Log.e("ERROR", response.message())
+                                Log.e("ERROR: Get Department List", response.message())
                                 CustomToast.getInstance(applicationContext)
                                     .setMessage(
                                         if (getString(R.string.lang) == "in")
@@ -1351,7 +1352,7 @@ class SubmissionFormActivity : AppCompatActivity(), OnMapReadyCallback {
                                         }
                                 }
                             } else {
-                                Log.e("ERROR", response.message())
+                                Log.e("ERROR Get Department List", response.message())
                                 CustomToast.getInstance(applicationContext)
                                     .setMessage(
                                         if (getString(R.string.lang) == "in")

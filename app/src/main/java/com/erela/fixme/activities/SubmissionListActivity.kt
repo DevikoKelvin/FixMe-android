@@ -177,7 +177,7 @@ class SubmissionListActivity : AppCompatActivity(), SubmissionRvAdapter.OnSubmis
 
             loadingManager(true)
             try {
-                InitAPI.getEndpoint.getDepartmentList()
+                InitAPI.getEndpoint.getDepList()
                     .enqueue(object : Callback<List<DepartmentListResponse>> {
                         override fun onResponse(
                             call: Call<List<DepartmentListResponse>>,

@@ -45,7 +45,7 @@
         android:layout_marginHorizontal="@dimen/list_item_padding"
         android:layout_marginTop="@dimen/user_info_item_margin_top"
         android:hint="@string/case_description"
-        android:visibility="gone"
+        android:visibility="visible"
         app:boxCornerRadiusBottomEnd="@dimen/login_field_corner_radius"
         app:boxCornerRadiusBottomStart="@dimen/login_field_corner_radius"
         app:boxCornerRadiusTopEnd="@dimen/login_field_corner_radius"
@@ -66,6 +66,39 @@
     </com.google.android.material.textfield.TextInputLayout>
 
     <TextView
+        android:id="@+id/subDeptText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/list_item_padding"
+        android:layout_marginTop="@dimen/user_info_item_margin_top"
+        android:text="@string/sub_department"
+        android:textColor="@color/black"
+        android:textSize="@dimen/text_size_small"
+        android:textStyle="bold"
+        android:visibility="visible" />
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/subDeptDropdownLayout"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/toolbar_height"
+        android:layout_marginHorizontal="@dimen/list_item_padding"
+        android:layout_marginTop="@dimen/user_info_item_margin_top"
+        app:cardBackgroundColor="@android:color/transparent"
+        app:cardCornerRadius="@dimen/login_button_corner_radius"
+        app:cardElevation="0dp"
+        app:contentPadding="@dimen/list_item_progress_content_margin_top_small"
+        app:strokeColor="@color/form_field_stroke"
+        app:strokeWidth="@dimen/login_field_stroke_width">
+
+        <Spinner
+            android:id="@+id/subDeptDropdown"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            tools:listitem="@layout/support_simple_spinner_dropdown_item" />
+    </com.google.android.material.card.MaterialCardView>
+
+    <TextView
         android:id="@+id/workByText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -75,14 +108,14 @@
         android:textColor="@color/black"
         android:textSize="@dimen/text_size_small"
         android:textStyle="bold"
-        android:visibility="gone" />
+        android:visibility="visible" />
 
     <LinearLayout
         android:id="@+id/workBySelectorContainer"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:visibility="gone">
+        android:visibility="visible">
 
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/internalButton"
@@ -152,7 +185,7 @@
         android:layout_marginHorizontal="@dimen/list_item_padding"
         android:layout_marginTop="@dimen/user_info_item_margin_top"
         android:hint="@string/vendors_name"
-        android:visibility="gone"
+        android:visibility="visible"
         app:boxCornerRadiusBottomEnd="@dimen/login_field_corner_radius"
         app:boxCornerRadiusBottomStart="@dimen/login_field_corner_radius"
         app:boxCornerRadiusTopEnd="@dimen/login_field_corner_radius"
@@ -182,7 +215,7 @@
         android:textColor="@color/black"
         android:textSize="@dimen/text_size_small"
         android:textStyle="bold"
-        android:visibility="gone" />
+        android:visibility="visible" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvSupervisor"
@@ -190,7 +223,7 @@
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="@dimen/list_item_padding"
         android:layout_marginTop="@dimen/dialog_loading_content_padding"
-        android:visibility="gone"
+        android:visibility="visible"
         app:layoutManager="com.google.android.flexbox.FlexboxLayoutManager"
         tools:itemCount="2"
         tools:listitem="@layout/list_item_selected_items" />
@@ -318,7 +351,7 @@
             android:layout_width="match_parent"
             android:layout_height="@dimen/bottom_sheet_padding_bottom"
             android:layout_weight="1"
-            android:visibility="gone"
+            android:visibility="visible"
             app:cardBackgroundColor="@color/custom_toast_background_success"
             app:cardCornerRadius="@dimen/login_button_corner_radius"
             app:strokeWidth="0dp">

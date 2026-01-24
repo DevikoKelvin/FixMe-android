@@ -23,8 +23,6 @@ class DepartmentListBottomSheet(
     }
     private lateinit var onDepartmentClickListener: OnDepartmentClickListener
     private var selectedDepartment: String = ""
-    private var currentSelectedSubDepartment: String = ""
-    /*private lateinit var selectedSubDepartment: DepartmentListResponse*/
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -63,15 +61,12 @@ class DepartmentListBottomSheet(
                 departmentDropdown.setSelection(
                     departmentList.distinct().indexOf(selectedDepartment)
                 )
-                currentSelectedSubDepartment = selectedDept!!.subDept.toString()
                 selectDepartmentButton.visibility = View.VISIBLE
                 selectDepartmentButton.setOnClickListener {
                     onDepartmentClickListener.onDepartmentClick(
                         selectedDept!!
                     )
                 }
-                /*subDeptartmentDropdownLayout.visibility = View.VISIBLE
-                initSubDepartmentList(currentSelectedSubDepartment)*/
             }
             departmentDropdown.onItemSelectedListener =
                 object : AdapterView.OnItemSelectedListener {
@@ -84,14 +79,11 @@ class DepartmentListBottomSheet(
                             selectDepartmentButton.visibility = View.VISIBLE
                             selectDepartmentButton.setOnClickListener {
                                 onDepartmentClickListener.onDepartmentClick(
-                                    data[departmentList.distinct().indexOf(selectedDepartment)]
+                                    data[departmentList.distinct().indexOf(selectedDepartment)-1]
                                 )
                             }
-                            /*subDeptartmentDropdownLayout.visibility = View.VISIBLE
-                            initSubDepartmentList(currentSelectedSubDepartment)*/
                         } else {
                             selectedDepartment = ""
-                            /*subDeptartmentDropdownLayout.visibility = View.GONE*/
                             selectDepartmentButton.visibility = View.GONE
                         }
                     }
@@ -100,63 +92,6 @@ class DepartmentListBottomSheet(
                 }
         }
     }
-
-    /*private fun initSubDepartmentList(currentSelectedSubDept: String) {
-        binding.apply {
-            val subDepartmentList = ArrayList<String>()
-            subDepartmentList.add(
-                if (context.getString(R.string.lang) == "in")
-                    "Pilih Sub Departemen"
-                else
-                    "Select Sub Department"
-            )
-            for (i in data.indices) {
-                if (data[i].namaDept == selectedDepartment) {
-                    subDepartmentList.add(
-                        data[i].subDept.toString()
-                    )
-                }
-            }
-            val subDepartmentAdapter = ArrayAdapter(
-                context,
-                R.layout.general_dropdown_item,
-                subDepartmentList
-            )
-
-            subDeptartmentDropdown.adapter = subDepartmentAdapter
-            if (currentSelectedSubDept != "") {
-                selectedSubDepartment = selectedDept!!
-                subDeptartmentDropdown.setSelection(
-                    subDepartmentList.indexOf(currentSelectedSubDept)
-                )
-            }
-            subDeptartmentDropdown.onItemSelectedListener =
-                object : AdapterView.OnItemSelectedListener {
-                    override fun onItemSelected(
-                        parent: AdapterView<*>?, view: View?,
-                        position: Int, id: Long
-                    ) {
-                        for (i in data.indices) {
-                            if (data[i].subDept == subDepartmentList[position]) {
-                                selectedSubDepartment = data[i]
-                            }
-                        }
-                        if (position != 0) {
-                            selectDepartmentButton.visibility = View.VISIBLE
-                            selectDepartmentButton.setOnClickListener {
-                                onDepartmentClickListener.onDepartmentClick(
-                                    selectedSubDepartment
-                                )
-                            }
-                        } else {
-                            selectDepartmentButton.visibility = View.GONE
-                        }
-                    }
-
-                    override fun onNothingSelected(parent: AdapterView<*>?) {}
-                }
-        }
-    }*/
 
     fun onDepartmentClickListener(onDepartmentClickListener: OnDepartmentClickListener) {
         this.onDepartmentClickListener = onDepartmentClickListener

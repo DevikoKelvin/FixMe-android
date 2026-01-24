@@ -7,6 +7,7 @@ import com.erela.fixme.objects.GenericSimpleResponse
 import com.erela.fixme.objects.InboxResponse
 import com.erela.fixme.objects.LoginResponse
 import com.erela.fixme.objects.MaterialListResponse
+import com.erela.fixme.objects.SubDepartmentListResponse
 import com.erela.fixme.objects.SubmissionDetailResponse
 import com.erela.fixme.objects.SubmissionListResponse
 import com.erela.fixme.objects.SubmissionProgressResponse
@@ -51,8 +52,17 @@ interface GetEndpoint {
         @Field("id_user") id: Int
     ): Call<List<InboxResponse>>
 
-    @GET("getDeptartmentList")
+    @GET("getDeptTujuan")
     fun getDepartmentList(): Call<List<DepartmentListResponse>>
+
+    @FormUrlEncoded
+    @POST("getSubDeptTujuan")
+    fun getSubDepartmentList(
+        @Field("nama_dept") namaDept: String
+    ): Call<List<SubDepartmentListResponse>>
+
+    @GET("getDeptartmentList")
+    fun getDepList(): Call<List<DepartmentListResponse>>
 
     @GET("getCategoryList")
     fun getCategoryList(): Call<List<CategoryListResponse>>

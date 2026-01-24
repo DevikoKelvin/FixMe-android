@@ -13,6 +13,8 @@ import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
 import android.widget.EditText
 import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
@@ -25,6 +27,7 @@ import com.erela.fixme.dialogs.ConfirmationDialog
 import com.erela.fixme.helpers.UserDataHelper
 import com.erela.fixme.helpers.api.InitAPI
 import com.erela.fixme.objects.GenericSimpleResponse
+import com.erela.fixme.objects.SubDepartmentListResponse
 import com.erela.fixme.objects.SubmissionDetailResponse
 import com.erela.fixme.objects.SupervisorTechnicianListResponse
 import com.erela.fixme.objects.UserData
@@ -65,6 +68,8 @@ class UpdateStatusBottomSheet(
     )
     private lateinit var complexity: String
     private var workByVendor = "n"
+    private lateinit var subDepartmentList: ArrayList<String>
+    private var selectedSubDept: SubDepartmentListResponse? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -126,6 +131,11 @@ class UpdateStatusBottomSheet(
             actionsButtonContainer.visibility = View.VISIBLE
             if (!deployTech) {
                 if (cancel) {
+                    subDeptText.visibility = View.GONE
+                    subDeptDropdownLayout.visibility = View.GONE
+                    workByText.visibility = View.GONE
+                    workBySelectorContainer.visibility = View.GONE
+                    vendorNameFieldLayout.visibility = View.GONE
                     selectSupervisorText.visibility = View.GONE
                     rvSupervisor.visibility = View.GONE
                     selectComplexityText.visibility = View.GONE
@@ -142,6 +152,14 @@ class UpdateStatusBottomSheet(
                     }
                 } else {
                     if (approve) {
+                        subDepartmentList = ArrayList()
+                        subDepartmentList.add(
+                            if (context.getString(R.string.lang) == "in")
+                                "Pilih Departemen"
+                            else
+                                "Select Department"
+                        )
+                        getSubDepartmentList()
                         selectComplexityText.visibility = View.GONE
                         complexityRadioGroup.visibility = View.GONE
                         selectTechniciansText.visibility = View.GONE
@@ -157,6 +175,8 @@ class UpdateStatusBottomSheet(
                             else
                                 "Approved!"
                         )
+                        subDeptText.visibility = View.VISIBLE
+                        subDeptDropdownLayout.visibility = View.VISIBLE
                         workByText.visibility = View.VISIBLE
                         workBySelectorContainer.visibility = View.VISIBLE
                         if (workByVendor == "n") {
@@ -351,6 +371,11 @@ class UpdateStatusBottomSheet(
                             executeUpdate()
                         }
                     } else {
+                        subDeptText.visibility = View.GONE
+                        subDeptDropdownLayout.visibility = View.GONE
+                        workByText.visibility = View.GONE
+                        workBySelectorContainer.visibility = View.GONE
+                        vendorNameFieldLayout.visibility = View.GONE
                         selectSupervisorText.visibility = View.GONE
                         rvSupervisor.visibility = View.GONE
                         selectComplexityText.visibility = View.GONE
@@ -375,6 +400,11 @@ class UpdateStatusBottomSheet(
                     }
                 }
             } else {
+                subDeptText.visibility = View.GONE
+                subDeptDropdownLayout.visibility = View.GONE
+                workByText.visibility = View.GONE
+                workBySelectorContainer.visibility = View.GONE
+                vendorNameFieldLayout.visibility = View.GONE
                 descriptionFieldLayout.visibility = View.GONE
                 selectSupervisorText.visibility = View.GONE
                 rvSupervisor.visibility = View.GONE
@@ -774,6 +804,10 @@ class UpdateStatusBottomSheet(
                                     put(
                                         "keterangan",
                                         createPartFromString(descriptionField.text.toString())!!
+                                    )
+                                    put(
+                                        "id_dept_tujuan",
+                                        createPartFromString(selectedSubDept?.idDept.toString())!!
                                     )
                                     put(
                                         "progress_vendor",
@@ -1408,6 +1442,86 @@ class UpdateStatusBottomSheet(
                         ).show()
                 }
             }
+        }
+    }
+
+    private fun getSubDepartmentList() {
+        binding.apply {
+            InitAPI.getEndpoint.getSubDepartmentList(dataDetail.deptTujuan!!)
+                .enqueue(object : Callback<List<SubDepartmentListResponse>> {
+                    override fun onResponse(
+                        call: Call<List<SubDepartmentListResponse>?>,
+                        response: Response<List<SubDepartmentListResponse>?>
+                    ) {
+                        if (response.isSuccessful) {
+                            val result = response.body()
+                            if (result != null) {
+                                for (subDept in result) {
+                                    subDepartmentList.add(
+                                        subDept.subDept.toString()
+                                    )
+                                }
+                                val subDepartmentAdapter = ArrayAdapter(
+                                    context,
+                                    R.layout.general_dropdown_item,
+                                    subDepartmentList
+                                )
+                                subDeptDropdown.adapter = subDepartmentAdapter
+                                subDeptDropdown.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+                                    override fun onItemSelected(
+                                        parent: AdapterView<*>?,
+                                        view: View?,
+                                        position: Int,
+                                        id: Long
+                                    ) {
+                                        if (position != 0) {
+                                            val subDept = parent?.getItemAtPosition(position).toString()
+                                            selectedSubDept = result[subDepartmentList.indexOf(subDept)-1]
+                                            Log.e("Selected Sub Department", selectedSubDept.toString())
+                                        } else {
+                                            selectedSubDept = null
+                                        }
+                                    }
+
+                                    override fun onNothingSelected(parent: AdapterView<*>?) {
+                                    }
+                                }
+                                subDepartmentAdapter.notifyDataSetChanged()
+                            }
+                        } else {
+                            CustomToast.getInstance(context)
+                                .setBackgroundColor(
+                                    ContextCompat.getColor(
+                                        context,
+                                        R.color.custom_toast_background_failed
+                                    )
+                                )
+                                .setFontColor(
+                                    ContextCompat.getColor(
+                                        context,
+                                        R.color.custom_toast_font_failed
+                                    )
+                                )
+                                .setMessage(
+                                    if (context.getString(R.string.lang) == "in")
+                                        "Gagal mendapatkan daftar Sub Departemen."
+                                    else
+                                        "Failed to get Sub Department List."
+                                ).show()
+                            Log.e(
+                                "ERROR ${response.code()}",
+                                response.message().toString()
+                            )
+                        }
+                    }
+
+                    override fun onFailure(
+                        call: Call<List<SubDepartmentListResponse>?>,
+                        t: Throwable
+                    ) {
+                        TODO("Not yet implemented")
+                    }
+                })
         }
     }
 
