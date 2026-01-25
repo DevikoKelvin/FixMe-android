@@ -45,7 +45,7 @@
         android:layout_marginHorizontal="@dimen/list_item_padding"
         android:layout_marginTop="@dimen/user_info_item_margin_top"
         android:hint="@string/case_description"
-        android:visibility="visible"
+        android:visibility="gone"
         app:boxCornerRadiusBottomEnd="@dimen/login_field_corner_radius"
         app:boxCornerRadiusBottomStart="@dimen/login_field_corner_radius"
         app:boxCornerRadiusTopEnd="@dimen/login_field_corner_radius"
@@ -75,7 +75,7 @@
         android:textColor="@color/black"
         android:textSize="@dimen/text_size_small"
         android:textStyle="bold"
-        android:visibility="visible" />
+        android:visibility="gone" />
 
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/subDeptDropdownLayout"
@@ -88,6 +88,7 @@
         app:cardElevation="0dp"
         app:contentPadding="@dimen/list_item_progress_content_margin_top_small"
         app:strokeColor="@color/form_field_stroke"
+        android:visibility="gone"
         app:strokeWidth="@dimen/login_field_stroke_width">
 
         <Spinner
@@ -215,7 +216,7 @@
         android:textColor="@color/black"
         android:textSize="@dimen/text_size_small"
         android:textStyle="bold"
-        android:visibility="visible" />
+        android:visibility="gone" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvSupervisor"
@@ -223,7 +224,7 @@
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="@dimen/list_item_padding"
         android:layout_marginTop="@dimen/dialog_loading_content_padding"
-        android:visibility="visible"
+        android:visibility="gone"
         app:layoutManager="com.google.android.flexbox.FlexboxLayoutManager"
         tools:itemCount="2"
         tools:listitem="@layout/list_item_selected_items" />
@@ -238,7 +239,7 @@
         android:textColor="@color/black"
         android:textSize="@dimen/text_size_small"
         android:textStyle="bold"
-        android:visibility="gone" />
+        android:visibility="visible" />
 
     <RadioGroup
         android:id="@+id/complexityRadioGroup"
@@ -247,7 +248,7 @@
         android:layout_marginHorizontal="@dimen/list_item_padding"
         android:layout_marginTop="@dimen/dialog_loading_content_padding"
         android:orientation="horizontal"
-        android:visibility="gone">
+        android:visibility="visible">
 
         <RadioButton
             android:id="@+id/lowSelector"
@@ -287,7 +288,7 @@
         android:textColor="@color/black"
         android:textSize="@dimen/text_size_small"
         android:textStyle="bold"
-        android:visibility="gone" />
+        android:visibility="visible" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvTechnicians"
@@ -295,7 +296,7 @@
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="@dimen/list_item_padding"
         android:layout_marginTop="@dimen/dialog_loading_content_padding"
-        android:visibility="gone"
+        android:visibility="visible"
         app:layoutManager="com.google.android.flexbox.FlexboxLayoutManager"
         tools:itemCount="2"
         tools:listitem="@layout/list_item_selected_items" />
@@ -351,7 +352,7 @@
             android:layout_width="match_parent"
             android:layout_height="@dimen/bottom_sheet_padding_bottom"
             android:layout_weight="1"
-            android:visibility="visible"
+            android:visibility="gone"
             app:cardBackgroundColor="@color/custom_toast_background_success"
             app:cardCornerRadius="@dimen/login_button_corner_radius"
             app:strokeWidth="0dp">

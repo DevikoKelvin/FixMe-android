@@ -402,9 +402,93 @@ class UpdateStatusBottomSheet(
             } else {
                 subDeptText.visibility = View.GONE
                 subDeptDropdownLayout.visibility = View.GONE
-                workByText.visibility = View.GONE
-                workBySelectorContainer.visibility = View.GONE
-                vendorNameFieldLayout.visibility = View.GONE
+                workByText.visibility = View.VISIBLE
+                workBySelectorContainer.visibility = View.VISIBLE
+                if (workByVendor == "n") {
+                    internalButton.strokeColor =
+                        ContextCompat.getColor(context, android.R.color.transparent)
+                    internalColor.background = ResourcesCompat.getDrawable(
+                        context.resources,
+                        R.drawable.gradient_accent_color,
+                        context.theme
+                    )
+                    internalText.setTextColor(
+                        ContextCompat.getColor(
+                            context,
+                            R.color.white
+                        )
+                    )
+                    vendorButton.strokeColor =
+                        ContextCompat.getColor(context, R.color.button_color)
+                    vendorColor.background = null
+                    vendorText.setTextColor(ContextCompat.getColor(context, R.color.black))
+                    vendorNameFieldLayout.visibility = View.GONE
+                    vendorNameField.setText("")
+                } else {
+                    internalButton.strokeColor =
+                        ContextCompat.getColor(context, R.color.button_color)
+                    internalColor.background = null
+                    internalText.setTextColor(
+                        ContextCompat.getColor(
+                            context,
+                            R.color.black
+                        )
+                    )
+                    vendorButton.strokeColor =
+                        ContextCompat.getColor(context, android.R.color.transparent)
+                    vendorColor.background = ResourcesCompat.getDrawable(
+                        context.resources,
+                        R.drawable.gradient_accent_color,
+                        context.theme
+                    )
+                    vendorText.setTextColor(ContextCompat.getColor(context, R.color.white))
+                    vendorNameFieldLayout.visibility = View.VISIBLE
+                }
+
+                internalButton.setOnClickListener {
+                    workByVendor = "n"
+                    internalButton.strokeColor =
+                        ContextCompat.getColor(context, android.R.color.transparent)
+                    internalColor.background = ResourcesCompat.getDrawable(
+                        context.resources,
+                        R.drawable.gradient_accent_color,
+                        context.theme
+                    )
+                    internalText.setTextColor(
+                        ContextCompat.getColor(
+                            context,
+                            R.color.white
+                        )
+                    )
+                    vendorButton.strokeColor =
+                        ContextCompat.getColor(context, R.color.button_color)
+                    vendorColor.background = null
+                    vendorText.setTextColor(ContextCompat.getColor(context, R.color.black))
+                    vendorNameFieldLayout.visibility = View.GONE
+                    vendorNameField.setText("")
+                }
+
+                vendorButton.setOnClickListener {
+                    workByVendor = "y"
+                    internalButton.strokeColor =
+                        ContextCompat.getColor(context, R.color.button_color)
+                    internalColor.background = null
+                    internalText.setTextColor(
+                        ContextCompat.getColor(
+                            context,
+                            R.color.black
+                        )
+                    )
+                    vendorButton.strokeColor =
+                        ContextCompat.getColor(context, android.R.color.transparent)
+                    vendorColor.background = ResourcesCompat.getDrawable(
+                        context.resources,
+                        R.drawable.gradient_accent_color,
+                        context.theme
+                    )
+                    vendorText.setTextColor(ContextCompat.getColor(context, R.color.white))
+                    vendorNameFieldLayout.visibility = View.VISIBLE
+                }
                 descriptionFieldLayout.visibility = View.GONE
                 selectSupervisorText.visibility = View.GONE
                 rvSupervisor.visibility = View.GONE
