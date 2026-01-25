@@ -157,7 +157,11 @@ data class SubmissionDetailResponse(
     @field:SerializedName("lokasi_nama")
     val locationName: String? = null,
     @field:SerializedName("lokasi_id")
-    val locationId: Int? = null
+    val locationId: Int? = null,
+    @field:SerializedName("isVendor")
+    val isVendor: String? = null,
+    @field:SerializedName("vendorName")
+    val vendorName: String? = null
 ) : Parcelable
 
 @Parcelize

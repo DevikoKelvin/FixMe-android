@@ -400,6 +400,7 @@ class UpdateStatusBottomSheet(
                     }
                 }
             } else {
+                workByVendor = if (dataDetail.isVendor == "Y") "y" else "n"
                 subDeptText.visibility = View.GONE
                 subDeptDropdownLayout.visibility = View.GONE
                 workByText.visibility = View.VISIBLE
@@ -424,6 +425,7 @@ class UpdateStatusBottomSheet(
                     vendorText.setTextColor(ContextCompat.getColor(context, R.color.black))
                     vendorNameFieldLayout.visibility = View.GONE
                     vendorNameField.setText("")
+                    setupTechnician()
                 } else {
                     internalButton.strokeColor =
                         ContextCompat.getColor(context, R.color.button_color)
@@ -443,6 +445,11 @@ class UpdateStatusBottomSheet(
                     )
                     vendorText.setTextColor(ContextCompat.getColor(context, R.color.white))
                     vendorNameFieldLayout.visibility = View.VISIBLE
+                    vendorNameField.setText(dataDetail.vendorName ?: "")
+                    selectTechniciansText.visibility = View.GONE
+                    rvTechnicians.visibility = View.GONE
+                    deployTechButton.visibility = View.VISIBLE
+                    deployTechText.text = context.getString(R.string.action_on_progress)
                 }
 
                 internalButton.setOnClickListener {
@@ -466,6 +473,7 @@ class UpdateStatusBottomSheet(
                     vendorText.setTextColor(ContextCompat.getColor(context, R.color.black))
                     vendorNameFieldLayout.visibility = View.GONE
                     vendorNameField.setText("")
+                    setupTechnician()
                 }
 
                 vendorButton.setOnClickListener {
@@ -488,6 +496,14 @@ class UpdateStatusBottomSheet(
                     )
                     vendorText.setTextColor(ContextCompat.getColor(context, R.color.white))
                     vendorNameFieldLayout.visibility = View.VISIBLE
+                    selectTechniciansText.visibility = View.GONE
+                    rvTechnicians.visibility = View.GONE
+                    deployTechButton.visibility = View.VISIBLE
+                    deployTechText.text = context.getString(R.string.action_on_progress)
+                }
+
+                deployTechButton.setOnClickListener {
+                    executeUpdate()
                 }
                 descriptionFieldLayout.visibility = View.GONE
                 selectSupervisorText.visibility = View.GONE
@@ -509,109 +525,113 @@ class UpdateStatusBottomSheet(
                         }
                     }
                 }
-                selectTechniciansText.visibility = View.VISIBLE
-                rvTechnicians.visibility = View.VISIBLE
                 approveButton.visibility = View.GONE
                 rejectButton.visibility = View.GONE
-                deployTechButton.visibility = View.GONE
-                selectedTechniciansArrayList.add(
-                    SupervisorTechnicianListResponse(
-                        null,
-                        null,
-                        null,
-                        null,
-                        "+",
-                        null,
-                        null,
-                        null
-                    )
-                )
-                techniciansRvAdapter = SelectedSupervisorTechniciansRvAdapter(
-                    context,
-                    dataDetail,
-                    selectedTechniciansArrayList,
-                    false
-                ).also {
-                    with(it) {
-                        setOnTechniciansSetListener(object :
-                            SelectedSupervisorTechniciansRvAdapter.OnTechniciansSetListener {
-                            override fun onTechniciansSelected(
-                                data: SupervisorTechnicianListResponse
-                            ) {
-                                selectedTechniciansArrayList.remove(
-                                    SupervisorTechnicianListResponse(
-                                        null,
-                                        null,
-                                        null,
-                                        null,
-                                        "+",
-                                        null,
-                                        null,
-                                        null
-                                    )
-                                )
-                                selectedTechniciansArrayList.add(data)
-                                selectedTechniciansArrayList.add(
-                                    SupervisorTechnicianListResponse(
-                                        null,
-                                        null,
-                                        null,
-                                        null,
-                                        "+",
-                                        null,
-                                        null,
-                                        null
-                                    )
-                                )
-                                techniciansRvAdapter.notifyDataSetChanged()
-                                if (techniciansRvAdapter.itemCount > 1)
-                                    deployTechButton.visibility = View.VISIBLE
-                            }
+            }
+        }
+    }
 
-                            override fun onTechniciansUnselected(
-                                data: SupervisorTechnicianListResponse
-                            ) {
-                                selectedTechniciansArrayList.remove(
-                                    SupervisorTechnicianListResponse(
-                                        null,
-                                        null,
-                                        null,
-                                        null,
-                                        "+",
-                                        null,
-                                        null,
-                                        null
-                                    )
-                                )
-                                selectedTechniciansArrayList.remove(data)
-                                selectedTechniciansArrayList.add(
-                                    SupervisorTechnicianListResponse(
-                                        null,
-                                        null,
-                                        null,
-                                        null,
-                                        "+",
-                                        null,
-                                        null,
-                                        null
-                                    )
-                                )
-                                techniciansRvAdapter.notifyDataSetChanged()
-                                if (techniciansRvAdapter.itemCount == 1)
-                                    deployTechButton.visibility = View.GONE
-                            }
-                        })
-                    }
-                }
-                rvTechnicians.adapter = techniciansRvAdapter
-                rvTechnicians.layoutManager = FlexboxLayoutManager(
-                    context, FlexDirection.ROW, FlexWrap.WRAP
+    @SuppressLint("NotifyDataSetChanged")
+    private fun setupTechnician() {
+        binding.apply {
+            selectTechniciansText.visibility = View.VISIBLE
+            rvTechnicians.visibility = View.VISIBLE
+            deployTechButton.visibility = View.GONE
+            selectedTechniciansArrayList.clear()
+            selectedTechniciansArrayList.add(
+                SupervisorTechnicianListResponse(
+                    null,
+                    null,
+                    null,
+                    null,
+                    "+",
+                    null,
+                    null,
+                    null
                 )
-                techniciansRvAdapter.notifyDataSetChanged()
-                deployTechButton.setOnClickListener {
-                    executeUpdate()
+            )
+            techniciansRvAdapter = SelectedSupervisorTechniciansRvAdapter(
+                context,
+                dataDetail,
+                selectedTechniciansArrayList,
+                false
+            ).also {
+                with(it) {
+                    setOnTechniciansSetListener(object :
+                        SelectedSupervisorTechniciansRvAdapter.OnTechniciansSetListener {
+                        override fun onTechniciansSelected(
+                            data: SupervisorTechnicianListResponse
+                        ) {
+                            selectedTechniciansArrayList.remove(
+                                SupervisorTechnicianListResponse(
+                                    null,
+                                    null,
+                                    null,
+                                    null,
+                                    "+",
+                                    null,
+                                    null,
+                                    null
+                                )
+                            )
+                            selectedTechniciansArrayList.add(data)
+                            selectedTechniciansArrayList.add(
+                                SupervisorTechnicianListResponse(
+                                    null,
+                                    null,
+                                    null,
+                                    null,
+                                    "+",
+                                    null,
+                                    null,
+                                    null
+                                )
+                            )
+                            techniciansRvAdapter.notifyDataSetChanged()
+                            if (techniciansRvAdapter.itemCount > 1)
+                                deployTechButton.visibility = View.VISIBLE
+                        }
+
+                        override fun onTechniciansUnselected(
+                            data: SupervisorTechnicianListResponse
+                        ) {
+                            selectedTechniciansArrayList.remove(
+                                SupervisorTechnicianListResponse(
+                                    null,
+                                    null,
+                                    null,
+                                    null,
+                                    "+",
+                                    null,
+                                    null,
+                                    null
+                                )
+                            )
+                            selectedTechniciansArrayList.remove(data)
+                            selectedTechniciansArrayList.add(
+                                SupervisorTechnicianListResponse(
+                                    null,
+                                    null,
+                                    null,
+                                    null,
+                                    "+",
+                                    null,
+                                    null,
+                                    null
+                                )
+                            )
+                            techniciansRvAdapter.notifyDataSetChanged()
+                            if (techniciansRvAdapter.itemCount == 1)
+                                deployTechButton.visibility = View.GONE
+                        }
+                    })
                 }
             }
+            rvTechnicians.adapter = techniciansRvAdapter
+            rvTechnicians.layoutManager = FlexboxLayoutManager(
+                context, FlexDirection.ROW, FlexWrap.WRAP
+            )
+            techniciansRvAdapter.notifyDataSetChanged()
         }
     }
 
@@ -1321,6 +1341,14 @@ class UpdateStatusBottomSheet(
                                 )
                             }
                             put("difficulty", createPartFromString(complexity)!!)
+                            put(
+                                "progress_vendor",
+                                createPartFromString(workByVendor)!!
+                            )
+                            put(
+                                "progress_vendor_nama",
+                                createPartFromString(vendorNameField.text.toString())!!
+                            )
                         }
                         InitAPI.getEndpoint.deployTechnicians(data)
                             .enqueue(object : Callback<GenericSimpleResponse> {
