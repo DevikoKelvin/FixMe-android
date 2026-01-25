@@ -55,7 +55,7 @@
         tools:text="Issue on Hold status. \nReason: Insufficient Material" />
 
     <com.google.android.material.card.MaterialCardView
-        android:id="@+id/progressActionButton"
+        android:id="@+id/readyTrialButton"
         android:layout_width="match_parent"
         android:layout_height="@dimen/bottom_sheet_padding_bottom"
         android:layout_marginHorizontal="@dimen/list_item_padding"
@@ -68,7 +68,38 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@drawable/gradient_accent_color"
+            android:background="@drawable/gradient_done_color"
+            android:gravity="center">
+
+            <TextView
+                android:id="@+id/readyTrialText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="@string/mark_progress_ready_trial"
+                android:textAlignment="center"
+                android:textColor="@color/white"
+                android:textSize="@dimen/text_size_small"
+                android:textStyle="bold" />
+        </LinearLayout>
+    </com.google.android.material.card.MaterialCardView>
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/progressActionButton"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/bottom_sheet_padding_bottom"
+        android:layout_marginHorizontal="@dimen/list_item_padding"
+        android:layout_marginTop="@dimen/user_info_item_margin_top"
+        android:visibility="gone"
+        app:cardCornerRadius="@dimen/login_button_corner_radius"
+        app:cardElevation="0dp"
+        app:strokeWidth="0dp">
+
+        <LinearLayout
+            android:id="@+id/progressActionColor"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            tools:background="@drawable/gradient_accent_color"
             android:gravity="center">
 
             <TextView

@@ -117,10 +117,9 @@ class ProgressTrackingBottomSheet(
                                                         if (data.usernUserTeknisi[i]?.idUser == userData.id) {
                                                             progressActionButton.visibility =
                                                                 View.VISIBLE
-                                                            progressActionButton.setCardBackgroundColor(
-                                                                ContextCompat.getColor(
-                                                                    context, R.color.button_color
-                                                                )
+                                                            progressActionColor.background = ContextCompat.getDrawable(
+                                                                context,
+                                                                R.drawable.gradient_accent_color
                                                             )
                                                             progressActionText.setTextColor(
                                                                 ContextCompat.getColor(
@@ -152,36 +151,18 @@ class ProgressTrackingBottomSheet(
                                                                         progressDone++
                                                                 }
                                                                 if (progressDone == result.data.size && result.data.isNotEmpty()) {
-                                                                    progressActionButton.visibility =
+                                                                    readyTrialButton.visibility =
                                                                         View.VISIBLE
-                                                                    progressActionButton.setCardBackgroundColor(
-                                                                        ContextCompat.getColor(
-                                                                            context,
-                                                                            R.color.custom_toast_background_soft_blue
-                                                                        )
-                                                                    )
-                                                                    progressActionText.setTextColor(
-                                                                        ContextCompat.getColor(
-                                                                            context,
-                                                                            R.color.custom_toast_font_blue
-                                                                        )
-                                                                    )
-                                                                    progressActionText.text =
-                                                                        if (context.getString(R.string.lang) == "in")
-                                                                            "Tandai Siap Uji Coba"
-                                                                        else "Mark Ready for Trial"
-                                                                    progressActionButton.setOnClickListener {
+                                                                    readyTrialButton.setOnClickListener {
                                                                         onProgressTrackingListener.readyForTrialClicked()
                                                                     }
                                                                 } else {
-                                                                    if (data.isVendor == "Y") {
+                                                                    if (data.isVendor == "y") {
                                                                         progressActionButton.visibility =
                                                                             View.VISIBLE
-                                                                        progressActionButton.setCardBackgroundColor(
-                                                                            ContextCompat.getColor(
-                                                                                context,
-                                                                                R.color.button_color
-                                                                            )
+                                                                        progressActionColor.background = ContextCompat.getDrawable(
+                                                                            context,
+                                                                            R.drawable.gradient_accent_color
                                                                         )
                                                                         progressActionText.setTextColor(
                                                                             ContextCompat.getColor(
@@ -207,14 +188,12 @@ class ProgressTrackingBottomSheet(
                                                                 }
                                                                 break
                                                             } else {
-                                                                if (data.isVendor == "Y") {
+                                                                if (data.isVendor == "y") {
                                                                     progressActionButton.visibility =
                                                                         View.VISIBLE
-                                                                    progressActionButton.setCardBackgroundColor(
-                                                                        ContextCompat.getColor(
-                                                                            context,
-                                                                            R.color.button_color
-                                                                        )
+                                                                    progressActionColor.background = ContextCompat.getDrawable(
+                                                                        context,
+                                                                        R.drawable.gradient_accent_color
                                                                     )
                                                                     progressActionText.setTextColor(
                                                                         ContextCompat.getColor(
@@ -243,10 +222,9 @@ class ProgressTrackingBottomSheet(
                                                         if (data.usernUserTeknisi[i]?.idUser == userData.id) {
                                                             progressActionButton.visibility =
                                                                 View.VISIBLE
-                                                            progressActionButton.setCardBackgroundColor(
-                                                                ContextCompat.getColor(
-                                                                    context, R.color.button_color
-                                                                )
+                                                            progressActionColor.background = ContextCompat.getDrawable(
+                                                                context,
+                                                                R.drawable.gradient_accent_color
                                                             )
                                                             progressActionText.setTextColor(
                                                                 ContextCompat.getColor(
@@ -280,70 +258,18 @@ class ProgressTrackingBottomSheet(
                                                                         progressDone++
                                                                 }
                                                                 if (progressDone == result.data.size && result.data.isNotEmpty()) {
-                                                                    progressActionButton.visibility =
+                                                                    readyTrialButton.visibility =
                                                                         View.VISIBLE
-                                                                    progressActionButton.setCardBackgroundColor(
-                                                                        ContextCompat.getColor(
-                                                                            context,
-                                                                            R.color.custom_toast_background_soft_blue
-                                                                        )
-                                                                    )
-                                                                    progressActionText.setTextColor(
-                                                                        ContextCompat.getColor(
-                                                                            context,
-                                                                            R.color.custom_toast_font_blue
-                                                                        )
-                                                                    )
-                                                                    progressActionText.text =
-                                                                        if (context.getString(R.string.lang) == "in")
-                                                                            "Tandai Siap Uji Coba"
-                                                                        else
-                                                                            "Mark Ready for Trial"
-                                                                    progressActionButton.setOnClickListener {
+                                                                    readyTrialButton.setOnClickListener {
                                                                         onProgressTrackingListener.readyForTrialClicked()
                                                                     }
-                                                                } else {
-                                                                    if (data.isVendor == "Y") {
-                                                                        progressActionButton.visibility =
-                                                                            View.VISIBLE
-                                                                        progressActionButton.setCardBackgroundColor(
-                                                                            ContextCompat.getColor(
-                                                                                context,
-                                                                                R.color.button_color
-                                                                            )
-                                                                        )
-                                                                        progressActionText.setTextColor(
-                                                                            ContextCompat.getColor(
-                                                                                context,
-                                                                                R.color.white
-                                                                            )
-                                                                        )
-                                                                        progressActionText.text =
-                                                                            if (progressAdapter.itemCount == 0) context.getString(
-                                                                                R.string.action_on_progress
-                                                                            ) else context.getString(
-                                                                                R.string.create_new_progress
-                                                                            )
-                                                                        progressActionButton.setOnClickListener {
-                                                                            onProgressTrackingListener.createProgressClicked()
-                                                                        }
-                                                                        tech = true
-                                                                        break
-                                                                    } else {
-                                                                        progressActionButton.visibility =
-                                                                            View.GONE
-                                                                    }
                                                                 }
-                                                                break
-                                                            } else {
-                                                                if (data.isVendor == "Y") {
+                                                                if (data.isVendor == "y") {
                                                                     progressActionButton.visibility =
                                                                         View.VISIBLE
-                                                                    progressActionButton.setCardBackgroundColor(
-                                                                        ContextCompat.getColor(
-                                                                            context,
-                                                                            R.color.button_color
-                                                                        )
+                                                                    progressActionColor.background = ContextCompat.getDrawable(
+                                                                        context,
+                                                                        R.drawable.gradient_accent_color
                                                                     )
                                                                     progressActionText.setTextColor(
                                                                         ContextCompat.getColor(
@@ -354,7 +280,9 @@ class ProgressTrackingBottomSheet(
                                                                     progressActionText.text =
                                                                         if (progressAdapter.itemCount == 0) context.getString(
                                                                             R.string.action_on_progress
-                                                                        ) else context.getString(R.string.create_new_progress)
+                                                                        ) else context.getString(
+                                                                            R.string.create_new_progress
+                                                                        )
                                                                     progressActionButton.setOnClickListener {
                                                                         onProgressTrackingListener.createProgressClicked()
                                                                     }
@@ -364,6 +292,9 @@ class ProgressTrackingBottomSheet(
                                                                     progressActionButton.visibility =
                                                                         View.GONE
                                                                 }
+                                                            } else {
+                                                                progressActionButton.visibility =
+                                                                    View.GONE
                                                             }
                                                         }
                                                     }
@@ -375,10 +306,9 @@ class ProgressTrackingBottomSheet(
                                             else -> {
                                                 if (data.idUser == userData.id) {
                                                     progressActionButton.visibility = View.VISIBLE
-                                                    progressActionButton.setCardBackgroundColor(
-                                                        ContextCompat.getColor(
-                                                            context, R.color.status_on_trial
-                                                        )
+                                                    progressActionColor.background = ContextCompat.getDrawable(
+                                                        context,
+                                                        R.drawable.gradient_on_trial_color
                                                     )
                                                     progressActionText.setTextColor(
                                                         ContextCompat.getColor(
@@ -414,17 +344,14 @@ class ProgressTrackingBottomSheet(
                                         when (data.stsGaprojects) {
                                             22 -> progressActionButton.visibility = View.GONE
                                             3 -> {
-                                                Log.e("Detail", data.toString())
-                                                Log.e("Result", result.toString())
                                                 if (data.idUser == userData.id) {
                                                     for (i in 0 until data.usernUserTeknisi!!.size) {
                                                         if (data.usernUserTeknisi[i]?.idUser == userData.id) {
                                                             progressActionButton.visibility =
                                                                 View.VISIBLE
-                                                            progressActionButton.setCardBackgroundColor(
-                                                                ContextCompat.getColor(
-                                                                    context, R.color.button_color
-                                                                )
+                                                            progressActionColor.background = ContextCompat.getDrawable(
+                                                                context,
+                                                                R.drawable.gradient_accent_color
                                                             )
                                                             progressActionText.setTextColor(
                                                                 ContextCompat.getColor(
@@ -453,11 +380,9 @@ class ProgressTrackingBottomSheet(
                                                                 if (data.isVendor == "y") {
                                                                     progressActionButton.visibility =
                                                                         View.VISIBLE
-                                                                    progressActionButton.setCardBackgroundColor(
-                                                                        ContextCompat.getColor(
-                                                                            context,
-                                                                            R.color.button_color
-                                                                        )
+                                                                    progressActionColor.background = ContextCompat.getDrawable(
+                                                                        context,
+                                                                        R.drawable.gradient_accent_color
                                                                     )
                                                                     progressActionText.setTextColor(
                                                                         ContextCompat.getColor(
@@ -484,11 +409,9 @@ class ProgressTrackingBottomSheet(
                                                                 if (data.isVendor == "y") {
                                                                     progressActionButton.visibility =
                                                                         View.VISIBLE
-                                                                    progressActionButton.setCardBackgroundColor(
-                                                                        ContextCompat.getColor(
-                                                                            context,
-                                                                            R.color.button_color
-                                                                        )
+                                                                    progressActionColor.background = ContextCompat.getDrawable(
+                                                                        context,
+                                                                        R.drawable.gradient_accent_color
                                                                     )
                                                                     progressActionText.setTextColor(
                                                                         ContextCompat.getColor(
@@ -517,10 +440,9 @@ class ProgressTrackingBottomSheet(
                                                         if (data.usernUserTeknisi[i]?.idUser == userData.id) {
                                                             progressActionButton.visibility =
                                                                 View.VISIBLE
-                                                            progressActionButton.setCardBackgroundColor(
-                                                                ContextCompat.getColor(
-                                                                    context, R.color.button_color
-                                                                )
+                                                            progressActionColor.background = ContextCompat.getDrawable(
+                                                                context,
+                                                                R.drawable.gradient_accent_color
                                                             )
                                                             progressActionText.setTextColor(
                                                                 ContextCompat.getColor(
@@ -544,19 +466,14 @@ class ProgressTrackingBottomSheet(
                                                     }
 
                                                     if (!tech) {
-                                                        Log.e("Tech", "I'm not a tech")
                                                         for (i in 0 until data.usernUserSpv!!.size) {
                                                             if (data.usernUserSpv[i]?.idUser == userData.id) {
-                                                                Log.e("SPV", "But I'm a Supervisor")
-                                                                Log.e("Is Vendor?", data.isVendor.toString())
                                                                 if (data.isVendor == "y") {
                                                                     progressActionButton.visibility =
                                                                         View.VISIBLE
-                                                                    progressActionButton.setCardBackgroundColor(
-                                                                        ContextCompat.getColor(
-                                                                            context,
-                                                                            R.color.button_color
-                                                                        )
+                                                                    progressActionColor.background = ContextCompat.getDrawable(
+                                                                        context,
+                                                                        R.drawable.gradient_accent_color
                                                                     )
                                                                     progressActionText.setTextColor(
                                                                         ContextCompat.getColor(
@@ -583,11 +500,9 @@ class ProgressTrackingBottomSheet(
                                                                 if (data.isVendor == "y") {
                                                                     progressActionButton.visibility =
                                                                         View.VISIBLE
-                                                                    progressActionButton.setCardBackgroundColor(
-                                                                        ContextCompat.getColor(
-                                                                            context,
-                                                                            R.color.button_color
-                                                                        )
+                                                                    progressActionColor.background = ContextCompat.getDrawable(
+                                                                        context,
+                                                                        R.drawable.gradient_accent_color
                                                                     )
                                                                     progressActionText.setTextColor(
                                                                         ContextCompat.getColor(
@@ -619,10 +534,9 @@ class ProgressTrackingBottomSheet(
                                             else -> {
                                                 if (data.idUser == userData.id) {
                                                     progressActionButton.visibility = View.VISIBLE
-                                                    progressActionButton.setCardBackgroundColor(
-                                                        ContextCompat.getColor(
-                                                            context, R.color.status_on_trial
-                                                        )
+                                                    progressActionColor.background = ContextCompat.getDrawable(
+                                                        context,
+                                                        R.drawable.gradient_on_trial_color
                                                     )
                                                     progressActionText.setTextColor(
                                                         ContextCompat.getColor(

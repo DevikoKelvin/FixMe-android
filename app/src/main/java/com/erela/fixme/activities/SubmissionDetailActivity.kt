@@ -1598,21 +1598,26 @@ class SubmissionDetailActivity : AppCompatActivity(),
                                         }
                                     }
 
-                                    userTechnicians.text = StringBuilder().also {
-                                        with(it) {
-                                            if (detailData.usernUserTeknisi!!.isEmpty()) {
-                                                append("-")
-                                            } else {
-                                                for (i in 0 until detailData.usernUserTeknisi!!.size) {
-                                                    if (i == detailData.usernUserTeknisi!!.size - 1) {
-                                                        append(detailData.usernUserTeknisi!![i]?.namaUser?.trimEnd())
-                                                    } else {
-                                                        append("${detailData.usernUserTeknisi!![i]?.namaUser?.trimEnd()}\n")
+                                    val vendorName = if (detailData.vendorName != "") {
+                                        ": ${detailData.vendorName}"
+                                    } else ""
+
+                                    userTechnicians.text =
+                                        if (detailData.isVendor == "y") "${getString(R.string.work_by_vendors)}${vendorName}" else StringBuilder().also {
+                                            with(it) {
+                                                if (detailData.usernUserTeknisi!!.isEmpty()) {
+                                                    append("-")
+                                                } else {
+                                                    for (i in 0 until detailData.usernUserTeknisi!!.size) {
+                                                        if (i == detailData.usernUserTeknisi!!.size - 1) {
+                                                            append(detailData.usernUserTeknisi!![i]?.namaUser?.trimEnd())
+                                                        } else {
+                                                            append("${detailData.usernUserTeknisi!![i]?.namaUser?.trimEnd()}\n")
+                                                        }
                                                     }
                                                 }
                                             }
                                         }
-                                    }
                                 } else {
                                     detailTitle.text = "ERR!!"
                                     CustomToast.getInstance(applicationContext)
