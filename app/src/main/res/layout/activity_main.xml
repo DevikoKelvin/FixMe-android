@@ -58,6 +58,7 @@
             app:cardBackgroundColor="@android:color/transparent"
             app:cardCornerRadius="25dp"
             app:cardElevation="0dp"
+            app:cardPreventCornerOverlap="false"
             app:contentPadding="@dimen/list_item_progress_indicator_padding"
             app:strokeWidth="0dp">
 
@@ -74,7 +75,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="@drawable/toolbar_background_staff"
-        android:elevation="7dp"
+        android:elevation="@dimen/dialog_elevation"
         app:layout_constraintEnd_toEndOf="@+id/toolBar"
         app:layout_constraintStart_toStartOf="@+id/toolBar"
         app:layout_constraintTop_toBottomOf="@+id/toolBar">
@@ -195,8 +196,8 @@
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="@dimen/activity_horizontal_margin"
             android:layout_marginVertical="@dimen/activity_vertical_margin"
-            android:paddingBottom="@dimen/submission_detail_bottom_margin"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:paddingBottom="@dimen/submission_detail_bottom_margin">
 
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/makeSubmissionMenu"

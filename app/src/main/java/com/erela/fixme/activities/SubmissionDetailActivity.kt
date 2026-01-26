@@ -157,6 +157,14 @@ class SubmissionDetailActivity : AppCompatActivity(),
         init()
     }
 
+    private fun setRoundedBackground(view: View, @androidx.annotation.DrawableRes drawableId: Int) {
+        val drawable = ContextCompat.getDrawable(this, drawableId)?.mutate()
+        if (drawable is android.graphics.drawable.GradientDrawable) {
+            drawable.cornerRadius = resources.getDimension(R.dimen.login_button_corner_radius)
+        }
+        view.background = drawable
+    }
+
     @SuppressLint("SetTextI18n")
     private fun init() {
         binding.apply {
@@ -355,40 +363,42 @@ class SubmissionDetailActivity : AppCompatActivity(),
 
                                     when (detailData.difficulty) {
                                         "low" -> {
-                                            complexityColor.background =
-                                                ResourcesCompat.getDrawable(
-                                                    resources,
-                                                    R.drawable.gradient_low_complexity,
-                                                    theme
-                                                )
+                                            setRoundedBackground(
+                                                submissionComplexity,
+                                                R.drawable.gradient_low_complexity
+                                            )
+                                            complexityColor.background = null
                                         }
 
                                         "middle" -> {
-                                            complexityColor.background =
-                                                ResourcesCompat.getDrawable(
-                                                    resources,
-                                                    R.drawable.gradient_middle_complexity,
-                                                    theme
-                                                )
+                                            setRoundedBackground(
+                                                submissionComplexity,
+                                                R.drawable.gradient_middle_complexity
+                                            )
+                                            complexityColor.background = null
                                         }
 
                                         "high" -> {
-                                            complexityColor.background =
-                                                ResourcesCompat.getDrawable(
-                                                    resources,
-                                                    R.drawable.gradient_high_complexity,
-                                                    theme
-                                                )
+                                            setRoundedBackground(
+                                                submissionComplexity,
+                                                R.drawable.gradient_high_complexity
+                                            )
+                                            complexityColor.background = null
                                         }
                                     }
+
+                                    setRoundedBackground(
+                                        onProgressColor,
+                                        R.drawable.gradient_progress_action_color
+                                    )
                                     when (detailData.stsGaprojects) {
                                         // Rejected
                                         0 -> {
-                                            statusColor.background = ResourcesCompat.getDrawable(
-                                                resources,
-                                                R.drawable.gradient_rejected_color,
-                                                theme
+                                            setRoundedBackground(
+                                                submissionStatus,
+                                                R.drawable.gradient_rejected_color
                                             )
+                                            statusColor.background = null
                                             submissionStatusText.text = "Rejected"
                                             actionButton.visibility = View.GONE
                                             actionSelfButton.visibility = View.GONE
@@ -407,12 +417,10 @@ class SubmissionDetailActivity : AppCompatActivity(),
                                                 )
                                             }
                                             statusMessageContainer.visibility = View.VISIBLE
-                                            statusMessageColor.background =
-                                                ResourcesCompat.getDrawable(
-                                                    resources,
-                                                    R.drawable.gradient_rejected_color,
-                                                    theme
-                                                )
+                                            setRoundedBackground(
+                                                statusMessageColor,
+                                                R.drawable.gradient_rejected_color,
+                                            )
                                             statusMessage.text =
                                                 if (getString(R.string.lang) == "in")
                                                     "Ditolak oleh ${detailData.nameUserReject?.trimEnd()}\nKetuk untuk melihat alasan"
@@ -427,11 +435,11 @@ class SubmissionDetailActivity : AppCompatActivity(),
                                         }
                                         // Pending
                                         1 -> {
-                                            statusColor.background = ResourcesCompat.getDrawable(
-                                                resources,
-                                                R.drawable.gradient_pending_color,
-                                                theme
+                                            setRoundedBackground(
+                                                submissionStatus,
+                                                R.drawable.gradient_pending_color
                                             )
+                                            statusColor.background = null
                                             submissionStatusText.text = "Pending"
                                             onProgressButton.visibility = View.GONE
                                             messageProgressAndTrialButtonContainer.visibility =
@@ -439,11 +447,11 @@ class SubmissionDetailActivity : AppCompatActivity(),
                                         }
                                         // Waiting
                                         11 -> {
-                                            statusColor.background = ResourcesCompat.getDrawable(
-                                                resources,
-                                                R.drawable.gradient_waiting_color,
-                                                theme
+                                            setRoundedBackground(
+                                                submissionStatus,
+                                                R.drawable.gradient_waiting_color
                                             )
+                                            statusColor.background = null
                                             submissionStatusText.text = "Waiting"
                                             onProgressButton.visibility = View.GONE
                                             messageProgressAndTrialButtonContainer.visibility =
@@ -460,12 +468,10 @@ class SubmissionDetailActivity : AppCompatActivity(),
                                                 )
                                             }
                                             statusMessageContainer.visibility = View.VISIBLE
-                                            statusMessageColor.background =
-                                                ResourcesCompat.getDrawable(
-                                                    resources,
-                                                    R.drawable.gradient_menu_color,
-                                                    theme
-                                                )
+                                            setRoundedBackground(
+                                                statusMessageColor,
+                                                R.drawable.gradient_menu_color,
+                                            )
                                             statusMessage.text =
                                                 if (getString(R.string.lang) == "in")
                                                     "Disetujui oleh ${detailData.namaUserPelaporApprove?.trimEnd()}\nTunggu manajer tujuan untuk menyetujui\nKetuk untuk melihat pesan"
@@ -480,11 +486,11 @@ class SubmissionDetailActivity : AppCompatActivity(),
                                         }
                                         // Approved
                                         2 -> {
-                                            statusColor.background = ResourcesCompat.getDrawable(
-                                                resources,
-                                                R.drawable.gradient_approved_color,
-                                                theme
+                                            setRoundedBackground(
+                                                submissionStatus,
+                                                R.drawable.gradient_approved_color
                                             )
+                                            statusColor.background = null
                                             submissionStatusText.text = "Approved"
                                             var tech = false
                                             var spv = false
@@ -535,12 +541,10 @@ class SubmissionDetailActivity : AppCompatActivity(),
                                                         )
                                                     }
                                                     statusMessageContainer.visibility = View.VISIBLE
-                                                    statusMessageColor.background =
-                                                        ResourcesCompat.getDrawable(
-                                                            resources,
-                                                            R.drawable.gradient_approved_color,
-                                                            theme
-                                                        )
+                                                    setRoundedBackground(
+                                                        statusMessageColor,
+                                                        R.drawable.gradient_approved_color,
+                                                    )
                                                     message = StringBuilder().append(
                                                         if (getString(R.string.lang) == "in")
                                                             "Disetujui oleh ${detailData.userNamaApprove?.trimEnd()}\nKetuk untuk melihat pesan"
@@ -838,11 +842,11 @@ class SubmissionDetailActivity : AppCompatActivity(),
                                                     break
                                                 }
                                             }
-                                            statusColor.background = ResourcesCompat.getDrawable(
-                                                resources,
-                                                R.drawable.gradient_hold_color,
-                                                theme
+                                            setRoundedBackground(
+                                                submissionStatus,
+                                                R.drawable.gradient_hold_color
                                             )
+                                            statusColor.background = null
                                             submissionStatusText.text = "Hold"
                                             messageProgressAndTrialButtonContainer.visibility =
                                                 View.VISIBLE
@@ -854,12 +858,10 @@ class SubmissionDetailActivity : AppCompatActivity(),
                                                 null,
                                                 null
                                             )
-                                            onProgressColor.background =
-                                                ResourcesCompat.getDrawable(
-                                                    resources,
-                                                    R.drawable.gradient_hold_color,
-                                                    theme
-                                                )
+                                            setRoundedBackground(
+                                                onProgressColor,
+                                                R.drawable.gradient_hold_color,
+                                            )
                                             onProgressButton.setOnClickListener {
                                                 progressTrackingBottomSheet =
                                                     ProgressTrackingBottomSheet(
@@ -1174,11 +1176,11 @@ class SubmissionDetailActivity : AppCompatActivity(),
                                                     break
                                                 }
                                             }
-                                            statusColor.background = ResourcesCompat.getDrawable(
-                                                resources,
-                                                R.drawable.gradient_on_progress_color,
-                                                theme
+                                            setRoundedBackground(
+                                                submissionStatus,
+                                                R.drawable.gradient_on_progress_color
                                             )
+                                            statusColor.background = null
                                             submissionStatusText.text = "On Progress"
                                             actionButton.visibility = View.GONE
                                             actionSelfButton.visibility = View.GONE
@@ -1195,12 +1197,10 @@ class SubmissionDetailActivity : AppCompatActivity(),
                                                 null,
                                                 null
                                             )
-                                            onProgressColor.background =
-                                                ResourcesCompat.getDrawable(
-                                                    resources,
-                                                    R.drawable.gradient_progress_action_color,
-                                                    theme
-                                                )
+                                            setRoundedBackground(
+                                                onProgressColor,
+                                                R.drawable.gradient_progress_action_color,
+                                            )
                                             message =
                                                 StringBuilder().append(
                                                     if (getString(R.string.lang) == "in")
@@ -1254,11 +1254,11 @@ class SubmissionDetailActivity : AppCompatActivity(),
                                         }
                                         // Progress Done
                                         30 -> {
-                                            statusColor.background = ResourcesCompat.getDrawable(
-                                                resources,
-                                                R.drawable.gradient_progress_done_color,
-                                                theme
+                                            setRoundedBackground(
+                                                submissionStatus,
+                                                R.drawable.gradient_progress_done_color
                                             )
+                                            statusColor.background = null
                                             submissionStatusText.text = "Progress Done"
                                             actionButton.visibility = View.GONE
                                             actionSelfButton.visibility = View.GONE
@@ -1291,12 +1291,10 @@ class SubmissionDetailActivity : AppCompatActivity(),
                                                 null,
                                                 null
                                             )
-                                            onProgressColor.background =
-                                                ResourcesCompat.getDrawable(
-                                                    resources,
-                                                    R.drawable.gradient_progress_done_color,
-                                                    theme
-                                                )
+                                            setRoundedBackground(
+                                                onProgressColor,
+                                                R.drawable.gradient_progress_done_color,
+                                            )
                                             onProgressButton.setOnClickListener {
                                                 progressTrackingBottomSheet =
                                                     ProgressTrackingBottomSheet(
@@ -1336,11 +1334,11 @@ class SubmissionDetailActivity : AppCompatActivity(),
                                         }
                                         // Done
                                         4 -> {
-                                            statusColor.background = ResourcesCompat.getDrawable(
-                                                resources,
-                                                R.drawable.gradient_done_color,
-                                                theme
+                                            setRoundedBackground(
+                                                submissionStatus,
+                                                R.drawable.gradient_done_color
                                             )
+                                            statusColor.background = null
                                             submissionStatusText.text = "Done"
                                             actionButton.visibility = View.GONE
                                             actionSelfButton.visibility = View.GONE
@@ -1348,17 +1346,9 @@ class SubmissionDetailActivity : AppCompatActivity(),
                                             messageProgressAndTrialButtonContainer.visibility =
                                                 View.VISIBLE
                                             statusMessageContainer.visibility = View.VISIBLE
-                                            statusMessageColor.background =
-                                                ResourcesCompat.getDrawable(
-                                                    resources,
-                                                    R.drawable.gradient_approved_color,
-                                                    theme
-                                                )
-                                            statusMessageContainer.setCardBackgroundColor(
-                                                ContextCompat.getColor(
-                                                    this@SubmissionDetailActivity,
-                                                    R.color.custom_toast_font_success
-                                                )
+                                            setRoundedBackground(
+                                                statusMessageColor,
+                                                R.drawable.gradient_approved_color,
                                             )
                                             statusMessage.text =
                                                 if (getString(R.string.lang) == "in")
@@ -1408,11 +1398,11 @@ class SubmissionDetailActivity : AppCompatActivity(),
                                         }
                                         // Canceled
                                         5 -> {
-                                            statusColor.background = ResourcesCompat.getDrawable(
-                                                resources,
-                                                R.drawable.gradient_canceled_color,
-                                                theme
+                                            setRoundedBackground(
+                                                submissionStatus,
+                                                R.drawable.gradient_canceled_color
                                             )
+                                            statusColor.background = null
                                             submissionStatusText.text = "Canceled"
                                             actionButton.visibility = View.GONE
                                             actionSelfButton.visibility = View.GONE
@@ -1420,12 +1410,10 @@ class SubmissionDetailActivity : AppCompatActivity(),
                                             messageProgressAndTrialButtonContainer.visibility =
                                                 View.VISIBLE
                                             statusMessageContainer.visibility = View.VISIBLE
-                                            statusMessageColor.background =
-                                                ResourcesCompat.getDrawable(
-                                                    resources,
-                                                    R.drawable.gradient_canceled_color,
-                                                    theme
-                                                )
+                                            setRoundedBackground(
+                                                statusMessageColor,
+                                                R.drawable.gradient_canceled_color,
+                                            )
                                             statusMessage.text =
                                                 if (userData.id == detailData.idUser) {
                                                     if (getString(R.string.lang) == "in")
@@ -1447,11 +1435,11 @@ class SubmissionDetailActivity : AppCompatActivity(),
                                         }
                                         // On-Trial
                                         31 -> {
-                                            statusColor.background = ResourcesCompat.getDrawable(
-                                                resources,
-                                                R.drawable.gradient_on_trial_color,
-                                                theme
+                                            setRoundedBackground(
+                                                submissionStatus,
+                                                R.drawable.gradient_on_trial_color
                                             )
+                                            statusColor.background = null
                                             submissionStatusText.text = "On Trial"
                                             actionButton.visibility = View.GONE
                                             actionSelfButton.visibility = View.GONE
@@ -1459,11 +1447,9 @@ class SubmissionDetailActivity : AppCompatActivity(),
                                             messageProgressAndTrialButtonContainer.visibility =
                                                 View.VISIBLE
                                             statusMessageContainer.visibility = View.VISIBLE
-                                            statusMessageContainer.setCardBackgroundColor(
-                                                ContextCompat.getColor(
-                                                    this@SubmissionDetailActivity,
-                                                    R.color.custom_toast_background_warning
-                                                )
+                                            setRoundedBackground(
+                                                statusMessageColor,
+                                                R.drawable.gradient_accent_color,
                                             )
                                             statusMessage.text =
                                                 if (getString(R.string.lang) == "in")

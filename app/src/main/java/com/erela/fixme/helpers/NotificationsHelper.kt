@@ -3,6 +3,7 @@ package com.erela.fixme.helpers
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.PendingIntent
+import android.app.TaskStackBuilder
 import android.content.Context
 import android.content.Intent
 import androidx.core.app.NotificationCompat
@@ -38,20 +39,18 @@ object NotificationsHelper {
 
         val notificationId = System.currentTimeMillis().toInt()
 
-        val resultIntent = Intent(context, MainActivity::class.java).apply {
-            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP
+        val resultIntent = Intent(context, SubmissionDetailActivity::class.java).apply {
+            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
             if (caseId != 0) {
                 putExtra(SubmissionDetailActivity.DETAIL_ID, caseId.toString())
                 putExtra(SubmissionDetailActivity.NOTIFICATION_ID, notificationId)
             }
         }
 
-        val pendingIntent = PendingIntent.getActivity(
-            context,
-            notificationId,
-            resultIntent,
-            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
-        )
+        val pendingIntent: PendingIntent? = TaskStackBuilder.create(context).run {
+            addNextIntentWithParentStack(resultIntent)
+            getPendingIntent(notificationId, PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE)
+        }
 
         val notificationBuilder =
             NotificationCompat.Builder(context, CHANNEL_ID)

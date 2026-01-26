@@ -206,6 +206,7 @@
                 app:cardBackgroundColor="@android:color/transparent"
                 app:cardCornerRadius="@dimen/list_item_submission_tag_card_corner_radius"
                 app:cardElevation="0dp"
+                app:cardPreventCornerOverlap="false"
                 app:strokeWidth="0dp">
 
                 <LinearLayout
@@ -234,6 +235,7 @@
                 app:cardBackgroundColor="@android:color/transparent"
                 app:cardCornerRadius="@dimen/list_item_submission_tag_card_corner_radius"
                 app:cardElevation="0dp"
+                app:cardPreventCornerOverlap="false"
                 app:strokeWidth="0dp">
 
                 <LinearLayout

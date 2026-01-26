@@ -26,6 +26,7 @@
             android:layout_alignParentStart="true"
             android:layout_centerVertical="true"
             android:layout_marginStart="@dimen/dialog_loading_content_padding"
+            app:cardPreventCornerOverlap="false"
             app:cardBackgroundColor="@android:color/transparent"
             app:cardCornerRadius="@dimen/login_button_corner_radius"
             app:cardElevation="0dp"
@@ -170,6 +171,7 @@
                                 app:cardBackgroundColor="@android:color/transparent"
                                 app:cardCornerRadius="@dimen/login_button_corner_radius"
                                 app:cardElevation="0dp"
+                                app:cardPreventCornerOverlap="false"
                                 app:contentPadding="@dimen/dialog_loading_content_padding"
                                 app:contentPaddingLeft="@dimen/dialog_margin"
                                 app:contentPaddingRight="@dimen/dialog_margin"
@@ -659,6 +661,7 @@
                             app:cardBackgroundColor="@android:color/transparent"
                             app:cardCornerRadius="@dimen/login_button_corner_radius"
                             app:cardElevation="0dp"
+                            app:cardPreventCornerOverlap="false"
                             app:strokeWidth="0dp"
                             tools:ignore="TooManyViews">
 
@@ -690,8 +693,9 @@
                             android:layout_gravity="end|center"
                             android:layout_margin="@dimen/dialog_loading_content_padding"
                             app:cardBackgroundColor="@android:color/transparent"
-                            app:cardCornerRadius="@dimen/login_button_corner_radius"
+                            app:cardCornerRadius="@dimen/list_item_submission_tag_card_corner_radius"
                             app:cardElevation="0dp"
+                            app:cardPreventCornerOverlap="false"
                             app:strokeWidth="0dp">
 
                             <LinearLayout
@@ -1133,6 +1137,7 @@
                 android:visibility="gone"
                 app:cardCornerRadius="@dimen/login_button_corner_radius"
                 app:cardElevation="@dimen/card_elevation"
+                app:cardPreventCornerOverlap="false"
                 app:strokeWidth="0dp">
 
                 <LinearLayout
@@ -1167,6 +1172,7 @@
                 android:visibility="gone"
                 app:cardCornerRadius="@dimen/login_button_corner_radius"
                 app:cardElevation="@dimen/card_elevation"
+                app:cardPreventCornerOverlap="false"
                 app:strokeWidth="0dp">
 
                 <LinearLayout
@@ -1203,6 +1209,7 @@
                 app:cardBackgroundColor="@color/status_on_trial"
                 app:cardCornerRadius="@dimen/login_button_corner_radius"
                 app:cardElevation="@dimen/card_elevation"
+                app:cardPreventCornerOverlap="false"
                 app:strokeWidth="0dp">
 
                 <LinearLayout
@@ -1233,6 +1240,7 @@
             android:visibility="gone"
             app:cardCornerRadius="@dimen/login_button_corner_radius"
             app:cardElevation="@dimen/card_elevation"
+            app:cardPreventCornerOverlap="false"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/actionSelfButton"
             app:layout_constraintStart_toStartOf="parent"
@@ -1265,6 +1273,7 @@
             app:cardBackgroundColor="@android:color/transparent"
             app:cardCornerRadius="100dp"
             app:cardElevation="6dp"
+            app:cardPreventCornerOverlap="false"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:strokeWidth="0dp">
@@ -1305,6 +1314,7 @@
             app:cardBackgroundColor="@android:color/transparent"
             app:cardCornerRadius="100dp"
             app:cardElevation="6dp"
+            app:cardPreventCornerOverlap="false"
             app:layout_constraintBottom_toTopOf="@+id/actionSelfButton"
             app:layout_constraintEnd_toEndOf="parent"
             app:strokeWidth="0dp">
@@ -1345,6 +1355,7 @@
             app:cardBackgroundColor="@android:color/transparent"
             app:cardCornerRadius="100dp"
             app:cardElevation="6dp"
+            app:cardPreventCornerOverlap="false"
             app:layout_constraintBottom_toTopOf="@+id/editButton"
             app:layout_constraintEnd_toEndOf="parent"
             app:strokeWidth="0dp">

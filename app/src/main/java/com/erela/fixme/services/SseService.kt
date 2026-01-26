@@ -2,7 +2,9 @@ package com.erela.fixme.services
 
 import android.app.Service
 import android.content.Intent
+import android.os.Handler
 import android.os.IBinder
+import android.os.Looper
 import android.util.Log
 import com.erela.fixme.BuildConfig
 import com.erela.fixme.R
@@ -21,6 +23,7 @@ import java.util.concurrent.TimeUnit
 
 class SseService : Service() {
     private lateinit var eventSource: EventSource
+    private val handler = Handler(Looper.getMainLooper())
     private val userData: UserData by lazy {
         UserDataHelper(applicationContext).getUserData()
     }
@@ -32,15 +35,13 @@ class SseService : Service() {
     }
 
     private fun createNotificationChannel() {
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
-            val channel = android.app.NotificationChannel(
-                CHANNEL_ID,
-                "FixMe Background Service",
-                android.app.NotificationManager.IMPORTANCE_MIN
-            )
-            val manager = getSystemService(android.app.NotificationManager::class.java)
-            manager.createNotificationChannel(channel)
-        }
+        val channel = android.app.NotificationChannel(
+            CHANNEL_ID,
+            "FixMe Background Service",
+            android.app.NotificationManager.IMPORTANCE_MIN
+        )
+        val manager = getSystemService(android.app.NotificationManager::class.java)
+        manager.createNotificationChannel(channel)
     }
 
     private fun getNotification(): android.app.Notification {
@@ -128,6 +129,8 @@ class SseService : Service() {
                             }
                         }
 
+                        Log.e("Received notification", messageJson.toString())
+
                         val notificationId = messageJson.getInt("id_gaprojects")
                         val relatedUserId = messageJson.getInt("id_user")
 
@@ -155,6 +158,12 @@ class SseService : Service() {
                     response: Response?
                 ) {
                     Log.e(TAG, "onFailure: ${t?.message}", t)
+                    Log.d(TAG, "SSE Connection failed, retrying in 5 seconds...")
+                    handler.postDelayed({
+                        if (isRunning) {
+                            initSse()
+                        }
+                    }, 5000)
                 }
 
                 override fun onClosed(eventSource: EventSource) {
@@ -166,7 +175,10 @@ class SseService : Service() {
 
     override fun onDestroy() {
         super.onDestroy()
-        eventSource.cancel()
+        handler.removeCallbacksAndMessages(null)
+        if (this::eventSource.isInitialized) {
+            eventSource.cancel()
+        }
         isRunning = false
     }
 
