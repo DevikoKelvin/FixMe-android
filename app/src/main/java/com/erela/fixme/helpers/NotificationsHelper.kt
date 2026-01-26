@@ -39,13 +39,15 @@ object NotificationsHelper {
 
         val notificationId = System.currentTimeMillis().toInt()
 
-        val resultIntent = Intent(context, SubmissionDetailActivity::class.java).apply {
-            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-            if (caseId != 0) {
+        val resultIntent = if (caseId != 0) {
+            Intent(context, SubmissionDetailActivity::class.java).apply {
                 putExtra(SubmissionDetailActivity.DETAIL_ID, caseId.toString())
                 putExtra(SubmissionDetailActivity.NOTIFICATION_ID, notificationId)
             }
+        } else {
+            Intent(context, MainActivity::class.java)
         }
+        resultIntent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
 
         val pendingIntent: PendingIntent? = TaskStackBuilder.create(context).run {
             addNextIntentWithParentStack(resultIntent)
