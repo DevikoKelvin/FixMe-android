@@ -27,12 +27,12 @@ swipeRefreshLayout = "1.2.0"
 circleIndicator = "2.1.6"
 appxupdater = "v2.0.20"
 pusherJavaClient = "2.4.4"
-balloon = "1.7.1"
+balloon = "1.7.3"
 shimmer = "0.5.0"
 
-firebaseBom = "34.7.0"
+firebaseBom = "34.8.0"
 firebaseMessaging = "25.0.1"
-playServicesMaps = "19.2.0"
+playServicesMaps = "20.0.0"
 playServicesLocation = "21.3.0"
 
 [libraries]
