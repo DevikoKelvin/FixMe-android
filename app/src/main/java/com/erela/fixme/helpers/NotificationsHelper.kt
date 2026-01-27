@@ -39,18 +39,25 @@ object NotificationsHelper {
 
         val notificationId = System.currentTimeMillis().toInt()
 
-        val resultIntent = if (caseId != 0) {
-            Intent(context, SubmissionDetailActivity::class.java).apply {
-                putExtra(SubmissionDetailActivity.DETAIL_ID, caseId.toString())
-                putExtra(SubmissionDetailActivity.NOTIFICATION_ID, notificationId)
+        val resultIntent: Intent? = if (UserDataHelper(context).isUserDataExist()) {
+            if (caseId != 0) {
+                Intent(context, SubmissionDetailActivity::class.java).apply {
+                    putExtra(SubmissionDetailActivity.DETAIL_ID, caseId.toString())
+                    putExtra(SubmissionDetailActivity.NOTIFICATION_ID, notificationId)
+                }
+            } else {
+                Intent(context, MainActivity::class.java)
             }
         } else {
-            Intent(context, MainActivity::class.java)
+            context.packageManager.getLaunchIntentForPackage(context.packageName)
         }
-        resultIntent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+
+        if (caseId == 0) {
+            resultIntent?.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+        }
 
         val pendingIntent: PendingIntent? = TaskStackBuilder.create(context).run {
-            addNextIntentWithParentStack(resultIntent)
+            addNextIntentWithParentStack(resultIntent!!)
             getPendingIntent(notificationId, PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE)
         }
 

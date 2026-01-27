@@ -109,7 +109,7 @@
                     android:id="@+id/shimmer"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:visibility="gone">
+                    android:visibility="visible">
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -590,7 +590,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    android:visibility="visible"
+                    android:visibility="gone"
                     tools:ignore="UselessLeaf">
 
                     <com.google.android.material.card.MaterialCardView
@@ -1118,7 +1118,6 @@
             android:layout_height="wrap_content"
             android:layout_alignParentStart="true"
             android:layout_centerVertical="true"
-            android:layout_marginBottom="@dimen/dialog_loading_content_padding"
             android:layout_toStartOf="@+id/actionSelfButton"
             android:orientation="horizontal"
             android:visibility="visible"
@@ -1155,7 +1154,7 @@
                         android:drawablePadding="@dimen/dialog_loading_content_padding"
                         android:textAlignment="center"
                         android:textColor="@color/custom_toast_background_normal_dark_gray"
-                        android:textSize="@dimen/text_size_small"
+                        android:textSize="@dimen/text_size_micro"
                         android:textStyle="bold"
                         tools:text="Waiting for action from hendrick\nClick to see progress" />
                 </LinearLayout>
@@ -1266,7 +1265,7 @@
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/actionSelfButton"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="@dimen/bottom_sheet_padding_bottom"
             android:layout_marginEnd="@dimen/activity_horizontal_margin"
             android:layout_marginBottom="@dimen/activity_horizontal_margin"
             android:visibility="gone"
@@ -1307,7 +1306,7 @@
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/editButton"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="@dimen/bottom_sheet_padding_bottom"
             android:layout_marginEnd="@dimen/activity_horizontal_margin"
             android:layout_marginBottom="@dimen/activity_horizontal_margin"
             android:visibility="gone"
@@ -1348,7 +1347,7 @@
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/cancelButton"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="@dimen/bottom_sheet_padding_bottom"
             android:layout_marginEnd="@dimen/activity_horizontal_margin"
             android:layout_marginBottom="@dimen/activity_horizontal_margin"
             android:visibility="gone"
@@ -1385,6 +1384,5 @@
                     android:textStyle="bold" />
             </LinearLayout>
         </com.google.android.material.card.MaterialCardView>
-
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

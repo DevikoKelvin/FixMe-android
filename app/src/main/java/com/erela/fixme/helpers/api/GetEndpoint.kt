@@ -152,6 +152,12 @@ interface GetEndpoint {
     ): Call<GenericSimpleResponse>
 
     @Multipart
+    @POST("statusApproveUpd")
+    fun editApprovals(
+        @PartMap data: MutableMap<String, RequestBody>
+    ): Call<GenericSimpleResponse>
+
+    @Multipart
     @POST("setupTechnician")
     fun deployTechnicians(
         @PartMap data: MutableMap<String, RequestBody>

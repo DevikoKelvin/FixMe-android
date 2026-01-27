@@ -1768,6 +1768,62 @@ class SubmissionDetailActivity : AppCompatActivity(),
                             onProgressButton.visibility = View.GONE
                         }
                     }
+                    actionSelfButton.setOnClickListener {
+                        if (!isFabVisible) {
+                            openFabMenu("reporter")
+
+                            editButton.setOnClickListener {
+                                activityResultLauncher.launch(
+                                    Intent(
+                                        this@SubmissionDetailActivity,
+                                        SubmissionFormActivity::class.java
+                                    ).also {
+                                        with(it) {
+                                            putExtra("data", data)
+                                        }
+                                    }
+                                )
+                            }
+
+                            cancelButton.setOnClickListener {
+                                closeFabMenu()
+                                val bottomSheet = UpdateStatusBottomSheet(
+                                    this@SubmissionDetailActivity,
+                                    data,
+                                    approve = false,
+                                    cancel = true,
+                                    deployTech = false
+                                ).also { bs ->
+                                    with(bs) {
+                                        setOnUpdateSuccessListener(object :
+                                            UpdateStatusBottomSheet.OnUpdateSuccessListener {
+                                            override fun onApproved() {}
+
+                                            override fun onRejected() {}
+
+                                            override fun onCanceled() {
+                                                isUpdated = true
+                                                init()
+                                            }
+
+                                            override fun onTechniciansDeployed() {}
+                                        })
+                                    }
+                                }
+
+                                if (bottomSheet.window != null)
+                                    bottomSheet.show()
+                            }
+                        } else {
+                            closeFabMenu()
+                        }
+                    }
+                }
+                // Approved
+                2 -> {
+                    if (userData.id == data.idUserApprove) {
+                        actionSelfButton.visibility = View.VISIBLE
+                    }
                 }
                 // Waiting
                 11 -> {
@@ -1793,56 +1849,6 @@ class SubmissionDetailActivity : AppCompatActivity(),
                 }
             }
 
-            actionSelfButton.setOnClickListener {
-                if (!isFabVisible) {
-                    openFabMenu()
-
-                    editButton.setOnClickListener {
-                        activityResultLauncher.launch(
-                            Intent(
-                                this@SubmissionDetailActivity,
-                                SubmissionFormActivity::class.java
-                            ).also {
-                                with(it) {
-                                    putExtra("data", data)
-                                }
-                            }
-                        )
-                    }
-
-                    cancelButton.setOnClickListener {
-                        closeFabMenu()
-                        val bottomSheet = UpdateStatusBottomSheet(
-                            this@SubmissionDetailActivity,
-                            data,
-                            approve = false,
-                            cancel = true,
-                            deployTech = false
-                        ).also { bs ->
-                            with(bs) {
-                                setOnUpdateSuccessListener(object :
-                                    UpdateStatusBottomSheet.OnUpdateSuccessListener {
-                                    override fun onApproved() {}
-
-                                    override fun onRejected() {}
-
-                                    override fun onCanceled() {
-                                        isUpdated = true
-                                        init()
-                                    }
-
-                                    override fun onTechniciansDeployed() {}
-                                })
-                            }
-                        }
-
-                        if (bottomSheet.window != null)
-                            bottomSheet.show()
-                    }
-                } else {
-                    closeFabMenu()
-                }
-            }
             actionButton.setOnClickListener {
                 val bottomSheet = SubmissionActionBottomSheet(
                     this@SubmissionDetailActivity, data
@@ -3012,14 +3018,18 @@ class SubmissionDetailActivity : AppCompatActivity(),
             confirmationDialog.show()
     }
 
-    private fun openFabMenu() {
+    private fun openFabMenu(role: String) {
         binding.apply {
             isFabVisible = true
             TransitionManager.beginDelayedTransition(buttonContainer, AutoTransition())
             actionSelfText.visibility = View.GONE
 
-            animShow(editButton)
-            animShow(cancelButton)
+            if (role == "reporter") {
+                animShow(editButton)
+                animShow(cancelButton)
+            } else {
+                animShow(editButton)
+            }
         }
     }
 
