@@ -17,11 +17,16 @@ class SubmissionRvAdapter(val context: Context, val data: ArrayList<SubmissionLi
     private lateinit var onSubmissionClickListener: OnSubmissionClickListener
 
     private fun setRoundedBackground(view: View, drawableId: Int) {
-        val drawable = androidx.core.content.ContextCompat.getDrawable(context, drawableId)?.mutate()
+        view.background = ResourcesCompat.getDrawable(
+            context.resources,
+            drawableId,
+            context.theme
+        )
+        /*val drawable = androidx.core.content.ContextCompat.getDrawable(context, drawableId)?.mutate()
         if (drawable is android.graphics.drawable.GradientDrawable) {
             drawable.cornerRadius = context.resources.getDimension(R.dimen.login_button_corner_radius)
         }
-        view.background = drawable
+        view.background = drawable*/
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder = ViewHolder(
@@ -75,23 +80,19 @@ class SubmissionRvAdapter(val context: Context, val data: ArrayList<SubmissionLi
                     }
                 when (item.complexity) {
                     "low" -> {
-                        setRoundedBackground(complexity, R.drawable.gradient_low_complexity)
-                        complexityColor.background = null
+                        setRoundedBackground(complexityColor, R.drawable.gradient_low_complexity)
                     }
 
                     "middle" -> {
-                        setRoundedBackground(complexity, R.drawable.gradient_middle_complexity)
-                        complexityColor.background = null
+                        setRoundedBackground(complexityColor, R.drawable.gradient_middle_complexity)
                     }
 
                     "high" -> {
-                        setRoundedBackground(complexity, R.drawable.gradient_high_complexity)
-                        complexityColor.background = null
+                        setRoundedBackground(complexityColor, R.drawable.gradient_high_complexity)
                     }
 
                     else -> {
-                        setRoundedBackground(complexity, R.drawable.gradient_logout_color)
-                        complexityColor.background = null
+                        setRoundedBackground(complexityColor, R.drawable.gradient_logout_color)
                     }
                 }
 
@@ -102,8 +103,7 @@ class SubmissionRvAdapter(val context: Context, val data: ArrayList<SubmissionLi
                             R.drawable.gradient_rejected_color,
                             context.theme
                         )
-                        setRoundedBackground(submissionStatus, R.drawable.gradient_rejected_color)
-                        statusColor.background = null
+                        setRoundedBackground(statusColor, R.drawable.gradient_rejected_color)
                         submissionStatusText.text = "Rejected"
                         submissionStatusText.setTextColor(
                             ResourcesCompat.getColor(
@@ -120,8 +120,7 @@ class SubmissionRvAdapter(val context: Context, val data: ArrayList<SubmissionLi
                             R.drawable.gradient_pending_color,
                             context.theme
                         )
-                        setRoundedBackground(submissionStatus, R.drawable.gradient_pending_color)
-                        statusColor.background = null
+                        setRoundedBackground(statusColor, R.drawable.gradient_pending_color)
                         submissionStatusText.text = "Pending"
                         submissionStatusText.setTextColor(
                             ResourcesCompat.getColor(
@@ -138,8 +137,7 @@ class SubmissionRvAdapter(val context: Context, val data: ArrayList<SubmissionLi
                             R.drawable.gradient_waiting_color,
                             context.theme
                         )
-                        setRoundedBackground(submissionStatus, R.drawable.gradient_waiting_color)
-                        statusColor.background = null
+                        setRoundedBackground(statusColor, R.drawable.gradient_waiting_color)
                         submissionStatusText.text = "Waiting"
                         submissionStatusText.setTextColor(
                             ResourcesCompat.getColor(
@@ -156,8 +154,7 @@ class SubmissionRvAdapter(val context: Context, val data: ArrayList<SubmissionLi
                             R.drawable.gradient_approved_color,
                             context.theme
                         )
-                        setRoundedBackground(submissionStatus, R.drawable.gradient_approved_color)
-                        statusColor.background = null
+                        setRoundedBackground(statusColor, R.drawable.gradient_approved_color)
                         submissionStatusText.text = "Approved"
                         submissionStatusText.setTextColor(
                             ResourcesCompat.getColor(
@@ -174,8 +171,7 @@ class SubmissionRvAdapter(val context: Context, val data: ArrayList<SubmissionLi
                             R.drawable.gradient_hold_color,
                             context.theme
                         )
-                        setRoundedBackground(submissionStatus, R.drawable.gradient_hold_color)
-                        statusColor.background = null
+                        setRoundedBackground(statusColor, R.drawable.gradient_hold_color)
                         submissionStatusText.text = "Hold"
                         submissionStatusText.setTextColor(
                             ResourcesCompat.getColor(
@@ -192,8 +188,7 @@ class SubmissionRvAdapter(val context: Context, val data: ArrayList<SubmissionLi
                             R.drawable.gradient_on_progress_color,
                             context.theme
                         )
-                        setRoundedBackground(submissionStatus, R.drawable.gradient_on_progress_color)
-                        statusColor.background = null
+                        setRoundedBackground(statusColor, R.drawable.gradient_on_progress_color)
                         submissionStatusText.text = "On Progress"
                         submissionStatusText.setTextColor(
                             ResourcesCompat.getColor(
@@ -210,8 +205,7 @@ class SubmissionRvAdapter(val context: Context, val data: ArrayList<SubmissionLi
                             R.drawable.gradient_progress_done_color,
                             context.theme
                         )
-                        setRoundedBackground(submissionStatus, R.drawable.gradient_progress_done_color)
-                        statusColor.background = null
+                        setRoundedBackground(statusColor, R.drawable.gradient_progress_done_color)
                         submissionStatusText.text = "Progress Done"
                         submissionStatusText.setTextColor(
                             ResourcesCompat.getColor(
@@ -228,8 +222,7 @@ class SubmissionRvAdapter(val context: Context, val data: ArrayList<SubmissionLi
                             R.drawable.gradient_done_color,
                             context.theme
                         )
-                        setRoundedBackground(submissionStatus, R.drawable.gradient_done_color)
-                        statusColor.background = null
+                        setRoundedBackground(statusColor, R.drawable.gradient_done_color)
                         submissionStatusText.text = "Done"
                         submissionStatusText.setTextColor(
                             ResourcesCompat.getColor(
@@ -246,8 +239,7 @@ class SubmissionRvAdapter(val context: Context, val data: ArrayList<SubmissionLi
                             R.drawable.gradient_canceled_color,
                             context.theme
                         )
-                        setRoundedBackground(submissionStatus, R.drawable.gradient_canceled_color)
-                        statusColor.background = null
+                        setRoundedBackground(statusColor, R.drawable.gradient_canceled_color)
                         submissionStatusText.text = "Canceled"
                         submissionStatusText.setTextColor(
                             ResourcesCompat.getColor(
@@ -264,8 +256,7 @@ class SubmissionRvAdapter(val context: Context, val data: ArrayList<SubmissionLi
                             R.drawable.gradient_on_trial_color,
                             context.theme
                         )
-                        setRoundedBackground(submissionStatus, R.drawable.gradient_on_trial_color)
-                        statusColor.background = null
+                        setRoundedBackground(statusColor, R.drawable.gradient_on_trial_color)
                         submissionStatusText.text = "On Trial"
                         submissionStatusText.setTextColor(
                             ResourcesCompat.getColor(

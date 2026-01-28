@@ -158,11 +158,16 @@ class SubmissionDetailActivity : AppCompatActivity(),
     }
 
     private fun setRoundedBackground(view: View, @androidx.annotation.DrawableRes drawableId: Int) {
-        val drawable = ContextCompat.getDrawable(this, drawableId)?.mutate()
+        view.background = ResourcesCompat.getDrawable(
+            resources,
+            drawableId,
+            theme
+        )
+        /*val drawable = ContextCompat.getDrawable(this, drawableId)?.mutate()
         if (drawable is android.graphics.drawable.GradientDrawable) {
             drawable.cornerRadius = resources.getDimension(R.dimen.login_button_corner_radius)
         }
-        view.background = drawable
+        view.background = drawable*/
     }
 
     @SuppressLint("SetTextI18n")
@@ -364,26 +369,23 @@ class SubmissionDetailActivity : AppCompatActivity(),
                                     when (detailData.difficulty) {
                                         "low" -> {
                                             setRoundedBackground(
-                                                submissionComplexity,
+                                                complexityColor,
                                                 R.drawable.gradient_low_complexity
                                             )
-                                            complexityColor.background = null
                                         }
 
                                         "middle" -> {
                                             setRoundedBackground(
-                                                submissionComplexity,
+                                                complexityColor,
                                                 R.drawable.gradient_middle_complexity
                                             )
-                                            complexityColor.background = null
                                         }
 
                                         "high" -> {
                                             setRoundedBackground(
-                                                submissionComplexity,
+                                                complexityColor,
                                                 R.drawable.gradient_high_complexity
                                             )
-                                            complexityColor.background = null
                                         }
                                     }
 
@@ -395,10 +397,9 @@ class SubmissionDetailActivity : AppCompatActivity(),
                                         // Rejected
                                         0 -> {
                                             setRoundedBackground(
-                                                submissionStatus,
+                                                statusColor,
                                                 R.drawable.gradient_rejected_color
                                             )
-                                            statusColor.background = null
                                             submissionStatusText.text = "Rejected"
                                             actionButton.visibility = View.GONE
                                             actionSelfButton.visibility = View.GONE
@@ -436,10 +437,9 @@ class SubmissionDetailActivity : AppCompatActivity(),
                                         // Pending
                                         1 -> {
                                             setRoundedBackground(
-                                                submissionStatus,
+                                                statusColor,
                                                 R.drawable.gradient_pending_color
                                             )
-                                            statusColor.background = null
                                             submissionStatusText.text = "Pending"
                                             onProgressButton.visibility = View.GONE
                                             messageProgressAndTrialButtonContainer.visibility =
@@ -451,7 +451,6 @@ class SubmissionDetailActivity : AppCompatActivity(),
                                                 submissionStatus,
                                                 R.drawable.gradient_waiting_color
                                             )
-                                            statusColor.background = null
                                             submissionStatusText.text = "Waiting"
                                             onProgressButton.visibility = View.GONE
                                             messageProgressAndTrialButtonContainer.visibility =
@@ -490,7 +489,6 @@ class SubmissionDetailActivity : AppCompatActivity(),
                                                 submissionStatus,
                                                 R.drawable.gradient_approved_color
                                             )
-                                            statusColor.background = null
                                             submissionStatusText.text = "Approved"
                                             var tech = false
                                             var spv = false
@@ -846,7 +844,6 @@ class SubmissionDetailActivity : AppCompatActivity(),
                                                 submissionStatus,
                                                 R.drawable.gradient_hold_color
                                             )
-                                            statusColor.background = null
                                             submissionStatusText.text = "Hold"
                                             messageProgressAndTrialButtonContainer.visibility =
                                                 View.VISIBLE
@@ -1177,10 +1174,9 @@ class SubmissionDetailActivity : AppCompatActivity(),
                                                 }
                                             }
                                             setRoundedBackground(
-                                                submissionStatus,
+                                                statusColor,
                                                 R.drawable.gradient_on_progress_color
                                             )
-                                            statusColor.background = null
                                             submissionStatusText.text = "On Progress"
                                             actionButton.visibility = View.GONE
                                             actionSelfButton.visibility = View.GONE
@@ -1255,10 +1251,9 @@ class SubmissionDetailActivity : AppCompatActivity(),
                                         // Progress Done
                                         30 -> {
                                             setRoundedBackground(
-                                                submissionStatus,
+                                                statusColor,
                                                 R.drawable.gradient_progress_done_color
                                             )
-                                            statusColor.background = null
                                             submissionStatusText.text = "Progress Done"
                                             actionButton.visibility = View.GONE
                                             actionSelfButton.visibility = View.GONE
@@ -1335,10 +1330,9 @@ class SubmissionDetailActivity : AppCompatActivity(),
                                         // Done
                                         4 -> {
                                             setRoundedBackground(
-                                                submissionStatus,
+                                                statusColor,
                                                 R.drawable.gradient_done_color
                                             )
-                                            statusColor.background = null
                                             submissionStatusText.text = "Done"
                                             actionButton.visibility = View.GONE
                                             actionSelfButton.visibility = View.GONE
@@ -1399,10 +1393,9 @@ class SubmissionDetailActivity : AppCompatActivity(),
                                         // Canceled
                                         5 -> {
                                             setRoundedBackground(
-                                                submissionStatus,
+                                                statusColor,
                                                 R.drawable.gradient_canceled_color
                                             )
-                                            statusColor.background = null
                                             submissionStatusText.text = "Canceled"
                                             actionButton.visibility = View.GONE
                                             actionSelfButton.visibility = View.GONE
@@ -1436,10 +1429,9 @@ class SubmissionDetailActivity : AppCompatActivity(),
                                         // On-Trial
                                         31 -> {
                                             setRoundedBackground(
-                                                submissionStatus,
+                                                statusColor,
                                                 R.drawable.gradient_on_trial_color
                                             )
-                                            statusColor.background = null
                                             submissionStatusText.text = "On Trial"
                                             actionButton.visibility = View.GONE
                                             actionSelfButton.visibility = View.GONE
