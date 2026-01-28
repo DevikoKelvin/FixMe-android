@@ -47,7 +47,8 @@ import java.util.Locale
 
 class UpdateStatusBottomSheet(
     context: Context, private val dataDetail: SubmissionDetailResponse,
-    private val approve: Boolean, private val cancel: Boolean, private val deployTech: Boolean
+    private val approve: Boolean, private val cancel: Boolean, private val deployTech: Boolean,
+    private val isEdit: Boolean
 ) : BottomSheetDialog(context) {
     private val binding: BsUpdateStatusBinding by lazy {
         BsUpdateStatusBinding.inflate(layoutInflater)
@@ -170,16 +171,29 @@ class UpdateStatusBottomSheet(
                         deployTechButton.visibility = View.GONE
                         descriptionFieldLayout.visibility = View.VISIBLE
                         descriptionField.setText(
-                            if (context.getString(R.string.lang) == "in")
-                                "Disetujui!"
-                            else
-                                "Approved!"
+                            if (isEdit) {
+                                dataDetail.keterangan ?: ""
+                            } else {
+                                if (context.getString(R.string.lang) == "in")
+                                    "Disetujui!"
+                                else
+                                    "Approved!"
+                            }
                         )
+                        if (isEdit) {
+                            approveText.text = if (context.getString(R.string.lang) == "in")
+                                "Perbarui"
+                            else
+                                "Update"
+                            workByVendor =
+                                if (dataDetail.isVendor.equals("Y", ignoreCase = true)) "y"
+                                else "n"
+                        }
                         subDeptText.visibility = View.VISIBLE
                         subDeptDropdownLayout.visibility = View.VISIBLE
                         workByText.visibility = View.VISIBLE
                         workBySelectorContainer.visibility = View.VISIBLE
-                        if (workByVendor == "n") {
+                        if (workByVendor == "n" || workByVendor == "N") {
                             internalButton.strokeColor =
                                 ContextCompat.getColor(context, android.R.color.transparent)
                             internalColor.background = ResourcesCompat.getDrawable(
@@ -218,6 +232,7 @@ class UpdateStatusBottomSheet(
                             )
                             vendorText.setTextColor(ContextCompat.getColor(context, R.color.white))
                             vendorNameFieldLayout.visibility = View.VISIBLE
+                            if (isEdit) vendorNameField.setText(dataDetail.vendorName ?: "")
                         }
 
                         internalButton.setOnClickListener {
@@ -265,13 +280,27 @@ class UpdateStatusBottomSheet(
                             vendorNameFieldLayout.visibility = View.VISIBLE
                         }
 
-                        isFormEmpty[0] = true
+                        isFormEmpty[0] = descriptionField.text.toString().isNotEmpty()
                         if (dataDetail.deptTujuan == userData.dept) {
                             selectSupervisorText.visibility = View.VISIBLE
                             rvSupervisor.visibility = View.VISIBLE
                         } else {
                             selectSupervisorText.visibility = View.GONE
                             rvSupervisor.visibility = View.GONE
+                        }
+                        if (isEdit && !dataDetail.usernUserSpv.isNullOrEmpty()) {
+                            dataDetail.usernUserSpv.forEach { spv ->
+                                if (spv != null) {
+                                    selectedSupervisorsArrayList.add(
+                                        SupervisorTechnicianListResponse(
+                                            idUser = spv.idUser,
+                                            namaUser = spv.namaUser,
+                                            namaDept = spv.deptUser
+                                        )
+                                    )
+                                }
+                            }
+                            if (selectedSupervisorsArrayList.isNotEmpty()) isFormEmpty[1] = true
                         }
                         selectedSupervisorsArrayList.add(
                             SupervisorTechnicianListResponse(
@@ -405,7 +434,7 @@ class UpdateStatusBottomSheet(
                 subDeptDropdownLayout.visibility = View.GONE
                 workByText.visibility = View.VISIBLE
                 workBySelectorContainer.visibility = View.VISIBLE
-                if (workByVendor == "n") {
+                if (workByVendor == "n" || workByVendor == "N") {
                     internalButton.strokeColor =
                         ContextCompat.getColor(context, android.R.color.transparent)
                     internalColor.background = ResourcesCompat.getDrawable(
@@ -506,8 +535,6 @@ class UpdateStatusBottomSheet(
                     executeUpdate()
                 }
                 descriptionFieldLayout.visibility = View.GONE
-                selectSupervisorText.visibility = View.GONE
-                rvSupervisor.visibility = View.GONE
                 selectComplexityText.visibility = View.VISIBLE
                 complexityRadioGroup.visibility = View.VISIBLE
                 complexityRadioGroup.setOnCheckedChangeListener { _, checkedId ->
@@ -642,6 +669,7 @@ class UpdateStatusBottomSheet(
             if (deployTech)
                 isFormEmpty[0] = this@UpdateStatusBottomSheet::complexity.isInitialized
 
+            Log.e("isFormEmpty", isFormEmpty.toString())
             for (element in isFormEmpty) {
                 if (element)
                     validated++
@@ -910,7 +938,7 @@ class UpdateStatusBottomSheet(
                                         createPartFromString(descriptionField.text.toString())!!
                                     )
                                     put(
-                                        "id_dept_tujuan",
+                                        "departemen",
                                         createPartFromString(selectedSubDept?.idDept.toString())!!
                                     )
                                     put(
@@ -932,7 +960,8 @@ class UpdateStatusBottomSheet(
                                         }
                                     }
                                 }
-                                (if (dataDetail.deptTujuan == userData.dept)
+                                (if (isEdit) InitAPI.getEndpoint.editApprovals(targetData)
+                                else if (dataDetail.deptTujuan == userData.dept)
                                     InitAPI.getEndpoint.approveTargetManagerSubmission(targetData)
                                 else InitAPI.getEndpoint.approveReportManagerSubmission(data)).enqueue(
                                     object : Callback<GenericSimpleResponse> {
@@ -1579,23 +1608,37 @@ class UpdateStatusBottomSheet(
                                     subDepartmentList
                                 )
                                 subDeptDropdown.adapter = subDepartmentAdapter
-                                subDeptDropdown.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-                                    override fun onItemSelected(
-                                        parent: AdapterView<*>?,
-                                        view: View?,
-                                        position: Int,
-                                        id: Long
-                                    ) {
-                                        if (position != 0) {
-                                            val subDept = parent?.getItemAtPosition(position).toString()
-                                            selectedSubDept = result[subDepartmentList.indexOf(subDept)-1]
-                                            Log.e("Selected Sub Department", selectedSubDept.toString())
-                                        } else {
-                                            selectedSubDept = null
+                                subDeptDropdown.onItemSelectedListener =
+                                    object : AdapterView.OnItemSelectedListener {
+                                        override fun onItemSelected(
+                                            parent: AdapterView<*>?,
+                                            view: View?,
+                                            position: Int,
+                                            id: Long
+                                        ) {
+                                            if (position != 0) {
+                                                val subDept =
+                                                    parent?.getItemAtPosition(position).toString()
+                                                selectedSubDept =
+                                                    result[subDepartmentList.indexOf(subDept) - 1]
+                                                Log.e(
+                                                    "Selected Sub Department",
+                                                    selectedSubDept.toString()
+                                                )
+                                            } else {
+                                                selectedSubDept = null
+                                            }
+                                        }
+
+                                        override fun onNothingSelected(parent: AdapterView<*>?) {
                                         }
                                     }
-
-                                    override fun onNothingSelected(parent: AdapterView<*>?) {
+                                if (isEdit && dataDetail.idDeptTujuan != null) {
+                                    val index =
+                                        result.indexOfFirst { it.idDept == dataDetail.idDeptTujuan }
+                                    if (index != -1) {
+                                        subDeptDropdown.setSelection(index + 1)
+                                        selectedSubDept = result[index]
                                     }
                                 }
                                 subDepartmentAdapter.notifyDataSetChanged()

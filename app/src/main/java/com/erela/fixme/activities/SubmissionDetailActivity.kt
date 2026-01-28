@@ -1792,7 +1792,8 @@ class SubmissionDetailActivity : AppCompatActivity(),
                                     data,
                                     approve = false,
                                     cancel = true,
-                                    deployTech = false
+                                    deployTech = false,
+                                    isEdit = false
                                 ).also { bs ->
                                     with(bs) {
                                         setOnUpdateSuccessListener(object :
@@ -1823,6 +1824,44 @@ class SubmissionDetailActivity : AppCompatActivity(),
                 2 -> {
                     if (userData.id == data.idUserApprove) {
                         actionSelfButton.visibility = View.VISIBLE
+                    }
+
+                    actionSelfButton.setOnClickListener {
+                        if (!isFabVisible) {
+                            openFabMenu("manager")
+
+                            editButton.setOnClickListener {
+                                val bottomSheet = UpdateStatusBottomSheet(
+                                    this@SubmissionDetailActivity,
+                                    data,
+                                    approve = true,
+                                    cancel = false,
+                                    deployTech = false,
+                                    isEdit = true
+                                ).also { bs ->
+                                    with(bs) {
+                                        setOnUpdateSuccessListener(object :
+                                            UpdateStatusBottomSheet.OnUpdateSuccessListener {
+                                            override fun onApproved() {
+                                                isUpdated = true
+                                                init()
+                                            }
+
+                                            override fun onRejected() {}
+
+                                            override fun onCanceled() {}
+
+                                            override fun onTechniciansDeployed() {}
+                                        })
+                                    }
+                                }
+
+                                if (bottomSheet.window != null)
+                                    bottomSheet.show()
+                            }
+                        } else {
+                            closeFabMenu()
+                        }
                     }
                 }
                 // Waiting

@@ -78,7 +78,12 @@ class SubmissionActionBottomSheet(context: Context, val data: SubmissionDetailRe
                     approveButton.setOnClickListener {
                         val bottomSheet =
                             UpdateStatusBottomSheet(
-                                context, data, approve = true, cancel = false, deployTech = false
+                                context,
+                                data,
+                                approve = true,
+                                cancel = false,
+                                deployTech = false,
+                                isEdit = false
                             ).also { bottomSheet ->
                                 with(bottomSheet) {
                                     setOnUpdateSuccessListener(this@SubmissionActionBottomSheet)
@@ -90,7 +95,12 @@ class SubmissionActionBottomSheet(context: Context, val data: SubmissionDetailRe
                     rejectButton.setOnClickListener {
                         val bottomSheet =
                             UpdateStatusBottomSheet(
-                                context, data, approve = false, cancel = false, deployTech = false
+                                context,
+                                data,
+                                approve = false,
+                                cancel = false,
+                                deployTech = false,
+                                isEdit = false
                             ).also { bottomSheet ->
                                 with(bottomSheet) {
                                     setOnUpdateSuccessListener(this@SubmissionActionBottomSheet)
@@ -135,7 +145,12 @@ class SubmissionActionBottomSheet(context: Context, val data: SubmissionDetailRe
                     approveButton.setOnClickListener {
                         val bottomSheet =
                             UpdateStatusBottomSheet(
-                                context, data, approve = true, cancel = false, deployTech = false
+                                context,
+                                data,
+                                approve = true,
+                                cancel = false,
+                                deployTech = false,
+                                isEdit = false
                             ).also { bottomSheet ->
                                 with(bottomSheet) {
                                     setOnUpdateSuccessListener(this@SubmissionActionBottomSheet)
@@ -147,7 +162,12 @@ class SubmissionActionBottomSheet(context: Context, val data: SubmissionDetailRe
                     rejectButton.setOnClickListener {
                         val bottomSheet =
                             UpdateStatusBottomSheet(
-                                context, data, approve = false, cancel = false, deployTech = false
+                                context,
+                                data,
+                                approve = false,
+                                cancel = false,
+                                deployTech = false,
+                                isEdit = false
                             ).also { bottomSheet ->
                                 with(bottomSheet) {
                                     setOnUpdateSuccessListener(this@SubmissionActionBottomSheet)
@@ -173,7 +193,8 @@ class SubmissionActionBottomSheet(context: Context, val data: SubmissionDetailRe
                                         data,
                                         approve = false,
                                         cancel = false,
-                                        deployTech = true
+                                        deployTech = true,
+                                        isEdit = false
                                     ).also { bottomSheet ->
                                         with(bottomSheet) {
                                             setOnUpdateSuccessListener(this@SubmissionActionBottomSheet)

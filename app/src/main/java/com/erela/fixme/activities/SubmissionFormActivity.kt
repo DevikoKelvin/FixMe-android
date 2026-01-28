@@ -544,6 +544,32 @@ class SubmissionFormActivity : AppCompatActivity(), OnMapReadyCallback {
                                                             )
                                                         ).show()
                                                 }
+                                            } else {
+                                                submitText.visibility = View.VISIBLE
+                                                loadingBar.visibility = View.GONE
+                                                CustomToast.getInstance(applicationContext)
+                                                    .setMessage(
+                                                        if (getString(R.string.lang) == "in")
+                                                            "Terjadi kesalahan, silakan coba lagi."
+                                                        else
+                                                            "Something went wrong, please try again."
+                                                    )
+                                                    .setFontColor(
+                                                        ContextCompat.getColor(
+                                                            this@SubmissionFormActivity,
+                                                            R.color.custom_toast_font_failed
+                                                        )
+                                                    )
+                                                    .setBackgroundColor(
+                                                        ContextCompat.getColor(
+                                                            this@SubmissionFormActivity,
+                                                            R.color.custom_toast_background_failed
+                                                        )
+                                                    ).show()
+                                                Log.e(
+                                                    "ERROR Response Body Null",
+                                                    response.toString()
+                                                )
                                             }
                                         } else {
                                             CustomToast.getInstance(applicationContext)
@@ -565,7 +591,7 @@ class SubmissionFormActivity : AppCompatActivity(), OnMapReadyCallback {
                                                         R.color.custom_toast_background_failed
                                                     )
                                                 ).show()
-                                            Log.e("ERROR", response.message())
+                                            Log.e("ERROR Not Successful", response.message())
                                         }
                                     }
 
@@ -594,7 +620,7 @@ class SubmissionFormActivity : AppCompatActivity(), OnMapReadyCallback {
                                                     R.color.custom_toast_background_failed
                                                 )
                                             ).show()
-                                        Log.e("ERROR", throwable.toString())
+                                        Log.e("ERROR Submit Failed", throwable.toString())
                                         throwable.printStackTrace()
                                     }
                                 })
@@ -729,14 +755,18 @@ class SubmissionFormActivity : AppCompatActivity(), OnMapReadyCallback {
                     createPartFromString(selectedDepartment.toString())!!
                 )
                 put("kategori", createPartFromString(selectedCategory.toString())!!)
-                put(
-                    "kode_mesin",
-                    createPartFromString(machineCodeField.text.toString())!!
-                )
-                put(
-                    "nama_mesin",
-                    createPartFromString(machineNameField.text.toString())!!
-                )
+                if (!machineCodeField.text.isNullOrEmpty()) {
+                    put(
+                        "kode_mesin",
+                        createPartFromString(machineCodeField.text.toString())!!
+                    )
+                }
+                if (!machineNameField.text.isNullOrEmpty()) {
+                    put(
+                        "nama_mesin",
+                        createPartFromString(machineNameField.text.toString())!!
+                    )
+                }
                 put(
                     "keterangan",
                     createPartFromString(descriptionField.text.toString())!!
@@ -772,10 +802,11 @@ class SubmissionFormActivity : AppCompatActivity(), OnMapReadyCallback {
                     )
                 }
             }
+            val userId = UserDataHelper(applicationContext).getUserData().id
             with(requestBodyMap) {
                 put(
                     "id_user", createPartFromString(
-                        UserDataHelper(applicationContext).getUserData().id.toString()
+                        userId.toString()
                     )!!
                 )
                 put(
@@ -785,14 +816,18 @@ class SubmissionFormActivity : AppCompatActivity(), OnMapReadyCallback {
                 put("lokasi", createPartFromString(locationField.text.toString())!!)
                 put("departemen", createPartFromString(selectedDepartment.toString())!!)
                 put("kategori", createPartFromString(selectedCategory.toString())!!)
-                put(
-                    "kode_mesin",
-                    createPartFromString(machineCodeField.text.toString())!!
-                )
-                put(
-                    "nama_mesin",
-                    createPartFromString(machineNameField.text.toString())!!
-                )
+                if (!machineCodeField.text.isNullOrEmpty()) {
+                    put(
+                        "kode_mesin",
+                        createPartFromString(machineCodeField.text.toString())!!
+                    )
+                }
+                if (!machineNameField.text.isNullOrEmpty()) {
+                    put(
+                        "nama_mesin",
+                        createPartFromString(machineNameField.text.toString())!!
+                    )
+                }
                 put(
                     "keterangan",
                     createPartFromString(descriptionField.text.toString())!!

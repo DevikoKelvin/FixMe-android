@@ -66,6 +66,7 @@ object InitAPI {
     private fun getInstance(): Retrofit {
         val gson = GsonBuilder()
             .registerTypeAdapter(Int::class.java, IntegerTypeAdapter())
+            .registerTypeAdapter(Int::class.javaObjectType, IntegerTypeAdapter())
             .setLenient()
             .create()
 
