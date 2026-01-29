@@ -448,7 +448,7 @@ class SubmissionDetailActivity : AppCompatActivity(),
                                         // Waiting
                                         11 -> {
                                             setRoundedBackground(
-                                                submissionStatus,
+                                                statusColor,
                                                 R.drawable.gradient_waiting_color
                                             )
                                             submissionStatusText.text = "Waiting"
@@ -486,7 +486,7 @@ class SubmissionDetailActivity : AppCompatActivity(),
                                         // Approved
                                         2 -> {
                                             setRoundedBackground(
-                                                submissionStatus,
+                                                statusColor,
                                                 R.drawable.gradient_approved_color
                                             )
                                             submissionStatusText.text = "Approved"
@@ -841,7 +841,7 @@ class SubmissionDetailActivity : AppCompatActivity(),
                                                 }
                                             }
                                             setRoundedBackground(
-                                                submissionStatus,
+                                                statusColor,
                                                 R.drawable.gradient_hold_color
                                             )
                                             submissionStatusText.text = "Hold"
