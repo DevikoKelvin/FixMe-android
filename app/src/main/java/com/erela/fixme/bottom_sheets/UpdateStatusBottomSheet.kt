@@ -189,213 +189,243 @@ class UpdateStatusBottomSheet(
                                 if (dataDetail.isVendor.equals("Y", ignoreCase = true)) "y"
                                 else "n"
                         }
-                        subDeptText.visibility = View.VISIBLE
-                        subDeptDropdownLayout.visibility = View.VISIBLE
-                        workByText.visibility = View.VISIBLE
-                        workBySelectorContainer.visibility = View.VISIBLE
-                        if (workByVendor == "n" || workByVendor == "N") {
-                            internalButton.strokeColor =
-                                ContextCompat.getColor(context, android.R.color.transparent)
-                            internalColor.background = ResourcesCompat.getDrawable(
-                                context.resources,
-                                R.drawable.gradient_accent_color,
-                                context.theme
-                            )
-                            internalText.setTextColor(
-                                ContextCompat.getColor(
-                                    context,
-                                    R.color.white
-                                )
-                            )
-                            vendorButton.strokeColor =
-                                ContextCompat.getColor(context, R.color.button_color)
-                            vendorColor.background = null
-                            vendorText.setTextColor(ContextCompat.getColor(context, R.color.black))
+                        if (dataDetail.deptTujuan != userData.dept) {
+                            subDeptText.visibility = View.GONE
+                            subDeptDropdownLayout.visibility = View.GONE
+                            workByText.visibility = View.GONE
+                            workBySelectorContainer.visibility = View.GONE
                             vendorNameFieldLayout.visibility = View.GONE
-                            vendorNameField.setText("")
-                        } else {
-                            internalButton.strokeColor =
-                                ContextCompat.getColor(context, R.color.button_color)
-                            internalColor.background = null
-                            internalText.setTextColor(
-                                ContextCompat.getColor(
-                                    context,
-                                    R.color.black
-                                )
-                            )
-                            vendorButton.strokeColor =
-                                ContextCompat.getColor(context, android.R.color.transparent)
-                            vendorColor.background = ResourcesCompat.getDrawable(
-                                context.resources,
-                                R.drawable.gradient_accent_color,
-                                context.theme
-                            )
-                            vendorText.setTextColor(ContextCompat.getColor(context, R.color.white))
-                            vendorNameFieldLayout.visibility = View.VISIBLE
-                            if (isEdit) vendorNameField.setText(dataDetail.vendorName ?: "")
-                        }
-
-                        internalButton.setOnClickListener {
-                            workByVendor = "n"
-                            internalButton.strokeColor =
-                                ContextCompat.getColor(context, android.R.color.transparent)
-                            internalColor.background = ResourcesCompat.getDrawable(
-                                context.resources,
-                                R.drawable.gradient_accent_color,
-                                context.theme
-                            )
-                            internalText.setTextColor(
-                                ContextCompat.getColor(
-                                    context,
-                                    R.color.white
-                                )
-                            )
-                            vendorButton.strokeColor =
-                                ContextCompat.getColor(context, R.color.button_color)
-                            vendorColor.background = null
-                            vendorText.setTextColor(ContextCompat.getColor(context, R.color.black))
-                            vendorNameFieldLayout.visibility = View.GONE
-                            vendorNameField.setText("")
-                        }
-
-                        vendorButton.setOnClickListener {
-                            workByVendor = "y"
-                            internalButton.strokeColor =
-                                ContextCompat.getColor(context, R.color.button_color)
-                            internalColor.background = null
-                            internalText.setTextColor(
-                                ContextCompat.getColor(
-                                    context,
-                                    R.color.black
-                                )
-                            )
-                            vendorButton.strokeColor =
-                                ContextCompat.getColor(context, android.R.color.transparent)
-                            vendorColor.background = ResourcesCompat.getDrawable(
-                                context.resources,
-                                R.drawable.gradient_accent_color,
-                                context.theme
-                            )
-                            vendorText.setTextColor(ContextCompat.getColor(context, R.color.white))
-                            vendorNameFieldLayout.visibility = View.VISIBLE
-                        }
-
-                        isFormEmpty[0] = descriptionField.text.toString().isNotEmpty()
-                        if (dataDetail.deptTujuan == userData.dept) {
-                            selectSupervisorText.visibility = View.VISIBLE
-                            rvSupervisor.visibility = View.VISIBLE
-                        } else {
                             selectSupervisorText.visibility = View.GONE
                             rvSupervisor.visibility = View.GONE
-                        }
-                        if (isEdit && !dataDetail.usernUserSpv.isNullOrEmpty()) {
-                            dataDetail.usernUserSpv.forEach { spv ->
-                                if (spv != null) {
-                                    selectedSupervisorsArrayList.add(
-                                        SupervisorTechnicianListResponse(
-                                            idUser = spv.idUser,
-                                            namaUser = spv.namaUser,
-                                            namaDept = spv.deptUser
-                                        )
+                        } else {
+                            subDeptText.visibility = View.VISIBLE
+                            subDeptDropdownLayout.visibility = View.VISIBLE
+                            workByText.visibility = View.VISIBLE
+                            workBySelectorContainer.visibility = View.VISIBLE
+                            if (workByVendor == "n" || workByVendor == "N") {
+                                internalButton.strokeColor =
+                                    ContextCompat.getColor(context, android.R.color.transparent)
+                                internalColor.background = ResourcesCompat.getDrawable(
+                                    context.resources,
+                                    R.drawable.gradient_accent_color,
+                                    context.theme
+                                )
+                                internalText.setTextColor(
+                                    ContextCompat.getColor(
+                                        context,
+                                        R.color.white
                                     )
+                                )
+                                vendorButton.strokeColor =
+                                    ContextCompat.getColor(context, R.color.button_color)
+                                vendorColor.background = null
+                                vendorText.setTextColor(
+                                    ContextCompat.getColor(
+                                        context,
+                                        R.color.black
+                                    )
+                                )
+                                vendorNameFieldLayout.visibility = View.GONE
+                                vendorNameField.setText("")
+                            } else {
+                                internalButton.strokeColor =
+                                    ContextCompat.getColor(context, R.color.button_color)
+                                internalColor.background = null
+                                internalText.setTextColor(
+                                    ContextCompat.getColor(
+                                        context,
+                                        R.color.black
+                                    )
+                                )
+                                vendorButton.strokeColor =
+                                    ContextCompat.getColor(context, android.R.color.transparent)
+                                vendorColor.background = ResourcesCompat.getDrawable(
+                                    context.resources,
+                                    R.drawable.gradient_accent_color,
+                                    context.theme
+                                )
+                                vendorText.setTextColor(
+                                    ContextCompat.getColor(
+                                        context,
+                                        R.color.white
+                                    )
+                                )
+                                vendorNameFieldLayout.visibility = View.VISIBLE
+                                if (isEdit) vendorNameField.setText(dataDetail.vendorName ?: "")
+                            }
+
+                            internalButton.setOnClickListener {
+                                workByVendor = "n"
+                                internalButton.strokeColor =
+                                    ContextCompat.getColor(context, android.R.color.transparent)
+                                internalColor.background = ResourcesCompat.getDrawable(
+                                    context.resources,
+                                    R.drawable.gradient_accent_color,
+                                    context.theme
+                                )
+                                internalText.setTextColor(
+                                    ContextCompat.getColor(
+                                        context,
+                                        R.color.white
+                                    )
+                                )
+                                vendorButton.strokeColor =
+                                    ContextCompat.getColor(context, R.color.button_color)
+                                vendorColor.background = null
+                                vendorText.setTextColor(
+                                    ContextCompat.getColor(
+                                        context,
+                                        R.color.black
+                                    )
+                                )
+                                vendorNameFieldLayout.visibility = View.GONE
+                                vendorNameField.setText("")
+                            }
+
+                            vendorButton.setOnClickListener {
+                                workByVendor = "y"
+                                internalButton.strokeColor =
+                                    ContextCompat.getColor(context, R.color.button_color)
+                                internalColor.background = null
+                                internalText.setTextColor(
+                                    ContextCompat.getColor(
+                                        context,
+                                        R.color.black
+                                    )
+                                )
+                                vendorButton.strokeColor =
+                                    ContextCompat.getColor(context, android.R.color.transparent)
+                                vendorColor.background = ResourcesCompat.getDrawable(
+                                    context.resources,
+                                    R.drawable.gradient_accent_color,
+                                    context.theme
+                                )
+                                vendorText.setTextColor(
+                                    ContextCompat.getColor(
+                                        context,
+                                        R.color.white
+                                    )
+                                )
+                                vendorNameFieldLayout.visibility = View.VISIBLE
+                            }
+
+                            isFormEmpty[0] = descriptionField.text.toString().isNotEmpty()
+                            if (dataDetail.deptTujuan == userData.dept) {
+                                selectSupervisorText.visibility = View.VISIBLE
+                                rvSupervisor.visibility = View.VISIBLE
+                            } else {
+                                selectSupervisorText.visibility = View.GONE
+                                rvSupervisor.visibility = View.GONE
+                            }
+                            if (isEdit && !dataDetail.usernUserSpv.isNullOrEmpty()) {
+                                dataDetail.usernUserSpv.forEach { spv ->
+                                    if (spv != null) {
+                                        selectedSupervisorsArrayList.add(
+                                            SupervisorTechnicianListResponse(
+                                                idUser = spv.idUser,
+                                                namaUser = spv.namaUser,
+                                                namaDept = spv.deptUser
+                                            )
+                                        )
+                                    }
+                                }
+                                if (selectedSupervisorsArrayList.isNotEmpty()) isFormEmpty[1] = true
+                            }
+                            selectedSupervisorsArrayList.add(
+                                SupervisorTechnicianListResponse(
+                                    null,
+                                    null,
+                                    null,
+                                    null,
+                                    "+",
+                                    null,
+                                    null,
+                                    null
+                                )
+                            )
+                            supervisorsRvAdapter = SelectedSupervisorTechniciansRvAdapter(
+                                context,
+                                dataDetail,
+                                selectedSupervisorsArrayList,
+                                true
+                            ).also {
+                                with(it) {
+                                    setOnSupervisorSetListener(object :
+                                        SelectedSupervisorTechniciansRvAdapter.OnSupervisorSetListener {
+                                        override fun onSupervisorsSelected(
+                                            data: SupervisorTechnicianListResponse
+                                        ) {
+                                            selectedSupervisorsArrayList.remove(
+                                                SupervisorTechnicianListResponse(
+                                                    null,
+                                                    null,
+                                                    null,
+                                                    null,
+                                                    "+",
+                                                    null,
+                                                    null,
+                                                    null
+                                                )
+                                            )
+                                            selectedSupervisorsArrayList.add(data)
+                                            selectedSupervisorsArrayList.add(
+                                                SupervisorTechnicianListResponse(
+                                                    null,
+                                                    null,
+                                                    null,
+                                                    null,
+                                                    "+",
+                                                    null,
+                                                    null,
+                                                    null
+                                                )
+                                            )
+                                            supervisorsRvAdapter.notifyDataSetChanged()
+                                            if (supervisorsRvAdapter.itemCount > 1)
+                                                isFormEmpty[1] = true
+                                        }
+
+                                        override fun onSupervisorsUnselected(
+                                            data: SupervisorTechnicianListResponse
+                                        ) {
+                                            selectedSupervisorsArrayList.remove(
+                                                SupervisorTechnicianListResponse(
+                                                    null,
+                                                    null,
+                                                    null,
+                                                    null,
+                                                    "+",
+                                                    null,
+                                                    null,
+                                                    null
+                                                )
+                                            )
+                                            selectedSupervisorsArrayList.remove(data)
+                                            selectedSupervisorsArrayList.add(
+                                                SupervisorTechnicianListResponse(
+                                                    null,
+                                                    null,
+                                                    null,
+                                                    null,
+                                                    "+",
+                                                    null,
+                                                    null,
+                                                    null
+                                                )
+                                            )
+                                            supervisorsRvAdapter.notifyDataSetChanged()
+                                            if (supervisorsRvAdapter.itemCount == 1)
+                                                isFormEmpty[1] = false
+                                        }
+                                    })
                                 }
                             }
-                            if (selectedSupervisorsArrayList.isNotEmpty()) isFormEmpty[1] = true
-                        }
-                        selectedSupervisorsArrayList.add(
-                            SupervisorTechnicianListResponse(
-                                null,
-                                null,
-                                null,
-                                null,
-                                "+",
-                                null,
-                                null,
-                                null
+                            rvSupervisor.adapter = supervisorsRvAdapter
+                            rvSupervisor.layoutManager = FlexboxLayoutManager(
+                                context, FlexDirection.ROW, FlexWrap.WRAP
                             )
-                        )
-                        supervisorsRvAdapter = SelectedSupervisorTechniciansRvAdapter(
-                            context,
-                            dataDetail,
-                            selectedSupervisorsArrayList,
-                            true
-                        ).also {
-                            with(it) {
-                                setOnSupervisorSetListener(object :
-                                    SelectedSupervisorTechniciansRvAdapter.OnSupervisorSetListener {
-                                    override fun onSupervisorsSelected(
-                                        data: SupervisorTechnicianListResponse
-                                    ) {
-                                        selectedSupervisorsArrayList.remove(
-                                            SupervisorTechnicianListResponse(
-                                                null,
-                                                null,
-                                                null,
-                                                null,
-                                                "+",
-                                                null,
-                                                null,
-                                                null
-                                            )
-                                        )
-                                        selectedSupervisorsArrayList.add(data)
-                                        selectedSupervisorsArrayList.add(
-                                            SupervisorTechnicianListResponse(
-                                                null,
-                                                null,
-                                                null,
-                                                null,
-                                                "+",
-                                                null,
-                                                null,
-                                                null
-                                            )
-                                        )
-                                        supervisorsRvAdapter.notifyDataSetChanged()
-                                        if (supervisorsRvAdapter.itemCount > 1)
-                                            isFormEmpty[1] = true
-                                    }
-
-                                    override fun onSupervisorsUnselected(
-                                        data: SupervisorTechnicianListResponse
-                                    ) {
-                                        selectedSupervisorsArrayList.remove(
-                                            SupervisorTechnicianListResponse(
-                                                null,
-                                                null,
-                                                null,
-                                                null,
-                                                "+",
-                                                null,
-                                                null,
-                                                null
-                                            )
-                                        )
-                                        selectedSupervisorsArrayList.remove(data)
-                                        selectedSupervisorsArrayList.add(
-                                            SupervisorTechnicianListResponse(
-                                                null,
-                                                null,
-                                                null,
-                                                null,
-                                                "+",
-                                                null,
-                                                null,
-                                                null
-                                            )
-                                        )
-                                        supervisorsRvAdapter.notifyDataSetChanged()
-                                        if (supervisorsRvAdapter.itemCount == 1)
-                                            isFormEmpty[1] = false
-                                    }
-                                })
-                            }
+                            supervisorsRvAdapter.notifyDataSetChanged()
                         }
-                        rvSupervisor.adapter = supervisorsRvAdapter
-                        rvSupervisor.layoutManager = FlexboxLayoutManager(
-                            context, FlexDirection.ROW, FlexWrap.WRAP
-                        )
-                        supervisorsRvAdapter.notifyDataSetChanged()
                         approveButton.setOnClickListener {
                             executeUpdate()
                         }
