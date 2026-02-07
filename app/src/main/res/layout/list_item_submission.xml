@@ -198,6 +198,15 @@
             android:layout_margin="@dimen/list_item_submission_tags_container_margin"
             android:orientation="horizontal">
 
+            <TextView
+                android:id="@+id/progressCountText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="@dimen/list_item_submission_tag_margin_end"
+                android:layout_gravity="center"
+                android:visibility="gone"
+                tools:text="Progress 0 / 0" />
+
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/complexity"
                 android:layout_width="wrap_content"

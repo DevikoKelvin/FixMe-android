@@ -68,5 +68,7 @@ data class SubmissionListResponse(
     @field:SerializedName("dept_tujuan")
     val deptTujuan: String? = null,
     @field:SerializedName("tgl_waktu_done")
-    val tglWaktuDone: String? = null
+    val tglWaktuDone: String? = null,
+    @field:SerializedName("count_progress")
+    val countProgress: String? = null
 )

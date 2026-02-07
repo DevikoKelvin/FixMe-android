@@ -2,9 +2,11 @@ package com.erela.fixme.adapters.recycler_view
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
 import androidx.core.content.res.ResourcesCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.erela.fixme.R
@@ -22,11 +24,33 @@ class SubmissionRvAdapter(val context: Context, val data: ArrayList<SubmissionLi
             drawableId,
             context.theme
         )
-        /*val drawable = androidx.core.content.ContextCompat.getDrawable(context, drawableId)?.mutate()
-        if (drawable is android.graphics.drawable.GradientDrawable) {
-            drawable.cornerRadius = context.resources.getDimension(R.dimen.login_button_corner_radius)
+    }
+
+    private fun setProgressTextColor(textView: TextView, progress: String?) {
+        textView.text = progress
+        var isComplete = false
+        if (!progress.isNullOrEmpty()) {
+            try {
+                // "Progress: 0 / 0"
+                val parts = progress.substringAfter("Progress:").split("/")
+                if (parts.size == 2) {
+                    val current = parts[0].trim().toInt()
+                    val total = parts[1].trim().toInt()
+                    if (total != 0 && current != 0) {
+                        if (current == total) {
+                            isComplete = true
+                        }
+                    }
+                }
+            } catch (exception: Exception) {
+                Log.e("ERROR", exception.toString())
+            }
         }
-        view.background = drawable*/
+
+        val colorRes = if (isComplete) R.color.status_approved else R.color.black
+        textView.setTextColor(
+            ResourcesCompat.getColor(context.resources, colorRes, context.theme)
+        )
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder = ViewHolder(
@@ -112,6 +136,7 @@ class SubmissionRvAdapter(val context: Context, val data: ArrayList<SubmissionLi
                                 context.theme
                             )
                         )
+                        progressCountText.visibility = View.GONE
                     }
 
                     1 -> {
@@ -129,6 +154,7 @@ class SubmissionRvAdapter(val context: Context, val data: ArrayList<SubmissionLi
                                 context.theme
                             )
                         )
+                        progressCountText.visibility = View.GONE
                     }
 
                     11 -> {
@@ -146,6 +172,7 @@ class SubmissionRvAdapter(val context: Context, val data: ArrayList<SubmissionLi
                                 context.theme
                             )
                         )
+                        progressCountText.visibility = View.GONE
                     }
 
                     2 -> {
@@ -163,6 +190,7 @@ class SubmissionRvAdapter(val context: Context, val data: ArrayList<SubmissionLi
                                 context.theme
                             )
                         )
+                        progressCountText.visibility = View.GONE
                     }
 
                     22 -> {
@@ -180,6 +208,8 @@ class SubmissionRvAdapter(val context: Context, val data: ArrayList<SubmissionLi
                                 context.theme
                             )
                         )
+                        progressCountText.visibility = View.VISIBLE
+                        setProgressTextColor(progressCountText, item.countProgress)
                     }
 
                     3 -> {
@@ -197,6 +227,8 @@ class SubmissionRvAdapter(val context: Context, val data: ArrayList<SubmissionLi
                                 context.theme
                             )
                         )
+                        progressCountText.visibility = View.VISIBLE
+                        setProgressTextColor(progressCountText, item.countProgress)
                     }
 
                     30 -> {
@@ -214,6 +246,7 @@ class SubmissionRvAdapter(val context: Context, val data: ArrayList<SubmissionLi
                                 context.theme
                             )
                         )
+                        progressCountText.visibility = View.GONE
                     }
 
                     4 -> {
@@ -231,6 +264,7 @@ class SubmissionRvAdapter(val context: Context, val data: ArrayList<SubmissionLi
                                 context.theme
                             )
                         )
+                        progressCountText.visibility = View.GONE
                     }
 
                     5 -> {
@@ -248,6 +282,7 @@ class SubmissionRvAdapter(val context: Context, val data: ArrayList<SubmissionLi
                                 context.theme
                             )
                         )
+                        progressCountText.visibility = View.GONE
                     }
 
                     31 -> {
@@ -265,6 +300,7 @@ class SubmissionRvAdapter(val context: Context, val data: ArrayList<SubmissionLi
                                 context.theme
                             )
                         )
+                        progressCountText.visibility = View.GONE
                     }
                 }
 
