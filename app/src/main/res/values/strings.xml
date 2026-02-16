@@ -85,7 +85,10 @@
 
     <string name="submission_detail_title">Submission Detail</string>
     <string name="submission_description">Description</string>
-    <string name="submission_report">Report time:</string>
+    <string name="submission_report_manager_time_approve">Report manager\napprove time:</string>
+    <string name="submission_report_manager_time_reject">Report manager\nreject time:</string>
+    <string name="submission_target_manager_time_approve">Target manager\napprove time:</string>
+    <string name="submission_target_manager_time_reject">Target manager\nreject time:</string>
     <string name="submission_start_working">Work start time:</string>
     <string name="submission_end_working">Work end time:</string>
     <string name="work_by_vendors">Executed by Vendor</string>

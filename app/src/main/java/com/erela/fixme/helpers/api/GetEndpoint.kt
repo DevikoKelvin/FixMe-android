@@ -122,7 +122,8 @@ interface GetEndpoint {
     @FormUrlEncoded
     @POST("getSpv")
     fun getSupervisorList(
-        @Field("id") id: Int
+        @Field("id") id: Int,
+        @Field("id_dept") deptId : Int
     ): Call<List<SupervisorTechnicianListResponse>>
 
     @FormUrlEncoded

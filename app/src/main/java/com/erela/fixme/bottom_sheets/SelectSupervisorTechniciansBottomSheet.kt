@@ -21,6 +21,7 @@ import com.erela.fixme.custom_views.CustomToast
 import com.erela.fixme.databinding.BsSelectTechniciansBinding
 import com.erela.fixme.helpers.api.InitAPI
 import com.erela.fixme.objects.SelectedSupervisorTechniciansList
+import com.erela.fixme.objects.SubDepartmentListResponse
 import com.erela.fixme.objects.SubmissionDetailResponse
 import com.erela.fixme.objects.SupervisorTechnicianListResponse
 import com.google.android.material.bottomsheet.BottomSheetDialog
@@ -33,7 +34,8 @@ import retrofit2.Response
 class SelectSupervisorTechniciansBottomSheet(
     context: Context, private val detailData: SubmissionDetailResponse,
     private val selectedSupervisorTechniciansList: ArrayList<SupervisorTechnicianListResponse>,
-    private val isForManager: Boolean
+    private val isForManager: Boolean,
+    private val selectedSubDept: SubDepartmentListResponse?
 ) : BottomSheetDialog(context), SupervisorTechniciansRvAdapter.OnTechniciansSetListener,
     SupervisorTechniciansRvAdapter.OnSupervisorSetListener {
     private val binding: BsSelectTechniciansBinding by lazy {
@@ -80,7 +82,7 @@ class SelectSupervisorTechniciansBottomSheet(
             try {
                 if (isForManager) {
                     title.text = context.getString(R.string.select_supervisor)
-                    InitAPI.getEndpoint.getSupervisorList(detailData.idGaprojects!!).enqueue(
+                    InitAPI.getEndpoint.getSupervisorList(detailData.idGaprojects!!, selectedSubDept?.idDept!!).enqueue(
                         object : Callback<List<SupervisorTechnicianListResponse>> {
                             override fun onResponse(
                                 call: Call<List<SupervisorTechnicianListResponse>>,

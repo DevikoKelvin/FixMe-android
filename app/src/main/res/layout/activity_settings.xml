@@ -182,7 +182,7 @@
                             android:id="@+id/statusIcon"
                             android:layout_width="@dimen/search_icon_size"
                             android:layout_height="@dimen/search_icon_size"
-                            android:visibility="gone"
+                            android:visibility="invisible"
                             tools:src="@drawable/caution_icon" />
 
                         <ProgressBar

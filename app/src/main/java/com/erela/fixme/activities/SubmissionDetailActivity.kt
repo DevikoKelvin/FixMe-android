@@ -163,11 +163,6 @@ class SubmissionDetailActivity : AppCompatActivity(),
             drawableId,
             theme
         )
-        /*val drawable = ContextCompat.getDrawable(this, drawableId)?.mutate()
-        if (drawable is android.graphics.drawable.GradientDrawable) {
-            drawable.cornerRadius = resources.getDimension(R.dimen.login_button_corner_radius)
-        }
-        view.background = drawable*/
     }
 
     @SuppressLint("SetTextI18n")
@@ -409,9 +404,15 @@ class SubmissionDetailActivity : AppCompatActivity(),
                                             statusMessageContainer.setOnClickListener {
                                                 statusMessageContainer.showAlignTop(
                                                     createBalloonOverlay(
-                                                        if (getString(R.string.lang) == "in")
-                                                            "Alasan: ${detailData.keteranganReject}"
-                                                        else "Reason: ${detailData.keteranganReject}",
+                                                        if (detailData.keteranganReject != null) {
+                                                            if (getString(R.string.lang) == "in")
+                                                                "Alasan: ${detailData.keteranganReject}"
+                                                            else "Reason: ${detailData.keteranganReject}"
+                                                        } else {
+                                                            if (getString(R.string.lang) == "in")
+                                                                "Alasan: ${detailData.keteranganPelaporReject}"
+                                                            else "Reason: ${detailData.keteranganPelaporReject}"
+                                                        },
                                                         R.color.custom_toast_background_normal_dark_gray,
                                                         R.color.custom_toast_font_normal_soft_gray
                                                     ), 0, 0
@@ -422,11 +423,17 @@ class SubmissionDetailActivity : AppCompatActivity(),
                                                 statusMessageColor,
                                                 R.drawable.gradient_rejected_color,
                                             )
-                                            statusMessage.text =
+                                            statusMessage.text = if (detailData.nameUserReject != "") {
                                                 if (getString(R.string.lang) == "in")
                                                     "Ditolak oleh ${detailData.nameUserReject?.trimEnd()}\nKetuk untuk melihat alasan"
                                                 else
                                                     "Rejected by ${detailData.nameUserReject?.trimEnd()}\nTap to see reason"
+                                            } else {
+                                                if (getString(R.string.lang) == "in")
+                                                    "Ditolak oleh ${detailData.namaUserPelaporReject?.trimEnd()}\nKetuk untuk melihat alasan"
+                                                else
+                                                    "Rejected by ${detailData.namaUserPelaporReject?.trimEnd()}\nTap to see reason"
+                                            }
                                             statusMessage.setTextColor(
                                                 ContextCompat.getColor(
                                                     this@SubmissionDetailActivity,
@@ -1509,10 +1516,45 @@ class SubmissionDetailActivity : AppCompatActivity(),
                                     category.text = detailData.namaKategori
                                     inputTime.text = detailData.tglInput
                                     location.text = detailData.lokasi
-                                    reportTime.text = if (detailData.tglWaktuLapor != null) {
-                                        if (detailData.tglWaktuLapor == "") "-" else detailData.tglWaktuLapor
+
+                                    if (detailData.tglWaktuPelaporApprove != null || detailData.tglWaktuPelaporReject != null) {
+                                        reportManagerApproveReject.visibility = View.VISIBLE
+                                        reportManagerTime.visibility = View.VISIBLE
+                                        if (detailData.tglWaktuPelaporApprove != null) {
+                                            reportManagerApproveReject.text = getString(R.string.submission_report_manager_time_approve)
+                                            reportManagerTime.text = if (detailData.tglWaktuPelaporApprove == "") "-" else {
+                                                if (getString(R.string.lang) == "in")
+                                                    "${detailData.tglWaktuPelaporApprove}\noleh ${detailData.namaUserPelaporApprove}"
+                                                else
+                                                    "${detailData.tglWaktuPelaporApprove}\nby ${detailData.namaUserPelaporApprove}"
+                                            }
+                                        } else {
+                                            reportManagerApproveReject.text = getString(R.string.submission_report_manager_time_reject)
+                                            reportManagerTime.text = if (detailData.tglWaktuPelaporReject == "") "-" else {
+                                                if (getString(R.string.lang) == "in")
+                                                    "${detailData.tglWaktuPelaporReject}\noleh ${detailData.namaUserPelaporReject}"
+                                                else
+                                                    "${detailData.tglWaktuPelaporReject}\nby ${detailData.namaUserPelaporReject}"
+                                            }
+                                        }
                                     } else {
-                                        "-"
+                                        reportManagerApproveReject.visibility = View.GONE
+                                        reportManagerTime.visibility = View.GONE
+                                    }
+
+                                    if (detailData.tglwaktuApproved != null || detailData.tglWaktuReject != null) {
+                                        targetManagerApproveReject.visibility = View.VISIBLE
+                                        targetManagerTime.visibility = View.VISIBLE
+                                        if (detailData.tglwaktuApproved != null) {
+                                            targetManagerApproveReject.text = getString(R.string.submission_target_manager_time_approve)
+                                            targetManagerTime.text = if (detailData.tglwaktuApproved == "") "-" else detailData.tglwaktuApproved
+                                        } else {
+                                            targetManagerApproveReject.text = getString(R.string.submission_target_manager_time_reject)
+                                            targetManagerTime.text = if (detailData.tglWaktuReject == "") "-" else detailData.tglWaktuReject
+                                        }
+                                    } else {
+                                        targetManagerApproveReject.visibility = View.GONE
+                                        targetManagerTime.visibility = View.GONE
                                     }
 
                                     startWork.text = if (detailData.tglWaktuKerjaStart != null) {

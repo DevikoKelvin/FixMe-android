@@ -85,7 +85,10 @@
 
     <string name="submission_detail_title">Detail Laporan</string>
     <string name="submission_description">Deskripsi</string>
-    <string name="submission_report">Waktu lapor:</string>
+    <string name="submission_report_manager_time_approve">Waktu manager\npelapor menyetujui:</string>
+    <string name="submission_report_manager_time_reject">Waktu manager\npelapor menolak:</string>
+    <string name="submission_target_manager_time_approve">Waktu manajer\ntarget menyetujui:</string>
+    <string name="submission_target_manager_time_reject">Waktu manajer\ntarget menolak:</string>
     <string name="submission_start_working">Waktu mulai bekerja:</string>
     <string name="submission_end_working">Waktu selesai bekerja:</string>
     <string name="work_by_vendors">Dilaksanakan oleh Vendor</string>

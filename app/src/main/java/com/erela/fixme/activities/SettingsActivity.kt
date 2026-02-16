@@ -176,7 +176,7 @@ class SettingsActivity : AppCompatActivity() {
                     startDownload(downloadLink!!)
                 } else {
                     loadingBar.visibility = View.VISIBLE
-                    statusIcon.visibility = View.GONE
+                    statusIcon.visibility = View.INVISIBLE
                     val handler = Handler(Looper.getMainLooper())
                     val runnable = object : Runnable {
                         var count = 1
@@ -258,7 +258,8 @@ class SettingsActivity : AppCompatActivity() {
                                                     )
                                                 ).show()
                                         } else {
-                                            statusIcon.visibility = View.GONE
+                                            statusIcon.setImageDrawable(getDrawable(R.drawable.done_icon))
+                                            statusIcon.visibility = View.VISIBLE
                                             CustomToast.getInstance(applicationContext)
                                                 .setMessage(
                                                     if (getString(R.string.lang) == "in")

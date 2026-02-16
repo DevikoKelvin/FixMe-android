@@ -10,13 +10,15 @@ import androidx.recyclerview.widget.RecyclerView
 import com.erela.fixme.R
 import com.erela.fixme.bottom_sheets.SelectSupervisorTechniciansBottomSheet
 import com.erela.fixme.databinding.ListItemSelectedItemsBinding
+import com.erela.fixme.objects.SubDepartmentListResponse
 import com.erela.fixme.objects.SubmissionDetailResponse
 import com.erela.fixme.objects.SupervisorTechnicianListResponse
 
 class SelectedSupervisorTechniciansRvAdapter(
     val context: Context, private val detailData: SubmissionDetailResponse,
     private val selectedSupervisorTechniciansList: ArrayList<SupervisorTechnicianListResponse>,
-    private val isForManager: Boolean
+    private val isForManager: Boolean,
+    private val getSelectedSubDept: () -> SubDepartmentListResponse?
 ) : RecyclerView.Adapter<SelectedSupervisorTechniciansRvAdapter.ViewHolder>(),
     SelectSupervisorTechniciansBottomSheet.OnSelectTechniciansListener,
     SelectSupervisorTechniciansBottomSheet.OnSelectSupervisorListener {
@@ -74,7 +76,8 @@ class SelectedSupervisorTechniciansRvAdapter(
                                 context,
                                 detailData,
                                 selectedSupervisorTechniciansList,
-                                isForManager
+                                isForManager,
+                                getSelectedSubDept()
                             ).also {
                                 with(it) {
                                     if (isForManager)

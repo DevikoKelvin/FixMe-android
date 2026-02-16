@@ -348,7 +348,7 @@ class UpdateStatusBottomSheet(
                                 dataDetail,
                                 selectedSupervisorsArrayList,
                                 true
-                            ).also {
+                            ) { selectedSubDept }.also {
                                 with(it) {
                                     setOnSupervisorSetListener(object :
                                         SelectedSupervisorTechniciansRvAdapter.OnSupervisorSetListener {
@@ -612,7 +612,7 @@ class UpdateStatusBottomSheet(
                 dataDetail,
                 selectedTechniciansArrayList,
                 false
-            ).also {
+            ) { selectedSubDept }.also {
                 with(it) {
                     setOnTechniciansSetListener(object :
                         SelectedSupervisorTechniciansRvAdapter.OnTechniciansSetListener {
