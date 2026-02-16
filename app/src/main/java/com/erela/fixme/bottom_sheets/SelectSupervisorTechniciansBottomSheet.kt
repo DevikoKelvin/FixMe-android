@@ -80,9 +80,15 @@ class SelectSupervisorTechniciansBottomSheet(
         binding.apply {
             loadingBar.visibility = View.VISIBLE
             try {
+                supervisorsList.clear()
+                techniciansList.clear()
+                val dept = if (selectedSubDept?.idDept != null) selectedSubDept.idDept else detailData.idDeptTujuan!!
                 if (isForManager) {
                     title.text = context.getString(R.string.select_supervisor)
-                    InitAPI.getEndpoint.getSupervisorList(detailData.idGaprojects!!, selectedSubDept?.idDept!!).enqueue(
+                    InitAPI.getEndpoint.getSupervisorList(
+                        detailData.idGaprojects!!,
+                        dept
+                    ).enqueue(
                         object : Callback<List<SupervisorTechnicianListResponse>> {
                             override fun onResponse(
                                 call: Call<List<SupervisorTechnicianListResponse>>,
@@ -136,7 +142,10 @@ class SelectSupervisorTechniciansBottomSheet(
                                                     "Can't retrieve supervisor list."
                                             )
                                             .show()
-                                        Log.e("ERROR Selecting SPV Body null", response.message().toString())
+                                        Log.e(
+                                            "ERROR Selecting SPV Body null",
+                                            response.message().toString()
+                                        )
                                         dismiss()
                                     }
                                 } else {
@@ -160,7 +169,10 @@ class SelectSupervisorTechniciansBottomSheet(
                                                 "Can't retrieve supervisor list."
                                         )
                                         .show()
-                                    Log.e("ERROR Selecting SPV Unsuccessful", response.message().toString())
+                                    Log.e(
+                                        "ERROR Selecting SPV Unsuccessful",
+                                        response.message().toString()
+                                    )
                                     dismiss()
                                 }
                             }
@@ -252,7 +264,10 @@ class SelectSupervisorTechniciansBottomSheet(
                                                     "Can't retrieve technicians list."
                                             )
                                             .show()
-                                        Log.e("ERROR Deploying Tech Body null", response.message().toString())
+                                        Log.e(
+                                            "ERROR Deploying Tech Body null",
+                                            response.message().toString()
+                                        )
                                         dismiss()
                                     }
                                 } else {
@@ -276,7 +291,10 @@ class SelectSupervisorTechniciansBottomSheet(
                                                 "Can't retrieve technicians list."
                                         )
                                         .show()
-                                    Log.e("ERROR Deploying Tech Unsuccessful", response.message().toString())
+                                    Log.e(
+                                        "ERROR Deploying Tech Unsuccessful",
+                                        response.message().toString()
+                                    )
                                     dismiss()
                                 }
                             }
