@@ -54,6 +54,7 @@ class TrialTrackingBottomSheet(
     @SuppressLint("SetTextI18n")
     private fun init() {
         binding.apply {
+            trialActionText.text = context.getString(R.string.report_trial)
             loadingManager(true)
             try {
                 trialData = ArrayList()
@@ -86,11 +87,10 @@ class TrialTrackingBottomSheet(
                                                     }
                                                 }
                                                 if (readyDone) {
-                                                    trialActionButton.setCardBackgroundColor(
-                                                        ContextCompat.getColor(
-                                                            context,
-                                                            R.color.custom_toast_background_soft_blue
-                                                        )
+                                                    trialActionColor.background = ResourcesCompat.getDrawable(
+                                                        context.resources,
+                                                        R.drawable.gradient_done_color,
+                                                        context.theme
                                                     )
                                                     trialActionText.text =
                                                         if (context.getString(R.string.lang) == "in")
@@ -99,7 +99,7 @@ class TrialTrackingBottomSheet(
                                                             "Mark as Done now!"
                                                     trialActionText.setTextColor(
                                                         ContextCompat.getColor(
-                                                            context, R.color.custom_toast_font_blue
+                                                            context, R.color.white
                                                         )
                                                     )
                                                     trialActionButton.setOnClickListener {
@@ -108,10 +108,10 @@ class TrialTrackingBottomSheet(
                                                         )
                                                     }
                                                 } else {
-                                                    trialActionButton.setCardBackgroundColor(
-                                                        ContextCompat.getColor(
-                                                            context, R.color.status_on_trial
-                                                        )
+                                                    trialActionColor.background = ResourcesCompat.getDrawable(
+                                                        context.resources,
+                                                        R.drawable.gradient_on_trial_color,
+                                                        context.theme
                                                     )
                                                     trialActionText.text =
                                                         if (context.getString(R.string.lang) == "in")
@@ -133,6 +133,17 @@ class TrialTrackingBottomSheet(
                                                 trialActionButton.visibility = View.GONE
                                             }
                                         }
+                                    } else {
+                                        if (data.idUser == userData.id) {
+                                            trialActionButton.visibility = View.VISIBLE
+                                            trialActionButton.setOnClickListener {
+                                                onTrialTrackingListener.reportTrialClicked(
+                                                    this@TrialTrackingBottomSheet
+                                                )
+                                            }
+                                        }
+                                        else
+                                            trialActionButton.visibility = View.GONE
                                     }
                                 } else {
                                     CustomToast.getInstance(context)

@@ -63,7 +63,6 @@
         android:id="@+id/actionsButtonContainer"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginHorizontal="@dimen/list_item_padding"
         android:layout_marginTop="@dimen/user_info_item_margin_top"
         android:orientation="horizontal"
         android:visibility="visible">
@@ -73,20 +72,21 @@
             android:layout_width="match_parent"
             android:layout_height="@dimen/bottom_sheet_padding_bottom"
             android:layout_marginVertical="@dimen/user_info_item_margin_top"
+            android:layout_marginStart="@dimen/list_item_padding"
             android:layout_marginEnd="@dimen/dialog_loading_content_padding"
             android:layout_weight="1"
             android:visibility="visible"
             app:cardBackgroundColor="@color/white"
             app:cardCornerRadius="@dimen/login_button_corner_radius"
-            app:strokeColor="@color/custom_toast_font_failed"
-            app:strokeWidth="@dimen/login_field_stroke_width">
+            app:strokeWidth="0dp">
 
             <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/gradient_rejected_color"
+                android:gravity="center"
                 android:text="@string/not_pass"
-                android:textColor="@color/custom_toast_font_failed"
+                android:textColor="@color/white"
                 android:textSize="@dimen/text_size_medium"
                 android:textStyle="bold" />
 
@@ -96,7 +96,7 @@
                 android:layout_height="@dimen/login_progress_bar_size"
                 android:layout_gravity="center_vertical"
                 android:layout_marginStart="@dimen/dialog_loading_content_padding"
-                android:indeterminateTint="@color/custom_toast_font_failed"
+                android:indeterminateTint="@color/white"
                 android:visibility="gone" />
         </com.google.android.material.card.MaterialCardView>
 
@@ -106,6 +106,7 @@
             android:layout_height="@dimen/bottom_sheet_padding_bottom"
             android:layout_marginVertical="@dimen/user_info_item_margin_top"
             android:layout_marginStart="@dimen/dialog_loading_content_padding"
+            android:layout_marginEnd="@dimen/list_item_padding"
             android:layout_weight="1"
             android:visibility="visible"
             app:cardBackgroundColor="@color/custom_toast_background_success"
@@ -113,11 +114,12 @@
             app:strokeWidth="0dp">
 
             <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/gradient_approved_color"
+                android:gravity="center"
                 android:text="@string/pass"
-                android:textColor="@color/custom_toast_font_success"
+                android:textColor="@color/white"
                 android:textSize="@dimen/text_size_medium"
                 android:textStyle="bold" />
 
@@ -127,8 +129,8 @@
                 android:layout_height="@dimen/login_progress_bar_size"
                 android:layout_gravity="center_vertical"
                 android:layout_marginStart="@dimen/dialog_loading_content_padding"
-                android:indeterminateTint="@color/custom_toast_font_success"
-                android:visibility="visible" />
+                android:indeterminateTint="@color/white"
+                android:visibility="gone" />
         </com.google.android.material.card.MaterialCardView>
     </LinearLayout>
 </LinearLayout>
