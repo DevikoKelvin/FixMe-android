@@ -68,7 +68,7 @@ class UpdateStatusBottomSheet(
         false
     )
     private lateinit var complexity: String
-    private var workByVendor = "n"
+    private var workByVendor = "N"
     private lateinit var subDepartmentList: ArrayList<String>
     private var selectedSubDept: SubDepartmentListResponse? = null
 
@@ -186,8 +186,8 @@ class UpdateStatusBottomSheet(
                             else
                                 "Update"
                             workByVendor =
-                                if (dataDetail.isVendor.equals("Y", ignoreCase = true)) "y"
-                                else "n"
+                                if (dataDetail.isVendor.equals("Y", ignoreCase = true)) "Y"
+                                else "N"
                         }
                         if (dataDetail.deptTujuan != userData.dept) {
                             subDeptText.visibility = View.GONE
@@ -255,7 +255,7 @@ class UpdateStatusBottomSheet(
                             }
 
                             internalButton.setOnClickListener {
-                                workByVendor = "n"
+                                workByVendor = "N"
                                 internalButton.strokeColor =
                                     ContextCompat.getColor(context, android.R.color.transparent)
                                 internalColor.background = ResourcesCompat.getDrawable(
@@ -283,7 +283,7 @@ class UpdateStatusBottomSheet(
                             }
 
                             vendorButton.setOnClickListener {
-                                workByVendor = "y"
+                                workByVendor = "Y"
                                 internalButton.strokeColor =
                                     ContextCompat.getColor(context, R.color.button_color)
                                 internalColor.background = null
@@ -459,7 +459,7 @@ class UpdateStatusBottomSheet(
                     }
                 }
             } else {
-                workByVendor = if (dataDetail.isVendor == "Y") "y" else "n"
+                workByVendor = if (dataDetail.isVendor == "Y") "Y" else "N"
                 subDeptText.visibility = View.GONE
                 subDeptDropdownLayout.visibility = View.GONE
                 workByText.visibility = View.VISIBLE
@@ -512,7 +512,7 @@ class UpdateStatusBottomSheet(
                 }
 
                 internalButton.setOnClickListener {
-                    workByVendor = "n"
+                    workByVendor = "N"
                     internalButton.strokeColor =
                         ContextCompat.getColor(context, android.R.color.transparent)
                     internalColor.background = ResourcesCompat.getDrawable(
@@ -536,7 +536,7 @@ class UpdateStatusBottomSheet(
                 }
 
                 vendorButton.setOnClickListener {
-                    workByVendor = "y"
+                    workByVendor = "Y"
                     internalButton.strokeColor =
                         ContextCompat.getColor(context, R.color.button_color)
                     internalColor.background = null

@@ -83,6 +83,8 @@ class ProgressTrackingBottomSheet(
                         ) {
                             if (response.isSuccessful) {
                                 val result = response.body()
+                                Log.e("Detail", data.toString())
+                                Log.e("Result", result.toString())
                                 if (result != null) {
                                     if (result.data != null) {
                                         for (i in 0 until result.data.size) {
@@ -110,17 +112,16 @@ class ProgressTrackingBottomSheet(
                                         when (data.stsGaprojects) {
                                             22 -> progressActionButton.visibility = View.GONE
                                             3 -> {
-                                                Log.e("Detail", data.toString())
-                                                Log.e("Result", result.toString())
                                                 if (data.idUser == userData.id) {
                                                     for (i in 0 until data.usernUserTeknisi!!.size) {
                                                         if (data.usernUserTeknisi[i]?.idUser == userData.id) {
                                                             progressActionButton.visibility =
                                                                 View.VISIBLE
-                                                            progressActionColor.background = ContextCompat.getDrawable(
-                                                                context,
-                                                                R.drawable.gradient_accent_color
-                                                            )
+                                                            progressActionColor.background =
+                                                                ContextCompat.getDrawable(
+                                                                    context,
+                                                                    R.drawable.gradient_accent_color
+                                                                )
                                                             progressActionText.setTextColor(
                                                                 ContextCompat.getColor(
                                                                     context,
@@ -157,13 +158,14 @@ class ProgressTrackingBottomSheet(
                                                                         onProgressTrackingListener.readyForTrialClicked()
                                                                     }
                                                                 } else {
-                                                                    if (data.isVendor == "y") {
+                                                                    if (data.isVendor == "y" || data.isVendor == "Y") {
                                                                         progressActionButton.visibility =
                                                                             View.VISIBLE
-                                                                        progressActionColor.background = ContextCompat.getDrawable(
-                                                                            context,
-                                                                            R.drawable.gradient_accent_color
-                                                                        )
+                                                                        progressActionColor.background =
+                                                                            ContextCompat.getDrawable(
+                                                                                context,
+                                                                                R.drawable.gradient_accent_color
+                                                                            )
                                                                         progressActionText.setTextColor(
                                                                             ContextCompat.getColor(
                                                                                 context,
@@ -188,13 +190,14 @@ class ProgressTrackingBottomSheet(
                                                                 }
                                                                 break
                                                             } else {
-                                                                if (data.isVendor == "y") {
+                                                                if (data.isVendor == "y" || data.isVendor == "Y") {
                                                                     progressActionButton.visibility =
                                                                         View.VISIBLE
-                                                                    progressActionColor.background = ContextCompat.getDrawable(
-                                                                        context,
-                                                                        R.drawable.gradient_accent_color
-                                                                    )
+                                                                    progressActionColor.background =
+                                                                        ContextCompat.getDrawable(
+                                                                            context,
+                                                                            R.drawable.gradient_accent_color
+                                                                        )
                                                                     progressActionText.setTextColor(
                                                                         ContextCompat.getColor(
                                                                             context,
@@ -222,10 +225,11 @@ class ProgressTrackingBottomSheet(
                                                         if (data.usernUserTeknisi[i]?.idUser == userData.id) {
                                                             progressActionButton.visibility =
                                                                 View.VISIBLE
-                                                            progressActionColor.background = ContextCompat.getDrawable(
-                                                                context,
-                                                                R.drawable.gradient_accent_color
-                                                            )
+                                                            progressActionColor.background =
+                                                                ContextCompat.getDrawable(
+                                                                    context,
+                                                                    R.drawable.gradient_accent_color
+                                                                )
                                                             progressActionText.setTextColor(
                                                                 ContextCompat.getColor(
                                                                     context,
@@ -264,13 +268,14 @@ class ProgressTrackingBottomSheet(
                                                                         onProgressTrackingListener.readyForTrialClicked()
                                                                     }
                                                                 }
-                                                                if (data.isVendor == "y") {
+                                                                if (data.isVendor == "y" || data.isVendor == "Y") {
                                                                     progressActionButton.visibility =
                                                                         View.VISIBLE
-                                                                    progressActionColor.background = ContextCompat.getDrawable(
-                                                                        context,
-                                                                        R.drawable.gradient_accent_color
-                                                                    )
+                                                                    progressActionColor.background =
+                                                                        ContextCompat.getDrawable(
+                                                                            context,
+                                                                            R.drawable.gradient_accent_color
+                                                                        )
                                                                     progressActionText.setTextColor(
                                                                         ContextCompat.getColor(
                                                                             context,
@@ -306,10 +311,11 @@ class ProgressTrackingBottomSheet(
                                             else -> {
                                                 if (data.idUser == userData.id) {
                                                     progressActionButton.visibility = View.VISIBLE
-                                                    progressActionColor.background = ContextCompat.getDrawable(
-                                                        context,
-                                                        R.drawable.gradient_on_trial_color
-                                                    )
+                                                    progressActionColor.background =
+                                                        ContextCompat.getDrawable(
+                                                            context,
+                                                            R.drawable.gradient_on_trial_color
+                                                        )
                                                     progressActionText.setTextColor(
                                                         ContextCompat.getColor(
                                                             context,
@@ -349,10 +355,11 @@ class ProgressTrackingBottomSheet(
                                                         if (data.usernUserTeknisi[i]?.idUser == userData.id) {
                                                             progressActionButton.visibility =
                                                                 View.VISIBLE
-                                                            progressActionColor.background = ContextCompat.getDrawable(
-                                                                context,
-                                                                R.drawable.gradient_accent_color
-                                                            )
+                                                            progressActionColor.background =
+                                                                ContextCompat.getDrawable(
+                                                                    context,
+                                                                    R.drawable.gradient_accent_color
+                                                                )
                                                             progressActionText.setTextColor(
                                                                 ContextCompat.getColor(
                                                                     context,
@@ -377,13 +384,14 @@ class ProgressTrackingBottomSheet(
                                                     if (!tech) {
                                                         for (i in 0 until data.usernUserSpv!!.size) {
                                                             if (data.usernUserSpv[i]?.idUser == userData.id) {
-                                                                if (data.isVendor == "y") {
+                                                                if (data.isVendor == "y" || data.isVendor == "Y") {
                                                                     progressActionButton.visibility =
                                                                         View.VISIBLE
-                                                                    progressActionColor.background = ContextCompat.getDrawable(
-                                                                        context,
-                                                                        R.drawable.gradient_accent_color
-                                                                    )
+                                                                    progressActionColor.background =
+                                                                        ContextCompat.getDrawable(
+                                                                            context,
+                                                                            R.drawable.gradient_accent_color
+                                                                        )
                                                                     progressActionText.setTextColor(
                                                                         ContextCompat.getColor(
                                                                             context,
@@ -406,13 +414,14 @@ class ProgressTrackingBottomSheet(
                                                                         View.GONE
                                                                 }
                                                             } else {
-                                                                if (data.isVendor == "y") {
+                                                                if (data.isVendor == "y" || data.isVendor == "Y") {
                                                                     progressActionButton.visibility =
                                                                         View.VISIBLE
-                                                                    progressActionColor.background = ContextCompat.getDrawable(
-                                                                        context,
-                                                                        R.drawable.gradient_accent_color
-                                                                    )
+                                                                    progressActionColor.background =
+                                                                        ContextCompat.getDrawable(
+                                                                            context,
+                                                                            R.drawable.gradient_accent_color
+                                                                        )
                                                                     progressActionText.setTextColor(
                                                                         ContextCompat.getColor(
                                                                             context,
@@ -440,10 +449,11 @@ class ProgressTrackingBottomSheet(
                                                         if (data.usernUserTeknisi[i]?.idUser == userData.id) {
                                                             progressActionButton.visibility =
                                                                 View.VISIBLE
-                                                            progressActionColor.background = ContextCompat.getDrawable(
-                                                                context,
-                                                                R.drawable.gradient_accent_color
-                                                            )
+                                                            progressActionColor.background =
+                                                                ContextCompat.getDrawable(
+                                                                    context,
+                                                                    R.drawable.gradient_accent_color
+                                                                )
                                                             progressActionText.setTextColor(
                                                                 ContextCompat.getColor(
                                                                     context,
@@ -468,13 +478,14 @@ class ProgressTrackingBottomSheet(
                                                     if (!tech) {
                                                         for (i in 0 until data.usernUserSpv!!.size) {
                                                             if (data.usernUserSpv[i]?.idUser == userData.id) {
-                                                                if (data.isVendor == "y") {
+                                                                if (data.isVendor == "y" || data.isVendor == "Y") {
                                                                     progressActionButton.visibility =
                                                                         View.VISIBLE
-                                                                    progressActionColor.background = ContextCompat.getDrawable(
-                                                                        context,
-                                                                        R.drawable.gradient_accent_color
-                                                                    )
+                                                                    progressActionColor.background =
+                                                                        ContextCompat.getDrawable(
+                                                                            context,
+                                                                            R.drawable.gradient_accent_color
+                                                                        )
                                                                     progressActionText.setTextColor(
                                                                         ContextCompat.getColor(
                                                                             context,
@@ -497,13 +508,14 @@ class ProgressTrackingBottomSheet(
                                                                         View.GONE
                                                                 }
                                                             } else {
-                                                                if (data.isVendor == "y") {
+                                                                if (data.isVendor == "y" || data.isVendor == "Y") {
                                                                     progressActionButton.visibility =
                                                                         View.VISIBLE
-                                                                    progressActionColor.background = ContextCompat.getDrawable(
-                                                                        context,
-                                                                        R.drawable.gradient_accent_color
-                                                                    )
+                                                                    progressActionColor.background =
+                                                                        ContextCompat.getDrawable(
+                                                                            context,
+                                                                            R.drawable.gradient_accent_color
+                                                                        )
                                                                     progressActionText.setTextColor(
                                                                         ContextCompat.getColor(
                                                                             context,
@@ -534,10 +546,11 @@ class ProgressTrackingBottomSheet(
                                             else -> {
                                                 if (data.idUser == userData.id) {
                                                     progressActionButton.visibility = View.VISIBLE
-                                                    progressActionColor.background = ContextCompat.getDrawable(
-                                                        context,
-                                                        R.drawable.gradient_on_trial_color
-                                                    )
+                                                    progressActionColor.background =
+                                                        ContextCompat.getDrawable(
+                                                            context,
+                                                            R.drawable.gradient_on_trial_color
+                                                        )
                                                     progressActionText.setTextColor(
                                                         ContextCompat.getColor(
                                                             context,

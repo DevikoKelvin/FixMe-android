@@ -1623,7 +1623,7 @@ class SubmissionDetailActivity : AppCompatActivity(),
                                     } else ""
 
                                     userTechnicians.text =
-                                        if (detailData.isVendor == "y") "${getString(R.string.work_by_vendors)}${vendorName}" else StringBuilder().also {
+                                        if (detailData.isVendor == "y" || detailData.isVendor == "Y") "${getString(R.string.work_by_vendors)}${vendorName}" else StringBuilder().also {
                                             with(it) {
                                                 if (detailData.usernUserTeknisi!!.isEmpty()) {
                                                     append("-")
