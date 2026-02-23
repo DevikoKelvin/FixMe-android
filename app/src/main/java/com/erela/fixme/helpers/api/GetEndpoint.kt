@@ -84,7 +84,7 @@ interface GetEndpoint {
     @POST("reportDetail")
     fun getSubmissionDetail(
         @Field("id") submissionID: String,
-        @Field("id_notif") notificationID: Int? = null
+        @Field("id_user") userId: Int
     ): Call<List<SubmissionDetailResponse>>
 
     @FormUrlEncoded

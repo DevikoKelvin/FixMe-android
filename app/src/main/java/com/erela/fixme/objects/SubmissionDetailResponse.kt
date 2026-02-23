@@ -161,7 +161,9 @@ data class SubmissionDetailResponse(
     @field:SerializedName("isVendor")
     val isVendor: String? = null,
     @field:SerializedName("vendorName")
-    val vendorName: String? = null
+    val vendorName: String? = null,
+    @field:SerializedName("btnApvPlp")
+    val isReporterManagerCanApprove: Boolean? = null,
 ) : Parcelable
 
 @Parcelize

@@ -64,7 +64,6 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import java.util.Locale
-import kotlin.properties.Delegates
 
 class SubmissionDetailActivity : AppCompatActivity(),
     SubmissionActionBottomSheet.OnButtonActionClickedListener,
@@ -82,7 +81,6 @@ class SubmissionDetailActivity : AppCompatActivity(),
     private lateinit var imageData: ArrayList<FotoGaprojectsItem>
     private lateinit var imageCarouselAdapter: ImageCarouselPagerAdapter
     private lateinit var detailId: String
-    private var notificationId by Delegates.notNull<Int>()
     private lateinit var detailData: SubmissionDetailResponse
     private lateinit var progressTrackingBottomSheet: ProgressTrackingBottomSheet
     private var message: StringBuilder = StringBuilder()
@@ -123,7 +121,6 @@ class SubmissionDetailActivity : AppCompatActivity(),
 
     companion object {
         const val DETAIL_ID = "DETAIL_ID"
-        const val NOTIFICATION_ID = "NOTIFICATION_ID"
         fun initiate(context: Context, detailId: String): Intent {
             return Intent(
                 context, SubmissionDetailActivity::class.java
@@ -172,12 +169,9 @@ class SubmissionDetailActivity : AppCompatActivity(),
             closeFabMenu()
 
             detailId = intent.getStringExtra(DETAIL_ID) ?: run {
-                Log.e("Detail ID", "No DETAIL_ID found in intent")
                 finish()
                 return@apply
             }
-
-            notificationId = intent.getIntExtra(NOTIFICATION_ID, 0)
 
             backButton.setOnClickListener {
                 if (isUpdated) {
@@ -213,10 +207,7 @@ class SubmissionDetailActivity : AppCompatActivity(),
             handler.post(runnable)
 
             try {
-                (if (notificationId != 0) InitAPI.getEndpoint.getSubmissionDetail(
-                    detailId,
-                    notificationId
-                ) else InitAPI.getEndpoint.getSubmissionDetail(detailId))
+                InitAPI.getEndpoint.getSubmissionDetail(detailId, userData.id)
                     .enqueue(object : Callback<List<SubmissionDetailResponse>> {
                         @SuppressLint("ClickableViewAccessibility")
                         override fun onResponse(
@@ -266,7 +257,6 @@ class SubmissionDetailActivity : AppCompatActivity(),
                                                 val decodedImageURL = Base64Helper.decodeBase64(
                                                     image?.foto.toString()
                                                 )
-                                                Log.e("ImageURL", decodedImageURL)
                                                 Glide.with(applicationContext)
                                                     .load(decodedImageURL)
                                                     .listener(object : RequestListener<Drawable> {
@@ -1776,16 +1766,17 @@ class SubmissionDetailActivity : AppCompatActivity(),
             when (data.stsGaprojects) {
                 // Pending
                 1 -> {
-                    if (userData.id == data.idUser) { // If logged in user is reporter
+                    if (userData.id == data.idUser) { // If logged-in user is reporter
                         actionButton.visibility = View.GONE
                         actionSelfButton.visibility = View.VISIBLE
                         onProgressButton.visibility = View.GONE
                     } else {
-                        // If logged in user are not the reporter but..
-                        if (userData.privilege < 2) { // If logged in user is manager or owner
-                            if (userData.dept == data.deptUser
+                        // If logged-in user are not the reporter but...
+                        if (userData.privilege < 2) { // If logged-in user is manager or owner
+                            if (data.isReporterManagerCanApprove == true)
+                            /*if (userData.dept == data.deptUser
                                 || data.deptUser!!.contains(userData.dept, true)
-                            ) { // If reporter's department are same as manager's/owner's department
+                            )*/ { // If reporter's department are same as manager's/owner's department
                                 actionButton.visibility = View.VISIBLE
                                 actionSelfButton.visibility = View.GONE
                                 onProgressButton.visibility = View.GONE
@@ -1796,7 +1787,7 @@ class SubmissionDetailActivity : AppCompatActivity(),
                                 onProgressButton.visibility = View.GONE
                             }
                         } else {
-                            // If logged in user is not a manager or owner
+                            // If logged-in user is not a manager or owner
                             actionButton.visibility = View.GONE
                             actionSelfButton.visibility = View.GONE
                             onProgressButton.visibility = View.GONE
@@ -1900,7 +1891,7 @@ class SubmissionDetailActivity : AppCompatActivity(),
                 }
                 // Waiting
                 11 -> {
-                    if (userData.privilege < 2) { // If logged in user is manager or owner
+                    if (userData.privilege < 2) { // If logged-in user is manager or owner
                         if (userData.dept == data.deptTujuan) { // If manager's/owner's department are same as targeted department
                             actionButton.visibility = View.VISIBLE
                             actionSelfButton.visibility = View.GONE
@@ -1914,7 +1905,7 @@ class SubmissionDetailActivity : AppCompatActivity(),
                             onProgressButton.visibility = View.GONE
                         }
                     } else {
-                        // If logged in user is not a manager or owner
+                        // If logged-in user is not a manager or owner
                         actionButton.visibility = View.GONE
                         actionSelfButton.visibility = View.GONE
                         onProgressButton.visibility = View.GONE

@@ -43,7 +43,6 @@ object NotificationsHelper {
             if (caseId != 0) {
                 Intent(context, SubmissionDetailActivity::class.java).apply {
                     putExtra(SubmissionDetailActivity.DETAIL_ID, caseId.toString())
-                    putExtra(SubmissionDetailActivity.NOTIFICATION_ID, notificationId)
                 }
             } else {
                 Intent(context, MainActivity::class.java)
