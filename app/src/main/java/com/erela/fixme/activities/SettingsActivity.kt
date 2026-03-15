@@ -162,7 +162,7 @@ class SettingsActivity : AppCompatActivity() {
                     "@ ${Calendar.getInstance().get(Calendar.YEAR)} Erlangga Edi Laboratories Corporation\n All rights reserved"
 
             val buildType =
-                if (BuildConfig.BUILD_TYPE == "debug") "dev_${BuildConfig.BUILD_TYPE}" else "pre_${BuildConfig.BUILD_TYPE}"
+                if (BuildConfig.BUILD_TYPE == "debug") "dev_${BuildConfig.BUILD_TYPE}" else "${BuildConfig.BUILD_TYPE}"
             currentAppVersion = BuildConfig.VERSION_NAME
             val appVersionText =
                 "${BuildConfig.VERSION_NAME}.${BuildConfig.VERSION_CODE}.${buildType}.${BuildConfig.BUILD_TIMESTAMP}"

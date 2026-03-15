@@ -3118,7 +3118,7 @@ class SubmissionDetailActivity : AppCompatActivity(),
                 .alpha(1f)
                 .scaleX(1f)
                 .scaleY(1f)
-                .setDuration(150)
+                .setDuration(50)
                 .start()
         }
     }
@@ -3128,7 +3128,7 @@ class SubmissionDetailActivity : AppCompatActivity(),
             .alpha(0f)
             .scaleX(0f)
             .scaleY(0f)
-            .setDuration(150)
+            .setDuration(100)
             .withEndAction {
                 view.visibility = View.GONE
             }
@@ -3152,7 +3152,7 @@ class SubmissionDetailActivity : AppCompatActivity(),
             googleMap?.apply {
                 clear()
                 addMarker(MarkerOptions().position(position).title(detailData.lokasi))
-                moveCamera(CameraUpdateFactory.newLatLngZoom(position, 15f))
+                moveCamera(CameraUpdateFactory.newLatLngZoom(position, 17f))
             }
         } catch (e: Exception) {
             e.printStackTrace()

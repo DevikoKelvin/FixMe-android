@@ -28,8 +28,8 @@ interface GetEndpoint {
     @FormUrlEncoded
     @POST("checkLogin")
     fun login(
-        @Field("usern") username: String,
-        @Field("passw") password: String
+        @Field("username") username: String,
+        @Field("password") password: String
     ): Call<LoginResponse>
 
     @FormUrlEncoded
@@ -43,7 +43,8 @@ interface GetEndpoint {
     @POST("changePassword")
     fun changePassword(
         @Field("id_user") id: Int,
-        @Field("passw") password: String
+        @Field("old_password") oldPassword: String,
+        @Field("new_password") newPassword: String,
     ): Call<GenericSimpleResponse>
 
     @FormUrlEncoded

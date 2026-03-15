@@ -1,13 +1,12 @@
 [versions]
 # Plugins
 agp = "9.1.0"
-kotlin = "2.3.10"
 gms = "4.4.4"
 
 # Dependencies
-coreKtx = "1.17.0"
+coreKtx = "1.18.0"
 appcompat = "1.7.1"
-activity = "1.12.4"
+activity = "1.13.0"
 material = "1.13.0"
 design = "28.0.0"
 constraintlayout = "2.2.1"
@@ -27,7 +26,7 @@ swipeRefreshLayout = "1.2.0"
 circleIndicator = "2.1.6"
 appxupdater = "v2.0.20"
 pusherJavaClient = "2.4.4"
-balloon = "1.7.4"
+balloon = "1.7.5"
 shimmer = "0.5.0"
 
 firebaseBom = "34.10.0"
@@ -72,6 +71,5 @@ play-services-location = { group = "com.google.android.gms", name = "play-servic
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
-kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 legacy-kapt = { id = "com.android.legacy-kapt", version.ref = "agp" }
 gms-services = { id = "com.google.gms.google-services", version.ref = "gms" }

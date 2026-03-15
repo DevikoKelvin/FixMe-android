@@ -33,6 +33,7 @@
     <string name="change_password_title">Ubah Kata Sandi</string>
     <string name="password_minimum_char_error">Kata sandi harus setidaknya minimal 4 karakter!</string>
     <string name="password_not_match_error">Kata sandi tidak cocok! Tolong periksa ulang.</string>
+    <string name="old_password_title">Kata sandi lama</string>
     <string name="new_password_title">Kata sandi baru</string>
     <string name="confirm_password_title">Konfirmasi Kata Sandi</string>
     <string name="save_settings">SIMPAN</string>

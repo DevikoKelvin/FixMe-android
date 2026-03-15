@@ -71,6 +71,32 @@ class ChangePasswordActivity : AppCompatActivity() {
                 onBackPressedDispatcher.onBackPressed()
             }
 
+            oldPasswordField.addTextChangedListener(object : TextWatcher {
+                override fun beforeTextChanged(
+                    s: CharSequence?,
+                    start: Int,
+                    count: Int,
+                    after: Int
+                ) {
+                }
+
+                override fun onTextChanged(
+                    s: CharSequence?,
+                    start: Int,
+                    before: Int,
+                    count: Int
+                ) {
+                    if (s != null)
+                        if (s.length < 4) {
+                            oldPasswordFieldLayout.error =
+                                getString(R.string.password_minimum_char_error)
+                        } else {
+                            oldPasswordFieldLayout.error = null
+                        }
+                }
+
+                override fun afterTextChanged(s: Editable?) {}
+            })
             passwordField.addTextChangedListener(object : TextWatcher {
                 override fun beforeTextChanged(
                     s: CharSequence?,
@@ -148,7 +174,9 @@ class ChangePasswordActivity : AppCompatActivity() {
                 } else {
                     try {
                         InitAPI.getEndpoint.changePassword(
-                            userData.id, confirmPasswordField.text.toString()
+                            userData.id,
+                            oldPasswordField.text.toString(),
+                            confirmPasswordField.text.toString()
                         )
                             .enqueue(object : Callback<GenericSimpleResponse> {
                                 override fun onResponse(

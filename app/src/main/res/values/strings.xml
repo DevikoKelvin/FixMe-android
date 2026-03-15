@@ -33,6 +33,7 @@
     <string name="change_password_title">Change Password</string>
     <string name="password_minimum_char_error">Password must be at least 4 characters!</string>
     <string name="password_not_match_error">Password didn\'t match! Please check again.</string>
+    <string name="old_password_title">Old Password</string>
     <string name="new_password_title">New Password</string>
     <string name="confirm_password_title">Confirm Password</string>
     <string name="save_settings">SAVE</string>

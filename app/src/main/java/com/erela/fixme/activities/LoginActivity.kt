@@ -173,6 +173,16 @@ class LoginActivity : AppCompatActivity() {
                 }
             }
 
+            val buildType =
+                if (BuildConfig.BUILD_TYPE == "debug") "dev_${BuildConfig.BUILD_TYPE}" else "${BuildConfig.BUILD_TYPE}"
+            val appVersionText =
+                "${BuildConfig.VERSION_NAME}.${BuildConfig.VERSION_CODE}.${buildType}.${BuildConfig.BUILD_TIMESTAMP}"
+            versionText.text = if (getString(R.string.lang) == "in")
+                "Versi $appVersionText"
+            else
+                "Version $appVersionText"
+
+
             checkNewUpdate()
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
                 registerReceiver(
@@ -231,7 +241,7 @@ class LoginActivity : AppCompatActivity() {
                         passwordFieldLayout.error = null
                     }
                 } else {
-                    checkLogin(usernameField.text.toString(), passwordField.text.toString())
+                    checkLogin(usernameField.text.toString().trim(), passwordField.text.toString().trim())
                 }
             }
         }

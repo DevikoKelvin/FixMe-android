@@ -47,7 +47,7 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="@drawable/gradient_logout_color"
+                android:background="@drawable/gradient_card_color"
                 android:orientation="vertical"
                 android:paddingVertical="@dimen/activity_vertical_margin"
                 tools:ignore="UseCompoundDrawables">
@@ -85,7 +85,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="vertical"
-                android:background="@drawable/gradient_logout_color"
+                android:background="@drawable/gradient_card_color"
                 android:paddingVertical="@dimen/activity_vertical_margin"
                 tools:ignore="UseCompoundDrawables">
 
