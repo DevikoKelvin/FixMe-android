@@ -24,12 +24,13 @@ import com.erela.fixme.adapters.recycler_view.SelectedSupervisorTechniciansRvAda
 import com.erela.fixme.custom_views.CustomToast
 import com.erela.fixme.databinding.BsUpdateStatusBinding
 import com.erela.fixme.dialogs.ConfirmationDialog
+import com.erela.fixme.dialogs.LoadingDialog
 import com.erela.fixme.helpers.UserDataHelper
 import com.erela.fixme.helpers.api.InitAPI
 import com.erela.fixme.objects.GenericSimpleResponse
 import com.erela.fixme.objects.SubDepartmentListResponse
 import com.erela.fixme.objects.SubmissionDetailResponse
-import com.erela.fixme.objects.SupervisorTechnicianListResponse
+import com.erela.fixme.objects.SupervisorTechnician
 import com.erela.fixme.objects.UserData
 import com.google.android.flexbox.FlexDirection
 import com.google.android.flexbox.FlexWrap
@@ -57,9 +58,9 @@ class UpdateStatusBottomSheet(
         UserDataHelper(context).getUserData()
     }
     private lateinit var onUpdateSuccessListener: OnUpdateSuccessListener
-    private var selectedSupervisorsArrayList: ArrayList<SupervisorTechnicianListResponse> =
+    private var selectedSupervisorsArrayList: ArrayList<SupervisorTechnician> =
         ArrayList()
-    private var selectedTechniciansArrayList: ArrayList<SupervisorTechnicianListResponse> =
+    private var selectedTechniciansArrayList: ArrayList<SupervisorTechnician> =
         ArrayList()
     private lateinit var supervisorsRvAdapter: SelectedSupervisorTechniciansRvAdapter
     private lateinit var techniciansRvAdapter: SelectedSupervisorTechniciansRvAdapter
@@ -103,7 +104,15 @@ class UpdateStatusBottomSheet(
     @SuppressLint("SetTextI18n", "NotifyDataSetChanged")
     private fun init() {
         binding.apply {
-            issueTitle.text = dataDetail.judulKasus?.uppercase(Locale.ROOT)
+            // In edit mode, show different title
+            if (isEdit && deployTech) {
+                issueTitle.text = if (context.getString(R.string.lang) == "in")
+                    "Edit Teknisi"
+                else
+                    "Edit Technicians"
+            } else {
+                issueTitle.text = dataDetail.judulKasus?.uppercase(Locale.ROOT)
+            }
             descriptionField.addTextChangedListener(object : TextWatcher {
                 override fun beforeTextChanged(
                     s: CharSequence?, start: Int, count: Int, after: Int
@@ -321,7 +330,7 @@ class UpdateStatusBottomSheet(
                                 dataDetail.usernUserSpv.forEach { spv ->
                                     if (spv != null) {
                                         selectedSupervisorsArrayList.add(
-                                            SupervisorTechnicianListResponse(
+                                            SupervisorTechnician(
                                                 idUser = spv.idUser,
                                                 namaUser = spv.namaUser,
                                                 namaDept = spv.deptUser
@@ -332,17 +341,18 @@ class UpdateStatusBottomSheet(
                                 if (selectedSupervisorsArrayList.isNotEmpty()) isFormEmpty[1] = true
                             }
                             selectedSupervisorsArrayList.add(
-                                SupervisorTechnicianListResponse(
+                                SupervisorTechnician(
+                                    null,
+                                    null,
                                     null,
                                     null,
                                     null,
                                     null,
                                     "+",
-                                    null,
-                                    null,
                                     null
                                 )
                             )
+
                             supervisorsRvAdapter = SelectedSupervisorTechniciansRvAdapter(
                                 context,
                                 dataDetail,
@@ -353,30 +363,30 @@ class UpdateStatusBottomSheet(
                                     setOnSupervisorSetListener(object :
                                         SelectedSupervisorTechniciansRvAdapter.OnSupervisorSetListener {
                                         override fun onSupervisorsSelected(
-                                            data: SupervisorTechnicianListResponse
+                                            data: SupervisorTechnician
                                         ) {
                                             selectedSupervisorsArrayList.remove(
-                                                SupervisorTechnicianListResponse(
+                                                SupervisorTechnician(
+                                                    null,
+                                                    null,
                                                     null,
                                                     null,
                                                     null,
                                                     null,
                                                     "+",
-                                                    null,
-                                                    null,
                                                     null
                                                 )
                                             )
                                             selectedSupervisorsArrayList.add(data)
                                             selectedSupervisorsArrayList.add(
-                                                SupervisorTechnicianListResponse(
+                                                SupervisorTechnician(
+                                                    null,
+                                                    null,
                                                     null,
                                                     null,
                                                     null,
                                                     null,
                                                     "+",
-                                                    null,
-                                                    null,
                                                     null
                                                 )
                                             )
@@ -386,30 +396,30 @@ class UpdateStatusBottomSheet(
                                         }
 
                                         override fun onSupervisorsUnselected(
-                                            data: SupervisorTechnicianListResponse
+                                            data: SupervisorTechnician
                                         ) {
                                             selectedSupervisorsArrayList.remove(
-                                                SupervisorTechnicianListResponse(
+                                                SupervisorTechnician(
+                                                    null,
+                                                    null,
                                                     null,
                                                     null,
                                                     null,
                                                     null,
                                                     "+",
-                                                    null,
-                                                    null,
                                                     null
                                                 )
                                             )
                                             selectedSupervisorsArrayList.remove(data)
                                             selectedSupervisorsArrayList.add(
-                                                SupervisorTechnicianListResponse(
+                                                SupervisorTechnician(
+                                                    null,
+                                                    null,
                                                     null,
                                                     null,
                                                     null,
                                                     null,
                                                     "+",
-                                                    null,
-                                                    null,
                                                     null
                                                 )
                                             )
@@ -459,131 +469,169 @@ class UpdateStatusBottomSheet(
                     }
                 }
             } else {
-                workByVendor = if (dataDetail.isVendor == "Y") "Y" else "N"
-                subDeptText.visibility = View.GONE
-                subDeptDropdownLayout.visibility = View.GONE
-                workByText.visibility = View.VISIBLE
-                workBySelectorContainer.visibility = View.VISIBLE
-                if (workByVendor == "n" || workByVendor == "N") {
-                    internalButton.strokeColor =
-                        ContextCompat.getColor(context, android.R.color.transparent)
-                    internalColor.background = ResourcesCompat.getDrawable(
-                        context.resources,
-                        R.drawable.gradient_accent_color,
-                        context.theme
-                    )
-                    internalText.setTextColor(
-                        ContextCompat.getColor(
-                            context,
-                            R.color.white
-                        )
-                    )
-                    vendorButton.strokeColor =
-                        ContextCompat.getColor(context, R.color.button_color)
-                    vendorColor.background = null
-                    vendorText.setTextColor(ContextCompat.getColor(context, R.color.black))
+                // Edit mode: Show only technicians selection
+                if (isEdit) {
+                    // Show title for header
+                    issueTitle.visibility = View.VISIBLE
+
+                    // Hide all non-technician-related UI
+                    descriptionFieldLayout.visibility = View.GONE
+                    selectComplexityText.visibility = View.GONE
+                    complexityRadioGroup.visibility = View.GONE
+                    workByText.visibility = View.GONE
+                    workBySelectorContainer.visibility = View.GONE
                     vendorNameFieldLayout.visibility = View.GONE
-                    vendorNameField.setText("")
+                    subDeptText.visibility = View.GONE
+                    subDeptDropdownLayout.visibility = View.GONE
+                    // Don't hide the actions button container so deployTechButton can be visible
+                    actionsButtonContainer.visibility = View.VISIBLE
+
+                    // Show only technicians selection
+                    deployTechText.text = if (context.getString(R.string.lang) == "in")
+                        "Perbarui"
+                    else
+                        "Update"
+                    approveButton.visibility = View.GONE
+                    rejectButton.visibility = View.GONE
+                    cancelButton.visibility = View.GONE
+
+                    // Set up deploy button click listener
+                    deployTechButton.setOnClickListener {
+                        executeUpdate()
+                    }
+
                     setupTechnician()
                 } else {
-                    internalButton.strokeColor =
-                        ContextCompat.getColor(context, R.color.button_color)
-                    internalColor.background = null
-                    internalText.setTextColor(
-                        ContextCompat.getColor(
-                            context,
-                            R.color.black
+                    // Normal deploy mode
+                    workByVendor = if (dataDetail.isVendor == "Y") "Y" else "N"
+                    subDeptText.visibility = View.GONE
+                    subDeptDropdownLayout.visibility = View.GONE
+                    workByText.visibility = View.VISIBLE
+                    workBySelectorContainer.visibility = View.VISIBLE
+                    if (workByVendor == "n" || workByVendor == "N") {
+                        internalButton.strokeColor =
+                            ContextCompat.getColor(context, android.R.color.transparent)
+                        internalColor.background = ResourcesCompat.getDrawable(
+                            context.resources,
+                            R.drawable.gradient_accent_color,
+                            context.theme
                         )
-                    )
-                    vendorButton.strokeColor =
-                        ContextCompat.getColor(context, android.R.color.transparent)
-                    vendorColor.background = ResourcesCompat.getDrawable(
-                        context.resources,
-                        R.drawable.gradient_accent_color,
-                        context.theme
-                    )
-                    vendorText.setTextColor(ContextCompat.getColor(context, R.color.white))
-                    vendorNameFieldLayout.visibility = View.VISIBLE
-                    vendorNameField.setText(dataDetail.vendorName ?: "")
-                    selectTechniciansText.visibility = View.GONE
-                    rvTechnicians.visibility = View.GONE
-                    deployTechButton.visibility = View.VISIBLE
-                    deployTechText.text = context.getString(R.string.action_on_progress)
-                }
-
-                internalButton.setOnClickListener {
-                    workByVendor = "N"
-                    internalButton.strokeColor =
-                        ContextCompat.getColor(context, android.R.color.transparent)
-                    internalColor.background = ResourcesCompat.getDrawable(
-                        context.resources,
-                        R.drawable.gradient_accent_color,
-                        context.theme
-                    )
-                    internalText.setTextColor(
-                        ContextCompat.getColor(
-                            context,
-                            R.color.white
+                        internalText.setTextColor(
+                            ContextCompat.getColor(
+                                context,
+                                R.color.white
+                            )
                         )
-                    )
-                    vendorButton.strokeColor =
-                        ContextCompat.getColor(context, R.color.button_color)
-                    vendorColor.background = null
-                    vendorText.setTextColor(ContextCompat.getColor(context, R.color.black))
-                    vendorNameFieldLayout.visibility = View.GONE
-                    vendorNameField.setText("")
-                    setupTechnician()
-                }
-
-                vendorButton.setOnClickListener {
-                    workByVendor = "Y"
-                    internalButton.strokeColor =
-                        ContextCompat.getColor(context, R.color.button_color)
-                    internalColor.background = null
-                    internalText.setTextColor(
-                        ContextCompat.getColor(
-                            context,
-                            R.color.black
+                        vendorButton.strokeColor =
+                            ContextCompat.getColor(context, R.color.button_color)
+                        vendorColor.background = null
+                        vendorText.setTextColor(ContextCompat.getColor(context, R.color.black))
+                        vendorNameFieldLayout.visibility = View.GONE
+                        vendorNameField.setText("")
+                        setupTechnician()
+                    } else {
+                        internalButton.strokeColor =
+                            ContextCompat.getColor(context, R.color.button_color)
+                        internalColor.background = null
+                        internalText.setTextColor(
+                            ContextCompat.getColor(
+                                context,
+                                R.color.black
+                            )
                         )
-                    )
-                    vendorButton.strokeColor =
-                        ContextCompat.getColor(context, android.R.color.transparent)
-                    vendorColor.background = ResourcesCompat.getDrawable(
-                        context.resources,
-                        R.drawable.gradient_accent_color,
-                        context.theme
-                    )
-                    vendorText.setTextColor(ContextCompat.getColor(context, R.color.white))
-                    vendorNameFieldLayout.visibility = View.VISIBLE
-                    selectTechniciansText.visibility = View.GONE
-                    rvTechnicians.visibility = View.GONE
-                    deployTechButton.visibility = View.VISIBLE
-                    deployTechText.text = context.getString(R.string.action_on_progress)
-                }
+                        vendorButton.strokeColor =
+                            ContextCompat.getColor(context, android.R.color.transparent)
+                        vendorColor.background = ResourcesCompat.getDrawable(
+                            context.resources,
+                            R.drawable.gradient_accent_color,
+                            context.theme
+                        )
+                        vendorText.setTextColor(ContextCompat.getColor(context, R.color.white))
+                        vendorNameFieldLayout.visibility = View.VISIBLE
+                        vendorNameField.setText(dataDetail.vendorName ?: "")
+                        selectTechniciansText.visibility = View.GONE
+                        rvTechnicians.visibility = View.GONE
+                        deployTechButton.visibility = View.VISIBLE
+                        deployTechText.text = context.getString(R.string.action_on_progress)
+                    }
 
-                deployTechButton.setOnClickListener {
-                    executeUpdate()
-                }
-                descriptionFieldLayout.visibility = View.GONE
-                selectComplexityText.visibility = View.VISIBLE
-                complexityRadioGroup.visibility = View.VISIBLE
-                complexityRadioGroup.setOnCheckedChangeListener { _, checkedId ->
-                    when (checkedId) {
-                        R.id.lowSelector -> {
-                            complexity = lowSelector.text.toString().lowercase(Locale.getDefault())
-                        }
+                    internalButton.setOnClickListener {
+                        workByVendor = "N"
+                        internalButton.strokeColor =
+                            ContextCompat.getColor(context, android.R.color.transparent)
+                        internalColor.background = ResourcesCompat.getDrawable(
+                            context.resources,
+                            R.drawable.gradient_accent_color,
+                            context.theme
+                        )
+                        internalText.setTextColor(
+                            ContextCompat.getColor(
+                                context,
+                                R.color.white
+                            )
+                        )
+                        vendorButton.strokeColor =
+                            ContextCompat.getColor(context, R.color.button_color)
+                        vendorColor.background = null
+                        vendorText.setTextColor(ContextCompat.getColor(context, R.color.black))
+                        vendorNameFieldLayout.visibility = View.GONE
+                        vendorNameField.setText("")
+                        setupTechnician()
+                    }
 
-                        R.id.midSelector -> {
-                            complexity = midSelector.text.toString().lowercase(Locale.getDefault())
-                        }
+                    vendorButton.setOnClickListener {
+                        workByVendor = "Y"
+                        internalButton.strokeColor =
+                            ContextCompat.getColor(context, R.color.button_color)
+                        internalColor.background = null
+                        internalText.setTextColor(
+                            ContextCompat.getColor(
+                                context,
+                                R.color.black
+                            )
+                        )
+                        vendorButton.strokeColor =
+                            ContextCompat.getColor(context, android.R.color.transparent)
+                        vendorColor.background = ResourcesCompat.getDrawable(
+                            context.resources,
+                            R.drawable.gradient_accent_color,
+                            context.theme
+                        )
+                        vendorText.setTextColor(ContextCompat.getColor(context, R.color.white))
+                        vendorNameFieldLayout.visibility = View.VISIBLE
+                        selectTechniciansText.visibility = View.GONE
+                        rvTechnicians.visibility = View.GONE
+                        deployTechButton.visibility = View.VISIBLE
+                        deployTechText.text = context.getString(R.string.action_on_progress)
+                    }
 
-                        R.id.highSelector -> {
-                            complexity = highSelector.text.toString().lowercase(Locale.getDefault())
+                    deployTechButton.setOnClickListener {
+                        executeUpdate()
+                    }
+                    descriptionFieldLayout.visibility = View.GONE
+                    selectComplexityText.visibility = View.VISIBLE
+                    complexityRadioGroup.visibility = View.VISIBLE
+                    complexityRadioGroup.setOnCheckedChangeListener { _, checkedId ->
+                        when (checkedId) {
+                            R.id.lowSelector -> {
+                                complexity =
+                                    lowSelector.text.toString().lowercase(Locale.getDefault())
+                            }
+
+                            R.id.midSelector -> {
+                                complexity =
+                                    midSelector.text.toString().lowercase(Locale.getDefault())
+                            }
+
+                            R.id.highSelector -> {
+                                complexity =
+                                    highSelector.text.toString().lowercase(Locale.getDefault())
+                            }
                         }
                     }
+                    approveButton.visibility = View.GONE
+                    rejectButton.visibility = View.GONE
                 }
-                approveButton.visibility = View.GONE
-                rejectButton.visibility = View.GONE
             }
         }
     }
@@ -595,15 +643,36 @@ class UpdateStatusBottomSheet(
             rvTechnicians.visibility = View.VISIBLE
             deployTechButton.visibility = View.GONE
             selectedTechniciansArrayList.clear()
+
+            // Pre-populate technicians in edit mode
+            if (isEdit && !dataDetail.usernUserTeknisi.isNullOrEmpty()) {
+                dataDetail.usernUserTeknisi.forEach { tech ->
+                    if (tech != null) {
+                        selectedTechniciansArrayList.add(
+                            SupervisorTechnician(
+                                idUser = tech.idUser,
+                                namaUser = tech.namaUser,
+                                namaDept = tech.deptUser
+                            )
+                        )
+                    }
+                }
+            }
+
+            // For normal deploy mode, only show button if technicians selected
+            if (!isEdit && selectedTechniciansArrayList.isNotEmpty()) {
+                deployTechButton.visibility = View.VISIBLE
+            }
+
             selectedTechniciansArrayList.add(
-                SupervisorTechnicianListResponse(
+                SupervisorTechnician(
+                    null,
+                    null,
                     null,
                     null,
                     null,
                     null,
                     "+",
-                    null,
-                    null,
                     null
                 )
             )
@@ -617,67 +686,83 @@ class UpdateStatusBottomSheet(
                     setOnTechniciansSetListener(object :
                         SelectedSupervisorTechniciansRvAdapter.OnTechniciansSetListener {
                         override fun onTechniciansSelected(
-                            data: SupervisorTechnicianListResponse
+                            data: SupervisorTechnician
                         ) {
                             selectedTechniciansArrayList.remove(
-                                SupervisorTechnicianListResponse(
+                                SupervisorTechnician(
+                                    null,
+                                    null,
                                     null,
                                     null,
                                     null,
                                     null,
                                     "+",
-                                    null,
-                                    null,
                                     null
                                 )
                             )
                             selectedTechniciansArrayList.add(data)
                             selectedTechniciansArrayList.add(
-                                SupervisorTechnicianListResponse(
+                                SupervisorTechnician(
+                                    null,
+                                    null,
                                     null,
                                     null,
                                     null,
                                     null,
                                     "+",
-                                    null,
-                                    null,
                                     null
                                 )
                             )
                             techniciansRvAdapter.notifyDataSetChanged()
+                            if (techniciansRvAdapter.itemCount == dataDetail.usernUserTeknisi?.size?.plus(
+                                    1
+                                )
+                            )
+                                deployTechButton.visibility = View.GONE
+                            else
+                                deployTechButton.visibility = View.VISIBLE
+
                             if (techniciansRvAdapter.itemCount > 1)
                                 deployTechButton.visibility = View.VISIBLE
                         }
 
                         override fun onTechniciansUnselected(
-                            data: SupervisorTechnicianListResponse
+                            data: SupervisorTechnician
                         ) {
                             selectedTechniciansArrayList.remove(
-                                SupervisorTechnicianListResponse(
+                                SupervisorTechnician(
+                                    null,
+                                    null,
                                     null,
                                     null,
                                     null,
                                     null,
                                     "+",
-                                    null,
-                                    null,
                                     null
                                 )
                             )
                             selectedTechniciansArrayList.remove(data)
                             selectedTechniciansArrayList.add(
-                                SupervisorTechnicianListResponse(
+                                SupervisorTechnician(
+                                    null,
+                                    null,
                                     null,
                                     null,
                                     null,
                                     null,
                                     "+",
-                                    null,
-                                    null,
                                     null
                                 )
                             )
                             techniciansRvAdapter.notifyDataSetChanged()
+                            if (techniciansRvAdapter.itemCount == dataDetail.usernUserTeknisi?.size?.plus(
+                                    1
+                                )
+                            )
+                                deployTechButton.visibility = View.GONE
+                            else
+                                deployTechButton.visibility = View.VISIBLE
+
                             if (techniciansRvAdapter.itemCount == 1)
                                 deployTechButton.visibility = View.GONE
                         }
@@ -696,10 +781,16 @@ class UpdateStatusBottomSheet(
         var validated = 0
 
         binding.apply {
+            // In Edit Technicians mode, only check if technicians are selected
+            if (deployTech && isEdit) {
+                // Filter out the "+" placeholder and check if there are any real technicians selected
+                val actualTechnicians = selectedTechniciansArrayList.filter { it.namaUser != "+" }
+                return actualTechnicians.isNotEmpty()
+            }
+
             if (deployTech)
                 isFormEmpty[0] = this@UpdateStatusBottomSheet::complexity.isInitialized
 
-            Log.e("isFormEmpty", isFormEmpty.toString())
             for (element in isFormEmpty) {
                 if (element)
                     validated++
@@ -726,10 +817,8 @@ class UpdateStatusBottomSheet(
         binding.apply {
             approveLoading.visibility = View.VISIBLE
             rejectLoading.visibility = View.VISIBLE
-            deployTechLoading.visibility = View.VISIBLE
             approveText.visibility = View.GONE
             rejectText.visibility = View.GONE
-            deployTechText.visibility = View.GONE
             if (!deployTech) {
                 if (formCheck()) {
                     if (cancel) {
@@ -936,16 +1025,16 @@ class UpdateStatusBottomSheet(
                             try {
                                 val data: MutableMap<String, RequestBody> = mutableMapOf()
                                 with(data) {
-                                    put("id_user", createPartFromString(userData.id.toString())!!)
+                                    put("user_id", createPartFromString(userData.id.toString())!!)
                                     put(
-                                        "id_gaprojects",
+                                        "case_id",
                                         createPartFromString(dataDetail.idGaprojects.toString())!!
                                     )
                                     put(
-                                        "keterangan",
+                                        "description",
                                         createPartFromString(descriptionField.text.toString())!!
                                     )
-                                    if (dataDetail.deptTujuan == userData.dept) {
+                                    /*if (dataDetail.deptTujuan == userData.dept) {
                                         for (i in 0 until selectedSupervisorsArrayList.size - 1) {
                                             put(
                                                 "user_supervisor[$i]",
@@ -954,35 +1043,35 @@ class UpdateStatusBottomSheet(
                                                 )!!
                                             )
                                         }
-                                    }
+                                    }*/
                                 }
                                 val targetData: MutableMap<String, RequestBody> = mutableMapOf()
                                 with(targetData) {
-                                    put("id_user", createPartFromString(userData.id.toString())!!)
+                                    put("user_id", createPartFromString(userData.id.toString())!!)
                                     put(
-                                        "id_gaprojects",
+                                        "case_id",
                                         createPartFromString(dataDetail.idGaprojects.toString())!!
                                     )
                                     put(
-                                        "keterangan",
+                                        "description",
                                         createPartFromString(descriptionField.text.toString())!!
                                     )
                                     put(
-                                        "departemen",
+                                        "department",
                                         createPartFromString(selectedSubDept?.idDept.toString())!!
                                     )
                                     put(
-                                        "progress_vendor",
+                                        "is_vendor",
                                         createPartFromString(workByVendor)!!
                                     )
                                     put(
-                                        "progress_vendor_nama",
+                                        "vendor_name",
                                         createPartFromString(vendorNameField.text.toString())!!
                                     )
                                     if (dataDetail.deptTujuan == userData.dept) {
                                         for (i in 0 until selectedSupervisorsArrayList.size - 1) {
                                             put(
-                                                "user_supervisor[$i]",
+                                                "supervisors[$i]",
                                                 createPartFromString(
                                                     selectedSupervisorsArrayList[i].idUser.toString()
                                                 )!!
@@ -1383,122 +1472,263 @@ class UpdateStatusBottomSheet(
                 }
             } else {
                 if (formCheck()) {
-                    try {
-                        val data: MutableMap<String, RequestBody> = mutableMapOf()
-                        with(data) {
-                            put("id_user", createPartFromString(userData.id.toString())!!)
-                            put(
-                                "id_gaprojects",
-                                createPartFromString(dataDetail.idGaprojects.toString())!!
-                            )
-                            for (i in 0 until selectedTechniciansArrayList.size - 1) {
-                                put(
-                                    "user_teknisi[$i]",
-                                    createPartFromString(
-                                        selectedTechniciansArrayList[i].idUser.toString()
-                                    )!!
-                                )
-                            }
-                            put("difficulty", createPartFromString(complexity)!!)
-                            put(
-                                "progress_vendor",
-                                createPartFromString(workByVendor)!!
-                            )
-                            put(
-                                "progress_vendor_nama",
-                                createPartFromString(vendorNameField.text.toString())!!
-                            )
+                    // Show confirmation dialog for Edit/Deploy Technicians
+                    val confirmationMessage =
+                        if (context.getString(R.string.lang) == "in") {
+                            if (isEdit)
+                                "Apakah Anda yakin ingin mengubah teknisi?"
+                            else
+                                "Apakah Anda yakin ingin mengerahkan teknisi sekarang?"
+                        } else {
+                            if (isEdit)
+                                "Are you sure you want to change the technicians?"
+                            else
+                                "Are you sure you want to assign technicians now?"
                         }
-                        InitAPI.getEndpoint.deployTechnicians(data)
-                            .enqueue(object : Callback<GenericSimpleResponse> {
-                                override fun onResponse(
-                                    call: Call<GenericSimpleResponse>,
-                                    response: Response<GenericSimpleResponse>
-                                ) {
-                                    approveLoading.visibility = View.GONE
-                                    rejectLoading.visibility = View.GONE
-                                    deployTechLoading.visibility = View.GONE
-                                    approveText.visibility = View.VISIBLE
-                                    rejectText.visibility = View.VISIBLE
-                                    deployTechText.visibility = View.VISIBLE
-                                    if (response.isSuccessful) {
-                                        if (response.body() != null) {
-                                            val result = response.body()
-                                            if (result?.code == 1) {
-                                                CustomToast.getInstance(context)
-                                                    .setBackgroundColor(
-                                                        ContextCompat.getColor(
-                                                            context,
-                                                            R.color.custom_toast_background_success
-                                                        )
-                                                    )
-                                                    .setFontColor(
-                                                        ContextCompat.getColor(
-                                                            context,
-                                                            R.color.custom_toast_font_success
-                                                        )
-                                                    )
-                                                    .setMessage(
-                                                        if (context.getString(R.string.lang) == "in")
-                                                            "Teknisi berhasil dikerahkan!"
-                                                        else
-                                                            "Technicians successfully deployed!"
-                                                    ).show()
-                                                dismiss()
-                                                onUpdateSuccessListener.onTechniciansDeployed()
-                                            } else {
-                                                CustomToast.getInstance(context)
-                                                    .setBackgroundColor(
-                                                        ContextCompat.getColor(
-                                                            context,
-                                                            R.color.custom_toast_background_failed
-                                                        )
-                                                    )
-                                                    .setFontColor(
-                                                        ContextCompat.getColor(
-                                                            context,
-                                                            R.color.custom_toast_font_failed
-                                                        )
-                                                    )
-                                                    .setMessage(
-                                                        if (context.getString(R.string.lang) == "in")
-                                                            "Gagal mengerahkan teknisi."
-                                                        else
-                                                            "Failed to deploy technicians."
-                                                    )
-                                                    .show()
-                                                Log.e(
-                                                    "ERROR ${result?.code}",
-                                                    result?.message.toString()
+                    val confirmationDialog = ConfirmationDialog(
+                        context,
+                        confirmationMessage,
+                        if (context.getString(R.string.lang) == "in") "Ya" else "Yes"
+                    ).also {
+                        with(it) {
+                            setConfirmationDialogListener(object :
+                                ConfirmationDialog.ConfirmationDialogListener {
+                                override fun onConfirm() {
+                                    val loadingDialog = LoadingDialog(context)
+                                    if (loadingDialog.window != null)
+                                        loadingDialog.show()
+
+                                    deployTechText.visibility = View.GONE
+                                    deployTechLoading.visibility = View.VISIBLE
+
+                                    try {
+                                        // In Edit mode, only prepare edit data; in Deploy mode, prepare deploy data
+                                        val dataToSend = if (isEdit) {
+                                            val editData: MutableMap<String, RequestBody> =
+                                                mutableMapOf()
+                                            with(editData) {
+                                                put(
+                                                    "case_id",
+                                                    createPartFromString(dataDetail.idGaprojects.toString())!!
                                                 )
+                                                put(
+                                                    "user_id",
+                                                    createPartFromString(userData.id.toString())!!
+                                                )
+                                                for (i in 0 until selectedTechniciansArrayList.size - 1) {
+                                                    put(
+                                                        "technicians[$i]",
+                                                        createPartFromString(
+                                                            selectedTechniciansArrayList[i].idUser.toString()
+                                                        )!!
+                                                    )
+                                                }
                                             }
+                                            editData
                                         } else {
-                                            CustomToast.getInstance(context)
-                                                .setBackgroundColor(
-                                                    ContextCompat.getColor(
-                                                        context,
-                                                        R.color.custom_toast_background_failed
+                                            val data: MutableMap<String, RequestBody> =
+                                                mutableMapOf()
+                                            with(data) {
+                                                put(
+                                                    "case_id",
+                                                    createPartFromString(dataDetail.idGaprojects.toString())!!
+                                                )
+                                                put(
+                                                    "user_id",
+                                                    createPartFromString(userData.id.toString())!!
+                                                )
+                                                put(
+                                                    "complexity",
+                                                    createPartFromString(complexity)!!
+                                                )
+                                                put(
+                                                    "is_vendor",
+                                                    createPartFromString(workByVendor)!!
+                                                )
+                                                put(
+                                                    "vendor_name",
+                                                    createPartFromString(vendorNameField.text.toString())!!
+                                                )
+                                                for (i in 0 until selectedTechniciansArrayList.size - 1) {
+                                                    put(
+                                                        "technicians[$i]",
+                                                        createPartFromString(
+                                                            selectedTechniciansArrayList[i].idUser.toString()
+                                                        )!!
                                                     )
-                                                )
-                                                .setFontColor(
-                                                    ContextCompat.getColor(
-                                                        context,
-                                                        R.color.custom_toast_font_failed
-                                                    )
-                                                )
-                                                .setMessage(
-                                                    if (context.getString(R.string.lang) == "in")
-                                                        "Gagal mengerahkan teknisi."
-                                                    else
-                                                        "Failed to deploy technicians."
-                                                )
-                                                .show()
-                                            Log.e(
-                                                "ERROR ${response.code()}",
-                                                response.message().toString()
-                                            )
+                                                }
+                                            }
+                                            data
                                         }
-                                    } else {
+
+                                        Log.e("Is it Edit?", isEdit.toString())
+                                        (if (isEdit) InitAPI.getEndpoint.editTechnicians(dataToSend)
+                                        else InitAPI.getEndpoint.deployTechnicians(dataToSend))
+                                            .enqueue(object : Callback<GenericSimpleResponse> {
+                                                override fun onResponse(
+                                                    call: Call<GenericSimpleResponse>,
+                                                    response: Response<GenericSimpleResponse>
+                                                ) {
+                                                    loadingDialog.dismiss()
+                                                    approveLoading.visibility = View.GONE
+                                                    rejectLoading.visibility = View.GONE
+                                                    deployTechLoading.visibility = View.GONE
+                                                    approveText.visibility = View.VISIBLE
+                                                    rejectText.visibility = View.VISIBLE
+                                                    deployTechText.visibility = View.VISIBLE
+                                                    if (response.isSuccessful) {
+                                                        if (response.body() != null) {
+                                                            val result = response.body()
+                                                            if (result?.code == 1) {
+                                                                CustomToast.getInstance(context)
+                                                                    .setBackgroundColor(
+                                                                        ContextCompat.getColor(
+                                                                            context,
+                                                                            R.color.custom_toast_background_success
+                                                                        )
+                                                                    )
+                                                                    .setFontColor(
+                                                                        ContextCompat.getColor(
+                                                                            context,
+                                                                            R.color.custom_toast_font_success
+                                                                        )
+                                                                    )
+                                                                    .setMessage(
+                                                                        if (isEdit) {
+                                                                            if (context.getString(R.string.lang) == "in")
+                                                                                "Teknisi berhasil diperbarui!"
+                                                                            else
+                                                                                "Technicians successfully updated!"
+                                                                        } else {
+                                                                            if (context.getString(R.string.lang) == "in")
+                                                                                "Teknisi berhasil dikerahkan!"
+                                                                            else
+                                                                                "Technicians successfully deployed!"
+                                                                        }
+                                                                    ).show()
+                                                                this@UpdateStatusBottomSheet.dismiss()
+                                                                onUpdateSuccessListener.onTechniciansDeployed()
+                                                            } else {
+                                                                CustomToast.getInstance(context)
+                                                                    .setBackgroundColor(
+                                                                        ContextCompat.getColor(
+                                                                            context,
+                                                                            R.color.custom_toast_background_failed
+                                                                        )
+                                                                    )
+                                                                    .setFontColor(
+                                                                        ContextCompat.getColor(
+                                                                            context,
+                                                                            R.color.custom_toast_font_failed
+                                                                        )
+                                                                    )
+                                                                    .setMessage(
+                                                                        if (context.getString(R.string.lang) == "in")
+                                                                            "Gagal mengerahkan teknisi."
+                                                                        else
+                                                                            "Failed to deploy technicians."
+                                                                    )
+                                                                    .show()
+                                                                Log.e(
+                                                                    "ERROR ${result?.code}",
+                                                                    result?.message.toString()
+                                                                )
+                                                            }
+                                                        } else {
+                                                            CustomToast.getInstance(context)
+                                                                .setBackgroundColor(
+                                                                    ContextCompat.getColor(
+                                                                        context,
+                                                                        R.color.custom_toast_background_failed
+                                                                    )
+                                                                )
+                                                                .setFontColor(
+                                                                    ContextCompat.getColor(
+                                                                        context,
+                                                                        R.color.custom_toast_font_failed
+                                                                    )
+                                                                )
+                                                                .setMessage(
+                                                                    if (context.getString(R.string.lang) == "in")
+                                                                        "Gagal mengerahkan teknisi."
+                                                                    else
+                                                                        "Failed to deploy technicians."
+                                                                )
+                                                                .show()
+                                                            Log.e(
+                                                                "ERROR ${response.code()}",
+                                                                response.message().toString()
+                                                            )
+                                                        }
+                                                    } else {
+                                                        CustomToast.getInstance(context)
+                                                            .setBackgroundColor(
+                                                                ContextCompat.getColor(
+                                                                    context,
+                                                                    R.color.custom_toast_background_failed
+                                                                )
+                                                            )
+                                                            .setFontColor(
+                                                                ContextCompat.getColor(
+                                                                    context,
+                                                                    R.color.custom_toast_font_failed
+                                                                )
+                                                            )
+                                                            .setMessage(
+                                                                if (context.getString(R.string.lang) == "in")
+                                                                    "Gagal mengerahkan teknisi."
+                                                                else
+                                                                    "Failed to deploy technicians."
+                                                            ).show()
+                                                        Log.e(
+                                                            "ERROR ${response.code()}",
+                                                            response.message().toString()
+                                                        )
+                                                    }
+                                                }
+
+                                                override fun onFailure(
+                                                    call: Call<GenericSimpleResponse>,
+                                                    throwable: Throwable
+                                                ) {
+                                                    loadingDialog.dismiss()
+                                                    approveLoading.visibility = View.GONE
+                                                    rejectLoading.visibility = View.GONE
+                                                    deployTechLoading.visibility = View.GONE
+                                                    approveText.visibility = View.VISIBLE
+                                                    rejectText.visibility = View.VISIBLE
+                                                    deployTechText.visibility = View.VISIBLE
+                                                    CustomToast.getInstance(context)
+                                                        .setBackgroundColor(
+                                                            ContextCompat.getColor(
+                                                                context,
+                                                                R.color.custom_toast_background_failed
+                                                            )
+                                                        )
+                                                        .setFontColor(
+                                                            ContextCompat.getColor(
+                                                                context,
+                                                                R.color.custom_toast_font_failed
+                                                            )
+                                                        )
+                                                        .setMessage(
+                                                            if (context.getString(R.string.lang) == "in")
+                                                                "Gagal mengerahkan teknisi."
+                                                            else
+                                                                "Failed to deploy technicians."
+                                                        ).show()
+                                                    Log.e("ERROR", throwable.message.toString())
+                                                    throwable.printStackTrace()
+                                                }
+                                            })
+                                    } catch (jsonException: JSONException) {
+                                        loadingDialog.dismiss()
+                                        approveLoading.visibility = View.GONE
+                                        rejectLoading.visibility = View.GONE
+                                        deployTechLoading.visibility = View.GONE
+                                        approveText.visibility = View.VISIBLE
+                                        rejectText.visibility = View.VISIBLE
+                                        deployTechText.visibility = View.VISIBLE
                                         CustomToast.getInstance(context)
                                             .setBackgroundColor(
                                                 ContextCompat.getColor(
@@ -1518,73 +1748,15 @@ class UpdateStatusBottomSheet(
                                                 else
                                                     "Failed to deploy technicians."
                                             ).show()
-                                        Log.e(
-                                            "ERROR ${response.code()}",
-                                            response.message().toString()
-                                        )
+                                        jsonException.printStackTrace()
                                     }
                                 }
-
-                                override fun onFailure(
-                                    call: Call<GenericSimpleResponse>, throwable: Throwable
-                                ) {
-                                    approveLoading.visibility = View.GONE
-                                    rejectLoading.visibility = View.GONE
-                                    deployTechLoading.visibility = View.GONE
-                                    approveText.visibility = View.VISIBLE
-                                    rejectText.visibility = View.VISIBLE
-                                    deployTechText.visibility = View.VISIBLE
-                                    CustomToast.getInstance(context)
-                                        .setBackgroundColor(
-                                            ContextCompat.getColor(
-                                                context,
-                                                R.color.custom_toast_background_failed
-                                            )
-                                        )
-                                        .setFontColor(
-                                            ContextCompat.getColor(
-                                                context,
-                                                R.color.custom_toast_font_failed
-                                            )
-                                        )
-                                        .setMessage(
-                                            if (context.getString(R.string.lang) == "in")
-                                                "Gagal mengerahkan teknisi."
-                                            else
-                                                "Failed to deploy technicians."
-                                        ).show()
-                                    Log.e("ERROR", throwable.message.toString())
-                                    throwable.printStackTrace()
-                                }
                             })
-                    } catch (jsonException: JSONException) {
-                        approveLoading.visibility = View.GONE
-                        rejectLoading.visibility = View.GONE
-                        deployTechLoading.visibility = View.GONE
-                        approveText.visibility = View.VISIBLE
-                        rejectText.visibility = View.VISIBLE
-                        deployTechText.visibility = View.VISIBLE
-                        CustomToast.getInstance(context)
-                            .setBackgroundColor(
-                                ContextCompat.getColor(
-                                    context,
-                                    R.color.custom_toast_background_failed
-                                )
-                            )
-                            .setFontColor(
-                                ContextCompat.getColor(
-                                    context,
-                                    R.color.custom_toast_font_failed
-                                )
-                            )
-                            .setMessage(
-                                if (context.getString(R.string.lang) == "in")
-                                    "Gagal mengerahkan teknisi."
-                                else
-                                    "Failed to deploy technicians."
-                            ).show()
-                        jsonException.printStackTrace()
+                        }
                     }
+
+                    if (confirmationDialog.window != null)
+                        confirmationDialog.show()
                 } else {
                     approveLoading.visibility = View.GONE
                     rejectLoading.visibility = View.GONE

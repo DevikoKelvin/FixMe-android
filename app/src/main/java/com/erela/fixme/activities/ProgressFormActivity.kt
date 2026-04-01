@@ -1057,8 +1057,8 @@ class ProgressFormActivity : AppCompatActivity() {
 
     private fun prepareRequestMaterialForm(idGaProjectsDetail: Int): Boolean {
         with(requestBodyMapMaterial) {
-            put("id", createPartFromString(idGaProjectsDetail.toString())!!)
-            put("id_user", createPartFromString(userData.id.toString())!!)
+            put("progress_id", createPartFromString(idGaProjectsDetail.toString())!!)
+            put("user_id", createPartFromString(userData.id.toString())!!)
             for (i in 0 until selectedMaterialsArrayList.size - 1) {
                 put(
                     "material[$i]",
@@ -1076,13 +1076,13 @@ class ProgressFormActivity : AppCompatActivity() {
     private fun prepareSubmitForm(): Boolean {
         binding.apply {
             with(requestBodyMap) {
-                put("id_user", createPartFromString(userData.id.toString())!!)
-                put("id_gaprojects", createPartFromString(detail?.idGaprojects.toString())!!)
+                put("case_id", createPartFromString(detail?.idGaprojects.toString())!!)
+                put("user_id", createPartFromString(userData.id.toString())!!)
                 put(
-                    "analisa_perbaikan", createPartFromString(repairAnalysisField.text.toString())!!
+                    "repair_analysis", createPartFromString(repairAnalysisField.text.toString())!!
                 )
                 put(
-                    "keterangan_perbaikan", createPartFromString(descriptionField.text.toString())!!
+                    "repair_description", createPartFromString(descriptionField.text.toString())!!
                 )
                 if (selectedMaterialsArrayList.size > 1 && materialQuantityList.size > 1) {
                     for (i in 0 until selectedMaterialsArrayList.size - 1) {
@@ -1105,22 +1105,22 @@ class ProgressFormActivity : AppCompatActivity() {
     private fun prepareEditForm(): Boolean {
         binding.apply {
             with(requestBodyMap) {
-                put("id_user", createPartFromString(userData.id.toString())!!)
                 put(
-                    "id_gaprojects",
+                    "case_id",
                     createPartFromString(progressData?.progress?.idGaprojects.toString())!!
                 )
                 put(
-                    "id_gaprojects_detail",
+                    "progress_id",
                     createPartFromString(progressData?.progress?.idGaprojectsDetail.toString())!!
                 )
+                put("user_id", createPartFromString(userData.id.toString())!!)
                 if (!editMaterial) {
                     put(
-                        "analisa_perbaikan",
+                        "repair_analysis",
                         createPartFromString(repairAnalysisField.text.toString())!!
                     )
                     put(
-                        "keterangan_perbaikan",
+                        "repair_description",
                         createPartFromString(descriptionField.text.toString())!!
                     )
                 }

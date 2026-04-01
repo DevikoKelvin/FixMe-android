@@ -78,11 +78,17 @@
     <string name="on_trial">On Trial</string>
     <string name="done">Done</string>
     <string name="canceled">Canceled</string>
-    <string name="clear_filter">Clear filter</string>
+    <string name="date_filter">Date</string>
+    <string name="date_to">to</string>
+    <string name="date_placeholder">Pick a date</string>
+    <string name="clear_filter">Clear date filter</string>
     <string name="machine_code">Machine Code</string>
     <string name="machine_name">Machine Name</string>
     <string name="reported_by">Reported by:</string>
     <string name="department_from">From:</string>
+    <string name="exceeding_message">The work time for this case exceeds</string>
+    <string name="exceeding_message_end">hours.</string>
+    <string name="time_limit">Time limit:</string>
 
     <string name="submission_detail_title">Submission Detail</string>
     <string name="submission_description">Description</string>
@@ -139,6 +145,7 @@
     <string name="vendors_name">Vendors Name</string>
     <string name="select_supervisor">Select Supervisor</string>
     <string name="select_complexity">Complexity</string>
+    <string name="all">All</string>
     <string name="complexity_low">Low</string>
     <string name="complexity_mid">Middle</string>
     <string name="complexity_high">High</string>

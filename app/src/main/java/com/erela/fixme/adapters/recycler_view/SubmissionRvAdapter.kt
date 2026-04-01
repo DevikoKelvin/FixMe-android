@@ -1,5 +1,6 @@
 package com.erela.fixme.adapters.recycler_view
 
+import android.animation.AnimatorInflater
 import android.annotation.SuppressLint
 import android.content.Context
 import android.util.Log
@@ -11,10 +12,10 @@ import androidx.core.content.res.ResourcesCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.erela.fixme.R
 import com.erela.fixme.databinding.ListItemSubmissionBinding
-import com.erela.fixme.objects.SubmissionListResponse
+import com.erela.fixme.objects.DataItem
 import java.util.Locale
 
-class SubmissionRvAdapter(val context: Context, val data: ArrayList<SubmissionListResponse>) :
+class SubmissionRvAdapter(val context: Context, val data: ArrayList<DataItem?>?) :
     RecyclerView.Adapter<SubmissionRvAdapter.ViewHolder>() {
     private lateinit var onSubmissionClickListener: OnSubmissionClickListener
 
@@ -61,48 +62,64 @@ class SubmissionRvAdapter(val context: Context, val data: ArrayList<SubmissionLi
         ).root
     )
 
-    override fun getItemCount(): Int = data.size
+    override fun getItemCount(): Int = data!!.size
 
     @SuppressLint("SetTextI18n")
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         with(holder) {
             binding.apply {
-                val item = data[position]
+                val item = data!![position]
 
-                submissionName.text = item.judulKasus
-                inputDate.text = item.setTglinput
-                noRequest.text = item.nomorRequest
-                submissionDescription.text = item.keterangan
+                submissionName.text = item?.judulKasus
+                inputDate.text = item?.setTglinput
+                noRequest.text = item?.nomorRequest
+                submissionDescription.text = item?.keterangan
                 machineCodeText.text = "${context.getString(R.string.machine_code)}:"
                 machineNameText.text = "${context.getString(R.string.machine_name)}:"
-                machineCode.text = if (item.kodeMesin != null) {
+                machineCode.text = if (item?.kodeMesin != null) {
                     item.kodeMesin.ifEmpty { "-" }
                 } else {
                     "-"
                 }
 
-                machineName.text = if (item.namaMesin != null) {
+                machineName.text = if (item?.namaMesin != null) {
                     item.namaMesin.ifEmpty { "-" }
                 } else {
                     "-"
                 }
-                submissionLocation.text = item.lokasi?.uppercase()
-                reportedBy.text = item.namaUser
-                departmentFrom.text = item.deptUser
+                submissionLocation.text = item?.lokasi?.uppercase()
+                reportedBy.text = item?.namaUser
+                departmentFrom.text = item?.deptUser
 
-                complexity.visibility = if (item.complexity == "null" || item.complexity == null)
+                if (item?.isExceeding == true) {
+                    exceedingMessageContainer.visibility = View.VISIBLE
+                    val hours = if (context.getString(R.string.lang) == "en") {
+                        if (item.timeOffset!! > 1 || item.limitTime!! > 1)
+                            "hours"
+                        else
+                            "hour"
+                    } else
+                        "jam"
+                    exceedingMessageText.text =
+                        "${context.getString(R.string.exceeding_message)} ${item.timeOffset} ${hours}."
+                    timeLimit.text = "${item.limitTime} $hours"
+                } else {
+                    exceedingMessageContainer.visibility = View.GONE
+                }
+
+                complexity.visibility = if (item?.complexity == "null" || item?.complexity == null)
                     View.GONE
                 else
                     View.VISIBLE
 
                 complexityText.text =
-                    item.complexity.toString().replaceFirstChar {
+                    item?.complexity.toString().replaceFirstChar {
                         if (it.isLowerCase())
                             it.titlecase(Locale.getDefault())
                         else
                             it.toString()
                     }
-                when (item.complexity) {
+                when (item?.complexity) {
                     "low" -> {
                         setRoundedBackground(complexityColor, R.drawable.gradient_low_complexity)
                     }
@@ -120,7 +137,7 @@ class SubmissionRvAdapter(val context: Context, val data: ArrayList<SubmissionLi
                     }
                 }
 
-                when (item.stsGaprojects) {
+                when (item?.stsGaprojects) {
                     0 -> {
                         header.background = ResourcesCompat.getDrawable(
                             context.resources,
@@ -307,6 +324,17 @@ class SubmissionRvAdapter(val context: Context, val data: ArrayList<SubmissionLi
                 itemView.setOnClickListener {
                     onSubmissionClickListener.onSubmissionClick(item)
                 }
+
+                // Apply glowing red blink animation if item is exceeding
+                if (item?.isExceeding == true) {
+                    val animator =
+                        AnimatorInflater.loadAnimator(context, R.animator.glowing_red_blink)
+                    animator?.setTarget(submissionCard)
+                    animator?.start()
+                } else {
+                    // Reset stroke color to transparent if not exceeding
+                    submissionCard.strokeColor = android.graphics.Color.TRANSPARENT
+                }
             }
         }
     }
@@ -320,6 +348,6 @@ class SubmissionRvAdapter(val context: Context, val data: ArrayList<SubmissionLi
     }
 
     interface OnSubmissionClickListener {
-        fun onSubmissionClick(data: SubmissionListResponse)
+        fun onSubmissionClick(data: DataItem?)
     }
 }

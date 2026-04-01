@@ -23,6 +23,7 @@ import com.erela.fixme.helpers.api.InitAPI
 import com.erela.fixme.objects.SelectedSupervisorTechniciansList
 import com.erela.fixme.objects.SubDepartmentListResponse
 import com.erela.fixme.objects.SubmissionDetailResponse
+import com.erela.fixme.objects.SupervisorTechnician
 import com.erela.fixme.objects.SupervisorTechnicianListResponse
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.textfield.TextInputEditText
@@ -33,7 +34,7 @@ import retrofit2.Response
 
 class SelectSupervisorTechniciansBottomSheet(
     context: Context, private val detailData: SubmissionDetailResponse,
-    private val selectedSupervisorTechniciansList: ArrayList<SupervisorTechnicianListResponse>,
+    private val selectedSupervisorTechniciansList: ArrayList<SupervisorTechnician>,
     private val isForManager: Boolean,
     private val selectedSubDept: SubDepartmentListResponse?
 ) : BottomSheetDialog(context), SupervisorTechniciansRvAdapter.OnTechniciansSetListener,
@@ -89,19 +90,19 @@ class SelectSupervisorTechniciansBottomSheet(
                         detailData.idGaprojects!!,
                         dept
                     ).enqueue(
-                        object : Callback<List<SupervisorTechnicianListResponse>> {
+                        object : Callback<SupervisorTechnicianListResponse> {
                             override fun onResponse(
-                                call: Call<List<SupervisorTechnicianListResponse>>,
-                                response: Response<List<SupervisorTechnicianListResponse>>
+                                call: Call<SupervisorTechnicianListResponse>,
+                                response: Response<SupervisorTechnicianListResponse>
                             ) {
                                 loadingBar.visibility = View.GONE
                                 if (response.isSuccessful) {
                                     if (response.body() != null) {
-                                        for (i in 0 until response.body()!!.size) {
+                                        for (i in 0 until response.body()!!.data!!.size) {
                                             supervisorsList.add(
                                                 SelectedSupervisorTechniciansList(
                                                     false,
-                                                    response.body()!![i]
+                                                    response.body()!!.data!![i]
                                                 )
                                             )
                                         }
@@ -178,7 +179,7 @@ class SelectSupervisorTechniciansBottomSheet(
                             }
 
                             override fun onFailure(
-                                call: Call<List<SupervisorTechnicianListResponse>>,
+                                call: Call<SupervisorTechnicianListResponse>,
                                 throwable: Throwable
                             ) {
                                 loadingBar.visibility = View.GONE
@@ -211,19 +212,19 @@ class SelectSupervisorTechniciansBottomSheet(
                 } else {
                     title.text = context.getString(R.string.select_technicians)
                     InitAPI.getEndpoint.getTechnicianList(detailData.idGaprojects!!).enqueue(
-                        object : Callback<List<SupervisorTechnicianListResponse>> {
+                        object : Callback<SupervisorTechnicianListResponse> {
                             override fun onResponse(
-                                call: Call<List<SupervisorTechnicianListResponse>>,
-                                response: Response<List<SupervisorTechnicianListResponse>>
+                                call: Call<SupervisorTechnicianListResponse>,
+                                response: Response<SupervisorTechnicianListResponse>
                             ) {
                                 loadingBar.visibility = View.GONE
                                 if (response.isSuccessful) {
                                     if (response.body() != null) {
-                                        for (i in 0 until response.body()!!.size) {
+                                        for (i in 0 until response.body()!!.data!!.size) {
                                             techniciansList.add(
                                                 SelectedSupervisorTechniciansList(
                                                     false,
-                                                    response.body()!![i]
+                                                    response.body()!!.data!![i]
                                                 )
                                             )
                                         }
@@ -300,7 +301,7 @@ class SelectSupervisorTechniciansBottomSheet(
                             }
 
                             override fun onFailure(
-                                call: Call<List<SupervisorTechnicianListResponse>>,
+                                call: Call<SupervisorTechnicianListResponse>,
                                 throwable: Throwable
                             ) {
                                 loadingBar.visibility = View.GONE
@@ -369,28 +370,28 @@ class SelectSupervisorTechniciansBottomSheet(
     }
 
     interface OnSelectTechniciansListener {
-        fun onTechnicianSelected(data: SupervisorTechnicianListResponse)
-        fun onTechnicianUnselected(data: SupervisorTechnicianListResponse)
+        fun onTechnicianSelected(data: SupervisorTechnician)
+        fun onTechnicianUnselected(data: SupervisorTechnician)
     }
 
     interface OnSelectSupervisorListener {
-        fun onSupervisorSelected(data: SupervisorTechnicianListResponse)
-        fun onSupervisorUnselected(data: SupervisorTechnicianListResponse)
+        fun onSupervisorSelected(data: SupervisorTechnician)
+        fun onSupervisorUnselected(data: SupervisorTechnician)
     }
 
-    override fun onTechnicianSelected(data: SupervisorTechnicianListResponse) {
+    override fun onTechnicianSelected(data: SupervisorTechnician) {
         onSelectTechniciansListener.onTechnicianSelected(data)
     }
 
-    override fun onTechnicianUnselected(data: SupervisorTechnicianListResponse) {
+    override fun onTechnicianUnselected(data: SupervisorTechnician) {
         onSelectTechniciansListener.onTechnicianUnselected(data)
     }
 
-    override fun onSupervisorsSelected(data: SupervisorTechnicianListResponse) {
+    override fun onSupervisorsSelected(data: SupervisorTechnician) {
         onSelectSupervisorListener.onSupervisorSelected(data)
     }
 
-    override fun onSupervisorsUnselected(data: SupervisorTechnicianListResponse) {
+    override fun onSupervisorsUnselected(data: SupervisorTechnician) {
         onSelectSupervisorListener.onSupervisorUnselected(data)
     }
 }

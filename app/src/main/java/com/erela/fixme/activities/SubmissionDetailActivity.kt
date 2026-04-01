@@ -1,5 +1,6 @@
 package com.erela.fixme.activities
 
+import android.animation.AnimatorInflater
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
@@ -165,6 +166,11 @@ class SubmissionDetailActivity : AppCompatActivity(),
     @SuppressLint("SetTextI18n")
     private fun init() {
         binding.apply {
+            // Reset child view visibility states to default
+            exceedingIndicatorBanner.visibility = View.GONE
+            statusMessageContainer.visibility = View.GONE
+            onProgressButton.visibility = View.GONE
+            seeTrialContainer.visibility = View.GONE
             isFabVisible = false
             closeFabMenu()
 
@@ -221,6 +227,11 @@ class SubmissionDetailActivity : AppCompatActivity(),
                                 if (response.body() != null) {
                                     detailData = response.body()!![0]
                                     showLocationOnMap()
+                                    handleExceedingStatus(
+                                        detailData.isExceeding!!,
+                                        detailData.timeOffset!!,
+                                        detailData.limitTime!!
+                                    )
                                     detailTitle.text = detailData.nomorRequest
                                     if (detailData.fotoGaprojects!!.isEmpty()) {
                                         imageContainer.visibility = View.GONE
@@ -389,6 +400,7 @@ class SubmissionDetailActivity : AppCompatActivity(),
                                             actionButton.visibility = View.GONE
                                             actionSelfButton.visibility = View.GONE
                                             onProgressButton.visibility = View.GONE
+                                            seeTrialContainer.visibility = View.GONE
                                             messageProgressAndTrialButtonContainer.visibility =
                                                 View.VISIBLE
                                             statusMessageContainer.setOnClickListener {
@@ -413,17 +425,18 @@ class SubmissionDetailActivity : AppCompatActivity(),
                                                 statusMessageColor,
                                                 R.drawable.gradient_rejected_color,
                                             )
-                                            statusMessage.text = if (detailData.nameUserReject != "") {
-                                                if (getString(R.string.lang) == "in")
-                                                    "Ditolak oleh ${detailData.nameUserReject?.trimEnd()}\nKetuk untuk melihat alasan"
-                                                else
-                                                    "Rejected by ${detailData.nameUserReject?.trimEnd()}\nTap to see reason"
-                                            } else {
-                                                if (getString(R.string.lang) == "in")
-                                                    "Ditolak oleh ${detailData.namaUserPelaporReject?.trimEnd()}\nKetuk untuk melihat alasan"
-                                                else
-                                                    "Rejected by ${detailData.namaUserPelaporReject?.trimEnd()}\nTap to see reason"
-                                            }
+                                            statusMessage.text =
+                                                if (detailData.nameUserReject != "") {
+                                                    if (getString(R.string.lang) == "in")
+                                                        "Ditolak oleh ${detailData.nameUserReject?.trimEnd()}\nKetuk untuk melihat alasan"
+                                                    else
+                                                        "Rejected by ${detailData.nameUserReject?.trimEnd()}\nTap to see reason"
+                                                } else {
+                                                    if (getString(R.string.lang) == "in")
+                                                        "Ditolak oleh ${detailData.namaUserPelaporReject?.trimEnd()}\nKetuk untuk melihat alasan"
+                                                    else
+                                                        "Rejected by ${detailData.namaUserPelaporReject?.trimEnd()}\nTap to see reason"
+                                                }
                                             statusMessage.setTextColor(
                                                 ContextCompat.getColor(
                                                     this@SubmissionDetailActivity,
@@ -439,6 +452,7 @@ class SubmissionDetailActivity : AppCompatActivity(),
                                             )
                                             submissionStatusText.text = "Pending"
                                             onProgressButton.visibility = View.GONE
+                                            seeTrialContainer.visibility = View.GONE
                                             messageProgressAndTrialButtonContainer.visibility =
                                                 View.GONE
                                         }
@@ -450,6 +464,7 @@ class SubmissionDetailActivity : AppCompatActivity(),
                                             )
                                             submissionStatusText.text = "Waiting"
                                             onProgressButton.visibility = View.GONE
+                                            seeTrialContainer.visibility = View.GONE
                                             messageProgressAndTrialButtonContainer.visibility =
                                                 View.VISIBLE
                                             statusMessageContainer.setOnClickListener {
@@ -510,6 +525,7 @@ class SubmissionDetailActivity : AppCompatActivity(),
                                                 messageProgressAndTrialButtonContainer.visibility =
                                                     View.GONE
                                                 statusMessageContainer.visibility = View.GONE
+                                                seeTrialContainer.visibility = View.GONE
                                             } else {
                                                 if (spv) {
                                                     actionButton.visibility = View.VISIBLE
@@ -518,12 +534,14 @@ class SubmissionDetailActivity : AppCompatActivity(),
                                                     messageProgressAndTrialButtonContainer.visibility =
                                                         View.GONE
                                                     statusMessageContainer.visibility = View.GONE
+                                                    seeTrialContainer.visibility = View.GONE
                                                 } else {
                                                     actionButton.visibility = View.GONE
                                                     actionSelfButton.visibility = View.GONE
                                                     onProgressButton.visibility = View.GONE
                                                     messageProgressAndTrialButtonContainer.visibility =
                                                         View.VISIBLE
+                                                    seeTrialContainer.visibility = View.GONE
                                                     statusMessageContainer.setOnClickListener {
                                                         statusMessageContainer.showAlignTop(
                                                             createBalloonOverlay(
@@ -562,19 +580,14 @@ class SubmissionDetailActivity : AppCompatActivity(),
                                                 if (userData.id == detailData.usernUserSpv!![i]
                                                     !!.idUser
                                                 ) {
+                                                    editTechniciansButton.visibility = View.VISIBLE
                                                     holdResumeIcon.setImageDrawable(
                                                         ContextCompat.getDrawable(
                                                             applicationContext,
-                                                            R.drawable.baseline_play_arrow_24
+                                                            R.drawable.resume_icon
                                                         )
                                                     )
                                                     holdResumeButton.visibility = View.VISIBLE
-                                                    holdResumeColor.background =
-                                                        ResourcesCompat.getDrawable(
-                                                            resources,
-                                                            R.drawable.gradient_approved_color,
-                                                            theme
-                                                        )
                                                     holdResumeButton.setOnClickListener {
                                                         val confirmationDialog = ConfirmationDialog(
                                                             this@SubmissionDetailActivity,
@@ -845,6 +858,7 @@ class SubmissionDetailActivity : AppCompatActivity(),
                                             messageProgressAndTrialButtonContainer.visibility =
                                                 View.VISIBLE
                                             statusMessageContainer.visibility = View.GONE
+                                            seeTrialContainer.visibility = View.GONE
                                             onProgressButton.visibility = View.VISIBLE
                                             onProgressText.setCompoundDrawablesWithIntrinsicBounds(
                                                 null,
@@ -897,19 +911,14 @@ class SubmissionDetailActivity : AppCompatActivity(),
                                                 if (userData.id == detailData.usernUserSpv!![i]
                                                     !!.idUser
                                                 ) {
+                                                    editTechniciansButton.visibility = View.VISIBLE
                                                     holdResumeIcon.setImageDrawable(
                                                         ContextCompat.getDrawable(
                                                             applicationContext,
-                                                            R.drawable.baseline_pause_24
+                                                            R.drawable.hold_icon
                                                         )
                                                     )
                                                     holdResumeButton.visibility = View.VISIBLE
-                                                    holdResumeColor.background =
-                                                        ResourcesCompat.getDrawable(
-                                                            resources,
-                                                            R.drawable.gradient_hold_color,
-                                                            theme
-                                                        )
                                                     holdResumeButton.setOnClickListener {
                                                         val holdBottomSheet =
                                                             ActionHoldIssueBottomSheet(this@SubmissionDetailActivity).also {
@@ -1180,6 +1189,7 @@ class SubmissionDetailActivity : AppCompatActivity(),
                                             messageProgressAndTrialButtonContainer.visibility =
                                                 View.VISIBLE
                                             statusMessageContainer.visibility = View.GONE
+                                            seeTrialContainer.visibility = View.GONE
                                             onProgressButton.visibility = View.VISIBLE
                                             onProgressText.setCompoundDrawablesWithIntrinsicBounds(
                                                 ContextCompat.getDrawable(
@@ -1243,6 +1253,8 @@ class SubmissionDetailActivity : AppCompatActivity(),
                                                     if (trialBottomSheet.window != null)
                                                         trialBottomSheet.show()
                                                 }
+                                            } else {
+                                                seeTrialContainer.visibility = View.GONE
                                             }
                                         }
                                         // Progress Done
@@ -1322,6 +1334,8 @@ class SubmissionDetailActivity : AppCompatActivity(),
                                                     if (trialBottomSheet.window != null)
                                                         trialBottomSheet.show()
                                                 }
+                                            } else {
+                                                seeTrialContainer.visibility = View.GONE
                                             }
                                         }
                                         // Done
@@ -1397,6 +1411,7 @@ class SubmissionDetailActivity : AppCompatActivity(),
                                             actionButton.visibility = View.GONE
                                             actionSelfButton.visibility = View.GONE
                                             onProgressButton.visibility = View.GONE
+                                            seeTrialContainer.visibility = View.GONE
                                             messageProgressAndTrialButtonContainer.visibility =
                                                 View.VISIBLE
                                             statusMessageContainer.visibility = View.VISIBLE
@@ -1511,21 +1526,25 @@ class SubmissionDetailActivity : AppCompatActivity(),
                                         reportManagerApproveReject.visibility = View.VISIBLE
                                         reportManagerTime.visibility = View.VISIBLE
                                         if (detailData.tglWaktuPelaporApprove != null) {
-                                            reportManagerApproveReject.text = getString(R.string.submission_report_manager_time_approve)
-                                            reportManagerTime.text = if (detailData.tglWaktuPelaporApprove == "") "-" else {
-                                                if (getString(R.string.lang) == "in")
-                                                    "${detailData.tglWaktuPelaporApprove}\noleh ${detailData.namaUserPelaporApprove}"
-                                                else
-                                                    "${detailData.tglWaktuPelaporApprove}\nby ${detailData.namaUserPelaporApprove}"
-                                            }
+                                            reportManagerApproveReject.text =
+                                                getString(R.string.submission_report_manager_time_approve)
+                                            reportManagerTime.text =
+                                                if (detailData.tglWaktuPelaporApprove == "") "-" else {
+                                                    if (getString(R.string.lang) == "in")
+                                                        "${detailData.tglWaktuPelaporApprove}\noleh ${detailData.namaUserPelaporApprove}"
+                                                    else
+                                                        "${detailData.tglWaktuPelaporApprove}\nby ${detailData.namaUserPelaporApprove}"
+                                                }
                                         } else {
-                                            reportManagerApproveReject.text = getString(R.string.submission_report_manager_time_reject)
-                                            reportManagerTime.text = if (detailData.tglWaktuPelaporReject == "") "-" else {
-                                                if (getString(R.string.lang) == "in")
-                                                    "${detailData.tglWaktuPelaporReject}\noleh ${detailData.namaUserPelaporReject}"
-                                                else
-                                                    "${detailData.tglWaktuPelaporReject}\nby ${detailData.namaUserPelaporReject}"
-                                            }
+                                            reportManagerApproveReject.text =
+                                                getString(R.string.submission_report_manager_time_reject)
+                                            reportManagerTime.text =
+                                                if (detailData.tglWaktuPelaporReject == "") "-" else {
+                                                    if (getString(R.string.lang) == "in")
+                                                        "${detailData.tglWaktuPelaporReject}\noleh ${detailData.namaUserPelaporReject}"
+                                                    else
+                                                        "${detailData.tglWaktuPelaporReject}\nby ${detailData.namaUserPelaporReject}"
+                                                }
                                         }
                                     } else {
                                         reportManagerApproveReject.visibility = View.GONE
@@ -1536,11 +1555,15 @@ class SubmissionDetailActivity : AppCompatActivity(),
                                         targetManagerApproveReject.visibility = View.VISIBLE
                                         targetManagerTime.visibility = View.VISIBLE
                                         if (detailData.tglwaktuApproved != null) {
-                                            targetManagerApproveReject.text = getString(R.string.submission_target_manager_time_approve)
-                                            targetManagerTime.text = if (detailData.tglwaktuApproved == "") "-" else detailData.tglwaktuApproved
+                                            targetManagerApproveReject.text =
+                                                getString(R.string.submission_target_manager_time_approve)
+                                            targetManagerTime.text =
+                                                if (detailData.tglwaktuApproved == "") "-" else detailData.tglwaktuApproved
                                         } else {
-                                            targetManagerApproveReject.text = getString(R.string.submission_target_manager_time_reject)
-                                            targetManagerTime.text = if (detailData.tglWaktuReject == "") "-" else detailData.tglWaktuReject
+                                            targetManagerApproveReject.text =
+                                                getString(R.string.submission_target_manager_time_reject)
+                                            targetManagerTime.text =
+                                                if (detailData.tglWaktuReject == "") "-" else detailData.tglWaktuReject
                                         }
                                     } else {
                                         targetManagerApproveReject.visibility = View.GONE
@@ -1592,6 +1615,8 @@ class SubmissionDetailActivity : AppCompatActivity(),
                                             ?: detailData.nameUserReject?.takeIf { it.isNotBlank() }
                                                 ?.trimEnd() ?: "-"
 
+                                    userSupervisorsTitle.text =
+                                        if (getString(R.string.lang) == "in") "Supervisor" else "Supervisors"
                                     userSupervisors.text = StringBuilder().also {
                                         with(it) {
                                             if (detailData.usernUserSpv!!.isEmpty()) {
@@ -1612,8 +1637,14 @@ class SubmissionDetailActivity : AppCompatActivity(),
                                         ": ${detailData.vendorName}"
                                     } else ""
 
+                                    userTechniciansTitle.text =
+                                        if (getString(R.string.lang) == "in") "Teknisi" else "Technicians"
                                     userTechnicians.text =
-                                        if (detailData.isVendor == "y" || detailData.isVendor == "Y") "${getString(R.string.work_by_vendors)}${vendorName}" else StringBuilder().also {
+                                        if (detailData.isVendor == "y" || detailData.isVendor == "Y") "${
+                                            getString(
+                                                R.string.work_by_vendors
+                                            )
+                                        }${vendorName}" else StringBuilder().also {
                                             with(it) {
                                                 if (detailData.usernUserTeknisi!!.isEmpty()) {
                                                     append("-")
@@ -1628,6 +1659,43 @@ class SubmissionDetailActivity : AppCompatActivity(),
                                                 }
                                             }
                                         }
+
+                                    editTechniciansButton.setOnClickListener {
+                                        val bottomSheet =
+                                            UpdateStatusBottomSheet(
+                                                this@SubmissionDetailActivity,
+                                                detailData,
+                                                approve = false,
+                                                cancel = false,
+                                                deployTech = true,
+                                                isEdit = true
+                                            ).also { bottomSheet ->
+                                                with(bottomSheet) {
+                                                    setOnUpdateSuccessListener(object :
+                                                        UpdateStatusBottomSheet.OnUpdateSuccessListener {
+                                                        override fun onApproved() {
+                                                            // Not used in edit mode
+                                                        }
+
+                                                        override fun onRejected() {
+                                                            // Not used in edit mode
+                                                        }
+
+                                                        override fun onCanceled() {
+                                                            // Not used in edit mode
+                                                        }
+
+                                                        override fun onTechniciansDeployed() {
+                                                            // Refresh the detail page to show updated technicians
+                                                            isUpdated = true
+                                                            init()
+                                                        }
+                                                    })
+                                                }
+                                            }
+                                        if (bottomSheet.window != null)
+                                            bottomSheet.show()
+                                    }
                                 } else {
                                     detailTitle.text = "ERR!!"
                                     CustomToast.getInstance(applicationContext)
@@ -1926,6 +1994,35 @@ class SubmissionDetailActivity : AppCompatActivity(),
                 if (bottomSheet.window != null) {
                     bottomSheet.show()
                 }
+            }
+        }
+    }
+
+    private fun handleExceedingStatus(isExceeding: Boolean, timeOffset: Int, limitTime: Int) {
+        binding.apply {
+            if (isExceeding) {
+                exceedingIndicatorBanner.visibility = View.VISIBLE
+
+                // Start the same animation used in the adapter
+                val animator = AnimatorInflater.loadAnimator(
+                    this@SubmissionDetailActivity,
+                    R.animator.glowing_red_blink
+                )
+                animator?.setTarget(exceedingIndicatorBanner)
+                animator?.start()
+
+                val hours = if (getString(R.string.lang) == "en") {
+                    if (timeOffset > 1 || limitTime > 1)
+                        "hours"
+                    else
+                        "hour"
+                } else
+                    "jam"
+                exceedingMessageText.text =
+                    "${getString(R.string.exceeding_message)} $timeOffset ${hours}."
+                timeLimit.text = "$limitTime $hours"
+            } else {
+                exceedingIndicatorBanner.visibility = View.GONE
             }
         }
     }
@@ -3152,7 +3249,7 @@ class SubmissionDetailActivity : AppCompatActivity(),
             googleMap?.apply {
                 clear()
                 addMarker(MarkerOptions().position(position).title(detailData.lokasi))
-                moveCamera(CameraUpdateFactory.newLatLngZoom(position, 17f))
+                moveCamera(CameraUpdateFactory.newLatLngZoom(position, 19f))
             }
         } catch (e: Exception) {
             e.printStackTrace()

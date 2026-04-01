@@ -15,9 +15,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        tools:background="@drawable/gradient_add_color"
         android:paddingHorizontal="@dimen/list_item_selected_items_content_padding_horizontal"
-        android:paddingVertical="@dimen/list_item_selected_items_content_padding_vertical">
+        android:paddingVertical="@dimen/list_item_selected_items_content_padding_vertical"
+        tools:background="@drawable/gradient_add_color">
 
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/deleteButton"
@@ -34,7 +34,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:src="@drawable/baseline_close_24"
-                android:tint="@color/black"
+                app:tint="@color/black"
                 tools:ignore="ContentDescription" />
         </com.google.android.material.card.MaterialCardView>
 

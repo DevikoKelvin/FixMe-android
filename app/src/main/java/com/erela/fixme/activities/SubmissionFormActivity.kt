@@ -735,46 +735,46 @@ class SubmissionFormActivity : AppCompatActivity(), OnMapReadyCallback {
             }
             with(requestBodyMap) {
                 put(
-                    "id_user", createPartFromString(
+                    "case_id",
+                    createPartFromString(detail?.idGaprojects.toString())!!
+                )
+                put(
+                    "user_id", createPartFromString(
                         UserDataHelper(
                             applicationContext
                         ).getUserData().id.toString()
                     )!!
                 )
                 put(
-                    "id_gaprojects",
-                    createPartFromString(detail?.idGaprojects.toString())!!
-                )
-                put(
-                    "judul_kasus",
+                    "case_title",
                     createPartFromString(caseTitleField.text.toString())!!
                 )
-                put("lokasi", createPartFromString(locationField.text.toString())!!)
+                put("location", createPartFromString(locationField.text.toString())!!)
                 put(
-                    "departemen",
+                    "department",
                     createPartFromString(selectedDepartment.toString())!!
                 )
-                put("kategori", createPartFromString(selectedCategory.toString())!!)
+                put("category", createPartFromString(selectedCategory.toString())!!)
                 if (!machineCodeField.text.isNullOrEmpty()) {
                     put(
-                        "kode_mesin",
+                        "machine_code",
                         createPartFromString(machineCodeField.text.toString())!!
                     )
                 }
                 if (!machineNameField.text.isNullOrEmpty()) {
                     put(
-                        "nama_mesin",
+                        "machine_name",
                         createPartFromString(machineNameField.text.toString())!!
                     )
                 }
                 put(
-                    "keterangan",
+                    "description",
                     createPartFromString(descriptionField.text.toString())!!
                 )
                 if (deletedOldImageArray.isNotEmpty()) {
                     for (element in deletedOldImageArray) {
                         put(
-                            "foto_old[]",
+                            "deleted_photos[]",
                             createPartFromString(
                                 element.toString()
                             )!!
@@ -805,31 +805,31 @@ class SubmissionFormActivity : AppCompatActivity(), OnMapReadyCallback {
             val userId = UserDataHelper(applicationContext).getUserData().id
             with(requestBodyMap) {
                 put(
-                    "id_user", createPartFromString(
+                    "user_id", createPartFromString(
                         userId.toString()
                     )!!
                 )
                 put(
-                    "judul_kasus",
+                    "case_title",
                     createPartFromString(caseTitleField.text.toString())!!
                 )
-                put("lokasi", createPartFromString(locationField.text.toString())!!)
-                put("departemen", createPartFromString(selectedDepartment.toString())!!)
-                put("kategori", createPartFromString(selectedCategory.toString())!!)
+                put("location", createPartFromString(locationField.text.toString())!!)
+                put("department", createPartFromString(selectedDepartment.toString())!!)
+                put("category", createPartFromString(selectedCategory.toString())!!)
                 if (!machineCodeField.text.isNullOrEmpty()) {
                     put(
-                        "kode_mesin",
+                        "machine_code",
                         createPartFromString(machineCodeField.text.toString())!!
                     )
                 }
                 if (!machineNameField.text.isNullOrEmpty()) {
                     put(
-                        "nama_mesin",
+                        "machine_name",
                         createPartFromString(machineNameField.text.toString())!!
                     )
                 }
                 put(
-                    "keterangan",
+                    "description",
                     createPartFromString(descriptionField.text.toString())!!
                 )
                 put(
@@ -1447,7 +1447,7 @@ class SubmissionFormActivity : AppCompatActivity(), OnMapReadyCallback {
         return try {
             val file = File(getRealPathFromURI(uri)!!)
             val requestBody = file.asRequestBody("image/*".toMediaTypeOrNull())
-            MultipartBody.Part.createFormData("foto[]", file.name, requestBody)
+            MultipartBody.Part.createFormData("photo[]", file.name, requestBody)
         } catch (e: Exception) {
             Log.e("createMultipartBody", "Error creating MultipartBody.Part", e)
             null
@@ -1572,7 +1572,7 @@ class SubmissionFormActivity : AppCompatActivity(), OnMapReadyCallback {
         googleMap?.apply {
             clear()
             addMarker(MarkerOptions().position(latLng))
-            animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 17f))
+            animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 19f))
             uiSettings.apply {
                 setAllGesturesEnabled(false)
                 isMapToolbarEnabled = false

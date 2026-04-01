@@ -78,11 +78,17 @@
     <string name="on_trial">On Trial</string>
     <string name="done">Done</string>
     <string name="canceled">Canceled</string>
-    <string name="clear_filter">Hapus saringan</string>
+    <string name="date_filter">Tanggal</string>
+    <string name="date_to">sampai</string>
+    <string name="date_placeholder">Pilih tanggal</string>
+    <string name="clear_filter">Hapus saringan tanggal</string>
     <string name="machine_code">Kode Mesin</string>
     <string name="machine_name">Nama Mesin</string>
     <string name="reported_by">Dilaporkan oleh:</string>
     <string name="department_from">Dari:</string>
+    <string name="exceeding_message">Waktu pengerjaan kasus ini melebihi batas waktu</string>
+    <string name="exceeding_message_end">jam.</string>
+    <string name="time_limit">Batas waktu:</string>
 
     <string name="submission_detail_title">Detail Laporan</string>
     <string name="submission_description">Deskripsi</string>
@@ -139,6 +145,7 @@
     <string name="vendors_name">Nama Vendor</string>
     <string name="select_supervisor">Pilih Supervisor</string>
     <string name="select_complexity">Kompleksitas</string>
+    <string name="all">Semua</string>
     <string name="complexity_low">Rendah</string>
     <string name="complexity_mid">Menengah</string>
     <string name="complexity_high">Tinggi</string>

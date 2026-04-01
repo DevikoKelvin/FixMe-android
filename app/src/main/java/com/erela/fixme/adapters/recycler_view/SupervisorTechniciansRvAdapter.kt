@@ -7,11 +7,11 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.erela.fixme.databinding.ListItemSelectionBinding
 import com.erela.fixme.objects.SelectedSupervisorTechniciansList
-import com.erela.fixme.objects.SupervisorTechnicianListResponse
+import com.erela.fixme.objects.SupervisorTechnician
 
 class SupervisorTechniciansRvAdapter(
     val context: Context, private val supervisorTechniciansList: List<SelectedSupervisorTechniciansList>,
-    private val selectedSupervisorTechniciansList: ArrayList<SupervisorTechnicianListResponse>,
+    private val selectedSupervisorTechniciansList: ArrayList<SupervisorTechnician>,
     private val isForSupervisor: Boolean
 ) : RecyclerView.Adapter<SupervisorTechniciansRvAdapter.ViewHolder>() {
     private lateinit var onTechniciansSetListener: OnTechniciansSetListener
@@ -34,10 +34,10 @@ class SupervisorTechniciansRvAdapter(
 
         with(holder) {
             binding.apply {
-                itemCheckboxText.text = item.technician?.namaUser
+                itemCheckboxText.text = item.supervisorTechnician?.namaUser
 
                 for (i in 0 until selectedSupervisorTechniciansList.size) {
-                    if (selectedSupervisorTechniciansList[i].idUser == item.technician?.idUser) {
+                    if (selectedSupervisorTechniciansList[i].idUser == item.supervisorTechnician?.idUser) {
                         itemCheckboxText.isChecked = true
                         break
                     }
@@ -47,15 +47,15 @@ class SupervisorTechniciansRvAdapter(
                     item.isSelected = isChecked
                     if (isForSupervisor) {
                         if (isChecked) {
-                            onSupervisorSetListener.onSupervisorsSelected(item.technician!!)
+                            onSupervisorSetListener.onSupervisorsSelected(item.supervisorTechnician!!)
                         } else {
-                            onSupervisorSetListener.onSupervisorsUnselected(item.technician!!)
+                            onSupervisorSetListener.onSupervisorsUnselected(item.supervisorTechnician!!)
                         }
                     } else {
                         if (isChecked) {
-                            onTechniciansSetListener.onTechnicianSelected(item.technician!!)
+                            onTechniciansSetListener.onTechnicianSelected(item.supervisorTechnician!!)
                         } else {
-                            onTechniciansSetListener.onTechnicianUnselected(item.technician!!)
+                            onTechniciansSetListener.onTechnicianUnselected(item.supervisorTechnician!!)
                         }
                     }
                 }
@@ -72,12 +72,12 @@ class SupervisorTechniciansRvAdapter(
     }
 
     interface OnTechniciansSetListener {
-        fun onTechnicianSelected(data: SupervisorTechnicianListResponse)
-        fun onTechnicianUnselected(data: SupervisorTechnicianListResponse)
+        fun onTechnicianSelected(data: SupervisorTechnician)
+        fun onTechnicianUnselected(data: SupervisorTechnician)
     }
 
     interface OnSupervisorSetListener {
-        fun onSupervisorsSelected(data: SupervisorTechnicianListResponse)
-        fun onSupervisorsUnselected(data: SupervisorTechnicianListResponse)
+        fun onSupervisorsSelected(data: SupervisorTechnician)
+        fun onSupervisorsUnselected(data: SupervisorTechnician)
     }
 }

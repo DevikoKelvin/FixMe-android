@@ -8,12 +8,22 @@ import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import androidx.core.graphics.drawable.toDrawable
+import androidx.fragment.app.FragmentManager
 import com.erela.fixme.R
 import com.erela.fixme.databinding.BsSubmissionListFilterBinding
 import com.google.android.material.bottomsheet.BottomSheetDialog
+import com.google.android.material.datepicker.MaterialDatePicker
+import java.text.SimpleDateFormat
+import java.util.Calendar
+import java.util.Locale
 
 class SubmissionListFilterBottomSheet(
-    context: Context, private val selectedFilter: Int, private val selectedComplexity: String
+    context: Context,
+    private val selectedFilter: Int,
+    private var startDate: String,
+    private var endDate: String,
+    private val selectedComplexity: String,
+    private val fragmentManager: FragmentManager
 ) :
     BottomSheetDialog(context) {
     private val binding: BsSubmissionListFilterBinding by lazy {
@@ -66,6 +76,9 @@ class SubmissionListFilterBottomSheet(
 
     private fun init() {
         binding.apply {
+            // Initialize selectFilterByStatus with the current selectedFilter
+            selectFilterByStatus = selectedFilter
+            
             filterBy = when (selectedFilter) {
                 ALL_ON_GOING, PENDING, WAITING, APPROVED, HOLD, ON_PROGRESS, PROGRESS_DONE, ON_TRIAL -> 0
                 ALL_DONE, REJECTED, DONE, CANCELED -> 1
@@ -136,6 +149,73 @@ class SubmissionListFilterBottomSheet(
                 override fun onNothingSelected(parent: AdapterView<*>?) {}
             }
 
+            val dateFormat = SimpleDateFormat("dd/MM/yyyy", Locale.forLanguageTag("id-ID"))
+            val serverDateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.forLanguageTag("id-ID"))
+            val startCalendar = Calendar.getInstance().apply {
+                if (startDate.isNotEmpty())
+                    time = serverDateFormat.parse(startDate)!!
+            }
+
+            // Show placeholder if startDate is empty, otherwise show formatted date
+            dateFromText.text = if (startDate.isNotEmpty()) 
+                dateFormat.format(startCalendar.time) 
+            else 
+                context.getString(R.string.date_placeholder)
+
+            dateFrom.setOnClickListener {
+                val datePicker = MaterialDatePicker.Builder.datePicker()
+                    .setTitleText(
+                        if (context.getString(R.string.lang) == "in")
+                            "Pilih Tanggal Dimulai"
+                        else
+                            "Select Start Date"
+                    )
+                    .setSelection(startCalendar.timeInMillis)
+                    .build()
+                datePicker.addOnPositiveButtonClickListener { selection ->
+                    startCalendar.timeInMillis = selection
+                    dateFromText.text = dateFormat.format(startCalendar.time)
+                    startDate = serverDateFormat.format(startCalendar.time)
+                }
+                datePicker.show(fragmentManager, "START")
+            }
+
+            val nowCalendar = Calendar.getInstance().apply {
+                if (endDate.isNotEmpty())
+                    time = serverDateFormat.parse(endDate)!!
+            }
+
+            // Show placeholder if endDate is empty, otherwise show formatted date
+            dateToText.text = if (endDate.isNotEmpty()) 
+                dateFormat.format(nowCalendar.time) 
+            else 
+                context.getString(R.string.date_placeholder)
+
+            dateTo.setOnClickListener {
+                val datePicker = MaterialDatePicker.Builder.datePicker()
+                    .setTitleText(
+                        if (context.getString(R.string.lang) == "in")
+                            "Pilih Tanggal Akhir"
+                        else
+                            "Select End Date"
+                    )
+                    .setSelection(nowCalendar.timeInMillis)
+                    .build()
+                datePicker.addOnPositiveButtonClickListener { selection ->
+                    nowCalendar.timeInMillis = selection
+                    dateToText.text = dateFormat.format(nowCalendar.time)
+                    endDate = serverDateFormat.format(nowCalendar.time)
+                }
+                datePicker.show(fragmentManager, "END")
+            }
+
+            clearDateFilterButton.setOnClickListener {
+                dateFromText.text = context.getString(R.string.date_placeholder)
+                dateToText.text = context.getString(R.string.date_placeholder)
+                startDate = ""
+                endDate = ""
+            }
+
             when (selectedComplexity) {
                 "All" -> allSelector.isChecked = true
                 "Low" -> lowSelector.isChecked = true
@@ -164,6 +244,8 @@ class SubmissionListFilterBottomSheet(
                 onFilterListener.onFilter(
                     selectFilterByStatus,
                     selectFilterByStatus,
+                    startDate,
+                    endDate,
                     complexity
                 )
                 dismiss()
@@ -240,6 +322,12 @@ class SubmissionListFilterBottomSheet(
     }
 
     interface OnFilterListener {
-        fun onFilter(filter: Int, selectedFilter: Int, selectedComplexity: String)
+        fun onFilter(
+            filter: Int,
+            selectedFilter: Int,
+            startDate: String,
+            endDate: String,
+            selectedComplexity: String
+        )
     }
 }

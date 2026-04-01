@@ -83,8 +83,6 @@ class ProgressTrackingBottomSheet(
                         ) {
                             if (response.isSuccessful) {
                                 val result = response.body()
-                                Log.e("Detail", data.toString())
-                                Log.e("Result", result.toString())
                                 if (result != null) {
                                     if (result.data != null) {
                                         for (i in 0 until result.data.size) {

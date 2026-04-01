@@ -130,8 +130,8 @@ class ReportTrialBottomSheet(context: Context, private val detail: SubmissionDet
                                 InitAPI.getEndpoint.reportTrial(
                                     userData.id,
                                     detail.idGaprojects!!,
-                                    descriptionField.text.toString(),
-                                    if (pass) 0 else 1
+                                    if (pass) 0 else 1,
+                                    descriptionField.text.toString()
                                 ).enqueue(object : Callback<CreationResponse> {
                                     override fun onResponse(
                                         call: Call<CreationResponse>,

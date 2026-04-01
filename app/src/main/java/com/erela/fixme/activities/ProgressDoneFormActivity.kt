@@ -620,18 +620,18 @@ class ProgressDoneFormActivity : AppCompatActivity() {
             if (imageArrayUri.isNotEmpty()) {
                 for (i in 0 until imageArrayUri.size) {
                     photoFiles.add(
-                        createMultipartBody(imageArrayUri[i], "foto[$i]")
+                        createMultipartBody(imageArrayUri[i], "photo[$i]")
                     )
                 }
             }
 
             with(requestBodyMap) {
                 put(
-                    "id",
+                    "progress_id",
                     createPartFromString(progressData?.progress?.idGaprojectsDetail.toString())!!
                 )
-                put("id_user", createPartFromString(userData.id.toString())!!)
-                put("keterangan", createPartFromString(descriptionField.text.toString())!!)
+                put("user_id", createPartFromString(userData.id.toString())!!)
+                put("description", createPartFromString(descriptionField.text.toString())!!)
             }
         }
 

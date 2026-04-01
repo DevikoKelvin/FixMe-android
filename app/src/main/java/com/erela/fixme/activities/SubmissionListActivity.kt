@@ -27,6 +27,7 @@ import com.erela.fixme.custom_views.CustomToast
 import com.erela.fixme.databinding.ActivitySubmissionListBinding
 import com.erela.fixme.helpers.UserDataHelper
 import com.erela.fixme.helpers.api.InitAPI
+import com.erela.fixme.objects.DataItem
 import com.erela.fixme.objects.DepartmentListResponse
 import com.erela.fixme.objects.SubmissionListResponse
 import com.erela.fixme.objects.UserData
@@ -50,18 +51,20 @@ class SubmissionListActivity : AppCompatActivity(), SubmissionRvAdapter.OnSubmis
     private lateinit var adapter: SubmissionRvAdapter
     private var firstInit = true
     private var selectedFilter = 100
+    private var startDate = ""
+    private var endDate = ""
     private var selectedComplexity = ""
     private var selectedDepartment: String = ""
-    private var submissionArrayList: ArrayList<SubmissionListResponse> = ArrayList()
-    private var originalSubmissionArrayList: ArrayList<SubmissionListResponse> = ArrayList()
-    private var listFilteredByStatusAndComplexity: ArrayList<SubmissionListResponse> = ArrayList()
+    private var submissionArrayList: ArrayList<DataItem?>? = ArrayList()
+    private var originalSubmissionArrayList: ArrayList<DataItem?>? = ArrayList()
+    private var listFilteredByStatusAndComplexity: ArrayList<DataItem?> = ArrayList()
 
     @SuppressLint("NotifyDataSetChanged")
     private val activityResultLauncher: ActivityResultLauncher<Intent> = registerForActivityResult(
         ActivityResultContracts.StartActivityForResult()
     ) {
         if (it.resultCode == RESULT_OK) {
-            submissionArrayList.clear()
+            submissionArrayList?.clear()
             adapter.notifyDataSetChanged()
             getSubmissionList()
         }
@@ -107,10 +110,10 @@ class SubmissionListActivity : AppCompatActivity(), SubmissionRvAdapter.OnSubmis
 
     @SuppressLint("NotifyDataSetChanged")
     private fun filter(text: String?) {
-        val filteredList: ArrayList<SubmissionListResponse> = ArrayList()
+        val filteredList: ArrayList<DataItem> = ArrayList()
         if (text.isNullOrEmpty()) {
-            submissionArrayList.clear()
-            submissionArrayList.addAll(listFilteredByStatusAndComplexity)
+            submissionArrayList?.clear()
+            submissionArrayList?.addAll(listFilteredByStatusAndComplexity)
             adapter.notifyDataSetChanged()
             binding.apply {
                 rvSubmission.visibility = View.VISIBLE
@@ -119,16 +122,16 @@ class SubmissionListActivity : AppCompatActivity(), SubmissionRvAdapter.OnSubmis
             return
         }
         for (item in listFilteredByStatusAndComplexity) {
-            if (item.nomorRequest.toString().lowercase(Locale.getDefault())
+            if (item?.nomorRequest.toString().lowercase(Locale.getDefault())
                     .contains(text.lowercase(Locale.getDefault())) ||
-                item.judulKasus?.lowercase(Locale.getDefault())
+                item?.judulKasus?.lowercase(Locale.getDefault())
                     ?.contains(text.lowercase(Locale.getDefault())) == true ||
-                item.keterangan?.lowercase(Locale.getDefault())
+                item?.keterangan?.lowercase(Locale.getDefault())
                     ?.contains(text.lowercase(Locale.getDefault())) == true ||
-                item.namaUser?.lowercase(Locale.getDefault())
+                item?.namaUser?.lowercase(Locale.getDefault())
                     ?.contains(text.lowercase(Locale.getDefault())) == true
             ) {
-                filteredList.add(item)
+                filteredList.add(item!!)
             }
         }
         if (filteredList.isEmpty()) {
@@ -137,8 +140,8 @@ class SubmissionListActivity : AppCompatActivity(), SubmissionRvAdapter.OnSubmis
                 emptyListContainer.visibility = View.VISIBLE
             }
         }
-        submissionArrayList.clear()
-        submissionArrayList.addAll(filteredList)
+        submissionArrayList?.clear()
+        submissionArrayList?.addAll(filteredList)
         adapter.notifyDataSetChanged()
         binding.apply {
             rvSubmission.visibility = View.VISIBLE
@@ -169,7 +172,7 @@ class SubmissionListActivity : AppCompatActivity(), SubmissionRvAdapter.OnSubmis
             rvSubmission.adapter = adapter
 
             swipeRefresh.setOnRefreshListener {
-                submissionArrayList.clear()
+                submissionArrayList?.clear()
                 adapter.notifyDataSetChanged()
                 getSubmissionList()
                 swipeRefresh.isRefreshing = false
@@ -177,7 +180,7 @@ class SubmissionListActivity : AppCompatActivity(), SubmissionRvAdapter.OnSubmis
 
             loadingManager(true)
             try {
-                InitAPI.getEndpoint.getDepList()
+                InitAPI.getEndpoint.getDeptList()
                     .enqueue(object : Callback<List<DepartmentListResponse>> {
                         override fun onResponse(
                             call: Call<List<DepartmentListResponse>>,
@@ -223,7 +226,7 @@ class SubmissionListActivity : AppCompatActivity(), SubmissionRvAdapter.OnSubmis
                                                     rvSubmission.visibility = View.VISIBLE
                                                     emptyListContainer.visibility = View.GONE
                                                 }
-                                                submissionArrayList.clear()
+                                                submissionArrayList?.clear()
                                                 adapter.notifyDataSetChanged()
                                                 getSubmissionList()
                                             }
@@ -320,21 +323,23 @@ class SubmissionListActivity : AppCompatActivity(), SubmissionRvAdapter.OnSubmis
             try {
                 if (selectedDepartment != "") {
                     InitAPI.getEndpoint.getSubmissionList(userData.id, selectedDepartment)
-                        .enqueue(object : Callback<List<SubmissionListResponse>> {
+                        .enqueue(object : Callback<SubmissionListResponse> {
                             @SuppressLint("NotifyDataSetChanged")
                             override fun onResponse(
-                                call: Call<List<SubmissionListResponse>>,
-                                response: Response<List<SubmissionListResponse>>
+                                call: Call<SubmissionListResponse>,
+                                response: Response<SubmissionListResponse>
                             ) {
                                 loadingManager(false)
                                 if (response.isSuccessful) {
                                     if (response.body() != null) {
-                                        originalSubmissionArrayList.clear()
-                                        originalSubmissionArrayList.addAll(response.body()!!)
+                                        originalSubmissionArrayList?.clear()
+                                        originalSubmissionArrayList?.addAll(response.body()?.data!!)
                                         if (firstInit) {
                                             filterList(
-                                                response.body(),
+                                                response.body()!!.data,
                                                 SubmissionListFilterBottomSheet.ON_PROGRESS,
+                                                startDate,
+                                                endDate,
                                                 "All"
                                             )
                                             selectedFilter =
@@ -343,8 +348,10 @@ class SubmissionListActivity : AppCompatActivity(), SubmissionRvAdapter.OnSubmis
                                             firstInit = false
                                         } else
                                             filterList(
-                                                response.body(),
+                                                response.body()!!.data,
                                                 selectedFilter,
+                                                startDate,
+                                                endDate,
                                                 selectedComplexity
                                             )
                                         filterListButton.visibility = View.VISIBLE
@@ -352,7 +359,10 @@ class SubmissionListActivity : AppCompatActivity(), SubmissionRvAdapter.OnSubmis
                                             val bottomSheet = SubmissionListFilterBottomSheet(
                                                 this@SubmissionListActivity,
                                                 selectedFilter,
-                                                selectedComplexity
+                                                startDate,
+                                                endDate,
+                                                selectedComplexity,
+                                                supportFragmentManager
                                             ).also {
                                                 with(it) {
                                                     setOnFilterListener(object :
@@ -360,12 +370,21 @@ class SubmissionListActivity : AppCompatActivity(), SubmissionRvAdapter.OnSubmis
                                                         override fun onFilter(
                                                             filter: Int,
                                                             selectedFilter: Int,
+                                                            startDate: String,
+                                                            endDate: String,
                                                             selectedComplexity: String
                                                         ) {
+                                                            // Store the dates for future filtering
+                                                            this@SubmissionListActivity.startDate =
+                                                                startDate
+                                                            this@SubmissionListActivity.endDate =
+                                                                endDate
                                                             getSubmissionList()
                                                             filterList(
-                                                                response.body(),
+                                                                response.body()!!.data,
                                                                 filter,
+                                                                startDate,
+                                                                endDate,
                                                                 selectedComplexity
                                                             )
                                                             this@SubmissionListActivity.selectedFilter =
@@ -407,7 +426,7 @@ class SubmissionListActivity : AppCompatActivity(), SubmissionRvAdapter.OnSubmis
                             }
 
                             override fun onFailure(
-                                call: Call<List<SubmissionListResponse>>,
+                                call: Call<SubmissionListResponse>,
                                 throwable: Throwable
                             ) {
                                 loadingManager(false)
@@ -435,7 +454,7 @@ class SubmissionListActivity : AppCompatActivity(), SubmissionRvAdapter.OnSubmis
                         })
                 } else {
                     loadingManager(false)
-                    submissionArrayList.clear()
+                    submissionArrayList?.clear()
                 }
             } catch (exception: Exception) {
                 loadingManager(false)
@@ -465,7 +484,11 @@ class SubmissionListActivity : AppCompatActivity(), SubmissionRvAdapter.OnSubmis
 
     @SuppressLint("NotifyDataSetChanged", "SetTextI18n")
     private fun filterList(
-        submissionList: List<SubmissionListResponse>?, filter: Int, complexity: String
+        submissionList: List<DataItem?>?,
+        filter: Int,
+        startDate: String,
+        endDate: String,
+        complexity: String
     ) {
         binding.apply {
             val filterText = SpannableStringBuilder()
@@ -590,89 +613,104 @@ class SubmissionListActivity : AppCompatActivity(), SubmissionRvAdapter.OnSubmis
             }
             when (filter) {
                 -1 -> {
-                    submissionArrayList.clear()
+                    submissionArrayList?.clear()
                     for (i in 0 until submissionList!!.size) {
-                        if (submissionList[i].stsGaprojects == 1 || submissionList[i].stsGaprojects == 11
-                            || submissionList[i].stsGaprojects == 2 || submissionList[i].stsGaprojects == 22
-                            || submissionList[i].stsGaprojects == 3 || submissionList[i].stsGaprojects == 30
-                            || submissionList[i].stsGaprojects == 31
+                        if (submissionList[i]?.stsGaprojects == 1 || submissionList[i]?.stsGaprojects == 11
+                            || submissionList[i]?.stsGaprojects == 2 || submissionList[i]?.stsGaprojects == 22
+                            || submissionList[i]?.stsGaprojects == 3 || submissionList[i]?.stsGaprojects == 30
+                            || submissionList[i]?.stsGaprojects == 31
                         ) {
                             if (complexity != "All") {
-                                if (submissionList[i].complexity == complexity.lowercase(Locale.getDefault()))
-                                    submissionArrayList.add(submissionList[i])
+                                if (submissionList[i]?.complexity == complexity.lowercase(Locale.getDefault()))
+                                    submissionArrayList?.add(submissionList[i])
                             } else {
-                                submissionArrayList.add(submissionList[i])
+                                submissionArrayList?.add(submissionList[i])
                             }
                         }
                     }
                 }
 
                 -2 -> {
-                    submissionArrayList.clear()
+                    submissionArrayList?.clear()
                     for (i in 0 until submissionList!!.size) {
-                        if (submissionList[i].stsGaprojects == 0 || submissionList[i].stsGaprojects == 4
-                            || submissionList[i].stsGaprojects == 5
+                        if (submissionList[i]?.stsGaprojects == 0 || submissionList[i]?.stsGaprojects == 4
+                            || submissionList[i]?.stsGaprojects == 5
                         )
-                            if (dateChecker(submissionList[i].tglInput.toString())) {
+                            if (dateChecker(
+                                    submissionList[i]?.tglInput.toString(),
+                                    startDate,
+                                    endDate
+                                )
+                            ) {
                                 if (complexity != "All") {
-                                    if (submissionList[i].complexity == complexity.lowercase(Locale.getDefault()))
-                                        submissionArrayList.add(submissionList[i])
+                                    if (submissionList[i]?.complexity == complexity.lowercase(Locale.getDefault()))
+                                        submissionArrayList?.add(submissionList[i])
                                 } else {
-                                    submissionArrayList.add(submissionList[i])
+                                    submissionArrayList?.add(submissionList[i])
                                 }
                             }
                     }
                 }
 
                 100 -> {
-                    submissionArrayList.clear()
+                    submissionArrayList?.clear()
                     for (i in 0 until submissionList!!.size) {
-                        if (submissionList[i].stsGaprojects == 1 || submissionList[i].stsGaprojects == 11
-                            || submissionList[i].stsGaprojects == 2 || submissionList[i].stsGaprojects == 22
-                            || submissionList[i].stsGaprojects == 3 || submissionList[i].stsGaprojects == 30
-                            || submissionList[i].stsGaprojects == 31
+                        if (submissionList[i]?.stsGaprojects == 1 || submissionList[i]?.stsGaprojects == 11
+                            || submissionList[i]?.stsGaprojects == 2 || submissionList[i]?.stsGaprojects == 22
+                            || submissionList[i]?.stsGaprojects == 3 || submissionList[i]?.stsGaprojects == 30
+                            || submissionList[i]?.stsGaprojects == 31
                         ) {
                             if (complexity != "All") {
-                                if (submissionList[i].complexity == complexity.lowercase(Locale.getDefault()))
-                                    submissionArrayList.add(submissionList[i])
+                                if (submissionList[i]?.complexity == complexity.lowercase(Locale.getDefault()))
+                                    submissionArrayList?.add(submissionList[i])
                             } else {
-                                submissionArrayList.add(submissionList[i])
+                                submissionArrayList?.add(submissionList[i])
                             }
                         } else
-                            if (dateChecker(submissionList[i].tglInput.toString())) {
+                            if (dateChecker(
+                                    submissionList[i]?.tglInput.toString(),
+                                    startDate,
+                                    endDate
+                                )
+                            ) {
                                 if (complexity != "All") {
-                                    if (submissionList[i].complexity == complexity.lowercase(Locale.getDefault()))
-                                        submissionArrayList.add(submissionList[i])
+                                    if (submissionList[i]?.complexity == complexity.lowercase(Locale.getDefault()))
+                                        submissionArrayList?.add(submissionList[i])
                                 } else {
-                                    submissionArrayList.add(submissionList[i])
+                                    submissionArrayList?.add(submissionList[i])
                                 }
                             }
                     }
                 }
 
                 else -> {
-                    submissionArrayList.clear()
+                    submissionArrayList?.clear()
                     for (i in 0 until submissionList!!.size) {
-                        if (submissionList[i].stsGaprojects == filter) {
+                        if (submissionList[i]?.stsGaprojects == filter) {
                             if (filter == 0 || filter == 4 || filter == 5
                             ) {
-                                if (dateChecker(submissionList[i].tglInput.toString())) {
+                                if (dateChecker(
+                                        submissionList[i]?.tglInput.toString(),
+                                        startDate,
+                                        endDate
+                                    )
+                                ) {
                                     if (complexity != "All") {
-                                        if (submissionList[i].complexity == complexity.lowercase(
+                                        if (submissionList[i]?.complexity == complexity.lowercase(
                                                 Locale.getDefault()
                                             )
                                         )
-                                            submissionArrayList.add(submissionList[i])
+                                            submissionArrayList?.add(submissionList[i])
                                     } else {
-                                        submissionArrayList.add(submissionList[i])
+                                        submissionArrayList?.add(submissionList[i])
                                     }
                                 }
                             } else {
                                 if (complexity != "All") {
-                                    if (submissionList[i].complexity == complexity.lowercase(Locale.getDefault()))
-                                        submissionArrayList.add(submissionList[i])
+                                    if (submissionList[i]?.complexity == complexity.lowercase(Locale.getDefault()))
+                                        submissionArrayList?.add(submissionList[i])
                                 } else {
-                                    submissionArrayList.add(submissionList[i])
+                                    submissionArrayList?.add(submissionList[i])
                                 }
                             }
                         }
@@ -681,7 +719,7 @@ class SubmissionListActivity : AppCompatActivity(), SubmissionRvAdapter.OnSubmis
             }
             adapter.notifyDataSetChanged()
             listFilteredByStatusAndComplexity.clear()
-            listFilteredByStatusAndComplexity.addAll(submissionArrayList)
+            listFilteredByStatusAndComplexity.addAll(submissionArrayList!!)
             emptyListAnimation.playAnimation()
             if (adapter.itemCount == 0) {
                 if (selectedDepartment == "") {
@@ -698,30 +736,33 @@ class SubmissionListActivity : AppCompatActivity(), SubmissionRvAdapter.OnSubmis
         }
     }
 
-    private fun dateChecker(date: String): Boolean {
+    private fun dateChecker(date: String, startDate: String, endDate: String): Boolean {
         val simpleDateFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault())
-        val thisMonth = LocalDateTime.now().month
-        val thisYear = LocalDateTime.now().year
-        val firstDate = Date.from(
-            LocalDateTime.of(thisYear, thisMonth, 1, 0, 0).atZone(ZoneId.systemDefault())
-                .toInstant()
-        )
-        val lastDate = Date.from(
-            LocalDateTime.of(thisYear, thisMonth, LocalDate.now().lengthOfMonth(), 0, 0)
-                .atZone(ZoneId.systemDefault()).toInstant()
-        )
+        val dateOnlyFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+
         val reportDate = simpleDateFormat.parse(date)
 
-        return if (reportDate != null)
-            reportDate.after(firstDate) && reportDate.before(lastDate)
-        else false
+        // If no date filter is selected, accept all dates
+        if (startDate.isEmpty() && endDate.isEmpty()) {
+            return true
+        }
+
+        return if (reportDate != null) {
+            val reportDateOnly = dateOnlyFormat.format(reportDate)
+            val start = if (startDate.isNotEmpty()) startDate else "1900-01-01"
+            val end = if (endDate.isNotEmpty()) endDate else "2100-12-31"
+
+            reportDateOnly >= start && reportDateOnly <= end
+        } else {
+            false
+        }
     }
 
-    override fun onSubmissionClick(data: SubmissionListResponse) {
+    override fun onSubmissionClick(data: DataItem?) {
         activityResultLauncher.launch(
             SubmissionDetailActivity.initiate(
                 this@SubmissionListActivity,
-                data.idGaprojects.toString()
+                data?.idGaprojects.toString()
             )
         )
     }

@@ -131,7 +131,7 @@ class SelectMaterialsBottomSheet(
                                                 "Can't retrieve material list."
                                         )
                                         .show()
-                                    Log.e("ERROR", response.message().toString())
+                                    Log.e("ERROR null", response.message().toString())
                                     dismiss()
                                 }
                             } else {
@@ -155,7 +155,7 @@ class SelectMaterialsBottomSheet(
                                             "Can't retrieve material list."
                                     )
                                     .show()
-                                Log.e("ERROR", response.message().toString())
+                                Log.e("ERROR Unsuccessful", response.message().toString())
                                 dismiss()
                             }
                         }
@@ -185,7 +185,7 @@ class SelectMaterialsBottomSheet(
                                         "Can't retrieve material list."
                                 )
                                 .show()
-                            Log.e("ERROR", throwable.message.toString())
+                            Log.e("ERROR Failure", throwable.message.toString())
                             throwable.printStackTrace()
                             dismiss()
                         }

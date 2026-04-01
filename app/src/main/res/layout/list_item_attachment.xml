@@ -13,31 +13,33 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/gradient_card_color"
-        android:orientation="vertical"
-        android:padding="@dimen/login_button_elevation">
+        android:orientation="vertical">
 
         <TextView
             android:id="@+id/fileName"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:paddingHorizontal="@dimen/list_item_submission_header_padding_vertical"
+            android:paddingVertical="@dimen/list_item_submission_header_padding_vertical"
             android:textColor="@color/black"
             android:textSize="@dimen/text_size_medium"
             android:textStyle="bold"
             tools:text="Filename.jpg" />
 
-        <RelativeLayout
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/dialog_margin">
+            android:layout_height="wrap_content">
 
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/seePhotoButton"
                 android:layout_width="wrap_content"
                 android:layout_height="@dimen/login_progress_bar_size"
-                android:layout_alignParentStart="true"
-                android:layout_centerVertical="true"
+                android:layout_marginHorizontal="@dimen/list_item_submission_header_padding_vertical"
+                android:layout_marginVertical="@dimen/list_item_submission_header_padding_vertical"
                 app:cardBackgroundColor="@color/button_color"
                 app:cardCornerRadius="@dimen/toast_card_corner_radius"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
                 app:strokeWidth="0dp"
                 tools:ignore="RelativeOverlap">
 
@@ -63,11 +65,12 @@
                 android:id="@+id/deletePhotoButton"
                 android:layout_width="@dimen/login_progress_bar_size"
                 android:layout_height="@dimen/login_progress_bar_size"
-                android:layout_alignParentEnd="true"
-                android:layout_centerVertical="true"
-                android:layout_marginStart="@dimen/card_elevation"
+                android:layout_marginHorizontal="@dimen/list_item_submission_header_padding_vertical"
+                android:layout_marginVertical="@dimen/list_item_submission_header_padding_vertical"
                 app:cardBackgroundColor="@color/custom_toast_font_failed"
                 app:cardCornerRadius="@dimen/toast_card_corner_radius"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:strokeWidth="0dp">
 
                 <ImageView
@@ -84,6 +87,6 @@
                     android:src="@drawable/delete_icon"
                     tools:ignore="ContentDescription" />
             </com.google.android.material.card.MaterialCardView>
-        </RelativeLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
     </LinearLayout>
 </androidx.cardview.widget.CardView>

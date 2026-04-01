@@ -26,44 +26,44 @@ import retrofit2.http.PartMap
 
 interface GetEndpoint {
     @FormUrlEncoded
-    @POST("checkLogin")
+    @POST("login")
     fun login(
         @Field("username") username: String,
         @Field("password") password: String
     ): Call<LoginResponse>
 
     @FormUrlEncoded
-    @POST("fcmTokenUpdate")
+    @POST("updateFcmToken")
     fun updateFcmToken(
-        @Field("id_user") id: Int,
+        @Field("user_id") userId: Int,
         @Field("token") token: String
     ): Call<GenericSimpleResponse>
 
     @FormUrlEncoded
     @POST("changePassword")
     fun changePassword(
-        @Field("id_user") id: Int,
+        @Field("user_id") userId: Int,
         @Field("old_password") oldPassword: String,
         @Field("new_password") newPassword: String,
     ): Call<GenericSimpleResponse>
 
     @FormUrlEncoded
-    @POST("showInbox")
+    @POST("checkInbox")
     fun showInbox(
-        @Field("id_user") id: Int
+        @Field("user_id") userId: Int
     ): Call<List<InboxResponse>>
 
-    @GET("getDeptTujuan")
+    @GET("getTargetDepartment")
     fun getDepartmentList(): Call<List<DepartmentListResponse>>
 
     @FormUrlEncoded
-    @POST("getSubDeptTujuan")
+    @POST("getTargetSubDept")
     fun getSubDepartmentList(
-        @Field("nama_dept") namaDept: String
+        @Field("dept_name") deptName: String
     ): Call<List<SubDepartmentListResponse>>
 
-    @GET("getDeptartmentList")
-    fun getDepList(): Call<List<DepartmentListResponse>>
+    @GET("getDepartmentList")
+    fun getDeptList(): Call<List<DepartmentListResponse>>
 
     @GET("getCategoryList")
     fun getCategoryList(): Call<List<CategoryListResponse>>
@@ -71,27 +71,27 @@ interface GetEndpoint {
     @FormUrlEncoded
     @POST("getMaterialList")
     fun getMaterialList(
-        @Field("id_kategori") id: Int
+        @Field("category_id") categoryId: Int
     ): Call<List<MaterialListResponse>>
 
     @FormUrlEncoded
     @POST("reportList")
     fun getSubmissionList(
-        @Field("id_user") id: Int,
-        @Field("dept") department: String
-    ): Call<List<SubmissionListResponse>>
+        @Field("user_id") userId: Int,
+        @Field("department") department: String
+    ): Call<SubmissionListResponse>
 
     @FormUrlEncoded
     @POST("reportDetail")
     fun getSubmissionDetail(
-        @Field("id") submissionID: String,
-        @Field("id_user") userId: Int
+        @Field("case_id") caseId: String,
+        @Field("user_id") userId: Int
     ): Call<List<SubmissionDetailResponse>>
 
     @FormUrlEncoded
     @POST("getProgress")
     fun getSubmissionProgress(
-        @Field("id_gaprojects") idGaProjects: Int
+        @Field("case_id") caseId: Int
     ): Call<SubmissionProgressResponse>
 
     @Multipart
@@ -121,23 +121,25 @@ interface GetEndpoint {
     ): Call<GenericSimpleResponse>
 
     @FormUrlEncoded
+    @POST("cancelReport")
+    fun cancelSubmission(
+        @Field("user_id") userId: Int,
+        @Field("case_id") caseId: Int,
+        @Field("description") description: String
+    ): Call<GenericSimpleResponse>
+
+    @FormUrlEncoded
     @POST("getSpv")
     fun getSupervisorList(
-        @Field("id") id: Int,
-        @Field("id_dept") deptId : Int
-    ): Call<List<SupervisorTechnicianListResponse>>
+        @Field("case_id") caseId: Int,
+        @Field("dept_id") deptId : Int
+    ): Call<SupervisorTechnicianListResponse>
 
     @FormUrlEncoded
     @POST("getTechnician")
     fun getTechnicianList(
-        @Field("id") id: Int
-    ): Call<List<SupervisorTechnicianListResponse>>
-
-    @Multipart
-    @POST("statusApproveTargetManager")
-    fun approveTargetManagerSubmission(
-        @PartMap data: MutableMap<String, RequestBody>
-    ): Call<GenericSimpleResponse>
+        @Field("case_id") caseId: Int
+    ): Call<SupervisorTechnicianListResponse>
 
     @Multipart
     @POST("statusApproveReportManager")
@@ -145,16 +147,22 @@ interface GetEndpoint {
         @PartMap data: MutableMap<String, RequestBody>
     ): Call<GenericSimpleResponse>
 
+    @Multipart
+    @POST("statusApproveTargetManager")
+    fun approveTargetManagerSubmission(
+        @PartMap data: MutableMap<String, RequestBody>
+    ): Call<GenericSimpleResponse>
+
     @FormUrlEncoded
     @POST("statusReject")
     fun rejectSubmission(
-        @Field("id_user") idUser: Int,
-        @Field("id_gaprojects") idGaProjects: Int,
-        @Field("keterangan") description: String
+        @Field("user_id") idUser: Int,
+        @Field("case_id") idGaProjects: Int,
+        @Field("description") description: String
     ): Call<GenericSimpleResponse>
 
     @Multipart
-    @POST("statusApproveUpd")
+    @POST("updateAssignedSpv")
     fun editApprovals(
         @PartMap data: MutableMap<String, RequestBody>
     ): Call<GenericSimpleResponse>
@@ -162,6 +170,12 @@ interface GetEndpoint {
     @Multipart
     @POST("setupTechnician")
     fun deployTechnicians(
+        @PartMap data: MutableMap<String, RequestBody>
+    ): Call<GenericSimpleResponse>
+
+    @Multipart
+    @POST("updateAssignedTech")
+    fun editTechnicians(
         @PartMap data: MutableMap<String, RequestBody>
     ): Call<GenericSimpleResponse>
 
@@ -180,8 +194,8 @@ interface GetEndpoint {
     @FormUrlEncoded
     @POST("deleteProgress")
     fun deleteProgress(
-        @Field("id") idProgress: Int,
-        @Field("id_user") idUser: Int
+        @Field("progress_id") progressId: Int,
+        @Field("user_id") userId: Int
     ): Call<GenericSimpleResponse>
 
     @Multipart
@@ -206,66 +220,58 @@ interface GetEndpoint {
     @FormUrlEncoded
     @POST("approveMaterialRequest")
     fun approveMaterialRequest(
-        @Field("id") idGaProjectsDetail: Int,
-        @Field("id_user") idUser: Int
+        @Field("progress_id") progressId: Int,
+        @Field("user_id") userId: Int
     ): Call<GenericSimpleResponse>
 
     @FormUrlEncoded
     @POST("statusHold")
     fun holdIssue(
-        @Field("id") idGaProjects: Int,
-        @Field("id_user") idUser: Int,
-        @Field("keterangan") description: String
+        @Field("case_id") caseId: Int,
+        @Field("user_id") userId: Int,
+        @Field("description") description: String
     ): Call<GenericSimpleResponse>
 
     @FormUrlEncoded
     @POST("statusResume")
     fun resumeIssue(
-        @Field("id") idGaProjects: Int,
-        @Field("id_user") idUser: Int,
+        @Field("case_id") caseId: Int,
+        @Field("user_id") userId: Int,
     ): Call<GenericSimpleResponse>
 
     @FormUrlEncoded
     @POST("markReadyForTrial")
     fun markAsReadyForTrial(
-        @Field("id") idGaProjects: Int,
-        @Field("id_user") idUser: Int
+        @Field("case_id") caseId: Int,
+        @Field("user_id") userId: Int
     ): Call<GenericSimpleResponse>
 
     @FormUrlEncoded
     @POST("getTrial")
     fun getTrial(
-        @Field("id_gaprojects") idGaProjects: Int
+        @Field("case_id") caseId: Int
     ): Call<SubmissionTrialResponse>
 
     @FormUrlEncoded
     @POST("startTrial")
     fun startTrial(
-        @Field("id") idGaProjects: Int,
-        @Field("id_user") idUser: Int
+        @Field("case_id") caseId: Int,
+        @Field("user_id") userId: Int
     ): Call<GenericSimpleResponse>
 
     @FormUrlEncoded
     @POST("reportTrial")
     fun reportTrial(
-        @Field("id_user") idUser: Int,
-        @Field("id_gaprojects") idGaProjects: Int,
-        @Field("keterangan") description: String,
-        @Field("status") status: Int
+        @Field("case_id") caseId: Int,
+        @Field("user_id") userId: Int,
+        @Field("status") status: Int,
+        @Field("description") description: String
     ): Call<CreationResponse>
 
     @FormUrlEncoded
     @POST("markIssueAsDone")
     fun markIssueDone(
-        @Field("id") idGaProjects: Int,
-        @Field("id_user") idUser: Int
-    ): Call<GenericSimpleResponse>
-
-    @FormUrlEncoded
-    @POST("cancelReport")
-    fun cancelSubmission(
-        @Field("id_user") idUser: Int,
-        @Field("id_gaprojects") idGaProjects: Int,
-        @Field("keterangan") description: String
+        @Field("case_id") caseId: Int,
+        @Field("user_id") userId: Int
     ): Call<GenericSimpleResponse>
 }

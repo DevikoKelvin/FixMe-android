@@ -12,11 +12,11 @@ import com.erela.fixme.bottom_sheets.SelectSupervisorTechniciansBottomSheet
 import com.erela.fixme.databinding.ListItemSelectedItemsBinding
 import com.erela.fixme.objects.SubDepartmentListResponse
 import com.erela.fixme.objects.SubmissionDetailResponse
-import com.erela.fixme.objects.SupervisorTechnicianListResponse
+import com.erela.fixme.objects.SupervisorTechnician
 
 class SelectedSupervisorTechniciansRvAdapter(
     val context: Context, private val detailData: SubmissionDetailResponse,
-    private val selectedSupervisorTechniciansList: ArrayList<SupervisorTechnicianListResponse>,
+    private val selectedSupervisorTechniciansList: ArrayList<SupervisorTechnician>,
     private val isForManager: Boolean,
     private val getSelectedSubDept: () -> SubDepartmentListResponse?
 ) : RecyclerView.Adapter<SelectedSupervisorTechniciansRvAdapter.ViewHolder>(),
@@ -108,28 +108,28 @@ class SelectedSupervisorTechniciansRvAdapter(
     }
 
     interface OnTechniciansSetListener {
-        fun onTechniciansSelected(data: SupervisorTechnicianListResponse)
-        fun onTechniciansUnselected(data: SupervisorTechnicianListResponse)
+        fun onTechniciansSelected(data: SupervisorTechnician)
+        fun onTechniciansUnselected(data: SupervisorTechnician)
     }
 
     interface OnSupervisorSetListener {
-        fun onSupervisorsSelected(data: SupervisorTechnicianListResponse)
-        fun onSupervisorsUnselected(data: SupervisorTechnicianListResponse)
+        fun onSupervisorsSelected(data: SupervisorTechnician)
+        fun onSupervisorsUnselected(data: SupervisorTechnician)
     }
 
-    override fun onTechnicianSelected(data: SupervisorTechnicianListResponse) {
+    override fun onTechnicianSelected(data: SupervisorTechnician) {
         onTechniciansSetListener.onTechniciansSelected(data)
     }
 
-    override fun onTechnicianUnselected(data: SupervisorTechnicianListResponse) {
+    override fun onTechnicianUnselected(data: SupervisorTechnician) {
         onTechniciansSetListener.onTechniciansUnselected(data)
     }
 
-    override fun onSupervisorSelected(data: SupervisorTechnicianListResponse) {
+    override fun onSupervisorSelected(data: SupervisorTechnician) {
         onSupervisorSetListener.onSupervisorsSelected(data)
     }
 
-    override fun onSupervisorUnselected(data: SupervisorTechnicianListResponse) {
+    override fun onSupervisorUnselected(data: SupervisorTechnician) {
         onSupervisorSetListener.onSupervisorsUnselected(data)
     }
 }

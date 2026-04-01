@@ -164,6 +164,14 @@ data class SubmissionDetailResponse(
     val vendorName: String? = null,
     @field:SerializedName("btnApvPlp")
     val isReporterManagerCanApprove: Boolean? = null,
+    @field:SerializedName("is_exceeding")
+    val isExceeding: Boolean? = null,
+    @field:SerializedName("limit")
+    val limitTime: Int? = null,
+    @field:SerializedName("total_hours")
+    val totalHours: Int? = null,
+    @field:SerializedName("time_offset")
+    val timeOffset: Int? = null,
 ) : Parcelable
 
 @Parcelize

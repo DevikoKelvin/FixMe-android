@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/submissionCard"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginHorizontal="@dimen/list_item_submission_margin_horizontal"
@@ -9,7 +10,8 @@
     app:cardBackgroundColor="#FBFBFB"
     app:cardCornerRadius="@dimen/list_item_submission_card_corner_radius"
     app:cardElevation="@dimen/list_item_submission_card_elevation"
-    app:strokeWidth="0dp">
+    app:strokeColor="@android:color/transparent"
+    app:strokeWidth="4dp">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -192,6 +194,46 @@
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/exceedingMessageContainer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/list_item_submission_reported_by_margin_top"
+            android:orientation="vertical"
+            android:paddingHorizontal="@dimen/list_item_submission_department_padding_horizontal"
+            android:visibility="gone"
+            tools:visibility="visible">
+
+            <TextView
+                android:id="@+id/exceedingMessageText"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:text="@string/exceeding_message"
+                android:textColor="@color/status_rejected"
+                android:textStyle="bold" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:text="@string/time_limit"
+                    android:textColor="@color/status_rejected" />
+
+                <TextView
+                    android:id="@+id/timeLimit"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/list_item_submission_department_text_margin_start"
+                    android:textColor="@color/status_rejected"
+                    android:textStyle="bold"
+                    tools:text="24 hours" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="end"
@@ -202,8 +244,8 @@
                 android:id="@+id/progressCountText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="@dimen/list_item_submission_tag_margin_end"
                 android:layout_gravity="center"
+                android:layout_marginEnd="@dimen/list_item_submission_tag_margin_end"
                 android:visibility="gone"
                 tools:text="Progress 0 / 0" />
 
@@ -267,4 +309,4 @@
             </com.google.android.material.card.MaterialCardView>
         </LinearLayout>
     </LinearLayout>
-</androidx.cardview.widget.CardView>
+</com.google.android.material.card.MaterialCardView>

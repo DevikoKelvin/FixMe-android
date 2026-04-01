@@ -3,6 +3,7 @@
 /local.properties
 /.gradle
 /.idea
+/.kotlin
 /.kotlin/sessions
 .DS_Store
 /build
