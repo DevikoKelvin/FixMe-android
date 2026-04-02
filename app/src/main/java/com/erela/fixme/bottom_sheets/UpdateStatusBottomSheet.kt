@@ -644,6 +644,46 @@ class UpdateStatusBottomSheet(
             deployTechButton.visibility = View.GONE
             selectedTechniciansArrayList.clear()
 
+            // In edit mode, show the update button only when the selected technicians set changes.
+            // Compare by `idUser` (fallback to `namaUser`) and ignore the "+" placeholder item.
+            val initialTechnicianKeys: Set<String> = if (isEdit) {
+                dataDetail.usernUserTeknisi
+                    ?.mapNotNull { tech ->
+                        (tech?.idUser?.toString() ?: tech?.namaUser)?.trim()
+                    }
+                    ?.filter { it.isNotEmpty() }
+                    ?.toSet()
+                    ?: emptySet()
+            } else {
+                emptySet()
+            }
+
+            fun currentTechnicianKeys(): Set<String> {
+                return selectedTechniciansArrayList
+                    .filter { it.namaUser != "+" }
+                    .mapNotNull { tech ->
+                        (tech.idUser?.toString() ?: tech.namaUser)?.trim()
+                    }
+                    .filter { it.isNotEmpty() }
+                    .toSet()
+            }
+
+            fun refreshDeployTechButtonVisibility() {
+                if (!isEdit) {
+                    deployTechButton.visibility =
+                        if (currentTechnicianKeys().isNotEmpty()) View.VISIBLE else View.GONE
+                    return
+                }
+
+                val currentKeys = currentTechnicianKeys()
+                deployTechButton.visibility =
+                    if (currentKeys.isNotEmpty() && currentKeys != initialTechnicianKeys) {
+                        View.VISIBLE
+                    } else {
+                        View.GONE
+                    }
+            }
+
             // Pre-populate technicians in edit mode
             if (isEdit && !dataDetail.usernUserTeknisi.isNullOrEmpty()) {
                 dataDetail.usernUserTeknisi.forEach { tech ->
@@ -657,11 +697,6 @@ class UpdateStatusBottomSheet(
                         )
                     }
                 }
-            }
-
-            // For normal deploy mode, only show button if technicians selected
-            if (!isEdit && selectedTechniciansArrayList.isNotEmpty()) {
-                deployTechButton.visibility = View.VISIBLE
             }
 
             selectedTechniciansArrayList.add(
@@ -714,16 +749,7 @@ class UpdateStatusBottomSheet(
                                 )
                             )
                             techniciansRvAdapter.notifyDataSetChanged()
-                            if (techniciansRvAdapter.itemCount == dataDetail.usernUserTeknisi?.size?.plus(
-                                    1
-                                )
-                            )
-                                deployTechButton.visibility = View.GONE
-                            else
-                                deployTechButton.visibility = View.VISIBLE
-
-                            if (techniciansRvAdapter.itemCount > 1)
-                                deployTechButton.visibility = View.VISIBLE
+                            refreshDeployTechButtonVisibility()
                         }
 
                         override fun onTechniciansUnselected(
@@ -755,16 +781,7 @@ class UpdateStatusBottomSheet(
                                 )
                             )
                             techniciansRvAdapter.notifyDataSetChanged()
-                            if (techniciansRvAdapter.itemCount == dataDetail.usernUserTeknisi?.size?.plus(
-                                    1
-                                )
-                            )
-                                deployTechButton.visibility = View.GONE
-                            else
-                                deployTechButton.visibility = View.VISIBLE
-
-                            if (techniciansRvAdapter.itemCount == 1)
-                                deployTechButton.visibility = View.GONE
+                            refreshDeployTechButtonVisibility()
                         }
                     })
                 }
@@ -774,6 +791,7 @@ class UpdateStatusBottomSheet(
                 context, FlexDirection.ROW, FlexWrap.WRAP
             )
             techniciansRvAdapter.notifyDataSetChanged()
+            refreshDeployTechButtonVisibility()
         }
     }
 

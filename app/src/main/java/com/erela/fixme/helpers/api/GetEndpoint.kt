@@ -66,7 +66,7 @@ interface GetEndpoint {
     fun getDeptList(): Call<List<DepartmentListResponse>>
 
     @GET("getCategoryList")
-    fun getCategoryList(): Call<List<CategoryListResponse>>
+    fun getCategoryList(): Call<CategoryListResponse>
 
     @FormUrlEncoded
     @POST("getMaterialList")

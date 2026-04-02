@@ -288,33 +288,6 @@ class LoginActivity : AppCompatActivity() {
                                     val result = response.body()
                                     val name = result?.nama!!
                                     when (result.code) {
-                                        0 -> {
-                                            CustomToast.getInstance(applicationContext)
-                                                .setMessage(
-                                                    if (getString(R.string.lang) == "in")
-                                                        "Kata sandi salah. Silakan coba lagi!"
-                                                    else
-                                                        "Wrong password. Please try again!"
-                                                )
-                                                .setFontColor(
-                                                    ContextCompat.getColor(
-                                                        this@LoginActivity,
-                                                        R.color.custom_toast_font_failed
-                                                    )
-                                                )
-                                                .setBackgroundColor(
-                                                    ContextCompat.getColor(
-                                                        this@LoginActivity,
-                                                        R.color.custom_toast_background_failed
-                                                    )
-                                                ).show()
-                                            passwordFieldLayout.error =
-                                                if (getString(R.string.lang) == "in")
-                                                    "Kata sandi salah"
-                                                else
-                                                    "Wrong password"
-                                        }
-
                                         1 -> {
                                             CustomToast.getInstance(applicationContext)
                                                 .setMessage(
@@ -433,6 +406,29 @@ class LoginActivity : AppCompatActivity() {
                                             CustomToast.getInstance(applicationContext)
                                                 .setMessage(
                                                     if (getString(R.string.lang) == "in")
+                                                        "Username dan kata sandi wajib diisi."
+                                                    else
+                                                        "Username and password are required."
+                                                )
+                                                .setFontColor(
+                                                    ContextCompat.getColor(
+                                                        this@LoginActivity,
+                                                        R.color.custom_toast_font_warning
+                                                    )
+                                                )
+                                                .setBackgroundColor(
+                                                    ContextCompat.getColor(
+                                                        this@LoginActivity,
+                                                        R.color.custom_toast_background_warning
+                                                    )
+                                                ).show()
+                                        }
+
+                                        3 -> {
+                                            Log.e("LoginActivity", "Error: ${response.message()}")
+                                            CustomToast.getInstance(applicationContext)
+                                                .setMessage(
+                                                    if (getString(R.string.lang) == "in")
                                                         "Pengguna tidak ditemukan. Silakan hubungi bagian IT."
                                                     else
                                                         "User not found. Please contact the IT department."
@@ -449,6 +445,33 @@ class LoginActivity : AppCompatActivity() {
                                                         R.color.custom_toast_background_warning
                                                     )
                                                 ).show()
+                                        }
+
+                                        4 -> {
+                                            CustomToast.getInstance(applicationContext)
+                                                .setMessage(
+                                                    if (getString(R.string.lang) == "in")
+                                                        "Kata sandi salah. Silakan coba lagi!"
+                                                    else
+                                                        "Wrong password. Please try again!"
+                                                )
+                                                .setFontColor(
+                                                    ContextCompat.getColor(
+                                                        this@LoginActivity,
+                                                        R.color.custom_toast_font_failed
+                                                    )
+                                                )
+                                                .setBackgroundColor(
+                                                    ContextCompat.getColor(
+                                                        this@LoginActivity,
+                                                        R.color.custom_toast_background_failed
+                                                    )
+                                                ).show()
+                                            passwordFieldLayout.error =
+                                                if (getString(R.string.lang) == "in")
+                                                    "Kata sandi salah"
+                                                else
+                                                    "Wrong password"
                                         }
                                     }
                                 } else {

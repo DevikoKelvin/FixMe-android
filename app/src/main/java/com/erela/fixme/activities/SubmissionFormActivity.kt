@@ -47,6 +47,7 @@ import com.erela.fixme.objects.DepartmentListResponse
 import com.erela.fixme.objects.FotoGaprojectsItem
 import com.erela.fixme.objects.GenericSimpleResponse
 import com.erela.fixme.objects.SubmissionDetailResponse
+import com.google.gson.Gson
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.maps.CameraUpdateFactory
@@ -450,7 +451,6 @@ class SubmissionFormActivity : AppCompatActivity(), OnMapReadyCallback {
                 pageTitle.text = getString(R.string.make_submission_title)
                 getDepartmentList()
                 getCategoryList()
-                /*prepareMaterials()*/
 
                 submitButton.setOnClickListener {
                     submitText.visibility = View.GONE
@@ -1163,7 +1163,6 @@ class SubmissionFormActivity : AppCompatActivity(), OnMapReadyCallback {
                             response: Response<List<DepartmentListResponse>>
                         ) {
                             if (response.isSuccessful) {
-                                Log.e("Department List Response", response.body().toString())
                                 if (response.body() != null) {
                                     if (selectedDepartment != 0) {
                                         for (i in 0 until response.body()!!.size) {
@@ -1321,13 +1320,17 @@ class SubmissionFormActivity : AppCompatActivity(), OnMapReadyCallback {
         binding.apply {
             try {
                 InitAPI.getEndpoint.getCategoryList()
-                    .enqueue(object : Callback<List<CategoryListResponse>> {
+                    .enqueue(object : Callback<CategoryListResponse> {
                         override fun onResponse(
-                            call: Call<List<CategoryListResponse>?>,
-                            response: Response<List<CategoryListResponse>?>
+                            call: Call<CategoryListResponse>,
+                            response: Response<CategoryListResponse>
                         ) {
                             if (response.isSuccessful) {
                                 if (response.body() != null) {
+                                    Log.e(
+                                        "Response",
+                                        Gson().toJson(response.body())
+                                    )
                                     val data: ArrayList<String> = ArrayList()
                                     data.add(
                                         if (getString(R.string.lang) == "in")
@@ -1335,10 +1338,10 @@ class SubmissionFormActivity : AppCompatActivity(), OnMapReadyCallback {
                                         else
                                             "Select Category"
                                     )
-                                    val categoryList = response.body()
+                                    val categoryList = response.body()?.data
                                     for (i in 0 until categoryList!!.size) {
                                         data.add(
-                                            categoryList[i].namaKategori!!
+                                            categoryList[i]?.categoryName!!
                                         )
                                     }
                                     val dropdownAdapter = ArrayAdapter(
@@ -1349,11 +1352,11 @@ class SubmissionFormActivity : AppCompatActivity(), OnMapReadyCallback {
                                     )
                                     categoryDropdown.adapter = dropdownAdapter
                                     if (selectedCategory != 0) {
-                                        for (i in 0 until response.body()!!.size) {
-                                            if (response.body()!![i].idKategori!!.toInt() == selectedCategory) {
+                                        for (i in 0 until response.body()!!.data!!.size) {
+                                            if (response.body()!!.data?.get(i)!!.categoryId!! == selectedCategory) {
                                                 categoryDropdown.setSelection(
                                                     dropdownAdapter.getPosition(
-                                                        response.body()!![i].namaKategori
+                                                        response.body()!!.data?.get(i)!!.categoryName
                                                     )
                                                 )
                                             }
@@ -1369,7 +1372,7 @@ class SubmissionFormActivity : AppCompatActivity(), OnMapReadyCallback {
                                                 selectedCategory = if (position == 0)
                                                     0
                                                 else
-                                                    categoryList[position - 1].idKategori!!.toInt()
+                                                    categoryList[position - 1]?.categoryId!!
                                                 isFormEmpty[3] = selectedCategory != 0
                                                 if (selectedCategory != 0) {
                                                     categoryDropdownLayout.strokeColor =
@@ -1387,7 +1390,7 @@ class SubmissionFormActivity : AppCompatActivity(), OnMapReadyCallback {
                                         }
                                 }
                             } else {
-                                Log.e("ERROR Get Department List", response.message())
+                                Log.e("ERROR Get Category List", response.message())
                                 CustomToast.getInstance(applicationContext)
                                     .setMessage(
                                         if (getString(R.string.lang) == "in")
@@ -1412,13 +1415,36 @@ class SubmissionFormActivity : AppCompatActivity(), OnMapReadyCallback {
                         }
 
                         override fun onFailure(
-                            call: Call<List<CategoryListResponse>?>,
+                            call: Call<CategoryListResponse>,
                             throwable: Throwable
                         ) {
+                            throwable.printStackTrace()
+                            Log.e("ERROR", throwable.toString())
+                            CustomToast.getInstance(applicationContext)
+                                .setMessage(
+                                    if (getString(R.string.lang) == "in")
+                                        "Terjadi kesalahan, silakan coba lagi."
+                                    else
+                                        "Something went wrong, please try again."
+                                )
+                                .setFontColor(
+                                    ContextCompat.getColor(
+                                        this@SubmissionFormActivity,
+                                        R.color.custom_toast_font_failed
+                                    )
+                                )
+                                .setBackgroundColor(
+                                    ContextCompat.getColor(
+                                        this@SubmissionFormActivity,
+                                        R.color.custom_toast_background_failed
+                                    )
+                                ).show()
+                            finish()
                         }
                     })
             } catch (exception: Exception) {
                 exception.printStackTrace()
+                Log.e("ERROR", exception.toString())
                 CustomToast.getInstance(applicationContext)
                     .setMessage(
                         if (getString(R.string.lang) == "in")
