@@ -1,6 +1,7 @@
 package com.erela.fixme.adapters.recycler_view
 
 import android.animation.AnimatorInflater
+import android.animation.Animator
 import android.annotation.SuppressLint
 import android.content.Context
 import android.util.Log
@@ -326,14 +327,23 @@ class SubmissionRvAdapter(val context: Context, val data: ArrayList<DataItem?>?)
                 }
 
                 // Apply glowing red blink animation if item is exceeding
+                // IMPORTANT: RecyclerView can reuse ViewHolders; always cancel any running
+                // animation before applying the new item's "isExceeding" state.
+                blinkAnimator?.cancel()
+                blinkAnimator = null
+
                 if (item?.isExceeding == true) {
-                    val animator =
-                        AnimatorInflater.loadAnimator(context, R.animator.glowing_red_blink)
-                    animator?.setTarget(submissionCard)
-                    animator?.start()
+                    val animator = AnimatorInflater.loadAnimator(
+                        context,
+                        R.animator.glowing_red_blink
+                    )
+                    blinkAnimator = animator
+                    animator.setTarget(submissionCard)
+                    animator.start()
                 } else {
                     // Reset stroke color to transparent if not exceeding
                     submissionCard.strokeColor = android.graphics.Color.TRANSPARENT
+                    submissionCard.clearAnimation()
                 }
             }
         }
@@ -341,6 +351,7 @@ class SubmissionRvAdapter(val context: Context, val data: ArrayList<DataItem?>?)
 
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val binding = ListItemSubmissionBinding.bind(view)
+        var blinkAnimator: Animator? = null
     }
 
     fun onSubmissionClickListener(onSubmissionClickListener: OnSubmissionClickListener) {

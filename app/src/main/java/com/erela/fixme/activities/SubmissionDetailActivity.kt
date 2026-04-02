@@ -90,6 +90,7 @@ class SubmissionDetailActivity : AppCompatActivity(),
     private var googleMap: GoogleMap? = null
     private var isFabVisible = false
     private var isUpdated = false
+    private var submissionDetailFetchSequence = 0
     private val activityResultLauncher: ActivityResultLauncher<Intent> = registerForActivityResult(
         ActivityResultContracts.StartActivityForResult()
     ) {
@@ -172,6 +173,8 @@ class SubmissionDetailActivity : AppCompatActivity(),
             exceedingIndicatorBanner.visibility = View.GONE
             statusMessageContainer.visibility = View.GONE
             onProgressButton.visibility = View.GONE
+            actionButton.visibility = View.GONE
+            actionSelfButton.visibility = View.GONE
             seeTrialContainer.visibility = View.GONE
             isFabVisible = false
             closeFabMenu()
@@ -215,6 +218,7 @@ class SubmissionDetailActivity : AppCompatActivity(),
             handler.post(runnable)
 
             try {
+                val fetchSequence = ++submissionDetailFetchSequence
                 InitAPI.getEndpoint.getSubmissionDetail(detailId, userData.id)
                     .enqueue(object : Callback<List<SubmissionDetailResponse>> {
                         @SuppressLint("ClickableViewAccessibility")
@@ -222,6 +226,8 @@ class SubmissionDetailActivity : AppCompatActivity(),
                             call: Call<List<SubmissionDetailResponse>?>,
                             response: Response<List<SubmissionDetailResponse>?>
                         ) {
+                            // Ignore stale responses if user refreshed again while this request was in-flight.
+                            if (fetchSequence != submissionDetailFetchSequence) return
                             loadingManager(false)
                             handler.removeCallbacks(runnable)
                             content.visibility = View.VISIBLE
@@ -1787,6 +1793,8 @@ class SubmissionDetailActivity : AppCompatActivity(),
                             call: Call<List<SubmissionDetailResponse>?>,
                             throwable: Throwable
                         ) {
+                            // Ignore stale failures too.
+                            if (fetchSequence != submissionDetailFetchSequence) return
                             loadingManager(false)
                             handler.removeCallbacks(runnable)
                             CustomToast.getInstance(applicationContext)
