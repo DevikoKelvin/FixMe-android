@@ -21,8 +21,7 @@ def getVerCode(boolean increment = false) {
     return versionCode
 }
 
-//noinspection GrUnusedDeclaration
-private File getKeystoreFile() {
+def findKeystoreFile() {
     def projectKeystore = file("${rootDir}/keystore.jks")
     if (projectKeystore.exists()) {
         return projectKeystore
@@ -55,7 +54,7 @@ android {
 
     signingConfigs {
         release {
-            storeFile = getKeystoreFile()
+            storeFile = this.findKeystoreFile()
             storePassword "erela_fixme"
             keyAlias "fixme_erela"
             keyPassword "erela_fixme"
