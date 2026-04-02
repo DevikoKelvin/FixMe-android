@@ -244,6 +244,26 @@ class LoginActivity : AppCompatActivity() {
                     checkLogin(usernameField.text.toString().trim(), passwordField.text.toString().trim())
                 }
             }
+
+            // Add keyboard action listeners for Enter key
+            usernameField.setOnEditorActionListener { _, actionId, _ ->
+                if (actionId == android.view.inputmethod.EditorInfo.IME_ACTION_NEXT ||
+                    actionId == android.view.inputmethod.EditorInfo.IME_ACTION_DONE) {
+                    passwordField.requestFocus()
+                    true
+                } else {
+                    false
+                }
+            }
+
+            passwordField.setOnEditorActionListener { _, actionId, _ ->
+                if (actionId == android.view.inputmethod.EditorInfo.IME_ACTION_DONE) {
+                    loginButton.performClick()
+                    true
+                } else {
+                    false
+                }
+            }
         }
     }
 

@@ -19,6 +19,7 @@
     <string name="ok">OK</string>
 
     <string name="user_info_title">FixMe User Info</string>
+    <string name="user_id">User ID</string>
     <string name="name">Name</string>
     <string name="id_starconnect">ID StarConnect</string>
     <string name="fixme_username">FixMe Username</string>

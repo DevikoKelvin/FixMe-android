@@ -103,14 +103,13 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="4dp">
+                android:layout_marginTop="@dimen/dropdown_item_padding_vertical">
 
                 <com.google.android.material.card.MaterialCardView
                     android:id="@+id/changePasswordButton"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginHorizontal="@dimen/activity_horizontal_margin"
-                    android:layout_marginTop="@dimen/dropdown_item_padding_vertical"
                     android:layout_weight="1"
                     app:cardCornerRadius="@dimen/card_corner_radius"
                     app:cardElevation="0dp"
@@ -121,7 +120,7 @@
                         android:layout_height="match_parent"
                         android:background="@drawable/gradient_card_color"
                         android:orientation="horizontal"
-                        android:padding="@dimen/activity_horizontal_margin"
+                        android:padding="@dimen/button_padding"
                         tools:ignore="UseCompoundDrawables">
 
                         <TextView
@@ -148,14 +147,13 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="4dp">
+                android:layout_marginTop="@dimen/dropdown_item_padding_vertical">
 
                 <com.google.android.material.card.MaterialCardView
                     android:id="@+id/checkDownloadInstallButton"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginHorizontal="@dimen/activity_horizontal_margin"
-                    android:layout_marginTop="@dimen/dropdown_item_padding_vertical"
                     android:layout_weight="1"
                     app:cardCornerRadius="@dimen/card_corner_radius"
                     app:cardElevation="0dp"
@@ -166,7 +164,7 @@
                         android:layout_height="wrap_content"
                         android:background="@drawable/gradient_card_color"
                         android:orientation="horizontal"
-                        android:padding="@dimen/activity_horizontal_margin">
+                        android:padding="@dimen/button_padding">
 
                         <TextView
                             android:id="@+id/checkDownloadInstallText"
@@ -212,6 +210,7 @@
                 android:layout_marginHorizontal="@dimen/activity_horizontal_margin"
                 android:layout_marginTop="4dp"
                 android:textColor="@color/black"
+                android:textSize="@dimen/text_size_micro"
                 tools:text="Current app version: 1.1.5" />
 
             <TextView

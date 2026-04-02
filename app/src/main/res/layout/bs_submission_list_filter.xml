@@ -117,16 +117,18 @@
                 android:layout_height="match_parent"
                 android:gravity="center"
                 android:text="@string/date_placeholder"
-                android:textColor="@color/black" />
+                android:textColor="@color/black"
+                android:textSize="@dimen/text_size_medium" />
         </com.google.android.material.card.MaterialCardView>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout_marginHorizontal="@dimen/activity_horizontal_margin"
+            android:layout_marginHorizontal="@dimen/card_corner_radius"
             android:text="@string/date_to"
             android:textColor="@color/black"
+            android:textSize="@dimen/text_size_medium"
             android:textStyle="bold" />
 
         <com.google.android.material.card.MaterialCardView
@@ -144,8 +146,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:gravity="center"
+                android:text="@string/date_placeholder"
                 android:textColor="@color/black"
-                android:text="@string/date_placeholder" />
+                android:textSize="@dimen/text_size_medium" />
         </com.google.android.material.card.MaterialCardView>
     </LinearLayout>
 
@@ -153,7 +156,7 @@
         android:id="@+id/clearDateFilterButton"
         android:layout_width="wrap_content"
         android:layout_height="@dimen/bottom_sheet_padding_bottom"
-        android:layout_marginHorizontal="@dimen/activity_horizontal_margin"
+        android:layout_marginStart="@dimen/list_item_padding"
         android:layout_marginTop="@dimen/list_item_progress_content_margin_top_small"
         app:cardCornerRadius="@dimen/login_button_corner_radius"
         app:cardElevation="0dp">
@@ -166,6 +169,7 @@
             android:paddingHorizontal="@dimen/dropdown_item_padding_horizontal"
             android:text="@string/clear_filter"
             android:textColor="@color/white"
+            android:textSize="@dimen/text_size_medium"
             android:textStyle="bold" />
     </com.google.android.material.card.MaterialCardView>
 
@@ -196,6 +200,7 @@
             android:paddingEnd="@dimen/dropdown_item_padding_vertical"
             android:text="@string/all"
             android:textColor="@color/custom_toast_background_normal_dark_gray"
+            android:textSize="@dimen/text_size_small"
             android:textStyle="bold"
             tools:ignore="HardcodedText" />
 
@@ -206,6 +211,7 @@
             android:layout_weight="1"
             android:text="@string/complexity_low"
             android:textColor="@color/custom_toast_font_success"
+            android:textSize="@dimen/text_size_small"
             android:textStyle="bold" />
 
         <RadioButton
@@ -215,6 +221,7 @@
             android:layout_weight="1"
             android:text="@string/complexity_mid"
             android:textColor="@color/custom_toast_font_warning"
+            android:textSize="@dimen/text_size_small"
             android:textStyle="bold" />
 
         <RadioButton
@@ -224,6 +231,7 @@
             android:layout_weight="1"
             android:text="@string/complexity_high"
             android:textColor="@color/custom_toast_font_failed"
+            android:textSize="@dimen/text_size_small"
             android:textStyle="bold" />
     </RadioGroup>
 

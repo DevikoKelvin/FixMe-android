@@ -73,7 +73,7 @@ class TrialTrackingBottomSheet(
                                         }
                                         trialAdapter = TrialRvAdapter(context, data, trialData)
                                         rvTrial.adapter = trialAdapter
-                                        rvTrial.setItemViewCacheSize(1000)
+                                        rvTrial.setItemViewCacheSize(trialData.size)
                                         rvTrial.layoutManager = LinearLayoutManager(context)
                                         if (data.stsGaprojects == 3 || data.stsGaprojects == 4 || data.stsGaprojects == 30) {
                                             trialActionButton.visibility = View.GONE

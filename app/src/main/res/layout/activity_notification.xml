@@ -153,4 +153,23 @@
                 tools:listitem="@layout/list_item_inbox" />
         </LinearLayout>
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/scrollToTopButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/login_button_margin_vertical"
+        android:visibility="gone"
+        app:cardCornerRadius="@dimen/dialog_corner_radius"
+        app:contentPadding="@dimen/card_corner_radius"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        tools:visibility="visible">
+
+        <ImageView
+            android:layout_width="@dimen/main_menu_notification_icon"
+            android:layout_height="@dimen/main_menu_notification_icon"
+            android:src="@drawable/scroll_to_top_icon"
+            tools:ignore="ContentDescription" />
+    </com.google.android.material.card.MaterialCardView>
 </androidx.constraintlayout.widget.ConstraintLayout>

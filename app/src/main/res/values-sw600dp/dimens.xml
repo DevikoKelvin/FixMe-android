@@ -175,5 +175,5 @@
     <dimen name="toast_text_size">21sp</dimen>
     
     <dimen name="submission_detail_image_height">600dp</dimen>
-    <dimen name="submission_detail_bottom_margin">150dp</dimen>
+    <dimen name="submission_detail_bottom_margin">200dp</dimen>
 </resources>

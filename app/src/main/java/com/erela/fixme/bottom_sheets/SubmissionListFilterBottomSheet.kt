@@ -10,12 +10,14 @@ import android.widget.ArrayAdapter
 import androidx.core.graphics.drawable.toDrawable
 import androidx.fragment.app.FragmentManager
 import com.erela.fixme.R
+import com.erela.fixme.custom_views.CustomToast
 import com.erela.fixme.databinding.BsSubmissionListFilterBinding
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.datepicker.MaterialDatePicker
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Locale
+import java.util.TimeZone
 
 class SubmissionListFilterBottomSheet(
     context: Context,
@@ -78,7 +80,7 @@ class SubmissionListFilterBottomSheet(
         binding.apply {
             // Initialize selectFilterByStatus with the current selectedFilter
             selectFilterByStatus = selectedFilter
-            
+
             filterBy = when (selectedFilter) {
                 ALL_ON_GOING, PENDING, WAITING, APPROVED, HOLD, ON_PROGRESS, PROGRESS_DONE, ON_TRIAL -> 0
                 ALL_DONE, REJECTED, DONE, CANCELED -> 1
@@ -150,16 +152,20 @@ class SubmissionListFilterBottomSheet(
             }
 
             val dateFormat = SimpleDateFormat("dd/MM/yyyy", Locale.forLanguageTag("id-ID"))
-            val serverDateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.forLanguageTag("id-ID"))
-            val startCalendar = Calendar.getInstance().apply {
-                if (startDate.isNotEmpty())
+            val serverDateFormat =
+                SimpleDateFormat("yyyy-MM-dd", Locale.forLanguageTag("id-ID")).apply {
+                    timeZone = TimeZone.getTimeZone("UTC")
+                }
+            val startCalendar = Calendar.getInstance(TimeZone.getTimeZone("UTC")).apply {
+                if (startDate.isNotEmpty()) {
                     time = serverDateFormat.parse(startDate)!!
+                }
             }
 
             // Show placeholder if startDate is empty, otherwise show formatted date
-            dateFromText.text = if (startDate.isNotEmpty()) 
-                dateFormat.format(startCalendar.time) 
-            else 
+            dateFromText.text = if (startDate.isNotEmpty())
+                dateFormat.format(startCalendar.time)
+            else
                 context.getString(R.string.date_placeholder)
 
             dateFrom.setOnClickListener {
@@ -173,36 +179,73 @@ class SubmissionListFilterBottomSheet(
                     .setSelection(startCalendar.timeInMillis)
                     .build()
                 datePicker.addOnPositiveButtonClickListener { selection ->
-                    startCalendar.timeInMillis = selection
+                    startCalendar.apply {
+                        timeInMillis = selection
+                        timeZone = TimeZone.getTimeZone("UTC")
+                    }
                     dateFromText.text = dateFormat.format(startCalendar.time)
                     startDate = serverDateFormat.format(startCalendar.time)
                 }
                 datePicker.show(fragmentManager, "START")
             }
 
-            val nowCalendar = Calendar.getInstance().apply {
-                if (endDate.isNotEmpty())
+            val nowCalendar = Calendar.getInstance(TimeZone.getTimeZone("UTC")).apply {
+                if (endDate.isNotEmpty()) {
                     time = serverDateFormat.parse(endDate)!!
+                }
             }
 
             // Show placeholder if endDate is empty, otherwise show formatted date
-            dateToText.text = if (endDate.isNotEmpty()) 
-                dateFormat.format(nowCalendar.time) 
-            else 
+            dateToText.text = if (endDate.isNotEmpty())
+                dateFormat.format(nowCalendar.time)
+            else
                 context.getString(R.string.date_placeholder)
 
             dateTo.setOnClickListener {
-                val datePicker = MaterialDatePicker.Builder.datePicker()
+                // Set minimum selectable date to startDate if it exists
+                val datePickerBuilder = MaterialDatePicker.Builder.datePicker()
                     .setTitleText(
                         if (context.getString(R.string.lang) == "in")
                             "Pilih Tanggal Akhir"
                         else
                             "Select End Date"
                     )
-                    .setSelection(nowCalendar.timeInMillis)
-                    .build()
+
+                // If startDate is selected, set it as minimum date
+                if (startDate.isNotEmpty()) {
+                    datePickerBuilder.setSelection(maxOf(nowCalendar.timeInMillis, startCalendar.timeInMillis))
+                } else {
+                    datePickerBuilder.setSelection(nowCalendar.timeInMillis)
+                }
+
+                val datePicker = datePickerBuilder.build()
                 datePicker.addOnPositiveButtonClickListener { selection ->
-                    nowCalendar.timeInMillis = selection
+                    // Validate that endDate is not before startDate
+                    if (startDate.isNotEmpty()) {
+                        val selectedCalendar = Calendar.getInstance(TimeZone.getTimeZone("UTC")).apply {
+                            timeInMillis = selection
+                        }
+
+                        if (selectedCalendar.before(startCalendar)) {
+                            // Show error toast
+                            CustomToast.getInstance(context)
+                                .setMessage(
+                                    if (context.getString(R.string.lang) == "in")
+                                        "Tanggal akhir tidak boleh kurang dari tanggal awal"
+                                    else
+                                        "End date cannot be earlier than start date"
+                                )
+                                .setFontColor(context.getColor(R.color.custom_toast_font_failed))
+                                .setBackgroundColor(context.getColor(R.color.custom_toast_background_failed))
+                                .show()
+                            return@addOnPositiveButtonClickListener
+                        }
+                    }
+
+                    nowCalendar.apply {
+                        timeInMillis = selection
+                        timeZone = TimeZone.getTimeZone("UTC")
+                    }
                     dateToText.text = dateFormat.format(nowCalendar.time)
                     endDate = serverDateFormat.format(nowCalendar.time)
                 }

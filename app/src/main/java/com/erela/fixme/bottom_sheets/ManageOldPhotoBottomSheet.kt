@@ -57,7 +57,7 @@ class ManageOldPhotoBottomSheet(context: Context) : BottomSheetDialog(context) {
                     }
                 }
                 attachmentRv.adapter = submissionAdapter
-                attachmentRv.setItemViewCacheSize(1000)
+                attachmentRv.setItemViewCacheSize(imageArrayUri!!.size)
                 attachmentRv.layoutManager = LinearLayoutManager(context)
             }
         }

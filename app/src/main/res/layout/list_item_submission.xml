@@ -92,13 +92,15 @@
                     android:id="@+id/machineCodeText"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/machine_code" />
+                    android:text="@string/machine_code"
+                    android:textSize="@dimen/text_size_small" />
 
                 <TextView
                     android:id="@+id/machineNameText"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/machine_name" />
+                    android:text="@string/machine_name"
+                    android:textSize="@dimen/text_size_small" />
             </LinearLayout>
 
             <LinearLayout
@@ -113,6 +115,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textColor="@color/black"
+                    android:textSize="@dimen/text_size_small"
                     android:textStyle="bold"
                     tools:text="D-14" />
 
@@ -121,6 +124,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textColor="@color/black"
+                    android:textSize="@dimen/text_size_small"
                     android:textStyle="bold"
                     tools:text="Autoclave E-Chung" />
             </LinearLayout>
@@ -147,6 +151,7 @@
                 android:layout_gravity="center"
                 android:layout_marginStart="@dimen/list_item_submission_location_text_margin_start"
                 android:textColor="@color/black"
+                android:textSize="@dimen/text_size_small"
                 tools:text="Erela HQ" />
         </LinearLayout>
 
@@ -160,7 +165,8 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:text="@string/reported_by" />
+                android:text="@string/reported_by"
+                android:textSize="@dimen/text_size_small" />
 
             <TextView
                 android:id="@+id/reportedBy"
@@ -168,6 +174,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/list_item_submission_reported_by_text_margin_start"
                 android:textColor="@color/black"
+                android:textSize="@dimen/text_size_small"
                 android:textStyle="bold"
                 tools:text="Hendrick" />
         </LinearLayout>
@@ -181,7 +188,8 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:text="@string/department_from" />
+                android:text="@string/department_from"
+                android:textSize="@dimen/text_size_small" />
 
             <TextView
                 android:id="@+id/departmentFrom"
@@ -189,6 +197,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/list_item_submission_department_text_margin_start"
                 android:textColor="@color/black"
+                android:textSize="@dimen/text_size_small"
                 android:textStyle="bold"
                 tools:text="Information Technology" />
         </LinearLayout>
@@ -209,6 +218,7 @@
                 android:layout_height="match_parent"
                 android:text="@string/exceeding_message"
                 android:textColor="@color/status_rejected"
+                android:textSize="@dimen/text_size_small"
                 android:textStyle="bold" />
 
             <LinearLayout
@@ -220,7 +230,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:text="@string/time_limit"
-                    android:textColor="@color/status_rejected" />
+                    android:textColor="@color/status_rejected"
+                    android:textSize="@dimen/text_size_small" />
 
                 <TextView
                     android:id="@+id/timeLimit"
@@ -228,6 +239,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/list_item_submission_department_text_margin_start"
                     android:textColor="@color/status_rejected"
+                    android:textSize="@dimen/text_size_small"
                     android:textStyle="bold"
                     tools:text="24 hours" />
             </LinearLayout>

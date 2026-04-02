@@ -24,6 +24,7 @@
             android:paddingHorizontal="@dimen/list_item_padding"
             android:paddingVertical="@dimen/dialog_margin"
             android:textColor="@color/white"
+            android:textSize="@dimen/text_size_small"
             tools:text="Name holder" />
 
         <TextView
@@ -35,6 +36,7 @@
             android:paddingHorizontal="@dimen/list_item_padding"
             android:paddingVertical="@dimen/dialog_margin"
             android:textColor="@color/black"
+            android:textSize="@dimen/text_size_small"
             tools:text="@tools:sample/lorem" />
 
         <View
@@ -61,6 +63,7 @@
                     android:layout_height="wrap_content"
                     android:text="@string/inbox_sent"
                     android:textColor="@color/black"
+                    android:textSize="@dimen/text_size_small"
                     android:textStyle="bold" />
 
                 <TextView
@@ -83,6 +86,7 @@
                     android:text="@string/inbox_read"
                     android:textAlignment="textEnd"
                     android:textColor="@color/black"
+                    android:textSize="@dimen/text_size_small"
                     android:textStyle="bold" />
 
                 <TextView

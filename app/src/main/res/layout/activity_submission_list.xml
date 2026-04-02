@@ -106,6 +106,7 @@
                     android:drawablePadding="@dimen/list_item_progress_content_margin_top_small"
                     android:gravity="center_vertical"
                     android:text="@string/filter_list_title"
+                    android:textSize="@dimen/text_size_medium"
                     app:drawableStartCompat="@drawable/baseline_filter_list_24" />
 
                 <TextView
@@ -113,6 +114,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="3dp"
+                    android:textSize="@dimen/text_size_medium"
                     android:textStyle="bold"
                     tools:text="None" />
             </LinearLayout>
@@ -239,4 +241,23 @@
             </LinearLayout>
         </LinearLayout>
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/scrollToTopButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/login_button_margin_vertical"
+        android:visibility="gone"
+        app:cardCornerRadius="@dimen/dialog_corner_radius"
+        app:contentPadding="@dimen/card_corner_radius"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        tools:visibility="visible">
+
+        <ImageView
+            android:layout_width="@dimen/main_menu_notification_icon"
+            android:layout_height="@dimen/main_menu_notification_icon"
+            android:src="@drawable/scroll_to_top_icon"
+            tools:ignore="ContentDescription" />
+    </com.google.android.material.card.MaterialCardView>
 </androidx.constraintlayout.widget.ConstraintLayout>

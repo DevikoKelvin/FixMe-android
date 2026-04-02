@@ -104,7 +104,7 @@ class ProgressTrackingBottomSheet(
                                             }
                                         }
                                         rvProgress.adapter = progressAdapter
-                                        rvProgress.setItemViewCacheSize(1000)
+                                        rvProgress.setItemViewCacheSize(progressItem.size)
                                         rvProgress.layoutManager = LinearLayoutManager(context)
 
                                         when (data.stsGaprojects) {
@@ -343,7 +343,7 @@ class ProgressTrackingBottomSheet(
                                             }
                                         }
                                         rvProgress.adapter = progressAdapter
-                                        rvProgress.setItemViewCacheSize(1000)
+                                        rvProgress.setItemViewCacheSize(progressItem.size)
                                         rvProgress.layoutManager = LinearLayoutManager(context)
                                         when (data.stsGaprojects) {
                                             22 -> progressActionButton.visibility = View.GONE

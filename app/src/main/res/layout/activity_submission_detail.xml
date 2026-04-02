@@ -110,8 +110,8 @@
                     android:padding="@dimen/dialog_loading_content_padding">
 
                     <ImageView
-                        android:layout_width="24dp"
-                        android:layout_height="24dp"
+                        android:layout_width="@dimen/search_icon_size"
+                        android:layout_height="@dimen/search_icon_size"
                         android:src="@drawable/caution_icon" />
 
                     <LinearLayout
@@ -140,7 +140,8 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="@string/time_limit"
-                                android:textColor="@color/status_rejected" />
+                                android:textColor="@color/status_rejected"
+                                android:textSize="@dimen/text_size_small" />
 
                             <TextView
                                 android:id="@+id/timeLimit"
@@ -148,6 +149,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_marginStart="@dimen/list_item_submission_department_text_margin_start"
                                 android:textColor="@color/status_rejected"
+                                android:textSize="@dimen/text_size_small"
                                 android:textStyle="bold"
                                 tools:text="24 hours" />
                         </LinearLayout>
@@ -175,7 +177,8 @@
                         android:id="@+id/shimmer"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:visibility="visible">
+                        android:visibility="visible"
+                        tools:visibility="gone">
 
                         <LinearLayout
                             android:layout_width="match_parent"
@@ -682,7 +685,8 @@
                         android:layout_height="wrap_content"
                         android:orientation="vertical"
                         android:visibility="gone"
-                        tools:ignore="UselessLeaf">
+                        tools:ignore="UselessLeaf"
+                        tools:visibility="visible">
 
                         <com.google.android.material.card.MaterialCardView
                             android:id="@+id/imageContainer"
@@ -692,7 +696,8 @@
                             android:layout_margin="@dimen/dialog_margin"
                             app:cardBackgroundColor="@color/white"
                             app:cardCornerRadius="@dimen/list_item_progress_card_corner_radius"
-                            app:cardElevation="@dimen/dialog_elevation">
+                            app:cardElevation="@dimen/dialog_elevation"
+                            tools:visibility="gone">
 
                             <androidx.viewpager.widget.ViewPager
                                 android:id="@+id/imageCarouselHolder"
@@ -723,7 +728,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginHorizontal="@dimen/activity_horizontal_margin"
-                            android:layout_marginTop="@dimen/activity_horizontal_margin"
+                            android:layout_marginTop="@dimen/user_info_item_margin_top"
                             android:textColor="@color/black"
                             android:textSize="@dimen/text_size_medium"
                             android:textStyle="bold"
@@ -827,6 +832,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginHorizontal="@dimen/activity_horizontal_margin"
                             android:textColor="@color/black"
+                            android:textSize="@dimen/text_size_small"
                             tools:text="@tools:sample/lorem" />
 
                         <LinearLayout
@@ -846,13 +852,15 @@
                                     android:id="@+id/machineCodeText"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:text="@string/machine_code" />
+                                    android:text="@string/machine_code"
+                                    android:textSize="@dimen/text_size_small" />
 
                                 <TextView
                                     android:id="@+id/machineNameText"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:text="@string/machine_name" />
+                                    android:text="@string/machine_name"
+                                    android:textSize="@dimen/text_size_small" />
                             </LinearLayout>
 
                             <LinearLayout
@@ -867,6 +875,7 @@
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:textColor="@color/black"
+                                    android:textSize="@dimen/text_size_small"
                                     android:textStyle="bold"
                                     tools:text="D-14" />
 
@@ -875,6 +884,7 @@
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:textColor="@color/black"
+                                    android:textSize="@dimen/text_size_small"
                                     android:textStyle="bold"
                                     tools:text="Autoclave E-Chung" />
                             </LinearLayout>
@@ -901,6 +911,7 @@
                                 android:layout_marginStart="@dimen/dialog_margin"
                                 android:layout_weight="1"
                                 android:textColor="@color/black"
+                                android:textSize="@dimen/text_size_small"
                                 tools:text="Hendrick\nFrom Information Technology Department" />
                         </LinearLayout>
 
@@ -925,6 +936,7 @@
                                 android:layout_marginStart="@dimen/dialog_margin"
                                 android:layout_weight="1"
                                 android:textColor="@color/black"
+                                android:textSize="@dimen/text_size_small"
                                 tools:text="Engineering" />
                         </LinearLayout>
 
@@ -949,6 +961,7 @@
                                 android:layout_marginStart="@dimen/dialog_margin"
                                 android:layout_weight="1"
                                 android:textColor="@color/black"
+                                android:textSize="@dimen/text_size_small"
                                 tools:text="IT" />
                         </LinearLayout>
 
@@ -973,6 +986,7 @@
                                 android:layout_marginStart="@dimen/dialog_margin"
                                 android:layout_weight="1"
                                 android:textColor="@color/black"
+                                android:textSize="@dimen/text_size_small"
                                 tools:text="2024-07-15 11:02:03" />
                         </LinearLayout>
 
@@ -997,6 +1011,7 @@
                                 android:layout_marginStart="@dimen/dialog_margin"
                                 android:layout_weight="1"
                                 android:textColor="@color/black"
+                                android:textSize="@dimen/text_size_small"
                                 tools:text="ERELA HQ" />
                         </LinearLayout>
 
@@ -1055,7 +1070,8 @@
                                         android:id="@+id/reportManagerApproveReject"
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
-                                        android:text="@string/submission_report_manager_time_approve" />
+                                        android:text="@string/submission_report_manager_time_approve"
+                                        android:textSize="@dimen/text_size_small" />
 
                                     <TextView
                                         android:id="@+id/reportManagerTime"
@@ -1064,6 +1080,7 @@
                                         android:layout_marginStart="@dimen/dialog_loading_content_padding"
                                         android:gravity="center_vertical"
                                         android:textColor="@color/black"
+                                        android:textSize="@dimen/text_size_small"
                                         tools:text="2024-07-15 10:44:00" />
                                 </LinearLayout>
 
@@ -1076,7 +1093,8 @@
                                         android:id="@+id/targetManagerApproveReject"
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
-                                        android:text="@string/submission_target_manager_time_approve" />
+                                        android:text="@string/submission_target_manager_time_approve"
+                                        android:textSize="@dimen/text_size_small" />
 
                                     <TextView
                                         android:id="@+id/targetManagerTime"
@@ -1085,6 +1103,7 @@
                                         android:layout_marginStart="@dimen/dialog_loading_content_padding"
                                         android:gravity="center_vertical"
                                         android:textColor="@color/black"
+                                        android:textSize="@dimen/text_size_small"
                                         tools:text="2024-07-15 10:44:00" />
                                 </LinearLayout>
 
@@ -1096,7 +1115,8 @@
                                     <TextView
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
-                                        android:text="@string/submission_start_working" />
+                                        android:text="@string/submission_start_working"
+                                        android:textSize="@dimen/text_size_small" />
 
                                     <TextView
                                         android:id="@+id/startWork"
@@ -1104,6 +1124,7 @@
                                         android:layout_height="wrap_content"
                                         android:layout_marginStart="@dimen/dialog_loading_content_padding"
                                         android:textColor="@color/black"
+                                        android:textSize="@dimen/text_size_small"
                                         tools:text="2024-07-15 10:44:00" />
                                 </LinearLayout>
 
@@ -1115,7 +1136,8 @@
                                     <TextView
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
-                                        android:text="@string/submission_end_working" />
+                                        android:text="@string/submission_end_working"
+                                        android:textSize="@dimen/text_size_small" />
 
                                     <TextView
                                         android:id="@+id/endWork"
@@ -1123,6 +1145,7 @@
                                         android:layout_height="wrap_content"
                                         android:layout_marginStart="@dimen/dialog_loading_content_padding"
                                         android:textColor="@color/black"
+                                        android:textSize="@dimen/text_size_small"
                                         tools:text="2024-07-15 10:44:00" />
                                 </LinearLayout>
                             </LinearLayout>
@@ -1160,6 +1183,7 @@
                                         android:layout_width="match_parent"
                                         android:layout_height="wrap_content"
                                         android:textColor="@color/black"
+                                        android:textSize="@dimen/text_size_small"
                                         android:textStyle="bold"
                                         tools:text="Approved by" />
 
@@ -1167,6 +1191,7 @@
                                         android:id="@+id/userApprovedOrRejected"
                                         android:layout_width="match_parent"
                                         android:layout_height="wrap_content"
+                                        android:textSize="@dimen/text_size_small"
                                         tools:text="Yunanto Widinugroho" />
                                 </LinearLayout>
 
@@ -1181,6 +1206,7 @@
                                         android:layout_width="match_parent"
                                         android:layout_height="wrap_content"
                                         android:textColor="@color/black"
+                                        android:textSize="@dimen/text_size_small"
                                         android:textStyle="bold"
                                         tools:text="Supervisors" />
 
@@ -1188,6 +1214,7 @@
                                         android:id="@+id/userSupervisors"
                                         android:layout_width="match_parent"
                                         android:layout_height="wrap_content"
+                                        android:textSize="@dimen/text_size_small"
                                         tools:text="Riky Dwi Cahya\nLianto Budi Setiawan" />
                                 </LinearLayout>
 
@@ -1209,6 +1236,7 @@
                                             android:layout_width="match_parent"
                                             android:layout_height="wrap_content"
                                             android:textColor="@color/black"
+                                            android:textSize="@dimen/text_size_small"
                                             android:textStyle="bold"
                                             tools:text="Technicians" />
 
@@ -1216,6 +1244,7 @@
                                             android:id="@+id/userTechnicians"
                                             android:layout_width="match_parent"
                                             android:layout_height="wrap_content"
+                                            android:textSize="@dimen/text_size_small"
                                             tools:text="Eko Prasetyo\nFatnur Ali Ustadzi" />
                                     </LinearLayout>
 
@@ -1249,6 +1278,7 @@
                                                 android:layout_marginStart="4dp"
                                                 android:text="@string/action_edit"
                                                 android:textColor="@color/black"
+                                                android:textSize="@dimen/text_size_small"
                                                 android:textStyle="bold" />
                                         </LinearLayout>
                                     </com.google.android.material.card.MaterialCardView>

@@ -1,5 +1,6 @@
 package com.erela.fixme.activities
 
+import android.animation.Animator
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
@@ -20,6 +21,7 @@ import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.erela.fixme.R
 import com.erela.fixme.adapters.recycler_view.SubmissionRvAdapter
 import com.erela.fixme.bottom_sheets.SubmissionListFilterBottomSheet
@@ -35,11 +37,8 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import java.text.SimpleDateFormat
-import java.time.LocalDate
-import java.time.LocalDateTime
-import java.time.ZoneId
-import java.util.Date
 import java.util.Locale
+import androidx.core.view.isVisible
 
 class SubmissionListActivity : AppCompatActivity(), SubmissionRvAdapter.OnSubmissionClickListener {
     private val binding: ActivitySubmissionListBinding by lazy {
@@ -58,6 +57,7 @@ class SubmissionListActivity : AppCompatActivity(), SubmissionRvAdapter.OnSubmis
     private var submissionArrayList: ArrayList<DataItem?>? = ArrayList()
     private var originalSubmissionArrayList: ArrayList<DataItem?>? = ArrayList()
     private var listFilteredByStatusAndComplexity: ArrayList<DataItem?> = ArrayList()
+    private var isScrollToTopButtonAnimating = false
 
     @SuppressLint("NotifyDataSetChanged")
     private val activityResultLauncher: ActivityResultLauncher<Intent> = registerForActivityResult(
@@ -66,6 +66,7 @@ class SubmissionListActivity : AppCompatActivity(), SubmissionRvAdapter.OnSubmis
         if (it.resultCode == RESULT_OK) {
             submissionArrayList?.clear()
             adapter.notifyDataSetChanged()
+            binding.rvSubmission.setItemViewCacheSize(submissionArrayList?.size ?: 0)
             getSubmissionList()
         }
     }
@@ -115,6 +116,7 @@ class SubmissionListActivity : AppCompatActivity(), SubmissionRvAdapter.OnSubmis
             submissionArrayList?.clear()
             submissionArrayList?.addAll(listFilteredByStatusAndComplexity)
             adapter.notifyDataSetChanged()
+            binding.rvSubmission.setItemViewCacheSize(submissionArrayList?.size ?: 0)
             binding.apply {
                 rvSubmission.visibility = View.VISIBLE
                 emptyListContainer.visibility = View.GONE
@@ -145,6 +147,7 @@ class SubmissionListActivity : AppCompatActivity(), SubmissionRvAdapter.OnSubmis
         adapter.notifyDataSetChanged()
         binding.apply {
             rvSubmission.visibility = View.VISIBLE
+            rvSubmission.setItemViewCacheSize(submissionArrayList?.size ?: 0)
             emptyListContainer.visibility = View.GONE
         }
     }
@@ -170,10 +173,34 @@ class SubmissionListActivity : AppCompatActivity(), SubmissionRvAdapter.OnSubmis
             rvSubmission.layoutManager =
                 LinearLayoutManager(applicationContext)
             rvSubmission.adapter = adapter
+            rvSubmission.setItemViewCacheSize(submissionArrayList?.size ?: 0)
+
+            rvSubmission.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+                override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                    super.onScrolled(recyclerView, dx, dy)
+                    // Only update if not currently animating to prevent race conditions
+                    if (!isScrollToTopButtonAnimating) {
+                        val layoutManager = recyclerView.layoutManager as LinearLayoutManager
+                        val firstVisibleItemPosition = layoutManager.findFirstVisibleItemPosition()
+                        if (firstVisibleItemPosition > 0) {
+                            if (!scrollToTopButton.isVisible)
+                                showScrollToTopButton()
+                        } else {
+                            if (scrollToTopButton.isVisible)
+                                hideScrollToTopButton()
+                        }
+                    }
+                }
+            })
+
+            scrollToTopButton.setOnClickListener {
+                rvSubmission.smoothScrollToPosition(0)
+            }
 
             swipeRefresh.setOnRefreshListener {
                 submissionArrayList?.clear()
                 adapter.notifyDataSetChanged()
+                rvSubmission.setItemViewCacheSize(submissionArrayList?.size ?: 0)
                 getSubmissionList()
                 swipeRefresh.isRefreshing = false
             }
@@ -228,6 +255,7 @@ class SubmissionListActivity : AppCompatActivity(), SubmissionRvAdapter.OnSubmis
                                                 }
                                                 submissionArrayList?.clear()
                                                 adapter.notifyDataSetChanged()
+                                                rvSubmission.setItemViewCacheSize(submissionArrayList?.size ?: 0)
                                                 getSubmissionList()
                                             }
 
@@ -613,6 +641,7 @@ class SubmissionListActivity : AppCompatActivity(), SubmissionRvAdapter.OnSubmis
             }
             when (filter) {
                 -1 -> {
+                    // All unfinished cases - apply date filter if provided
                     submissionArrayList?.clear()
                     for (i in 0 until submissionList!!.size) {
                         if (submissionList[i]?.stsGaprojects == 1 || submissionList[i]?.stsGaprojects == 11
@@ -620,22 +649,6 @@ class SubmissionListActivity : AppCompatActivity(), SubmissionRvAdapter.OnSubmis
                             || submissionList[i]?.stsGaprojects == 3 || submissionList[i]?.stsGaprojects == 30
                             || submissionList[i]?.stsGaprojects == 31
                         ) {
-                            if (complexity != "All") {
-                                if (submissionList[i]?.complexity == complexity.lowercase(Locale.getDefault()))
-                                    submissionArrayList?.add(submissionList[i])
-                            } else {
-                                submissionArrayList?.add(submissionList[i])
-                            }
-                        }
-                    }
-                }
-
-                -2 -> {
-                    submissionArrayList?.clear()
-                    for (i in 0 until submissionList!!.size) {
-                        if (submissionList[i]?.stsGaprojects == 0 || submissionList[i]?.stsGaprojects == 4
-                            || submissionList[i]?.stsGaprojects == 5
-                        )
                             if (dateChecker(
                                     submissionList[i]?.tglInput.toString(),
                                     startDate,
@@ -649,10 +662,36 @@ class SubmissionListActivity : AppCompatActivity(), SubmissionRvAdapter.OnSubmis
                                     submissionArrayList?.add(submissionList[i])
                                 }
                             }
+                        }
+                    }
+                }
+
+                -2 -> {
+                    // All finished cases - apply date filter
+                    submissionArrayList?.clear()
+                    for (i in 0 until submissionList!!.size) {
+                        if (submissionList[i]?.stsGaprojects == 0 || submissionList[i]?.stsGaprojects == 4
+                            || submissionList[i]?.stsGaprojects == 5
+                        ) {
+                            if (dateChecker(
+                                    submissionList[i]?.tglInput.toString(),
+                                    startDate,
+                                    endDate
+                                )
+                            ) {
+                                if (complexity != "All") {
+                                    if (submissionList[i]?.complexity == complexity.lowercase(Locale.getDefault()))
+                                        submissionArrayList?.add(submissionList[i])
+                                } else {
+                                    submissionArrayList?.add(submissionList[i])
+                                }
+                            }
+                        }
                     }
                 }
 
                 100 -> {
+                    // All cases - apply date filter to all
                     submissionArrayList?.clear()
                     for (i in 0 until submissionList!!.size) {
                         if (submissionList[i]?.stsGaprojects == 1 || submissionList[i]?.stsGaprojects == 11
@@ -660,11 +699,18 @@ class SubmissionListActivity : AppCompatActivity(), SubmissionRvAdapter.OnSubmis
                             || submissionList[i]?.stsGaprojects == 3 || submissionList[i]?.stsGaprojects == 30
                             || submissionList[i]?.stsGaprojects == 31
                         ) {
-                            if (complexity != "All") {
-                                if (submissionList[i]?.complexity == complexity.lowercase(Locale.getDefault()))
+                            if (dateChecker(
+                                    submissionList[i]?.tglInput.toString(),
+                                    startDate,
+                                    endDate
+                                )
+                            ) {
+                                if (complexity != "All") {
+                                    if (submissionList[i]?.complexity == complexity.lowercase(Locale.getDefault()))
+                                        submissionArrayList?.add(submissionList[i])
+                                } else {
                                     submissionArrayList?.add(submissionList[i])
-                            } else {
-                                submissionArrayList?.add(submissionList[i])
+                                }
                             }
                         } else
                             if (dateChecker(
@@ -684,6 +730,7 @@ class SubmissionListActivity : AppCompatActivity(), SubmissionRvAdapter.OnSubmis
                 }
 
                 else -> {
+                    // Specific status filter - apply date filter if applicable
                     submissionArrayList?.clear()
                     for (i in 0 until submissionList!!.size) {
                         if (submissionList[i]?.stsGaprojects == filter) {
@@ -706,11 +753,21 @@ class SubmissionListActivity : AppCompatActivity(), SubmissionRvAdapter.OnSubmis
                                     }
                                 }
                             } else {
-                                if (complexity != "All") {
-                                    if (submissionList[i]?.complexity == complexity.lowercase(Locale.getDefault()))
+                                if (dateChecker(
+                                        submissionList[i]?.tglInput.toString(),
+                                        startDate,
+                                        endDate
+                                    )
+                                ) {
+                                    if (complexity != "All") {
+                                        if (submissionList[i]?.complexity == complexity.lowercase(
+                                                Locale.getDefault()
+                                            )
+                                        )
+                                            submissionArrayList?.add(submissionList[i])
+                                    } else {
                                         submissionArrayList?.add(submissionList[i])
-                                } else {
-                                    submissionArrayList?.add(submissionList[i])
+                                    }
                                 }
                             }
                         }
@@ -718,6 +775,7 @@ class SubmissionListActivity : AppCompatActivity(), SubmissionRvAdapter.OnSubmis
                 }
             }
             adapter.notifyDataSetChanged()
+            rvSubmission.setItemViewCacheSize(submissionArrayList?.size ?: 0)
             listFilteredByStatusAndComplexity.clear()
             listFilteredByStatusAndComplexity.addAll(submissionArrayList!!)
             emptyListAnimation.playAnimation()
@@ -740,22 +798,25 @@ class SubmissionListActivity : AppCompatActivity(), SubmissionRvAdapter.OnSubmis
         val simpleDateFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault())
         val dateOnlyFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
 
-        val reportDate = simpleDateFormat.parse(date)
+        val reportDate = simpleDateFormat.parse(date) ?: return false
 
         // If no date filter is selected, accept all dates
         if (startDate.isEmpty() && endDate.isEmpty()) {
             return true
         }
 
-        return if (reportDate != null) {
-            val reportDateOnly = dateOnlyFormat.format(reportDate)
-            val start = if (startDate.isNotEmpty()) startDate else "1900-01-01"
-            val end = if (endDate.isNotEmpty()) endDate else "2100-12-31"
+        // Convert report date to yyyy-MM-dd format for comparison
+        val reportDateOnly = dateOnlyFormat.format(reportDate)
 
-            reportDateOnly >= start && reportDateOnly <= end
-        } else {
-            false
-        }
+        // The startDate and endDate are already in yyyy-MM-dd format from the filter
+        val start = startDate.ifEmpty { "1900-01-01" }
+        val end = endDate.ifEmpty { "2100-12-31" }
+
+        Log.e(
+            "DateChecker",
+            "Comparing reportDate: $reportDateOnly with start: $start and end: $end"
+        )
+        return reportDateOnly in start..end
     }
 
     override fun onSubmissionClick(data: DataItem?) {
@@ -779,6 +840,63 @@ class SubmissionListActivity : AppCompatActivity(), SubmissionRvAdapter.OnSubmis
                     stopShimmer()
                     visibility = View.GONE
                 }
+            }
+        }
+    }
+
+    private fun showScrollToTopButton() {
+        binding.apply {
+            if (!scrollToTopButton.isVisible) {
+                // Cancel any existing animation
+                scrollToTopButton.animate().cancel()
+                isScrollToTopButtonAnimating = true
+
+                scrollToTopButton.visibility = View.VISIBLE
+                scrollToTopButton.alpha = 0f
+                scrollToTopButton.animate()
+                    .alpha(1f)
+                    .setDuration(300)
+                    .setListener(object : Animator.AnimatorListener {
+                        override fun onAnimationStart(animation: Animator) {}
+                        override fun onAnimationEnd(animation: Animator) {
+                            isScrollToTopButtonAnimating = false
+                        }
+
+                        override fun onAnimationCancel(animation: Animator) {
+                            isScrollToTopButtonAnimating = false
+                        }
+
+                        override fun onAnimationRepeat(animation: Animator) {}
+                    })
+                    .start()
+            }
+        }
+    }
+
+    private fun hideScrollToTopButton() {
+        binding.apply {
+            if (scrollToTopButton.isVisible) {
+                // Cancel any existing animation
+                scrollToTopButton.animate().cancel()
+                isScrollToTopButtonAnimating = true
+
+                scrollToTopButton.animate()
+                    .alpha(0f)
+                    .setDuration(300)
+                    .setListener(object : Animator.AnimatorListener {
+                        override fun onAnimationStart(animation: Animator) {}
+                        override fun onAnimationEnd(animation: Animator) {
+                            scrollToTopButton.visibility = View.GONE
+                            isScrollToTopButtonAnimating = false
+                        }
+
+                        override fun onAnimationCancel(animation: Animator) {
+                            isScrollToTopButtonAnimating = false
+                        }
+
+                        override fun onAnimationRepeat(animation: Animator) {}
+                    })
+                    .start()
             }
         }
     }

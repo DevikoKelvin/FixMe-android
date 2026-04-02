@@ -86,7 +86,7 @@
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="36dp"
             android:layout_marginVertical="4dp"
-            android:textSize="@dimen/text_size_micro"
+            android:textSize="@dimen/text_size_small"
             android:textStyle="bold"
             tools:text="Owner" />
     </LinearLayout>
@@ -114,7 +114,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="4dp"
-                android:textSize="@dimen/text_size_medium"
+                android:textSize="@dimen/text_size_large"
                 tools:text="@string/welcome_message" />
 
             <com.google.android.material.card.MaterialCardView
@@ -131,7 +131,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:textColor="@color/black"
-                    android:textSize="@dimen/text_size_large"
+                    android:textSize="@dimen/text_size_xlarge"
                     android:textStyle="bold"
                     tools:text="Lie Ignatius Hendrick!" />
             </com.google.android.material.card.MaterialCardView>
@@ -230,7 +230,7 @@
                         android:layout_marginHorizontal="@dimen/button_padding"
                         android:text="@string/make_submission_title"
                         android:textColor="@color/black"
-                        android:textSize="@dimen/text_size_medium"
+                        android:textSize="@dimen/text_size_large"
                         android:textStyle="bold" />
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
@@ -266,7 +266,7 @@
                         android:layout_marginHorizontal="@dimen/button_padding"
                         android:text="@string/submission_list_title"
                         android:textColor="@color/black"
-                        android:textSize="@dimen/text_size_medium"
+                        android:textSize="@dimen/text_size_large"
                         android:textStyle="bold" />
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
@@ -302,7 +302,7 @@
                         android:layout_marginHorizontal="@dimen/button_padding"
                         android:text="@string/app_settings_title"
                         android:textColor="@color/black"
-                        android:textSize="@dimen/text_size_medium"
+                        android:textSize="@dimen/text_size_large"
                         android:textStyle="bold" />
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>

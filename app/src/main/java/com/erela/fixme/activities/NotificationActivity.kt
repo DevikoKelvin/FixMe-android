@@ -1,5 +1,6 @@
 package com.erela.fixme.activities
 
+import android.animation.Animator
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
@@ -12,7 +13,9 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.erela.fixme.R
 import com.erela.fixme.adapters.recycler_view.InboxRvAdapter
 import com.erela.fixme.custom_views.CustomToast
@@ -32,6 +35,7 @@ class NotificationActivity : AppCompatActivity(), InboxRvAdapter.OnNotificationI
     private lateinit var userData: UserData
     private lateinit var adapter: InboxRvAdapter
     private var inboxArrayList: ArrayList<InboxResponse> = ArrayList()
+    private var isScrollToTopButtonAnimating = false
 
     @SuppressLint("NotifyDataSetChanged")
     private val activityResultLauncher: ActivityResultLauncher<Intent> = registerForActivityResult(
@@ -71,7 +75,29 @@ class NotificationActivity : AppCompatActivity(), InboxRvAdapter.OnNotificationI
                 it.setOnItemClickListener(this@NotificationActivity)
             }
             rvInbox.layoutManager = LinearLayoutManager(applicationContext)
+            rvInbox.setItemViewCacheSize(inboxArrayList.size)
             rvInbox.adapter = adapter
+
+            rvInbox.addOnScrollListener(object: RecyclerView.OnScrollListener() {
+                override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                    super.onScrolled(recyclerView, dx, dy)
+                    if (!isScrollToTopButtonAnimating) {
+                        val layoutManager = recyclerView.layoutManager as LinearLayoutManager
+                        val firstVisibleItemPosition = layoutManager.findFirstVisibleItemPosition()
+                        if (firstVisibleItemPosition > 0) {
+                            if (!scrollToTopButton.isVisible)
+                                showScrollToTopButton()
+                        } else {
+                            if (scrollToTopButton.isVisible)
+                                hideScrollToTopButton()
+                        }
+                    }
+                }
+            })
+
+            scrollToTopButton.setOnClickListener {
+                rvInbox.smoothScrollToPosition(0)
+            }
 
             getNotification()
 
@@ -103,6 +129,7 @@ class NotificationActivity : AppCompatActivity(), InboxRvAdapter.OnNotificationI
                                     )
                                 }
                                 adapter.notifyDataSetChanged()
+                                rvInbox.setItemViewCacheSize(inboxArrayList.size)
                             } else {
                                 CustomToast.getInstance(applicationContext)
                                     .setMessage(
@@ -199,6 +226,63 @@ class NotificationActivity : AppCompatActivity(), InboxRvAdapter.OnNotificationI
                     stopShimmer()
                 }
                 rvInbox.visibility = View.VISIBLE
+            }
+        }
+    }
+
+    private fun showScrollToTopButton() {
+        binding.apply {
+            if (!scrollToTopButton.isVisible) {
+                // Cancel any existing animation
+                scrollToTopButton.animate().cancel()
+                isScrollToTopButtonAnimating = true
+
+                scrollToTopButton.visibility = View.VISIBLE
+                scrollToTopButton.alpha = 0f
+                scrollToTopButton.animate()
+                    .alpha(1f)
+                    .setDuration(300)
+                    .setListener(object : Animator.AnimatorListener {
+                        override fun onAnimationStart(animation: Animator) {}
+                        override fun onAnimationEnd(animation: Animator) {
+                            isScrollToTopButtonAnimating = false
+                        }
+
+                        override fun onAnimationCancel(animation: Animator) {
+                            isScrollToTopButtonAnimating = false
+                        }
+
+                        override fun onAnimationRepeat(animation: Animator) {}
+                    })
+                    .start()
+            }
+        }
+    }
+
+    private fun hideScrollToTopButton() {
+        binding.apply {
+            if (scrollToTopButton.isVisible) {
+                // Cancel any existing animation
+                scrollToTopButton.animate().cancel()
+                isScrollToTopButtonAnimating = true
+
+                scrollToTopButton.animate()
+                    .alpha(0f)
+                    .setDuration(300)
+                    .setListener(object : Animator.AnimatorListener {
+                        override fun onAnimationStart(animation: Animator) {}
+                        override fun onAnimationEnd(animation: Animator) {
+                            scrollToTopButton.visibility = View.GONE
+                            isScrollToTopButtonAnimating = false
+                        }
+
+                        override fun onAnimationCancel(animation: Animator) {
+                            isScrollToTopButtonAnimating = false
+                        }
+
+                        override fun onAnimationRepeat(animation: Animator) {}
+                    })
+                    .start()
             }
         }
     }

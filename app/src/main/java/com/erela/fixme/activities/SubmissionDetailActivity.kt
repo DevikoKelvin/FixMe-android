@@ -2,6 +2,8 @@ package com.erela.fixme.activities
 
 import android.animation.AnimatorInflater
 import android.annotation.SuppressLint
+import android.content.ClipData
+import android.content.ClipboardManager
 import android.content.Context
 import android.content.Intent
 import android.graphics.Rect
@@ -233,6 +235,36 @@ class SubmissionDetailActivity : AppCompatActivity(),
                                         detailData.limitTime!!
                                     )
                                     detailTitle.text = detailData.nomorRequest
+                                    // Add click listener for copying text to clipboard when status is Hold (22)
+                                    detailTitle.setOnLongClickListener {
+                                        val clipboard = getSystemService(CLIPBOARD_SERVICE) as ClipboardManager
+                                        val clip = ClipData.newPlainText("Request Number", detailData.nomorRequest)
+                                        clipboard.setPrimaryClip(clip)
+                                        CustomToast.getInstance(applicationContext)
+                                            .setBackgroundColor(
+                                                ResourcesCompat.getColor(
+                                                    resources,
+                                                    R.color.custom_toast_background_success,
+                                                    theme
+                                                )
+                                            )
+                                            .setFontColor(
+                                                ResourcesCompat.getColor(
+                                                    resources,
+                                                    R.color.custom_toast_font_success,
+                                                    theme
+                                                )
+                                            )
+                                            .setMessage(
+                                                if (getString(R.string.lang) == "in")
+                                                    "Nomor request berhasil disalin!"
+                                                else
+                                                    "Request number copied successfully!"
+                                            )
+                                            .show()
+
+                                        return@setOnLongClickListener true
+                                    }
                                     if (detailData.fotoGaprojects!!.isEmpty()) {
                                         imageContainer.visibility = View.GONE
                                     } else {
@@ -1998,6 +2030,7 @@ class SubmissionDetailActivity : AppCompatActivity(),
         }
     }
 
+    @SuppressLint("SetTextI18n")
     private fun handleExceedingStatus(isExceeding: Boolean, timeOffset: Int, limitTime: Int) {
         binding.apply {
             if (isExceeding) {

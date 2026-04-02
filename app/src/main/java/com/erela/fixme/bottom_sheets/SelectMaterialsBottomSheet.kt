@@ -107,7 +107,7 @@ class SelectMaterialsBottomSheet(
                                         }
                                     }
                                     rvMaterials.adapter = adapter
-                                    rvMaterials.setItemViewCacheSize(1000)
+                                    rvMaterials.setItemViewCacheSize(materialsList.size)
                                     rvMaterials.layoutManager = LinearLayoutManager(context)
                                     adapter.notifyDataSetChanged()
                                 } else {
