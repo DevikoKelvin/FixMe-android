@@ -34,6 +34,7 @@ class UserInfoBottomSheet(context: Context) : BottomSheetDialog(context) {
     @SuppressLint("SetTextI18n")
     private fun init() {
         binding.apply {
+            userIdText.text = userData.id.toString()
             nameText.text = userData.name
             starConnectIdText.text = userData.idStarConnect.toString()
             fixMeUsernameText.text = userData.username
