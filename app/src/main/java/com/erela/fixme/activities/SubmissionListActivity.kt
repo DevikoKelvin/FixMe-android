@@ -360,8 +360,10 @@ class SubmissionListActivity : AppCompatActivity(), SubmissionRvAdapter.OnSubmis
                                 loadingManager(false)
                                 if (response.isSuccessful) {
                                     if (response.body() != null) {
+                                        Log.e("Response Case List", response.body().toString())
                                         originalSubmissionArrayList?.clear()
-                                        originalSubmissionArrayList?.addAll(response.body()?.data!!)
+                                        if (response.body()?.data != null)
+                                            originalSubmissionArrayList?.addAll(response.body()?.data!!)
                                         if (firstInit) {
                                             filterList(
                                                 response.body()!!.data,
@@ -643,98 +645,12 @@ class SubmissionListActivity : AppCompatActivity(), SubmissionRvAdapter.OnSubmis
                 -1 -> {
                     // All unfinished cases - apply date filter if provided
                     submissionArrayList?.clear()
-                    for (i in 0 until submissionList!!.size) {
-                        if (submissionList[i]?.stsGaprojects == 1 || submissionList[i]?.stsGaprojects == 11
-                            || submissionList[i]?.stsGaprojects == 2 || submissionList[i]?.stsGaprojects == 22
-                            || submissionList[i]?.stsGaprojects == 3 || submissionList[i]?.stsGaprojects == 30
-                            || submissionList[i]?.stsGaprojects == 31
-                        ) {
-                            if (dateChecker(
-                                    submissionList[i]?.tglInput.toString(),
-                                    startDate,
-                                    endDate
-                                )
-                            ) {
-                                if (complexity != "All") {
-                                    if (submissionList[i]?.complexity == complexity.lowercase(Locale.getDefault()))
-                                        submissionArrayList?.add(submissionList[i])
-                                } else {
-                                    submissionArrayList?.add(submissionList[i])
-                                }
-                            }
-                        }
-                    }
-                }
-
-                -2 -> {
-                    // All finished cases - apply date filter
-                    submissionArrayList?.clear()
-                    for (i in 0 until submissionList!!.size) {
-                        if (submissionList[i]?.stsGaprojects == 0 || submissionList[i]?.stsGaprojects == 4
-                            || submissionList[i]?.stsGaprojects == 5
-                        ) {
-                            if (dateChecker(
-                                    submissionList[i]?.tglInput.toString(),
-                                    startDate,
-                                    endDate
-                                )
-                            ) {
-                                if (complexity != "All") {
-                                    if (submissionList[i]?.complexity == complexity.lowercase(Locale.getDefault()))
-                                        submissionArrayList?.add(submissionList[i])
-                                } else {
-                                    submissionArrayList?.add(submissionList[i])
-                                }
-                            }
-                        }
-                    }
-                }
-
-                100 -> {
-                    // All cases - apply date filter to all
-                    submissionArrayList?.clear()
-                    for (i in 0 until submissionList!!.size) {
-                        if (submissionList[i]?.stsGaprojects == 1 || submissionList[i]?.stsGaprojects == 11
-                            || submissionList[i]?.stsGaprojects == 2 || submissionList[i]?.stsGaprojects == 22
-                            || submissionList[i]?.stsGaprojects == 3 || submissionList[i]?.stsGaprojects == 30
-                            || submissionList[i]?.stsGaprojects == 31
-                        ) {
-                            if (dateChecker(
-                                    submissionList[i]?.tglInput.toString(),
-                                    startDate,
-                                    endDate
-                                )
-                            ) {
-                                if (complexity != "All") {
-                                    if (submissionList[i]?.complexity == complexity.lowercase(Locale.getDefault()))
-                                        submissionArrayList?.add(submissionList[i])
-                                } else {
-                                    submissionArrayList?.add(submissionList[i])
-                                }
-                            }
-                        } else
-                            if (dateChecker(
-                                    submissionList[i]?.tglInput.toString(),
-                                    startDate,
-                                    endDate
-                                )
-                            ) {
-                                if (complexity != "All") {
-                                    if (submissionList[i]?.complexity == complexity.lowercase(Locale.getDefault()))
-                                        submissionArrayList?.add(submissionList[i])
-                                } else {
-                                    submissionArrayList?.add(submissionList[i])
-                                }
-                            }
-                    }
-                }
-
-                else -> {
-                    // Specific status filter - apply date filter if applicable
-                    submissionArrayList?.clear()
-                    for (i in 0 until submissionList!!.size) {
-                        if (submissionList[i]?.stsGaprojects == filter) {
-                            if (filter == 0 || filter == 4 || filter == 5
+                    if(submissionList != null) {
+                        for (i in 0 until submissionList.size) {
+                            if (submissionList[i]?.stsGaprojects == 1 || submissionList[i]?.stsGaprojects == 11
+                                || submissionList[i]?.stsGaprojects == 2 || submissionList[i]?.stsGaprojects == 22
+                                || submissionList[i]?.stsGaprojects == 3 || submissionList[i]?.stsGaprojects == 30
+                                || submissionList[i]?.stsGaprojects == 31
                             ) {
                                 if (dateChecker(
                                         submissionList[i]?.tglInput.toString(),
@@ -752,7 +668,19 @@ class SubmissionListActivity : AppCompatActivity(), SubmissionRvAdapter.OnSubmis
                                         submissionArrayList?.add(submissionList[i])
                                     }
                                 }
-                            } else {
+                            }
+                        }
+                    }
+                }
+
+                -2 -> {
+                    // All finished cases - apply date filter
+                    submissionArrayList?.clear()
+                    if (submissionList != null) {
+                        for (i in 0 until submissionList.size) {
+                            if (submissionList[i]?.stsGaprojects == 0 || submissionList[i]?.stsGaprojects == 4
+                                || submissionList[i]?.stsGaprojects == 5
+                            ) {
                                 if (dateChecker(
                                         submissionList[i]?.tglInput.toString(),
                                         startDate,
@@ -767,6 +695,100 @@ class SubmissionListActivity : AppCompatActivity(), SubmissionRvAdapter.OnSubmis
                                             submissionArrayList?.add(submissionList[i])
                                     } else {
                                         submissionArrayList?.add(submissionList[i])
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+
+                100 -> {
+                    // All cases - apply date filter to all
+                    submissionArrayList?.clear()
+                    if (submissionList != null) {
+                        for (i in 0 until submissionList.size) {
+                            if (submissionList[i]?.stsGaprojects == 1 || submissionList[i]?.stsGaprojects == 11
+                                || submissionList[i]?.stsGaprojects == 2 || submissionList[i]?.stsGaprojects == 22
+                                || submissionList[i]?.stsGaprojects == 3 || submissionList[i]?.stsGaprojects == 30
+                                || submissionList[i]?.stsGaprojects == 31
+                            ) {
+                                if (dateChecker(
+                                        submissionList[i]?.tglInput.toString(),
+                                        startDate,
+                                        endDate
+                                    )
+                                ) {
+                                    if (complexity != "All") {
+                                        if (submissionList[i]?.complexity == complexity.lowercase(
+                                                Locale.getDefault()
+                                            )
+                                        )
+                                            submissionArrayList?.add(submissionList[i])
+                                    } else {
+                                        submissionArrayList?.add(submissionList[i])
+                                    }
+                                }
+                            } else
+                                if (dateChecker(
+                                        submissionList[i]?.tglInput.toString(),
+                                        startDate,
+                                        endDate
+                                    )
+                                ) {
+                                    if (complexity != "All") {
+                                        if (submissionList[i]?.complexity == complexity.lowercase(
+                                                Locale.getDefault()
+                                            )
+                                        )
+                                            submissionArrayList?.add(submissionList[i])
+                                    } else {
+                                        submissionArrayList?.add(submissionList[i])
+                                    }
+                                }
+                        }
+                    }
+                }
+
+                else -> {
+                    // Specific status filter - apply date filter if applicable
+                    submissionArrayList?.clear()
+                    if (submissionList != null) {
+                        for (i in 0 until submissionList.size) {
+                            if (submissionList[i]?.stsGaprojects == filter) {
+                                if (filter == 0 || filter == 4 || filter == 5
+                                ) {
+                                    if (dateChecker(
+                                            submissionList[i]?.tglInput.toString(),
+                                            startDate,
+                                            endDate
+                                        )
+                                    ) {
+                                        if (complexity != "All") {
+                                            if (submissionList[i]?.complexity == complexity.lowercase(
+                                                    Locale.getDefault()
+                                                )
+                                            )
+                                                submissionArrayList?.add(submissionList[i])
+                                        } else {
+                                            submissionArrayList?.add(submissionList[i])
+                                        }
+                                    }
+                                } else {
+                                    if (dateChecker(
+                                            submissionList[i]?.tglInput.toString(),
+                                            startDate,
+                                            endDate
+                                        )
+                                    ) {
+                                        if (complexity != "All") {
+                                            if (submissionList[i]?.complexity == complexity.lowercase(
+                                                    Locale.getDefault()
+                                                )
+                                            )
+                                                submissionArrayList?.add(submissionList[i])
+                                        } else {
+                                            submissionArrayList?.add(submissionList[i])
+                                        }
                                     }
                                 }
                             }
