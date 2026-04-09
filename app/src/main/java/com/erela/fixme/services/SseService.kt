@@ -131,13 +131,13 @@ class SseService : Service() {
 
                         Log.e("Received notification", messageJson.toString())
 
-                        val notificationId = messageJson.getInt("id_gaprojects")
-                        val relatedUserId = messageJson.getInt("id_user")
+                        val extras = messageJson.getJSONObject("extras")
+                        val notificationId = extras.getString("client:id_gaprojects").toInt()
+                        val relatedUserId = extras.getString("client:id_user").toInt()
 
                         if (UserDataHelper(applicationContext).isUserDataExist() && FCMService.lastNotificationId != notificationId) {
-                            val title =
-                                if (getString(R.string.lang) == "in") "Kamu mendapatkan notifikasi baru!" else "You have a new notification!"
-                            val body = messageJson.getString("body")
+                            val title = messageJson.getString("title")
+                            val body = messageJson.getString("message")
                             if (userData.id == relatedUserId) {
                                 NotificationsHelper.generateNotification(
                                     title,
