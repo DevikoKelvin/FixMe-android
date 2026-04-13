@@ -27,6 +27,7 @@ import com.erela.fixme.dialogs.ConfirmationDialog
 import com.erela.fixme.dialogs.LoadingDialog
 import com.erela.fixme.helpers.UserDataHelper
 import com.erela.fixme.helpers.api.InitAPI
+import com.erela.fixme.objects.CategoryListResponse
 import com.erela.fixme.objects.GenericSimpleResponse
 import com.erela.fixme.objects.SubDepartmentListResponse
 import com.erela.fixme.objects.SubmissionDetailResponse
@@ -49,7 +50,7 @@ import java.util.Locale
 class UpdateStatusBottomSheet(
     context: Context, private val dataDetail: SubmissionDetailResponse,
     private val approve: Boolean, private val cancel: Boolean, private val deployTech: Boolean,
-    private val isEdit: Boolean
+    private val isEdit: Boolean, private val editCategoryComplexity: Boolean = false
 ) : BottomSheetDialog(context) {
     private val binding: BsUpdateStatusBinding by lazy {
         BsUpdateStatusBinding.inflate(layoutInflater)
@@ -70,6 +71,7 @@ class UpdateStatusBottomSheet(
     )
     private lateinit var complexity: String
     private var workByVendor = "N"
+    private var selectedCategoryId: Int = 0
     private lateinit var subDepartmentList: ArrayList<String>
     private var selectedSubDept: SubDepartmentListResponse? = null
 
@@ -104,6 +106,66 @@ class UpdateStatusBottomSheet(
     @SuppressLint("SetTextI18n", "NotifyDataSetChanged")
     private fun init() {
         binding.apply {
+            // Edit Category & Complexity mode
+            if (editCategoryComplexity) {
+                issueTitle.text = if (context.getString(R.string.lang) == "in")
+                    "Edit Kategori & Kompleksitas"
+                else
+                    "Edit Category & Complexity"
+
+                descriptionFieldLayout.visibility = View.GONE
+                subDeptText.visibility = View.GONE
+                subDeptDropdownLayout.visibility = View.GONE
+                workByText.visibility = View.GONE
+                workBySelectorContainer.visibility = View.GONE
+                vendorNameFieldLayout.visibility = View.GONE
+                selectSupervisorText.visibility = View.GONE
+                rvSupervisor.visibility = View.GONE
+                selectTechniciansText.visibility = View.GONE
+                rvTechnicians.visibility = View.GONE
+                approveButton.visibility = View.GONE
+                rejectButton.visibility = View.GONE
+                cancelButton.visibility = View.GONE
+
+                selectCategoryText.visibility = View.VISIBLE
+                categoryDropdownLayout.visibility = View.VISIBLE
+                selectComplexityText.visibility = View.VISIBLE
+                complexityRadioGroup.visibility = View.VISIBLE
+
+                // Pre-populate from existing data
+                selectedCategoryId = dataDetail.idKategori ?: 0
+                if (!dataDetail.difficulty.isNullOrEmpty() && dataDetail.difficulty != "null") {
+                    complexity = dataDetail.difficulty
+                    when (dataDetail.difficulty) {
+                        "low" -> lowSelector.isChecked = true
+                        "middle" -> midSelector.isChecked = true
+                        "high" -> highSelector.isChecked = true
+                    }
+                }
+
+                complexityRadioGroup.setOnCheckedChangeListener { _, checkedId ->
+                    when (checkedId) {
+                        R.id.lowSelector -> complexity =
+                            lowSelector.text.toString().lowercase(Locale.getDefault())
+
+                        R.id.midSelector -> complexity =
+                            midSelector.text.toString().lowercase(Locale.getDefault())
+
+                        R.id.highSelector -> complexity =
+                            highSelector.text.toString().lowercase(Locale.getDefault())
+                    }
+                }
+
+                actionsButtonContainer.visibility = View.VISIBLE
+                deployTechButton.visibility = View.VISIBLE
+                deployTechText.text =
+                    if (context.getString(R.string.lang) == "in") "Simpan" else "Save"
+                deployTechButton.setOnClickListener { executeUpdate() }
+
+                getCategoryListForEditMode()
+                return
+            }
+
             // In edit mode, show different title
             if (isEdit && deployTech) {
                 issueTitle.text = if (context.getString(R.string.lang) == "in")
@@ -799,6 +861,10 @@ class UpdateStatusBottomSheet(
         var validated = 0
 
         binding.apply {
+            if (editCategoryComplexity) {
+                return selectedCategoryId != 0 || this@UpdateStatusBottomSheet::complexity.isInitialized
+            }
+
             // In Edit Technicians mode, only check if technicians are selected
             if (deployTech && isEdit) {
                 // Filter out the "+" placeholder and check if there are any real technicians selected
@@ -833,6 +899,209 @@ class UpdateStatusBottomSheet(
 
     private fun executeUpdate() {
         binding.apply {
+            if (editCategoryComplexity) {
+                if (formCheck()) {
+                    val confirmationDialog = ConfirmationDialog(
+                        context,
+                        if (context.getString(R.string.lang) == "in")
+                            "Apakah Anda yakin ingin mengubah kategori dan kompleksitas?"
+                        else
+                            "Are you sure you want to update the category and complexity?",
+                        if (context.getString(R.string.lang) == "in") "Ya" else "Yes"
+                    ).also {
+                        with(it) {
+                            setConfirmationDialogListener(object :
+                                ConfirmationDialog.ConfirmationDialogListener {
+                                override fun onConfirm() {
+                                    val loadingDialog = LoadingDialog(context)
+                                    if (loadingDialog.window != null) loadingDialog.show()
+                                    deployTechLoading.visibility = View.VISIBLE
+                                    deployTechText.visibility = View.GONE
+
+                                    val categoryToSend =
+                                        if (selectedCategoryId != 0) selectedCategoryId else dataDetail.idKategori
+                                            ?: 0
+                                    val complexityToSend =
+                                        if (this@UpdateStatusBottomSheet::complexity.isInitialized) complexity else dataDetail.difficulty
+                                            ?: ""
+
+                                    try {
+                                        InitAPI.getEndpoint.updateCategoryComplexity(
+                                            userId = userData.id,
+                                            caseId = dataDetail.idGaprojects!!,
+                                            category = categoryToSend,
+                                            complexity = complexityToSend
+                                        ).enqueue(object : Callback<GenericSimpleResponse> {
+                                            override fun onResponse(
+                                                call: Call<GenericSimpleResponse>,
+                                                response: Response<GenericSimpleResponse>
+                                            ) {
+                                                loadingDialog.dismiss()
+                                                deployTechLoading.visibility = View.GONE
+                                                deployTechText.visibility = View.VISIBLE
+                                                if (response.isSuccessful) {
+                                                    val result = response.body()
+                                                    if (result?.code == 1) {
+                                                        CustomToast.getInstance(context)
+                                                            .setBackgroundColor(
+                                                                ContextCompat.getColor(
+                                                                    context,
+                                                                    R.color.custom_toast_background_success
+                                                                )
+                                                            )
+                                                            .setFontColor(
+                                                                ContextCompat.getColor(
+                                                                    context,
+                                                                    R.color.custom_toast_font_success
+                                                                )
+                                                            )
+                                                            .setMessage(
+                                                                if (context.getString(R.string.lang) == "in")
+                                                                    "Kategori dan kompleksitas berhasil diperbarui."
+                                                                else
+                                                                    "Category and complexity updated successfully."
+                                                            ).show()
+                                                        this@UpdateStatusBottomSheet.dismiss()
+                                                        onUpdateSuccessListener.onCategoryComplexityUpdated()
+                                                    } else {
+                                                        CustomToast.getInstance(context)
+                                                            .setBackgroundColor(
+                                                                ContextCompat.getColor(
+                                                                    context,
+                                                                    R.color.custom_toast_background_failed
+                                                                )
+                                                            )
+                                                            .setFontColor(
+                                                                ContextCompat.getColor(
+                                                                    context,
+                                                                    R.color.custom_toast_font_failed
+                                                                )
+                                                            )
+                                                            .setMessage(
+                                                                if (context.getString(R.string.lang) == "in")
+                                                                    "Gagal memperbarui kategori dan kompleksitas."
+                                                                else
+                                                                    "Failed to update category and complexity."
+                                                            ).show()
+                                                        Log.e(
+                                                            "ERROR ${result?.code}",
+                                                            result?.message.toString()
+                                                        )
+                                                    }
+                                                } else {
+                                                    CustomToast.getInstance(context)
+                                                        .setBackgroundColor(
+                                                            ContextCompat.getColor(
+                                                                context,
+                                                                R.color.custom_toast_background_failed
+                                                            )
+                                                        )
+                                                        .setFontColor(
+                                                            ContextCompat.getColor(
+                                                                context,
+                                                                R.color.custom_toast_font_failed
+                                                            )
+                                                        )
+                                                        .setMessage(
+                                                            if (context.getString(R.string.lang) == "in")
+                                                                "Gagal memperbarui kategori dan kompleksitas."
+                                                            else
+                                                                "Failed to update category and complexity."
+                                                        ).show()
+                                                    Log.e(
+                                                        "ERROR ${response.code()}",
+                                                        response.message()
+                                                    )
+                                                }
+                                            }
+
+                                            override fun onFailure(
+                                                call: Call<GenericSimpleResponse>,
+                                                throwable: Throwable
+                                            ) {
+                                                loadingDialog.dismiss()
+                                                deployTechLoading.visibility = View.GONE
+                                                deployTechText.visibility = View.VISIBLE
+                                                CustomToast.getInstance(context)
+                                                    .setBackgroundColor(
+                                                        ContextCompat.getColor(
+                                                            context,
+                                                            R.color.custom_toast_background_failed
+                                                        )
+                                                    )
+                                                    .setFontColor(
+                                                        ContextCompat.getColor(
+                                                            context,
+                                                            R.color.custom_toast_font_failed
+                                                        )
+                                                    )
+                                                    .setMessage(
+                                                        if (context.getString(R.string.lang) == "in")
+                                                            "Terjadi kesalahan. Silakan coba lagi nanti."
+                                                        else
+                                                            "Something went wrong. Please try again later."
+                                                    ).show()
+                                                throwable.printStackTrace()
+                                                Log.e(
+                                                    "ERROR",
+                                                    "Update Category Complexity Failure | $throwable"
+                                                )
+                                            }
+                                        })
+                                    } catch (jsonException: JSONException) {
+                                        loadingDialog.dismiss()
+                                        deployTechLoading.visibility = View.GONE
+                                        deployTechText.visibility = View.VISIBLE
+                                        CustomToast.getInstance(context)
+                                            .setBackgroundColor(
+                                                ContextCompat.getColor(
+                                                    context,
+                                                    R.color.custom_toast_background_failed
+                                                )
+                                            )
+                                            .setFontColor(
+                                                ContextCompat.getColor(
+                                                    context,
+                                                    R.color.custom_toast_font_failed
+                                                )
+                                            )
+                                            .setMessage(
+                                                if (context.getString(R.string.lang) == "in")
+                                                    "Terjadi kesalahan. Silakan coba lagi nanti."
+                                                else
+                                                    "Something went wrong. Please try again later."
+                                            ).show()
+                                        jsonException.printStackTrace()
+                                    }
+                                }
+                            })
+                        }
+                    }
+                    if (confirmationDialog.window != null) confirmationDialog.show()
+                } else {
+                    CustomToast.getInstance(context)
+                        .setBackgroundColor(
+                            ContextCompat.getColor(
+                                context,
+                                R.color.custom_toast_background_failed
+                            )
+                        )
+                        .setFontColor(
+                            ContextCompat.getColor(
+                                context,
+                                R.color.custom_toast_font_failed
+                            )
+                        )
+                        .setMessage(
+                            if (context.getString(R.string.lang) == "in")
+                                "Pilih minimal satu perubahan (kategori atau kompleksitas)."
+                            else
+                                "Please select at least one change (category or complexity)."
+                        ).show()
+                }
+                return
+            }
+
             approveLoading.visibility = View.VISIBLE
             rejectLoading.visibility = View.VISIBLE
             approveText.visibility = View.GONE
@@ -1806,6 +2075,114 @@ class UpdateStatusBottomSheet(
         }
     }
 
+    private fun getCategoryListForEditMode() {
+        binding.apply {
+            categoryLoading.visibility = View.VISIBLE
+            categoryDropdown.visibility = View.GONE
+            try {
+                InitAPI.getEndpoint.getCategoryList()
+                    .enqueue(object : Callback<CategoryListResponse> {
+                        override fun onResponse(
+                            call: Call<CategoryListResponse>,
+                            response: Response<CategoryListResponse>
+                        ) {
+                            categoryLoading.visibility = View.GONE
+                            categoryDropdown.visibility = View.VISIBLE
+                            if (response.isSuccessful && response.body() != null) {
+                                val names: ArrayList<String> = ArrayList()
+                                names.add(
+                                    if (context.getString(R.string.lang) == "in")
+                                        "Pilih Kategori"
+                                    else
+                                        "Select Category"
+                                )
+                                val categories = response.body()?.data
+                                categories?.forEach { it?.categoryName?.let { name -> names.add(name) } }
+
+                                val dropdownAdapter = ArrayAdapter(
+                                    context,
+                                    R.layout.general_dropdown_item,
+                                    names
+                                )
+                                categoryDropdown.adapter = dropdownAdapter
+
+                                if (selectedCategoryId != 0 && categories != null) {
+                                    val index =
+                                        categories.indexOfFirst { it?.categoryId == selectedCategoryId }
+                                    if (index != -1) categoryDropdown.setSelection(index + 1)
+                                }
+
+                                categoryDropdown.onItemSelectedListener =
+                                    object : AdapterView.OnItemSelectedListener {
+                                        override fun onItemSelected(
+                                            parent: AdapterView<*>?,
+                                            view: View?,
+                                            position: Int,
+                                            id: Long
+                                        ) {
+                                            selectedCategoryId = if (position == 0) 0
+                                            else categories?.get(position - 1)?.categoryId ?: 0
+                                        }
+
+                                        override fun onNothingSelected(parent: AdapterView<*>?) {}
+                                    }
+                                dropdownAdapter.notifyDataSetChanged()
+                            } else {
+                                CustomToast.getInstance(context)
+                                    .setBackgroundColor(
+                                        ContextCompat.getColor(
+                                            context,
+                                            R.color.custom_toast_background_failed
+                                        )
+                                    )
+                                    .setFontColor(
+                                        ContextCompat.getColor(
+                                            context,
+                                            R.color.custom_toast_font_failed
+                                        )
+                                    )
+                                    .setMessage(
+                                        if (context.getString(R.string.lang) == "in")
+                                            "Gagal mendapatkan daftar kategori."
+                                        else
+                                            "Failed to get category list."
+                                    ).show()
+                            }
+                        }
+
+                        override fun onFailure(call: Call<CategoryListResponse>, t: Throwable) {
+                            categoryLoading.visibility = View.GONE
+                            categoryDropdown.visibility = View.VISIBLE
+                            CustomToast.getInstance(context)
+                                .setBackgroundColor(
+                                    ContextCompat.getColor(
+                                        context,
+                                        R.color.custom_toast_background_failed
+                                    )
+                                )
+                                .setFontColor(
+                                    ContextCompat.getColor(
+                                        context,
+                                        R.color.custom_toast_font_failed
+                                    )
+                                )
+                                .setMessage(
+                                    if (context.getString(R.string.lang) == "in")
+                                        "Terjadi kesalahan. Silakan coba lagi nanti."
+                                    else
+                                        "Something went wrong. Please try again later."
+                                ).show()
+                            t.printStackTrace()
+                        }
+                    })
+            } catch (e: Exception) {
+                categoryLoading.visibility = View.GONE
+                categoryDropdown.visibility = View.VISIBLE
+                e.printStackTrace()
+            }
+        }
+    }
+
     private fun getSubDepartmentList() {
         binding.apply {
             InitAPI.getEndpoint.getSubDepartmentList(dataDetail.deptTujuan!!)
@@ -1894,7 +2271,27 @@ class UpdateStatusBottomSheet(
                         call: Call<List<SubDepartmentListResponse>?>,
                         t: Throwable
                     ) {
-                        TODO("Not yet implemented")
+                        CustomToast.getInstance(context)
+                            .setBackgroundColor(
+                                ContextCompat.getColor(
+                                    context,
+                                    R.color.custom_toast_background_failed
+                                )
+                            )
+                            .setFontColor(
+                                ContextCompat.getColor(
+                                    context,
+                                    R.color.custom_toast_font_failed
+                                )
+                            )
+                            .setMessage(
+                                if (context.getString(R.string.lang) == "in")
+                                    "Terjadi kesalahan. Silakan coba lagi nanti."
+                                else
+                                    "Something went wrong. Please try again later."
+                            ).show()
+                        t.printStackTrace()
+                        Log.e("ERROR", "Get Sub Department List Failure | $t")
                     }
                 })
         }
@@ -1913,5 +2310,6 @@ class UpdateStatusBottomSheet(
         fun onRejected()
         fun onCanceled()
         fun onTechniciansDeployed()
+        fun onCategoryComplexityUpdated()
     }
 }

@@ -83,12 +83,12 @@
         android:layout_height="@dimen/toolbar_height"
         android:layout_marginHorizontal="@dimen/list_item_padding"
         android:layout_marginTop="@dimen/user_info_item_margin_top"
+        android:visibility="gone"
         app:cardBackgroundColor="@android:color/transparent"
         app:cardCornerRadius="@dimen/login_button_corner_radius"
         app:cardElevation="0dp"
         app:contentPadding="@dimen/list_item_progress_content_margin_top_small"
         app:strokeColor="@color/form_field_stroke"
-        android:visibility="gone"
         app:strokeWidth="@dimen/login_field_stroke_width">
 
         <Spinner
@@ -109,14 +109,14 @@
         android:textColor="@color/black"
         android:textSize="@dimen/text_size_small"
         android:textStyle="bold"
-        android:visibility="visible" />
+        tools:visibility="visible" />
 
     <LinearLayout
         android:id="@+id/workBySelectorContainer"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:visibility="visible">
+        tools:visibility="visible">
 
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/internalButton"
@@ -185,7 +185,6 @@
         android:layout_marginHorizontal="@dimen/list_item_padding"
         android:layout_marginTop="@dimen/user_info_item_margin_top"
         android:hint="@string/vendors_name"
-        android:visibility="visible"
         app:boxCornerRadiusBottomEnd="@dimen/login_field_corner_radius"
         app:boxCornerRadiusBottomStart="@dimen/login_field_corner_radius"
         app:boxCornerRadiusTopEnd="@dimen/login_field_corner_radius"
@@ -194,7 +193,8 @@
         app:boxStrokeWidth="@dimen/login_field_stroke_width"
         app:expandedHintEnabled="true"
         app:hintAnimationEnabled="true"
-        app:hintTextColor="@color/black">
+        app:hintTextColor="@color/black"
+        tools:visibility="visible">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/vendorNameField"
@@ -229,6 +229,47 @@
         tools:listitem="@layout/list_item_selected_items" />
 
     <TextView
+        android:id="@+id/selectCategoryText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/list_item_padding"
+        android:layout_marginTop="@dimen/user_info_item_margin_top"
+        android:text="@string/select_category"
+        android:textColor="@color/black"
+        android:textSize="@dimen/text_size_small"
+        android:textStyle="bold"
+        tools:visibility="visible" />
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/categoryDropdownLayout"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/toolbar_height"
+        android:layout_marginHorizontal="@dimen/list_item_padding"
+        android:layout_marginTop="@dimen/user_info_item_margin_top"
+        app:cardBackgroundColor="@android:color/transparent"
+        app:cardCornerRadius="@dimen/login_button_corner_radius"
+        app:cardElevation="0dp"
+        app:contentPadding="@dimen/list_item_progress_content_margin_top_small"
+        app:strokeColor="@color/form_field_stroke"
+        app:strokeWidth="@dimen/login_field_stroke_width"
+        tools:visibility="visible">
+
+        <ProgressBar
+            android:id="@+id/categoryLoading"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:indeterminateTint="@color/button_color"
+            tools:visibility="visible" />
+
+        <Spinner
+            android:id="@+id/categoryDropdown"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            tools:listitem="@layout/support_simple_spinner_dropdown_item" />
+    </com.google.android.material.card.MaterialCardView>
+
+    <TextView
         android:id="@+id/selectComplexityText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -238,7 +279,7 @@
         android:textColor="@color/black"
         android:textSize="@dimen/text_size_small"
         android:textStyle="bold"
-        android:visibility="visible" />
+        tools:visibility="visible" />
 
     <RadioGroup
         android:id="@+id/complexityRadioGroup"
@@ -247,7 +288,7 @@
         android:layout_marginHorizontal="@dimen/list_item_padding"
         android:layout_marginTop="@dimen/dialog_loading_content_padding"
         android:orientation="horizontal"
-        android:visibility="visible">
+        tools:visibility="visible">
 
         <RadioButton
             android:id="@+id/lowSelector"
@@ -287,7 +328,7 @@
         android:textColor="@color/black"
         android:textSize="@dimen/text_size_small"
         android:textStyle="bold"
-        android:visibility="visible" />
+        tools:visibility="visible" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvTechnicians"
@@ -295,10 +336,10 @@
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="@dimen/list_item_padding"
         android:layout_marginTop="@dimen/dialog_loading_content_padding"
-        android:visibility="visible"
         app:layoutManager="com.google.android.flexbox.FlexboxLayoutManager"
         tools:itemCount="2"
-        tools:listitem="@layout/list_item_selected_items" />
+        tools:listitem="@layout/list_item_selected_items"
+        tools:visibility="visible" />
 
     <LinearLayout
         android:id="@+id/actionsButtonContainer"

@@ -243,8 +243,12 @@ class SubmissionDetailActivity : AppCompatActivity(),
                                     detailTitle.text = detailData.nomorRequest
                                     // Add click listener for copying text to clipboard when status is Hold (22)
                                     detailTitle.setOnLongClickListener {
-                                        val clipboard = getSystemService(CLIPBOARD_SERVICE) as ClipboardManager
-                                        val clip = ClipData.newPlainText("Request Number", detailData.nomorRequest)
+                                        val clipboard =
+                                            getSystemService(CLIPBOARD_SERVICE) as ClipboardManager
+                                        val clip = ClipData.newPlainText(
+                                            "Request Number",
+                                            detailData.nomorRequest
+                                        )
                                         clipboard.setPrimaryClip(clip)
                                         CustomToast.getInstance(applicationContext)
                                             .setBackgroundColor(
@@ -950,6 +954,7 @@ class SubmissionDetailActivity : AppCompatActivity(),
                                                     !!.idUser
                                                 ) {
                                                     editTechniciansButton.visibility = View.VISIBLE
+                                                    editCategoryComplexityButton.visibility = View.VISIBLE
                                                     holdResumeIcon.setImageDrawable(
                                                         ContextCompat.getDrawable(
                                                             applicationContext,
@@ -1728,11 +1733,42 @@ class SubmissionDetailActivity : AppCompatActivity(),
                                                             isUpdated = true
                                                             init()
                                                         }
+
+                                                        override fun onCategoryComplexityUpdated() {
+                                                            // Not used in edit technicians mode
+                                                        }
                                                     })
                                                 }
                                             }
                                         if (bottomSheet.window != null)
                                             bottomSheet.show()
+                                    }
+
+                                    editCategoryComplexityButton.setOnClickListener {
+                                        val catSheet = UpdateStatusBottomSheet(
+                                            this@SubmissionDetailActivity,
+                                            detailData,
+                                            approve = false,
+                                            cancel = false,
+                                            deployTech = false,
+                                            isEdit = false,
+                                            editCategoryComplexity = true
+                                        ).also { bs ->
+                                            with(bs) {
+                                                setOnUpdateSuccessListener(object :
+                                                    UpdateStatusBottomSheet.OnUpdateSuccessListener {
+                                                    override fun onApproved() {}
+                                                    override fun onRejected() {}
+                                                    override fun onCanceled() {}
+                                                    override fun onTechniciansDeployed() {}
+                                                    override fun onCategoryComplexityUpdated() {
+                                                        isUpdated = true
+                                                        init()
+                                                    }
+                                                })
+                                            }
+                                        }
+                                        if (catSheet.window != null) catSheet.show()
                                     }
                                 } else {
                                     detailTitle.text = "ERR!!"
@@ -1941,6 +1977,8 @@ class SubmissionDetailActivity : AppCompatActivity(),
                                             }
 
                                             override fun onTechniciansDeployed() {}
+
+                                            override fun onCategoryComplexityUpdated() {}
                                         })
                                     }
                                 }
@@ -1985,6 +2023,8 @@ class SubmissionDetailActivity : AppCompatActivity(),
                                             override fun onCanceled() {}
 
                                             override fun onTechniciansDeployed() {}
+
+                                            override fun onCategoryComplexityUpdated() {}
                                         })
                                     }
                                 }
@@ -3332,4 +3372,3 @@ class SubmissionDetailActivity : AppCompatActivity(),
         binding.mapPreview.onLowMemory()
     }
 }
-

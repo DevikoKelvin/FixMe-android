@@ -156,8 +156,8 @@ interface GetEndpoint {
     @FormUrlEncoded
     @POST("statusReject")
     fun rejectSubmission(
-        @Field("user_id") idUser: Int,
-        @Field("case_id") idGaProjects: Int,
+        @Field("user_id") userId: Int,
+        @Field("case_id") caseId: Int,
         @Field("description") description: String
     ): Call<GenericSimpleResponse>
 
@@ -237,6 +237,15 @@ interface GetEndpoint {
     fun resumeIssue(
         @Field("case_id") caseId: Int,
         @Field("user_id") userId: Int,
+    ): Call<GenericSimpleResponse>
+
+    @FormUrlEncoded
+    @POST("updateCategoryComplexity")
+    fun updateCategoryComplexity(
+        @Field("user_id") userId: Int,
+        @Field("case_id") caseId: Int,
+        @Field("category") category: Int,
+        @Field("complexity") complexity: String
     ): Call<GenericSimpleResponse>
 
     @FormUrlEncoded

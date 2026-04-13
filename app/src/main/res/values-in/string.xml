@@ -145,6 +145,7 @@
     <string name="vendors">Vendor/Bagian Luar</string>
     <string name="vendors_name">Nama Vendor</string>
     <string name="select_supervisor">Pilih Supervisor</string>
+    <string name="select_category">Kategori</string>
     <string name="select_complexity">Kompleksitas</string>
     <string name="all">Semua</string>
     <string name="complexity_low">Rendah</string>

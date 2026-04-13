@@ -246,4 +246,9 @@ class SubmissionActionBottomSheet(context: Context, val data: SubmissionDetailRe
         onButtonActionClickedListener.onUpdateSuccess()
         dismiss()
     }
+
+    override fun onCategoryComplexityUpdated() {
+        onButtonActionClickedListener.onUpdateSuccess()
+        dismiss()
+    }
 }

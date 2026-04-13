@@ -45,6 +45,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
+            android:textAlignment="center"
             android:textColor="@color/black"
             android:textSize="@dimen/text_size_medium"
             android:textStyle="bold"
@@ -63,7 +64,8 @@
             app:cardCornerRadius="@dimen/card_corner_radius"
             app:cardElevation="0dp"
             app:contentPadding="@dimen/dialog_margin"
-            app:strokeWidth="0dp">
+            app:strokeWidth="0dp"
+            tools:visibility="visible">
 
             <ImageView
                 android:id="@+id/holdResumeIcon"
@@ -945,6 +947,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginHorizontal="@dimen/activity_horizontal_margin"
                             android:layout_marginTop="@dimen/dialog_loading_content_padding"
+                            android:gravity="center_vertical"
                             android:orientation="horizontal"
                             tools:ignore="UseCompoundDrawables">
 
@@ -963,6 +966,42 @@
                                 android:textColor="@color/black"
                                 android:textSize="@dimen/text_size_small"
                                 tools:text="IT" />
+
+                            <com.google.android.material.card.MaterialCardView
+                                android:id="@+id/editCategoryComplexityButton"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:layout_marginHorizontal="@dimen/card_corner_radius"
+                                android:visibility="gone"
+                                app:cardCornerRadius="@dimen/card_corner_radius"
+                                app:cardElevation="0dp"
+                                app:contentPadding="@dimen/dialog_margin"
+                                tools:visibility="visible">
+
+                                <LinearLayout
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:gravity="center"
+                                    android:orientation="horizontal"
+                                    tools:ignore="UseCompoundDrawables">
+
+                                    <ImageView
+                                        android:layout_width="@dimen/search_icon_size"
+                                        android:layout_height="@dimen/search_icon_size"
+                                        android:src="@drawable/edit_icon"
+                                        tools:ignore="ContentDescription" />
+
+                                    <TextView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginStart="4dp"
+                                        android:text="@string/action_edit"
+                                        android:textColor="@color/black"
+                                        android:textSize="@dimen/text_size_small"
+                                        android:textStyle="bold" />
+                                </LinearLayout>
+                            </com.google.android.material.card.MaterialCardView>
                         </LinearLayout>
 
                         <LinearLayout
@@ -1257,7 +1296,8 @@
                                         android:visibility="gone"
                                         app:cardCornerRadius="@dimen/card_corner_radius"
                                         app:cardElevation="0dp"
-                                        app:contentPadding="@dimen/dialog_margin">
+                                        app:contentPadding="@dimen/dialog_margin"
+                                        tools:visibility="visible">
 
                                         <LinearLayout
                                             android:layout_width="wrap_content"

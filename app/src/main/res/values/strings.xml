@@ -145,6 +145,7 @@
     <string name="vendors">Vendors</string>
     <string name="vendors_name">Vendors Name</string>
     <string name="select_supervisor">Select Supervisor</string>
+    <string name="select_category">Category</string>
     <string name="select_complexity">Complexity</string>
     <string name="all">All</string>
     <string name="complexity_low">Low</string>
