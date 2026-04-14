@@ -596,7 +596,7 @@ class LoginActivity : AppCompatActivity() {
                                 }
                             }
 
-                            if (dialog.window != null)
+                            if (dialog.window != null && !isFinishing && !isDestroyed)
                                 dialog.show()
                         }
                     }
