@@ -106,6 +106,10 @@ class UpdateStatusBottomSheet(
     @SuppressLint("SetTextI18n", "NotifyDataSetChanged")
     private fun init() {
         binding.apply {
+            // Hide category fields by default — only shown in editCategoryComplexity mode
+            selectCategoryText.visibility = View.GONE
+            categoryDropdownLayout.visibility = View.GONE
+
             // Edit Category & Complexity mode
             if (editCategoryComplexity) {
                 issueTitle.text = if (context.getString(R.string.lang) == "in")
