@@ -3330,7 +3330,7 @@ class SubmissionDetailActivity : AppCompatActivity(),
             googleMap?.apply {
                 clear()
                 addMarker(MarkerOptions().position(position).title(detailData.lokasi))
-                moveCamera(CameraUpdateFactory.newLatLngZoom(position, 19f))
+                moveCamera(CameraUpdateFactory.newLatLngZoom(position, 18f))
             }
         } catch (e: Exception) {
             e.printStackTrace()

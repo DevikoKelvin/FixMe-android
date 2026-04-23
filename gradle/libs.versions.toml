@@ -1,6 +1,6 @@
 [versions]
 # Plugins
-agp = "9.1.1"
+agp = "9.2.0"
 gms = "4.4.4"
 
 # Dependencies
@@ -21,12 +21,12 @@ converterGson = "3.0.0"
 loggingInterceptor = "5.3.2"
 flexbox = "3.0.0"
 lottie = "6.7.1"
-glide = "5.0.5"
+glide = "5.0.7"
 swipeRefreshLayout = "1.2.0"
 circleIndicator = "2.1.6"
 appxupdater = "v2.0.20"
 pusherJavaClient = "2.4.4"
-balloon = "1.7.5"
+balloon = "1.7.6"
 shimmer = "0.5.0"
 
 firebaseBom = "34.12.0"

@@ -195,15 +195,6 @@
             </LinearLayout>
 
             <TextView
-                android:id="@+id/updateAvailableStatus"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginHorizontal="@dimen/activity_horizontal_margin"
-                android:layout_marginTop="4dp"
-                android:text="@string/update_available"
-                android:visibility="gone" />
-
-            <TextView
                 android:id="@+id/currentAppVersionText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -222,7 +213,40 @@
                 android:textColor="@color/black"
                 android:textStyle="bold"
                 android:visibility="gone"
-                tools:text="Detected new app version: 1_2.0" />
+                tools:text="Detected new app version: 1_2.0"
+                tools:visibility="visible" />
+
+            <TextView
+                android:id="@+id/updateAvailableStatus"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="@dimen/activity_horizontal_margin"
+                android:layout_marginTop="4dp"
+                android:text="@string/update_available"
+                android:visibility="gone"
+                tools:visibility="visible" />
+
+            <ProgressBar
+                android:id="@+id/downloadProgress"
+                style="?android:attr/progressBarStyleHorizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="@dimen/activity_horizontal_margin"
+                android:layout_marginTop="4dp"
+                android:indeterminateTint="@color/button_color"
+                android:progress="50"
+                android:visibility="gone"
+                tools:visibility="visible" />
+
+            <TextView
+                android:id="@+id/downloadPercentage"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end"
+                android:layout_marginHorizontal="@dimen/activity_horizontal_margin"
+                android:visibility="gone"
+                tools:text="50%"
+                tools:visibility="visible" />
         </LinearLayout>
     </ScrollView>
 
@@ -232,11 +256,11 @@
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="@dimen/activity_horizontal_margin"
         android:layout_marginBottom="@dimen/activity_vertical_margin"
-        tools:text="@string/copyright"
         android:textAlignment="center"
         android:textSize="@dimen/copyright_text_size"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        tools:text="@string/copyright" />
 </androidx.constraintlayout.widget.ConstraintLayout>

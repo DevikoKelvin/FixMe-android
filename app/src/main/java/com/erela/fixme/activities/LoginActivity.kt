@@ -60,6 +60,7 @@ class LoginActivity : AppCompatActivity() {
     private var newAppVersion: String? = null
     private var downloadProgress: Int = 0
     private var downloadId: Long = 0
+    private var pendingDeleteApkFile: File? = null
     private val onDownloadComplete = object : BroadcastReceiver() {
         override fun onReceive(context: Context, intent: Intent) {
             val id = intent.getLongExtra(DownloadManager.EXTRA_DOWNLOAD_ID, -1)
@@ -158,6 +159,17 @@ class LoginActivity : AppCompatActivity() {
     override fun onDestroy() {
         super.onDestroy()
         unregisterReceiver(onDownloadComplete)
+    }
+
+    override fun onResume() {
+        super.onResume()
+        pendingDeleteApkFile?.let { file ->
+            if (file.exists()) {
+                val deleted = file.delete()
+                Log.d("APKCleanup", "Downloaded APK ${if (deleted) "deleted" else "delete failed"}: ${file.name}")
+            }
+            pendingDeleteApkFile = null
+        }
     }
 
     override fun onPause() {
@@ -680,6 +692,7 @@ class LoginActivity : AppCompatActivity() {
     private fun installApk(uri: Uri) {
         try {
             val downloadedFile = File(uri.path!!)
+            pendingDeleteApkFile = downloadedFile
             val installIntent = Intent(Intent.ACTION_VIEW).apply {
                 setDataAndType(
                     FileProvider.getUriForFile(
@@ -695,6 +708,8 @@ class LoginActivity : AppCompatActivity() {
             try {
                 startActivity(installIntent)
             } catch (ex: ActivityNotFoundException) {
+                pendingDeleteApkFile?.delete()
+                pendingDeleteApkFile = null
                 CustomToast.getInstance(applicationContext)
                     .setMessage(
                         if (getString(R.string.lang) == "in")
@@ -717,6 +732,7 @@ class LoginActivity : AppCompatActivity() {
                 ex.printStackTrace()
             }
         } catch (e: Exception) {
+            pendingDeleteApkFile = null
             Log.e("InstallApk", "Error installing APK", e)
             CustomToast.getInstance(applicationContext)
                 .setMessage(

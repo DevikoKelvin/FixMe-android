@@ -1598,7 +1598,7 @@ class SubmissionFormActivity : AppCompatActivity(), OnMapReadyCallback {
         googleMap?.apply {
             clear()
             addMarker(MarkerOptions().position(latLng))
-            animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 19f))
+            animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 18f))
             uiSettings.apply {
                 setAllGesturesEnabled(false)
                 isMapToolbarEnabled = false

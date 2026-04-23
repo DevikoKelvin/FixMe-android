@@ -1,6 +1,5 @@
 package com.erela.fixme.activities
 
-import android.Manifest
 import android.annotation.SuppressLint
 import android.app.DownloadManager
 import android.content.ActivityNotFoundException
@@ -8,7 +7,7 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
-import android.content.pm.PackageManager
+import android.content.res.ColorStateList
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
@@ -19,11 +18,11 @@ import android.util.Log
 import android.view.View
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.app.ActivityCompat
-import androidx.core.app.NotificationCompat
+import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.app.NotificationManagerCompat
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
+import androidx.core.content.edit
 import androidx.core.net.toUri
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
@@ -48,68 +47,98 @@ class SettingsActivity : AppCompatActivity() {
     private var downloadLink: String? = null
     private var downloadProgress: Int = 0
     private var downloadId: Long = 0
+    private var pendingDeleteApkFile: File? = null
+    private val downloadAnimHandler = Handler(Looper.getMainLooper())
+    private var downloadAnimRunnable: Runnable? = null
+    private val progressPollingHandler = Handler(Looper.getMainLooper())
+    private var progressPollingRunnable: Runnable? = null
     private val onDownloadComplete = object : BroadcastReceiver() {
+        @SuppressLint("SetTextI18n")
         override fun onReceive(context: Context, intent: Intent) {
             val id = intent.getLongExtra(DownloadManager.EXTRA_DOWNLOAD_ID, -1)
-            if (downloadId == id) {
-                val downloadManager = getSystemService(DOWNLOAD_SERVICE) as DownloadManager
-                val query = DownloadManager.Query().setFilterById(downloadId)
-                val cursor = downloadManager.query(query)
-                if (cursor.moveToFirst()) {
-                    val statusColumnIndex = cursor.getColumnIndex(DownloadManager.COLUMN_STATUS)
-                    if (statusColumnIndex != -1) {
-                        val status = cursor.getInt(statusColumnIndex)
-                        if (status == DownloadManager.STATUS_SUCCESSFUL) {
-                            showDownloadProgressNotification(downloadId.toInt(), 100)
-                            cancelNotification(downloadId.toInt())
-                            val uriColumnIndex =
-                                cursor.getColumnIndex(DownloadManager.COLUMN_LOCAL_URI)
-                            if (uriColumnIndex != -1) {
-                                val fileUriString = cursor.getString(uriColumnIndex)
-                                if (fileUriString != null) {
-                                    val fileUri = fileUriString.toUri()
-                                    installApk(fileUri)
-                                } else {
-                                    Log.e("DownloadManager", "COLUMN_LOCAL_URI is null")
-                                    showDownloadFailedToast()
-                                    cancelNotification(downloadId.toInt())
-                                }
+            if (downloadId != id) return
+
+            val downloadManager = getSystemService(DOWNLOAD_SERVICE) as DownloadManager
+            val cursor = downloadManager.query(DownloadManager.Query().setFilterById(downloadId))
+
+            if (!cursor.moveToFirst()) {
+                cursor.close()
+                return
+            }
+
+            binding.apply {
+                val statusColumnIndex = cursor.getColumnIndex(DownloadManager.COLUMN_STATUS)
+                if (statusColumnIndex != -1) {
+                    val status = cursor.getInt(statusColumnIndex)
+                    if (status == DownloadManager.STATUS_SUCCESSFUL) {
+                        stopProgressPolling()
+                        clearSavedDownloadId()
+                        cancelNotification(downloadId.toInt())
+                        downloadAnimRunnable?.let { downloadAnimHandler.removeCallbacks(it) }
+                        downloadProgress.progress = 100
+                        downloadPercentage.text = "100%"
+                        downloadProgress.progressTintList = ColorStateList.valueOf(
+                            ContextCompat.getColor(
+                                this@SettingsActivity,
+                                R.color.custom_toast_font_success
+                            )
+                        )
+                        updateAvailableStatus.text =
+                            if (getString(R.string.lang) == "in") "Unduhan selesai!" else "Download completed!"
+                        val uriColumnIndex = cursor.getColumnIndex(DownloadManager.COLUMN_LOCAL_URI)
+                        if (uriColumnIndex != -1) {
+                            val fileUriString = cursor.getString(uriColumnIndex)
+                            if (fileUriString != null) {
+                                cancelNotification(downloadId.toInt())
+                                installApk(fileUriString.toUri())
                             } else {
-                                Log.e("DownloadManager", "COLUMN_LOCAL_URI not found")
+                                Log.e("DownloadManager", "COLUMN_LOCAL_URI is null")
                                 showDownloadFailedToast()
                                 cancelNotification(downloadId.toInt())
-                            }
-                        } else if (status == DownloadManager.STATUS_RUNNING) {
-                            val bytesDownloadedIndex =
-                                cursor.getColumnIndex(DownloadManager.COLUMN_BYTES_DOWNLOADED_SO_FAR)
-                            val bytesTotalIndex =
-                                cursor.getColumnIndex(DownloadManager.COLUMN_TOTAL_SIZE_BYTES)
-                            if (bytesDownloadedIndex != -1 && bytesTotalIndex != -1) {
-                                val bytesDownloaded = cursor.getLong(bytesDownloadedIndex)
-                                val bytesTotal = cursor.getLong(bytesTotalIndex)
-                                if (bytesTotal > 0) {
-                                    downloadProgress =
-                                        ((bytesDownloaded * 100) / bytesTotal).toInt()
-                                    showDownloadProgressNotification(
-                                        downloadId.toInt(),
-                                        downloadProgress
-                                    )
-                                }
+                                enableDownloadButton()
+                                downloadProgress.visibility = View.GONE
+                                downloadPercentage.visibility = View.GONE
                             }
                         } else {
-                            Log.e("DownloadManager", "Download not successful, status: $status")
+                            Log.e("DownloadManager", "COLUMN_LOCAL_URI not found")
                             showDownloadFailedToast()
                             cancelNotification(downloadId.toInt())
+                            enableDownloadButton()
+                            downloadProgress.visibility = View.GONE
+                            downloadPercentage.visibility = View.GONE
                         }
                     } else {
-                        Log.e("DownloadManager", "COLUMN_STATUS not found")
+                        stopProgressPolling()
+                        clearSavedDownloadId()
+                        Log.e("DownloadManager", "Download not successful, status: $status")
                         showDownloadFailedToast()
                         cancelNotification(downloadId.toInt())
+                        downloadAnimRunnable?.let { downloadAnimHandler.removeCallbacks(it) }
+                        enableDownloadButton()
+                        downloadProgress.visibility = View.GONE
+                        downloadPercentage.visibility = View.GONE
                     }
+                } else {
+                    stopProgressPolling()
+                    clearSavedDownloadId()
+                    Log.e("DownloadManager", "COLUMN_STATUS not found")
+                    showDownloadFailedToast()
+                    cancelNotification(downloadId.toInt())
+                    downloadAnimRunnable?.let { downloadAnimHandler.removeCallbacks(it) }
+                    enableDownloadButton()
+                    downloadProgress.visibility = View.GONE
+                    downloadPercentage.visibility = View.GONE
                 }
-                cursor.close()
             }
+
+            cursor.close()
         }
+    }
+
+    companion object {
+        private const val DOWNLOAD_PREFS = "fixme_download_prefs"
+        private const val PREF_DOWNLOAD_ID = "active_download_id"
+        private const val PREF_NEW_APP_VERSION = "new_app_version"
     }
 
     @SuppressLint("UnspecifiedRegisterReceiverFlag")
@@ -139,8 +168,24 @@ class SettingsActivity : AppCompatActivity() {
         }
     }
 
+    override fun onResume() {
+        super.onResume()
+        pendingDeleteApkFile?.let { file ->
+            if (file.exists()) {
+                val deleted = file.delete()
+                Log.d(
+                    "APKCleanup",
+                    "Downloaded APK ${if (deleted) "deleted" else "delete failed"}: ${file.name}"
+                )
+            }
+            pendingDeleteApkFile = null
+        }
+        restoreDownloadStateIfNeeded()
+    }
+
     override fun onDestroy() {
         super.onDestroy()
+        stopProgressPolling()
         unregisterReceiver(onDownloadComplete)
     }
 
@@ -157,9 +202,13 @@ class SettingsActivity : AppCompatActivity() {
 
             copyright.text =
                 if (getString(R.string.lang) == "in")
-                    "@ ${Calendar.getInstance().get(Calendar.YEAR)} PT Erlangga Edi Laboratories\n Seluruh hak cipta dilindungi"
+                    "@ ${
+                        Calendar.getInstance().get(Calendar.YEAR)
+                    } PT Erlangga Edi Laboratories\n Seluruh hak cipta dilindungi"
                 else
-                    "@ ${Calendar.getInstance().get(Calendar.YEAR)} Erlangga Edi Laboratories Corporation\n All rights reserved"
+                    "@ ${
+                        Calendar.getInstance().get(Calendar.YEAR)
+                    } Erlangga Edi Laboratories Corporation\n All rights reserved"
 
             val buildType =
                 if (BuildConfig.BUILD_TYPE == "debug") "dev_${BuildConfig.BUILD_TYPE}" else "${BuildConfig.BUILD_TYPE}"
@@ -173,6 +222,29 @@ class SettingsActivity : AppCompatActivity() {
 
             checkDownloadInstallButton.setOnClickListener {
                 if (downloadLink != null) {
+                    disableDownloadButton()
+                    downloadProgress.visibility = View.VISIBLE
+                    downloadProgress.progress = 0
+                    downloadPercentage.visibility = View.VISIBLE
+                    downloadPercentage.text = "0%"
+                    downloadAnimRunnable = object : Runnable {
+                        var count = 1
+                        override fun run() {
+                            when (count) {
+                                1 -> updateAvailableStatus.text =
+                                    if (getString(R.string.lang) == "in") "Mengunduh." else "Downloading."
+
+                                2 -> updateAvailableStatus.text =
+                                    if (getString(R.string.lang) == "in") "Mengunduh.." else "Downloading.."
+
+                                3 -> updateAvailableStatus.text =
+                                    if (getString(R.string.lang) == "in") "Mengunduh..." else "Downloading..."
+                            }
+                            count = if (count < 3) count + 1 else 1
+                            downloadAnimHandler.postDelayed(this, 1000)
+                        }
+                    }
+                    downloadAnimHandler.post(downloadAnimRunnable!!)
                     startDownload(downloadLink!!)
                 } else {
                     loadingBar.visibility = View.VISIBLE
@@ -222,13 +294,20 @@ class SettingsActivity : AppCompatActivity() {
                                             )
                                         )
                                         newAppVersion = update?.latestVersion
+                                        getSharedPreferences(DOWNLOAD_PREFS, MODE_PRIVATE)
+                                            .edit { putString(PREF_NEW_APP_VERSION, newAppVersion) }
                                         newAppVersionText.text =
                                             if (getString(R.string.lang) == "in")
                                                 "Versi aplikasi baru terdeteksi: ${update?.latestVersion}"
                                             else
                                                 "Detected new app version: ${update?.latestVersion}"
                                         newAppVersionText.visibility = View.VISIBLE
-                                        statusIcon.setImageDrawable(getDrawable(R.drawable.caution_icon))
+                                        statusIcon.setImageDrawable(
+                                            AppCompatResources.getDrawable(
+                                                this@SettingsActivity,
+                                                R.drawable.caution_icon
+                                            )
+                                        )
                                         statusIcon.visibility = View.VISIBLE
                                         downloadLink = update?.urlToDownload.toString().replace(
                                             "latest",
@@ -236,7 +315,12 @@ class SettingsActivity : AppCompatActivity() {
                                         )
                                     } else {
                                         if (comparison < 0) {
-                                            statusIcon.setImageDrawable(getDrawable(R.drawable.question_mark_icon))
+                                            statusIcon.setImageDrawable(
+                                                AppCompatResources.getDrawable(
+                                                    this@SettingsActivity,
+                                                    R.drawable.question_mark_icon
+                                                )
+                                            )
                                             statusIcon.visibility = View.VISIBLE
                                             CustomToast.getInstance(applicationContext)
                                                 .setMessage(
@@ -258,7 +342,12 @@ class SettingsActivity : AppCompatActivity() {
                                                     )
                                                 ).show()
                                         } else {
-                                            statusIcon.setImageDrawable(getDrawable(R.drawable.done_icon))
+                                            statusIcon.setImageDrawable(
+                                                AppCompatResources.getDrawable(
+                                                    this@SettingsActivity,
+                                                    R.drawable.done_icon
+                                                )
+                                            )
                                             statusIcon.visibility = View.VISIBLE
                                             CustomToast.getInstance(applicationContext)
                                                 .setMessage(
@@ -325,7 +414,12 @@ class SettingsActivity : AppCompatActivity() {
                                         getString(R.string.check_for_update_now)
                                     updateAvailableStatus.visibility = View.GONE
                                     newAppVersionText.visibility = View.GONE
-                                    statusIcon.setImageDrawable(getDrawable(R.drawable.connection_error_icon))
+                                    statusIcon.setImageDrawable(
+                                        AppCompatResources.getDrawable(
+                                            this@SettingsActivity,
+                                            R.drawable.connection_error_icon
+                                        )
+                                    )
                                     statusIcon.visibility = View.VISIBLE
                                     Log.e("ERROR Update", error.toString())
                                 }
@@ -336,6 +430,193 @@ class SettingsActivity : AppCompatActivity() {
                 }
             }
         }
+    }
+
+    @SuppressLint("SetTextI18n")
+    private fun startProgressPolling(downloadManager: DownloadManager) {
+        progressPollingRunnable = object : Runnable {
+            override fun run() {
+                val cursor = downloadManager.query(
+                    DownloadManager.Query().setFilterById(downloadId)
+                )
+                binding.apply {
+                    if (cursor.moveToFirst()) {
+                        val bytesDownloadedIndex =
+                            cursor.getColumnIndex(DownloadManager.COLUMN_BYTES_DOWNLOADED_SO_FAR)
+                        val bytesTotalIndex =
+                            cursor.getColumnIndex(DownloadManager.COLUMN_TOTAL_SIZE_BYTES)
+                        if (bytesDownloadedIndex != -1 && bytesTotalIndex != -1) {
+                            val bytesDownloaded = cursor.getLong(bytesDownloadedIndex)
+                            val bytesTotal = cursor.getLong(bytesTotalIndex)
+                            if (bytesTotal > 0) {
+                                this@SettingsActivity.downloadProgress =
+                                    ((bytesDownloaded * 100) / bytesTotal).toInt()
+                                downloadProgress.progressTintList = ColorStateList.valueOf(
+                                    ContextCompat.getColor(
+                                        this@SettingsActivity,
+                                        R.color.button_color
+                                    )
+                                )
+                                downloadProgress.progress =
+                                    this@SettingsActivity.downloadProgress
+                                downloadPercentage.text =
+                                    "${this@SettingsActivity.downloadProgress}%"
+                            }
+                        }
+                    }
+                }
+                cursor.close()
+                cancelNotification(downloadId.toInt())
+                progressPollingHandler.postDelayed(this, 500)
+            }
+        }
+        progressPollingHandler.post(progressPollingRunnable!!)
+    }
+
+    private fun stopProgressPolling() {
+        progressPollingRunnable?.let { progressPollingHandler.removeCallbacks(it) }
+        progressPollingRunnable = null
+    }
+
+    private fun enableDownloadButton() {
+        binding.apply {
+            checkDownloadInstallButton.isEnabled = false
+            checkDownloadInstallButton.alpha = 1.0f
+        }
+    }
+
+    private fun disableDownloadButton() {
+        binding.apply {
+            checkDownloadInstallButton.isEnabled = false
+            checkDownloadInstallButton.alpha = 0.4f
+        }
+    }
+
+    private fun clearSavedDownloadId() {
+        getSharedPreferences(DOWNLOAD_PREFS, MODE_PRIVATE)
+            .edit { remove(PREF_DOWNLOAD_ID) }
+    }
+
+    @SuppressLint("SetTextI18n")
+    private fun restoreDownloadStateIfNeeded() {
+        if (progressPollingRunnable != null) return  // already running in this session
+
+        val prefs = getSharedPreferences(DOWNLOAD_PREFS, MODE_PRIVATE)
+        val savedId = prefs.getLong(PREF_DOWNLOAD_ID, 0L)
+        if (savedId == 0L) return
+
+        // Restore newAppVersion so notification helpers and UI have the correct version string
+        newAppVersion = prefs.getString(PREF_NEW_APP_VERSION, null)
+
+        val downloadManager = getSystemService(DOWNLOAD_SERVICE) as DownloadManager
+        val cursor = downloadManager.query(DownloadManager.Query().setFilterById(savedId))
+
+        if (!cursor.moveToFirst()) {
+            cursor.close()
+            clearSavedDownloadId()
+            return
+        }
+
+        val statusIndex = cursor.getColumnIndex(DownloadManager.COLUMN_STATUS)
+        val status = if (statusIndex != -1) cursor.getInt(statusIndex) else -1
+
+        when (status) {
+            DownloadManager.STATUS_RUNNING, DownloadManager.STATUS_PENDING -> {
+                downloadId = savedId
+                binding.apply {
+                    disableDownloadButton()
+                    checkDownloadInstallText.text =
+                        getString(R.string.download_update)
+                    updateAvailableStatus.visibility = View.VISIBLE
+                    currentAppVersionText.setTextColor(
+                        ContextCompat.getColor(
+                            this@SettingsActivity,
+                            R.color.custom_toast_font_failed
+                        )
+                    )
+                    newAppVersionText.text =
+                        if (getString(R.string.lang) == "in")
+                            "Versi aplikasi baru terdeteksi: $newAppVersion"
+                        else
+                            "Detected new app version: $newAppVersion"
+                    newAppVersionText.visibility = View.VISIBLE
+                    statusIcon.setImageDrawable(
+                        AppCompatResources.getDrawable(
+                            this@SettingsActivity,
+                            R.drawable.caution_icon
+                        )
+                    )
+                    statusIcon.visibility = View.VISIBLE
+                    updateAvailableStatus.visibility = View.VISIBLE
+                    downloadProgress.visibility = View.VISIBLE
+                    downloadPercentage.visibility = View.VISIBLE
+                    val bytesDownloadedIndex =
+                        cursor.getColumnIndex(DownloadManager.COLUMN_BYTES_DOWNLOADED_SO_FAR)
+                    val bytesTotalIndex =
+                        cursor.getColumnIndex(DownloadManager.COLUMN_TOTAL_SIZE_BYTES)
+                    if (bytesDownloadedIndex != -1 && bytesTotalIndex != -1) {
+                        val bytesTotal = cursor.getLong(bytesTotalIndex)
+                        if (bytesTotal > 0) {
+                            val progress =
+                                ((cursor.getLong(bytesDownloadedIndex) * 100) / bytesTotal).toInt()
+                            downloadProgress.progress = progress
+                            downloadPercentage.text = "$progress%"
+                        }
+                    }
+                    downloadAnimRunnable = object : Runnable {
+                        var count = 1
+                        override fun run() {
+                            when (count) {
+                                1 -> updateAvailableStatus.text =
+                                    if (getString(R.string.lang) == "in") "Mengunduh." else "Downloading."
+
+                                2 -> updateAvailableStatus.text =
+                                    if (getString(R.string.lang) == "in") "Mengunduh.." else "Downloading.."
+
+                                3 -> updateAvailableStatus.text =
+                                    if (getString(R.string.lang) == "in") "Mengunduh..." else "Downloading..."
+                            }
+                            count = if (count < 3) count + 1 else 1
+                            downloadAnimHandler.postDelayed(this, 1000)
+                        }
+                    }
+                    downloadAnimHandler.post(downloadAnimRunnable!!)
+                }
+                startProgressPolling(downloadManager)
+            }
+
+            DownloadManager.STATUS_SUCCESSFUL -> {
+                downloadId = savedId
+                val uriIndex = cursor.getColumnIndex(DownloadManager.COLUMN_LOCAL_URI)
+                val fileUriString =
+                    if (uriIndex != -1) cursor.getString(uriIndex) else null
+                if (fileUriString != null) {
+                    binding.apply {
+                        disableDownloadButton()
+                        downloadProgress.visibility = View.VISIBLE
+                        downloadProgress.progress = 100
+                        downloadProgress.progressTintList = ColorStateList.valueOf(
+                            ContextCompat.getColor(
+                                this@SettingsActivity,
+                                R.color.custom_toast_font_success
+                            )
+                        )
+                        downloadPercentage.visibility = View.VISIBLE
+                        downloadPercentage.text = "100%"
+                        updateAvailableStatus.visibility = View.VISIBLE
+                        updateAvailableStatus.text =
+                            if (getString(R.string.lang) == "in") "Unduhan selesai!" else "Download completed!"
+                    }
+                    cancelNotification(downloadId.toInt())
+                    installApk(fileUriString.toUri())
+                }
+                clearSavedDownloadId()
+            }
+
+            else -> clearSavedDownloadId()
+        }
+
+        cursor.close()
     }
 
     private fun showDownloadFailedToast() {
@@ -374,13 +655,17 @@ class SettingsActivity : AppCompatActivity() {
                 else
                     "Please wait while the update is downloading..."
             )
-            .setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED)
+            .setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE)
             .setDestinationInExternalPublicDir(
                 Environment.DIRECTORY_DOWNLOADS,
                 "FixMe Updates"
             )
         val downloadManager = getSystemService(DOWNLOAD_SERVICE) as DownloadManager
         downloadId = downloadManager.enqueue(request)
+        getSharedPreferences(DOWNLOAD_PREFS, MODE_PRIVATE)
+            .edit { putLong(PREF_DOWNLOAD_ID, downloadId) }
+        cancelNotification(downloadId.toInt())
+        startProgressPolling(downloadManager)
         CustomToast.getInstance(applicationContext)
             .setMessage(
                 if (getString(R.string.lang) == "in")
@@ -400,33 +685,6 @@ class SettingsActivity : AppCompatActivity() {
                     R.color.custom_toast_background_soft_blue
                 )
             ).show()
-        showDownloadProgressNotification(downloadId.toInt(), 0)
-    }
-
-    private fun showDownloadProgressNotification(notificationId: Int, progress: Int) {
-        val builder = NotificationCompat.Builder(this, "FixMe Download Channel")
-            .setSmallIcon(android.R.drawable.stat_sys_download)
-            .setContentTitle("Erela_FixMe_prerelease_v${newAppVersion}")
-            .setContentText(
-                if (getString(R.string.lang) == "in")
-                    "Unduhan sedang berlangsung"
-                else
-                    "Download in progress"
-            )
-            .setOngoing(true)
-            .setProgress(100, progress, false)
-            .setOnlyAlertOnce(true)
-
-        with(NotificationManagerCompat.from(this)) {
-            if (ActivityCompat.checkSelfPermission(
-                    this@SettingsActivity,
-                    Manifest.permission.POST_NOTIFICATIONS
-                ) != PackageManager.PERMISSION_GRANTED
-            ) {
-                return
-            }
-            notify(notificationId, builder.build())
-        }
     }
 
     private fun cancelNotification(notificationId: Int) {
@@ -438,6 +696,7 @@ class SettingsActivity : AppCompatActivity() {
     private fun installApk(uri: Uri) {
         try {
             val downloadedFile = File(uri.path!!)
+            pendingDeleteApkFile = downloadedFile
             val installIntent = Intent(Intent.ACTION_VIEW).apply {
                 setDataAndType(
                     FileProvider.getUriForFile(
@@ -447,13 +706,16 @@ class SettingsActivity : AppCompatActivity() {
                     ),
                     "application/vnd.android.package-archive"
                 )
-                setDataAndType(uri, "application/vnd.android.package-archive")
                 addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
                 addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
             }
             try {
+                getSharedPreferences(DOWNLOAD_PREFS, MODE_PRIVATE)
+                    .edit { remove(PREF_NEW_APP_VERSION) }
                 startActivity(installIntent)
             } catch (ex: ActivityNotFoundException) {
+                pendingDeleteApkFile?.delete()
+                pendingDeleteApkFile = null
                 CustomToast.getInstance(applicationContext)
                     .setMessage(
                         if (getString(R.string.lang) == "in")
@@ -476,6 +738,7 @@ class SettingsActivity : AppCompatActivity() {
                 ex.printStackTrace()
             }
         } catch (e: Exception) {
+            pendingDeleteApkFile = null
             Log.e("InstallApk", "Error installing APK", e)
             CustomToast.getInstance(applicationContext)
                 .setMessage(
