@@ -155,6 +155,32 @@
 
     <string name="edit_submission_title">Edit Submission</string>
 
+    <string name="ac_maintenance_title">AC Maintenance</string>
+    <string name="ac_code">AC Code</string>
+    <string name="brand">Brand</string>
+    <string name="area">Area</string>
+    <string name="deadline">Deadline:</string>
+    
+    <string name="ac_check_in_title">Check In AC Maintenance</string>
+    <string name="item_id">Item ID</string>
+    <string name="ac_details">AC Details</string>
+    <string name="ready_to_begin">Ready to begin?</string>
+    <string name="check_in_instruction">Click the Check In button below to start the maintenance session. This will record your start time and assign the task to you.</string>
+    
+    <string name="maintenance_session_title">Maintenance Session</string>
+    <string name="assistant_technician">Assistant Technician</string>
+    <string name="ac_condition">AC Condition</string>
+    <string name="good">Good</string>
+    <string name="need_repair">Needs Repair</string>
+    <string name="broken">Broken</string>
+    <string name="findings">Findings</string>
+    <string name="action_taken">Action Taken</string>
+    <string name="photos_required">Photos (Required)</string>
+    <string name="before">Before</string>
+    <string name="during">During</string>
+    <string name="after">After</string>
+    <string name="complete_check_out">Complete &amp; Check Out</string>
+
     <string name="app_settings_title">Settings</string>
     <string name="about">About app</string>
     <string name="about_fixme">An app for reporting and managing damage to equipment and infrastructure at PT Erlangga Edi Laboratories (ERELA) Semarang</string>

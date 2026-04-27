@@ -139,7 +139,8 @@
                 android:id="@+id/shimmerLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:visibility="visible">
+                android:visibility="visible"
+                tools:visibility="gone">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -148,61 +149,61 @@
                     android:orientation="vertical">
 
                     <include
-                        layout="@layout/list_item_shimmer"
+                        layout="@layout/list_item_submission_shimmer"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginVertical="@dimen/dialog_margin" />
 
                     <include
-                        layout="@layout/list_item_shimmer"
+                        layout="@layout/list_item_submission_shimmer"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginVertical="@dimen/dialog_margin" />
 
                     <include
-                        layout="@layout/list_item_shimmer"
+                        layout="@layout/list_item_submission_shimmer"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginVertical="@dimen/dialog_margin" />
 
                     <include
-                        layout="@layout/list_item_shimmer"
+                        layout="@layout/list_item_submission_shimmer"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginVertical="@dimen/dialog_margin" />
 
                     <include
-                        layout="@layout/list_item_shimmer"
+                        layout="@layout/list_item_submission_shimmer"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginVertical="@dimen/dialog_margin" />
 
                     <include
-                        layout="@layout/list_item_shimmer"
+                        layout="@layout/list_item_submission_shimmer"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginVertical="@dimen/dialog_margin" />
 
                     <include
-                        layout="@layout/list_item_shimmer"
+                        layout="@layout/list_item_submission_shimmer"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginVertical="@dimen/dialog_margin" />
 
                     <include
-                        layout="@layout/list_item_shimmer"
+                        layout="@layout/list_item_submission_shimmer"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginVertical="@dimen/dialog_margin" />
 
                     <include
-                        layout="@layout/list_item_shimmer"
+                        layout="@layout/list_item_submission_shimmer"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginVertical="@dimen/dialog_margin" />
 
                     <include
-                        layout="@layout/list_item_shimmer"
+                        layout="@layout/list_item_submission_shimmer"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginVertical="@dimen/dialog_margin" />
@@ -244,19 +245,19 @@
 
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/scrollToTopButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="@dimen/fab_size"
+        android:layout_height="@dimen/fab_size"
         android:layout_margin="@dimen/login_button_margin_vertical"
         android:visibility="gone"
         app:cardCornerRadius="@dimen/dialog_corner_radius"
-        app:contentPadding="@dimen/card_corner_radius"
+        app:contentPadding="12dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         tools:visibility="visible">
 
         <ImageView
-            android:layout_width="@dimen/main_menu_notification_icon"
-            android:layout_height="@dimen/main_menu_notification_icon"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
             android:src="@drawable/scroll_to_top_icon"
             tools:ignore="ContentDescription" />
     </com.google.android.material.card.MaterialCardView>

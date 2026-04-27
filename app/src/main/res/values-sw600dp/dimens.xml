@@ -12,6 +12,7 @@
     <dimen name="text_size_xxlarge">48sp</dimen>
 
     <!-- Component specific dimensions -->
+    <dimen name="fab_size">78dp</dimen>
     <dimen name="button_height">72dp</dimen>
     <dimen name="button_padding">24dp</dimen>
     <dimen name="toolbar_height">84dp</dimen>

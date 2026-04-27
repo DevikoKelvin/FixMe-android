@@ -26,7 +26,6 @@
             tools:ignore="UselessParent">
 
             <TextView
-                android:id="@+id/submissionName"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textColor="@color/white"
@@ -39,7 +38,6 @@
                 android:orientation="horizontal">
 
                 <TextView
-                    android:id="@+id/inputDate"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
@@ -47,7 +45,6 @@
                     android:textSize="@dimen/copyright_text_size" />
 
                 <TextView
-                    android:id="@+id/noRequest"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
@@ -59,7 +56,6 @@
         </LinearLayout>
 
         <TextView
-            android:id="@+id/submissionDescription"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="@dimen/list_item_shimmer_description_margin_horizontal"
@@ -83,13 +79,11 @@
                 android:orientation="vertical">
 
                 <TextView
-                    android:id="@+id/machineCodeText"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="@color/custom_toast_font_normal_soft_gray" />
 
                 <TextView
-                    android:id="@+id/machineNameText"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/list_item_shimmer_machine_name_margin_top"
@@ -106,7 +100,6 @@
                 android:orientation="vertical">
 
                 <TextView
-                    android:id="@+id/machineCode"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="@color/custom_toast_font_normal_soft_gray"
@@ -115,7 +108,6 @@
                     tools:text="D-14" />
 
                 <TextView
-                    android:id="@+id/machineName"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/list_item_shimmer_machine_name_margin_top"
@@ -141,7 +133,6 @@
                 tools:ignore="ContentDescription" />
 
             <TextView
-                android:id="@+id/submissionLocation"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
@@ -153,7 +144,76 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/list_item_shimmer_location_margin_top"
+            android:orientation="horizontal"
+            android:paddingHorizontal="@dimen/list_item_shimmer_machine_info_padding_horizontal"
+            tools:ignore="DisableBaselineAlignment">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/custom_toast_font_normal_soft_gray" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/list_item_shimmer_machine_name_margin_top"
+                    android:background="@color/custom_toast_font_normal_soft_gray"
+                    android:text="@string/machine_name"
+                    android:textColor="@color/custom_toast_font_normal_soft_gray" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/list_item_shimmer_machine_code_margin_start"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/custom_toast_font_normal_soft_gray"
+                    android:textColor="@color/custom_toast_font_normal_soft_gray"
+                    android:textStyle="bold"
+                    tools:text="D-14" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/list_item_shimmer_machine_name_margin_top"
+                    android:background="@color/custom_toast_font_normal_soft_gray"
+                    android:textColor="@color/custom_toast_font_normal_soft_gray"
+                    android:textStyle="bold"
+                    tools:text="Autoclave E-Chung" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/list_item_shimmer_reported_by_margin_top"
+            android:orientation="horizontal"
+            android:paddingHorizontal="@dimen/list_item_shimmer_department_padding_horizontal">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/custom_toast_font_normal_soft_gray"
+                android:textColor="@color/custom_toast_font_normal_soft_gray"
+                android:textStyle="bold"
+                tools:text="Information Technology" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/list_item_shimmer_department_margin_top"
             android:orientation="horizontal"
             android:paddingHorizontal="@dimen/list_item_shimmer_reported_by_padding_horizontal">
 
@@ -165,7 +225,6 @@
                 android:textColor="@color/custom_toast_font_normal_soft_gray" />
 
             <TextView
-                android:id="@+id/reportedBy"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/list_item_shimmer_reported_by_text_margin_start"
@@ -176,31 +235,6 @@
         </LinearLayout>
 
         <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/list_item_shimmer_department_margin_top"
-            android:orientation="horizontal"
-            android:paddingHorizontal="@dimen/list_item_shimmer_department_padding_horizontal">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:background="@color/custom_toast_font_normal_soft_gray"
-                android:text="@string/department_from"
-                android:textColor="@color/custom_toast_font_normal_soft_gray" />
-
-            <TextView
-                android:id="@+id/departmentFrom"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/list_item_shimmer_department_text_margin_start"
-                android:background="@color/custom_toast_font_normal_soft_gray"
-                android:textColor="@color/custom_toast_font_normal_soft_gray"
-                android:textStyle="bold"
-                tools:text="Information Technology" />
-        </LinearLayout>
-
-        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="end"
@@ -208,50 +242,44 @@
             android:orientation="horizontal">
 
             <com.google.android.material.card.MaterialCardView
-                android:id="@+id/complexity"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="@dimen/list_item_shimmer_tag_margin_end"
                 app:cardBackgroundColor="@android:color/transparent"
-                app:cardCornerRadius="50dp"
+                app:cardCornerRadius="0dp"
                 app:cardElevation="0dp"
                 app:cardPreventCornerOverlap="false"
-                app:contentPadding="@dimen/list_item_shimmer_tag_padding"
-                app:contentPaddingLeft="@dimen/list_item_shimmer_tag_padding_horizontal"
-                app:contentPaddingRight="@dimen/list_item_shimmer_tag_padding_horizontal"
                 app:strokeWidth="0dp">
 
                 <TextView
-                    android:id="@+id/complexityText"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textColor="@color/white"
+                    android:background="@color/custom_toast_font_normal_soft_gray"
+                    android:padding="@dimen/list_item_shimmer_tag_padding"
+                    android:text="Low"
+                    android:textColor="@color/custom_toast_font_normal_soft_gray"
                     android:textSize="@dimen/text_size_micro"
-                    android:textStyle="bold"
-                    tools:text="Low" />
+                    android:textStyle="bold" />
             </com.google.android.material.card.MaterialCardView>
 
             <com.google.android.material.card.MaterialCardView
-                android:id="@+id/submissionStatus"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 app:cardBackgroundColor="@android:color/transparent"
-                app:cardCornerRadius="50dp"
+                app:cardCornerRadius="0dp"
                 app:cardElevation="0dp"
                 app:cardPreventCornerOverlap="false"
-                app:contentPadding="@dimen/list_item_shimmer_tag_padding"
-                app:contentPaddingLeft="@dimen/list_item_shimmer_tag_padding_horizontal"
-                app:contentPaddingRight="@dimen/list_item_shimmer_tag_padding_horizontal"
                 app:strokeWidth="0dp">
 
                 <TextView
-                    android:id="@+id/submissionStatusText"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textColor="@color/white"
+                    android:background="@color/custom_toast_font_normal_soft_gray"
+                    android:padding="@dimen/list_item_shimmer_tag_padding"
+                    android:text="On Progress"
+                    android:textColor="@color/custom_toast_font_normal_soft_gray"
                     android:textSize="@dimen/text_size_micro"
-                    android:textStyle="bold"
-                    tools:text="On Progress" />
+                    android:textStyle="bold" />
             </com.google.android.material.card.MaterialCardView>
         </LinearLayout>
     </LinearLayout>

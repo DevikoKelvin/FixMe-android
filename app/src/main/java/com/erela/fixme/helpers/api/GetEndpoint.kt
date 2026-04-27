@@ -13,6 +13,10 @@ import com.erela.fixme.objects.SubmissionListResponse
 import com.erela.fixme.objects.SubmissionProgressResponse
 import com.erela.fixme.objects.SubmissionTrialResponse
 import com.erela.fixme.objects.SupervisorTechnicianListResponse
+import com.erela.fixme.objects.ac.AcCheckInResponse
+import com.erela.fixme.objects.ac.AcScanResponse
+import com.erela.fixme.objects.ac.AcSimpleResponse
+import com.erela.fixme.objects.ac.AcTaskListResponse
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import retrofit2.Call
@@ -132,7 +136,7 @@ interface GetEndpoint {
     @POST("getSpv")
     fun getSupervisorList(
         @Field("case_id") caseId: Int,
-        @Field("dept_id") deptId : Int
+        @Field("dept_id") deptId: Int
     ): Call<SupervisorTechnicianListResponse>
 
     @FormUrlEncoded
@@ -283,4 +287,67 @@ interface GetEndpoint {
         @Field("case_id") caseId: Int,
         @Field("user_id") userId: Int
     ): Call<GenericSimpleResponse>
+
+    @FormUrlEncoded
+    @POST("acScan")
+    suspend fun acScan(
+        @Field("ac_code") acCode: String,
+        @Field("user_id") userId: Int,
+        @Field("lang") lang: String
+    ): AcScanResponse
+
+    @FormUrlEncoded
+    @POST("acCheckIn")
+    suspend fun acCheckIn(
+        @Field("item_id") itemId: Int,
+        @Field("user_id") userId: Int,
+        @Field("lat") lat: Double? = null,
+        @Field("lng") lng: Double? = null,
+        @Field("lang") lang: String = "id"
+    ): AcCheckInResponse
+
+    @FormUrlEncoded
+    @POST("acAddTechnician")
+    suspend fun acAddTechnician(
+        @Field("log_id") logId: Int,
+        @Field("user_id") userId: Int,
+        @Field("lang") lang: String
+    ): AcSimpleResponse
+
+    @FormUrlEncoded
+    @POST("acRemoveTechnician")
+    suspend fun acRemoveTechnician(
+        @Field("log_id") logId: Int,
+        @Field("user_id") userId: Int,
+        @Field("lang") lang: String
+    ): AcSimpleResponse
+
+    @Multipart
+    @POST("acCheckOut")
+    suspend fun acCheckOut(
+        @Part("log_id") logId: RequestBody,
+        @Part("user_id") userId: RequestBody,
+        @Part("ac_condition") acCondition: RequestBody,
+        @Part photos: List<MultipartBody.Part>,
+        @Part photoTypes: List<MultipartBody.Part>,
+        @Part("findings") findings: RequestBody?,
+        @Part("actions_taken") actionsTaken: RequestBody?,
+        @Part("lat") lat: RequestBody?,
+        @Part("lng") lng: RequestBody?,
+        @Part("lang") lang: RequestBody?
+    ): AcSimpleResponse
+
+    @FormUrlEncoded
+    @POST("acTaskList")
+    suspend fun acTaskList(
+        @Field("user_id") userId: Int,
+        @Field("lang") lang: String
+    ): AcTaskListResponse
+
+    @FormUrlEncoded
+    @POST("acGetTechnicians")
+    fun acGetTechnicians(
+        @Field("user_id") userId: Int,
+        @Field("lang") lang: String
+    ): Call<SupervisorTechnicianListResponse>
 }

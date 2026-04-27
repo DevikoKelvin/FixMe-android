@@ -136,6 +136,8 @@ dependencies {
     implementation libs.pusher.java.client
     implementation libs.balloon
     implementation libs.shimmer
+    implementation libs.qr.code
+
     implementation libs.play.services.maps
     implementation libs.play.services.location
 

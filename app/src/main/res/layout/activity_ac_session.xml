@@ -1,0 +1,371 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#FDFDFD"
+    tools:context=".activities.AcSessionActivity">
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolBar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="@color/white"
+        android:elevation="4dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:navigationIcon="@drawable/baseline_arrow_back_ios_new_24">
+
+        <TextView
+            android:id="@+id/title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="@string/maintenance_session_title"
+            android:textColor="@color/black"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+    </androidx.appcompat.widget.Toolbar>
+
+    <ProgressBar
+        android:id="@+id/progressBar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:elevation="10dp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:clipToPadding="false"
+        android:paddingBottom="100dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/toolBar">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="24dp">
+
+            <!-- Technician Section -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/user_info_item_margin_top"
+                android:text="@string/assistant_technician"
+                android:textColor="@color/black"
+                android:textSize="@dimen/text_size_small"
+                android:textStyle="bold" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rvTechnicians"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dialog_loading_content_padding"
+                app:layoutManager="com.google.android.flexbox.FlexboxLayoutManager"
+                tools:itemCount="2"
+                tools:listitem="@layout/list_item_selected_items"
+                tools:visibility="visible" />
+
+            <!--<LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:orientation="horizontal">
+
+                <com.google.android.material.textfield.TextInputLayout
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:hint="User ID (optional)">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/etTechId"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="number" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <Button
+                    android:id="@+id/btnAddTech"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:layout_gravity="center_vertical"
+                    android:text="ADD" />
+            </LinearLayout>-->
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginTop="@dimen/user_info_item_margin_top"
+                android:background="#E0E0E0" />
+
+            <!-- AC Condition -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/user_info_item_margin_top"
+                android:text="@string/ac_condition"
+                android:textColor="@color/black"
+                android:textSize="@dimen/text_size_small"
+                android:textStyle="bold" />
+
+            <RadioGroup
+                android:id="@+id/rgCondition"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:orientation="horizontal">
+
+                <RadioButton
+                    android:id="@+id/rbGood"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/good" />
+
+                <RadioButton
+                    android:id="@+id/rbRepair"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:text="@string/need_repair" />
+
+                <RadioButton
+                    android:id="@+id/rbBroken"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:text="@string/broken" />
+            </RadioGroup>
+
+            <!-- Findings -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/user_info_item_margin_top"
+                android:text="@string/findings"
+                android:textColor="@color/black"
+                android:textSize="@dimen/text_size_small"
+                android:textStyle="bold" />
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/etFindingsLayout"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/user_info_item_margin_top"
+                android:hint="@string/case_description"
+                app:boxCornerRadiusBottomEnd="@dimen/login_field_corner_radius"
+                app:boxCornerRadiusBottomStart="@dimen/login_field_corner_radius"
+                app:boxCornerRadiusTopEnd="@dimen/login_field_corner_radius"
+                app:boxCornerRadiusTopStart="@dimen/login_field_corner_radius"
+                app:boxStrokeColor="@color/black"
+                app:boxStrokeWidth="@dimen/login_field_stroke_width"
+                app:expandedHintEnabled="true"
+                app:hintAnimationEnabled="true"
+                app:hintTextColor="@color/black">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/etFindings"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/list_item_progress_image_container_height"
+                    android:gravity="top"
+                    android:inputType="textMultiLine"
+                    android:textSize="@dimen/text_size_small" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <!-- Actions Taken -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/user_info_item_margin_top"
+                android:text="@string/action_taken"
+                android:textColor="@color/black"
+                android:textSize="@dimen/text_size_small"
+                android:textStyle="bold" />
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/etActionsLayout"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/user_info_item_margin_top"
+                android:hint="@string/case_description"
+                app:boxCornerRadiusBottomEnd="@dimen/login_field_corner_radius"
+                app:boxCornerRadiusBottomStart="@dimen/login_field_corner_radius"
+                app:boxCornerRadiusTopEnd="@dimen/login_field_corner_radius"
+                app:boxCornerRadiusTopStart="@dimen/login_field_corner_radius"
+                app:boxStrokeColor="@color/black"
+                app:boxStrokeWidth="@dimen/login_field_stroke_width"
+                app:expandedHintEnabled="true"
+                app:hintAnimationEnabled="true"
+                app:hintTextColor="@color/black">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/etActions"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/list_item_progress_image_container_height"
+                    android:gravity="top"
+                    android:inputType="textMultiLine"
+                    android:textSize="@dimen/text_size_small" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <!-- Photos -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/user_info_item_margin_top"
+                android:text="@string/photos_required"
+                android:textColor="@color/black"
+                android:textSize="@dimen/text_size_small"
+                android:textStyle="bold" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:baselineAligned="false"
+                android:orientation="horizontal"
+                android:weightSum="3">
+
+                <!-- Before -->
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:orientation="vertical">
+
+                    <com.google.android.material.card.MaterialCardView
+                        android:id="@+id/ivPhotoBefore"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:cardCornerRadius="@dimen/dialog_corner_radius"
+                        app:cardElevation="0dp"
+                        app:strokeWidth="0dp">
+
+                        <ImageView
+                            android:id="@+id/imgPhotoBefore"
+                            android:layout_width="@dimen/bottom_sheet_drawer_width"
+                            android:layout_height="@dimen/bottom_sheet_drawer_width"
+                            android:background="@drawable/gradient_card_color"
+                            android:padding="@dimen/dialog_corner_radius"
+                            android:scaleType="centerCrop"
+                            android:src="@drawable/camera_icon"
+                            tools:ignore="ContentDescription" />
+                    </com.google.android.material.card.MaterialCardView>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="4dp"
+                        android:text="@string/before"
+                        android:textSize="12sp" />
+                </LinearLayout>
+
+                <!-- During -->
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:orientation="vertical">
+
+                    <com.google.android.material.card.MaterialCardView
+                        android:id="@+id/ivPhotoDuring"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:cardCornerRadius="@dimen/dialog_corner_radius"
+                        app:cardElevation="0dp"
+                        app:strokeWidth="0dp">
+
+                        <ImageView
+                            android:id="@+id/imgPhotoDuring"
+                            android:layout_width="@dimen/bottom_sheet_drawer_width"
+                            android:layout_height="@dimen/bottom_sheet_drawer_width"
+                            android:background="@drawable/gradient_card_color"
+                            android:padding="@dimen/dialog_corner_radius"
+                            android:scaleType="centerCrop"
+                            android:src="@drawable/camera_icon"
+                            tools:ignore="ContentDescription" />
+                    </com.google.android.material.card.MaterialCardView>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="4dp"
+                        android:text="@string/during"
+                        android:textSize="12sp" />
+                </LinearLayout>
+
+                <!-- After -->
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:orientation="vertical">
+
+                    <com.google.android.material.card.MaterialCardView
+                        android:id="@+id/ivPhotoAfter"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:cardCornerRadius="@dimen/dialog_corner_radius"
+                        app:cardElevation="0dp"
+                        app:strokeWidth="0dp">
+
+                        <ImageView
+                            android:id="@+id/imgPhotoAfter"
+                            android:layout_width="@dimen/bottom_sheet_drawer_width"
+                            android:layout_height="@dimen/bottom_sheet_drawer_width"
+                            android:background="@drawable/gradient_card_color"
+                            android:padding="@dimen/dialog_corner_radius"
+                            android:scaleType="centerCrop"
+                            android:src="@drawable/camera_icon"
+                            tools:ignore="ContentDescription" />
+                    </com.google.android.material.card.MaterialCardView>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="4dp"
+                        android:text="@string/after"
+                        android:textSize="12sp" />
+                </LinearLayout>
+            </LinearLayout>
+        </LinearLayout>
+    </ScrollView>
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/btnCheckOut"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/bottom_sheet_padding_bottom"
+        android:layout_marginHorizontal="@dimen/list_item_padding"
+        android:layout_marginBottom="@dimen/dialog_message_margin_vertical"
+        app:cardCornerRadius="@dimen/login_button_corner_radius"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:strokeWidth="0dp">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/gradient_accent_color"
+            android:gravity="center"
+            android:text="@string/complete_check_out"
+            android:textColor="@color/white"
+            android:textSize="@dimen/text_size_medium"
+            android:textStyle="bold" />
+    </com.google.android.material.card.MaterialCardView>
+</androidx.constraintlayout.widget.ConstraintLayout>

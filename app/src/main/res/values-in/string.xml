@@ -155,6 +155,32 @@
 
     <string name="edit_submission_title">Sunting Laporan</string>
 
+    <string name="ac_maintenance_title">Perawatan AC</string>
+    <string name="ac_code">Kode AC</string>
+    <string name="brand">Merek</string>
+    <string name="area">Area</string>
+    <string name="deadline">Tenggat waktu:</string>
+
+    <string name="ac_check_in_title">Lakukan Pendaftaran Perawatan AC</string>
+    <string name="item_id">ID Barang</string>
+    <string name="ac_details">Detail AC</string>
+    <string name="ready_to_begin">Siap memulai?</string>
+    <string name="check_in_instruction">Klik tombol Daftar di bawah untuk memulai sesi perawatan. Ini akan mencatat waktu mulai Anda dan menetapkan tugas kepada Anda.</string>
+
+    <string name="maintenance_session_title">Sesi Perawatan</string>
+    <string name="assistant_technician">Asisten Teknisi</string>
+    <string name="ac_condition">Kondisi AC</string>
+    <string name="good">Baik</string>
+    <string name="need_repair">Perlu Perbaikan</string>
+    <string name="broken">Rusak</string>
+    <string name="findings">Temuan</string>
+    <string name="action_taken">Tindakan yang Dilakukan</string>
+    <string name="photos_required">Foto (Wajib)</string>
+    <string name="before">Sebelum</string>
+    <string name="during">Selama</string>
+    <string name="after">Setelah</string>
+    <string name="complete_check_out">Selesai &amp; Pemeriksaan Akhir</string>
+
     <string name="app_settings_title">Pengaturan</string>
     <string name="about">Tentang aplikasi</string>
     <string name="about_fixme">Aplikasi pelaporan dan pengelolaan kerusakan peralatan dan infrastruktur di PT Erlangga Edi Laboratories (ERELA) Semarang</string>

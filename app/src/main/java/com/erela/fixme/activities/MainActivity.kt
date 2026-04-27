@@ -175,7 +175,10 @@ class MainActivity : AppCompatActivity() {
         pendingDeleteApkFile?.let { file ->
             if (file.exists()) {
                 val deleted = file.delete()
-                Log.d("APKCleanup", "Downloaded APK ${if (deleted) "deleted" else "delete failed"}: ${file.name}")
+                Log.d(
+                    "APKCleanup",
+                    "Downloaded APK ${if (deleted) "deleted" else "delete failed"}: ${file.name}"
+                )
             }
             pendingDeleteApkFile = null
         }
@@ -343,6 +346,18 @@ class MainActivity : AppCompatActivity() {
                 }
             }
 
+            if (userData.dept != "General Affair")
+                acMaintenanceMenu.visibility = View.GONE
+            else {
+                if (userData.subDept == "Electrical General Affair" || userData.subDept == "Air Conditioner General Affair") {
+                    if (userData.privilege > 2)
+                        acMaintenanceMenu.visibility = View.VISIBLE
+                    else
+                        acMaintenanceMenu.visibility = View.GONE
+                } else
+                    acMaintenanceMenu.visibility = View.GONE
+            }
+
             notificationButton.setOnClickListener {
                 startActivity(Intent(this@MainActivity, NotificationActivity::class.java))
             }
@@ -353,6 +368,10 @@ class MainActivity : AppCompatActivity() {
 
             submissionListMenu.setOnClickListener {
                 startActivity(Intent(this@MainActivity, SubmissionListActivity::class.java))
+            }
+
+            acMaintenanceMenu.setOnClickListener {
+                startActivity(Intent(this@MainActivity, AcTaskListActivity::class.java))
             }
 
             settingsMenu.setOnClickListener {

@@ -18,6 +18,7 @@ class SelectedSupervisorTechniciansRvAdapter(
     val context: Context, private val detailData: SubmissionDetailResponse,
     private val selectedSupervisorTechniciansList: ArrayList<SupervisorTechnician>,
     private val isForManager: Boolean,
+    private val onPlusClicked: (() -> Unit)? = null,
     private val getSelectedSubDept: () -> SubDepartmentListResponse?
 ) : RecyclerView.Adapter<SelectedSupervisorTechniciansRvAdapter.ViewHolder>(),
     SelectSupervisorTechniciansBottomSheet.OnSelectTechniciansListener,
@@ -71,6 +72,10 @@ class SelectedSupervisorTechniciansRvAdapter(
                 }
                 itemView.setOnClickListener {
                     if (position == selectedSupervisorTechniciansList.size - 1) {
+                        if (onPlusClicked != null) {
+                            onPlusClicked.invoke()
+                            return@setOnClickListener
+                        }
                         val bottomSheet =
                             SelectSupervisorTechniciansBottomSheet(
                                 context,
