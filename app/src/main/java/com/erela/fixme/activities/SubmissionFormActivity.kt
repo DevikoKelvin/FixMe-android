@@ -85,7 +85,7 @@ class SubmissionFormActivity : AppCompatActivity(), OnMapReadyCallback {
     private var deletedOldImageArray: ArrayList<Int> = ArrayList()
     private var cameraCaptureFileName: String = ""
     private lateinit var imageUri: Uri
-    private val photoFiles: ArrayList<MultipartBody.Part?> = ArrayList()
+    private val photoFiles: ArrayList<MultipartBody.Part> = ArrayList()
     private val requestBodyMap: MutableMap<String, RequestBody> = mutableMapOf()
     private lateinit var fusedLocationClient: FusedLocationProviderClient
     private var googleMap: GoogleMap? = null
@@ -725,14 +725,17 @@ class SubmissionFormActivity : AppCompatActivity(), OnMapReadyCallback {
     }
 
     private fun prepareUpdateForm(): Boolean {
+        photoFiles.clear()
+        requestBodyMap.clear()
         binding.apply {
             if (imageArrayUri.isNotEmpty()) {
                 for (element in imageArrayUri) {
-                    photoFiles.add(
-                        createMultipartBody(element)
-                    )
+                    val part = createMultipartBody(element)
+                    if (part != null) photoFiles.add(part)
                 }
             }
+            Log.e("Image URI", imageArrayUri.toString())
+            Log.e("Photo Files", photoFiles.toString())
             with(requestBodyMap) {
                 put(
                     "case_id",
@@ -794,12 +797,13 @@ class SubmissionFormActivity : AppCompatActivity(), OnMapReadyCallback {
     }
 
     private fun prepareSubmitForm(): Boolean {
+        photoFiles.clear()
+        requestBodyMap.clear()
         binding.apply {
             if (imageArrayUri.isNotEmpty()) {
                 for (element in imageArrayUri) {
-                    photoFiles.add(
-                        createMultipartBody(element)
-                    )
+                    val part = createMultipartBody(element)
+                    if (part != null) photoFiles.add(part)
                 }
             }
             val userId = UserDataHelper(applicationContext).getUserData().id
@@ -1327,10 +1331,6 @@ class SubmissionFormActivity : AppCompatActivity(), OnMapReadyCallback {
                         ) {
                             if (response.isSuccessful) {
                                 if (response.body() != null) {
-                                    Log.e(
-                                        "Response",
-                                        Gson().toJson(response.body())
-                                    )
                                     val data: ArrayList<String> = ArrayList()
                                     data.add(
                                         if (getString(R.string.lang) == "in")
@@ -1473,7 +1473,7 @@ class SubmissionFormActivity : AppCompatActivity(), OnMapReadyCallback {
         return try {
             val file = File(getRealPathFromURI(uri)!!)
             val requestBody = file.asRequestBody("image/*".toMediaTypeOrNull())
-            MultipartBody.Part.createFormData("photo[]", file.name, requestBody)
+            MultipartBody.Part.createFormData("photos[]", file.name, requestBody)
         } catch (e: Exception) {
             Log.e("createMultipartBody", "Error creating MultipartBody.Part", e)
             null
@@ -1483,8 +1483,9 @@ class SubmissionFormActivity : AppCompatActivity(), OnMapReadyCallback {
     private fun getRealPathFromURI(uri: Uri): String? {
         val contentResolver = contentResolver
         val fileName = getFileName(contentResolver, uri)
+            ?: "img_${System.currentTimeMillis()}.jpg"
 
-        if (fileName != null) {
+        run {
             val file = File(cacheDir, fileName)
             try {
                 val inputStream = contentResolver.openInputStream(uri)
