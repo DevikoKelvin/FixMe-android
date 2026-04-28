@@ -49,7 +49,7 @@
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="AIzaSyBVIOv7TiZmcyPet64GSYD1vID6NDjSj4o" />
+            android:value="${MAPS_API_KEY}" />
 
         <meta-data
             android:name="com.google.firebase.messaging.default_notification_icon"

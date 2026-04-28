@@ -102,7 +102,7 @@ interface GetEndpoint {
     @POST("submitReport")
     fun submitSubmission(
         @PartMap submissionData: MutableMap<String, RequestBody>,
-        @Part photo: ArrayList<MultipartBody.Part?>
+        @Part photo: List<MultipartBody.Part>
     ): Call<CreationResponse>
 
     @Multipart
@@ -115,7 +115,7 @@ interface GetEndpoint {
     @POST("reportUpdate")
     fun updateSubmission(
         @PartMap submissionData: MutableMap<String, RequestBody>,
-        @Part photo: ArrayList<MultipartBody.Part?>
+        @Part photo: List<MultipartBody.Part>
     ): Call<GenericSimpleResponse>
 
     @Multipart
@@ -218,7 +218,7 @@ interface GetEndpoint {
     @POST("progressDone")
     fun markProgressDone(
         @PartMap submissionData: MutableMap<String, RequestBody>,
-        @Part photo: ArrayList<MultipartBody.Part?>
+        @Part photo: List<MultipartBody.Part>
     ): Call<GenericSimpleResponse>
 
     @FormUrlEncoded

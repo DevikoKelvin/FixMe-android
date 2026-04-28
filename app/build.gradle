@@ -21,6 +21,12 @@ def getVerCode(boolean increment = false) {
     return versionCode
 }
 
+def localProps = new Properties()
+def localPropsFile = rootProject.file('local.properties')
+if (localPropsFile.exists()) {
+    localProps.load(new FileInputStream(localPropsFile))
+}
+
 def findKeystoreFile() {
     def projectKeystore = file("${rootDir}/keystore.jks")
     if (projectKeystore.exists()) {
@@ -37,9 +43,10 @@ android {
         applicationId "com.erela.fixme"
         minSdk = 26
         targetSdk = 37
+        manifestPlaceholders = [MAPS_API_KEY: localProps['MAPS_API_KEY'] ?: ""]
 
         versionCode getVerCode(!project.gradle.startParameter.taskNames.any { it.contains('assemble') || it.contains('bundle') })
-        versionName "1.3.9a"
+        versionName "1.3.9b"
 
         buildConfigField "String", "BUILD_TIMESTAMP", "\"${new Date().format('MMddyy-HHmm')}\""
 
@@ -55,9 +62,9 @@ android {
     signingConfigs {
         release {
             storeFile = this.findKeystoreFile()
-            storePassword "erela_fixme"
-            keyAlias "fixme_erela"
-            keyPassword "erela_fixme"
+            storePassword localProps['KEYSTORE_STORE_PASSWORD']
+            keyAlias localProps['KEYSTORE_KEY_ALIAS']
+            keyPassword localProps['KEYSTORE_KEY_PASSWORD']
         }
     }
 
@@ -65,17 +72,17 @@ android {
         release {
             buildConfigField 'String', 'BASE_URL', '"http://182.23.21.202:8282/fixme/"'
             buildConfigField 'String', 'SSE_URL', '"http://103.96.147.242:8081/erelaMurbei_fixme25_mobile/sse"'
-            buildConfigField 'String', 'MAP_API_KEY', '"AIzaSyBVIOv7TiZmcyPet64GSYD1vID6NDjSj4o"'
+            buildConfigField 'String', 'MAP_API_KEY', "\"${localProps['MAPS_API_KEY']}\""
             minifyEnabled true
             shrinkResources true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
             signingConfig signingConfigs.release
-            debuggable true
+            debuggable false
         }
         debug {
             buildConfigField 'String', 'BASE_URL', '"http://192.168.3.245/fixme/"'
             buildConfigField 'String', 'SSE_URL', '"http://103.96.147.242:8081/erelaMurbei_fixme25_mobile/sse"'
-            buildConfigField 'String', 'MAP_API_KEY', '"AIzaSyBVIOv7TiZmcyPet64GSYD1vID6NDjSj4o"'
+            buildConfigField 'String', 'MAP_API_KEY', "\"${localProps['MAPS_API_KEY']}\""
             minifyEnabled false
             //noinspection NotShrinkingResources
             shrinkResources false

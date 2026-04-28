@@ -65,7 +65,7 @@ class ProgressDoneFormActivity : AppCompatActivity() {
     private val imageArrayUri = ArrayList<Uri>()
     private var cameraCaptureFileName: String = ""
     private lateinit var imageUri: Uri
-    private val photoFiles: ArrayList<MultipartBody.Part?> = ArrayList()
+    private val photoFiles: ArrayList<MultipartBody.Part> = ArrayList()
     private val requestBodyMap: MutableMap<String, RequestBody> = mutableMapOf()
     private var isFormEmpty = arrayOf(
         false,
@@ -617,11 +617,12 @@ class ProgressDoneFormActivity : AppCompatActivity() {
 
     private fun prepareSubmitForm(): Boolean {
         binding.apply {
+            photoFiles.clear()
+            requestBodyMap.clear()
             if (imageArrayUri.isNotEmpty()) {
-                for (i in 0 until imageArrayUri.size) {
-                    photoFiles.add(
-                        createMultipartBody(imageArrayUri[i], "photo[$i]")
-                    )
+                for (element in imageArrayUri) {
+                    val part = createMultipartBody(element)
+                    if (part != null) photoFiles.add(part)
                 }
             }
 
@@ -638,11 +639,11 @@ class ProgressDoneFormActivity : AppCompatActivity() {
         return requestBodyMap.isNotEmpty()
     }
 
-    private fun createMultipartBody(uri: Uri, partName: String): MultipartBody.Part? {
+    private fun createMultipartBody(uri: Uri): MultipartBody.Part? {
         return try {
             val file = File(getRealPathFromURI(uri)!!)
             val requestBody = file.asRequestBody("image/*".toMediaTypeOrNull())
-            MultipartBody.Part.createFormData(partName, file.name, requestBody)
+            MultipartBody.Part.createFormData("photo[]", file.name, requestBody)
         } catch (e: Exception) {
             Log.e("createMultipartBody", "Error creating MultipartBody.Part", e)
             null

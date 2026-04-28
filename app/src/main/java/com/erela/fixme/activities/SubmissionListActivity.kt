@@ -360,7 +360,6 @@ class SubmissionListActivity : AppCompatActivity(), SubmissionRvAdapter.OnSubmis
                                 loadingManager(false)
                                 if (response.isSuccessful) {
                                     if (response.body() != null) {
-                                        Log.e("Response Case List", response.body().toString())
                                         originalSubmissionArrayList?.clear()
                                         if (response.body()?.data != null)
                                             originalSubmissionArrayList?.addAll(response.body()?.data!!)

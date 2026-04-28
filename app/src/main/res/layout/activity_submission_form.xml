@@ -362,7 +362,8 @@
                     app:cardCornerRadius="@dimen/login_button_corner_radius"
                     app:cardElevation="0dp"
                     app:contentPadding="@dimen/dialog_margin"
-                    app:strokeWidth="0dp">
+                    app:strokeWidth="0dp"
+                    tools:visibility="visible">
 
                     <TextView
                         android:id="@+id/manageAttachmentText"
