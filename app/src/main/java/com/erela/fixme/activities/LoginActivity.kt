@@ -166,7 +166,10 @@ class LoginActivity : AppCompatActivity() {
         pendingDeleteApkFile?.let { file ->
             if (file.exists()) {
                 val deleted = file.delete()
-                Log.d("APKCleanup", "Downloaded APK ${if (deleted) "deleted" else "delete failed"}: ${file.name}")
+                Log.d(
+                    "APKCleanup",
+                    "Downloaded APK ${if (deleted) "deleted" else "delete failed"}: ${file.name}"
+                )
             }
             pendingDeleteApkFile = null
         }
@@ -185,15 +188,17 @@ class LoginActivity : AppCompatActivity() {
                 }
             }
 
-            val buildType =
-                if (BuildConfig.BUILD_TYPE == "debug") "dev_${BuildConfig.BUILD_TYPE}" else "${BuildConfig.BUILD_TYPE}"
+            val channel =
+                if (BuildConfig.VERSION_CHANNEL != "release" || BuildConfig.VERSION_CHANNEL != "beta_prerelease")
+                    "${BuildConfig.VERSION_CHANNEL}_${BuildConfig.BUILD_TYPE}"
+                else
+                    BuildConfig.VERSION_CHANNEL
             val appVersionText =
-                "${BuildConfig.VERSION_NAME}.${BuildConfig.VERSION_CODE}.${buildType}.${BuildConfig.BUILD_TIMESTAMP}"
+                "${BuildConfig.VERSION_NAME}.${BuildConfig.VERSION_CODE}.${channel}.${BuildConfig.BUILD_TIMESTAMP}"
             versionText.text = if (getString(R.string.lang) == "in")
                 "Versi $appVersionText"
             else
                 "Version $appVersionText"
-
 
             checkNewUpdate()
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
@@ -253,14 +258,18 @@ class LoginActivity : AppCompatActivity() {
                         passwordFieldLayout.error = null
                     }
                 } else {
-                    checkLogin(usernameField.text.toString().trim(), passwordField.text.toString().trim())
+                    checkLogin(
+                        usernameField.text.toString().trim(),
+                        passwordField.text.toString().trim()
+                    )
                 }
             }
 
             // Add keyboard action listeners for Enter key
             usernameField.setOnEditorActionListener { _, actionId, _ ->
                 if (actionId == android.view.inputmethod.EditorInfo.IME_ACTION_NEXT ||
-                    actionId == android.view.inputmethod.EditorInfo.IME_ACTION_DONE) {
+                    actionId == android.view.inputmethod.EditorInfo.IME_ACTION_DONE
+                ) {
                     passwordField.requestFocus()
                     true
                 } else {
@@ -376,7 +385,8 @@ class LoginActivity : AppCompatActivity() {
                                                     }
                                                 })
                                             }
-                                            val sharedPreferences = getSharedPreferences("app_prefs",
+                                            val sharedPreferences = getSharedPreferences(
+                                                "app_prefs",
                                                 MODE_PRIVATE
                                             )
                                             sharedPreferences.edit {
@@ -552,7 +562,7 @@ class LoginActivity : AppCompatActivity() {
                                     setAction("Retry") {
                                         checkLogin(username, password)
                                     }
-                                 }
+                                }
                             }.show()
                         }
                     })

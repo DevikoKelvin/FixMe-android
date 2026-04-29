@@ -27,6 +27,21 @@ if (localPropsFile.exists()) {
     localProps.load(new FileInputStream(localPropsFile))
 }
 
+def getVersionChannel() {
+    try {
+        def branch = providers.exec {
+            commandLine 'git', 'rev-parse', '--abbrev-ref', 'HEAD'
+            workingDir rootDir
+        }.standardOutput.asText.get().trim()
+        if (branch == 'main' || branch == 'master') return 'release'
+        if (branch == 'beta') return 'beta_prerelease'
+        if (branch == 'development') return 'dev'
+        return 'canary'
+    } catch (ignored) {
+        return 'canary'
+    }
+}
+
 def findKeystoreFile() {
     def projectKeystore = file("${rootDir}/keystore.jks")
     if (projectKeystore.exists()) {
@@ -48,7 +63,8 @@ android {
         versionCode getVerCode(!project.gradle.startParameter.taskNames.any { it.contains('assemble') || it.contains('bundle') })
         versionName "1.3.9b"
 
-        buildConfigField "String", "BUILD_TIMESTAMP", "\"${new Date().format('MMddyy-HHmm')}\""
+        buildConfigField "String", "BUILD_TIMESTAMP", "\"${new Date().format('yyMMdd-HHmm')}\""
+        buildConfigField "String", "VERSION_CHANNEL", "\"${getVersionChannel()}\""
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
