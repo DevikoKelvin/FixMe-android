@@ -189,10 +189,10 @@ class LoginActivity : AppCompatActivity() {
             }
 
             val channel =
-                if (BuildConfig.VERSION_CHANNEL != "release" || BuildConfig.VERSION_CHANNEL != "beta_prerelease")
-                    "${BuildConfig.VERSION_CHANNEL}_${BuildConfig.BUILD_TYPE}"
-                else
+                if (BuildConfig.VERSION_CHANNEL == "release" || BuildConfig.VERSION_CHANNEL == "beta_prerelease")
                     BuildConfig.VERSION_CHANNEL
+                else
+                    "${BuildConfig.VERSION_CHANNEL}_${BuildConfig.BUILD_TYPE}"
             val appVersionText =
                 "${BuildConfig.VERSION_NAME}.${BuildConfig.VERSION_CODE}.${channel}.${BuildConfig.BUILD_TIMESTAMP}"
             versionText.text = if (getString(R.string.lang) == "in")

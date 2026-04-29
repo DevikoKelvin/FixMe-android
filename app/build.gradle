@@ -10,12 +10,22 @@ plugins {
 def getVerCode(boolean increment = false) {
     def propFile = file("../buildNumber.properties")
     def properties = new Properties()
-    properties.load(new FileInputStream(propFile))
+    def fis = new FileInputStream(propFile)
+    try {
+        properties.load(fis)
+    } finally {
+        fis.close()
+    }
     def versionCode = properties['VERSION_CODE'].toInteger()
 
     if (increment) {
         properties['VERSION_CODE'] = (versionCode + 1).toString()
-        properties.store(propFile.newWriter(), null)
+        def writer = propFile.newWriter()
+        try {
+            properties.store(writer, null)
+        } finally {
+            writer.close()
+        }
     }
 
     return versionCode
