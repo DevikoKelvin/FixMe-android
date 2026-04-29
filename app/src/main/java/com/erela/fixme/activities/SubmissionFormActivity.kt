@@ -734,8 +734,6 @@ class SubmissionFormActivity : AppCompatActivity(), OnMapReadyCallback {
                     if (part != null) photoFiles.add(part)
                 }
             }
-            Log.e("Image URI", imageArrayUri.toString())
-            Log.e("Photo Files", photoFiles.toString())
             with(requestBodyMap) {
                 put(
                     "case_id",
