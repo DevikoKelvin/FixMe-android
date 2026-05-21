@@ -16,5 +16,7 @@ data class AcScheduleItem(
     @SerializedName("date_end")
     val dateEnd: String,
     @SerializedName("schedule_name")
-    val scheduleName: String
+    val scheduleName: String,
+    @SerializedName("log_id")
+    val logId: Int?
 )

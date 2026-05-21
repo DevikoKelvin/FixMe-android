@@ -33,12 +33,14 @@ class AcRepository(
     suspend fun taskList(userId: Int) =
         runCatching { api.acTaskList(userId, lang) }
 
+    suspend fun sessionParticipants(logId: Int, userId: Int) =
+        runCatching { api.acSessionParticipants(logId, userId, lang) }
+
     suspend fun checkOut(
         logId: Int,
         userId: Int,
         acCondition: String,
-        photos: List<File>,
-        photoTypes: List<String>,
+        photo: File,
         findings: String?,
         actionsTaken: String?,
         lat: Double?,
@@ -48,20 +50,15 @@ class AcRepository(
         fun Double?.toBodyOrNull() =
             this?.toString()?.toRequestBody("text/plain".toMediaTypeOrNull())
 
-        val photoParts = photos.mapIndexed { i, file ->
-            val reqFile = file.asRequestBody("image/*".toMediaTypeOrNull())
-            MultipartBody.Part.createFormData("photos[]", file.name, reqFile)
-        }
-        val typeParts = photoTypes.map { type ->
-            MultipartBody.Part.createFormData("photo_types[]", type)
-        }
+        val photoPart = MultipartBody.Part.createFormData(
+            "photo", photo.name, photo.asRequestBody("image/*".toMediaTypeOrNull())
+        )
 
         api.acCheckOut(
             logId = logId.toString().toBody(),
             userId = userId.toString().toBody(),
             acCondition = acCondition.toBody(),
-            photos = photoParts,
-            photoTypes = typeParts,
+            photo = photoPart,
             findings = findings?.toBody(),
             actionsTaken = actionsTaken?.toBody(),
             lat = lat.toBodyOrNull(),
@@ -69,4 +66,5 @@ class AcRepository(
             lang = lang.toBody()
         )
     }
+
 }

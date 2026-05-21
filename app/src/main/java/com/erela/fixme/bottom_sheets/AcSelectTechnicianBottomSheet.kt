@@ -47,61 +47,67 @@ class AcSelectTechnicianBottomSheet(
 
     @SuppressLint("NotifyDataSetChanged")
     private fun loadTechnicians() {
-        binding.loadingBar.visibility = View.VISIBLE
+        binding.apply {
+            loadingBar.visibility = View.VISIBLE
 
-        InitAPI.getEndpoint.acGetTechnicians(currentUserId, lang).enqueue(
-            object : Callback<SupervisorTechnicianListResponse> {
-                override fun onResponse(
-                    call: Call<SupervisorTechnicianListResponse>,
-                    response: Response<SupervisorTechnicianListResponse>
-                ) {
-                    binding.loadingBar.visibility = View.GONE
-                    val list = response.body()?.data ?: return
+            InitAPI.getEndpoint.acGetTechnicians(currentUserId, lang).enqueue(
+                object : Callback<SupervisorTechnicianListResponse> {
+                    override fun onResponse(
+                        call: Call<SupervisorTechnicianListResponse>,
+                        response: Response<SupervisorTechnicianListResponse>
+                    ) {
+                        loadingBar.visibility = View.GONE
+                        val list = response.body()?.data ?: return
 
-                    techniciansList.clear()
-                    list.forEach { tech ->
-                        if (tech != null) {
-                            techniciansList.add(
-                                SelectedSupervisorTechniciansList(
-                                    isSelected = alreadySelected.any { it.idUser == tech.idUser },
-                                    supervisorTechnician = tech
+                        techniciansList.clear()
+                        list.forEach { tech ->
+                            if (tech != null) {
+                                techniciansList.add(
+                                    SelectedSupervisorTechniciansList(
+                                        isSelected = alreadySelected.any { it.idUser == tech.idUser },
+                                        supervisorTechnician = tech
+                                    )
                                 )
-                            )
+                            }
                         }
+
+                        adapter = SupervisorTechniciansRvAdapter(
+                            context,
+                            techniciansList,
+                            alreadySelected,
+                            false
+                        ).also { rv ->
+                            rv.setOnTechniciansSetListener(object :
+                                SupervisorTechniciansRvAdapter.OnTechniciansSetListener {
+                                override fun onTechnicianSelected(data: SupervisorTechnician) {
+                                    onTechnicianSelectedListener?.onTechnicianSelected(data)
+                                    dismiss()
+                                }
+
+                                override fun onTechnicianUnselected(data: SupervisorTechnician) {
+                                    onTechnicianSelectedListener?.onTechnicianUnselected(data)
+                                    dismiss()
+                                }
+                            })
+                        }
+
+                        rvSupervisorsTechnicians.adapter = adapter
+                        rvSupervisorsTechnicians.setItemViewCacheSize(1000)
+                        rvSupervisorsTechnicians.layoutManager =
+                            LinearLayoutManager(context)
+                        adapter.notifyDataSetChanged()
                     }
 
-                    adapter = SupervisorTechniciansRvAdapter(
-                        context,
-                        techniciansList,
-                        alreadySelected,
-                        false
-                    ).also { rv ->
-                        rv.setOnTechniciansSetListener(object :
-                            SupervisorTechniciansRvAdapter.OnTechniciansSetListener {
-                            override fun onTechnicianSelected(data: SupervisorTechnician) {
-                                onTechnicianSelectedListener?.onTechnicianSelected(data)
-                                dismiss()
-                            }
-
-                            override fun onTechnicianUnselected(data: SupervisorTechnician) {
-                                onTechnicianSelectedListener?.onTechnicianUnselected(data)
-                                dismiss()
-                            }
-                        })
+                    override fun onFailure(
+                        call: Call<SupervisorTechnicianListResponse>,
+                        t: Throwable
+                    ) {
+                        loadingBar.visibility = View.GONE
+                        dismiss()
                     }
-
-                    binding.rvSupervisorsTechnicians.adapter = adapter
-                    binding.rvSupervisorsTechnicians.setItemViewCacheSize(1000)
-                    binding.rvSupervisorsTechnicians.layoutManager = LinearLayoutManager(context)
-                    adapter.notifyDataSetChanged()
                 }
-
-                override fun onFailure(call: Call<SupervisorTechnicianListResponse>, t: Throwable) {
-                    binding.loadingBar.visibility = View.GONE
-                    dismiss()
-                }
-            }
-        )
+            )
+        }
     }
 
     fun setOnTechnicianSelectedListener(listener: OnTechnicianSelectedListener) {

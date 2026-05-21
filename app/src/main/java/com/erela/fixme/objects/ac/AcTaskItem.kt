@@ -34,5 +34,7 @@ data class AcTaskItem(
     @SerializedName("frequency_months")
     val frequencyMonths: Int,
     @SerializedName("assigned_technician")
-    val assignedTechnician: String?
+    val assignedTechnician: String?,
+    @SerializedName("log_id")
+    val logId: Int?
 )

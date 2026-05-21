@@ -3,9 +3,13 @@ package com.erela.fixme.activities
 import android.annotation.SuppressLint
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.graphics.Rect
 import android.net.Uri
 import android.os.Bundle
+import android.view.MotionEvent
 import android.view.View
+import android.view.inputmethod.InputMethodManager
+import android.widget.EditText
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
@@ -28,13 +32,18 @@ import com.erela.fixme.viewmodel.AcMaintenanceViewModel
 import com.google.android.flexbox.FlexDirection
 import com.google.android.flexbox.FlexWrap
 import com.google.android.flexbox.FlexboxLayoutManager
+import com.google.android.material.textfield.TextInputEditText
 import java.io.File
 import java.io.FileOutputStream
 import java.util.UUID
 
 class AcSessionActivity : AppCompatActivity(),
     AcSelectTechnicianBottomSheet.OnTechnicianSelectedListener {
-    private lateinit var binding: ActivityAcSessionBinding
+    private val binding: ActivityAcSessionBinding by lazy {
+        ActivityAcSessionBinding.inflate(
+            layoutInflater
+        )
+    }
     private val userData: UserData by lazy {
         UserDataHelper(this@AcSessionActivity).getUserData()
     }
@@ -45,45 +54,25 @@ class AcSessionActivity : AppCompatActivity(),
 
     private var logId: Int = -1
 
-    private var photoBeforeFile: File? = null
     private var photoDuringFile: File? = null
-    private var photoAfterFile: File? = null
 
-    private var currentPhotoTarget: String = ""
     private var currentPhotoUri: Uri? = null
     private var currentPhotoFile: File? = null
 
     private val takePictureLauncher =
         registerForActivityResult(ActivityResultContracts.TakePicture()) { success ->
-            if (success) {
-                val bitmap = BitmapFactory.decodeFile(currentPhotoFile!!.absolutePath)
-                binding.apply {
-                    when (currentPhotoTarget) {
-                        "before" -> {
-                            photoBeforeFile = compressImage(currentPhotoFile!!)
-                            imgPhotoBefore.setImageBitmap(bitmap)
-                            imgPhotoBefore.setPadding(0)
-                        }
-
-                        "during" -> {
-                            photoDuringFile = compressImage(currentPhotoFile!!)
-                            imgPhotoDuring.setImageBitmap(bitmap)
-                            imgPhotoDuring.setPadding(0)
-                        }
-
-                        "after" -> {
-                            photoAfterFile = compressImage(currentPhotoFile!!)
-                            imgPhotoAfter.setImageBitmap(bitmap)
-                            imgPhotoAfter.setPadding(0)
-                        }
-                    }
+            binding.apply {
+                if (success) {
+                    val bitmap = BitmapFactory.decodeFile(currentPhotoFile!!.absolutePath)
+                    photoDuringFile = compressImage(currentPhotoFile!!)
+                    imgPhotoDuring.setImageBitmap(bitmap)
+                    imgPhotoDuring.setPadding(0)
                 }
             }
         }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityAcSessionBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
         enableEdgeToEdge()
@@ -98,6 +87,28 @@ class AcSessionActivity : AppCompatActivity(),
         setupTechnician()
         setupUI()
         setupObservers()
+
+        if (logId != -1) {
+            val userId = userData.id
+            viewModel.loadSessionParticipants(logId, userId)
+        }
+    }
+
+    override fun dispatchTouchEvent(motionEvent: MotionEvent): Boolean {
+        if (motionEvent.action == MotionEvent.ACTION_DOWN) {
+            val view: View? = currentFocus
+            if (view is TextInputEditText || view is EditText) {
+                val rect = Rect()
+                view.getGlobalVisibleRect(rect)
+                if (!rect.contains(motionEvent.rawX.toInt(), motionEvent.rawY.toInt())) {
+                    view.clearFocus()
+                    val inputMethodManager =
+                        getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
+                    inputMethodManager.hideSoftInputFromWindow(view.windowToken, 0)
+                }
+            }
+        }
+        return super.dispatchTouchEvent(motionEvent)
     }
 
     @SuppressLint("NotifyDataSetChanged")
@@ -146,9 +157,7 @@ class AcSessionActivity : AppCompatActivity(),
         binding.apply {
             toolBar.setNavigationOnClickListener { finish() }
 
-            ivPhotoBefore.setOnClickListener { openCamera("before") }
-            ivPhotoDuring.setOnClickListener { openCamera("during") }
-            ivPhotoAfter.setOnClickListener { openCamera("after") }
+            ivPhotoDuring.setOnClickListener { openCamera() }
 
             btnCheckOut.setOnClickListener {
                 val condition = when (rgCondition.checkedRadioButtonId) {
@@ -180,13 +189,13 @@ class AcSessionActivity : AppCompatActivity(),
                     return@setOnClickListener
                 }
 
-                if (photoBeforeFile == null || photoDuringFile == null || photoAfterFile == null) {
+                if (photoDuringFile == null) {
                     CustomToast.getInstance(this@AcSessionActivity)
                         .setMessage(
                             if (getString(R.string.lang) == "en")
-                                "Please capture all three photos (Before, During, After)"
+                                "Please capture a photo of the maintenance in progress"
                             else
-                                "Mohon ambil ketiga foto tersebut (Sebelum, Selama, dan Setelah)."
+                                "Mohon ambil foto saat sedang melakukan perawatan."
                         )
                         .setBackgroundColor(
                             ResourcesCompat.getColor(
@@ -207,8 +216,7 @@ class AcSessionActivity : AppCompatActivity(),
                     logId = logId,
                     userId = userId,
                     acCondition = condition,
-                    photos = listOfNotNull(photoBeforeFile, photoDuringFile, photoAfterFile),
-                    photoTypes = listOf("before", "during", "after"),
+                    photo = photoDuringFile!!,
                     findings = etFindings.text.toString(),
                     actionsTaken = etActions.text.toString(),
                     lat = null,
@@ -226,19 +234,40 @@ class AcSessionActivity : AppCompatActivity(),
                     btnCheckOut.isEnabled = !isLoading
                 }
 
+                @Suppress("NotifyDataSetChanged")
+                sessionParticipants.observe(this@AcSessionActivity) { response ->
+                    // Backend orders lead first (orderByDesc is_lead), assists follow
+                    val participants = response.data?.filterNotNull() ?: return@observe
+                    val leadEntry = participants.firstOrNull()
+                    val isCurrentUserLead = leadEntry?.idUser == userData.id
+
+                    if (isCurrentUserLead) {
+                        sectionLeadTechnicians.visibility = View.VISIBLE
+                        sectionAssistInfo.visibility = View.GONE
+                        selectedTechniciansArrayList.clear()
+                        participants.drop(1).forEach { selectedTechniciansArrayList.add(it) }
+                        selectedTechniciansArrayList.add(plusPlaceholder())
+                        techniciansRvAdapter.notifyDataSetChanged()
+                    } else {
+                        sectionLeadTechnicians.visibility = View.GONE
+                        sectionAssistInfo.visibility = View.VISIBLE
+                        tvLeadName.text = leadEntry?.namaUser ?: "-"
+                        tvAssistNames.text = participants.drop(1)
+                            .mapNotNull { it.namaUser?.trim() }
+                            .joinToString("\n")
+                            .ifEmpty { "-" }
+                    }
+                }
+
                 actionResult.observe(this@AcSessionActivity) { response ->
+                    val bgColor = if (response.isSuccess) R.color.custom_toast_background_success
+                    else R.color.custom_toast_background_failed
+                    val fontColor = if (response.isSuccess) R.color.custom_toast_font_success
+                    else R.color.custom_toast_font_failed
                     CustomToast.getInstance(this@AcSessionActivity)
                         .setMessage(response.message)
-                        .setBackgroundColor(
-                            ResourcesCompat.getColor(
-                                resources, R.color.custom_toast_background_failed, theme
-                            )
-                        )
-                        .setFontColor(
-                            ResourcesCompat.getColor(
-                                resources, R.color.custom_toast_font_failed, theme
-                            )
-                        )
+                        .setBackgroundColor(ResourcesCompat.getColor(resources, bgColor, theme))
+                        .setFontColor(ResourcesCompat.getColor(resources, fontColor, theme))
                         .show()
                     if (response.isSuccess) {
                         when {
@@ -273,9 +302,8 @@ class AcSessionActivity : AppCompatActivity(),
         null, null, null, null, null, null, "+", null
     )
 
-    private fun openCamera(target: String) {
-        currentPhotoTarget = target
-        val filename = "AC_${target}_${UUID.randomUUID()}.jpg"
+    private fun openCamera() {
+        val filename = "AC_during_${UUID.randomUUID()}.jpg"
         currentPhotoFile = File(externalCacheDir, filename)
         currentPhotoUri =
             FileProvider.getUriForFile(this, "${packageName}.provider", currentPhotoFile!!)

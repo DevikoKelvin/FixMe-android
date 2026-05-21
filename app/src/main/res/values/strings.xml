@@ -169,6 +169,8 @@
     
     <string name="maintenance_session_title">Maintenance Session</string>
     <string name="assistant_technician">Assistant Technician</string>
+    <string name="lead_technician">Lead Technician</string>
+    <string name="session_team">Session Team</string>
     <string name="ac_condition">AC Condition</string>
     <string name="good">Good</string>
     <string name="need_repair">Needs Repair</string>

@@ -22,7 +22,11 @@ import com.journeyapps.barcodescanner.ScanContract
 import com.journeyapps.barcodescanner.ScanOptions
 
 class AcTaskListActivity : AppCompatActivity(), AcCheckInBottomSheet.OnCheckInListener {
-    private lateinit var binding: ActivityAcTaskListBinding
+    private val binding: ActivityAcTaskListBinding by lazy {
+        ActivityAcTaskListBinding.inflate(
+            layoutInflater
+        )
+    }
     private val viewModel: AcMaintenanceViewModel by viewModels()
     private lateinit var taskAdapter: AcTaskAdapter
     private val loadingDialog: LoadingDialog by lazy { LoadingDialog(this) }
@@ -36,7 +40,6 @@ class AcTaskListActivity : AppCompatActivity(), AcCheckInBottomSheet.OnCheckInLi
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityAcTaskListBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
         enableEdgeToEdge()
@@ -58,7 +61,12 @@ class AcTaskListActivity : AppCompatActivity(), AcCheckInBottomSheet.OnCheckInLi
             toolBar.setNavigationOnClickListener { finish() }
 
             taskAdapter = AcTaskAdapter(this@AcTaskListActivity) { task ->
-                showCheckInBottomSheet(task.itemId, task.acCode)
+                if (task.itemStatus == "in_progress" && task.logId != null) {
+                    // Assist tech joining an already checked-in session
+                    navigateToSession(logId = task.logId, itemId = null)
+                } else {
+                    showCheckInBottomSheet(task.itemId, task.acCode)
+                }
             }
 
             rvTasks.apply {
@@ -118,14 +126,15 @@ class AcTaskListActivity : AppCompatActivity(), AcCheckInBottomSheet.OnCheckInLi
 
                 scanResult.observe(this@AcTaskListActivity) { response ->
                     if (response.isSuccess) {
-                        if (response.item?.itemStatus == "in_progress") {
-                            // Already claimed — go straight to session
-                            navigateToSession(logId = null, itemId = response.item.itemId)
+                        val item = response.item ?: return@observe
+                        if (item.itemStatus == "in_progress" && item.logId != null) {
+                            // Session already active — join it directly
+                            navigateToSession(logId = item.logId, itemId = null)
+                        } else if (item.itemStatus == "in_progress") {
+                            // Fallback: let check-in handle the already-in-progress case
+                            navigateToSession(logId = null, itemId = item.itemId)
                         } else {
-                            showCheckInBottomSheet(
-                                itemId = response.item?.itemId ?: return@observe,
-                                acCode = response.unit?.acCode
-                            )
+                            showCheckInBottomSheet(itemId = item.itemId, acCode = response.unit?.acCode)
                         }
                     } else {
                         CustomToast.getInstance(this@AcTaskListActivity)

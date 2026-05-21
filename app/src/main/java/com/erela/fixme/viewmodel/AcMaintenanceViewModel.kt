@@ -5,6 +5,7 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
+import com.erela.fixme.objects.SupervisorTechnicianListResponse
 import com.erela.fixme.objects.ac.AcCheckInResponse
 import com.erela.fixme.objects.ac.AcScanResponse
 import com.erela.fixme.objects.ac.AcSimpleResponse
@@ -27,6 +28,9 @@ class AcMaintenanceViewModel(application: Application) : AndroidViewModel(applic
 
     private val _actionResult = MutableLiveData<AcSimpleResponse>()
     val actionResult: LiveData<AcSimpleResponse> = _actionResult
+
+    private val _sessionParticipants = MutableLiveData<SupervisorTechnicianListResponse>()
+    val sessionParticipants: LiveData<SupervisorTechnicianListResponse> = _sessionParticipants
 
     private val _isLoading = MutableLiveData<Boolean>()
     val isLoading: LiveData<Boolean> = _isLoading
@@ -69,6 +73,14 @@ class AcMaintenanceViewModel(application: Application) : AndroidViewModel(applic
         }
     }
 
+    fun loadSessionParticipants(logId: Int, userId: Int) {
+        viewModelScope.launch {
+            repository.sessionParticipants(logId, userId)
+                .onSuccess { _sessionParticipants.value = it }
+                .onFailure { _error.value = it.message }
+        }
+    }
+
     fun addTechnician(logId: Int, userId: Int) {
         _isLoading.value = true
         viewModelScope.launch {
@@ -103,8 +115,7 @@ class AcMaintenanceViewModel(application: Application) : AndroidViewModel(applic
         logId: Int,
         userId: Int,
         acCondition: String,
-        photos: List<File>,
-        photoTypes: List<String>,
+        photo: File,
         findings: String?,
         actionsTaken: String?,
         lat: Double?,
@@ -113,7 +124,7 @@ class AcMaintenanceViewModel(application: Application) : AndroidViewModel(applic
         _isLoading.value = true
         viewModelScope.launch {
             repository.checkOut(
-                logId, userId, acCondition, photos, photoTypes,
+                logId, userId, acCondition, photo,
                 findings, actionsTaken, lat, lng
             )
                 .onSuccess {

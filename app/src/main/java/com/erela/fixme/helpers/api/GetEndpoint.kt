@@ -328,8 +328,7 @@ interface GetEndpoint {
         @Part("log_id") logId: RequestBody,
         @Part("user_id") userId: RequestBody,
         @Part("ac_condition") acCondition: RequestBody,
-        @Part photos: List<MultipartBody.Part>,
-        @Part photoTypes: List<MultipartBody.Part>,
+        @Part photo: MultipartBody.Part,
         @Part("findings") findings: RequestBody?,
         @Part("actions_taken") actionsTaken: RequestBody?,
         @Part("lat") lat: RequestBody?,
@@ -350,4 +349,13 @@ interface GetEndpoint {
         @Field("user_id") userId: Int,
         @Field("lang") lang: String
     ): Call<SupervisorTechnicianListResponse>
+
+    @FormUrlEncoded
+    @POST("acSessionParticipants")
+    suspend fun acSessionParticipants(
+        @Field("log_id") logId: Int,
+        @Field("user_id") userId: Int,
+        @Field("lang") lang: String
+    ): SupervisorTechnicianListResponse
+
 }

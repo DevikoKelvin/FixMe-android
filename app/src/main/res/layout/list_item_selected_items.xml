@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/mainContainer"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:layout_marginVertical="@dimen/list_item_selected_items_margin_vertical"
+    android:layout_marginTop="4dp"
+    android:layout_marginBottom="2dp"
     android:layout_marginEnd="@dimen/list_item_selected_items_margin_end"
     app:cardCornerRadius="@dimen/list_item_selected_items_card_corner_radius"
     app:cardElevation="0dp">
@@ -44,6 +45,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
             android:textColor="@color/black"
+            android:textSize="@dimen/text_size_small"
             tools:text="Item" />
 
         <TextView
@@ -53,7 +55,9 @@
             android:layout_gravity="center_vertical"
             android:layout_marginStart="@dimen/list_item_selected_items_amount_text_margin_start"
             android:textColor="@color/black"
+            android:textSize="@dimen/text_size_small"
             android:visibility="gone"
+            tools:visibility="visible"
             tools:text="(2)" />
     </LinearLayout>
-</androidx.cardview.widget.CardView>
+</com.google.android.material.card.MaterialCardView>
