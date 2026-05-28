@@ -10,7 +10,7 @@ The app gives field technicians, supervisors, and managers a full-featured mobil
 
 | Login | Main Menu |
 |---|---|
-| ![Login](docs/login.png) | ![Main Menu](docs/main_menu.png) |
+| ![Login](docs/screenshots/login.png) | ![Main Menu](docs/screenshots/main_menu.png) |
 
 ---
 
