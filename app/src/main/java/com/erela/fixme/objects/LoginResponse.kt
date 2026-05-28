@@ -22,5 +22,7 @@ data class LoginResponse(
     @field:SerializedName("id_starconnect")
     val idStarConnect: Int? = null,
     @field:SerializedName("message")
-    val message: String? = null
+    val message: String? = null,
+    @field:SerializedName("email")
+    val email: String? = null
 )

@@ -338,7 +338,8 @@ class LoginActivity : AppCompatActivity() {
                                                     result.hakAkses!!,
                                                     result.idDept!!,
                                                     result.dept!!,
-                                                    result.subDept!!
+                                                    result.subDept!!,
+                                                    result.email ?: ""
                                                 )
                                             FirebaseMessaging.getInstance().token.addOnCompleteListener { task ->
                                                 if (!task.isSuccessful) {

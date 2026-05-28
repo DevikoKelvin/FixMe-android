@@ -200,6 +200,10 @@ class SettingsActivity : AppCompatActivity() {
                 startActivity(Intent(this@SettingsActivity, ChangePasswordActivity::class.java))
             }
 
+            changeEmailButton.setOnClickListener {
+                startActivity(Intent(this@SettingsActivity, ChangeEmailActivity::class.java))
+            }
+
             copyright.text =
                 if (getString(R.string.lang) == "in")
                     "@ ${

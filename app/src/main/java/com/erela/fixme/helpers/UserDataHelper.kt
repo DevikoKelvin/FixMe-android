@@ -13,12 +13,13 @@ class UserDataHelper(private val context: Context) {
     private val keyIdDept = "key.id.dept"
     private val keyDept = "key.dept"
     private val keySubDept = "key.sub.dept"
+    private val keyEmail = "key.email"
 
     /*private val notificationKey = "key.notification"*/
 
     fun setUserData(
         id: Int, idStarConnect: Int, username: String, name: String, privilege: Int, idDept: Int,
-        dept: String, subDept: String
+        dept: String, subDept: String, email: String = ""
     ) {
         SharedPreferencesHelper.getSharedPreferences(context).edit {
             also {
@@ -31,6 +32,7 @@ class UserDataHelper(private val context: Context) {
                     putInt(keyIdDept, idDept)
                     putString(keyDept, dept)
                     putString(keySubDept, subDept)
+                    putString(keyEmail, email)
                 }
             }
         }
@@ -48,12 +50,19 @@ class UserDataHelper(private val context: Context) {
                     getInt(keyStatusPrev, 0),
                     getInt(keyIdDept, 0),
                     getString(keyDept, "").toString(),
-                    getString(keySubDept, "").toString()
+                    getString(keySubDept, "").toString(),
+                    getString(keyEmail, "").toString()
                 )
             }
         }
 
         return userData
+    }
+
+    fun saveEmail(email: String) {
+        SharedPreferencesHelper.getSharedPreferences(context).edit {
+            putString(keyEmail, email)
+        }
     }
 
     fun isUserDataExist(): Boolean =
