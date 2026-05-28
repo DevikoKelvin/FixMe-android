@@ -28,7 +28,9 @@ class ChangePasswordActivity : AppCompatActivity() {
     private val binding: ActivityChangePasswordBinding by lazy {
         ActivityChangePasswordBinding.inflate(layoutInflater)
     }
-    private lateinit var userData: UserData
+    private val userData: UserData by lazy {
+        UserDataHelper(this).getUserData()
+    }
     private var passValid = false
     private var passMatch = false
 
@@ -42,8 +44,6 @@ class ChangePasswordActivity : AppCompatActivity() {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
-
-        userData = UserDataHelper(this).getUserData()
 
         init()
     }
@@ -87,12 +87,11 @@ class ChangePasswordActivity : AppCompatActivity() {
                     count: Int
                 ) {
                     if (s != null)
-                        if (s.length < 4) {
+                        if (s.length < 4)
                             oldPasswordFieldLayout.error =
                                 getString(R.string.password_minimum_char_error)
-                        } else {
+                        else
                             oldPasswordFieldLayout.error = null
-                        }
                 }
 
                 override fun afterTextChanged(s: Editable?) {}

@@ -48,6 +48,14 @@ interface GetEndpoint {
     ): Call<GenericSimpleResponse>
 
     @FormUrlEncoded
+    @POST("changeEmail")
+    fun changeEmail(
+        @Field("user_id") userId: Int,
+        @Field("password") password: String,
+        @Field("new_email") newEmail: String
+    ): Call<GenericSimpleResponse>
+
+    @FormUrlEncoded
     @POST("checkInbox")
     fun showInbox(
         @Field("user_id") userId: Int

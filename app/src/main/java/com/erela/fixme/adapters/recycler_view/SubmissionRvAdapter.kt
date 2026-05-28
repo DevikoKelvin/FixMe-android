@@ -1,7 +1,7 @@
 package com.erela.fixme.adapters.recycler_view
 
-import android.animation.AnimatorInflater
 import android.animation.Animator
+import android.animation.AnimatorInflater
 import android.annotation.SuppressLint
 import android.content.Context
 import android.util.Log

@@ -38,6 +38,11 @@
     <string name="new_password_title">New Password</string>
     <string name="confirm_password_title">Confirm Password</string>
     <string name="save_settings">SAVE</string>
+    
+    <string name="change_email_title">Change Email</string>
+    <string name="email_not_valid_error">Email is not valid! Please check again.</string>
+    <string name="old_email_title">Old Email</string>
+    <string name="new_email_title">New Email</string>
 
     <string name="make_submission_title">Make a Submission</string>
     <string name="case_title">Case Title</string>

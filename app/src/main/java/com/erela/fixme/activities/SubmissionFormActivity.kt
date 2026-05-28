@@ -47,7 +47,6 @@ import com.erela.fixme.objects.DepartmentListResponse
 import com.erela.fixme.objects.FotoGaprojectsItem
 import com.erela.fixme.objects.GenericSimpleResponse
 import com.erela.fixme.objects.SubmissionDetailResponse
-import com.google.gson.Gson
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.maps.CameraUpdateFactory

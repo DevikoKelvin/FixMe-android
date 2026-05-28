@@ -142,6 +142,8 @@ androidComponents {
 }
 
 dependencies {
+    implementation libs.androidx.activity.ktx
+
     // Core
     implementation libs.androidx.core.ktx
 

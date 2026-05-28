@@ -39,6 +39,11 @@
     <string name="confirm_password_title">Konfirmasi Kata Sandi</string>
     <string name="save_settings">SIMPAN</string>
 
+    <string name="change_email_title">Ubah Surel</string>
+    <string name="email_not_valid_error">Surel tidak valid! Tolong periksa ulang.</string>
+    <string name="old_email_title">Surel Lama</string>
+    <string name="new_email_title">Surel Baru</string>
+
     <string name="make_submission_title">Buat Laporan</string>
     <string name="case_title">Judul Kasus</string>
     <string name="location">Lokasi</string>
