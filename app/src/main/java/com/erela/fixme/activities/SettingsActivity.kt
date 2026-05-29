@@ -705,10 +705,8 @@ class SettingsActivity : AppCompatActivity() {
     }
 
     private fun installApk(uri: Uri) {
-        Log.d("InstallApk", "Installing from uri=$uri path=${uri.path}")
         try {
             val downloadedFile = File(uri.path!!)
-            Log.d("InstallApk", "File exists=${downloadedFile.exists()} size=${downloadedFile.length()} path=${downloadedFile.absolutePath}")
             pendingDeleteApkFile = downloadedFile
             val installIntent = Intent(Intent.ACTION_VIEW).apply {
                 setDataAndType(
