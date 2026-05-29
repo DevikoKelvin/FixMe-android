@@ -37,21 +37,6 @@ if (localPropsFile.exists()) {
     localProps.load(new FileInputStream(localPropsFile))
 }
 
-def getVersionChannel() {
-    try {
-        def branch = providers.exec {
-            commandLine 'git', 'rev-parse', '--abbrev-ref', 'HEAD'
-            workingDir rootDir
-        }.standardOutput.asText.get().trim()
-        if (branch == 'main' || branch == 'master') return 'release'
-        if (branch == 'beta') return 'beta_prerelease'
-        if (branch == 'development') return 'dev'
-        return 'canary'
-    } catch (ignored) {
-        return 'canary'
-    }
-}
-
 def findKeystoreFile() {
     def projectKeystore = file("${rootDir}/keystore.jks")
     if (projectKeystore.exists()) {
@@ -60,12 +45,15 @@ def findKeystoreFile() {
     return file('D:/Coding/Android_Studio_Projects/ERELA/FixMe/keystore.jks')
 }
 
+googleServices {
+    missingGoogleServicesStrategy = 'IGNORE'
+}
+
 android {
     namespace 'com.erela.fixme'
     compileSdk = 37
 
     defaultConfig {
-        applicationId "com.erela.fixme"
         minSdk = 26
         targetSdk = 37
         manifestPlaceholders = [MAPS_API_KEY: localProps['MAPS_API_KEY'] ?: ""]
@@ -74,7 +62,6 @@ android {
         versionName "1.4.0a"
 
         buildConfigField "String", "BUILD_TIMESTAMP", "\"${new Date().format('yyMMdd-HHmm')}\""
-        buildConfigField "String", "VERSION_CHANNEL", "\"${getVersionChannel()}\""
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
@@ -82,6 +69,36 @@ android {
 
         ndk {
             abiFilters 'armeabi-v7a', 'arm64-v8a', 'x86_64'
+        }
+    }
+
+    // ── Flavor dimensions ──────────────────────────────────────────────────────
+    flavorDimensions "channel"
+
+    productFlavors {
+        // "stable" avoids naming conflict with the "release" build type
+        stable {
+            dimension "channel"
+            applicationId "com.erela.fixme"
+            buildConfigField "String", "VERSION_CHANNEL", '"release"'
+        }
+        beta {
+            dimension "channel"
+            applicationId "com.erela.fixme.beta"
+            buildConfigField "String", "VERSION_CHANNEL", '"beta_prerelease"'
+            resValue "string", "app_name", "FixMe Beta"
+        }
+        dev {
+            dimension "channel"
+            applicationId "com.erela.fixme.dev"
+            buildConfigField "String", "VERSION_CHANNEL", '"dev"'
+            resValue "string", "app_name", "FixMe Dev"
+        }
+        canary {
+            dimension "channel"
+            applicationId "com.erela.fixme.canary"
+            buildConfigField "String", "VERSION_CHANNEL", '"canary"'
+            resValue "string", "app_name", "FixMe Canary"
         }
     }
 
@@ -112,6 +129,7 @@ android {
             minifyEnabled false
             //noinspection NotShrinkingResources
             shrinkResources false
+            applicationIdSuffix ".debug"
         }
     }
 
@@ -136,7 +154,7 @@ android {
 androidComponents {
     onVariants(selector().all(), { variant ->
         variant.outputs.each { output ->
-            output.outputFileName.set("Erela_FixMe_prerelease_v${android.defaultConfig.versionName}.apk")
+            output.outputFileName.set("Erela_FixMe_${variant.name}_v${android.defaultConfig.versionName}.apk")
         }
     })
 }

@@ -30,11 +30,11 @@ import com.erela.fixme.BuildConfig
 import com.erela.fixme.R
 import com.erela.fixme.custom_views.CustomToast
 import com.erela.fixme.databinding.ActivitySettingsBinding
-import com.erela.fixme.helpers.VersionHelper
-import com.github.tutorialsandroid.appxupdater.AppUpdaterUtils
-import com.github.tutorialsandroid.appxupdater.enums.AppUpdaterError
-import com.github.tutorialsandroid.appxupdater.enums.UpdateFrom
-import com.github.tutorialsandroid.appxupdater.objects.Update
+import com.erela.fixme.helpers.api.InitAPI
+import com.erela.fixme.objects.UpdateCheckResponse
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 import java.io.File
 import java.util.Calendar
 
@@ -276,167 +276,168 @@ class SettingsActivity : AppCompatActivity() {
                     }
 
                     handler.post(runnable)
-                    val appUpdaterUtils = AppUpdaterUtils(this@SettingsActivity).also {
-                        with(it) {
-                            setUpdateFrom(UpdateFrom.GITHUB)
-                            setGitHubUserAndRepo("DevikoKelvin", "FixMe-android")
-                            withListener(object : AppUpdaterUtils.UpdateListener {
-                                override fun onSuccess(
-                                    update: Update?, isUpdateAvailable: Boolean?
-                                ) {
-                                    loadingBar.visibility = View.GONE
-                                    handler.removeCallbacks(runnable)
-                                    val comparison = VersionHelper.compareVersions(
-                                        update?.latestVersion,
-                                        currentAppVersion
-                                    )
-                                    if (comparison > 0) {
-                                        checkDownloadInstallText.text =
-                                            getString(R.string.download_update)
-                                        updateAvailableStatus.visibility = View.VISIBLE
-                                        currentAppVersionText.setTextColor(
-                                            ContextCompat.getColor(
-                                                this@SettingsActivity,
-                                                R.color.custom_toast_font_failed
-                                            )
-                                        )
-                                        newAppVersion = update?.latestVersion
-                                        getSharedPreferences(DOWNLOAD_PREFS, MODE_PRIVATE)
-                                            .edit { putString(PREF_NEW_APP_VERSION, newAppVersion) }
-                                        newAppVersionText.text =
-                                            if (getString(R.string.lang) == "in")
-                                                "Versi aplikasi baru terdeteksi: ${update?.latestVersion}"
-                                            else
-                                                "Detected new app version: ${update?.latestVersion}"
-                                        newAppVersionText.visibility = View.VISIBLE
-                                        statusIcon.setImageDrawable(
-                                            AppCompatResources.getDrawable(
-                                                this@SettingsActivity,
-                                                R.drawable.caution_icon
-                                            )
-                                        )
-                                        statusIcon.visibility = View.VISIBLE
-                                        downloadLink = update?.urlToDownload.toString().replace(
-                                            "latest",
-                                            "download/v${update?.latestVersion}/Erela_FixMe_prerelease_v${update?.latestVersion}.apk"
-                                        )
-                                    } else {
-                                        if (comparison < 0) {
-                                            statusIcon.setImageDrawable(
-                                                AppCompatResources.getDrawable(
-                                                    this@SettingsActivity,
-                                                    R.drawable.question_mark_icon
-                                                )
-                                            )
-                                            statusIcon.visibility = View.VISIBLE
-                                            CustomToast.getInstance(applicationContext)
-                                                .setMessage(
-                                                    if (getString(R.string.lang) == "in")
-                                                        "Versi aplikasi Anda lebih tinggi dari versi terbaru."
-                                                    else
-                                                        "Your app version is higher than the latest version."
-                                                )
-                                                .setFontColor(
-                                                    ContextCompat.getColor(
-                                                        this@SettingsActivity,
-                                                        R.color.custom_toast_background_soft_blue
-                                                    )
-                                                )
-                                                .setBackgroundColor(
-                                                    ContextCompat.getColor(
-                                                        this@SettingsActivity,
-                                                        R.color.custom_toast_font_blue
-                                                    )
-                                                ).show()
-                                        } else {
-                                            statusIcon.setImageDrawable(
-                                                AppCompatResources.getDrawable(
-                                                    this@SettingsActivity,
-                                                    R.drawable.done_icon
-                                                )
-                                            )
-                                            statusIcon.visibility = View.VISIBLE
-                                            CustomToast.getInstance(applicationContext)
-                                                .setMessage(
-                                                    if (getString(R.string.lang) == "in")
-                                                        "Tidak ada pembaruan yang tersedia. Aplikasi Anda sudah versi terbaru!"
-                                                    else
-                                                        "No update available. Your app is on the latest version!"
-                                                )
-                                                .setFontColor(
-                                                    ContextCompat.getColor(
-                                                        this@SettingsActivity,
-                                                        R.color.custom_toast_background_soft_blue
-                                                    )
-                                                )
-                                                .setBackgroundColor(
-                                                    ContextCompat.getColor(
-                                                        this@SettingsActivity,
-                                                        R.color.custom_toast_font_blue
-                                                    )
-                                                ).show()
-                                        }
-                                        currentAppVersionText.setTextColor(
-                                            ContextCompat.getColor(
-                                                this@SettingsActivity,
-                                                R.color.black
-                                            )
-                                        )
-                                        checkDownloadInstallText.text =
-                                            getString(R.string.check_for_update_now)
-                                        updateAvailableStatus.visibility = View.GONE
-                                        newAppVersionText.visibility = View.GONE
-                                    }
-                                }
-
-                                override fun onFailed(error: AppUpdaterError?) {
-                                    loadingBar.visibility = View.GONE
-                                    handler.removeCallbacks(runnable)
-                                    CustomToast.getInstance(applicationContext)
-                                        .setMessage(
-                                            if (getString(R.string.lang) == "in")
-                                                "Terjadi kesalahan, silakan coba lagi."
-                                            else
-                                                "Something went wrong, please try again."
-                                        )
-                                        .setFontColor(
-                                            ContextCompat.getColor(
-                                                this@SettingsActivity,
-                                                R.color.custom_toast_font_failed
-                                            )
-                                        )
-                                        .setBackgroundColor(
-                                            ContextCompat.getColor(
-                                                this@SettingsActivity,
-                                                R.color.custom_toast_background_failed
-                                            )
-                                        ).show()
+                    Log.e(
+                        "FixMe.Update",
+                        "checkUpdate → channel=${BuildConfig.VERSION_CHANNEL} versionName=${BuildConfig.VERSION_NAME}"
+                    )
+                    InitAPI.getEndpoint.checkUpdate(
+                        BuildConfig.VERSION_CHANNEL,
+                        BuildConfig.VERSION_NAME
+                    ).enqueue(object : Callback<UpdateCheckResponse> {
+                        override fun onResponse(
+                            call: Call<UpdateCheckResponse>,
+                            response: Response<UpdateCheckResponse>
+                        ) {
+                            loadingBar.visibility = View.GONE
+                            handler.removeCallbacks(runnable)
+                            Log.e(
+                                "FixMe.Update",
+                                "HTTP ${response.code()} | isSuccessful=${response.isSuccessful}"
+                            )
+                            if (!response.isSuccessful) {
+                                val errBody = response.errorBody()?.string()
+                                Log.e("FixMe.Update", "Error body: $errBody")
+                                showUpdateError()
+                                return
+                            }
+                            val body = response.body()
+                            if (body == null) {
+                                Log.e("FixMe.Update", "Body is null despite successful response")
+                                showUpdateError()
+                                return
+                            }
+                            Log.e(
+                                "FixMe.Update",
+                                "code=${body.code} versionName=${body.versionName} downloadUrl=${body.downloadUrl} forceUpdate=${body.forceUpdate}"
+                            )
+                            when (body.code) {
+                                1 -> {
+                                    checkDownloadInstallText.text =
+                                        getString(R.string.download_update)
+                                    updateAvailableStatus.visibility = View.VISIBLE
                                     currentAppVersionText.setTextColor(
                                         ContextCompat.getColor(
                                             this@SettingsActivity,
-                                            R.color.black
+                                            R.color.custom_toast_font_failed
                                         )
+                                    )
+                                    newAppVersion = body.versionName
+                                    getSharedPreferences(DOWNLOAD_PREFS, MODE_PRIVATE)
+                                        .edit { putString(PREF_NEW_APP_VERSION, newAppVersion) }
+                                    newAppVersionText.text =
+                                        if (getString(R.string.lang) == "in")
+                                            "Versi aplikasi baru terdeteksi: ${body.versionName}"
+                                        else
+                                            "Detected new app version: ${body.versionName}"
+                                    newAppVersionText.visibility = View.VISIBLE
+                                    statusIcon.setImageDrawable(
+                                        AppCompatResources.getDrawable(
+                                            this@SettingsActivity,
+                                            R.drawable.caution_icon
+                                        )
+                                    )
+                                    statusIcon.visibility = View.VISIBLE
+                                    downloadLink = body.downloadUrl?.takeIf { it.isNotBlank() }
+                                }
+
+                                0 -> {
+                                    statusIcon.setImageDrawable(
+                                        AppCompatResources.getDrawable(
+                                            this@SettingsActivity,
+                                            R.drawable.done_icon
+                                        )
+                                    )
+                                    statusIcon.visibility = View.VISIBLE
+                                    currentAppVersionText.setTextColor(
+                                        ContextCompat.getColor(this@SettingsActivity, R.color.black)
                                     )
                                     checkDownloadInstallText.text =
                                         getString(R.string.check_for_update_now)
                                     updateAvailableStatus.visibility = View.GONE
                                     newAppVersionText.visibility = View.GONE
-                                    statusIcon.setImageDrawable(
-                                        AppCompatResources.getDrawable(
-                                            this@SettingsActivity,
-                                            R.drawable.connection_error_icon
+                                    CustomToast.getInstance(applicationContext)
+                                        .setMessage(
+                                            if (getString(R.string.lang) == "in")
+                                                "Tidak ada pembaruan. Aplikasi Anda sudah versi terbaru!"
+                                            else
+                                                "No update available. Your app is on the latest version!"
                                         )
-                                    )
-                                    statusIcon.visibility = View.VISIBLE
-                                    Log.e("ERROR Update", error.toString())
+                                        .setFontColor(
+                                            ContextCompat.getColor(
+                                                this@SettingsActivity,
+                                                R.color.custom_toast_background_soft_blue
+                                            )
+                                        )
+                                        .setBackgroundColor(
+                                            ContextCompat.getColor(
+                                                this@SettingsActivity,
+                                                R.color.custom_toast_font_blue
+                                            )
+                                        )
+                                        .show()
                                 }
-                            })
+
+                                else -> {
+                                    Log.e(
+                                        "FixMe.Update",
+                                        "Unexpected code ${body.code}: ${body.message}"
+                                    )
+                                    showUpdateError()
+                                }
+                            }
                         }
-                    }
-                    appUpdaterUtils.start()
+
+                        override fun onFailure(
+                            call: Call<UpdateCheckResponse>,
+                            t: Throwable
+                        ) {
+                            loadingBar.visibility = View.GONE
+                            handler.removeCallbacks(runnable)
+                            Log.e(
+                                "FixMe.Update",
+                                "onFailure: ${t::class.simpleName}: ${t.message}",
+                                t
+                            )
+                            showUpdateError()
+                        }
+                    })
                 }
             }
         }
+    }
+
+    private fun showUpdateError() {
+        binding.apply {
+            currentAppVersionText.setTextColor(
+                ContextCompat.getColor(
+                    this@SettingsActivity,
+                    R.color.black
+                )
+            )
+            checkDownloadInstallText.text = getString(R.string.check_for_update_now)
+            updateAvailableStatus.visibility = View.GONE
+            newAppVersionText.visibility = View.GONE
+            statusIcon.setImageDrawable(
+                AppCompatResources.getDrawable(
+                    this@SettingsActivity,
+                    R.drawable.connection_error_icon
+                )
+            )
+            statusIcon.visibility = View.VISIBLE
+        }
+        CustomToast.getInstance(applicationContext)
+            .setMessage(
+                if (getString(R.string.lang) == "in") "Terjadi kesalahan, silakan coba lagi."
+                else "Something went wrong, please try again."
+            )
+            .setFontColor(ContextCompat.getColor(this, R.color.custom_toast_font_failed))
+            .setBackgroundColor(
+                ContextCompat.getColor(
+                    this,
+                    R.color.custom_toast_background_failed
+                )
+            )
+            .show()
     }
 
     @SuppressLint("SetTextI18n")

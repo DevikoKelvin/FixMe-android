@@ -37,13 +37,13 @@ import com.erela.fixme.dialogs.ConfirmationDialog
 import com.erela.fixme.dialogs.UpdateAvailableDialog
 import com.erela.fixme.helpers.PermissionHelper
 import com.erela.fixme.helpers.UserDataHelper
-import com.erela.fixme.helpers.VersionHelper
+import com.erela.fixme.helpers.api.InitAPI
+import com.erela.fixme.objects.UpdateCheckResponse
 import com.erela.fixme.objects.UserData
 import com.erela.fixme.services.SseService
-import com.github.tutorialsandroid.appxupdater.AppUpdaterUtils
-import com.github.tutorialsandroid.appxupdater.enums.AppUpdaterError
-import com.github.tutorialsandroid.appxupdater.enums.UpdateFrom
-import com.github.tutorialsandroid.appxupdater.objects.Update
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 import java.io.File
 import java.time.LocalDateTime
 
@@ -437,48 +437,37 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun checkNewUpdate() {
-        val currentAppVersion = BuildConfig.VERSION_NAME
-        AppUpdaterUtils(this@MainActivity).also {
-            with(it) {
-                setUpdateFrom(UpdateFrom.GITHUB)
-                setGitHubUserAndRepo("DevikoKelvin", "FixMe-android")
-                withListener(object : AppUpdaterUtils.UpdateListener {
-                    override fun onSuccess(update: Update?, isUpdateAvailable: Boolean?) {
-                        val comparison =
-                            VersionHelper.compareVersions(update?.latestVersion, currentAppVersion)
-                        if (comparison > 0) {
-                            newAppVersion = update?.latestVersion
-                            val dialog = UpdateAvailableDialog(
-                                this@MainActivity,
-                                update?.urlToDownload.toString().replace(
-                                    "latest",
-                                    "download/v${update?.latestVersion}/Erela_FixMe_prerelease_v${update?.latestVersion}.apk"
-                                )
-                            ).also { updateDialog ->
-                                with(updateDialog) {
-                                    setOnDownloadListener(object :
-                                        UpdateAvailableDialog.OnDownloadListener {
-                                        override fun onDownload(url: String) {
-                                            startDownload(url)
-                                        }
-                                    })
-                                }
+        InitAPI.getEndpoint.checkUpdate(BuildConfig.VERSION_CHANNEL, BuildConfig.VERSION_NAME)
+            .enqueue(object : Callback<UpdateCheckResponse> {
+                override fun onResponse(
+                    call: Call<UpdateCheckResponse>,
+                    response: Response<UpdateCheckResponse>
+                ) {
+                    val body = response.body() ?: return
+                    if (body.code == 1) {
+                        val url = body.downloadUrl?.takeIf { it.isNotBlank() } ?: return
+                        newAppVersion = body.versionName
+                        val dialog = UpdateAvailableDialog(this@MainActivity, url)
+                            .also { d ->
+                                d.setOnDownloadListener(object :
+                                    UpdateAvailableDialog.OnDownloadListener {
+                                    override fun onDownload(url: String) {
+                                        startDownload(url)
+                                    }
+                                })
                             }
-
-                            if (dialog.window != null)
-                                dialog.show()
-                        }
+                        if (dialog.window != null)
+                            dialog.show()
                     }
+                }
 
-                    override fun onFailed(error: AppUpdaterError?) {
-                        Log.e(
-                            "ERROR Update Check",
-                            "Can\'t retrieve update channel | ERROR ${error.toString()}"
-                        )
-                    }
-                })
-            }
-        }.start()
+                override fun onFailure(
+                    call: Call<UpdateCheckResponse>,
+                    t: Throwable
+                ) {
+                    Log.e("ERROR Update Check", "checkUpdate failed: ${t.message}")
+                }
+            })
     }
 
     private fun showDownloadFailedToast() {

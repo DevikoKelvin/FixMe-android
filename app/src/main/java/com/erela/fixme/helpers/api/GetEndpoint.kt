@@ -1,6 +1,7 @@
 package com.erela.fixme.helpers.api
 
 import com.erela.fixme.objects.CategoryListResponse
+import com.erela.fixme.objects.UpdateCheckResponse
 import com.erela.fixme.objects.CreationResponse
 import com.erela.fixme.objects.DepartmentListResponse
 import com.erela.fixme.objects.GenericSimpleResponse
@@ -29,6 +30,12 @@ import retrofit2.http.Part
 import retrofit2.http.PartMap
 
 interface GetEndpoint {
+    @GET("checkUpdate")
+    fun checkUpdate(
+        @retrofit2.http.Query("channel") channel: String,
+        @retrofit2.http.Query("version_name") versionName: String
+    ): Call<UpdateCheckResponse>
+
     @FormUrlEncoded
     @POST("login")
     fun login(
