@@ -650,6 +650,9 @@ class SettingsActivity : AppCompatActivity() {
     }
 
     private fun startDownload(url: String) {
+        val fileName = url.substringAfterLast('/').let {
+            if (it.endsWith(".apk")) it else "FixMe_update_${BuildConfig.VERSION_NAME}.apk"
+        }
         val request = DownloadManager.Request(url.toUri())
             .setTitle(
                 if (getString(R.string.lang) == "in")
@@ -666,7 +669,7 @@ class SettingsActivity : AppCompatActivity() {
             .setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE)
             .setDestinationInExternalPublicDir(
                 Environment.DIRECTORY_DOWNLOADS,
-                "FixMe Updates"
+                "FixMe Updates/$fileName"
             )
         val downloadManager = getSystemService(DOWNLOAD_SERVICE) as DownloadManager
         downloadId = downloadManager.enqueue(request)
@@ -702,8 +705,10 @@ class SettingsActivity : AppCompatActivity() {
     }
 
     private fun installApk(uri: Uri) {
+        Log.d("InstallApk", "Installing from uri=$uri path=${uri.path}")
         try {
             val downloadedFile = File(uri.path!!)
+            Log.d("InstallApk", "File exists=${downloadedFile.exists()} size=${downloadedFile.length()} path=${downloadedFile.absolutePath}")
             pendingDeleteApkFile = downloadedFile
             val installIntent = Intent(Intent.ACTION_VIEW).apply {
                 setDataAndType(
