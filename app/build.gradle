@@ -45,10 +45,6 @@ def findKeystoreFile() {
     return file('D:/Coding/Android_Studio_Projects/ERELA/FixMe/keystore.jks')
 }
 
-googleServices {
-    missingGoogleServicesStrategy = 'IGNORE'
-}
-
 android {
     namespace 'com.erela.fixme'
     compileSdk = 37
