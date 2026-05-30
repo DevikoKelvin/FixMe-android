@@ -247,7 +247,7 @@ class UpdateStatusBottomSheet(
                         descriptionFieldLayout.visibility = View.VISIBLE
                         descriptionField.setText(
                             if (isEdit) {
-                                dataDetail.keterangan ?: ""
+                                dataDetail.ketApproved ?: ""
                             } else {
                                 if (context.getString(R.string.lang) == "in")
                                     "Disetujui!"

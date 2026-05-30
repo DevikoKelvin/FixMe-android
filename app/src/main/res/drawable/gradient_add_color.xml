@@ -5,4 +5,5 @@
         android:angle="45"
         android:endColor="#8DC26F"
         android:startColor="#76b852" />
+    <corners android:radius="50dp" />
 </shape>

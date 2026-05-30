@@ -214,11 +214,7 @@ class SettingsActivity : AppCompatActivity() {
                         Calendar.getInstance().get(Calendar.YEAR)
                     } Erlangga Edi Laboratories Corporation\n All rights reserved"
 
-            val channel =
-                if (BuildConfig.VERSION_CHANNEL == "release" || BuildConfig.VERSION_CHANNEL == "beta_prerelease")
-                    BuildConfig.VERSION_CHANNEL
-                else
-                    "${BuildConfig.VERSION_CHANNEL}_${BuildConfig.BUILD_TYPE}"
+            val channel = "${BuildConfig.VERSION_CHANNEL}_${BuildConfig.BUILD_TYPE}"
             currentAppVersion = BuildConfig.VERSION_NAME
             val appVersionText =
                 "${BuildConfig.VERSION_NAME}.${BuildConfig.VERSION_CODE}.${channel}.${BuildConfig.BUILD_TIMESTAMP}"
