@@ -64,7 +64,7 @@ class AcSelectTechnicianBottomSheet(
                             if (tech != null) {
                                 techniciansList.add(
                                     SelectedSupervisorTechniciansList(
-                                        isSelected = alreadySelected.any { it.idUser == tech.idUser },
+                                        isSelected = alreadySelected.any { it.userId == tech.userId },
                                         supervisorTechnician = tech
                                     )
                                 )

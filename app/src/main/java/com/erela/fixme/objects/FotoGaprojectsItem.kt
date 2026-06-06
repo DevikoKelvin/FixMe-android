@@ -7,11 +7,11 @@ import kotlinx.parcelize.Parcelize
 @Parcelize
 data class FotoGaprojectsItem(
     @field:SerializedName("foto")
-    val foto: String? = null,
+    val photo: String? = null,
     @field:SerializedName("id_foto_gaprojects")
-    val idFotoGaprojects: Int? = null,
+    val photoId: Int? = null,
     @field:SerializedName("id_gaprojects")
-    val idGaprojects: Int? = null,
+    val caseId: Int? = null,
     @field:SerializedName("tgl_waktu")
-    val tglWaktu: String? = null
+    val dateTime: String? = null
 ) : Parcelable

@@ -299,7 +299,7 @@ class LoginActivity : AppCompatActivity() {
                             if (response.isSuccessful) {
                                 if (response.body() != null) {
                                     val result = response.body()
-                                    val name = result?.nama!!
+                                    val name = result?.name!!
                                     when (result.code) {
                                         1 -> {
                                             CustomToast.getInstance(applicationContext)
@@ -323,13 +323,13 @@ class LoginActivity : AppCompatActivity() {
                                                 ).show()
                                             UserDataHelper(this@LoginActivity)
                                                 .setUserData(
-                                                    result.idUser!!,
-                                                    result.idStarConnect!!,
+                                                    result.userId!!,
+                                                    result.starConnectId!!,
                                                     username,
                                                     name,
-                                                    result.hakAkses!!,
-                                                    result.idDept!!,
-                                                    result.dept!!,
+                                                    result.privilege!!,
+                                                    result.deptId!!,
+                                                    result.deptName!!,
                                                     result.subDept!!,
                                                     result.email ?: ""
                                                 )
@@ -346,7 +346,7 @@ class LoginActivity : AppCompatActivity() {
                                                 Log.e("LoginActivity", "FCM Token: $token")
 
                                                 InitAPI.getEndpoint.updateFcmToken(
-                                                    result.idUser,
+                                                    result.userId,
                                                     token
                                                 ).enqueue(object : Callback<GenericSimpleResponse> {
                                                     override fun onResponse(

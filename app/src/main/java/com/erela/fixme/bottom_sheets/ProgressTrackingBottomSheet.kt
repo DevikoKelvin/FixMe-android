@@ -64,18 +64,18 @@ class ProgressTrackingBottomSheet(
                     "Progress is being worked on."
             )
             progressWorkedBy.text = message.toString()
-            if (data.stsGaprojects == 22) {
+            if (data.caseStatus == 22) {
                 holdMessage.visibility = View.VISIBLE
                 holdMessage.text = if (context.getString(R.string.lang) == "in")
-                    "Proyek ini sedang dalam status Jeda.\nAlasan: ${data.keteranganHold}"
+                    "Proyek ini sedang dalam status Jeda.\nAlasan: ${data.holdDesc}"
                 else
-                    "Issue on Hold status.\nReason: ${data.keteranganHold}"
+                    "Issue on Hold status.\nReason: ${data.holdDesc}"
             } else
                 holdMessage.visibility = View.GONE
 
             try {
                 progressItem = ArrayList()
-                InitAPI.getEndpoint.getSubmissionProgress(data.idGaprojects!!).enqueue(
+                InitAPI.getEndpoint.getSubmissionProgress(data.caseId!!).enqueue(
                     object : Callback<SubmissionProgressResponse> {
                         override fun onResponse(
                             call: Call<SubmissionProgressResponse?>,
@@ -85,7 +85,7 @@ class ProgressTrackingBottomSheet(
                                 val result = response.body()
                                 if (result != null) {
                                     if (result.data != null) {
-                                        for (i in 0 until result.data.size) {
+                                        for (i in result.data.indices) {
                                             progressItem.add(
                                                 ProgressItems(
                                                     false,
@@ -107,12 +107,12 @@ class ProgressTrackingBottomSheet(
                                         rvProgress.setItemViewCacheSize(progressItem.size)
                                         rvProgress.layoutManager = LinearLayoutManager(context)
 
-                                        when (data.stsGaprojects) {
+                                        when (data.caseStatus) {
                                             22 -> progressActionButton.visibility = View.GONE
                                             3 -> {
-                                                if (data.idUser == userData.id) {
-                                                    for (i in 0 until data.usernUserTeknisi!!.size) {
-                                                        if (data.usernUserTeknisi[i]?.idUser == userData.id) {
+                                                if (data.userId == userData.id) {
+                                                    for (i in data.techniciansUser!!.indices) {
+                                                        if (data.techniciansUser[i]?.userId == userData.id) {
                                                             progressActionButton.visibility =
                                                                 View.VISIBLE
                                                             progressActionColor.background =
@@ -142,11 +142,11 @@ class ProgressTrackingBottomSheet(
                                                     }
 
                                                     if (!tech) {
-                                                        for (i in 0 until data.usernUserSpv!!.size) {
-                                                            if (data.usernUserSpv[i]?.idUser == userData.id) {
+                                                        for (i in data.supervisorUserName!!.indices) {
+                                                            if (data.supervisorUserName[i]?.userId == userData.id) {
                                                                 var progressDone = 0
-                                                                for (j in 0 until result.data.size) {
-                                                                    if (result.data[j]?.stsDetail == 1)
+                                                                for (j in result.data.indices) {
+                                                                    if (result.data[j]?.detailStatus == 1)
                                                                         progressDone++
                                                                 }
                                                                 if (progressDone == result.data.size && result.data.isNotEmpty()) {
@@ -219,8 +219,8 @@ class ProgressTrackingBottomSheet(
                                                         }
                                                     }
                                                 } else {
-                                                    for (i in 0 until data.usernUserTeknisi!!.size) {
-                                                        if (data.usernUserTeknisi[i]?.idUser == userData.id) {
+                                                    for (i in data.techniciansUser!!.indices) {
+                                                        if (data.techniciansUser[i]?.userId == userData.id) {
                                                             progressActionButton.visibility =
                                                                 View.VISIBLE
                                                             progressActionColor.background =
@@ -251,12 +251,12 @@ class ProgressTrackingBottomSheet(
 
                                                     if (!tech) {
                                                         Log.e("Tech", "I'm not a tech")
-                                                        for (i in 0 until data.usernUserSpv!!.size) {
-                                                            if (data.usernUserSpv[i]?.idUser == userData.id) {
+                                                        for (i in data.supervisorUserName!!.indices) {
+                                                            if (data.supervisorUserName[i]?.userId == userData.id) {
                                                                 Log.e("SPV", "But I'm a Supervisor")
                                                                 var progressDone = 0
-                                                                for (j in 0 until result.data.size) {
-                                                                    if (result.data[j]?.stsDetail == 1)
+                                                                for (j in result.data.indices) {
+                                                                    if (result.data[j]?.detailStatus == 1)
                                                                         progressDone++
                                                                 }
                                                                 if (progressDone == result.data.size && result.data.isNotEmpty()) {
@@ -307,7 +307,7 @@ class ProgressTrackingBottomSheet(
                                             4 -> progressActionButton.visibility = View.GONE
                                             31 -> progressActionButton.visibility = View.GONE
                                             else -> {
-                                                if (data.idUser == userData.id) {
+                                                if (data.userId == userData.id) {
                                                     progressActionButton.visibility = View.VISIBLE
                                                     progressActionColor.background =
                                                         ContextCompat.getDrawable(
@@ -345,12 +345,12 @@ class ProgressTrackingBottomSheet(
                                         rvProgress.adapter = progressAdapter
                                         rvProgress.setItemViewCacheSize(progressItem.size)
                                         rvProgress.layoutManager = LinearLayoutManager(context)
-                                        when (data.stsGaprojects) {
+                                        when (data.caseStatus) {
                                             22 -> progressActionButton.visibility = View.GONE
                                             3 -> {
-                                                if (data.idUser == userData.id) {
-                                                    for (i in 0 until data.usernUserTeknisi!!.size) {
-                                                        if (data.usernUserTeknisi[i]?.idUser == userData.id) {
+                                                if (data.userId == userData.id) {
+                                                    for (i in data.techniciansUser!!.indices) {
+                                                        if (data.techniciansUser[i]?.userId == userData.id) {
                                                             progressActionButton.visibility =
                                                                 View.VISIBLE
                                                             progressActionColor.background =
@@ -380,8 +380,8 @@ class ProgressTrackingBottomSheet(
                                                     }
 
                                                     if (!tech) {
-                                                        for (i in 0 until data.usernUserSpv!!.size) {
-                                                            if (data.usernUserSpv[i]?.idUser == userData.id) {
+                                                        for (i in data.supervisorUserName!!.indices) {
+                                                            if (data.supervisorUserName[i]?.userId == userData.id) {
                                                                 if (data.isVendor == "y" || data.isVendor == "Y") {
                                                                     progressActionButton.visibility =
                                                                         View.VISIBLE
@@ -443,8 +443,8 @@ class ProgressTrackingBottomSheet(
                                                         }
                                                     }
                                                 } else {
-                                                    for (i in 0 until data.usernUserTeknisi!!.size) {
-                                                        if (data.usernUserTeknisi[i]?.idUser == userData.id) {
+                                                    for (i in data.techniciansUser!!.indices) {
+                                                        if (data.techniciansUser[i]?.userId == userData.id) {
                                                             progressActionButton.visibility =
                                                                 View.VISIBLE
                                                             progressActionColor.background =
@@ -474,8 +474,8 @@ class ProgressTrackingBottomSheet(
                                                     }
 
                                                     if (!tech) {
-                                                        for (i in 0 until data.usernUserSpv!!.size) {
-                                                            if (data.usernUserSpv[i]?.idUser == userData.id) {
+                                                        for (i in data.supervisorUserName!!.indices) {
+                                                            if (data.supervisorUserName[i]?.userId == userData.id) {
                                                                 if (data.isVendor == "y" || data.isVendor == "Y") {
                                                                     progressActionButton.visibility =
                                                                         View.VISIBLE
@@ -542,7 +542,7 @@ class ProgressTrackingBottomSheet(
                                             4 -> progressActionButton.visibility = View.GONE
                                             31 -> progressActionButton.visibility = View.GONE
                                             else -> {
-                                                if (data.idUser == userData.id) {
+                                                if (data.userId == userData.id) {
                                                     progressActionButton.visibility = View.VISIBLE
                                                     progressActionColor.background =
                                                         ContextCompat.getDrawable(

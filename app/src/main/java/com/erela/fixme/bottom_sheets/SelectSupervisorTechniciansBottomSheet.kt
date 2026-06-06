@@ -83,11 +83,11 @@ class SelectSupervisorTechniciansBottomSheet(
             try {
                 supervisorsList.clear()
                 techniciansList.clear()
-                val dept = if (selectedSubDept?.idDept != null) selectedSubDept.idDept else detailData.idDeptTujuan!!
+                val dept = if (selectedSubDept?.deptId != null) selectedSubDept.deptId else detailData.targetDeptId!!
                 if (isForManager) {
                     title.text = context.getString(R.string.select_supervisor)
                     InitAPI.getEndpoint.getSupervisorList(
-                        detailData.idGaprojects!!,
+                        detailData.caseId!!,
                         dept
                     ).enqueue(
                         object : Callback<SupervisorTechnicianListResponse> {
@@ -98,7 +98,7 @@ class SelectSupervisorTechniciansBottomSheet(
                                 loadingBar.visibility = View.GONE
                                 if (response.isSuccessful) {
                                     if (response.body() != null) {
-                                        for (i in 0 until response.body()!!.data!!.size) {
+                                        for (i in response.body()!!.data!!.indices) {
                                             supervisorsList.add(
                                                 SelectedSupervisorTechniciansList(
                                                     false,
@@ -211,7 +211,7 @@ class SelectSupervisorTechniciansBottomSheet(
                     )
                 } else {
                     title.text = context.getString(R.string.select_technicians)
-                    InitAPI.getEndpoint.getTechnicianList(detailData.idGaprojects!!).enqueue(
+                    InitAPI.getEndpoint.getTechnicianList(detailData.caseId!!).enqueue(
                         object : Callback<SupervisorTechnicianListResponse> {
                             override fun onResponse(
                                 call: Call<SupervisorTechnicianListResponse>,
@@ -220,7 +220,7 @@ class SelectSupervisorTechniciansBottomSheet(
                                 loadingBar.visibility = View.GONE
                                 if (response.isSuccessful) {
                                     if (response.body() != null) {
-                                        for (i in 0 until response.body()!!.data!!.size) {
+                                        for (i in response.body()!!.data!!.indices) {
                                             techniciansList.add(
                                                 SelectedSupervisorTechniciansList(
                                                     false,

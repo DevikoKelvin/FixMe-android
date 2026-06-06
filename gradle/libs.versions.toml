@@ -4,7 +4,7 @@ agp = "9.2.1"
 gms = "4.4.4"
 
 # Dependencies
-coreKtx = "1.18.0"
+coreKtx = "1.19.0"
 appcompat = "1.7.1"
 activity = "1.13.0"
 material = "1.14.0"
@@ -30,7 +30,7 @@ balloon = "1.7.6"
 shimmer = "0.5.0"
 qr-code = "4.3.0"
 
-firebaseBom = "34.13.0"
+firebaseBom = "34.14.0"
 firebaseMessaging = "25.0.2"
 playServicesMaps = "20.0.0"
 playServicesLocation = "21.3.0"

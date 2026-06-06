@@ -234,24 +234,24 @@ class SubmissionFormActivity : AppCompatActivity(), OnMapReadyCallback {
 
             if (detail != null) {
                 pageTitle.text = getString(R.string.edit_submission_title)
-                caseTitleField.setText(detail?.judulKasus ?: "")
+                caseTitleField.setText(detail?.caseTitle ?: "")
                 isFormEmpty[0] = true
-                locationField.setText(detail?.lokasi ?: "")
+                locationField.setText(detail?.location ?: "")
                 isFormEmpty[1] = true
-                selectedDepartment = detail?.idDeptTujuan ?: 0
+                selectedDepartment = detail?.targetDeptId ?: 0
                 getDepartmentList()
                 isFormEmpty[2] = true
-                selectedCategory = detail?.idKategori ?: 0
+                selectedCategory = detail?.categoryId ?: 0
                 getCategoryList()
-                isFormEmpty[4] = !detail?.kodeMesin.isNullOrEmpty()
-                machineCodeField.setText(detail?.kodeMesin ?: "")
-                isFormEmpty[5] = !detail?.namaMesin.isNullOrEmpty()
-                machineNameField.setText(detail?.namaMesin ?: "")
-                descriptionField.setText(detail?.keterangan ?: "")
+                isFormEmpty[4] = !detail?.machineCode.isNullOrEmpty()
+                machineCodeField.setText(detail?.machineCode ?: "")
+                isFormEmpty[5] = !detail?.machineName.isNullOrEmpty()
+                machineNameField.setText(detail?.machineName ?: "")
+                descriptionField.setText(detail?.description ?: "")
                 isFormEmpty[6] = true
-                if (detail?.fotoGaprojects!!.isNotEmpty()) {
+                if (detail?.casePhoto!!.isNotEmpty()) {
                     manageAttachmentText.text = getString(R.string.manage_new_photo)
-                    for (element in detail?.fotoGaprojects!!) {
+                    for (element in detail?.casePhoto!!) {
                         if (element != null) {
                             oldImageArray.add(element)
                         }
@@ -270,7 +270,7 @@ class SubmissionFormActivity : AppCompatActivity(), OnMapReadyCallback {
                                         fotoGaProjectsItem: FotoGaprojectsItem
                                     ) {
                                         deletedOldImageArray.add(
-                                            fotoGaProjectsItem.idFotoGaprojects!!
+                                            fotoGaProjectsItem.photoId!!
                                         )
                                         oldImageArray.remove(fotoGaProjectsItem)
                                         if (oldImageArray.isEmpty()) {
@@ -736,7 +736,7 @@ class SubmissionFormActivity : AppCompatActivity(), OnMapReadyCallback {
             with(requestBodyMap) {
                 put(
                     "case_id",
-                    createPartFromString(detail?.idGaprojects.toString())!!
+                    createPartFromString(detail?.caseId.toString())!!
                 )
                 put(
                     "user_id", createPartFromString(
@@ -1166,10 +1166,10 @@ class SubmissionFormActivity : AppCompatActivity(), OnMapReadyCallback {
                             if (response.isSuccessful) {
                                 if (response.body() != null) {
                                     if (selectedDepartment != 0) {
-                                        for (i in 0 until response.body()!!.size) {
-                                            if (response.body()!![i].idDept!! == selectedDepartment) {
+                                        for (i in response.body()!!.indices) {
+                                            if (response.body()!![i].deptId!! == selectedDepartment) {
                                                 selectedDepartmentText.text =
-                                                    "${response.body()!![i].namaDept}"
+                                                    "${response.body()!![i].deptName}"
                                                 this@SubmissionFormActivity.selectedDept =
                                                     response.body()!![i]
                                             }
@@ -1202,11 +1202,11 @@ class SubmissionFormActivity : AppCompatActivity(), OnMapReadyCallback {
                                                         data: DepartmentListResponse
                                                     ) {
                                                         selectedDepartment =
-                                                            data.idDept!!
+                                                            data.deptId!!
                                                         this@SubmissionFormActivity.selectedDept =
                                                             data
                                                         selectedDepartmentText.text =
-                                                            "${data.namaDept}"
+                                                            "${data.deptName}"
                                                         isFormEmpty[2] = selectedDepartment != 0
                                                         if (selectedDepartment != 0) {
                                                             departmentDropdownLayout.strokeColor =
@@ -1336,7 +1336,7 @@ class SubmissionFormActivity : AppCompatActivity(), OnMapReadyCallback {
                                             "Select Category"
                                     )
                                     val categoryList = response.body()?.data
-                                    for (i in 0 until categoryList!!.size) {
+                                    for (i in categoryList!!.indices) {
                                         data.add(
                                             categoryList[i]?.categoryName!!
                                         )
@@ -1349,7 +1349,7 @@ class SubmissionFormActivity : AppCompatActivity(), OnMapReadyCallback {
                                     )
                                     categoryDropdown.adapter = dropdownAdapter
                                     if (selectedCategory != 0) {
-                                        for (i in 0 until response.body()!!.data!!.size) {
+                                        for (i in response.body()!!.data!!.indices) {
                                             if (response.body()!!.data?.get(i)!!.categoryId!! == selectedCategory) {
                                                 categoryDropdown.setSelection(
                                                     dropdownAdapter.getPosition(
@@ -1573,7 +1573,24 @@ class SubmissionFormActivity : AppCompatActivity(), OnMapReadyCallback {
                 } else {
                     showLocationError()
                     CustomToast.getInstance(this)
-                        .setMessage("Couldn't get your location. Please try again.")
+                        .setBackgroundColor(
+                            ContextCompat.getColor(
+                                this,
+                                R.color.custom_toast_background_failed
+                            )
+                        )
+                        .setFontColor(
+                            ContextCompat.getColor(
+                                this,
+                                R.color.custom_toast_font_failed
+                            )
+                        )
+                        .setMessage(
+                            if (getString(R.string.lang) == "en")
+                                "Couldn't get your location. Please try again."
+                            else
+                                "Tidak bisa mendapatkan lokasi Anda. Coba lagi nanti."
+                        )
                         .show()
                 }
             }

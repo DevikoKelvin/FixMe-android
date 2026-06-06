@@ -56,7 +56,7 @@ class ProgressRvAdapter(
         with(holder) {
             binding.apply {
                 if (item.progress != null) {
-                    usernameText.background = if (item.progress.stsDetail == 1)
+                    usernameText.background = if (item.progress.detailStatus == 1)
                         ResourcesCompat.getDrawable(
                             context.resources,
                             R.drawable.gradient_approved_color,
@@ -68,35 +68,35 @@ class ProgressRvAdapter(
                             R.drawable.gradient_notification_color,
                             context.theme
                         )
-                    usernameText.text = item.progress.namaUser
-                    progressAnalysis.text = item.progress.analisa
-                    progressDescription.text = item.progress.keterangan
-                    dateTimeText.text = item.progress.tglWaktu?.replace(
+                    usernameText.text = item.progress.fullName
+                    progressAnalysis.text = item.progress.analysis
+                    progressDescription.text = item.progress.description
+                    dateTimeText.text = item.progress.dateTime?.replace(
                         Regex("(\\d{4})-(\\d{2})-(\\d{2}) (\\d{2}):(\\d{2}):(\\d{2})"),
                         "$3-$2-$1 $4:$5:$6"
-                    ) ?: item.progress.tglWaktu
+                    ) ?: item.progress.dateTime
                     val material = StringBuilder().also {
                         with(it) {
-                            for (i in 0 until item.progress.material!!.size) {
-                                if (i < item.progress.material.size - 1)
+                            for (i in item.progress.materials!!.indices) {
+                                if (i < item.progress.materials.size - 1)
                                     append(
-                                        "${item.progress.material[i]?.namaMaterial} " +
-                                                "(${item.progress.material[i]?.qtyMaterial} Pcs)\n"
+                                        "${item.progress.materials[i]?.materialName} " +
+                                                "(${item.progress.materials[i]?.materialQuantity} Pcs)\n"
                                     )
                                 else
                                     append(
-                                        "${item.progress.material[i]?.namaMaterial} " +
-                                                "(${item.progress.material[i]?.qtyMaterial} Pcs)"
+                                        "${item.progress.materials[i]?.materialName} " +
+                                                "(${item.progress.materials[i]?.materialQuantity} Pcs)"
                                     )
                             }
                         }
                     }
                     materialTitle.visibility = View.VISIBLE
                     materialList.visibility = View.VISIBLE
-                    val materials = item.progress.material
+                    val materials = item.progress.materials
                     if (materials != null) {
                         if (materials.isNotEmpty()) {
-                            if (item.progress.approveMaterialStatus == 1) {
+                            if (item.progress.approvedMaterialStatus == 1) {
                                 materialApprovedStatus.visibility = View.VISIBLE
                                 materialApprovalIcon.setImageDrawable(
                                     ContextCompat.getDrawable(
@@ -107,12 +107,12 @@ class ProgressRvAdapter(
                                 materialApprovalMessage.text =
                                     if (context.getString(R.string.lang) == "in")
                                         "Material disetujui oleh ${
-                                            item.progress.approveMaterialUser
-                                        } pada ${item.progress.approveMaterialTglWaktu}"
+                                            item.progress.approvedMaterialFullName
+                                        } pada ${item.progress.approvedMaterialDateTime}"
                                     else
                                         "Material approved by ${
-                                            item.progress.approveMaterialUser
-                                        } on ${item.progress.approveMaterialTglWaktu}"
+                                            item.progress.approvedMaterialFullName
+                                        } on ${item.progress.approvedMaterialDateTime}"
                                 materialApprovalMessage.setTextColor(
                                     ContextCompat.getColor(
                                         context,
@@ -155,7 +155,7 @@ class ProgressRvAdapter(
                     progressDoneContainer.visibility = if (item.isExpanded) View.VISIBLE else
                         View.GONE
 
-                    if (item.progress.foto?.size!! > 1) {
+                    if (item.progress.photo?.size!! > 1) {
                         expandShrinkButton.visibility = View.VISIBLE
                         imageCarouselHolder.visibility = View.VISIBLE
                         circleIndicator.visibility = View.VISIBLE
@@ -182,8 +182,8 @@ class ProgressRvAdapter(
                             item
                         )
                         val imageData = ArrayList<String>()
-                        for (i in 0 until item.progress.foto.size) {
-                            imageData.add(item.progress.foto[i]?.foto!!)
+                        for (i in item.progress.photo.indices) {
+                            imageData.add(item.progress.photo[i]?.photo!!)
                         }
                         imageCarouselAdapter = ImageCarouselPagerAdapter(
                             context, imageData, activity
@@ -193,7 +193,7 @@ class ProgressRvAdapter(
                         imageCarouselAdapter.registerDataSetObserver(
                             circleIndicator.dataSetObserver
                         )
-                    } else if (item.progress.foto.size == 1) {
+                    } else if (item.progress.photo.size == 1) {
                         expandShrinkButton.visibility = View.VISIBLE
                         imageCarouselHolder.visibility = View.GONE
                         circleIndicator.visibility = View.GONE
@@ -219,7 +219,7 @@ class ProgressRvAdapter(
                             arrowExpandShrink,
                             item
                         )
-                        val image = item.progress.foto[0]?.foto
+                        val image = item.progress.photo[0]?.photo
                         Glide.with(context)
                             .load(InitAPI.IMAGE_URL + image)
                             .listener(object : RequestListener<Drawable> {
@@ -251,8 +251,8 @@ class ProgressRvAdapter(
                         circleIndicator.visibility = View.GONE
                     }
                     progressResultDescription.text =
-                        if (item.progress.keteranganApprove != "null" || item.progress.keteranganApprove != null)
-                            item.progress.keteranganApprove
+                        if ((item.progress.approveDesc != "null") || (item.progress.approveDesc != null))
+                            item.progress.approveDesc
                         else {
                             if (context.getString(R.string.lang) == "in")
                                 "Tidak ada keterangan"
@@ -262,14 +262,14 @@ class ProgressRvAdapter(
                 }
 
                 imageCarouselHolder.setOnLongClickListener {
-                    if (userData.id == item.progress?.idUser) {
-                        if (detail.stsGaprojects == 3 && item.progress.stsDetail == 0)
+                    if (userData.id == item.progress?.userId) {
+                        if (detail.caseStatus == 3 && item.progress.detailStatus == 0)
                             onItemHoldTapListener.onItemHoldTap(item, false)
                     } else {
-                        for (i in 0 until detail.usernUserSpv!!.size) {
-                            if (userData.id == detail.usernUserSpv[i]?.idUser) {
-                                if (detail.stsGaprojects == 3 && item.progress?.stsDetail == 0 &&
-                                    item.progress.approveMaterialStatus == 0
+                        for (i in detail.supervisorUserName!!.indices) {
+                            if (userData.id == detail.supervisorUserName[i]?.userId) {
+                                if (detail.caseStatus == 3 && item.progress?.detailStatus == 0 &&
+                                    item.progress.approvedMaterialStatus == 0
                                 )
                                     onItemHoldTapListener.onItemHoldTap(item, true)
                                 break
@@ -280,14 +280,14 @@ class ProgressRvAdapter(
                 }
 
                 submissionImage.setOnLongClickListener {
-                    if (userData.id == item.progress?.idUser) {
-                        if (detail.stsGaprojects == 3 && item.progress.stsDetail == 0)
+                    if (userData.id == item.progress?.userId) {
+                        if (detail.caseStatus == 3 && item.progress.detailStatus == 0)
                             onItemHoldTapListener.onItemHoldTap(item, false)
                     } else {
-                        for (i in 0 until detail.usernUserSpv!!.size) {
-                            if (userData.id == detail.usernUserSpv[i]?.idUser) {
-                                if (detail.stsGaprojects == 3 && item.progress?.stsDetail == 0 &&
-                                    item.progress.approveMaterialStatus == 0
+                        for (i in detail.supervisorUserName!!.indices) {
+                            if (userData.id == detail.supervisorUserName[i]?.userId) {
+                                if (detail.caseStatus == 3 && item.progress?.detailStatus == 0 &&
+                                    item.progress.approvedMaterialStatus == 0
                                 )
                                     onItemHoldTapListener.onItemHoldTap(item, true)
                                 break
@@ -298,13 +298,13 @@ class ProgressRvAdapter(
                 }
 
                 itemView.setOnLongClickListener {
-                    if (userData.id == item.progress?.idUser) {
-                        if (detail.stsGaprojects == 3 && item.progress.stsDetail == 0)
+                    if (userData.id == item.progress?.userId) {
+                        if (detail.caseStatus == 3 && item.progress.detailStatus == 0)
                             onItemHoldTapListener.onItemHoldTap(item, false)
                     } else {
-                        for (i in 0 until detail.usernUserSpv!!.size) {
-                            if (userData.id == detail.usernUserSpv[i]?.idUser) {
-                                if (detail.stsGaprojects == 3 && item.progress?.stsDetail == 0
+                        for (i in detail.supervisorUserName!!.indices) {
+                            if (userData.id == detail.supervisorUserName[i]?.userId) {
+                                if (detail.caseStatus == 3 && item.progress?.detailStatus == 0
                                 )
                                     onItemHoldTapListener.onItemHoldTap(item, true)
                                 break

@@ -46,7 +46,7 @@ class DepartmentListBottomSheet(
             )
             for (element in data) {
                 departmentList.add(
-                    element.namaDept.toString()
+                    element.deptName.toString()
                 )
             }
             val departmentAdapter = ArrayAdapter(
@@ -57,7 +57,7 @@ class DepartmentListBottomSheet(
 
             departmentDropdown.adapter = departmentAdapter
             if (selectedDept != null) {
-                selectedDepartment = selectedDept!!.namaDept.toString()
+                selectedDepartment = selectedDept!!.deptName.toString()
                 departmentDropdown.setSelection(
                     departmentList.distinct().indexOf(selectedDepartment)
                 )

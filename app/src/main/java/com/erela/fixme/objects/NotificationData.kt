@@ -10,5 +10,5 @@ data class NotificationData(
     @SerializedName("click_action")
     val clickAction: String,
     @SerializedName("id_gaprojects")
-    val idGaProjects: Int
+    val caseId: Int
 )

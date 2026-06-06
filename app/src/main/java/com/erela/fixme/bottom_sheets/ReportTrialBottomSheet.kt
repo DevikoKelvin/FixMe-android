@@ -128,7 +128,7 @@ class ReportTrialBottomSheet(context: Context, private val detail: SubmissionDet
                             }
                             try {
                                 InitAPI.getEndpoint.reportTrial(
-                                    detail.idGaprojects!!,
+                                    detail.caseId!!,
                                     userData.id,
                                     if (pass) 0 else 1,
                                     descriptionField.text.toString()

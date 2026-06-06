@@ -138,7 +138,7 @@ class AcSessionActivity : AppCompatActivity(),
                             selectedTechniciansArrayList.add(plusPlaceholder())
                             techniciansRvAdapter.notifyDataSetChanged()
 
-                            val userId = data.idUser ?: return
+                            val userId = data.userId ?: return
                             viewModel.removeTechnician(logId, userId)
                         }
                     }
@@ -239,7 +239,7 @@ class AcSessionActivity : AppCompatActivity(),
                     // Backend orders lead first (orderByDesc is_lead), assists follow
                     val participants = response.data?.filterNotNull() ?: return@observe
                     val leadEntry = participants.firstOrNull()
-                    val isCurrentUserLead = leadEntry?.idUser == userData.id
+                    val isCurrentUserLead = leadEntry?.userId == userData.id
 
                     if (isCurrentUserLead) {
                         sectionLeadTechnicians.visibility = View.VISIBLE
@@ -251,9 +251,9 @@ class AcSessionActivity : AppCompatActivity(),
                     } else {
                         sectionLeadTechnicians.visibility = View.GONE
                         sectionAssistInfo.visibility = View.VISIBLE
-                        tvLeadName.text = leadEntry?.namaUser ?: "-"
+                        tvLeadName.text = leadEntry?.fullName ?: "-"
                         tvAssistNames.text = participants.drop(1)
-                            .mapNotNull { it.namaUser?.trim() }
+                            .mapNotNull { it.fullName?.trim() }
                             .joinToString("\n")
                             .ifEmpty { "-" }
                     }
@@ -324,7 +324,7 @@ class AcSessionActivity : AppCompatActivity(),
         selectedTechniciansArrayList.add(data)
         selectedTechniciansArrayList.add(plusPlaceholder())
         techniciansRvAdapter.notifyDataSetChanged()
-        val userId = data.idUser ?: return
+        val userId = data.userId ?: return
         viewModel.addTechnician(logId, userId)
     }
 
@@ -334,7 +334,7 @@ class AcSessionActivity : AppCompatActivity(),
         selectedTechniciansArrayList.remove(data)
         selectedTechniciansArrayList.add(plusPlaceholder())
         techniciansRvAdapter.notifyDataSetChanged()
-        val userId = data.idUser ?: return
+        val userId = data.userId ?: return
         viewModel.removeTechnician(logId, userId)
     }
 

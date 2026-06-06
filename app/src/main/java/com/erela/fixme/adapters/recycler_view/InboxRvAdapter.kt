@@ -35,8 +35,8 @@ class InboxRvAdapter(val context: Context, val data: ArrayList<InboxResponse>) :
             binding.apply {
                 usernameText.text = userData.name
                 notificationContent.text = item.actions
-                sentTime.text = item.tglWaktu
-                readTime.text = item.tglWaktuBaca
+                sentTime.text = item.dateTime
+                readTime.text = item.readDateTime
             }
 
             itemView.setOnClickListener {

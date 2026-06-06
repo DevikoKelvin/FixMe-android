@@ -5,151 +5,151 @@ import com.google.gson.annotations.SerializedName
 import kotlinx.parcelize.Parcelize
 
 @Parcelize
-data class UsernUserTeknisiItem(
+data class TechniciansUserItem(
     @field:SerializedName("id_table_teknisi")
-    val idTableTeknisi: Int? = null,
+    val techId: Int? = null,
     @field:SerializedName("dept_user")
-    val deptUser: String? = null,
+    val userDept: String? = null,
     @field:SerializedName("id_user")
-    val idUser: Int? = null,
+    val userId: Int? = null,
     @field:SerializedName("nama_user")
-    val namaUser: String? = null,
+    val userName: String? = null,
     @field:SerializedName("id_user_spv")
-    val idUserSpv: Int? = null,
+    val supervisorId: Int? = null,
     @field:SerializedName("tgl_waktu")
-    val tglWaktu: String? = null
+    val dateTime: String? = null
 ) : Parcelable
 
 @Parcelize
 data class SubmissionDetailResponse(
     @field:SerializedName("name_user_done")
-    val nameUserDone: String? = null,
+    val doneFullName: String? = null,
     @field:SerializedName("usern_user_hold")
-    val usernUserHold: String? = null,
+    val holdUserName: String? = null,
     @field:SerializedName("keterangan_reject")
-    val keteranganReject: String? = null,
+    val rejectDesc: String? = null,
     @field:SerializedName("tgl_waktu_cancel")
-    val tglWaktuCancel: String? = null,
+    val cancelDateTime: String? = null,
     @field:SerializedName("keterangan_hold")
-    val keteranganHold: String? = null,
+    val holdDesc: String? = null,
     @field:SerializedName("id_gaprojects")
-    val idGaprojects: Int? = null,
+    val caseId: Int? = null,
     @field:SerializedName("keterangan_pelapor_reject")
-    val keteranganPelaporReject: String? = null,
+    val reporterRejectDesc: String? = null,
     @field:SerializedName("id_dept_tujuan")
-    val idDeptTujuan: Int? = null,
+    val targetDeptId: Int? = null,
     @field:SerializedName("id_user_pelapor_reject")
-    val idUserPelaporReject: Int? = null,
+    val reporterRejectUserId: Int? = null,
     @field:SerializedName("kode_mesin")
-    val kodeMesin: String? = null,
+    val machineCode: String? = null,
     @field:SerializedName("id_user_approve")
-    val idUserApprove: Int? = null,
+    val approveUserId: Int? = null,
     @field:SerializedName("nomor_request")
-    val nomorRequest: String? = null,
+    val requestNumber: String? = null,
     @field:SerializedName("sts_gaprojects")
-    val stsGaprojects: Int? = null,
+    val caseStatus: Int? = null,
     @field:SerializedName("user_nama_approve")
-    val userNamaApprove: String? = null,
+    val approveFullName: String? = null,
     @field:SerializedName("tgl_waktu_reject")
-    val tglWaktuReject: String? = null,
+    val rejectDateTime: String? = null,
     @field:SerializedName("foto_gaprojects")
-    val fotoGaprojects: List<FotoGaprojectsItem?>? = null,
+    val casePhoto: List<FotoGaprojectsItem?>? = null,
     @field:SerializedName("id_user_hold")
-    val idUserHold: Int? = null,
+    val holdUserId: Int? = null,
     @field:SerializedName("tgl_waktu_pelapor_approve")
-    val tglWaktuPelaporApprove: String? = null,
+    val reporterApproveDateTime: String? = null,
     @field:SerializedName("nama_user_pelapor_reject")
-    val namaUserPelaporReject: String? = null,
+    val reporterRejectFullName: String? = null,
     @field:SerializedName("dept_user")
-    val deptUser: String? = null,
+    val userDept: String? = null,
     @field:SerializedName("nama_user_buat")
-    val namaUserBuat: String? = null,
+    val creatorFullName: String? = null,
     @field:SerializedName("tgl_input")
-    val tglInput: String? = null,
+    val inputDate: String? = null,
     @field:SerializedName("ket_approved")
-    val ketApproved: String? = null,
+    val approvedDesc: String? = null,
     @field:SerializedName("difficulty")
-    val difficulty: String? = null,
+    val complexity: String? = null,
     @field:SerializedName("set_waktuinput")
-    val setWaktuinput: String? = null,
+    val inputTime: String? = null,
     @field:SerializedName("nama_user_resume")
-    val namaUserResume: String? = null,
+    val resumeFullName: String? = null,
     @field:SerializedName("keterangan_cancel")
-    val keteranganCancel: String? = null,
+    val cancelDesc: String? = null,
     @field:SerializedName("lokasi")
-    val lokasi: String? = null,
+    val location: String? = null,
     @field:SerializedName("usern_user_pelapor_approve")
-    val usernUserPelaporApprove: String? = null,
+    val reporterApproveUserName: String? = null,
     @field:SerializedName("tgl_waktu_resume")
-    val tglWaktuResume: String? = null,
+    val resumeDateTime: String? = null,
     @field:SerializedName("tglwaktu_approved")
-    val tglwaktuApproved: String? = null,
+    val approvedDateTime: String? = null,
     @field:SerializedName("judul_kasus")
-    val judulKasus: String? = null,
+    val caseTitle: String? = null,
     @field:SerializedName("sub_dept_tujuan")
-    val subDeptTujuan: String? = null,
+    val targetedSubDept: String? = null,
     @field:SerializedName("usern_user_spv")
-    val usernUserSpv: List<UsernUserSpvItem?>? = null,
+    val supervisorUserName: List<UsernUserSpvItem?>? = null,
     @field:SerializedName("dept_tujuan")
-    val deptTujuan: String? = null,
+    val targetedDept: String? = null,
     @field:SerializedName("tgl_waktu_done")
-    val tglWaktuDone: String? = null,
+    val doneDateTime: String? = null,
     @field:SerializedName("name_user_reject")
-    val nameUserReject: String? = null,
+    val rejectFullName: String? = null,
     @field:SerializedName("usern_approve")
-    val usernApprove: String? = null,
+    val approvedUserName: String? = null,
     @field:SerializedName("nama_user_pelapor_approve")
-    val namaUserPelaporApprove: String? = null,
+    val reporterApproveFullName: String? = null,
     @field:SerializedName("keterangan")
-    val keterangan: String? = null,
+    val description: String? = null,
     @field:SerializedName("tgl_waktu_trial_start")
-    val tglWaktuTrialStart: String? = null,
+    val trialStartDateTime: String? = null,
     @field:SerializedName("usern_user_done")
-    val usernUserDone: String? = null,
+    val doneUserName: String? = null,
     @field:SerializedName("id_user_pelapor_approve")
-    val idUserPelaporApprove: Int? = null,
+    val reporterApproveUserId: Int? = null,
     @field:SerializedName("nama_user_hold")
-    val namaUserHold: String? = null,
+    val holdFullName: String? = null,
     @field:SerializedName("tgl_waktu_pelapor_reject")
-    val tglWaktuPelaporReject: String? = null,
+    val reporterRejectDateTime: String? = null,
     @field:SerializedName("id_starconnect_user_buat")
-    val idStarconnectUserBuat: Int? = null,
+    val creatorStarConnectId: Int? = null,
     @field:SerializedName("usern_user_resume")
-    val usernUserResume: String? = null,
+    val resumeUserName: String? = null,
     @field:SerializedName("nama_kategori")
-    val namaKategori: String? = null,
+    val categoryName: String? = null,
     @field:SerializedName("id_kategori")
-    val idKategori: Int? = null,
+    val categoryId: Int? = null,
     @field:SerializedName("id_user_resume")
-    val idUserResume: Int? = null,
+    val resumeUserId: Int? = null,
     @field:SerializedName("id_user")
-    val idUser: Int? = null,
+    val userId: Int? = null,
     @field:SerializedName("set_tglinput")
-    val setTglinput: String? = null,
+    val inputDateSet: String? = null,
     @field:SerializedName("nama_mesin")
-    val namaMesin: String? = null,
+    val machineName: String? = null,
     @field:SerializedName("tgl_waktu_lapor")
-    val tglWaktuLapor: String? = null,
+    val reportDateTime: String? = null,
     @field:SerializedName("usern_user_teknisi")
-    val usernUserTeknisi: List<UsernUserTeknisiItem?>? = null,
+    val techniciansUser: List<TechniciansUserItem?>? = null,
     @field:SerializedName("keterangan_pelapor_approve")
-    val keteranganPelaporApprove: String? = null,
+    val reporterApproveDesc: String? = null,
     @field:SerializedName("tgl_waktu_trial_end")
-    val tglWaktuTrialEnd: String? = null,
+    val trialEndDateTime: String? = null,
     @field:SerializedName("tgl_waktu_kerja_start")
-    val tglWaktuKerjaStart: String? = null,
+    val workStartDateTime: String? = null,
     @field:SerializedName("tgl_waktu_kerja_end")
-    val tglWaktuKerjaEnd: String? = null,
+    val workEndDateTime: String? = null,
     @field:SerializedName("usern_user_pelapor_reject")
-    val usernUserPelaporReject: String? = null,
+    val reporterRejectUserName: String? = null,
     @field:SerializedName("id_user_reject")
-    val idUserReject: Int? = null,
+    val rejectUserId: Int? = null,
     @field:SerializedName("id_user_done")
-    val idUserDone: Int? = null,
+    val doneUserId: Int? = null,
     @field:SerializedName("tgl_waktu_hold")
-    val tglWaktuHold: String? = null,
+    val holdDateTime: String? = null,
     @field:SerializedName("is_already_trial")
-    val isAlreadyTrial: Boolean? = null,
+    val isReadyForTrial: Boolean? = null,
     @field:SerializedName("lokasi_lat")
     val latitude: String? = null,
     @field:SerializedName("lokasi_long")
@@ -177,13 +177,13 @@ data class SubmissionDetailResponse(
 @Parcelize
 data class UsernUserSpvItem(
     @field:SerializedName("id_table_supervisor")
-    val idTableSupervisor: Int? = null,
+    val supervisorId: Int? = null,
     @field:SerializedName("dept_user")
-    val deptUser: String? = null,
+    val userDept: String? = null,
     @field:SerializedName("id_user")
-    val idUser: Int? = null,
+    val userId: Int? = null,
     @field:SerializedName("nama_user")
-    val namaUser: String? = null,
+    val fullName: String? = null,
     @field:SerializedName("tgl_waktu")
-    val tglWaktu: String? = null
+    val dateTime: String? = null
 ) : Parcelable

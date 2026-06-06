@@ -43,7 +43,7 @@ class SelectedSupervisorTechniciansRvAdapter(
 
         with(holder) {
             binding.apply {
-                itemText.text = item.namaUser
+                itemText.text = item.fullName
                 if (position == selectedSupervisorTechniciansList.size - 1) {
                     mainContainerColor.background = ResourcesCompat.getDrawable(
                         context.resources,

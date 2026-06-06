@@ -13,19 +13,19 @@ data class SubmissionTrialResponse(
 
 data class TrialDataItem(
 	@field:SerializedName("keterangan")
-	val keterangan: String? = null,
+	val description: String? = null,
 	@field:SerializedName("sts_aktif")
-	val stsAktif: Int? = null,
+	val isActive: Int? = null,
 	@field:SerializedName("foto")
-	val foto: Any? = null,
+	val photo: Any? = null,
 	@field:SerializedName("id_user")
-	val idUser: Int? = null,
+	val userId: Int? = null,
 	@field:SerializedName("id_gaprojects")
-	val idGaprojects: Int? = null,
+	val caseId: Int? = null,
 	@field:SerializedName("id_gaprojects_ket_trial")
-	val idGaprojectsKetTrial: Int? = null,
+	val trialDescCaseId: Int? = null,
 	@field:SerializedName("tgl_waktu")
-	val tglWaktu: String? = null,
+	val dateTime: String? = null,
 	@field:SerializedName("status")
 	val status: Int? = null
 )

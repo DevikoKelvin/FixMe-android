@@ -240,14 +240,14 @@ class SubmissionDetailActivity : AppCompatActivity(),
                                         detailData.timeOffset!!,
                                         detailData.limitTime!!
                                     )
-                                    detailTitle.text = detailData.nomorRequest
+                                    detailTitle.text = detailData.requestNumber
                                     // Add click listener for copying text to clipboard when status is Hold (22)
                                     detailTitle.setOnLongClickListener {
                                         val clipboard =
                                             getSystemService(CLIPBOARD_SERVICE) as ClipboardManager
                                         val clip = ClipData.newPlainText(
                                             "Request Number",
-                                            detailData.nomorRequest
+                                            detailData.requestNumber
                                         )
                                         clipboard.setPrimaryClip(clip)
                                         CustomToast.getInstance(applicationContext)
@@ -275,18 +275,18 @@ class SubmissionDetailActivity : AppCompatActivity(),
 
                                         return@setOnLongClickListener true
                                     }
-                                    if (detailData.fotoGaprojects!!.isEmpty()) {
+                                    if (detailData.casePhoto!!.isEmpty()) {
                                         imageContainer.visibility = View.GONE
                                     } else {
                                         imageContainer.visibility = View.VISIBLE
                                         imageData = ArrayList()
-                                        if (detailData.fotoGaprojects!!.size > 1) {
+                                        if (detailData.casePhoto!!.size > 1) {
                                             imageCarouselHolder.visibility = View.VISIBLE
                                             circleIndicator.visibility = View.VISIBLE
                                             submissionImage.visibility = View.GONE
-                                            for (i in 0 until detailData.fotoGaprojects!!.size) {
+                                            for (i in detailData.casePhoto!!.indices) {
                                                 imageData.add(
-                                                    detailData.fotoGaprojects!![i]!!
+                                                    detailData.casePhoto!![i]!!
                                                 )
                                             }
                                             imageCarouselAdapter = ImageCarouselPagerAdapter(
@@ -302,13 +302,13 @@ class SubmissionDetailActivity : AppCompatActivity(),
                                             imageCarouselHolder.visibility = View.GONE
                                             circleIndicator.visibility = View.GONE
                                             submissionImage.visibility = View.VISIBLE
-                                            val image = detailData.fotoGaprojects!![0]
+                                            val image = detailData.casePhoto!![0]
                                             if (Base64Helper.isBase64Encoded(
-                                                    image?.foto.toString()
+                                                    image?.photo.toString()
                                                 )
                                             ) {
                                                 val decodedImageURL = Base64Helper.decodeBase64(
-                                                    image?.foto.toString()
+                                                    image?.photo.toString()
                                                 )
                                                 Glide.with(applicationContext)
                                                     .load(decodedImageURL)
@@ -349,7 +349,7 @@ class SubmissionDetailActivity : AppCompatActivity(),
                                                 }
                                             } else {
                                                 Glide.with(applicationContext)
-                                                    .load(InitAPI.IMAGE_URL + image?.foto)
+                                                    .load(InitAPI.IMAGE_URL + image?.photo)
                                                     .listener(object : RequestListener<Drawable> {
                                                         override fun onLoadFailed(
                                                             e: GlideException?,
@@ -388,10 +388,10 @@ class SubmissionDetailActivity : AppCompatActivity(),
                                             }
                                         }
                                     }
-                                    submissionName.text = detailData.judulKasus
-                                    inputDate.text = detailData.setTglinput
+                                    submissionName.text = detailData.caseTitle
+                                    inputDate.text = detailData.inputDateSet
                                     submissionComplexityText.text =
-                                        detailData.difficulty?.replaceFirstChar {
+                                        detailData.complexity?.replaceFirstChar {
                                             if (it.isLowerCase())
                                                 it.titlecase(Locale.getDefault())
                                             else
@@ -399,12 +399,12 @@ class SubmissionDetailActivity : AppCompatActivity(),
                                         }
 
                                     submissionComplexity.visibility =
-                                        if (detailData.difficulty == "null" || detailData.difficulty == null)
+                                        if (detailData.complexity == "null" || detailData.complexity == null)
                                             View.GONE
                                         else
                                             View.VISIBLE
 
-                                    when (detailData.difficulty) {
+                                    when (detailData.complexity) {
                                         "low" -> {
                                             setRoundedBackground(
                                                 complexityColor,
@@ -431,7 +431,7 @@ class SubmissionDetailActivity : AppCompatActivity(),
                                         onProgressColor,
                                         R.drawable.gradient_progress_action_color
                                     )
-                                    when (detailData.stsGaprojects) {
+                                    when (detailData.caseStatus) {
                                         // Rejected
                                         0 -> {
                                             setRoundedBackground(
@@ -448,14 +448,14 @@ class SubmissionDetailActivity : AppCompatActivity(),
                                             statusMessageContainer.setOnClickListener {
                                                 statusMessageContainer.showAlignTop(
                                                     createBalloonOverlay(
-                                                        if (detailData.keteranganReject != null) {
+                                                        if (detailData.rejectDesc != null) {
                                                             if (getString(R.string.lang) == "in")
-                                                                "Alasan: ${detailData.keteranganReject}"
-                                                            else "Reason: ${detailData.keteranganReject}"
+                                                                "Alasan: ${detailData.rejectDesc}"
+                                                            else "Reason: ${detailData.rejectDesc}"
                                                         } else {
                                                             if (getString(R.string.lang) == "in")
-                                                                "Alasan: ${detailData.keteranganPelaporReject}"
-                                                            else "Reason: ${detailData.keteranganPelaporReject}"
+                                                                "Alasan: ${detailData.reporterRejectDesc}"
+                                                            else "Reason: ${detailData.reporterRejectDesc}"
                                                         },
                                                         R.color.custom_toast_background_normal_dark_gray,
                                                         R.color.custom_toast_font_normal_soft_gray
@@ -468,16 +468,16 @@ class SubmissionDetailActivity : AppCompatActivity(),
                                                 R.drawable.gradient_rejected_color,
                                             )
                                             statusMessage.text =
-                                                if (detailData.nameUserReject != "") {
+                                                if (detailData.rejectFullName != "") {
                                                     if (getString(R.string.lang) == "in")
-                                                        "Ditolak oleh ${detailData.nameUserReject?.trimEnd()}\nKetuk untuk melihat alasan"
+                                                        "Ditolak oleh ${detailData.rejectFullName?.trimEnd()}\nKetuk untuk melihat alasan"
                                                     else
-                                                        "Rejected by ${detailData.nameUserReject?.trimEnd()}\nTap to see reason"
+                                                        "Rejected by ${detailData.rejectFullName?.trimEnd()}\nTap to see reason"
                                                 } else {
                                                     if (getString(R.string.lang) == "in")
-                                                        "Ditolak oleh ${detailData.namaUserPelaporReject?.trimEnd()}\nKetuk untuk melihat alasan"
+                                                        "Ditolak oleh ${detailData.reporterRejectFullName?.trimEnd()}\nKetuk untuk melihat alasan"
                                                     else
-                                                        "Rejected by ${detailData.namaUserPelaporReject?.trimEnd()}\nTap to see reason"
+                                                        "Rejected by ${detailData.reporterRejectFullName?.trimEnd()}\nTap to see reason"
                                                 }
                                             statusMessage.setTextColor(
                                                 ContextCompat.getColor(
@@ -513,8 +513,8 @@ class SubmissionDetailActivity : AppCompatActivity(),
                                                 statusMessageContainer.showAlignTop(
                                                     createBalloonOverlay(
                                                         if (getString(R.string.lang) == "in")
-                                                            "Pesan: ${detailData.keteranganPelaporApprove}"
-                                                        else "Message: ${detailData.keteranganPelaporApprove}",
+                                                            "Pesan: ${detailData.reporterApproveDesc}"
+                                                        else "Message: ${detailData.reporterApproveDesc}",
                                                         R.color.custom_toast_font_success,
                                                         R.color.custom_toast_background_success
                                                     ), 0, 0
@@ -527,9 +527,9 @@ class SubmissionDetailActivity : AppCompatActivity(),
                                             )
                                             statusMessage.text =
                                                 if (getString(R.string.lang) == "in")
-                                                    "Disetujui oleh ${detailData.namaUserPelaporApprove?.trimEnd()}\nTunggu manajer tujuan untuk menyetujui\nKetuk untuk melihat pesan"
+                                                    "Disetujui oleh ${detailData.reporterApproveFullName?.trimEnd()}\nTunggu manajer tujuan untuk menyetujui\nKetuk untuk melihat pesan"
                                                 else
-                                                    "Approved by ${detailData.namaUserPelaporApprove?.trimEnd()}\nWait for targeted manager to approve\nTap to see message"
+                                                    "Approved by ${detailData.reporterApproveFullName?.trimEnd()}\nWait for targeted manager to approve\nTap to see message"
                                             statusMessage.setTextColor(
                                                 ContextCompat.getColor(
                                                     this@SubmissionDetailActivity,
@@ -546,15 +546,15 @@ class SubmissionDetailActivity : AppCompatActivity(),
                                             submissionStatusText.text = "Approved"
                                             var tech = false
                                             var spv = false
-                                            for (technician in detailData.usernUserTeknisi!!) {
-                                                if (technician?.idUser == userData.id) {
+                                            for (technician in detailData.techniciansUser!!) {
+                                                if (technician?.userId == userData.id) {
                                                     tech = true
                                                     break
                                                 }
                                             }
 
-                                            for (supervisor in detailData.usernUserSpv!!) {
-                                                if (supervisor?.idUser == userData.id) {
+                                            for (supervisor in detailData.supervisorUserName!!) {
+                                                if (supervisor?.userId == userData.id) {
                                                     spv = true
                                                     break
                                                 }
@@ -588,8 +588,8 @@ class SubmissionDetailActivity : AppCompatActivity(),
                                                         statusMessageContainer.showAlignTop(
                                                             createBalloonOverlay(
                                                                 if (getString(R.string.lang) == "in")
-                                                                    "Pesan: ${detailData.ketApproved}"
-                                                                else "Message: ${detailData.ketApproved}",
+                                                                    "Pesan: ${detailData.approvedDesc}"
+                                                                else "Message: ${detailData.approvedDesc}",
                                                                 R.color.custom_toast_font_success,
                                                                 R.color.custom_toast_background_success
                                                             ), 0, 0
@@ -602,9 +602,9 @@ class SubmissionDetailActivity : AppCompatActivity(),
                                                     )
                                                     message = StringBuilder().append(
                                                         if (getString(R.string.lang) == "in")
-                                                            "Disetujui oleh ${detailData.userNamaApprove?.trimEnd()}\nKetuk untuk melihat pesan"
+                                                            "Disetujui oleh ${detailData.approveFullName?.trimEnd()}\nKetuk untuk melihat pesan"
                                                         else
-                                                            "Approved by ${detailData.userNamaApprove?.trimEnd()}\nTap to see message"
+                                                            "Approved by ${detailData.approveFullName?.trimEnd()}\nTap to see message"
                                                     )
                                                     statusMessage.text = message.toString()
                                                     statusMessage.setTextColor(
@@ -618,9 +618,9 @@ class SubmissionDetailActivity : AppCompatActivity(),
                                         }
                                         // Hold
                                         22 -> {
-                                            for (i in 0 until detailData.usernUserSpv!!.size) {
-                                                if (userData.id == detailData.usernUserSpv!![i]
-                                                    !!.idUser
+                                            for (i in detailData.supervisorUserName!!.indices) {
+                                                if (userData.id == detailData.supervisorUserName!![i]
+                                                    !!.userId
                                                 ) {
                                                     editTechniciansButton.visibility = View.VISIBLE
                                                     holdResumeIcon.setImageDrawable(
@@ -652,7 +652,7 @@ class SubmissionDetailActivity : AppCompatActivity(),
                                                                             try {
                                                                                 InitAPI.getEndpoint
                                                                                     .resumeIssue(
-                                                                                        detailData.idGaprojects!!,
+                                                                                        detailData.caseId!!,
                                                                                         userData.id
                                                                                     ).enqueue(
                                                                                         object :
@@ -934,11 +934,11 @@ class SubmissionDetailActivity : AppCompatActivity(),
                                             onProgressText.text =
                                                 if (getString(R.string.lang) == "in")
                                                     "Masalah dijeda oleh ${
-                                                        detailData.namaUserHold
+                                                        detailData.holdFullName
                                                     }\nKetuk untuk melihat kemajuan"
                                                 else
                                                     "Issue on hold by ${
-                                                        detailData.namaUserHold
+                                                        detailData.holdFullName
                                                     }\nTap to see progress"
                                             onProgressText.setTextColor(
                                                 ContextCompat.getColor(
@@ -949,9 +949,9 @@ class SubmissionDetailActivity : AppCompatActivity(),
                                         }
                                         // On-Progress
                                         3 -> {
-                                            for (i in 0 until detailData.usernUserSpv!!.size) {
-                                                if (userData.id == detailData.usernUserSpv!![i]
-                                                    !!.idUser
+                                            for (i in detailData.supervisorUserName!!.indices) {
+                                                if (userData.id == detailData.supervisorUserName!![i]
+                                                    !!.userId
                                                 ) {
                                                     editTechniciansButton.visibility = View.VISIBLE
                                                     editCategoryComplexityButton.visibility = View.VISIBLE
@@ -981,7 +981,7 @@ class SubmissionDetailActivity : AppCompatActivity(),
                                                                                 try {
                                                                                     InitAPI.getEndpoint
                                                                                         .holdIssue(
-                                                                                            detailData.idGaprojects!!,
+                                                                                            detailData.caseId!!,
                                                                                             userData.id,
                                                                                             reason
                                                                                         ).enqueue(
@@ -1280,7 +1280,7 @@ class SubmissionDetailActivity : AppCompatActivity(),
                                                 if (progressTrackingBottomSheet.window != null)
                                                     progressTrackingBottomSheet.show()
                                             }
-                                            if (detailData.isAlreadyTrial!!) {
+                                            if (detailData.isReadyForTrial!!) {
                                                 seeTrialContainer.visibility = View.VISIBLE
                                                 seeTrialContainer.setOnClickListener {
                                                     val trialBottomSheet = TrialTrackingBottomSheet(
@@ -1321,9 +1321,9 @@ class SubmissionDetailActivity : AppCompatActivity(),
                                                 )
                                             message.append(
                                                 if (getString(R.string.lang) == "in")
-                                                    "${detailData.usernUserSpv!![0]?.namaUser?.trimEnd()}\nKetuk untuk melihat kemajuan"
+                                                    "${detailData.supervisorUserName!![0]?.fullName?.trimEnd()}\nKetuk untuk melihat kemajuan"
                                                 else
-                                                    "${detailData.usernUserSpv!![0]?.namaUser?.trimEnd()}\nTap to see progress"
+                                                    "${detailData.supervisorUserName!![0]?.fullName?.trimEnd()}\nTap to see progress"
                                             )
                                             onProgressText.text = message.toString()
                                             onProgressText.setTextColor(
@@ -1361,7 +1361,7 @@ class SubmissionDetailActivity : AppCompatActivity(),
                                                 if (progressTrackingBottomSheet.window != null)
                                                     progressTrackingBottomSheet.show()
                                             }
-                                            if (detailData.isAlreadyTrial!!) {
+                                            if (detailData.isReadyForTrial!!) {
                                                 seeTrialContainer.visibility = View.VISIBLE
                                                 seeTrialContainer.setOnClickListener {
                                                     val trialBottomSheet = TrialTrackingBottomSheet(
@@ -1400,9 +1400,9 @@ class SubmissionDetailActivity : AppCompatActivity(),
                                             )
                                             statusMessage.text =
                                                 if (getString(R.string.lang) == "in")
-                                                    "Masalah telah ditandai selesai oleh ${detailData.nameUserDone?.trimEnd()}\nKetuk untuk melihat kemajuan"
+                                                    "Masalah telah ditandai selesai oleh ${detailData.doneFullName?.trimEnd()}\nKetuk untuk melihat kemajuan"
                                                 else
-                                                    "Done by ${detailData.nameUserDone?.trimEnd()}\nTap to see progress"
+                                                    "Done by ${detailData.doneFullName?.trimEnd()}\nTap to see progress"
                                             statusMessage.setTextColor(
                                                 ContextCompat.getColor(
                                                     this@SubmissionDetailActivity,
@@ -1463,16 +1463,16 @@ class SubmissionDetailActivity : AppCompatActivity(),
                                                 R.drawable.gradient_canceled_color,
                                             )
                                             statusMessage.text =
-                                                if (userData.id == detailData.idUser) {
+                                                if (userData.id == detailData.userId) {
                                                     if (getString(R.string.lang) == "in")
                                                         "Dibatalkan oleh Anda"
                                                     else
                                                         "Canceled by You"
                                                 } else {
                                                     if (getString(R.string.lang) == "in")
-                                                        "Dibatalkan oleh pelapor, ${detailData.namaUserBuat?.trimEnd()}"
+                                                        "Dibatalkan oleh pelapor, ${detailData.creatorFullName?.trimEnd()}"
                                                     else
-                                                        "Canceled by the reporter, ${detailData.namaUserBuat?.trimEnd()}"
+                                                        "Canceled by the reporter, ${detailData.creatorFullName?.trimEnd()}"
                                                 }
                                             statusMessage.setTextColor(
                                                 ContextCompat.getColor(
@@ -1545,48 +1545,48 @@ class SubmissionDetailActivity : AppCompatActivity(),
                                             }
                                         }
                                     }
-                                    submissionDescription.text = detailData.keterangan
+                                    submissionDescription.text = detailData.description
                                     machineCodeText.text = "${getString(R.string.machine_code)}:"
                                     machineNameText.text = "${getString(R.string.machine_name)}:"
-                                    machineCode.text = if (detailData.kodeMesin != null) {
-                                        detailData.kodeMesin!!.ifEmpty { "-" }
+                                    machineCode.text = if (detailData.machineCode != null) {
+                                        detailData.machineCode!!.ifEmpty { "-" }
                                     } else "-"
-                                    machineName.text = if (detailData.namaMesin != null) {
-                                        detailData.namaMesin!!.ifEmpty { "-" }
+                                    machineName.text = if (detailData.machineName != null) {
+                                        detailData.machineName!!.ifEmpty { "-" }
                                     } else "-"
                                     user.text =
-                                        "${detailData.namaUserBuat?.trimEnd()} " +
-                                                "(ID: ${detailData.idUser} | StarConnect ID: ${detailData.idStarconnectUserBuat})" +
-                                                if (getString(R.string.lang) == "in") "\nDari Departemen ${detailData.deptUser}"
-                                                else "\nFrom ${detailData.deptUser} Department"
+                                        "${detailData.creatorFullName?.trimEnd()} " +
+                                                "(ID: ${detailData.userId} | StarConnect ID: ${detailData.creatorStarConnectId})" +
+                                                if (getString(R.string.lang) == "in") "\nDari Departemen ${detailData.userDept}"
+                                                else "\nFrom ${detailData.userDept} Department"
                                     actionCondition(detailData)
-                                    department.text = detailData.subDeptTujuan
-                                    category.text = detailData.namaKategori
-                                    inputTime.text = detailData.tglInput
-                                    location.text = detailData.lokasi
+                                    department.text = detailData.targetedSubDept
+                                    category.text = detailData.categoryName
+                                    inputTime.text = detailData.inputDate
+                                    location.text = detailData.location
 
-                                    if (detailData.tglWaktuPelaporApprove != null || detailData.tglWaktuPelaporReject != null) {
+                                    if (detailData.reporterApproveDateTime != null || detailData.reporterRejectDateTime != null) {
                                         reportManagerApproveReject.visibility = View.VISIBLE
                                         reportManagerTime.visibility = View.VISIBLE
-                                        if (detailData.tglWaktuPelaporApprove != null) {
+                                        if (detailData.reporterApproveDateTime != null) {
                                             reportManagerApproveReject.text =
                                                 getString(R.string.submission_report_manager_time_approve)
                                             reportManagerTime.text =
-                                                if (detailData.tglWaktuPelaporApprove == "") "-" else {
+                                                if (detailData.reporterApproveDateTime == "") "-" else {
                                                     if (getString(R.string.lang) == "in")
-                                                        "${detailData.tglWaktuPelaporApprove}\noleh ${detailData.namaUserPelaporApprove}"
+                                                        "${detailData.reporterApproveDateTime}\noleh ${detailData.reporterApproveFullName}"
                                                     else
-                                                        "${detailData.tglWaktuPelaporApprove}\nby ${detailData.namaUserPelaporApprove}"
+                                                        "${detailData.reporterApproveDateTime}\nby ${detailData.reporterApproveFullName}"
                                                 }
                                         } else {
                                             reportManagerApproveReject.text =
                                                 getString(R.string.submission_report_manager_time_reject)
                                             reportManagerTime.text =
-                                                if (detailData.tglWaktuPelaporReject == "") "-" else {
+                                                if (detailData.reporterRejectDateTime == "") "-" else {
                                                     if (getString(R.string.lang) == "in")
-                                                        "${detailData.tglWaktuPelaporReject}\noleh ${detailData.namaUserPelaporReject}"
+                                                        "${detailData.reporterRejectDateTime}\noleh ${detailData.reporterRejectFullName}"
                                                     else
-                                                        "${detailData.tglWaktuPelaporReject}\nby ${detailData.namaUserPelaporReject}"
+                                                        "${detailData.reporterRejectDateTime}\nby ${detailData.reporterRejectFullName}"
                                                 }
                                         }
                                     } else {
@@ -1594,56 +1594,56 @@ class SubmissionDetailActivity : AppCompatActivity(),
                                         reportManagerTime.visibility = View.GONE
                                     }
 
-                                    if (detailData.tglwaktuApproved != null || detailData.tglWaktuReject != null) {
+                                    if (detailData.approvedDateTime != null || detailData.rejectDateTime != null) {
                                         targetManagerApproveReject.visibility = View.VISIBLE
                                         targetManagerTime.visibility = View.VISIBLE
-                                        if (detailData.tglwaktuApproved != null) {
+                                        if (detailData.approvedDateTime != null) {
                                             targetManagerApproveReject.text =
                                                 getString(R.string.submission_target_manager_time_approve)
                                             targetManagerTime.text =
-                                                if (detailData.tglwaktuApproved == "") "-" else detailData.tglwaktuApproved
+                                                if (detailData.approvedDateTime == "") "-" else detailData.approvedDateTime
                                         } else {
                                             targetManagerApproveReject.text =
                                                 getString(R.string.submission_target_manager_time_reject)
                                             targetManagerTime.text =
-                                                if (detailData.tglWaktuReject == "") "-" else detailData.tglWaktuReject
+                                                if (detailData.rejectDateTime == "") "-" else detailData.rejectDateTime
                                         }
                                     } else {
                                         targetManagerApproveReject.visibility = View.GONE
                                         targetManagerTime.visibility = View.GONE
                                     }
 
-                                    startWork.text = if (detailData.tglWaktuKerjaStart != null) {
-                                        if (detailData.tglWaktuKerjaStart!!.contains(
+                                    startWork.text = if (detailData.workStartDateTime != null) {
+                                        if (detailData.workStartDateTime!!.contains(
                                                 "0000-00-00"
-                                            ) || detailData.tglWaktuKerjaStart == ""
-                                        ) "-" else detailData.tglWaktuKerjaStart
+                                            ) || detailData.workStartDateTime == ""
+                                        ) "-" else detailData.workStartDateTime
                                     } else {
                                         "-"
                                     }
 
-                                    endWork.text = if (detailData.tglWaktuKerjaEnd != null) {
-                                        if (detailData.tglWaktuKerjaEnd!!.contains(
+                                    endWork.text = if (detailData.workEndDateTime != null) {
+                                        if (detailData.workEndDateTime!!.contains(
                                                 "0000-00-00"
-                                            ) || detailData.tglWaktuKerjaEnd == ""
-                                        ) "-" else detailData.tglWaktuKerjaEnd
+                                            ) || detailData.workEndDateTime == ""
+                                        ) "-" else detailData.workEndDateTime
                                     } else {
                                         "-"
                                     }
 
                                     userApprovedOrRejectedTitle.text = if (detailData
-                                            .userNamaApprove
-                                        == "" && detailData.nameUserReject == ""
+                                            .approveFullName
+                                        == "" && detailData.rejectFullName == ""
                                     ) {
                                         "-"
                                     } else {
                                         when {
-                                            detailData.userNamaApprove?.isNotEmpty() == true -> if (getString(
+                                            detailData.approveFullName?.isNotEmpty() == true -> if (getString(
                                                     R.string.lang
                                                 ) == "in"
                                             ) "Disetujui oleh" else "Approved by"
 
-                                            detailData.nameUserReject?.isNotEmpty() == true -> if (getString(
+                                            detailData.rejectFullName?.isNotEmpty() == true -> if (getString(
                                                     R.string.lang
                                                 ) == "in"
                                             ) "Ditolak oleh" else "Rejected by"
@@ -1653,23 +1653,23 @@ class SubmissionDetailActivity : AppCompatActivity(),
                                     }
 
                                     userApprovedOrRejected.text =
-                                        detailData.userNamaApprove?.takeIf { it.isNotBlank() }
+                                        detailData.approveFullName?.takeIf { it.isNotBlank() }
                                             ?.trimEnd()
-                                            ?: detailData.nameUserReject?.takeIf { it.isNotBlank() }
+                                            ?: detailData.rejectFullName?.takeIf { it.isNotBlank() }
                                                 ?.trimEnd() ?: "-"
 
                                     userSupervisorsTitle.text =
                                         if (getString(R.string.lang) == "in") "Supervisor" else "Supervisors"
                                     userSupervisors.text = StringBuilder().also {
                                         with(it) {
-                                            if (detailData.usernUserSpv!!.isEmpty()) {
+                                            if (detailData.supervisorUserName!!.isEmpty()) {
                                                 append("-")
                                             } else {
-                                                for (i in 0 until detailData.usernUserSpv!!.size) {
-                                                    if (i == detailData.usernUserSpv!!.size - 1) {
-                                                        append(detailData.usernUserSpv!![i]?.namaUser?.trimEnd())
+                                                for (i in detailData.supervisorUserName!!.indices) {
+                                                    if (i == detailData.supervisorUserName!!.size - 1) {
+                                                        append(detailData.supervisorUserName!![i]?.fullName?.trimEnd())
                                                     } else {
-                                                        append("${detailData.usernUserSpv!![i]?.namaUser?.trimEnd()}\n")
+                                                        append("${detailData.supervisorUserName!![i]?.fullName?.trimEnd()}\n")
                                                     }
                                                 }
                                             }
@@ -1689,14 +1689,14 @@ class SubmissionDetailActivity : AppCompatActivity(),
                                             )
                                         }${vendorName}" else StringBuilder().also {
                                             with(it) {
-                                                if (detailData.usernUserTeknisi!!.isEmpty()) {
+                                                if (detailData.techniciansUser!!.isEmpty()) {
                                                     append("-")
                                                 } else {
-                                                    for (i in 0 until detailData.usernUserTeknisi!!.size) {
-                                                        if (i == detailData.usernUserTeknisi!!.size - 1) {
-                                                            append(detailData.usernUserTeknisi!![i]?.namaUser?.trimEnd())
+                                                    for (i in detailData.techniciansUser!!.indices) {
+                                                        if (i == detailData.techniciansUser!!.size - 1) {
+                                                            append(detailData.techniciansUser!![i]?.userName?.trimEnd())
                                                         } else {
-                                                            append("${detailData.usernUserTeknisi!![i]?.namaUser?.trimEnd()}\n")
+                                                            append("${detailData.techniciansUser!![i]?.userName?.trimEnd()}\n")
                                                         }
                                                     }
                                                 }
@@ -1907,10 +1907,10 @@ class SubmissionDetailActivity : AppCompatActivity(),
 
     private fun actionCondition(data: SubmissionDetailResponse) {
         binding.apply {
-            when (data.stsGaprojects) {
+            when (data.caseStatus) {
                 // Pending
                 1 -> {
-                    if (userData.id == data.idUser) { // If logged-in user is reporter
+                    if (userData.id == data.userId) { // If logged-in user is reporter
                         actionButton.visibility = View.GONE
                         actionSelfButton.visibility = View.VISIBLE
                         onProgressButton.visibility = View.GONE
@@ -1918,8 +1918,8 @@ class SubmissionDetailActivity : AppCompatActivity(),
                         // If logged-in user are not the reporter but...
                         if (userData.privilege < 2) { // If logged-in user is manager or owner
                             if (data.isReporterManagerCanApprove == true)
-                            /*if (userData.dept == data.deptUser
-                                || data.deptUser!!.contains(userData.dept, true)
+                            /*if (userData.deptName == data.userDept
+                                || data.userDept!!.contains(userData.deptName, true)
                             )*/ { // If reporter's department are same as manager's/owner's department
                                 actionButton.visibility = View.VISIBLE
                                 actionSelfButton.visibility = View.GONE
@@ -1993,7 +1993,7 @@ class SubmissionDetailActivity : AppCompatActivity(),
                 }
                 // Approved
                 2 -> {
-                    if (userData.id == data.idUserApprove) {
+                    if (userData.id == data.approveUserId) {
                         actionSelfButton.visibility = View.VISIBLE
                     }
 
@@ -2040,7 +2040,7 @@ class SubmissionDetailActivity : AppCompatActivity(),
                 // Waiting
                 11 -> {
                     if (userData.privilege < 2) { // If logged-in user is manager or owner
-                        if (userData.dept == data.deptTujuan) { // If manager's/owner's department are same as targeted department
+                        if (userData.dept == data.targetedDept) { // If manager's/owner's department are same as targeted department
                             actionButton.visibility = View.VISIBLE
                             actionSelfButton.visibility = View.GONE
                             onProgressButton.visibility = View.GONE
@@ -2179,7 +2179,7 @@ class SubmissionDetailActivity : AppCompatActivity(),
                                 loadingDialog.show()
                             try {
                                 InitAPI.getEndpoint.markAsReadyForTrial(
-                                    detailData.idGaprojects!!,
+                                    detailData.caseId!!,
                                     userData.id
                                 )
                                     .enqueue(object :
@@ -2382,7 +2382,7 @@ class SubmissionDetailActivity : AppCompatActivity(),
                                 loadingDialog.show()
                             try {
                                 InitAPI.getEndpoint.startTrial(
-                                    detailData.idGaprojects!!,
+                                    detailData.caseId!!,
                                     userData.id
                                 )
                                     .enqueue(object :
@@ -2596,7 +2596,7 @@ class SubmissionDetailActivity : AppCompatActivity(),
                                 loadingDialog.show()
                             try {
                                 InitAPI.getEndpoint.deleteProgress(
-                                    data.progress?.idGaprojectsDetail!!, userData.id
+                                    data.progress?.caseDetailId!!, userData.id
                                 )
                                     .enqueue(object :
                                         Callback<GenericSimpleResponse> {
@@ -2846,7 +2846,7 @@ class SubmissionDetailActivity : AppCompatActivity(),
                                 loadingDialog.show()
                             try {
                                 InitAPI.getEndpoint.approveMaterialRequest(
-                                    data.progress?.idGaprojectsDetail!!,
+                                    data.progress?.caseDetailId!!,
                                     userData.id
                                 ).enqueue(object : Callback<GenericSimpleResponse> {
                                     override fun onResponse(
@@ -3079,7 +3079,7 @@ class SubmissionDetailActivity : AppCompatActivity(),
                                 loadingDialog.show()
                             try {
                                 InitAPI.getEndpoint.markIssueDone(
-                                    detailData.idGaprojects!!,
+                                    detailData.caseId!!,
                                     userData.id
                                 )
                                     .enqueue(object : Callback<GenericSimpleResponse> {
@@ -3329,7 +3329,7 @@ class SubmissionDetailActivity : AppCompatActivity(),
                 LatLng(detailData.latitude!!.toDouble(), detailData.longitude!!.toDouble())
             googleMap?.apply {
                 clear()
-                addMarker(MarkerOptions().position(position).title(detailData.lokasi))
+                addMarker(MarkerOptions().position(position).title(detailData.location))
                 moveCamera(CameraUpdateFactory.newLatLngZoom(position, 18f))
             }
         } catch (e: Exception) {

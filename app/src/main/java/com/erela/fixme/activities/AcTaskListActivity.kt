@@ -127,14 +127,18 @@ class AcTaskListActivity : AppCompatActivity(), AcCheckInBottomSheet.OnCheckInLi
                 scanResult.observe(this@AcTaskListActivity) { response ->
                     if (response.isSuccess) {
                         val item = response.item ?: return@observe
-                        if (item.itemStatus == "in_progress" && item.logId != null) {
-                            // Session already active — join it directly
-                            navigateToSession(logId = item.logId, itemId = null)
-                        } else if (item.itemStatus == "in_progress") {
-                            // Fallback: let check-in handle the already-in-progress case
-                            navigateToSession(logId = null, itemId = item.itemId)
-                        } else {
-                            showCheckInBottomSheet(itemId = item.itemId, acCode = response.unit?.acCode)
+                        when (item.itemStatus) {
+                            "in_progress" if item.logId != null -> {
+                                // Session already active — join it directly
+                                navigateToSession(logId = item.logId, itemId = null)
+                            }
+                            "in_progress" -> {
+                                // Fallback: let check-in handle the already-in-progress case
+                                navigateToSession(logId = null, itemId = item.itemId)
+                            }
+                            else -> {
+                                showCheckInBottomSheet(itemId = item.itemId, acCode = response.unit?.acCode)
+                            }
                         }
                     } else {
                         CustomToast.getInstance(this@AcTaskListActivity)

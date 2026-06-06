@@ -629,7 +629,7 @@ class ProgressDoneFormActivity : AppCompatActivity() {
             with(requestBodyMap) {
                 put(
                     "progress_id",
-                    createPartFromString(progressData?.progress?.idGaprojectsDetail.toString())!!
+                    createPartFromString(progressData?.progress?.caseDetailId.toString())!!
                 )
                 put("user_id", createPartFromString(userData.id.toString())!!)
                 put("description", createPartFromString(descriptionField.text.toString())!!)

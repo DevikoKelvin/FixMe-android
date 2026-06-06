@@ -4,19 +4,19 @@ import com.google.gson.annotations.SerializedName
 
 data class MaterialListResponse(
     @field:SerializedName("sts_aktif")
-    val stsAktif: Int? = null,
+    val status: Int? = null,
     @field:SerializedName("harga")
-    val harga: Int? = null,
+    val price: Int? = null,
     @field:SerializedName("nama_material")
-    val namaMaterial: String? = null,
+    val materialName: String? = null,
     @field:SerializedName("satuan")
-    val satuan: String? = null,
+    val unit: String? = null,
     @field:SerializedName("id_material")
-    val idMaterial: Int? = null,
+    val materialId: Int? = null,
     @field:SerializedName("kode_material")
-    val kodeMaterial: String? = null,
+    val materialCode: String? = null,
     @field:SerializedName("id_kategori")
-    val idKategori: Int? = null
+    val categoryId: Int? = null
 )
 
 data class SelectedMaterialList(

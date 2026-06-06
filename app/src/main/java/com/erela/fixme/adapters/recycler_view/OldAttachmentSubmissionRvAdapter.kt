@@ -31,9 +31,9 @@ class OldAttachmentSubmissionRvAdapter(
 
         with(holder) {
             binding.apply {
-                fileName.text = item.foto
+                fileName.text = item.photo
                 seePhotoButton.setOnClickListener {
-                    val photoPreviewDialog = PhotoPreviewDialog(context, null, item.foto)
+                    val photoPreviewDialog = PhotoPreviewDialog(context, null, item.photo)
 
                     if (photoPreviewDialog.window != null)
                         photoPreviewDialog.show()

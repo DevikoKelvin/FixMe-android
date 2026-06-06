@@ -33,10 +33,10 @@ class MaterialsRvAdapters(
 
         with(holder) {
             binding.apply {
-                itemCheckboxText.text = item.material!!.namaMaterial
+                itemCheckboxText.text = item.material!!.materialName
 
-                for (i in 0 until selectedMaterialsArrayList.size) {
-                    if (selectedMaterialsArrayList[i].idMaterial == item.material.idMaterial) {
+                for (i in selectedMaterialsArrayList.indices) {
+                    if (selectedMaterialsArrayList[i].materialId == item.material.materialId) {
                         itemCheckboxText.isChecked = true
                         break
                     }
@@ -83,7 +83,7 @@ class MaterialDiffUtilCallback(
     override fun getNewListSize(): Int = newList.size
 
     override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
-        return oldList[oldItemPosition].material?.idMaterial == newList[newItemPosition].material?.idMaterial
+        return oldList[oldItemPosition].material?.materialId == newList[newItemPosition].material?.materialId
     }
 
     override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {

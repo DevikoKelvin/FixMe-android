@@ -29,7 +29,7 @@ class IntegerTypeAdapter : TypeAdapter<Int>() {
             } else {
                 try {
                     Integer.valueOf(value)
-                } catch (e: NumberFormatException) {
+                } catch (_: NumberFormatException) {
                     0
                 }
             }

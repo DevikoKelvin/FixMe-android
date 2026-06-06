@@ -66,7 +66,7 @@ class SubmissionActionBottomSheet(context: Context, val data: SubmissionDetailRe
     @SuppressLint("SetTextI18n")
     private fun init() {
         binding.apply {
-            when (data.stsGaprojects) {
+            when (data.caseStatus) {
                 // Pending
                 1 -> {
                     startProgressButton.visibility = View.GONE
@@ -121,14 +121,14 @@ class SubmissionActionBottomSheet(context: Context, val data: SubmissionDetailRe
                     reportManagerApprovalMessageContainer.visibility = View.VISIBLE
                     reportManagerApprovalMessage.text =
                         if (context.getString(R.string.lang) == "in")
-                            "Laporan telah disetujui oleh ${data.namaUserPelaporApprove}\nKetuk untuk melihat pesan"
+                            "Laporan telah disetujui oleh ${data.reporterApproveFullName}\nKetuk untuk melihat pesan"
                         else
-                            "Report was approved by ${data.namaUserPelaporApprove}\nTap to see message"
+                            "Report was approved by ${data.reporterApproveFullName}\nTap to see message"
                     reportManagerApprovalMessageContainer.setOnClickListener {
                         val balloon = Balloon.Builder(context).also {
                             with(it) {
                                 setHeight(BalloonSizeSpec.WRAP)
-                                setText(data.keteranganPelaporApprove.toString())
+                                setText(data.reporterApproveDesc.toString())
                                 setTextColorResource(R.color.custom_toast_font_success)
                                 setTextSize(14f)
                                 setArrowPositionRules(ArrowPositionRules.ALIGN_ANCHOR)
@@ -179,8 +179,8 @@ class SubmissionActionBottomSheet(context: Context, val data: SubmissionDetailRe
                 }
                 // Approved
                 2 -> {
-                    for (i in 0 until data.usernUserSpv!!.size) {
-                        if (data.usernUserSpv[i]?.idUser == userData.id) {
+                    for (i in data.supervisorUserName!!.indices) {
+                        if (data.supervisorUserName[i]?.userId == userData.id) {
                             actionsButtonContainer.visibility = View.VISIBLE
                             startProgressButton.visibility = View.GONE
                             approveButton.visibility = View.GONE

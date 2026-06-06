@@ -1,5 +1,6 @@
 package com.erela.fixme.adapters.recycler_view
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
@@ -17,6 +18,7 @@ class AcTaskAdapter(
 
     private val tasks = mutableListOf<AcTaskItem>()
 
+    @SuppressLint("NotifyDataSetChanged")
     fun submitList(newTasks: List<AcTaskItem>) {
         tasks.clear()
         tasks.addAll(newTasks)
@@ -41,6 +43,7 @@ class AcTaskAdapter(
     inner class ViewHolder(private val binding: ListItemAcTaskBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
+        @SuppressLint("SetTextI18n")
         fun bind(item: AcTaskItem) {
             binding.apply {
                 tvScheduleName.text = item.scheduleName

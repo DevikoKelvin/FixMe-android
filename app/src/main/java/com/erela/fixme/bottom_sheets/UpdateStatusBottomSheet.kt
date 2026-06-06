@@ -137,10 +137,10 @@ class UpdateStatusBottomSheet(
                 complexityRadioGroup.visibility = View.VISIBLE
 
                 // Pre-populate from existing data
-                selectedCategoryId = dataDetail.idKategori ?: 0
-                if (!dataDetail.difficulty.isNullOrEmpty() && dataDetail.difficulty != "null") {
-                    complexity = dataDetail.difficulty
-                    when (dataDetail.difficulty) {
+                selectedCategoryId = dataDetail.categoryId ?: 0
+                if (!dataDetail.complexity.isNullOrEmpty() && dataDetail.complexity != "null") {
+                    complexity = dataDetail.complexity
+                    when (dataDetail.complexity) {
                         "low" -> lowSelector.isChecked = true
                         "middle" -> midSelector.isChecked = true
                         "high" -> highSelector.isChecked = true
@@ -177,7 +177,7 @@ class UpdateStatusBottomSheet(
                 else
                     "Edit Technicians"
             } else {
-                issueTitle.text = dataDetail.judulKasus?.uppercase(Locale.ROOT)
+                issueTitle.text = dataDetail.caseTitle?.uppercase(Locale.ROOT)
             }
             descriptionField.addTextChangedListener(object : TextWatcher {
                 override fun beforeTextChanged(
@@ -247,7 +247,7 @@ class UpdateStatusBottomSheet(
                         descriptionFieldLayout.visibility = View.VISIBLE
                         descriptionField.setText(
                             if (isEdit) {
-                                dataDetail.ketApproved ?: ""
+                                dataDetail.approvedDesc ?: ""
                             } else {
                                 if (context.getString(R.string.lang) == "in")
                                     "Disetujui!"
@@ -264,7 +264,7 @@ class UpdateStatusBottomSheet(
                                 if (dataDetail.isVendor.equals("Y", ignoreCase = true)) "Y"
                                 else "N"
                         }
-                        if (dataDetail.deptTujuan != userData.dept) {
+                        if (dataDetail.targetedDept != userData.dept) {
                             subDeptText.visibility = View.GONE
                             subDeptDropdownLayout.visibility = View.GONE
                             workByText.visibility = View.GONE
@@ -385,21 +385,21 @@ class UpdateStatusBottomSheet(
                             }
 
                             isFormEmpty[0] = descriptionField.text.toString().isNotEmpty()
-                            if (dataDetail.deptTujuan == userData.dept) {
+                            if (dataDetail.targetedDept == userData.dept) {
                                 selectSupervisorText.visibility = View.VISIBLE
                                 rvSupervisor.visibility = View.VISIBLE
                             } else {
                                 selectSupervisorText.visibility = View.GONE
                                 rvSupervisor.visibility = View.GONE
                             }
-                            if (isEdit && !dataDetail.usernUserSpv.isNullOrEmpty()) {
-                                dataDetail.usernUserSpv.forEach { spv ->
+                            if (isEdit && !dataDetail.supervisorUserName.isNullOrEmpty()) {
+                                dataDetail.supervisorUserName.forEach { spv ->
                                     if (spv != null) {
                                         selectedSupervisorsArrayList.add(
                                             SupervisorTechnician(
-                                                idUser = spv.idUser,
-                                                namaUser = spv.namaUser,
-                                                namaDept = spv.deptUser
+                                                userId = spv.userId,
+                                                fullName = spv.fullName,
+                                                deptName = spv.userDept
                                             )
                                         )
                                     }
@@ -711,11 +711,11 @@ class UpdateStatusBottomSheet(
             selectedTechniciansArrayList.clear()
 
             // In edit mode, show the update button only when the selected technicians set changes.
-            // Compare by `idUser` (fallback to `namaUser`) and ignore the "+" placeholder item.
+            // Compare by `userId` (fallback to `userName`) and ignore the "+" placeholder item.
             val initialTechnicianKeys: Set<String> = if (isEdit) {
-                dataDetail.usernUserTeknisi
+                dataDetail.techniciansUser
                     ?.mapNotNull { tech ->
-                        (tech?.idUser?.toString() ?: tech?.namaUser)?.trim()
+                        (tech?.userId?.toString() ?: tech?.userName)?.trim()
                     }
                     ?.filter { it.isNotEmpty() }
                     ?.toSet()
@@ -726,9 +726,9 @@ class UpdateStatusBottomSheet(
 
             fun currentTechnicianKeys(): Set<String> {
                 return selectedTechniciansArrayList
-                    .filter { it.namaUser != "+" }
+                    .filter { it.fullName != "+" }
                     .mapNotNull { tech ->
-                        (tech.idUser?.toString() ?: tech.namaUser)?.trim()
+                        (tech.userId?.toString() ?: tech.fullName)?.trim()
                     }
                     .filter { it.isNotEmpty() }
                     .toSet()
@@ -751,14 +751,14 @@ class UpdateStatusBottomSheet(
             }
 
             // Pre-populate technicians in edit mode
-            if (isEdit && !dataDetail.usernUserTeknisi.isNullOrEmpty()) {
-                dataDetail.usernUserTeknisi.forEach { tech ->
+            if (isEdit && !dataDetail.techniciansUser.isNullOrEmpty()) {
+                dataDetail.techniciansUser.forEach { tech ->
                     if (tech != null) {
                         selectedTechniciansArrayList.add(
                             SupervisorTechnician(
-                                idUser = tech.idUser,
-                                namaUser = tech.namaUser,
-                                namaDept = tech.deptUser
+                                userId = tech.userId,
+                                fullName = tech.userName,
+                                deptName = tech.userDept
                             )
                         )
                     }
@@ -872,7 +872,7 @@ class UpdateStatusBottomSheet(
             // In Edit Technicians mode, only check if technicians are selected
             if (deployTech && isEdit) {
                 // Filter out the "+" placeholder and check if there are any real technicians selected
-                val actualTechnicians = selectedTechniciansArrayList.filter { it.namaUser != "+" }
+                val actualTechnicians = selectedTechniciansArrayList.filter { it.fullName != "+" }
                 return actualTechnicians.isNotEmpty()
             }
 
@@ -889,7 +889,7 @@ class UpdateStatusBottomSheet(
                     validated == 1
                 else {
                     if (approve) {
-                        if (dataDetail.deptTujuan == userData.dept)
+                        if (dataDetail.targetedDept == userData.dept)
                             validated == isFormEmpty.size
                         else
                             validated == 1
@@ -923,16 +923,16 @@ class UpdateStatusBottomSheet(
                                     deployTechText.visibility = View.GONE
 
                                     val categoryToSend =
-                                        if (selectedCategoryId != 0) selectedCategoryId else dataDetail.idKategori
+                                        if (selectedCategoryId != 0) selectedCategoryId else dataDetail.categoryId
                                             ?: 0
                                     val complexityToSend =
-                                        if (this@UpdateStatusBottomSheet::complexity.isInitialized) complexity else dataDetail.difficulty
+                                        if (this@UpdateStatusBottomSheet::complexity.isInitialized) complexity else dataDetail.complexity
                                             ?: ""
 
                                     try {
                                         InitAPI.getEndpoint.updateCategoryComplexity(
                                             userId = userData.id,
-                                            caseId = dataDetail.idGaprojects!!,
+                                            caseId = dataDetail.caseId!!,
                                             category = categoryToSend,
                                             complexity = complexityToSend
                                         ).enqueue(object : Callback<GenericSimpleResponse> {
@@ -1131,7 +1131,7 @@ class UpdateStatusBottomSheet(
                                         try {
                                             InitAPI.getEndpoint.cancelSubmission(
                                                 userData.id,
-                                                dataDetail.idGaprojects!!,
+                                                dataDetail.caseId!!,
                                                 descriptionField.text.toString()
                                             ).enqueue(object :
                                                 Callback<GenericSimpleResponse> {
@@ -1319,18 +1319,18 @@ class UpdateStatusBottomSheet(
                                     put("user_id", createPartFromString(userData.id.toString())!!)
                                     put(
                                         "case_id",
-                                        createPartFromString(dataDetail.idGaprojects.toString())!!
+                                        createPartFromString(dataDetail.caseId.toString())!!
                                     )
                                     put(
                                         "description",
                                         createPartFromString(descriptionField.text.toString())!!
                                     )
-                                    /*if (dataDetail.deptTujuan == userData.dept) {
+                                    /*if (dataDetail.targetedDept == userData.deptName) {
                                         for (i in 0 until selectedSupervisorsArrayList.size - 1) {
                                             put(
                                                 "user_supervisor[$i]",
                                                 createPartFromString(
-                                                    selectedSupervisorsArrayList[i].idUser.toString()
+                                                    selectedSupervisorsArrayList[i].userId.toString()
                                                 )!!
                                             )
                                         }
@@ -1341,7 +1341,7 @@ class UpdateStatusBottomSheet(
                                     put("user_id", createPartFromString(userData.id.toString())!!)
                                     put(
                                         "case_id",
-                                        createPartFromString(dataDetail.idGaprojects.toString())!!
+                                        createPartFromString(dataDetail.caseId.toString())!!
                                     )
                                     put(
                                         "description",
@@ -1349,7 +1349,7 @@ class UpdateStatusBottomSheet(
                                     )
                                     put(
                                         "department",
-                                        createPartFromString(selectedSubDept?.idDept.toString())!!
+                                        createPartFromString(selectedSubDept?.deptId.toString())!!
                                     )
                                     put(
                                         "is_vendor",
@@ -1359,19 +1359,19 @@ class UpdateStatusBottomSheet(
                                         "vendor_name",
                                         createPartFromString(vendorNameField.text.toString())!!
                                     )
-                                    if (dataDetail.deptTujuan == userData.dept) {
+                                    if (dataDetail.targetedDept == userData.dept) {
                                         for (i in 0 until selectedSupervisorsArrayList.size - 1) {
                                             put(
                                                 "supervisors[$i]",
                                                 createPartFromString(
-                                                    selectedSupervisorsArrayList[i].idUser.toString()
+                                                    selectedSupervisorsArrayList[i].userId.toString()
                                                 )!!
                                             )
                                         }
                                     }
                                 }
                                 (if (isEdit) InitAPI.getEndpoint.editApprovals(targetData)
-                                else if (dataDetail.deptTujuan == userData.dept)
+                                else if (dataDetail.targetedDept == userData.dept)
                                     InitAPI.getEndpoint.approveTargetManagerSubmission(targetData)
                                 else InitAPI.getEndpoint.approveReportManagerSubmission(data)).enqueue(
                                     object : Callback<GenericSimpleResponse> {
@@ -1553,7 +1553,7 @@ class UpdateStatusBottomSheet(
                         } else {
                             try {
                                 InitAPI.getEndpoint.rejectSubmission(
-                                    userData.id, dataDetail.idGaprojects!!,
+                                    userData.id, dataDetail.caseId!!,
                                     descriptionField.text.toString()
                                 ).enqueue(object : Callback<GenericSimpleResponse> {
                                     override fun onResponse(
@@ -1800,7 +1800,7 @@ class UpdateStatusBottomSheet(
                                             with(editData) {
                                                 put(
                                                     "case_id",
-                                                    createPartFromString(dataDetail.idGaprojects.toString())!!
+                                                    createPartFromString(dataDetail.caseId.toString())!!
                                                 )
                                                 put(
                                                     "user_id",
@@ -1810,7 +1810,7 @@ class UpdateStatusBottomSheet(
                                                     put(
                                                         "technicians[$i]",
                                                         createPartFromString(
-                                                            selectedTechniciansArrayList[i].idUser.toString()
+                                                            selectedTechniciansArrayList[i].userId.toString()
                                                         )!!
                                                     )
                                                 }
@@ -1822,7 +1822,7 @@ class UpdateStatusBottomSheet(
                                             with(data) {
                                                 put(
                                                     "case_id",
-                                                    createPartFromString(dataDetail.idGaprojects.toString())!!
+                                                    createPartFromString(dataDetail.caseId.toString())!!
                                                 )
                                                 put(
                                                     "user_id",
@@ -1844,7 +1844,7 @@ class UpdateStatusBottomSheet(
                                                     put(
                                                         "technicians[$i]",
                                                         createPartFromString(
-                                                            selectedTechniciansArrayList[i].idUser.toString()
+                                                            selectedTechniciansArrayList[i].userId.toString()
                                                         )!!
                                                     )
                                                 }
@@ -2189,7 +2189,7 @@ class UpdateStatusBottomSheet(
 
     private fun getSubDepartmentList() {
         binding.apply {
-            InitAPI.getEndpoint.getSubDepartmentList(dataDetail.deptTujuan!!)
+            InitAPI.getEndpoint.getSubDepartmentList(dataDetail.targetedDept!!)
                 .enqueue(object : Callback<List<SubDepartmentListResponse>> {
                     override fun onResponse(
                         call: Call<List<SubDepartmentListResponse>?>,
@@ -2234,9 +2234,9 @@ class UpdateStatusBottomSheet(
                                         override fun onNothingSelected(parent: AdapterView<*>?) {
                                         }
                                     }
-                                if (isEdit && dataDetail.idDeptTujuan != null) {
+                                if (isEdit && dataDetail.targetDeptId != null) {
                                     val index =
-                                        result.indexOfFirst { it.idDept == dataDetail.idDeptTujuan }
+                                        result.indexOfFirst { it.deptId == dataDetail.targetDeptId }
                                     if (index != -1) {
                                         subDeptDropdown.setSelection(index + 1)
                                         selectedSubDept = result[index]

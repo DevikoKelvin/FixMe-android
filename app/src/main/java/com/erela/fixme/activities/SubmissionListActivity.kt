@@ -124,13 +124,13 @@ class SubmissionListActivity : AppCompatActivity(), SubmissionRvAdapter.OnSubmis
             return
         }
         for (item in listFilteredByStatusAndComplexity) {
-            if (item?.nomorRequest.toString().lowercase(Locale.getDefault())
+            if (item?.requestNumber.toString().lowercase(Locale.getDefault())
                     .contains(text.lowercase(Locale.getDefault())) ||
-                item?.judulKasus?.lowercase(Locale.getDefault())
+                item?.caseTitle?.lowercase(Locale.getDefault())
                     ?.contains(text.lowercase(Locale.getDefault())) == true ||
-                item?.keterangan?.lowercase(Locale.getDefault())
+                item?.description?.lowercase(Locale.getDefault())
                     ?.contains(text.lowercase(Locale.getDefault())) == true ||
-                item?.namaUser?.lowercase(Locale.getDefault())
+                item?.fullName?.lowercase(Locale.getDefault())
                     ?.contains(text.lowercase(Locale.getDefault())) == true
             ) {
                 filteredList.add(item!!)
@@ -223,9 +223,9 @@ class SubmissionListActivity : AppCompatActivity(), SubmissionRvAdapter.OnSubmis
                                         else
                                             "Select Department"
                                     )
-                                    for (i in 0 until response.body()!!.size) {
+                                    for (i in response.body()!!.indices) {
                                         data.add(
-                                            response.body()!![i].namaDept.toString()
+                                            response.body()!![i].deptName.toString()
                                         )
                                     }
                                     val dropdownAdapter = ArrayAdapter(
@@ -645,14 +645,14 @@ class SubmissionListActivity : AppCompatActivity(), SubmissionRvAdapter.OnSubmis
                     // All unfinished cases - apply date filter if provided
                     submissionArrayList?.clear()
                     if(submissionList != null) {
-                        for (i in 0 until submissionList.size) {
-                            if (submissionList[i]?.stsGaprojects == 1 || submissionList[i]?.stsGaprojects == 11
-                                || submissionList[i]?.stsGaprojects == 2 || submissionList[i]?.stsGaprojects == 22
-                                || submissionList[i]?.stsGaprojects == 3 || submissionList[i]?.stsGaprojects == 30
-                                || submissionList[i]?.stsGaprojects == 31
+                        for (i in submissionList.indices) {
+                            if (submissionList[i]?.status == 1 || submissionList[i]?.status == 11
+                                || submissionList[i]?.status == 2 || submissionList[i]?.status == 22
+                                || submissionList[i]?.status == 3 || submissionList[i]?.status == 30
+                                || submissionList[i]?.status == 31
                             ) {
                                 if (dateChecker(
-                                        submissionList[i]?.tglInput.toString(),
+                                        submissionList[i]?.inputDate.toString(),
                                         startDate,
                                         endDate
                                     )
@@ -676,12 +676,12 @@ class SubmissionListActivity : AppCompatActivity(), SubmissionRvAdapter.OnSubmis
                     // All finished cases - apply date filter
                     submissionArrayList?.clear()
                     if (submissionList != null) {
-                        for (i in 0 until submissionList.size) {
-                            if (submissionList[i]?.stsGaprojects == 0 || submissionList[i]?.stsGaprojects == 4
-                                || submissionList[i]?.stsGaprojects == 5
+                        for (i in submissionList.indices) {
+                            if (submissionList[i]?.status == 0 || submissionList[i]?.status == 4
+                                || submissionList[i]?.status == 5
                             ) {
                                 if (dateChecker(
-                                        submissionList[i]?.tglInput.toString(),
+                                        submissionList[i]?.inputDate.toString(),
                                         startDate,
                                         endDate
                                     )
@@ -705,14 +705,14 @@ class SubmissionListActivity : AppCompatActivity(), SubmissionRvAdapter.OnSubmis
                     // All cases - apply date filter to all
                     submissionArrayList?.clear()
                     if (submissionList != null) {
-                        for (i in 0 until submissionList.size) {
-                            if (submissionList[i]?.stsGaprojects == 1 || submissionList[i]?.stsGaprojects == 11
-                                || submissionList[i]?.stsGaprojects == 2 || submissionList[i]?.stsGaprojects == 22
-                                || submissionList[i]?.stsGaprojects == 3 || submissionList[i]?.stsGaprojects == 30
-                                || submissionList[i]?.stsGaprojects == 31
+                        for (i in submissionList.indices) {
+                            if (submissionList[i]?.status == 1 || submissionList[i]?.status == 11
+                                || submissionList[i]?.status == 2 || submissionList[i]?.status == 22
+                                || submissionList[i]?.status == 3 || submissionList[i]?.status == 30
+                                || submissionList[i]?.status == 31
                             ) {
                                 if (dateChecker(
-                                        submissionList[i]?.tglInput.toString(),
+                                        submissionList[i]?.inputDate.toString(),
                                         startDate,
                                         endDate
                                     )
@@ -729,7 +729,7 @@ class SubmissionListActivity : AppCompatActivity(), SubmissionRvAdapter.OnSubmis
                                 }
                             } else
                                 if (dateChecker(
-                                        submissionList[i]?.tglInput.toString(),
+                                        submissionList[i]?.inputDate.toString(),
                                         startDate,
                                         endDate
                                     )
@@ -752,12 +752,12 @@ class SubmissionListActivity : AppCompatActivity(), SubmissionRvAdapter.OnSubmis
                     // Specific status filter - apply date filter if applicable
                     submissionArrayList?.clear()
                     if (submissionList != null) {
-                        for (i in 0 until submissionList.size) {
-                            if (submissionList[i]?.stsGaprojects == filter) {
+                        for (i in submissionList.indices) {
+                            if (submissionList[i]?.status == filter) {
                                 if (filter == 0 || filter == 4 || filter == 5
                                 ) {
                                     if (dateChecker(
-                                            submissionList[i]?.tglInput.toString(),
+                                            submissionList[i]?.inputDate.toString(),
                                             startDate,
                                             endDate
                                         )
@@ -774,7 +774,7 @@ class SubmissionListActivity : AppCompatActivity(), SubmissionRvAdapter.OnSubmis
                                     }
                                 } else {
                                     if (dateChecker(
-                                            submissionList[i]?.tglInput.toString(),
+                                            submissionList[i]?.inputDate.toString(),
                                             startDate,
                                             endDate
                                         )
@@ -844,7 +844,7 @@ class SubmissionListActivity : AppCompatActivity(), SubmissionRvAdapter.OnSubmis
         activityResultLauncher.launch(
             SubmissionDetailActivity.initiate(
                 this@SubmissionListActivity,
-                data?.idGaprojects.toString()
+                data?.caseId.toString()
             )
         )
     }

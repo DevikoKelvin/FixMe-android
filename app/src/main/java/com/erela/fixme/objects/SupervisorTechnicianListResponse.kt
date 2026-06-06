@@ -15,23 +15,23 @@ data class SupervisorTechnician(
     @field:SerializedName("sub_dept")
     val subDept: String? = null,
     @field:SerializedName("lokasi_nama")
-    val lokasiNama: String? = null,
+    val locationName: String? = null,
     @field:SerializedName("id_dept")
-    val idDept: Int? = null,
+    val deptId: Int? = null,
     @field:SerializedName("hak_akses")
-    val hakAkses: Int? = null,
+    val privilege: Int? = null,
     @field:SerializedName("singkatan")
-    val singkatan: String? = null,
+    val abbreviation: String? = null,
     @field:SerializedName("id_user")
-    val idUser: Int? = null,
+    val userId: Int? = null,
     @field:SerializedName("nama_user")
-    val namaUser: String? = null,
+    val fullName: String? = null,
     @field:SerializedName("id_user_starconnect")
-    val idUserStarconnect: Int? = null,
+    val starConnectId: Int? = null,
     @field:SerializedName("lokasi_id")
-    val lokasiId: Int? = null,
+    val locationId: Int? = null,
     @field:SerializedName("nama_dept")
-    val namaDept: String? = null
+    val deptName: String? = null
 )
 
 data class SelectedSupervisorTechniciansList(

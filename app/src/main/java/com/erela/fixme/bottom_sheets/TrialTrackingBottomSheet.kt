@@ -58,7 +58,7 @@ class TrialTrackingBottomSheet(
             loadingManager(true)
             try {
                 trialData = ArrayList()
-                InitAPI.getEndpoint.getTrial(data.idGaprojects!!).enqueue(
+                InitAPI.getEndpoint.getTrial(data.caseId!!).enqueue(
                     object : Callback<SubmissionTrialResponse> {
                         override fun onResponse(
                             call: Call<SubmissionTrialResponse?>,
@@ -68,17 +68,17 @@ class TrialTrackingBottomSheet(
                                 val result = response.body()
                                 if (result != null) {
                                     if (result.data != null) {
-                                        for (i in 0 until result.data.size) {
+                                        for (i in result.data.indices) {
                                             trialData.add(result.data[i])
                                         }
                                         trialAdapter = TrialRvAdapter(context, data, trialData)
                                         rvTrial.adapter = trialAdapter
                                         rvTrial.setItemViewCacheSize(trialData.size)
                                         rvTrial.layoutManager = LinearLayoutManager(context)
-                                        if (data.stsGaprojects == 3 || data.stsGaprojects == 4 || data.stsGaprojects == 30) {
+                                        if (data.caseStatus == 3 || data.caseStatus == 4 || data.caseStatus == 30) {
                                             trialActionButton.visibility = View.GONE
                                         } else {
-                                            if (data.idUser == userData.id) {
+                                            if (data.userId == userData.id) {
                                                 trialActionButton.visibility = View.VISIBLE
                                                 for (element in trialData) {
                                                     if (element?.status == 0) {
@@ -134,7 +134,7 @@ class TrialTrackingBottomSheet(
                                             }
                                         }
                                     } else {
-                                        if (data.idUser == userData.id) {
+                                        if (data.userId == userData.id) {
                                             trialActionButton.visibility = View.VISIBLE
                                             trialActionButton.setOnClickListener {
                                                 onTrialTrackingListener.reportTrialClicked(

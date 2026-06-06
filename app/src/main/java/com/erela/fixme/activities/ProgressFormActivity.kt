@@ -138,27 +138,27 @@ class ProgressFormActivity : AppCompatActivity() {
                         "Simpan Suntingan Kemajuan"
                     else
                         "Save Edited Progress"
-                repairAnalysisField.setText(progressData?.progress?.analisa)
-                if (!progressData?.progress?.analisa.isNullOrEmpty())
+                repairAnalysisField.setText(progressData?.progress?.analysis)
+                if (!progressData?.progress?.analysis.isNullOrEmpty())
                     isFormEmpty[0] = true
-                descriptionField.setText(progressData?.progress?.keterangan)
-                if (!progressData?.progress?.keterangan.isNullOrEmpty())
+                descriptionField.setText(progressData?.progress?.description)
+                if (!progressData?.progress?.description.isNullOrEmpty())
                     isFormEmpty[1] = true
-                if (progressData?.progress?.material!!.isNotEmpty()) {
-                    oldMaterialCount = progressData?.progress?.material!!.size
-                    for (i in 0 until progressData?.progress?.material!!.size) {
+                if (progressData?.progress?.materials!!.isNotEmpty()) {
+                    oldMaterialCount = progressData?.progress?.materials!!.size
+                    for (i in progressData?.progress?.materials!!.indices) {
                         selectedMaterialsArrayList.add(
                             MaterialListResponse(
-                                progressData?.progress?.material!![i]?.stsAktif,
-                                progressData?.progress?.material!![i]?.harga,
-                                progressData?.progress?.material!![i]?.namaMaterial,
-                                progressData?.progress?.material!![i]?.satuan,
-                                progressData?.progress?.material!![i]?.idMaterial,
-                                progressData?.progress?.material!![i]?.kodeMaterial,
-                                progressData?.progress?.material!![i]?.idKategori
+                                progressData?.progress?.materials!![i]?.isActive,
+                                progressData?.progress?.materials!![i]?.price,
+                                progressData?.progress?.materials!![i]?.materialName,
+                                progressData?.progress?.materials!![i]?.unit,
+                                progressData?.progress?.materials!![i]?.materialId,
+                                progressData?.progress?.materials!![i]?.materialCode,
+                                progressData?.progress?.materials!![i]?.categoryId
                             )
                         )
-                        materialQuantityList.add(progressData?.progress?.material!![i]?.qtyMaterial!!)
+                        materialQuantityList.add(progressData?.progress?.materials!![i]?.materialQuantity!!)
                     }
                 }
             }
@@ -254,7 +254,7 @@ class ProgressFormActivity : AppCompatActivity() {
                                                         if (selectedMaterialsArrayList.size - 1 > oldMaterialCount) {
                                                             if (prepareRequestMaterialForm(
                                                                     progressData!!.progress!!
-                                                                        .idGaprojectsDetail!!
+                                                                        .caseDetailId!!
                                                                 )
                                                             ) {
                                                                 InitAPI.getEndpoint.requestMaterialAdd(
@@ -960,7 +960,7 @@ class ProgressFormActivity : AppCompatActivity() {
                             val bottomSheet =
                                 MaterialQuantityBottomSheet(
                                     this@ProgressFormActivity,
-                                    data.namaMaterial!!
+                                    data.materialName!!
                                 ).also { qtyBottomSheet ->
                                     with(qtyBottomSheet) {
                                         setOnQuantityConfirmListener(object :
@@ -1062,7 +1062,7 @@ class ProgressFormActivity : AppCompatActivity() {
             for (i in 0 until selectedMaterialsArrayList.size - 1) {
                 put(
                     "material[$i]",
-                    createPartFromString(selectedMaterialsArrayList[i].idMaterial.toString())!!
+                    createPartFromString(selectedMaterialsArrayList[i].materialId.toString())!!
                 )
                 put(
                     "qty_material[$i]",
@@ -1076,7 +1076,7 @@ class ProgressFormActivity : AppCompatActivity() {
     private fun prepareSubmitForm(): Boolean {
         binding.apply {
             with(requestBodyMap) {
-                put("case_id", createPartFromString(detail?.idGaprojects.toString())!!)
+                put("case_id", createPartFromString(detail?.caseId.toString())!!)
                 put("user_id", createPartFromString(userData.id.toString())!!)
                 put(
                     "repair_analysis", createPartFromString(repairAnalysisField.text.toString())!!
@@ -1088,7 +1088,7 @@ class ProgressFormActivity : AppCompatActivity() {
                     for (i in 0 until selectedMaterialsArrayList.size - 1) {
                         put(
                             "material[$i]",
-                            createPartFromString(selectedMaterialsArrayList[i].idMaterial.toString())!!
+                            createPartFromString(selectedMaterialsArrayList[i].materialId.toString())!!
                         )
                         put(
                             "qty_material[$i]",
@@ -1107,11 +1107,11 @@ class ProgressFormActivity : AppCompatActivity() {
             with(requestBodyMap) {
                 put(
                     "case_id",
-                    createPartFromString(progressData?.progress?.idGaprojects.toString())!!
+                    createPartFromString(progressData?.progress?.caseId.toString())!!
                 )
                 put(
                     "progress_id",
-                    createPartFromString(progressData?.progress?.idGaprojectsDetail.toString())!!
+                    createPartFromString(progressData?.progress?.caseDetailId.toString())!!
                 )
                 put("user_id", createPartFromString(userData.id.toString())!!)
                 if (!editMaterial) {
@@ -1128,7 +1128,7 @@ class ProgressFormActivity : AppCompatActivity() {
                     for (i in 0 until selectedMaterialsArrayList.size - 1) {
                         put(
                             "material[$i]",
-                            createPartFromString(selectedMaterialsArrayList[i].idMaterial.toString())!!
+                            createPartFromString(selectedMaterialsArrayList[i].materialId.toString())!!
                         )
                         put(
                             "qty_material[$i]",

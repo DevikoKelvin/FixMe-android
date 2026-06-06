@@ -71,26 +71,26 @@ class SubmissionRvAdapter(val context: Context, val data: ArrayList<DataItem?>?)
             binding.apply {
                 val item = data!![position]
 
-                submissionName.text = item?.judulKasus
-                inputDate.text = item?.setTglinput
-                noRequest.text = item?.nomorRequest
-                submissionDescription.text = item?.keterangan
+                submissionName.text = item?.caseTitle
+                inputDate.text = item?.inputDateSet
+                noRequest.text = item?.requestNumber
+                submissionDescription.text = item?.description
                 machineCodeText.text = "${context.getString(R.string.machine_code)}:"
                 machineNameText.text = "${context.getString(R.string.machine_name)}:"
-                machineCode.text = if (item?.kodeMesin != null) {
-                    item.kodeMesin.ifEmpty { "-" }
+                machineCode.text = if (item?.machineCode != null) {
+                    item.machineCode.ifEmpty { "-" }
                 } else {
                     "-"
                 }
 
-                machineName.text = if (item?.namaMesin != null) {
-                    item.namaMesin.ifEmpty { "-" }
+                machineName.text = if (item?.machineName != null) {
+                    item.machineName.ifEmpty { "-" }
                 } else {
                     "-"
                 }
-                submissionLocation.text = item?.lokasi?.uppercase()
-                reportedBy.text = item?.namaUser
-                departmentFrom.text = item?.deptUser
+                submissionLocation.text = item?.location?.uppercase()
+                reportedBy.text = item?.fullName
+                departmentFrom.text = item?.userDept
 
                 if (item?.isExceeding == true) {
                     exceedingMessageContainer.visibility = View.VISIBLE
@@ -138,7 +138,7 @@ class SubmissionRvAdapter(val context: Context, val data: ArrayList<DataItem?>?)
                     }
                 }
 
-                when (item?.stsGaprojects) {
+                when (item?.status) {
                     0 -> {
                         header.background = ResourcesCompat.getDrawable(
                             context.resources,
@@ -227,7 +227,7 @@ class SubmissionRvAdapter(val context: Context, val data: ArrayList<DataItem?>?)
                             )
                         )
                         progressCountText.visibility = View.VISIBLE
-                        setProgressTextColor(progressCountText, item.countProgress)
+                        setProgressTextColor(progressCountText, item.progressCount)
                     }
 
                     3 -> {
@@ -246,7 +246,7 @@ class SubmissionRvAdapter(val context: Context, val data: ArrayList<DataItem?>?)
                             )
                         )
                         progressCountText.visibility = View.VISIBLE
-                        setProgressTextColor(progressCountText, item.countProgress)
+                        setProgressTextColor(progressCountText, item.progressCount)
                     }
 
                     30 -> {

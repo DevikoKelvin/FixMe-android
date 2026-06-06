@@ -62,7 +62,7 @@ class SelectMaterialsBottomSheet(
                     materialsList
                 } else {
                     materialsList.filter { materialItem ->
-                        materialItem.material?.namaMaterial?.lowercase(Locale.getDefault())
+                        materialItem.material?.materialName?.lowercase(Locale.getDefault())
                             ?.indexOf(searchText) != -1
                     }
                 }
@@ -77,7 +77,7 @@ class SelectMaterialsBottomSheet(
             loadingBar.visibility = View.VISIBLE
             searchFieldLayout.visibility = View.GONE
             try {
-                InitAPI.getEndpoint.getMaterialList(detailData.idKategori!!)
+                InitAPI.getEndpoint.getMaterialList(detailData.categoryId!!)
                     .enqueue(object : Callback<List<MaterialListResponse>> {
                         override fun onResponse(
                             call: Call<List<MaterialListResponse>?>,
@@ -87,7 +87,7 @@ class SelectMaterialsBottomSheet(
                             searchFieldLayout.visibility = View.VISIBLE
                             if (response.isSuccessful) {
                                 if (response.body() != null) {
-                                    for (i in 0 until response.body()!!.size) {
+                                    for (i in response.body()!!.indices) {
                                         materialsList.add(
                                             SelectedMaterialList(
                                                 false,

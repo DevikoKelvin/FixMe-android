@@ -41,10 +41,10 @@ class TrialRvAdapter(
                                 context.resources, R.drawable.gradient_approved_color, context.theme
                             )
                     }
-                    usernameText.text = detail.namaUserBuat?.trimEnd()
-                    progressAnalysis.text = item.keterangan
+                    usernameText.text = detail.creatorFullName?.trimEnd()
+                    progressAnalysis.text = item.description
                     progressDescription.visibility = View.GONE
-                    dateTimeText.text = item.tglWaktu
+                    dateTimeText.text = item.dateTime
                     imageContainer.visibility = View.GONE
                     circleIndicator.visibility = View.GONE
                 }

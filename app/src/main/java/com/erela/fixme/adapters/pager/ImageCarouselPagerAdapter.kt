@@ -58,10 +58,10 @@ class ImageCarouselPagerAdapter(
                 }
 
                 try {
-                    if (data?.foto != null) {
-                        if (Base64Helper.isBase64Encoded(data.foto)) {
+                    if (data?.photo != null) {
+                        if (Base64Helper.isBase64Encoded(data.photo)) {
                             val decodedImageURL = Base64Helper.decodeBase64(
-                                data.foto
+                                data.photo
                             )
                             Glide.with(context)
                                 .load(decodedImageURL)
@@ -90,7 +90,7 @@ class ImageCarouselPagerAdapter(
                                 .into(displayImage)
                         } else {
                             Glide.with(context)
-                                .load(InitAPI.IMAGE_URL + data.foto)
+                                .load(InitAPI.IMAGE_URL + data.photo)
                                 .listener(object : RequestListener<Drawable> {
                                     override fun onLoadFailed(
                                         e: GlideException?,

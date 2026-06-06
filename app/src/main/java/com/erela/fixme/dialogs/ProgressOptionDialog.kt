@@ -40,15 +40,15 @@ class ProgressOptionDialog(
                     dismiss()
                 }
                 approveMaterialButton.visibility = View.VISIBLE
-                if (progress.progress?.material!!.isNotEmpty()) {
-                    if (progress.progress.approveMaterialStatus == 0) {
+                if (progress.progress?.materials!!.isNotEmpty()) {
+                    if (progress.progress.approvedMaterialStatus == 0) {
                         approveMaterialButton.isEnabled = true
                         approveMaterialButton.alpha = 1.0f
                         approveMaterialButton.setOnClickListener {
                             onProgressOptionDialogListener.onMaterialApproved(progress)
                             dismiss()
                         }
-                    } else if (progress.progress.approveMaterialStatus == 1) {
+                    } else if (progress.progress.approvedMaterialStatus == 1) {
                         approveMaterialButton.isEnabled = false
                         approveMaterialButton.alpha = 0.5f
                     }
@@ -68,9 +68,9 @@ class ProgressOptionDialog(
                 onProgressOptionDialogListener.onProgressDeleted(progress)
                 dismiss()
             }
-            if (progress.progress?.stsDetail == 0) {
-                if (progress.progress.material!!.isNotEmpty()) {
-                    if (progress.progress.approveMaterialStatus == 0) {
+            if (progress.progress?.detailStatus == 0) {
+                if (progress.progress.materials!!.isNotEmpty()) {
+                    if (progress.progress.approvedMaterialStatus == 0) {
                         doneButton.isEnabled = false
                         doneButton.alpha = 0.5f
                         editButton.isEnabled = true
@@ -78,7 +78,7 @@ class ProgressOptionDialog(
                             onProgressOptionDialogListener.onProgressEdited(progress)
                             dismiss()
                         }
-                    } else if (progress.progress.approveMaterialStatus == 1) {
+                    } else if (progress.progress.approvedMaterialStatus == 1) {
                         doneButton.isEnabled = true
                         doneButton.setOnClickListener {
                             onProgressOptionDialogListener.onProgressSetDone(progress)

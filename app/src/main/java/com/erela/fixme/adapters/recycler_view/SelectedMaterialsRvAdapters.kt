@@ -39,7 +39,7 @@ class SelectedMaterialsRvAdapters(
         val item = selectedMaterialsArrayList[holder.adapterPosition]
         with(holder) {
             binding.apply {
-                itemText.text = item.namaMaterial
+                itemText.text = item.materialName
                 if (adapterPosition == selectedMaterialsArrayList.size - 1) {
                     amountText.visibility = View.GONE
                     mainContainerColor.background = ResourcesCompat.getDrawable(
@@ -85,7 +85,7 @@ class SelectedMaterialsRvAdapters(
                     } else {
                         val bottomSheet =
                             MaterialQuantityBottomSheet(
-                                context, item.namaMaterial!!, materialQuantityList[adapterPosition]
+                                context, item.materialName!!, materialQuantityList[adapterPosition]
                             ).also {
                                 with(it) {
                                     setOnQuantityConfirmListener(object :

@@ -34,10 +34,10 @@ class SupervisorTechniciansRvAdapter(
 
         with(holder) {
             binding.apply {
-                itemCheckboxText.text = item.supervisorTechnician?.namaUser
+                itemCheckboxText.text = item.supervisorTechnician?.fullName
 
-                for (i in 0 until selectedSupervisorTechniciansList.size) {
-                    if (selectedSupervisorTechniciansList[i].idUser == item.supervisorTechnician?.idUser) {
+                for (i in selectedSupervisorTechniciansList.indices) {
+                    if (selectedSupervisorTechniciansList[i].userId == item.supervisorTechnician?.userId) {
                         itemCheckboxText.isChecked = true
                         break
                     }

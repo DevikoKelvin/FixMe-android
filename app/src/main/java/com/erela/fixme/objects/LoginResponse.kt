@@ -6,21 +6,21 @@ data class LoginResponse(
     @field:SerializedName("code")
     val code: Int? = null,
     @field:SerializedName("nama")
-    val nama: String? = null,
+    val name: String? = null,
     @field:SerializedName("hak_akses")
-    val hakAkses: Int? = null,
+    val privilege: Int? = null,
     @field:SerializedName("id_dept")
-    val idDept: Int? = null,
+    val deptId: Int? = null,
     @field:SerializedName("nama_dept")
-    val dept: String? = null,
+    val deptName: String? = null,
     @field:SerializedName("sub_dept")
     val subDept: String? = null,
     @field:SerializedName("sts_login")
-    val stsLogin: Int? = null,
+    val loginStatus: Int? = null,
     @field:SerializedName("id_user")
-    val idUser: Int? = null,
+    val userId: Int? = null,
     @field:SerializedName("id_starconnect")
-    val idStarConnect: Int? = null,
+    val starConnectId: Int? = null,
     @field:SerializedName("message")
     val message: String? = null,
     @field:SerializedName("email")

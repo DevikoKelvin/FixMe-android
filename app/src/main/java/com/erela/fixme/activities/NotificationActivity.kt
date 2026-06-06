@@ -291,7 +291,7 @@ class NotificationActivity : AppCompatActivity(), InboxRvAdapter.OnNotificationI
         activityResultLauncher.launch(
             SubmissionDetailActivity.initiate(
                 this@NotificationActivity,
-                item.idGaprojects.toString()
+                item.caseId.toString()
             )
         )
     }
