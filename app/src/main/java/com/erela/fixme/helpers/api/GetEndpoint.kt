@@ -1,7 +1,6 @@
 package com.erela.fixme.helpers.api
 
 import com.erela.fixme.objects.CategoryListResponse
-import com.erela.fixme.objects.UpdateCheckResponse
 import com.erela.fixme.objects.CreationResponse
 import com.erela.fixme.objects.DepartmentListResponse
 import com.erela.fixme.objects.GenericSimpleResponse
@@ -14,6 +13,7 @@ import com.erela.fixme.objects.SubmissionListResponse
 import com.erela.fixme.objects.SubmissionProgressResponse
 import com.erela.fixme.objects.SubmissionTrialResponse
 import com.erela.fixme.objects.SupervisorTechnicianListResponse
+import com.erela.fixme.objects.UpdateCheckResponse
 import com.erela.fixme.objects.ac.AcCheckInResponse
 import com.erela.fixme.objects.ac.AcScanResponse
 import com.erela.fixme.objects.ac.AcSimpleResponse
