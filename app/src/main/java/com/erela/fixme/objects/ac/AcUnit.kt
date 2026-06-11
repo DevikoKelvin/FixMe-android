@@ -7,6 +7,8 @@ data class AcUnit(
     val acId: Int,
     @SerializedName("ac_code")
     val acCode: String,
+    @SerializedName("location")
+    val location: String,
     @SerializedName("detail")
     val detail: String?,
     @SerializedName("area")

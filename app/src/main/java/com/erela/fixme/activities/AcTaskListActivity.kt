@@ -65,7 +65,14 @@ class AcTaskListActivity : AppCompatActivity(), AcCheckInBottomSheet.OnCheckInLi
                     // Assist tech joining an already checked-in session
                     navigateToSession(logId = task.logId, itemId = null)
                 } else {
-                    showCheckInBottomSheet(task.itemId, task.acCode)
+                    showCheckInBottomSheet(
+                        task.itemId,
+                        task.acCode,
+                        task.location,
+                        task.detail,
+                        task.area,
+                        task.floor
+                    )
                 }
             }
 
@@ -131,12 +138,21 @@ class AcTaskListActivity : AppCompatActivity(), AcCheckInBottomSheet.OnCheckInLi
                                 // Session already active — join it directly
                                 navigateToSession(logId = item.logId, itemId = null)
                             }
+
                             "in_progress" -> {
                                 // Fallback: let check-in handle the already-in-progress case
                                 navigateToSession(logId = null, itemId = item.itemId)
                             }
+
                             else -> {
-                                showCheckInBottomSheet(itemId = item.itemId, acCode = response.unit?.acCode)
+                                showCheckInBottomSheet(
+                                    itemId = item.itemId,
+                                    acCode = response.unit?.acCode,
+                                    location = response.unit?.location,
+                                    detail = response.unit?.detail,
+                                    area = response.unit?.area,
+                                    floor = response.unit?.floor
+                                )
                             }
                         }
                     } else {
@@ -206,8 +222,15 @@ class AcTaskListActivity : AppCompatActivity(), AcCheckInBottomSheet.OnCheckInLi
     }
 
     // ── Helpers ──────────────────────────────────────────────────────────────
-    private fun showCheckInBottomSheet(itemId: Int, acCode: String?) {
-        AcCheckInBottomSheet(this, itemId, acCode)
+    private fun showCheckInBottomSheet(
+        itemId: Int,
+        acCode: String?,
+        location: String?,
+        detail: String?,
+        area: String?,
+        floor: Int?
+    ) {
+        AcCheckInBottomSheet(this, itemId, acCode, location, detail, area, floor)
             .apply { setOnCheckInListener(this@AcTaskListActivity) }
             .show()
     }

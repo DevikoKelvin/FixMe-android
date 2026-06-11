@@ -33,7 +33,7 @@
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="@dimen/activity_horizontal_margin"
         android:layout_marginTop="@dimen/activity_vertical_margin"
-        android:text="AC Details"
+        android:text="@string/ac_details"
         android:textColor="@color/black"
         android:textSize="@dimen/text_size_medium"
         android:textStyle="bold" />
@@ -60,7 +60,25 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/item_id"
+                android:text="@string/location"
+                android:textSize="@dimen/text_size_small" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/detail"
+                android:textSize="@dimen/text_size_small" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/area"
+                android:textSize="@dimen/text_size_small" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/floor"
                 android:textSize="@dimen/text_size_small" />
         </LinearLayout>
 
@@ -69,6 +87,27 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/list_item_submission_machine_code_margin_start"
             android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text=":"
+                android:textSize="@dimen/text_size_small"
+                tools:ignore="HardcodedText" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text=":"
+                android:textSize="@dimen/text_size_small"
+                tools:ignore="HardcodedText" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text=":"
+                android:textSize="@dimen/text_size_small"
+                tools:ignore="HardcodedText" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -96,15 +135,46 @@
                 android:id="@+id/tvAcCode"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:textColor="@color/black"
                 android:textSize="@dimen/text_size_small"
-                tools:text="AC-001" />
+                android:textStyle="bold"
+                tools:text="AC.EMR/HOL.LT1-001" />
 
             <TextView
-                android:id="@+id/tvItemId"
+                android:id="@+id/tvLocation"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:textColor="@color/black"
                 android:textSize="@dimen/text_size_small"
-                tools:text="10" />
+                android:textStyle="bold"
+                tools:text="Erela Murbei" />
+
+            <TextView
+                android:id="@+id/tvDetail"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/black"
+                android:textSize="@dimen/text_size_small"
+                android:textStyle="bold"
+                tools:text="RnD Office Lt. 1" />
+
+            <TextView
+                android:id="@+id/tvArea"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/black"
+                android:textSize="@dimen/text_size_small"
+                android:textStyle="bold"
+                tools:text="HOLDING" />
+
+            <TextView
+                android:id="@+id/tvFloor"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/black"
+                android:textSize="@dimen/text_size_small"
+                android:textStyle="bold"
+                tools:text="Fl. 1" />
         </LinearLayout>
     </LinearLayout>
 
