@@ -15,7 +15,6 @@ class AcTaskAdapter(
     private val context: Context,
     private val onItemClick: (AcTaskItem) -> Unit
 ) : RecyclerView.Adapter<AcTaskAdapter.ViewHolder>() {
-
     private val tasks = mutableListOf<AcTaskItem>()
 
     @SuppressLint("NotifyDataSetChanged")
@@ -124,8 +123,15 @@ class AcTaskAdapter(
                     else -> item.itemStatus
                 }
                 tvAcCode.text = item.acCode
+                tvLocation.text = item.location ?: "-"
+                tvDetail.text = item.detail ?: "-"
+                tvArea.text = item.area ?: "-"
+                tvFloor.text =
+                    if (context.getString(R.string.lang) == "en")
+                        "Fl. ${item.floor ?: "-"}"
+                    else
+                        "Lantai. ${item.floor ?: "-"}"
                 tvBrand.text = item.brand ?: "-"
-                tvArea.text = "${item.area ?: "-"} (Floor ${item.floor ?: "-"})"
                 tvDeadline.text = "Deadline: ${item.dateEnd}"
 
                 root.setOnClickListener {

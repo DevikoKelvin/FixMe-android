@@ -162,8 +162,10 @@
 
     <string name="ac_maintenance_title">Perawatan AC</string>
     <string name="ac_code">Kode AC</string>
-    <string name="brand">Merek</string>
+    <string name="detail">Detail</string>
     <string name="area">Area</string>
+    <string name="floor">Floor</string>
+    <string name="brand">Merek</string>
     <string name="deadline">Tenggat waktu:</string>
 
     <string name="ac_check_in_title">Lakukan Pendaftaran Perawatan AC</string>
@@ -174,6 +176,8 @@
 
     <string name="maintenance_session_title">Sesi Perawatan</string>
     <string name="assistant_technician">Asisten Teknisi</string>
+    <string name="lead_technician">Kepala Teknisi</string>
+    <string name="session_team">Tim Teknisi</string>
     <string name="ac_condition">Kondisi AC</string>
     <string name="good">Baik</string>
     <string name="need_repair">Perlu Perbaikan</string>

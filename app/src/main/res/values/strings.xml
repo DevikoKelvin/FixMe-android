@@ -162,8 +162,10 @@
 
     <string name="ac_maintenance_title">AC Maintenance</string>
     <string name="ac_code">AC Code</string>
-    <string name="brand">Brand</string>
+    <string name="detail">Detail</string>
     <string name="area">Area</string>
+    <string name="floor">Floor</string>
+    <string name="brand">Brand</string>
     <string name="deadline">Deadline:</string>
     
     <string name="ac_check_in_title">Check In AC Maintenance</string>

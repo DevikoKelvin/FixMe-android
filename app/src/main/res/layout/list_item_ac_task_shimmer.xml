@@ -88,7 +88,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:background="@color/custom_toast_font_normal_soft_gray"
-                    android:text="@string/ac_code"
+                    android:text="@string/location"
                     android:textColor="@android:color/transparent"
                     android:textSize="@dimen/text_size_small" />
 
@@ -97,7 +97,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="2dp"
                     android:background="@color/custom_toast_font_normal_soft_gray"
-                    android:text="@string/brand"
+                    android:text="@string/detail"
                     android:textColor="@android:color/transparent"
                     android:textSize="@dimen/text_size_small" />
 
@@ -107,6 +107,24 @@
                     android:layout_marginTop="2dp"
                     android:background="@color/custom_toast_font_normal_soft_gray"
                     android:text="@string/area"
+                    android:textColor="@android:color/transparent"
+                    android:textSize="@dimen/text_size_small" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="2dp"
+                    android:background="@color/custom_toast_font_normal_soft_gray"
+                    android:text="@string/floor"
+                    android:textColor="@android:color/transparent"
+                    android:textSize="@dimen/text_size_small" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="2dp"
+                    android:background="@color/custom_toast_font_normal_soft_gray"
+                    android:text="@string/brand"
                     android:textColor="@android:color/transparent"
                     android:textSize="@dimen/text_size_small" />
             </LinearLayout>
@@ -119,31 +137,23 @@
                 android:orientation="vertical">
 
                 <TextView
-                    android:id="@+id/tvAcCode"
+                    android:id="@+id/tvLocation"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="@color/custom_toast_font_normal_soft_gray"
                     android:textColor="@android:color/transparent"
                     android:textSize="@dimen/text_size_small"
-                    android:textStyle="bold"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/tvScheduleName"
-                    tools:text="AC-001" />
+                    android:textStyle="bold" />
 
                 <TextView
-                    android:id="@+id/tvBrand"
+                    android:id="@+id/tvDetail"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="2dp"
                     android:background="@color/custom_toast_font_normal_soft_gray"
                     android:textColor="@android:color/transparent"
                     android:textSize="@dimen/text_size_small"
-                    android:textStyle="bold"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/tvAcCode"
-                    tools:text="Daikin" />
+                    android:textStyle="bold" />
 
                 <TextView
                     android:id="@+id/tvArea"
@@ -153,27 +163,39 @@
                     android:background="@color/custom_toast_font_normal_soft_gray"
                     android:textColor="@android:color/transparent"
                     android:textSize="@dimen/text_size_small"
-                    android:textStyle="bold"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/tvBrand"
-                    tools:text="Meeting Room (Floor 1)" />
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/tvFloor"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="2dp"
+                    android:background="@color/custom_toast_font_normal_soft_gray"
+                    android:textColor="@android:color/transparent"
+                    android:textSize="@dimen/text_size_small"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/tvBrand"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="2dp"
+                    android:background="@color/custom_toast_font_normal_soft_gray"
+                    android:textColor="@android:color/transparent"
+                    android:textSize="@dimen/text_size_small"
+                    android:textStyle="bold" />
             </LinearLayout>
         </LinearLayout>
 
         <TextView
             android:id="@+id/tvDeadline"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="@dimen/list_item_submission_description_padding_horizontal"
             android:layout_marginBottom="@dimen/list_item_submission_description_padding_vertical"
             android:background="@color/custom_toast_font_normal_soft_gray"
             android:textColor="@android:color/transparent"
             android:textSize="@dimen/text_size_small"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tvArea"
             tools:text="Deadline: 2024-05-01" />
     </LinearLayout>
-
 </com.google.android.material.card.MaterialCardView>

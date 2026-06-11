@@ -21,6 +21,8 @@ data class AcTaskItem(
     val dateEnd: String,
     @SerializedName("ac_code")
     val acCode: String,
+    @SerializedName("location_name")
+    val location: String,
     @SerializedName("detail")
     val detail: String?,
     @SerializedName("area")

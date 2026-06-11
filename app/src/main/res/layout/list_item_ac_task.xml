@@ -27,24 +27,40 @@
             android:paddingVertical="@dimen/list_item_submission_header_padding_vertical"
             tools:ignore="UselessParent">
 
-            <TextView
-                android:id="@+id/tvScheduleName"
+            <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="8dp"
                 android:layout_weight="1"
-                android:textColor="@color/white"
-                android:textSize="16sp"
-                android:textStyle="bold"
-                app:layout_constraintEnd_toStartOf="@+id/tvStatus"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                tools:text="Monthly Maintenance" />
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/tvScheduleName"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="8dp"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/text_size_medium"
+                    android:textStyle="bold"
+                    app:layout_constraintEnd_toStartOf="@+id/tvStatus"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:text="Monthly Maintenance" />
+
+                <TextView
+                    android:id="@+id/tvAcCode"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/text_size_micro"
+                    android:textStyle="bold"
+                    tools:text="AC.EMR/HOL.LT1-001" />
+            </LinearLayout>
 
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/tvStatus"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
                 app:cardBackgroundColor="@android:color/transparent"
                 app:cardCornerRadius="@dimen/list_item_submission_tag_card_corner_radius"
                 app:cardElevation="0dp"
@@ -87,19 +103,31 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/ac_code"
+                    android:text="@string/location"
                     android:textSize="@dimen/text_size_small" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/brand"
+                    android:text="@string/detail"
                     android:textSize="@dimen/text_size_small" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/area"
+                    android:textSize="@dimen/text_size_small" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/floor"
+                    android:textSize="@dimen/text_size_small" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/brand"
                     android:textSize="@dimen/text_size_small" />
             </LinearLayout>
 
@@ -108,6 +136,20 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/list_item_submission_machine_code_margin_start"
                 android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text=":"
+                    android:textSize="@dimen/text_size_small"
+                    tools:ignore="HardcodedText" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text=":"
+                    android:textSize="@dimen/text_size_small"
+                    tools:ignore="HardcodedText" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -139,7 +181,34 @@
                 android:orientation="vertical">
 
                 <TextView
-                    android:id="@+id/tvAcCode"
+                    android:id="@+id/tvLocation"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/text_size_small"
+                    android:textStyle="bold"
+                    tools:text="Erela Murbei" />
+
+                <TextView
+                    android:id="@+id/tvDetail"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/text_size_small"
+                    android:textStyle="bold"
+                    tools:text="RnD Office Lt. 1" />
+
+                <TextView
+                    android:id="@+id/tvArea"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/text_size_small"
+                    android:textStyle="bold"
+                    tools:text="HOLDING" />
+
+                <TextView
+                    android:id="@+id/tvFloor"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:textColor="@color/black"
@@ -147,8 +216,8 @@
                     android:textStyle="bold"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/tvScheduleName"
-                    tools:text="AC-001" />
+                    app:layout_constraintTop_toBottomOf="@+id/tvAcCode"
+                    tools:text="Fl. 1" />
 
                 <TextView
                     android:id="@+id/tvBrand"
@@ -161,18 +230,6 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/tvAcCode"
                     tools:text="Daikin" />
-
-                <TextView
-                    android:id="@+id/tvArea"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:textColor="@color/black"
-                    android:textSize="@dimen/text_size_small"
-                    android:textStyle="bold"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/tvBrand"
-                    tools:text="Meeting Room (Floor 1)" />
             </LinearLayout>
         </LinearLayout>
 

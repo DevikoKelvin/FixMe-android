@@ -2,6 +2,7 @@ package com.erela.fixme.activities
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
@@ -98,7 +99,6 @@ class AcTaskListActivity : AppCompatActivity(), AcCheckInBottomSheet.OnCheckInLi
     private fun setupObservers() {
         viewModel.apply {
             binding.apply {
-
                 isLoading.observe(this@AcTaskListActivity) { isLoading ->
                     if (isLoading) {
                         shimmerLayout.visibility = View.VISIBLE
@@ -113,6 +113,7 @@ class AcTaskListActivity : AppCompatActivity(), AcCheckInBottomSheet.OnCheckInLi
 
                 taskListResult.observe(this@AcTaskListActivity) { response ->
                     if (response.isSuccess && !response.data.isNullOrEmpty()) {
+                        Log.e("AC_TaskList", response.data.toString())
                         rvTasks.visibility = View.VISIBLE
                         emptyListContainer.visibility = View.GONE
                         emptyListAnimation.pauseAnimation()
