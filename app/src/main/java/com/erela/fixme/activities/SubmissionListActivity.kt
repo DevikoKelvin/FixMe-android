@@ -38,6 +38,7 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import java.text.SimpleDateFormat
+import java.util.Calendar
 import java.util.Locale
 
 class SubmissionListActivity : AppCompatActivity(), SubmissionRvAdapter.OnSubmissionClickListener {
@@ -50,8 +51,14 @@ class SubmissionListActivity : AppCompatActivity(), SubmissionRvAdapter.OnSubmis
     private lateinit var adapter: SubmissionRvAdapter
     private var firstInit = true
     private var selectedFilter = 100
-    private var startDate = ""
-    private var endDate = ""
+    private var startDate = run {
+        val cal = Calendar.getInstance()
+        cal.set(Calendar.DAY_OF_MONTH, 1)
+        SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(cal.time)
+    }
+    private var endDate = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(
+        Calendar.getInstance().time
+    )
     private var selectedComplexity = ""
     private var selectedDepartment: String = ""
     private var submissionArrayList: ArrayList<DataItem?>? = ArrayList()
