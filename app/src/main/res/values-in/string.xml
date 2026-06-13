@@ -202,4 +202,21 @@
     <string name="download_update">Unduh pembaruan</string>
     <string name="install_update">Instal pembaruan sekarang!</string>
     <string name="not_now">Tidak sekarang</string>
+
+    <string name="update_channel_label">Saluran pembaruan</string>
+    <string name="update_channel_sheet_title">Saluran Pembaruan</string>
+    <string name="update_channel_sheet_subtitle">Pilih saluran pembaruan yang diterima perangkat ini. Anda hanya dapat berpindah ke saluran yang lebih cepat; untuk menurunkan versi, hapus instalasi lalu instal ulang aplikasi.</string>
+    <string name="channel_current_tag">Aktif</string>
+    <string name="channel_locked_hint">Hapus &amp; instal ulang untuk menurunkan versi</string>
+    <string name="channel_confirm_title">Ganti saluran?</string>
+    <string name="channel_confirm_body">Beralih dari %1$s ke %2$s? Pemeriksaan pembaruan berikutnya akan menggunakan saluran baru.</string>
+    <string name="channel_confirm_yes">Ganti</string>
+    <string name="channel_name_release">Release</string>
+    <string name="channel_name_beta">Beta</string>
+    <string name="channel_name_dev">Dev</string>
+    <string name="channel_name_canary">Canary</string>
+    <string name="channel_desc_release">Versi stabil untuk penggunaan sehari-hari.</string>
+    <string name="channel_desc_beta">Versi mendekati stabil dengan fitur terbaru.</string>
+    <string name="channel_desc_dev">Fitur terkini, mungkin tidak stabil.</string>
+    <string name="channel_desc_canary">Versi paling mutakhir, siap dengan ketidaksempurnaan.</string>
 </resources>

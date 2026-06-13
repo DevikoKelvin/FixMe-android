@@ -48,7 +48,11 @@ android {
     flavorDimensions "channel"
 
     productFlavors {
-        // "stable" avoids naming conflict with the "release" build type
+        // All flavors share ONE applicationId so a stable install can update itself
+        // with a beta/dev/canary APK (Windows Insider-style channel switching).
+        // Downgrading a channel requires uninstall + reinstall, enforced by Android
+        // (lower versionCode) and by the in-app selector (upgrade-only).
+        // "stable" avoids naming conflict with the "release" build type.
         stable {
             dimension "channel"
             applicationId "com.erela.fixme"
@@ -56,21 +60,18 @@ android {
         }
         beta {
             dimension "channel"
-            applicationId "com.erela.fixme.beta"
+            applicationId "com.erela.fixme"
             buildConfigField "String", "VERSION_CHANNEL", '"beta_prerelease"'
-            resValue "string", "app_name", "FixMe Beta"
         }
         dev {
             dimension "channel"
-            applicationId "com.erela.fixme.dev"
+            applicationId "com.erela.fixme"
             buildConfigField "String", "VERSION_CHANNEL", '"dev"'
-            resValue "string", "app_name", "FixMe Dev"
         }
         canary {
             dimension "channel"
-            applicationId "com.erela.fixme.canary"
+            applicationId "com.erela.fixme"
             buildConfigField "String", "VERSION_CHANNEL", '"canary"'
-            resValue "string", "app_name", "FixMe Canary"
         }
     }
 

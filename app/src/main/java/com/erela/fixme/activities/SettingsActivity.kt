@@ -28,6 +28,7 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.erela.fixme.BuildConfig
 import com.erela.fixme.R
+import com.erela.fixme.bottom_sheets.ChannelPickerBottomSheet
 import com.erela.fixme.custom_views.CustomToast
 import com.erela.fixme.databinding.ActivitySettingsBinding
 import com.erela.fixme.helpers.api.InitAPI
@@ -139,6 +140,33 @@ class SettingsActivity : AppCompatActivity() {
         private const val DOWNLOAD_PREFS = "fixme_download_prefs"
         private const val PREF_DOWNLOAD_ID = "active_download_id"
         private const val PREF_NEW_APP_VERSION = "new_app_version"
+        private const val PREF_CHANNEL_OVERRIDE = "channel_override"
+    }
+
+    private fun loadEffectiveChannel(): String {
+        val stored = getSharedPreferences(DOWNLOAD_PREFS, MODE_PRIVATE)
+            .getString(PREF_CHANNEL_OVERRIDE, null) ?: return BuildConfig.VERSION_CHANNEL
+        val bakedLevel = ChannelPickerBottomSheet.channelLevel(BuildConfig.VERSION_CHANNEL)
+        return if (ChannelPickerBottomSheet.channelLevel(stored) > bakedLevel) stored
+        else BuildConfig.VERSION_CHANNEL
+    }
+
+    private fun selectUpdateChannel(channel: String) {
+        val bakedLevel = ChannelPickerBottomSheet.channelLevel(BuildConfig.VERSION_CHANNEL)
+        if (ChannelPickerBottomSheet.channelLevel(channel) < bakedLevel) return
+        getSharedPreferences(DOWNLOAD_PREFS, MODE_PRIVATE)
+            .edit { putString(PREF_CHANNEL_OVERRIDE, channel) }
+        binding.channelSelectorValue.text = channelDisplayName(channel)
+        downloadLink = null
+        triggerUpdateCheck()
+    }
+
+    private fun channelDisplayName(channel: String): String = when (channel) {
+        "release" -> getString(R.string.channel_name_release)
+        "beta_prerelease" -> getString(R.string.channel_name_beta)
+        "dev" -> getString(R.string.channel_name_dev)
+        "canary" -> getString(R.string.channel_name_canary)
+        else -> channel
     }
 
     @SuppressLint("UnspecifiedRegisterReceiverFlag")
@@ -223,6 +251,14 @@ class SettingsActivity : AppCompatActivity() {
             else
                 "Current app version: $appVersionText"
 
+            channelSelectorValue.text = channelDisplayName(loadEffectiveChannel())
+            channelSelectorButton.setOnClickListener {
+                ChannelPickerBottomSheet(this@SettingsActivity).apply {
+                    effectiveChannel = loadEffectiveChannel()
+                    onChannelSelected = { selectUpdateChannel(it) }
+                }.show()
+            }
+
             checkDownloadInstallButton.setOnClickListener {
                 if (downloadLink != null) {
                     disableDownloadButton()
@@ -250,155 +286,151 @@ class SettingsActivity : AppCompatActivity() {
                     downloadAnimHandler.post(downloadAnimRunnable!!)
                     startDownload(downloadLink!!)
                 } else {
-                    loadingBar.visibility = View.VISIBLE
-                    statusIcon.visibility = View.INVISIBLE
-                    val handler = Handler(Looper.getMainLooper())
-                    val runnable = object : Runnable {
-                        var count = 1
-                        override fun run() {
-                            when (count) {
-                                1 -> checkDownloadInstallText.text =
-                                    if (getString(R.string.lang) == "in") "Memeriksa pembaruan." else "Checking update."
+                    triggerUpdateCheck()
+                }
+            }
+        }
+    }
 
-                                2 -> checkDownloadInstallText.text =
-                                    if (getString(R.string.lang) == "in") "Memeriksa pembaruan.." else "Checking update.."
+    @SuppressLint("SetTextI18n")
+    private fun triggerUpdateCheck() {
+        binding.apply {
+            loadingBar.visibility = View.VISIBLE
+            statusIcon.visibility = View.INVISIBLE
+            val effectiveChannel = loadEffectiveChannel()
+            val handler = Handler(Looper.getMainLooper())
+            val runnable = object : Runnable {
+                var count = 1
+                override fun run() {
+                    when (count) {
+                        1 -> checkDownloadInstallText.text =
+                            if (getString(R.string.lang) == "in") "Memeriksa pembaruan." else "Checking update."
 
-                                3 -> checkDownloadInstallText.text =
-                                    if (getString(R.string.lang) == "in") "Memeriksa pembaruan..." else "Checking update..."
+                        2 -> checkDownloadInstallText.text =
+                            if (getString(R.string.lang) == "in") "Memeriksa pembaruan.." else "Checking update.."
+
+                        3 -> checkDownloadInstallText.text =
+                            if (getString(R.string.lang) == "in") "Memeriksa pembaruan..." else "Checking update..."
+                    }
+                    count = if (count < 3) count + 1 else 1
+                    handler.postDelayed(this, 500)
+                }
+            }
+            handler.post(runnable)
+            Log.e(
+                "FixMe.Update",
+                "checkUpdate → channel=$effectiveChannel versionName=${BuildConfig.VERSION_NAME}"
+            )
+            InitAPI.getEndpoint.checkUpdate(effectiveChannel, BuildConfig.VERSION_NAME)
+                .enqueue(object : Callback<UpdateCheckResponse> {
+                    override fun onResponse(
+                        call: Call<UpdateCheckResponse>,
+                        response: Response<UpdateCheckResponse>
+                    ) {
+                        loadingBar.visibility = View.GONE
+                        handler.removeCallbacks(runnable)
+                        Log.e(
+                            "FixMe.Update",
+                            "HTTP ${response.code()} | isSuccessful=${response.isSuccessful}"
+                        )
+                        if (!response.isSuccessful) {
+                            Log.e("FixMe.Update", "Error body: ${response.errorBody()?.string()}")
+                            showUpdateError()
+                            return
+                        }
+                        val body = response.body()
+                        if (body == null) {
+                            Log.e("FixMe.Update", "Body is null despite successful response")
+                            showUpdateError()
+                            return
+                        }
+                        Log.e(
+                            "FixMe.Update",
+                            "code=${body.code} versionName=${body.versionName} downloadUrl=${body.downloadUrl} forceUpdate=${body.forceUpdate}"
+                        )
+                        when (body.code) {
+                            1 -> {
+                                checkDownloadInstallText.text = getString(R.string.download_update)
+                                updateAvailableStatus.visibility = View.VISIBLE
+                                currentAppVersionText.setTextColor(
+                                    ContextCompat.getColor(
+                                        this@SettingsActivity,
+                                        R.color.custom_toast_font_failed
+                                    )
+                                )
+                                newAppVersion = body.versionName
+                                getSharedPreferences(DOWNLOAD_PREFS, MODE_PRIVATE)
+                                    .edit { putString(PREF_NEW_APP_VERSION, newAppVersion) }
+                                newAppVersionText.text =
+                                    if (getString(R.string.lang) == "in")
+                                        "Versi aplikasi baru terdeteksi: ${body.versionName}"
+                                    else
+                                        "Detected new app version: ${body.versionName}"
+                                newAppVersionText.visibility = View.VISIBLE
+                                statusIcon.setImageDrawable(
+                                    AppCompatResources.getDrawable(
+                                        this@SettingsActivity,
+                                        R.drawable.caution_icon
+                                    )
+                                )
+                                statusIcon.visibility = View.VISIBLE
+                                downloadLink = body.downloadUrl?.takeIf { it.isNotBlank() }
                             }
-                            count = if (count < 3) count + 1 else 1
-                            handler.postDelayed(this, 500)
+
+                            0 -> {
+                                statusIcon.setImageDrawable(
+                                    AppCompatResources.getDrawable(
+                                        this@SettingsActivity,
+                                        R.drawable.done_icon
+                                    )
+                                )
+                                statusIcon.visibility = View.VISIBLE
+                                currentAppVersionText.setTextColor(
+                                    ContextCompat.getColor(this@SettingsActivity, R.color.black)
+                                )
+                                checkDownloadInstallText.text =
+                                    getString(R.string.check_for_update_now)
+                                updateAvailableStatus.visibility = View.GONE
+                                newAppVersionText.visibility = View.GONE
+                                CustomToast.getInstance(applicationContext)
+                                    .setMessage(
+                                        if (getString(R.string.lang) == "in")
+                                            "Tidak ada pembaruan. Aplikasi Anda sudah versi terbaru!"
+                                        else
+                                            "No update available. Your app is on the latest version!"
+                                    )
+                                    .setFontColor(
+                                        ContextCompat.getColor(
+                                            this@SettingsActivity,
+                                            R.color.custom_toast_background_soft_blue
+                                        )
+                                    )
+                                    .setBackgroundColor(
+                                        ContextCompat.getColor(
+                                            this@SettingsActivity,
+                                            R.color.custom_toast_font_blue
+                                        )
+                                    )
+                                    .show()
+                            }
+
+                            else -> {
+                                Log.e(
+                                    "FixMe.Update",
+                                    "Unexpected code ${body.code}: ${body.message}"
+                                )
+                                showUpdateError()
+                            }
                         }
                     }
 
-                    handler.post(runnable)
-                    Log.e(
-                        "FixMe.Update",
-                        "checkUpdate → channel=${BuildConfig.VERSION_CHANNEL} versionName=${BuildConfig.VERSION_NAME}"
-                    )
-                    InitAPI.getEndpoint.checkUpdate(
-                        BuildConfig.VERSION_CHANNEL,
-                        BuildConfig.VERSION_NAME
-                    ).enqueue(object : Callback<UpdateCheckResponse> {
-                        override fun onResponse(
-                            call: Call<UpdateCheckResponse>,
-                            response: Response<UpdateCheckResponse>
-                        ) {
-                            loadingBar.visibility = View.GONE
-                            handler.removeCallbacks(runnable)
-                            Log.e(
-                                "FixMe.Update",
-                                "HTTP ${response.code()} | isSuccessful=${response.isSuccessful}"
-                            )
-                            if (!response.isSuccessful) {
-                                val errBody = response.errorBody()?.string()
-                                Log.e("FixMe.Update", "Error body: $errBody")
-                                showUpdateError()
-                                return
-                            }
-                            val body = response.body()
-                            if (body == null) {
-                                Log.e("FixMe.Update", "Body is null despite successful response")
-                                showUpdateError()
-                                return
-                            }
-                            Log.e(
-                                "FixMe.Update",
-                                "code=${body.code} versionName=${body.versionName} downloadUrl=${body.downloadUrl} forceUpdate=${body.forceUpdate}"
-                            )
-                            when (body.code) {
-                                1 -> {
-                                    checkDownloadInstallText.text =
-                                        getString(R.string.download_update)
-                                    updateAvailableStatus.visibility = View.VISIBLE
-                                    currentAppVersionText.setTextColor(
-                                        ContextCompat.getColor(
-                                            this@SettingsActivity,
-                                            R.color.custom_toast_font_failed
-                                        )
-                                    )
-                                    newAppVersion = body.versionName
-                                    getSharedPreferences(DOWNLOAD_PREFS, MODE_PRIVATE)
-                                        .edit { putString(PREF_NEW_APP_VERSION, newAppVersion) }
-                                    newAppVersionText.text =
-                                        if (getString(R.string.lang) == "in")
-                                            "Versi aplikasi baru terdeteksi: ${body.versionName}"
-                                        else
-                                            "Detected new app version: ${body.versionName}"
-                                    newAppVersionText.visibility = View.VISIBLE
-                                    statusIcon.setImageDrawable(
-                                        AppCompatResources.getDrawable(
-                                            this@SettingsActivity,
-                                            R.drawable.caution_icon
-                                        )
-                                    )
-                                    statusIcon.visibility = View.VISIBLE
-                                    downloadLink = body.downloadUrl?.takeIf { it.isNotBlank() }
-                                }
-
-                                0 -> {
-                                    statusIcon.setImageDrawable(
-                                        AppCompatResources.getDrawable(
-                                            this@SettingsActivity,
-                                            R.drawable.done_icon
-                                        )
-                                    )
-                                    statusIcon.visibility = View.VISIBLE
-                                    currentAppVersionText.setTextColor(
-                                        ContextCompat.getColor(this@SettingsActivity, R.color.black)
-                                    )
-                                    checkDownloadInstallText.text =
-                                        getString(R.string.check_for_update_now)
-                                    updateAvailableStatus.visibility = View.GONE
-                                    newAppVersionText.visibility = View.GONE
-                                    CustomToast.getInstance(applicationContext)
-                                        .setMessage(
-                                            if (getString(R.string.lang) == "in")
-                                                "Tidak ada pembaruan. Aplikasi Anda sudah versi terbaru!"
-                                            else
-                                                "No update available. Your app is on the latest version!"
-                                        )
-                                        .setFontColor(
-                                            ContextCompat.getColor(
-                                                this@SettingsActivity,
-                                                R.color.custom_toast_background_soft_blue
-                                            )
-                                        )
-                                        .setBackgroundColor(
-                                            ContextCompat.getColor(
-                                                this@SettingsActivity,
-                                                R.color.custom_toast_font_blue
-                                            )
-                                        )
-                                        .show()
-                                }
-
-                                else -> {
-                                    Log.e(
-                                        "FixMe.Update",
-                                        "Unexpected code ${body.code}: ${body.message}"
-                                    )
-                                    showUpdateError()
-                                }
-                            }
-                        }
-
-                        override fun onFailure(
-                            call: Call<UpdateCheckResponse>,
-                            t: Throwable
-                        ) {
-                            loadingBar.visibility = View.GONE
-                            handler.removeCallbacks(runnable)
-                            Log.e(
-                                "FixMe.Update",
-                                "onFailure: ${t::class.simpleName}: ${t.message}",
-                                t
-                            )
-                            showUpdateError()
-                        }
-                    })
-                }
-            }
+                    override fun onFailure(call: Call<UpdateCheckResponse>, t: Throwable) {
+                        loadingBar.visibility = View.GONE
+                        handler.removeCallbacks(runnable)
+                        Log.e("FixMe.Update", "onFailure: ${t::class.simpleName}: ${t.message}", t)
+                        showUpdateError()
+                    }
+                })
         }
     }
 

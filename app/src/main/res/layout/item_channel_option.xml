@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginHorizontal="@dimen/list_item_department_margin_horizontal"
+    android:layout_marginVertical="12dp"
+    android:minHeight="64dp"
+    app:cardBackgroundColor="@android:color/transparent"
+    app:cardCornerRadius="25dp"
+    app:cardElevation="0dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingHorizontal="@dimen/activity_horizontal_margin"
+        android:paddingVertical="12dp">
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/channelName"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/text_size_medium"
+                    android:textStyle="bold"
+                    tools:text="Release" />
+
+                <TextView
+                    android:id="@+id/channelActiveTag"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:background="@drawable/tag_active_background"
+                    android:paddingHorizontal="6dp"
+                    android:paddingVertical="2dp"
+                    android:text="@string/channel_current_tag"
+                    android:textColor="@android:color/white"
+                    android:textSize="@dimen/text_size_micro"
+                    android:textStyle="bold"
+                    android:visibility="gone"
+                    tools:visibility="visible" />
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/channelDescription"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
+                android:textColor="#757575"
+                android:textSize="@dimen/text_size_small"
+                tools:text="Stable builds for everyday use." />
+
+            <TextView
+                android:id="@+id/channelLockedHint"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
+                android:text="@string/channel_locked_hint"
+                android:textColor="#F44336"
+                android:textSize="@dimen/text_size_micro"
+                android:visibility="gone"
+                tools:visibility="visible" />
+        </LinearLayout>
+
+        <ImageView
+            android:id="@+id/channelEndIcon"
+            android:layout_width="@dimen/search_icon_size"
+            android:layout_height="@dimen/search_icon_size"
+            android:alpha="0.4"
+            android:src="@drawable/baseline_arrow_forward_ios_24"
+            tools:ignore="ContentDescription" />
+    </LinearLayout>
+</com.google.android.material.card.MaterialCardView>

@@ -202,4 +202,21 @@
     <string name="download_update">Download update</string>
     <string name="install_update">Install update now!</string>
     <string name="not_now">Not now</string>
+
+    <string name="update_channel_label">Update channel</string>
+    <string name="update_channel_sheet_title">Update Channel</string>
+    <string name="update_channel_sheet_subtitle">Choose which update channel this device receives. You can only move to a faster channel; to downgrade, uninstall and reinstall the app.</string>
+    <string name="channel_current_tag">Active</string>
+    <string name="channel_locked_hint">Uninstall &amp; reinstall to downgrade</string>
+    <string name="channel_confirm_title">Switch channel?</string>
+    <string name="channel_confirm_body">Switch from %1$s to %2$s? The next update check will use the new channel.</string>
+    <string name="channel_confirm_yes">Switch</string>
+    <string name="channel_name_release">Release</string>
+    <string name="channel_name_beta">Beta</string>
+    <string name="channel_name_dev">Dev</string>
+    <string name="channel_name_canary">Canary</string>
+    <string name="channel_desc_release">Stable builds for everyday use.</string>
+    <string name="channel_desc_beta">Near-stable builds with recent features.</string>
+    <string name="channel_desc_dev">Latest features, may be unstable.</string>
+    <string name="channel_desc_canary">Bleeding-edge, expect rough edges.</string>
 </resources>
