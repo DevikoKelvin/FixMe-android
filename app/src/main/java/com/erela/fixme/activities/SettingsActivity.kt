@@ -43,7 +43,6 @@ class SettingsActivity : AppCompatActivity() {
     private val binding: ActivitySettingsBinding by lazy {
         ActivitySettingsBinding.inflate(layoutInflater)
     }
-    private lateinit var currentAppVersion: String
     private var newAppVersion: String? = null
     private var downloadLink: String? = null
     private var downloadProgress: Int = 0
@@ -236,8 +235,11 @@ class SettingsActivity : AppCompatActivity() {
                         Calendar.getInstance().get(Calendar.YEAR)
                     } Erlangga Edi Laboratories Corporation\n All rights reserved"
 
-            val channel = "${BuildConfig.VERSION_CHANNEL}_${BuildConfig.BUILD_TYPE}"
-            currentAppVersion = BuildConfig.VERSION_NAME
+            val channel =
+                if (BuildConfig.VERSION_CHANNEL == "release" && BuildConfig.BUILD_TYPE == "release")
+                    "${BuildConfig.VERSION_CHANNEL}"
+                else
+                    "${BuildConfig.VERSION_CHANNEL}_${BuildConfig.BUILD_TYPE}"
             val appVersionText =
                 "${BuildConfig.VERSION_NAME}.${BuildConfig.VERSION_CODE}.${channel}.${BuildConfig.BUILD_TIMESTAMP}"
             currentAppVersionText.text = if (getString(R.string.lang) == "in")
