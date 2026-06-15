@@ -236,7 +236,10 @@ class SettingsActivity : AppCompatActivity() {
                     } Erlangga Edi Laboratories Corporation\n All rights reserved"
 
             val channel =
-                if (BuildConfig.VERSION_CHANNEL == "release" && BuildConfig.BUILD_TYPE == "release")
+                if (
+                    (BuildConfig.VERSION_CHANNEL == "release" || BuildConfig.VERSION_CHANNEL == "beta_prerelease")
+                    && BuildConfig.BUILD_TYPE == "release"
+                )
                     "${BuildConfig.VERSION_CHANNEL}"
                 else
                     "${BuildConfig.VERSION_CHANNEL}_${BuildConfig.BUILD_TYPE}"
