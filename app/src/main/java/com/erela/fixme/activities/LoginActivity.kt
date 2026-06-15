@@ -33,6 +33,7 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.erela.fixme.BuildConfig
 import com.erela.fixme.R
+import com.erela.fixme.bottom_sheets.ChannelPickerBottomSheet
 import com.erela.fixme.custom_views.CustomToast
 import com.erela.fixme.databinding.ActivityLoginBinding
 import com.erela.fixme.dialogs.UpdateAvailableDialog
@@ -583,7 +584,7 @@ class LoginActivity : AppCompatActivity() {
     }
 
     private fun checkNewUpdate() {
-        InitAPI.getEndpoint.checkUpdate(BuildConfig.VERSION_CHANNEL, BuildConfig.VERSION_NAME)
+        InitAPI.getEndpoint.checkUpdate(ChannelPickerBottomSheet.loadEffectiveChannel(this), BuildConfig.VERSION_NAME)
             .enqueue(object : Callback<UpdateCheckResponse> {
                 override fun onResponse(
                     call: Call<UpdateCheckResponse>,

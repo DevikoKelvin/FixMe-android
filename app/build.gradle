@@ -31,7 +31,7 @@ android {
         manifestPlaceholders = [MAPS_API_KEY: localProps['MAPS_API_KEY'] ?: ""]
 
         versionCode new Date().format('yyMMddHH').toInteger()
-        versionName "1.4.0b"
+        versionName "1.4.0c"
 
         buildConfigField "String", "BUILD_TIMESTAMP", "\"${new Date().format('yyMMdd-HHmm')}\""
 

@@ -1,6 +1,7 @@
 package com.erela.fixme.bottom_sheets
 
 import android.content.Context
+import android.content.Context.MODE_PRIVATE
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -19,9 +20,19 @@ class ChannelPickerBottomSheet(context: Context) : BottomSheetDialog(context) {
 
     companion object {
         val CHANNEL_LADDER = listOf("release", "beta_prerelease", "dev", "canary")
+        private const val PREFS_NAME = "fixme_download_prefs"
+        private const val PREF_CHANNEL_OVERRIDE = "channel_override"
 
         fun channelLevel(channel: String): Int =
             CHANNEL_LADDER.indexOf(channel).takeIf { it >= 0 } ?: 0
+
+        fun loadEffectiveChannel(context: Context): String {
+            val stored = context.getSharedPreferences(PREFS_NAME, MODE_PRIVATE)
+                .getString(PREF_CHANNEL_OVERRIDE, null)
+                ?: return BuildConfig.VERSION_CHANNEL
+            val bakedLevel = channelLevel(BuildConfig.VERSION_CHANNEL)
+            return if (channelLevel(stored) > bakedLevel) stored else BuildConfig.VERSION_CHANNEL
+        }
     }
 
     var effectiveChannel: String = BuildConfig.VERSION_CHANNEL

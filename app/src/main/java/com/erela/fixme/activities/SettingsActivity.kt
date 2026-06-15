@@ -143,13 +143,7 @@ class SettingsActivity : AppCompatActivity() {
         private const val PREF_CHANNEL_OVERRIDE = "channel_override"
     }
 
-    private fun loadEffectiveChannel(): String {
-        val stored = getSharedPreferences(DOWNLOAD_PREFS, MODE_PRIVATE)
-            .getString(PREF_CHANNEL_OVERRIDE, null) ?: return BuildConfig.VERSION_CHANNEL
-        val bakedLevel = ChannelPickerBottomSheet.channelLevel(BuildConfig.VERSION_CHANNEL)
-        return if (ChannelPickerBottomSheet.channelLevel(stored) > bakedLevel) stored
-        else BuildConfig.VERSION_CHANNEL
-    }
+    private fun loadEffectiveChannel(): String = ChannelPickerBottomSheet.loadEffectiveChannel(this)
 
     private fun selectUpdateChannel(channel: String) {
         val bakedLevel = ChannelPickerBottomSheet.channelLevel(BuildConfig.VERSION_CHANNEL)
