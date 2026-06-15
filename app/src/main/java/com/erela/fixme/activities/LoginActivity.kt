@@ -584,7 +584,10 @@ class LoginActivity : AppCompatActivity() {
     }
 
     private fun checkNewUpdate() {
-        InitAPI.getEndpoint.checkUpdate(ChannelPickerBottomSheet.loadEffectiveChannel(this), BuildConfig.VERSION_NAME)
+        InitAPI.getEndpoint.checkUpdate(
+            ChannelPickerBottomSheet.loadEffectiveChannel(this),
+            BuildConfig.VERSION_NAME
+        )
             .enqueue(object : Callback<UpdateCheckResponse> {
                 override fun onResponse(
                     call: Call<UpdateCheckResponse>,

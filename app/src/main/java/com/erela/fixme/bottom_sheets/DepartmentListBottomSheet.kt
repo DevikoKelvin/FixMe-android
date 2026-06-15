@@ -79,7 +79,7 @@ class DepartmentListBottomSheet(
                             selectDepartmentButton.visibility = View.VISIBLE
                             selectDepartmentButton.setOnClickListener {
                                 onDepartmentClickListener.onDepartmentClick(
-                                    data[departmentList.distinct().indexOf(selectedDepartment)-1]
+                                    data[departmentList.distinct().indexOf(selectedDepartment) - 1]
                                 )
                             }
                         } else {

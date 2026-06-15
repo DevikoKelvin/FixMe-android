@@ -10,14 +10,15 @@ import com.erela.fixme.objects.SelectedSupervisorTechniciansList
 import com.erela.fixme.objects.SupervisorTechnician
 
 class SupervisorTechniciansRvAdapter(
-    val context: Context, private val supervisorTechniciansList: List<SelectedSupervisorTechniciansList>,
+    val context: Context,
+    private val supervisorTechniciansList: List<SelectedSupervisorTechniciansList>,
     private val selectedSupervisorTechniciansList: ArrayList<SupervisorTechnician>,
     private val isForSupervisor: Boolean
 ) : RecyclerView.Adapter<SupervisorTechniciansRvAdapter.ViewHolder>() {
     private lateinit var onTechniciansSetListener: OnTechniciansSetListener
     private lateinit var onSupervisorSetListener: OnSupervisorSetListener
 
-    class ViewHolder(view: View): RecyclerView.ViewHolder(view) {
+    class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val binding = ListItemSelectionBinding.bind(view)
     }
 

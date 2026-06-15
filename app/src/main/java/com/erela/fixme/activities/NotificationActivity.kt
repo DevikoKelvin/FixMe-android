@@ -78,7 +78,7 @@ class NotificationActivity : AppCompatActivity(), InboxRvAdapter.OnNotificationI
             rvInbox.setItemViewCacheSize(inboxArrayList.size)
             rvInbox.adapter = adapter
 
-            rvInbox.addOnScrollListener(object: RecyclerView.OnScrollListener() {
+            rvInbox.addOnScrollListener(object : RecyclerView.OnScrollListener() {
                 override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                     super.onScrolled(recyclerView, dx, dy)
                     if (!isScrollToTopButtonAnimating) {

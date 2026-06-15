@@ -262,7 +262,9 @@ class SubmissionListActivity : AppCompatActivity(), SubmissionRvAdapter.OnSubmis
                                                 }
                                                 submissionArrayList?.clear()
                                                 adapter.notifyDataSetChanged()
-                                                rvSubmission.setItemViewCacheSize(submissionArrayList?.size ?: 0)
+                                                rvSubmission.setItemViewCacheSize(
+                                                    submissionArrayList?.size ?: 0
+                                                )
                                                 getSubmissionList()
                                             }
 
@@ -651,7 +653,7 @@ class SubmissionListActivity : AppCompatActivity(), SubmissionRvAdapter.OnSubmis
                 -1 -> {
                     // All unfinished cases - apply date filter if provided
                     submissionArrayList?.clear()
-                    if(submissionList != null) {
+                    if (submissionList != null) {
                         for (i in submissionList.indices) {
                             if (submissionList[i]?.status == 1 || submissionList[i]?.status == 11
                                 || submissionList[i]?.status == 2 || submissionList[i]?.status == 22

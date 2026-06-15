@@ -87,11 +87,12 @@ class TrialTrackingBottomSheet(
                                                     }
                                                 }
                                                 if (readyDone) {
-                                                    trialActionColor.background = ResourcesCompat.getDrawable(
-                                                        context.resources,
-                                                        R.drawable.gradient_done_color,
-                                                        context.theme
-                                                    )
+                                                    trialActionColor.background =
+                                                        ResourcesCompat.getDrawable(
+                                                            context.resources,
+                                                            R.drawable.gradient_done_color,
+                                                            context.theme
+                                                        )
                                                     trialActionText.text =
                                                         if (context.getString(R.string.lang) == "in")
                                                             "Tandai Selesai Sekarang!"
@@ -108,11 +109,12 @@ class TrialTrackingBottomSheet(
                                                         )
                                                     }
                                                 } else {
-                                                    trialActionColor.background = ResourcesCompat.getDrawable(
-                                                        context.resources,
-                                                        R.drawable.gradient_on_trial_color,
-                                                        context.theme
-                                                    )
+                                                    trialActionColor.background =
+                                                        ResourcesCompat.getDrawable(
+                                                            context.resources,
+                                                            R.drawable.gradient_on_trial_color,
+                                                            context.theme
+                                                        )
                                                     trialActionText.text =
                                                         if (context.getString(R.string.lang) == "in")
                                                             "Laporkan Uji Coba"
@@ -141,8 +143,7 @@ class TrialTrackingBottomSheet(
                                                     this@TrialTrackingBottomSheet
                                                 )
                                             }
-                                        }
-                                        else
+                                        } else
                                             trialActionButton.visibility = View.GONE
                                     }
                                 } else {

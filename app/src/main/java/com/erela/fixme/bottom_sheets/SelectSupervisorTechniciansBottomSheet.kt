@@ -83,7 +83,8 @@ class SelectSupervisorTechniciansBottomSheet(
             try {
                 supervisorsList.clear()
                 techniciansList.clear()
-                val dept = if (selectedSubDept?.deptId != null) selectedSubDept.deptId else detailData.targetDeptId!!
+                val dept =
+                    if (selectedSubDept?.deptId != null) selectedSubDept.deptId else detailData.targetDeptId!!
                 if (isForManager) {
                     title.text = context.getString(R.string.select_supervisor)
                     InitAPI.getEndpoint.getSupervisorList(

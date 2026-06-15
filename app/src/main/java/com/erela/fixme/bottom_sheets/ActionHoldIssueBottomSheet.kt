@@ -11,7 +11,7 @@ import com.erela.fixme.R
 import com.erela.fixme.databinding.BsActionHoldIssueBinding
 import com.google.android.material.bottomsheet.BottomSheetDialog
 
-class ActionHoldIssueBottomSheet(context: Context): BottomSheetDialog(context) {
+class ActionHoldIssueBottomSheet(context: Context) : BottomSheetDialog(context) {
     private val binding: BsActionHoldIssueBinding by lazy {
         BsActionHoldIssueBinding.inflate(layoutInflater)
     }
@@ -36,7 +36,8 @@ class ActionHoldIssueBottomSheet(context: Context): BottomSheetDialog(context) {
             descriptionField.addTextChangedListener(object : TextWatcher {
                 override fun beforeTextChanged(
                     s: CharSequence?, start: Int, count: Int, after: Int
-                ) {}
+                ) {
+                }
 
                 override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                     if (s.toString().isNotEmpty()) {

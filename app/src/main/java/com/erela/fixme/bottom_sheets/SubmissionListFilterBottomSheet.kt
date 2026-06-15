@@ -213,7 +213,12 @@ class SubmissionListFilterBottomSheet(
 
                 // If startDate is selected, set it as minimum date
                 if (startDate.isNotEmpty()) {
-                    datePickerBuilder.setSelection(maxOf(nowCalendar.timeInMillis, startCalendar.timeInMillis))
+                    datePickerBuilder.setSelection(
+                        maxOf(
+                            nowCalendar.timeInMillis,
+                            startCalendar.timeInMillis
+                        )
+                    )
                 } else {
                     datePickerBuilder.setSelection(nowCalendar.timeInMillis)
                 }
@@ -222,9 +227,10 @@ class SubmissionListFilterBottomSheet(
                 datePicker.addOnPositiveButtonClickListener { selection ->
                     // Validate that endDate is not before startDate
                     if (startDate.isNotEmpty()) {
-                        val selectedCalendar = Calendar.getInstance(TimeZone.getTimeZone("UTC")).apply {
-                            timeInMillis = selection
-                        }
+                        val selectedCalendar =
+                            Calendar.getInstance(TimeZone.getTimeZone("UTC")).apply {
+                                timeInMillis = selection
+                            }
 
                         if (selectedCalendar.before(startCalendar)) {
                             // Show error toast

@@ -954,7 +954,8 @@ class SubmissionDetailActivity : AppCompatActivity(),
                                                     !!.userId
                                                 ) {
                                                     editTechniciansButton.visibility = View.VISIBLE
-                                                    editCategoryComplexityButton.visibility = View.VISIBLE
+                                                    editCategoryComplexityButton.visibility =
+                                                        View.VISIBLE
                                                     holdResumeIcon.setImageDrawable(
                                                         ContextCompat.getDrawable(
                                                             applicationContext,

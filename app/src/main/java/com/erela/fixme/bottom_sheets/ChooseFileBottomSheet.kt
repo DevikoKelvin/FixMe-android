@@ -9,7 +9,7 @@ import com.erela.fixme.R
 import com.erela.fixme.databinding.BsChooseFileBinding
 import com.google.android.material.bottomsheet.BottomSheetDialog
 
-class ChooseFileBottomSheet(context: Context): BottomSheetDialog(context) {
+class ChooseFileBottomSheet(context: Context) : BottomSheetDialog(context) {
     private val binding: BsChooseFileBinding by lazy {
         BsChooseFileBinding.inflate(layoutInflater)
     }

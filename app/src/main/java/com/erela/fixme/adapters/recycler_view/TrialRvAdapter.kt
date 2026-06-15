@@ -38,8 +38,8 @@ class TrialRvAdapter(
                         )
                     } else {
                         usernameText.background = ResourcesCompat.getDrawable(
-                                context.resources, R.drawable.gradient_approved_color, context.theme
-                            )
+                            context.resources, R.drawable.gradient_approved_color, context.theme
+                        )
                     }
                     usernameText.text = detail.creatorFullName?.trimEnd()
                     progressAnalysis.text = item.description

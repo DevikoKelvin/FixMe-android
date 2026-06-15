@@ -11,7 +11,7 @@ import javax.net.ssl.X509TrustManager
 object UnsafeOkHttpClient {
     // Create a trust manager that does not validate certificate chains
     val unsafeOkHttpClient:
-        OkHttpClient
+            OkHttpClient
         get() = try {
             // Create a trust manager that does not validate certificate chains
             val trustAllCerts = arrayOf<TrustManager>(

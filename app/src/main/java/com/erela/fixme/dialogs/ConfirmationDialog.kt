@@ -7,7 +7,7 @@ import android.os.Bundle
 import androidx.core.graphics.drawable.toDrawable
 import com.erela.fixme.databinding.DialogConfirmationBinding
 
-class ConfirmationDialog(context: Context): Dialog(context) {
+class ConfirmationDialog(context: Context) : Dialog(context) {
     private val binding: DialogConfirmationBinding by lazy {
         DialogConfirmationBinding.inflate(layoutInflater)
     }
@@ -15,7 +15,7 @@ class ConfirmationDialog(context: Context): Dialog(context) {
     private lateinit var message: String
     private lateinit var confirmationText: String
 
-    constructor(context: Context, message: String, confirmationText: String): this(context) {
+    constructor(context: Context, message: String, confirmationText: String) : this(context) {
         this.message = message
         this.confirmationText = confirmationText
     }
