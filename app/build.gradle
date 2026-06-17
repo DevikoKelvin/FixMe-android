@@ -25,12 +25,17 @@ android {
     namespace 'com.erela.fixme'
     compileSdk = 37
 
+    // versionCode = major * 100_000_000 + channelLevel * 1_000_000 + yyMMdd
+    // Bands (v1): release=100M, beta=101M, dev=102M, canary=103M
+    // Guarantees canary > dev > beta > release regardless of compilation order.
+    def MAJOR_VERSION = 1
+    def buildDate = new Date().format('yyMMdd').toInteger()
+
     defaultConfig {
         minSdk = 26
         targetSdk = 37
         manifestPlaceholders = [MAPS_API_KEY: localProps['MAPS_API_KEY'] ?: ""]
 
-        versionCode new Date().format('yyMMddHH').toInteger()
         versionName "1.4.0c"
 
         buildConfigField "String", "BUILD_TIMESTAMP", "\"${new Date().format('yyMMdd-HHmm')}\""
@@ -57,21 +62,25 @@ android {
             dimension "channel"
             applicationId "com.erela.fixme"
             buildConfigField "String", "VERSION_CHANNEL", '"release"'
+            versionCode MAJOR_VERSION * 100_000_000 + 0 * 1_000_000 + buildDate
         }
         beta {
             dimension "channel"
             applicationId "com.erela.fixme"
             buildConfigField "String", "VERSION_CHANNEL", '"beta_prerelease"'
+            versionCode MAJOR_VERSION * 100_000_000 + 1 * 1_000_000 + buildDate
         }
         dev {
             dimension "channel"
             applicationId "com.erela.fixme"
             buildConfigField "String", "VERSION_CHANNEL", '"dev"'
+            versionCode MAJOR_VERSION * 100_000_000 + 2 * 1_000_000 + buildDate
         }
         canary {
             dimension "channel"
             applicationId "com.erela.fixme"
             buildConfigField "String", "VERSION_CHANNEL", '"canary"'
+            versionCode MAJOR_VERSION * 100_000_000 + 3 * 1_000_000 + buildDate
         }
     }
 
