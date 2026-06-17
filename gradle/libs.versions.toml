@@ -1,7 +1,7 @@
 [versions]
 # Plugins
 agp = "9.2.1"
-gms = "4.4.4"
+gms = "4.5.0"
 
 # Dependencies
 coreKtx = "1.19.0"
@@ -30,8 +30,8 @@ balloon = "1.7.6"
 shimmer = "0.5.0"
 qr-code = "4.3.0"
 
-firebaseBom = "34.14.1"
-firebaseMessaging = "25.0.2"
+firebaseBom = "34.15.0"
+firebaseMessaging = "25.1.0"
 playServicesMaps = "20.0.0"
 playServicesLocation = "21.3.0"
 activityKtx = "1.13.0"
