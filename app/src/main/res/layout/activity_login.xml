@@ -139,11 +139,11 @@
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="@dimen/activity_horizontal_margin"
         android:layout_marginBottom="@dimen/activity_vertical_margin"
-        tools:text="@string/copyright"
         android:textAlignment="center"
         android:textSize="@dimen/copyright_text_size"
         android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout"
+        tools:text="@string/copyright" />
 </androidx.constraintlayout.widget.ConstraintLayout>

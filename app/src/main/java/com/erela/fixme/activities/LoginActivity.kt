@@ -129,7 +129,10 @@ class LoginActivity : AppCompatActivity() {
         enableEdgeToEdge()
         ViewCompat.setOnApplyWindowInsetsListener(binding.main) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
+            val ime = insets.getInsets(WindowInsetsCompat.Type.ime())
+            // Use the larger of the navigation bar or the keyboard height as the bottom padding.
+            // This lifts the content above the keyboard when it appears on small screens.
+            v.setPadding(systemBars.left, systemBars.top, systemBars.right, maxOf(systemBars.bottom, ime.bottom))
             insets
         }
 

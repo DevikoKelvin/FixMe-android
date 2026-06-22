@@ -14,6 +14,7 @@ import com.erela.fixme.R
 import com.erela.fixme.databinding.BottomSheetChannelPickerBinding
 import com.erela.fixme.databinding.ItemChannelOptionBinding
 import com.erela.fixme.dialogs.ConfirmationDialog
+import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 
 class ChannelPickerBottomSheet(context: Context) : BottomSheetDialog(context) {
@@ -50,6 +51,16 @@ class ChannelPickerBottomSheet(context: Context) : BottomSheetDialog(context) {
             channelList.layoutManager = LinearLayoutManager(context)
             channelList.adapter = ChannelAdapter()
         }
+    }
+
+    override fun onStart() {
+        super.onStart()
+        // On tablets, Material BottomSheetDialog caps the sheet to a narrow fixed width.
+        // Force full width so the layout renders correctly on all screen sizes.
+        window?.setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
+        // Start fully expanded so channel options are visible immediately.
+        behavior.skipCollapsed = true
+        behavior.state = BottomSheetBehavior.STATE_EXPANDED
     }
 
     private inner class ChannelAdapter : RecyclerView.Adapter<ChannelAdapter.VH>() {
