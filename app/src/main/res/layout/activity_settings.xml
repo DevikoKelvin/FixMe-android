@@ -103,8 +103,8 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:layout_marginTop="@dimen/dropdown_item_padding_vertical">
+                android:layout_marginTop="@dimen/dropdown_item_padding_vertical"
+                android:orientation="vertical">
 
                 <com.google.android.material.card.MaterialCardView
                     android:id="@+id/changePasswordButton"
@@ -218,8 +218,8 @@
                             android:layout_width="@dimen/search_icon_size"
                             android:layout_height="@dimen/search_icon_size"
                             android:layout_marginStart="4dp"
-                            android:src="@drawable/baseline_arrow_forward_ios_24"
                             android:alpha="0.5"
+                            android:src="@drawable/baseline_arrow_forward_ios_24"
                             tools:ignore="ContentDescription" />
                     </LinearLayout>
                 </com.google.android.material.card.MaterialCardView>
@@ -262,8 +262,8 @@
                             android:layout_width="@dimen/search_icon_size"
                             android:layout_height="@dimen/search_icon_size"
                             android:visibility="invisible"
-                            tools:src="@drawable/caution_icon"
-                            tools:ignore="ContentDescription" />
+                            tools:ignore="ContentDescription"
+                            tools:src="@drawable/caution_icon" />
 
                         <ProgressBar
                             android:id="@+id/loadingBar"
@@ -329,20 +329,17 @@
                 android:visibility="gone"
                 tools:text="50%"
                 tools:visibility="visible" />
+
+            <TextView
+                android:id="@+id/copyright"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="@dimen/activity_horizontal_margin"
+                android:layout_marginTop="4dp"
+                android:textAlignment="center"
+                android:textSize="@dimen/copyright_text_size"
+                android:textStyle="bold"
+                tools:text="@string/copyright" />
         </LinearLayout>
     </ScrollView>
-
-    <TextView
-        android:id="@+id/copyright"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginHorizontal="@dimen/activity_horizontal_margin"
-        android:layout_marginBottom="@dimen/activity_vertical_margin"
-        android:textAlignment="center"
-        android:textSize="@dimen/copyright_text_size"
-        android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        tools:text="@string/copyright" />
 </androidx.constraintlayout.widget.ConstraintLayout>

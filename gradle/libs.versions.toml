@@ -33,7 +33,7 @@ qr-code = "4.3.0"
 firebaseBom = "34.15.0"
 firebaseMessaging = "25.1.0"
 playServicesMaps = "20.0.0"
-playServicesLocation = "21.3.0"
+playServicesLocation = "21.4.0"
 activityKtx = "1.13.0"
 
 [libraries]
