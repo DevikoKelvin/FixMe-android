@@ -12,6 +12,7 @@ import androidx.fragment.app.FragmentManager
 import com.erela.fixme.R
 import com.erela.fixme.custom_views.CustomToast
 import com.erela.fixme.databinding.BsSubmissionListFilterBinding
+import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.datepicker.MaterialDatePicker
 import java.text.SimpleDateFormat
@@ -72,6 +73,11 @@ class SubmissionListFilterBottomSheet(
         window?.setBackgroundDrawable(Color.TRANSPARENT.toDrawable())
         window?.setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT)
         setCancelable(true)
+
+        val screenHeight = context.resources.displayMetrics.heightPixels
+        behavior.peekHeight = screenHeight
+        behavior.state = BottomSheetBehavior.STATE_EXPANDED
+        behavior.skipCollapsed = true
 
         init()
     }
