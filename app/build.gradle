@@ -36,7 +36,7 @@ android {
         targetSdk = 37
         manifestPlaceholders = [MAPS_API_KEY: localProps['MAPS_API_KEY'] ?: ""]
 
-        versionName "1.4.0d"
+        versionName "1.4.0e"
 
         buildConfigField "String", "BUILD_TIMESTAMP", "\"${new Date().format('yyMMdd-HHmm')}\""
 
@@ -105,6 +105,7 @@ android {
             debuggable false
         }
         debug {
+            resValue "string", "app_name", "FixMe Debug"
             buildConfigField 'String', 'BASE_URL', '"http://192.168.3.245/fixme/"'
             buildConfigField 'String', 'SSE_URL', '"http://103.96.147.242:8081/erelaMurbei_fixme25_mobile/sse"'
             buildConfigField 'String', 'MAP_API_KEY', "\"${localProps['MAPS_API_KEY']}\""

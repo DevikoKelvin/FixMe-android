@@ -10,6 +10,7 @@ import com.erela.fixme.R
 import com.erela.fixme.databinding.BsUserInfoBinding
 import com.erela.fixme.helpers.UserDataHelper
 import com.erela.fixme.objects.UserData
+import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 
 class UserInfoBottomSheet(context: Context) : BottomSheetDialog(context) {
@@ -27,6 +28,11 @@ class UserInfoBottomSheet(context: Context) : BottomSheetDialog(context) {
         window?.setBackgroundDrawable(Color.TRANSPARENT.toDrawable())
         window?.setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT)
         setCancelable(true)
+
+        val screenHeight = context.resources.displayMetrics.heightPixels
+        behavior.peekHeight = screenHeight
+        behavior.state = BottomSheetBehavior.STATE_EXPANDED
+        behavior.skipCollapsed = true
 
         init()
     }

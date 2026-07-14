@@ -114,7 +114,8 @@
                     <ImageView
                         android:layout_width="@dimen/search_icon_size"
                         android:layout_height="@dimen/search_icon_size"
-                        android:src="@drawable/caution_icon" />
+                        android:src="@drawable/caution_icon"
+                        tools:ignore="ContentDescription" />
 
                     <LinearLayout
                         android:layout_width="wrap_content"
@@ -254,6 +255,7 @@
                                         android:textColor="@color/white"
                                         android:textSize="@dimen/text_size_micro"
                                         android:textStyle="bold"
+                                        tools:ignore="TooDeepLayout"
                                         tools:text="Low" />
                                 </com.google.android.material.card.MaterialCardView>
 
@@ -657,7 +659,8 @@
                                         android:layout_width="match_parent"
                                         android:layout_height="wrap_content"
                                         android:layout_marginTop="2dp"
-                                        android:orientation="vertical">
+                                        android:orientation="vertical"
+                                        tools:ignore="TooManyViews">
 
                                         <TextView
                                             android:layout_width="match_parent"
@@ -1054,31 +1057,41 @@
                                 tools:text="ERELA HQ" />
                         </LinearLayout>
 
-                        <com.google.android.material.card.MaterialCardView
+                        <androidx.constraintlayout.widget.ConstraintLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginHorizontal="@dimen/list_item_padding"
-                            android:layout_marginTop="@dimen/user_info_item_margin_top"
-                            app:cardBackgroundColor="@android:color/transparent"
-                            app:cardCornerRadius="@dimen/login_field_corner_radius"
-                            app:cardElevation="2dp">
+                            android:layout_marginTop="@dimen/user_info_item_margin_top">
 
-                            <androidx.constraintlayout.widget.ConstraintLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="match_parent">
+                            <com.google.android.material.card.MaterialCardView
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                app:cardBackgroundColor="@android:color/transparent"
+                                app:cardCornerRadius="@dimen/card_corner_radius"
+                                app:cardElevation="0dp"
+                                app:cardPreventCornerOverlap="false"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toTopOf="parent"
+                                app:layout_constraintWidth_max="750dp">
 
-                                <com.google.android.gms.maps.MapView
-                                    android:id="@+id/mapPreview"
+                                <androidx.constraintlayout.widget.ConstraintLayout
                                     android:layout_width="match_parent"
-                                    android:layout_height="@dimen/list_item_progress_image_container_height"
-                                    app:cameraZoom="15"
-                                    app:layout_constraintBottom_toBottomOf="parent"
-                                    app:layout_constraintEnd_toEndOf="parent"
-                                    app:layout_constraintStart_toStartOf="parent"
-                                    app:layout_constraintTop_toTopOf="parent"
-                                    app:liteMode="true" />
-                            </androidx.constraintlayout.widget.ConstraintLayout>
-                        </com.google.android.material.card.MaterialCardView>
+                                    android:layout_height="match_parent">
+
+                                    <com.google.android.gms.maps.MapView
+                                        android:id="@+id/mapPreview"
+                                        android:layout_width="0dp"
+                                        android:layout_height="@dimen/list_item_progress_image_container_height"
+                                        app:cameraZoom="15"
+                                        app:layout_constraintBottom_toBottomOf="parent"
+                                        app:layout_constraintEnd_toEndOf="parent"
+                                        app:layout_constraintStart_toStartOf="parent"
+                                        app:layout_constraintTop_toTopOf="parent"
+                                        app:liteMode="true" />
+                                </androidx.constraintlayout.widget.ConstraintLayout>
+                            </com.google.android.material.card.MaterialCardView>
+                        </androidx.constraintlayout.widget.ConstraintLayout>
 
                         <LinearLayout
                             android:layout_width="match_parent"

@@ -1555,6 +1555,8 @@ class SubmissionFormActivity : AppCompatActivity(), OnMapReadyCallback {
 
     override fun onMapReady(gMap: GoogleMap) {
         googleMap = gMap
+        gMap.setOnMapClickListener { }
+        gMap.setOnMarkerClickListener { true }
         checkLocationPermission()
     }
 

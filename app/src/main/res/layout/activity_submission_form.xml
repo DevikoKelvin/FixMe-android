@@ -118,66 +118,76 @@
                     android:textSize="@dimen/text_size_small" />
             </com.google.android.material.textfield.TextInputLayout>
 
-            <com.google.android.material.card.MaterialCardView
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="@dimen/list_item_padding"
-                android:layout_marginVertical="@dimen/user_info_item_margin_top"
-                app:cardBackgroundColor="@android:color/transparent"
-                app:cardCornerRadius="@dimen/login_field_corner_radius"
-                app:cardElevation="2dp">
+                android:layout_marginVertical="@dimen/user_info_item_margin_top">
 
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent">
+                <com.google.android.material.card.MaterialCardView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    app:cardBackgroundColor="@android:color/transparent"
+                    app:cardCornerRadius="@dimen/card_corner_radius"
+                    app:cardElevation="0dp"
+                    app:cardPreventCornerOverlap="false"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintWidth_max="750dp">
 
-                    <com.google.android.gms.maps.MapView
-                        android:id="@+id/mapPreview"
+                    <androidx.constraintlayout.widget.ConstraintLayout
                         android:layout_width="match_parent"
-                        android:layout_height="250dp"
-                        app:cameraZoom="15"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:liteMode="true" />
+                        android:layout_height="match_parent">
 
-                    <com.google.android.material.card.MaterialCardView
-                        android:id="@+id/refreshButton"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="8dp"
-                        android:layout_marginEnd="8dp"
-                        app:cardBackgroundColor="@color/white"
-                        app:cardCornerRadius="50dp"
-                        app:cardElevation="0dp"
-                        app:contentPadding="4dp"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:strokeWidth="0dp">
+                        <com.google.android.gms.maps.MapView
+                            android:id="@+id/mapPreview"
+                            android:layout_width="0dp"
+                            android:layout_height="250dp"
+                            app:cameraZoom="15"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:liteMode="true" />
 
-                        <LinearLayout
+                        <com.google.android.material.card.MaterialCardView
+                            android:id="@+id/refreshButton"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:orientation="horizontal"
-                            tools:ignore="UseCompoundDrawables">
+                            android:layout_marginTop="8dp"
+                            android:layout_marginEnd="8dp"
+                            app:cardBackgroundColor="@color/white"
+                            app:cardCornerRadius="50dp"
+                            app:cardElevation="0dp"
+                            app:contentPadding="4dp"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:strokeWidth="0dp">
 
-                            <ImageView
-                                android:layout_width="@dimen/list_item_shimmer_location_icon_size"
-                                android:layout_height="@dimen/list_item_shimmer_location_icon_size"
-                                android:src="@drawable/refresh_icon"
-                                tools:ignore="ContentDescription" />
-
-                            <TextView
+                            <LinearLayout
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_gravity="center"
-                                android:layout_marginStart="4dp"
-                                android:text="@string/refresh_location" />
-                        </LinearLayout>
-                    </com.google.android.material.card.MaterialCardView>
-                </androidx.constraintlayout.widget.ConstraintLayout>
-            </com.google.android.material.card.MaterialCardView>
+                                android:orientation="horizontal"
+                                tools:ignore="UseCompoundDrawables">
+
+                                <ImageView
+                                    android:layout_width="@dimen/list_item_shimmer_location_icon_size"
+                                    android:layout_height="@dimen/list_item_shimmer_location_icon_size"
+                                    android:src="@drawable/refresh_icon"
+                                    tools:ignore="ContentDescription" />
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center"
+                                    android:layout_marginStart="4dp"
+                                    android:text="@string/refresh_location" />
+                            </LinearLayout>
+                        </com.google.android.material.card.MaterialCardView>
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+                </com.google.android.material.card.MaterialCardView>
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/departmentDropdownLayout"
@@ -353,11 +363,11 @@
                     android:id="@+id/manageAttachmentButton"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginVertical="@dimen/dialog_loading_content_padding"
                     android:layout_marginStart="@dimen/dialog_margin"
                     android:layout_marginBottom="@dimen/dialog_loading_content_padding"
-                    android:layout_marginVertical="@dimen/dialog_loading_content_padding"
                     android:visibility="gone"
-                    android:layout_gravity="center"
                     app:cardBackgroundColor="@android:color/transparent"
                     app:cardCornerRadius="@dimen/login_button_corner_radius"
                     app:cardElevation="0dp"
@@ -381,10 +391,10 @@
                     android:id="@+id/manageOldAttachmentButton"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginVertical="@dimen/dialog_loading_content_padding"
                     android:layout_marginStart="@dimen/dialog_margin"
                     android:layout_marginBottom="@dimen/dialog_loading_content_padding"
-                    android:layout_marginVertical="@dimen/dialog_loading_content_padding"
-                    android:layout_gravity="center"
                     android:visibility="gone"
                     app:cardBackgroundColor="@android:color/transparent"
                     app:cardCornerRadius="@dimen/login_button_corner_radius"
@@ -430,8 +440,8 @@
             android:layout_height="@dimen/main_menu_notification_icon"
             android:layout_alignParentEnd="true"
             android:layout_centerVertical="true"
-            android:indeterminateTint="@color/white"
             android:layout_gravity="center"
+            android:indeterminateTint="@color/white"
             android:visibility="gone" />
 
         <TextView
