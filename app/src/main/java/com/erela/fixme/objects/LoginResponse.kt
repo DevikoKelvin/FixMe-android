@@ -24,5 +24,7 @@ data class LoginResponse(
     @field:SerializedName("message")
     val message: String? = null,
     @field:SerializedName("email")
-    val email: String? = null
+    val email: String? = null,
+    @field:SerializedName("lockout_seconds")
+    val lockoutSeconds: Int? = null
 )

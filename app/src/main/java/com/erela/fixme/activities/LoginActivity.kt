@@ -13,6 +13,7 @@ import android.graphics.Rect
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import android.os.CountDownTimer
 import android.os.Environment
 import android.os.Handler
 import android.util.Log
@@ -54,6 +55,7 @@ class LoginActivity : AppCompatActivity() {
     private val binding: ActivityLoginBinding by lazy {
         ActivityLoginBinding.inflate(layoutInflater)
     }
+    private var lockoutTimer: CountDownTimer? = null
     private var newAppVersion: String? = null
     private var downloadProgress: Int = 0
     private var downloadId: Long = 0
@@ -132,7 +134,12 @@ class LoginActivity : AppCompatActivity() {
             val ime = insets.getInsets(WindowInsetsCompat.Type.ime())
             // Use the larger of the navigation bar or the keyboard height as the bottom padding.
             // This lifts the content above the keyboard when it appears on small screens.
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, maxOf(systemBars.bottom, ime.bottom))
+            v.setPadding(
+                systemBars.left,
+                systemBars.top,
+                systemBars.right,
+                maxOf(systemBars.bottom, ime.bottom)
+            )
             insets
         }
 
@@ -158,6 +165,7 @@ class LoginActivity : AppCompatActivity() {
 
     override fun onDestroy() {
         super.onDestroy()
+        lockoutTimer?.cancel()
         unregisterReceiver(onDownloadComplete)
     }
 
@@ -310,8 +318,8 @@ class LoginActivity : AppCompatActivity() {
                             if (response.isSuccessful) {
                                 if (response.body() != null) {
                                     val result = response.body()
-                                    val name = result?.name!!
-                                    when (result.code) {
+                                    val name = result?.name
+                                    when (result?.code) {
                                         1 -> {
                                             CustomToast.getInstance(applicationContext)
                                                 .setMessage(
@@ -337,7 +345,7 @@ class LoginActivity : AppCompatActivity() {
                                                     result.userId!!,
                                                     result.starConnectId!!,
                                                     username,
-                                                    name,
+                                                    name!!,
                                                     result.privilege!!,
                                                     result.deptId!!,
                                                     result.deptName!!,
@@ -498,6 +506,48 @@ class LoginActivity : AppCompatActivity() {
                                                     "Kata sandi salah"
                                                 else
                                                     "Wrong password"
+                                        }
+
+                                        -429 -> {
+                                            val langIn = getString(R.string.lang) == "in"
+                                            val lockSecs = (result.lockoutSeconds ?: 300).toLong()
+                                            loginButton.isEnabled = false
+                                            lockoutTimer?.cancel()
+                                            lockoutTimer =
+                                                object : CountDownTimer(lockSecs * 1000L, 1000L) {
+                                                    override fun onTick(ms: Long) {
+                                                        val s = (ms / 1000).toInt()
+                                                        val txt =
+                                                            if (s >= 60) "${s / 60}m ${s % 60}s" else "${s}s"
+                                                        loginText.text =
+                                                            if (langIn) "Coba lagi dalam $txt" else "Try again in $txt"
+                                                    }
+
+                                                    override fun onFinish() {
+                                                        loginText.text =
+                                                            if (langIn) "Masuk" else "Sign In"
+                                                        loginButton.isEnabled = true
+                                                    }
+                                                }.start()
+                                            CustomToast.getInstance(applicationContext)
+                                                .setMessage(
+                                                    if (langIn)
+                                                        "Terlalu banyak percobaan login. Silakan tunggu."
+                                                    else
+                                                        "Too many login attempts. Please wait."
+                                                )
+                                                .setFontColor(
+                                                    ContextCompat.getColor(
+                                                        this@LoginActivity,
+                                                        R.color.custom_toast_font_failed
+                                                    )
+                                                )
+                                                .setBackgroundColor(
+                                                    ContextCompat.getColor(
+                                                        this@LoginActivity,
+                                                        R.color.custom_toast_background_failed
+                                                    )
+                                                ).show()
                                         }
                                     }
                                 } else {
