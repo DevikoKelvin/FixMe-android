@@ -40,7 +40,8 @@ interface GetEndpoint {
     @POST("login")
     fun login(
         @Field("username") username: String,
-        @Field("password") password: String
+        @Field("password") password: String,
+        @Field("device_id") deviceId: String
     ): Call<LoginResponse>
 
     @FormUrlEncoded

@@ -307,7 +307,11 @@ class LoginActivity : AppCompatActivity() {
             loadingBar.visibility = View.VISIBLE
 
             try {
-                InitAPI.getEndpoint.login(username, password)
+                val deviceId = android.provider.Settings.Secure.getString(
+                    contentResolver,
+                    android.provider.Settings.Secure.ANDROID_ID
+                )
+                InitAPI.getEndpoint.login(username, password, deviceId)
                     .enqueue(object : Callback<LoginResponse> {
                         override fun onResponse(
                             call: Call<LoginResponse?>,
