@@ -16,7 +16,7 @@ import android.view.MotionEvent
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
-import androidx.activity.enableEdgeToEdge
+import com.erela.fixme.helpers.enableEdgeToEdgeOpaqueNav
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
@@ -123,7 +123,7 @@ class ProgressDoneFormActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         binding.apply {
-            enableEdgeToEdge()
+            enableEdgeToEdgeOpaqueNav()
             ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
                 val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
                 v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)

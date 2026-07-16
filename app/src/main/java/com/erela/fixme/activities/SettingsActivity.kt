@@ -16,7 +16,7 @@ import android.os.Handler
 import android.os.Looper
 import android.util.Log
 import android.view.View
-import androidx.activity.enableEdgeToEdge
+import com.erela.fixme.helpers.enableEdgeToEdgeOpaqueNav
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.app.NotificationManagerCompat
@@ -161,7 +161,7 @@ class SettingsActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
 
-        enableEdgeToEdge()
+        enableEdgeToEdgeOpaqueNav()
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)

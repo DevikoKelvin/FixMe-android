@@ -46,12 +46,6 @@
         android:theme="@style/Theme.FixMe"
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
-        <activity
-            android:name=".activities.ChangeEmailActivity"
-            android:exported="false"
-            android:configChanges="orientation|screenSize|screenLayout|keyboardHidden"
-            android:screenOrientation="portrait"
-            tools:ignore="DiscouragedApi,LockedOrientationActivity" />
 
         <uses-library
             android:name="org.apache.http.legacy"
@@ -60,65 +54,82 @@
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="${MAPS_API_KEY}" />
+
         <meta-data
             android:name="com.google.firebase.messaging.default_notification_icon"
             android:resource="@drawable/erela_logo" />
+
         <meta-data
             android:name="com.google.firebase.messaging.default_notification_color"
             android:resource="@color/custom_toast_background_normal" />
 
         <activity
-            android:name=".activities.ProgressDoneFormActivity"
-            android:exported="false"
+            android:name=".activities.ChangeEmailActivity"
             android:configChanges="orientation|screenSize|screenLayout|keyboardHidden"
+            android:exported="false"
+            android:screenOrientation="portrait"
+            tools:ignore="DiscouragedApi,LockedOrientationActivity" />
+
+        <activity
+            android:name=".activities.ProgressDoneFormActivity"
+            android:configChanges="orientation|screenSize|screenLayout|keyboardHidden"
+            android:exported="false"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustPan"
             tools:ignore="DiscouragedApi,LockedOrientationActivity" />
+
         <activity
             android:name=".activities.SettingsActivity"
             android:exported="false"
             android:screenOrientation="portrait"
             tools:ignore="DiscouragedApi,LockedOrientationActivity" />
+
         <activity
             android:name=".activities.ProgressFormActivity"
-            android:exported="false"
             android:configChanges="orientation|screenSize|screenLayout|keyboardHidden"
+            android:exported="false"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustPan"
             tools:ignore="DiscouragedApi,LockedOrientationActivity" />
+
         <activity
             android:name=".activities.SubmissionFormActivity"
-            android:exported="false"
             android:configChanges="orientation|screenSize|screenLayout|keyboardHidden"
+            android:exported="false"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustPan"
             tools:ignore="DiscouragedApi,LockedOrientationActivity" />
+
         <activity
             android:name=".activities.SubmissionDetailActivity"
-            android:exported="false"
             android:configChanges="orientation|screenSize|screenLayout|keyboardHidden"
+            android:exported="false"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustPan"
             tools:ignore="DiscouragedApi,LockedOrientationActivity" />
+
         <activity
             android:name=".activities.SubmissionListActivity"
-            android:exported="false"
             android:configChanges="orientation|screenSize|screenLayout|keyboardHidden"
+            android:exported="false"
             android:screenOrientation="portrait"
             tools:ignore="DiscouragedApi,LockedOrientationActivity" />
+
         <activity
             android:name=".activities.NotificationActivity"
             android:exported="false"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustPan"
             tools:ignore="DiscouragedApi,LockedOrientationActivity" />
+
         <activity
             android:name=".activities.ChangePasswordActivity"
-            android:exported="false"
             android:configChanges="orientation|screenSize|screenLayout|keyboardHidden"
+            android:exported="false"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustPan"
             tools:ignore="DiscouragedApi,LockedOrientationActivity" />
+
         <activity
             android:name=".activities.SplashScreenActivity"
             android:exported="true"
@@ -130,13 +141,15 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
         <activity
             android:name=".activities.LoginActivity"
-            android:exported="false"
             android:configChanges="orientation|screenSize|screenLayout|keyboardHidden"
+            android:exported="false"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustResize"
             tools:ignore="DiscouragedApi,LockedOrientationActivity" />
+
         <activity
             android:name=".activities.MainActivity"
             android:exported="false"
@@ -151,20 +164,12 @@
 
         <activity
             android:name=".activities.AcSessionActivity"
-            android:exported="false"
             android:configChanges="orientation|screenSize|screenLayout|keyboardHidden"
+            android:exported="false"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustResize"
             tools:ignore="DiscouragedApi,LockedOrientationActivity" />
 
-        <!--<service
-            android:name=".services.FCMService"
-            android:exported="false">
-            <intent-filter>
-                <action android:name="com.google.firebase.MESSAGING_EVENT" />
-            </intent-filter>
-        </service>
-        -->
         <service
             android:name=".services.SseService"
             android:exported="false"
@@ -175,6 +180,7 @@
             android:authorities="${applicationId}.provider"
             android:exported="false"
             android:grantUriPermissions="true">
+
             <meta-data
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/path_provider" />

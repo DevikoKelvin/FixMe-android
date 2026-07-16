@@ -12,7 +12,7 @@ import android.view.Menu
 import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
-import androidx.activity.enableEdgeToEdge
+import com.erela.fixme.helpers.enableEdgeToEdgeOpaqueNav
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
@@ -82,7 +82,7 @@ class SubmissionListActivity : AppCompatActivity(), SubmissionRvAdapter.OnSubmis
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
 
-        enableEdgeToEdge()
+        enableEdgeToEdgeOpaqueNav()
         ViewCompat.setOnApplyWindowInsetsListener(binding.main) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
