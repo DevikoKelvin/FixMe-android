@@ -113,6 +113,8 @@ android {
             //noinspection NotShrinkingResources
             shrinkResources false
             applicationIdSuffix ".debug"
+            // Sign debug with the committed keystore (not the per-machine ~/.android/debug.keystore) so every machine produces identically-signed .debug APKs → OTA channel updates install.
+            signingConfig signingConfigs.release
         }
     }
 
