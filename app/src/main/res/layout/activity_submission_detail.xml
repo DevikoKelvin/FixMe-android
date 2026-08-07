@@ -19,6 +19,19 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
+        <TextView
+            android:id="@+id/detailTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:gravity="center"
+            android:textAlignment="center"
+            android:textColor="@color/black"
+            android:textSize="@dimen/text_size_medium"
+            android:textStyle="bold"
+            tools:ignore="RelativeOverlap"
+            tools:text="@string/submission_detail_title" />
+
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/backButton"
             android:layout_width="wrap_content"
@@ -39,18 +52,6 @@
                 android:src="@drawable/baseline_arrow_back_ios_new_24"
                 tools:ignore="ContentDescription" />
         </com.google.android.material.card.MaterialCardView>
-
-        <TextView
-            android:id="@+id/detailTitle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:textAlignment="center"
-            android:textColor="@color/black"
-            android:textSize="@dimen/text_size_medium"
-            android:textStyle="bold"
-            tools:ignore="RelativeOverlap"
-            tools:text="@string/submission_detail_title" />
 
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/holdResumeButton"
@@ -163,7 +164,8 @@
             <ScrollView
                 android:id="@+id/contentScrollContainer"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="0dp"
+                android:layout_weight="1"
                 android:layout_marginTop="@dimen/dialog_margin"
                 android:nestedScrollingEnabled="true"
                 app:layout_constraintBottom_toBottomOf="parent"

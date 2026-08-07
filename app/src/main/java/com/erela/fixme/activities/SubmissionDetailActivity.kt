@@ -1,5 +1,6 @@
 package com.erela.fixme.activities
 
+import android.animation.Animator
 import android.animation.AnimatorInflater
 import android.annotation.SuppressLint
 import android.content.ClipData
@@ -16,7 +17,6 @@ import android.transition.TransitionManager
 import android.util.Log
 import android.view.MotionEvent
 import android.view.View
-import com.erela.fixme.helpers.enableEdgeToEdgeOpaqueNav
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.ColorRes
@@ -47,6 +47,7 @@ import com.erela.fixme.dialogs.ProgressOptionDialog
 import com.erela.fixme.helpers.Base64Helper
 import com.erela.fixme.helpers.UserDataHelper
 import com.erela.fixme.helpers.api.InitAPI
+import com.erela.fixme.helpers.enableEdgeToEdgeOpaqueNav
 import com.erela.fixme.objects.FotoGaprojectsItem
 import com.erela.fixme.objects.GenericSimpleResponse
 import com.erela.fixme.objects.ProgressItems
@@ -91,6 +92,7 @@ class SubmissionDetailActivity : AppCompatActivity(),
     private var isFabVisible = false
     private var isUpdated = false
     private var submissionDetailFetchSequence = 0
+    private var exceedingAnimator: Animator? = null
     private val activityResultLauncher: ActivityResultLauncher<Intent> = registerForActivityResult(
         ActivityResultContracts.StartActivityForResult()
     ) {
@@ -170,7 +172,10 @@ class SubmissionDetailActivity : AppCompatActivity(),
     private fun init() {
         binding.apply {
             // Reset child view visibility states to default
-            exceedingIndicatorBanner.visibility = View.GONE
+            detailTitle.textAlignment = View.TEXT_ALIGNMENT_CENTER
+            // Banner visibility is left alone here on purpose: handleExceedingStatus() sets it from
+            // every response. Flipping it GONE->VISIBLE across a refresh made it draw at its stale
+            // bounds over the ScrollView whenever the reflow got dropped on a slow load.
             statusMessageContainer.visibility = View.GONE
             onProgressButton.visibility = View.GONE
             actionButton.visibility = View.GONE
@@ -230,7 +235,7 @@ class SubmissionDetailActivity : AppCompatActivity(),
                             if (fetchSequence != submissionDetailFetchSequence) return
                             loadingManager(false)
                             handler.removeCallbacks(runnable)
-                            content.visibility = View.VISIBLE
+                            // content is revealed only once fully populated (see end of the response.body() != null branch below) — showing it here, before detailData is applied to the views, is what caused the stale/old title+banner to render for a frame (visible as overlapping text) whenever the population code below took a while to run.
                             if (response.isSuccessful) {
                                 if (response.body() != null) {
                                     detailData = response.body()!![0]
@@ -1676,7 +1681,6 @@ class SubmissionDetailActivity : AppCompatActivity(),
                                             }
                                         }
                                     }
-
                                     val vendorName = if (detailData.vendorName != "") {
                                         ": ${detailData.vendorName}"
                                     } else ""
@@ -1771,6 +1775,8 @@ class SubmissionDetailActivity : AppCompatActivity(),
                                         }
                                         if (catSheet.window != null) catSheet.show()
                                     }
+                                    // Reveal only now that detailData is fully applied to every view — prevents the stale-title/banner overlap flash on slow reloads.
+                                    content.visibility = View.VISIBLE
                                 } else {
                                     detailTitle.text = "ERR!!"
                                     CustomToast.getInstance(applicationContext)
@@ -1969,16 +1975,13 @@ class SubmissionDetailActivity : AppCompatActivity(),
                                         setOnUpdateSuccessListener(object :
                                             UpdateStatusBottomSheet.OnUpdateSuccessListener {
                                             override fun onApproved() {}
-
                                             override fun onRejected() {}
-
                                             override fun onCanceled() {
                                                 isUpdated = true
                                                 init()
                                             }
 
                                             override fun onTechniciansDeployed() {}
-
                                             override fun onCategoryComplexityUpdated() {}
                                         })
                                     }
@@ -2020,11 +2023,8 @@ class SubmissionDetailActivity : AppCompatActivity(),
                                             }
 
                                             override fun onRejected() {}
-
                                             override fun onCanceled() {}
-
                                             override fun onTechniciansDeployed() {}
-
                                             override fun onCategoryComplexityUpdated() {}
                                         })
                                     }
@@ -2084,15 +2084,15 @@ class SubmissionDetailActivity : AppCompatActivity(),
         binding.apply {
             if (isExceeding) {
                 exceedingIndicatorBanner.visibility = View.VISIBLE
-
-                // Start the same animation used in the adapter
-                val animator = AnimatorInflater.loadAnimator(
+                // Start the same animation used in the adapter. Cancel the previous one first — it repeats forever, so every refresh used to stack another one on the same view.
+                exceedingAnimator?.cancel()
+                exceedingAnimator = AnimatorInflater.loadAnimator(
                     this@SubmissionDetailActivity,
                     R.animator.glowing_red_blink
-                )
-                animator?.setTarget(exceedingIndicatorBanner)
-                animator?.start()
-
+                )?.also {
+                    it.setTarget(exceedingIndicatorBanner)
+                    it.start()
+                }
                 val hours = if (getString(R.string.lang) == "en") {
                     if (timeOffset > 1 || limitTime > 1)
                         "hours"
@@ -2104,6 +2104,8 @@ class SubmissionDetailActivity : AppCompatActivity(),
                     "${getString(R.string.exceeding_message)} $timeOffset ${hours}."
                 timeLimit.text = "$limitTime $hours"
             } else {
+                exceedingAnimator?.cancel()
+                exceedingAnimator = null
                 exceedingIndicatorBanner.visibility = View.GONE
             }
         }
@@ -2122,7 +2124,7 @@ class SubmissionDetailActivity : AppCompatActivity(),
                     visibility = View.GONE
                     stopShimmer()
                 }
-                content.visibility = View.VISIBLE
+                // content is intentionally NOT revealed here — the caller reveals it only once detailData has actually been applied to the views (see onResponse), otherwise content briefly shows the previous load's stale data before repopulating.
             }
         }
     }
