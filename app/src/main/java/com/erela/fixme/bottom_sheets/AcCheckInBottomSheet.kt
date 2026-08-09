@@ -16,7 +16,7 @@ class AcCheckInBottomSheet(
     private val location: String?,
     private val detail: String?,
     private val area: String?,
-    private val floor: Int?,
+    private val floor: String?,
 ) : BottomSheetDialog(context) {
     private val binding: BsAcCheckInBinding by lazy {
         BsAcCheckInBinding.inflate(layoutInflater)

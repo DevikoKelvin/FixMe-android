@@ -13,16 +13,15 @@ data class AcUnit(
     val detail: String?,
     @SerializedName("area")
     val area: String?,
+    // See AcTaskItem.floor — varchar on the server, not an integer.
     @SerializedName("floor")
-    val floor: Int?,
+    val floor: String?,
     @SerializedName("brand")
     val brand: String?,
     @SerializedName("model_type")
     val modelType: String?,
     @SerializedName("capacity_pk")
     val capacityPk: Double?,
-    @SerializedName("frequency_months")
-    val frequencyMonths: Int,
     @SerializedName("is_active")
     val isActive: Int,
     @SerializedName("last_maintenance_at")

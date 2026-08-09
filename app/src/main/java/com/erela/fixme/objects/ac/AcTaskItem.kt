@@ -27,14 +27,14 @@ data class AcTaskItem(
     val detail: String?,
     @SerializedName("area")
     val area: String?,
+    // ac_units.floor is varchar: real values include "2M", "4M", "GOJ", "KANTIN".
+    // Typing it Int? made IntegerTypeAdapter silently coerce those to 0.
     @SerializedName("floor")
-    val floor: Int?,
+    val floor: String?,
     @SerializedName("brand")
     val brand: String?,
     @SerializedName("model_type")
     val modelType: String?,
-    @SerializedName("frequency_months")
-    val frequencyMonths: Int,
     @SerializedName("assigned_technician")
     val assignedTechnician: String?,
     @SerializedName("log_id")

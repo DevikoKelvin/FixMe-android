@@ -9,7 +9,9 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.erela.fixme.R
 import com.erela.fixme.adapters.recycler_view.AcTaskAdapter
 import com.erela.fixme.bottom_sheets.AcCheckInBottomSheet
@@ -79,10 +81,23 @@ class AcTaskListActivity : AppCompatActivity(), AcCheckInBottomSheet.OnCheckInLi
             rvTasks.apply {
                 layoutManager = LinearLayoutManager(this@AcTaskListActivity)
                 adapter = taskAdapter
+                addOnScrollListener(object : RecyclerView.OnScrollListener() {
+                    override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                        super.onScrolled(recyclerView, dx, dy)
+                        val firstVisible = (recyclerView.layoutManager as LinearLayoutManager)
+                            .findFirstVisibleItemPosition()
+                        scrollToTopButton.fade(show = firstVisible > 0)
+                    }
+                })
             }
+
+            scrollToTopButton.setOnClickListener { rvTasks.smoothScrollToPosition(0) }
 
             swipeRefresh.setOnRefreshListener {
                 taskAdapter.submitList(emptyList())
+                // Clearing the list won't fire onScrolled, so the button would stay up
+                // over a list that is back at the top.
+                scrollToTopButton.fade(show = false)
                 val userId = UserDataHelper(this@AcTaskListActivity).getUserData().id
                 viewModel.getTaskList(userId)
                 swipeRefresh.isRefreshing = false
@@ -228,7 +243,7 @@ class AcTaskListActivity : AppCompatActivity(), AcCheckInBottomSheet.OnCheckInLi
         location: String?,
         detail: String?,
         area: String?,
-        floor: Int?
+        floor: String?
     ) {
         AcCheckInBottomSheet(this, itemId, acCode, location, detail, area, floor)
             .apply { setOnCheckInListener(this@AcTaskListActivity) }
@@ -241,5 +256,25 @@ class AcTaskListActivity : AppCompatActivity(), AcCheckInBottomSheet.OnCheckInLi
             itemId?.let { putExtra("ITEM_ID", it) }
         }
         startActivity(intent)
+    }
+
+    /**
+     * Same 300ms fade as the scroll-to-top button on the submission list. Kept short by
+     * letting withEndAction carry the final visibility instead of tracking an
+     * "is animating" flag: animate().cancel() drops the pending end action, so a fade
+     * reversed mid-flight can't leave the button stuck in the wrong state.
+     */
+    private fun View.fade(show: Boolean) {
+        if (show == isVisible) return
+        animate().cancel()
+        if (show) {
+            alpha = 0f
+            isVisible = true
+        }
+        animate()
+            .alpha(if (show) 1f else 0f)
+            .setDuration(300)
+            .withEndAction { isVisible = show }
+            .start()
     }
 }

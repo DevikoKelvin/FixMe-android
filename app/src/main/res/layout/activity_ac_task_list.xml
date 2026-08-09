@@ -162,6 +162,26 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <com.google.android.material.card.MaterialCardView
+        android:id="@+id/scrollToTopButton"
+        android:layout_width="@dimen/fab_size"
+        android:layout_height="@dimen/fab_size"
+        android:layout_marginHorizontal="@dimen/login_button_margin_vertical"
+        android:layout_marginBottom="@dimen/list_item_progress_header_padding_vertical"
+        android:visibility="gone"
+        app:cardCornerRadius="@dimen/dialog_corner_radius"
+        app:contentPadding="12dp"
+        app:layout_constraintBottom_toTopOf="@+id/fabScan"
+        app:layout_constraintEnd_toEndOf="parent"
+        tools:visibility="visible">
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:src="@drawable/scroll_to_top_icon"
+            tools:ignore="ContentDescription" />
+    </com.google.android.material.card.MaterialCardView>
+
+    <com.google.android.material.card.MaterialCardView
         android:id="@+id/fabScan"
         android:layout_width="@dimen/fab_size"
         android:layout_height="@dimen/fab_size"
