@@ -368,6 +368,11 @@ class LoginActivity : AppCompatActivity() {
                                                         R.color.custom_toast_background_success
                                                     )
                                                 ).show()
+                                            // Stored before anything else fires a request,
+                                            // so the first authenticated call already
+                                            // carries the Authorization header.
+                                            UserDataHelper(this@LoginActivity)
+                                                .saveToken(result.token)
                                             UserDataHelper(this@LoginActivity)
                                                 .setUserData(
                                                     result.userId!!,

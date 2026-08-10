@@ -38,6 +38,7 @@ import com.erela.fixme.dialogs.ConfirmationDialog
 import com.erela.fixme.dialogs.UpdateAvailableDialog
 import com.erela.fixme.helpers.PermissionHelper
 import com.erela.fixme.helpers.UserDataHelper
+import com.erela.fixme.objects.GenericSimpleResponse
 import com.erela.fixme.helpers.api.InitAPI
 import com.erela.fixme.objects.UpdateCheckResponse
 import com.erela.fixme.objects.UserData
@@ -393,6 +394,24 @@ class MainActivity : AppCompatActivity() {
                             setConfirmationDialogListener(object :
                                 ConfirmationDialog.ConfirmationDialogListener {
                                 override fun onConfirm() {
+                                    // Tell the server first — it needs the token that is
+                                    // about to be purged. Fire-and-forget: local logout must
+                                    // not depend on the network, and the token expires by
+                                    // idle timeout anyway if this call never lands.
+                                    InitAPI.getEndpoint
+                                        .logout(UserDataHelper(this@MainActivity).getUserData().id)
+                                        .enqueue(object : Callback<GenericSimpleResponse> {
+                                            override fun onResponse(
+                                                call: Call<GenericSimpleResponse>,
+                                                response: Response<GenericSimpleResponse>
+                                            ) = Unit
+
+                                            override fun onFailure(
+                                                call: Call<GenericSimpleResponse>,
+                                                t: Throwable
+                                            ) = Unit
+                                        })
+
                                     UserDataHelper(this@MainActivity).purgeUserData()
                                     Toast.makeText(
                                         this@MainActivity,

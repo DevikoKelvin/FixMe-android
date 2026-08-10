@@ -3,6 +3,7 @@ package com.erela.fixme.helpers.api
 import android.annotation.SuppressLint
 import com.erela.fixme.BuildConfig
 import com.google.gson.GsonBuilder
+import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import okhttp3.Protocol
 import okhttp3.logging.HttpLoggingInterceptor
@@ -25,8 +26,43 @@ object InitAPI {
      */
     fun okHttpClientBuilder(): OkHttpClient.Builder = OkHttpClient.Builder()
 
+    /**
+     * Supplies the current bearer token. A lambda rather than a UserDataHelper because this
+     * is a Context-less object; FixMeApplication installs it so services that start without
+     * any activity (FCMService, SseService) are authenticated too.
+     */
+    @Volatile
+    var tokenProvider: () -> String? = { null }
+
+    /**
+     * Invoked when the server rejects the token (401) — expired, revoked by the 4h idle
+     * window, or superseded because the account signed in on another device.
+     */
+    @Volatile
+    var onUnauthorized: () -> Unit = {}
+
+    private val authInterceptor = Interceptor { chain ->
+        val token = tokenProvider()
+        val request = if (token.isNullOrBlank()) {
+            chain.request()
+        } else {
+            chain.request().newBuilder()
+                .header("Authorization", "Bearer $token")
+                .build()
+        }
+
+        chain.proceed(request).also { response ->
+            // Only meaningful if we actually presented a token: a 401 on an
+            // unauthenticated call says nothing about session validity.
+            if (response.code == 401 && !token.isNullOrBlank()) {
+                onUnauthorized()
+            }
+        }
+    }
+
     private val client =
         okHttpClientBuilder()
+            .addInterceptor(authInterceptor)
             .addInterceptor(HttpLoggingInterceptor().apply {
                 level = HttpLoggingInterceptor.Level.BODY
             })

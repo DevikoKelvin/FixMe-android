@@ -44,6 +44,17 @@ interface GetEndpoint {
         @Field("device_id") deviceId: String
     ): Call<LoginResponse>
 
+    /**
+     * Revokes the bearer token server-side and clears this account's fcm_token so a
+     * logged-out device stops receiving push. user_id is still sent so the call also works
+     * from a build talking to a server where the token fallback is still in place.
+     */
+    @FormUrlEncoded
+    @POST("logout")
+    fun logout(
+        @Field("user_id") userId: Int
+    ): Call<GenericSimpleResponse>
+
     @FormUrlEncoded
     @POST("updateFcmToken")
     fun updateFcmToken(

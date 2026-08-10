@@ -26,5 +26,8 @@ data class LoginResponse(
     @field:SerializedName("email")
     val email: String? = null,
     @field:SerializedName("lockout_seconds")
-    val lockoutSeconds: Int? = null
+    val lockoutSeconds: Int? = null,
+    // Sanctum bearer token. Nullable so a server that predates token auth still parses.
+    @field:SerializedName("token")
+    val token: String? = null
 )

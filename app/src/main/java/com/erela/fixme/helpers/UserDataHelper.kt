@@ -14,6 +14,7 @@ class UserDataHelper(private val context: Context) {
     private val keyDept = "key.dept"
     private val keySubDept = "key.sub.dept"
     private val keyEmail = "key.email"
+    private val keyToken = "key.token"
 
     /*private val notificationKey = "key.notification"*/
 
@@ -64,6 +65,16 @@ class UserDataHelper(private val context: Context) {
             putString(keyEmail, email)
         }
     }
+
+    /** Sanctum bearer token. Null when the server issued none (pre-token deployments). */
+    fun saveToken(token: String?) {
+        SharedPreferencesHelper.getSharedPreferences(context).edit {
+            putString(keyToken, token)
+        }
+    }
+
+    fun getToken(): String? =
+        SharedPreferencesHelper.getSharedPreferences(context).getString(keyToken, null)
 
     fun isUserDataExist(): Boolean =
         SharedPreferencesHelper.getSharedPreferences(context)
