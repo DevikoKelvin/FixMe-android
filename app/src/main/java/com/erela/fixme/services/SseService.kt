@@ -64,7 +64,7 @@ class SseService : Service() {
     }
 
     private fun initSse() {
-        val client = InitAPI.getUnsafeOkHttpClient()
+        val client = InitAPI.okHttpClientBuilder()
             .callTimeout(10, TimeUnit.MINUTES)
             .readTimeout(10, TimeUnit.MINUTES)
             .writeTimeout(10, TimeUnit.MINUTES)

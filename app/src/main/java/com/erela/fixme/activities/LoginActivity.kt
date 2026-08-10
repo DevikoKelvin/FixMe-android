@@ -60,6 +60,7 @@ class LoginActivity : AppCompatActivity() {
     private var downloadProgress: Int = 0
     private var downloadId: Long = 0
     private var pendingDeleteApkFile: File? = null
+    private var isDownloadReceiverRegistered = false
     private val onDownloadComplete = object : BroadcastReceiver() {
         override fun onReceive(context: Context, intent: Intent) {
             val id = intent.getLongExtra(DownloadManager.EXTRA_DOWNLOAD_ID, -1)
@@ -166,7 +167,12 @@ class LoginActivity : AppCompatActivity() {
     override fun onDestroy() {
         super.onDestroy()
         lockoutTimer?.cancel()
-        unregisterReceiver(onDownloadComplete)
+        // init() returns early when a session already exists, so the receiver may never have
+        // been registered — unregistering it unconditionally throws IllegalArgumentException.
+        if (isDownloadReceiverRegistered) {
+            unregisterReceiver(onDownloadComplete)
+            isDownloadReceiverRegistered = false
+        }
     }
 
     override fun onResume() {
@@ -187,13 +193,30 @@ class LoginActivity : AppCompatActivity() {
         super.onPause()
     }
 
+    /**
+     * Once authenticated, the login screen must not be reachable again by pressing back.
+     * CLEAR_TASK makes MainActivity the task root, so this holds regardless of what was on
+     * the stack — relying on finish() alone left LoginActivity underneath in some flows,
+     * and MainActivity's back handler then popped to it instead of closing the app.
+     */
+    private fun goToMain() {
+        startActivity(
+            Intent(this, MainActivity::class.java).apply {
+                addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
+            }
+        )
+        finish()
+    }
+
     @SuppressLint("UnspecifiedRegisterReceiverFlag")
     private fun init() {
         binding.apply {
             if (UserDataHelper(this@LoginActivity).isUserDataExist()) {
-                startActivity(Intent(this@LoginActivity, MainActivity::class.java)).also {
-                    finish()
-                }
+                goToMain()
+                // Nothing below applies to an already-signed-in launch, and init() used to
+                // keep going here — registering receivers and running the update check on an
+                // activity that is already finishing.
+                return@apply
             }
 
             val channel =
@@ -224,6 +247,7 @@ class LoginActivity : AppCompatActivity() {
                     IntentFilter(DownloadManager.ACTION_DOWNLOAD_COMPLETE)
                 )
             }
+            isDownloadReceiverRegistered = true
 
             loginButton.setOnClickListener {
                 loginText.visibility = View.GONE
@@ -428,14 +452,7 @@ class LoginActivity : AppCompatActivity() {
                                                             R.color.custom_toast_background_normal_dark_gray
                                                         )
                                                     ).show()
-                                                startActivity(
-                                                    Intent(
-                                                        this@LoginActivity,
-                                                        MainActivity::class.java
-                                                    )
-                                                ).also {
-                                                    finish()
-                                                }
+                                                goToMain()
                                             }, 2000)
                                         }
 

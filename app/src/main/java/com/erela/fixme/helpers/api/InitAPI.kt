@@ -8,51 +8,25 @@ import okhttp3.Protocol
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import java.security.SecureRandom
-import java.security.cert.X509Certificate
 import java.util.concurrent.TimeUnit
-import javax.net.ssl.SSLContext
-import javax.net.ssl.TrustManager
-import javax.net.ssl.X509TrustManager
 
 object InitAPI {
     private const val API_BASE_URL = "${BuildConfig.BASE_URL}apimobile/"
     const val IMAGE_URL = "${BuildConfig.BASE_URL}public/assets/upload/"
 
-    fun getUnsafeOkHttpClient(): OkHttpClient.Builder {
-        val trustAllCerts = arrayOf<TrustManager>(
-            @SuppressLint("CustomX509TrustManager")
-            object : X509TrustManager {
-                @SuppressLint("TrustAllX509TrustManager")
-                override fun checkClientTrusted(
-                    chain: Array<out X509Certificate>?,
-                    authType: String?
-                ) {
-                }
-
-                @SuppressLint("TrustAllX509TrustManager")
-                override fun checkServerTrusted(
-                    chain: Array<out X509Certificate>?,
-                    authType: String?
-                ) {
-                }
-
-                override fun getAcceptedIssuers(): Array<X509Certificate> {
-                    return arrayOf()
-                }
-            }
-        )
-        val sslContext = SSLContext.getInstance("SSL")
-        sslContext.init(null, trustAllCerts, SecureRandom())
-        val sslSocketFactory = sslContext.socketFactory
-        val builder = OkHttpClient.Builder()
-        builder.sslSocketFactory(sslSocketFactory, trustAllCerts[0] as X509TrustManager)
-        builder.hostnameVerifier { _, _ -> true }
-        return builder
-    }
+    /**
+     * Plain OkHttp with the platform trust store.
+     *
+     * This used to install a trust-all X509TrustManager and a hostnameVerifier that
+     * returned true for everything. Every BASE_URL/SSE_URL is http://, so that code never
+     * protected a real connection — but it would have silently accepted any certificate,
+     * including an attacker's, the moment the server moved to https. Removing it means a
+     * future TLS migration actually validates.
+     */
+    fun okHttpClientBuilder(): OkHttpClient.Builder = OkHttpClient.Builder()
 
     private val client =
-        getUnsafeOkHttpClient()
+        okHttpClientBuilder()
             .addInterceptor(HttpLoggingInterceptor().apply {
                 level = HttpLoggingInterceptor.Level.BODY
             })

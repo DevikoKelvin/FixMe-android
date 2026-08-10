@@ -403,14 +403,21 @@ class MainActivity : AppCompatActivity() {
                                         Toast.LENGTH_SHORT
                                     ).show()
                                     stopService(Intent(this@MainActivity, SseService::class.java))
+                                    // Mirror of LoginActivity.goToMain(): clear the task so no
+                                    // authenticated screen is left underneath for back to reach
+                                    // after logging out.
                                     startActivity(
                                         Intent(
                                             this@MainActivity,
                                             LoginActivity::class.java
-                                        )
-                                    ).also {
-                                        finish()
-                                    }
+                                        ).apply {
+                                            addFlags(
+                                                Intent.FLAG_ACTIVITY_NEW_TASK or
+                                                    Intent.FLAG_ACTIVITY_CLEAR_TASK
+                                            )
+                                        }
+                                    )
+                                    finish()
                                 }
                             })
                         }

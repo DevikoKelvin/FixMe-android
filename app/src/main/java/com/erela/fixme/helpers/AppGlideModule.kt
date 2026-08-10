@@ -7,7 +7,7 @@ import com.bumptech.glide.annotation.GlideModule
 import com.bumptech.glide.integration.okhttp3.OkHttpUrlLoader
 import com.bumptech.glide.load.model.GlideUrl
 import com.bumptech.glide.module.AppGlideModule
-import com.erela.fixme.helpers.api.UnsafeOkHttpClient
+import com.erela.fixme.helpers.api.InitAPI
 import java.io.InputStream
 
 @GlideModule
@@ -17,10 +17,11 @@ class AppGlideModule : AppGlideModule() {
         glide: Glide,
         registry: Registry
     ) {
-        val client = UnsafeOkHttpClient.unsafeOkHttpClient
+        // Shares InitAPI's plain client. Was UnsafeOkHttpClient, which trusted any
+        // certificate — see the note in InitAPI.
         registry.replace(
             GlideUrl::class.java, InputStream::class.java,
-            OkHttpUrlLoader.Factory(client)
+            OkHttpUrlLoader.Factory(InitAPI.okHttpClientBuilder().build())
         )
     }
 }
