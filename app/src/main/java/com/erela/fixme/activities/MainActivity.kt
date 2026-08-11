@@ -34,6 +34,7 @@ import com.erela.fixme.bottom_sheets.ChannelPickerBottomSheet
 import com.erela.fixme.bottom_sheets.UserInfoBottomSheet
 import com.erela.fixme.custom_views.CustomToast
 import com.erela.fixme.databinding.ActivityMainBinding
+import com.erela.fixme.dialogs.ChangelogDialog
 import com.erela.fixme.dialogs.ConfirmationDialog
 import com.erela.fixme.dialogs.UpdateAvailableDialog
 import com.erela.fixme.helpers.PermissionHelper
@@ -137,6 +138,10 @@ class MainActivity : AppCompatActivity() {
         }
 
         init()
+        // Before checkNewUpdate() so that on the rare launch where both fire — a dev-channel
+        // device that updated and is already behind again — the update prompt lands on top
+        // and is the one the user acts on first.
+        ChangelogDialog.showIfVersionIsNew(this)
         checkNewUpdate()
         handleNotificationIntent(intent)
         val sharedPreferences = getSharedPreferences("app_prefs", MODE_PRIVATE)
@@ -474,6 +479,12 @@ class MainActivity : AppCompatActivity() {
                     response: Response<UpdateCheckResponse>
                 ) {
                     val body = response.body() ?: return
+                    // Keep the notes for the version being offered, before the early returns
+                    // below can skip them. ChangelogDialog shows them only once the running
+                    // build matches this version — i.e. after the user actually updates.
+                    ChangelogDialog.rememberPending(
+                        this@MainActivity, body.versionName, body.changelog, body.changelogEn
+                    )
                     if (body.code == 1) {
                         val url = body.downloadUrl?.takeIf { it.isNotBlank() } ?: return
                         newAppVersion = body.versionName

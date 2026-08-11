@@ -37,6 +37,7 @@ import com.erela.fixme.R
 import com.erela.fixme.bottom_sheets.ChannelPickerBottomSheet
 import com.erela.fixme.custom_views.CustomToast
 import com.erela.fixme.databinding.ActivityLoginBinding
+import com.erela.fixme.dialogs.ChangelogDialog
 import com.erela.fixme.dialogs.UpdateAvailableDialog
 import com.erela.fixme.helpers.UserDataHelper
 import com.erela.fixme.helpers.api.InitAPI
@@ -680,6 +681,10 @@ class LoginActivity : AppCompatActivity() {
                     response: Response<UpdateCheckResponse>
                 ) {
                     val body = response.body() ?: return
+                    // See MainActivity.checkNewUpdate(): store before the early returns.
+                    ChangelogDialog.rememberPending(
+                        this@LoginActivity, body.versionName, body.changelog, body.changelogEn
+                    )
                     if (body.code == 1) {
                         val url = body.downloadUrl?.takeIf { it.isNotBlank() } ?: return
                         newAppVersion = body.versionName

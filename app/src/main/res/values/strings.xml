@@ -219,4 +219,14 @@
     <string name="channel_desc_beta">Near-stable builds with recent features.</string>
     <string name="channel_desc_dev">Latest features, may be unstable.</string>
     <string name="channel_desc_canary">Bleeding-edge, expect rough edges.</string>
+
+    <!-- Fallback shown by ChangelogDialog only when no server notes match the installed build
+         (fresh install / sideload). Rewrite changelog_current on every release, here and in
+         values-in/string.xml; the name stays stable so no code has to change.
+
+         Breaks MUST be \n escapes on a single line. AAPT normalises whitespace in string
+         resources, so a literal newline in this XML compiles to a space — verified by
+         `aapt2 dump strings` reporting zero newlines when this was written across lines. -->
+    <string name="changelog_title">What\'s New in v%1$s</string>
+    <string name="changelog_current">NEW\n• Secure login session: each sign-in receives a token from the server. One account stays active on one device only — signing in elsewhere ends the earlier session.\n• Automatic sign-out after 8 hours of inactivity. Please sign in again.\n• Logout now notifies the server, so a signed-out device stops receiving push notifications.\n• Scroll-to-top button on the AC Maintenance task list.\n\nFIXES\n• Pressing back after signing in no longer reopens the login screen; the app closes as it should.\n• AC unit floors that are not numbers (2M, 4M, GOJ, KANTIN) previously showed as 0, and now match the data.\n• The app no longer stops when leaving the login screen while a session is already saved.\n• Connections to the server now validate the certificate.\n• The scroll-to-top button no longer stays on screen after pull-to-refresh.\n• Push notifications and image loading now use the same session as the app.</string>
 </resources>

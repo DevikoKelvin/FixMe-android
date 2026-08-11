@@ -31,6 +31,7 @@ import com.erela.fixme.R
 import com.erela.fixme.bottom_sheets.ChannelPickerBottomSheet
 import com.erela.fixme.custom_views.CustomToast
 import com.erela.fixme.databinding.ActivitySettingsBinding
+import com.erela.fixme.dialogs.ChangelogDialog
 import com.erela.fixme.helpers.api.InitAPI
 import com.erela.fixme.objects.UpdateCheckResponse
 import retrofit2.Call
@@ -351,6 +352,11 @@ class SettingsActivity : AppCompatActivity() {
                         Log.e(
                             "FixMe.Update",
                             "code=${body.code} versionName=${body.versionName} downloadUrl=${body.downloadUrl} forceUpdate=${body.forceUpdate}"
+                        )
+                        // See MainActivity.checkNewUpdate(). This is the path most users take
+                        // to update, so it is the one that usually supplies the notes.
+                        ChangelogDialog.rememberPending(
+                            this@SettingsActivity, body.versionName, body.changelog, body.changelogEn
                         )
                         when (body.code) {
                             1 -> {

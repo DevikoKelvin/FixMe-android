@@ -13,6 +13,10 @@ data class UpdateCheckResponse(
     val downloadUrl: String? = null,
     @field:SerializedName("changelog")
     val changelog: String? = null,
+    // English notes. changelog stays the Indonesian/default field because every client
+    // released before this one reads that key.
+    @field:SerializedName("changelog_en")
+    val changelogEn: String? = null,
     @field:SerializedName("force_update")
     val forceUpdate: Boolean = false
 )
