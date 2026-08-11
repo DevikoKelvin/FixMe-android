@@ -3,6 +3,7 @@ package com.erela.fixme.helpers.api
 import android.annotation.SuppressLint
 import com.erela.fixme.BuildConfig
 import com.google.gson.GsonBuilder
+import okhttp3.HttpUrl.Companion.toHttpUrlOrNull
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import okhttp3.Protocol
@@ -24,7 +25,16 @@ object InitAPI {
      * including an attacker's, the moment the server moved to https. Removing it means a
      * future TLS migration actually validates.
      */
-    fun okHttpClientBuilder(): OkHttpClient.Builder = OkHttpClient.Builder()
+    /** Host of BASE_URL. The bearer token is only ever sent here. */
+    private val apiHost: String? = BuildConfig.BASE_URL.toHttpUrlOrNull()?.host
+
+    /**
+     * Every OkHttp client in the app, so SseService and Glide are authenticated too —
+     * they previously used a bare builder and sent no token, which would have started
+     * failing the moment auth:sanctum lands on the apimobile routes.
+     */
+    fun okHttpClientBuilder(): OkHttpClient.Builder =
+        OkHttpClient.Builder().addInterceptor(authInterceptor)
 
     /**
      * Supplies the current bearer token. A lambda rather than a UserDataHelper because this
@@ -43,18 +53,24 @@ object InitAPI {
 
     private val authInterceptor = Interceptor { chain ->
         val token = tokenProvider()
-        val request = if (token.isNullOrBlank()) {
-            chain.request()
-        } else {
+
+        // Host check, not just "is there a token": SSE_URL is a different server
+        // (103.96.147.242) from BASE_URL (182.23.21.202), so attaching the header
+        // unconditionally would hand our Sanctum token to a third party.
+        val sendToken = !token.isNullOrBlank() && chain.request().url.host == apiHost
+
+        val request = if (sendToken) {
             chain.request().newBuilder()
                 .header("Authorization", "Bearer $token")
                 .build()
+        } else {
+            chain.request()
         }
 
         chain.proceed(request).also { response ->
-            // Only meaningful if we actually presented a token: a 401 on an
-            // unauthenticated call says nothing about session validity.
-            if (response.code == 401 && !token.isNullOrBlank()) {
+            // Only meaningful if we actually presented a token: a 401 from a host we did
+            // not authenticate against says nothing about session validity.
+            if (response.code == 401 && sendToken) {
                 onUnauthorized()
             }
         }
@@ -62,7 +78,6 @@ object InitAPI {
 
     private val client =
         okHttpClientBuilder()
-            .addInterceptor(authInterceptor)
             .addInterceptor(HttpLoggingInterceptor().apply {
                 level = HttpLoggingInterceptor.Level.BODY
             })
