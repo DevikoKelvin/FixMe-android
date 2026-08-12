@@ -15,7 +15,7 @@
     <string name="logout_confirmation_dialog_message">Anda yakin ingin keluar?</string>
     <string name="logout_confirmation_yes">Ya</string>
     <string name="cancel_confirmation">Batal</string>
-    <string name="confirm">Setuju</string>
+    <string name="confirm">Konfirmasi</string>
     <string name="ok">OK</string>
 
     <string name="user_info_title">Informasi Pengguna FixMe</string>
@@ -32,7 +32,7 @@
     <string name="inbox_read">Dibaca</string>
 
     <string name="change_password_title">Ubah Kata Sandi</string>
-    <string name="password_minimum_char_error">Kata sandi harus setidaknya minimal 4 karakter!</string>
+    <string name="password_minimum_char_error">Kata sandi minimal 4 karakter!</string>
     <string name="password_not_match_error">Kata sandi tidak cocok! Tolong periksa ulang.</string>
     <string name="old_password_title">Kata sandi lama</string>
     <string name="new_password_title">Kata sandi baru</string>
@@ -140,13 +140,13 @@
     <string name="progress_result_description">Deskripsi Hasil Kemajuan</string>
     <string name="materials_hint">Ketuk \"×\" untuk menghapus barang.\nKetuk barang untuk sunting jumlah barang.\nKetuk \"+\" untuk tambah barang material.</string>
 
-    <string name="hold_issue_description_title">Mengapa Anda ingin menjeda isu ini??</string>
-    <string name="hold_issue_description_hint">Jelaskan alasanmu</string>
+    <string name="hold_issue_description_title">Mengapa Anda ingin menjeda kasus ini?</string>
+    <string name="hold_issue_description_hint">Jelaskan alasan Anda</string>
 
     <string name="action_question">Apa yang akan kamu lakukan?</string>
     <string name="update_status">Perbarui Status</string>
     <string name="work_by">Akan Diproses oleh</string>
-    <string name="internal">Bagian Dalam ERELA</string>
+    <string name="internal">Internal ERELA</string>
     <string name="vendors">Vendor/Bagian Luar</string>
     <string name="vendors_name">Nama Vendor</string>
     <string name="select_supervisor">Pilih Supervisor</string>
@@ -164,7 +164,7 @@
     <string name="ac_code">Kode AC</string>
     <string name="detail">Detail</string>
     <string name="area">Area</string>
-    <string name="floor">Floor</string>
+    <string name="floor">Lantai</string>
     <string name="brand">Merek</string>
     <string name="model_type">Tipe</string>
     <string name="capacity">Kapasitas</string>
@@ -178,7 +178,7 @@
     <string name="item_id">ID Barang</string>
     <string name="ac_details">Detail AC</string>
     <string name="ready_to_begin">Siap memulai?</string>
-    <string name="check_in_instruction">Klik tombol Daftar di bawah untuk memulai sesi perawatan. Ini akan mencatat waktu mulai Anda dan menetapkan tugas kepada Anda.</string>
+    <string name="check_in_instruction">Ketuk tombol Konfirmasi di bawah untuk memulai sesi perawatan. Waktu mulai Anda akan dicatat dan tugas ini ditetapkan kepada Anda.</string>
 
     <string name="maintenance_session_title">Sesi Perawatan</string>
     <string name="assistant_technician">Asisten Teknisi</string>
@@ -224,7 +224,7 @@
     <string name="channel_desc_release">Versi stabil untuk penggunaan sehari-hari.</string>
     <string name="channel_desc_beta">Versi mendekati stabil dengan fitur terbaru.</string>
     <string name="channel_desc_dev">Fitur terkini, mungkin tidak stabil.</string>
-    <string name="channel_desc_canary">Versi paling mutakhir, siap dengan ketidaksempurnaan.</string>
+    <string name="channel_desc_canary">Versi paling mutakhir, kemungkinan masih banyak kekurangan.</string>
 
     <!-- Lihat catatan di values/strings.xml: perbarui changelog_current di kedua berkas setiap
          kali rilis. Pemisah baris WAJIB memakai \n, bukan baris baru asli — AAPT mengubah

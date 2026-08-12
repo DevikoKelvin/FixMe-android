@@ -33,7 +33,7 @@
 
     <string name="change_password_title">Change Password</string>
     <string name="password_minimum_char_error">Password must be at least 4 characters!</string>
-    <string name="password_not_match_error">Password didn\'t match! Please check again.</string>
+    <string name="password_not_match_error">Passwords do not match! Please check again.</string>
     <string name="old_password_title">Old Password</string>
     <string name="new_password_title">New Password</string>
     <string name="confirm_password_title">Confirm Password</string>
@@ -115,24 +115,24 @@
     <string name="trial_tracking">Trial Tracking</string>
     <string name="report_trial">Report Trial</string>
     <string name="pass">Pass</string>
-    <string name="not_pass">Not Pass</string>
+    <string name="not_pass">Not Passed</string>
     <string name="action_on_progress">Start Progress Now</string>
     <string name="see_progress">See Progress</string>
     <string name="progress_tracking">Progress Tracking</string>
     <string name="hold_issue">Hold This Issue</string>
     <string name="create_new_progress">Create New Progress</string>
-    <string name="approve_material">Approve Materials Request</string>
+    <string name="approve_material">Approve Material Request</string>
     <string name="edit_material">Edit Materials</string>
     <string name="edit_progress">Edit Progress</string>
     <string name="mark_progress_done">Mark This Progress as Done</string>
     <string name="mark_progress_ready_trial">Mark Ready for Trial</string>
-    <string name="action_ready_trial">Ready to Trial!</string>
+    <string name="action_ready_trial">Ready for Trial!</string>
     <string name="action_on_trial">Start Trial</string>
     <string name="more_options">More</string>
     <string name="action_edit">Edit</string>
     <string name="action_cancel">Cancel</string>
     <string name="action_cancel_this_issue">Cancel This Issue</string>
-    <string name="action_done">Done This Issue</string>
+    <string name="action_done">Complete This Issue</string>
 
     <string name="mark_progress_done_title">Mark Progress as Done</string>
 
@@ -143,12 +143,12 @@
     <string name="hold_issue_description_title">Why do you want to hold this issue?</string>
     <string name="hold_issue_description_hint">Explain your reason</string>
 
-    <string name="action_question">What would you do?</string>
+    <string name="action_question">What would you like to do?</string>
     <string name="update_status">Update Status</string>
     <string name="work_by">Will be Processed by</string>
-    <string name="internal">ERELA Internals</string>
-    <string name="vendors">Vendors</string>
-    <string name="vendors_name">Vendors Name</string>
+    <string name="internal">ERELA Internal</string>
+    <string name="vendors">Vendor / External</string>
+    <string name="vendors_name">Vendor Name</string>
     <string name="select_supervisor">Select Supervisor</string>
     <string name="select_category">Category</string>
     <string name="select_complexity">Complexity</string>
@@ -178,7 +178,7 @@
     <string name="item_id">Item ID</string>
     <string name="ac_details">AC Details</string>
     <string name="ready_to_begin">Ready to begin?</string>
-    <string name="check_in_instruction">Click the Check In button below to start the maintenance session. This will record your start time and assign the task to you.</string>
+    <string name="check_in_instruction">Tap the Confirm button below to start the maintenance session. Your start time will be recorded and this task assigned to you.</string>
     
     <string name="maintenance_session_title">Maintenance Session</string>
     <string name="assistant_technician">Assistant Technician</string>
