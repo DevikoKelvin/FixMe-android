@@ -52,6 +52,11 @@
          A fixed cap is what keeps the OK button on screen for a long changelog. -->
     <dimen name="dialog_changelog_scroll_height">300dp</dimen>
 
+    <!-- AC task card: fixed label column so rows line up while each row stays an independent
+         view that can be hidden when its value is null. Sized for the longest label in either
+         language ("Terakhir dirawat" / "Last serviced") at text_size_small. -->
+    <dimen name="ac_task_label_width">120dp</dimen>
+
     <!-- Bottom sheet dimensions -->
     <dimen name="bottom_sheet_padding_bottom">46dp</dimen>
     <dimen name="bottom_sheet_drawer_width">75dp</dimen>

@@ -35,6 +35,19 @@ data class AcTaskItem(
     val brand: String?,
     @SerializedName("model_type")
     val modelType: String?,
+    // Nullable across the board: the card hides a row rather than printing a dash, so "no
+    // value" has to survive as null instead of being defaulted to 0 or "".
+    //
+    // capacity_pk is DECIMAL(5,2), which PDO hands over as a string, so the JSON carries
+    // "2.00" rather than 2.0. Double is still correct — JsonReader.nextDouble() parses a
+    // quoted number — but do not "fix" the quotes by retyping this as String.
+    @SerializedName("capacity_pk")
+    val capacityPk: Double? = null,
+    @SerializedName("last_maintenance_at")
+    val lastMaintenanceAt: String? = null,
+    /** Supervisor's brief for the whole schedule, from ac_maintenance_schedules.notes. */
+    @SerializedName("schedule_notes")
+    val scheduleNotes: String? = null,
     @SerializedName("assigned_technician")
     val assignedTechnician: String?,
     @SerializedName("log_id")

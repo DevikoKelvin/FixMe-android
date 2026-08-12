@@ -166,6 +166,12 @@
     <string name="area">Area</string>
     <string name="floor">Floor</string>
     <string name="brand">Brand</string>
+    <string name="model_type">Model</string>
+    <string name="capacity">Capacity</string>
+    <string name="technician">Technician</string>
+    <string name="last_maintenance">Last serviced</string>
+    <string name="schedule_note">Supervisor\'s note</string>
+    <string name="unassigned">Not yet assigned</string>
     <string name="deadline">Deadline:</string>
     
     <string name="ac_check_in_title">Check In AC Maintenance</string>

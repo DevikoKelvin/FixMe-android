@@ -87,150 +87,84 @@
             </com.google.android.material.card.MaterialCardView>
         </LinearLayout>
 
+        <!-- One LinearLayout per row, not three parallel label/colon/value columns. The old
+             shape made a row impossible to hide: the label, colon and value lived in
+             different parents, so a null value left an orphan label behind. -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
+            android:orientation="vertical"
             android:paddingHorizontal="@dimen/list_item_submission_machine_info_padding_horizontal"
+            android:paddingVertical="@dimen/list_item_submission_description_padding_vertical">
+
+            <include
+                android:id="@+id/rowLocation"
+                layout="@layout/partial_ac_task_row"
+                tools:visibility="visible" />
+
+            <include
+                android:id="@+id/rowDetail"
+                layout="@layout/partial_ac_task_row" />
+
+            <include
+                android:id="@+id/rowArea"
+                layout="@layout/partial_ac_task_row" />
+
+            <include
+                android:id="@+id/rowFloor"
+                layout="@layout/partial_ac_task_row" />
+
+            <include
+                android:id="@+id/rowBrand"
+                layout="@layout/partial_ac_task_row" />
+
+            <include
+                android:id="@+id/rowModel"
+                layout="@layout/partial_ac_task_row" />
+
+            <include
+                android:id="@+id/rowCapacity"
+                layout="@layout/partial_ac_task_row" />
+
+            <include
+                android:id="@+id/rowTechnician"
+                layout="@layout/partial_ac_task_row" />
+
+            <include
+                android:id="@+id/rowLastMaintenance"
+                layout="@layout/partial_ac_task_row" />
+        </LinearLayout>
+
+        <!-- Supervisor's brief for the schedule. Free text, so it gets its own full-width block
+             instead of a label:value row, and stays hidden unless the schedule has one. -->
+        <LinearLayout
+            android:id="@+id/noteBlock"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/list_item_submission_machine_info_padding_horizontal"
+            android:layout_marginBottom="@dimen/list_item_submission_description_padding_vertical"
+            android:background="#FFF8E1"
+            android:orientation="vertical"
+            android:paddingHorizontal="@dimen/list_item_submission_description_padding_horizontal"
             android:paddingVertical="@dimen/list_item_submission_description_padding_vertical"
-            tools:ignore="DisableBaselineAlignment">
+            android:visibility="gone"
+            tools:visibility="visible">
 
-            <LinearLayout
-                android:layout_width="wrap_content"
+            <TextView
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical">
+                android:text="@string/schedule_note"
+                android:textColor="#8A6D00"
+                android:textSize="@dimen/text_size_micro"
+                android:textStyle="bold" />
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/location"
-                    android:textSize="@dimen/text_size_small" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/detail"
-                    android:textSize="@dimen/text_size_small" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/area"
-                    android:textSize="@dimen/text_size_small" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/floor"
-                    android:textSize="@dimen/text_size_small" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/brand"
-                    android:textSize="@dimen/text_size_small" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="wrap_content"
+            <TextView
+                android:id="@+id/tvScheduleNote"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/list_item_submission_machine_code_margin_start"
-                android:orientation="vertical">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text=":"
-                    android:textSize="@dimen/text_size_small"
-                    tools:ignore="HardcodedText" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text=":"
-                    android:textSize="@dimen/text_size_small"
-                    tools:ignore="HardcodedText" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text=":"
-                    android:textSize="@dimen/text_size_small"
-                    tools:ignore="HardcodedText" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text=":"
-                    android:textSize="@dimen/text_size_small"
-                    tools:ignore="HardcodedText" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text=":"
-                    android:textSize="@dimen/text_size_small"
-                    tools:ignore="HardcodedText" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/list_item_submission_machine_code_margin_start"
-                android:layout_weight="1"
-                android:orientation="vertical">
-
-                <TextView
-                    android:id="@+id/tvLocation"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:textColor="@color/black"
-                    android:textSize="@dimen/text_size_small"
-                    android:textStyle="bold"
-                    tools:text="Erela Murbei" />
-
-                <TextView
-                    android:id="@+id/tvDetail"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:textColor="@color/black"
-                    android:textSize="@dimen/text_size_small"
-                    android:textStyle="bold"
-                    tools:text="RnD Office Lt. 1" />
-
-                <TextView
-                    android:id="@+id/tvArea"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:textColor="@color/black"
-                    android:textSize="@dimen/text_size_small"
-                    android:textStyle="bold"
-                    tools:text="HOLDING" />
-
-                <TextView
-                    android:id="@+id/tvFloor"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:textColor="@color/black"
-                    android:textSize="@dimen/text_size_small"
-                    android:textStyle="bold"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/tvAcCode"
-                    tools:text="Fl. 1" />
-
-                <TextView
-                    android:id="@+id/tvBrand"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:textColor="@color/black"
-                    android:textSize="@dimen/text_size_small"
-                    android:textStyle="bold"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/tvAcCode"
-                    tools:text="Daikin" />
-            </LinearLayout>
+                android:textColor="@color/black"
+                android:textSize="@dimen/text_size_small"
+                tools:text="Bawa tangga, unit berada di plafon tinggi." />
         </LinearLayout>
 
         <TextView

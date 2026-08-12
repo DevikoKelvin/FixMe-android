@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  One "Label : value" row of the AC task card, included once per field so the adapter can hide
+  a whole row when its value is null. Label and value live in the same parent for that reason.
+-->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal">
+
+    <TextView
+        android:id="@+id/rowLabel"
+        android:layout_width="@dimen/ac_task_label_width"
+        android:layout_height="wrap_content"
+        android:textSize="@dimen/text_size_small"
+        tools:text="Terakhir dirawat" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text=":"
+        android:textSize="@dimen/text_size_small"
+        tools:ignore="HardcodedText" />
+
+    <TextView
+        android:id="@+id/rowValue"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/list_item_submission_machine_code_margin_start"
+        android:layout_weight="1"
+        android:textColor="@color/black"
+        android:textSize="@dimen/text_size_small"
+        android:textStyle="bold"
+        tools:text="12 Mei 2026" />
+</LinearLayout>

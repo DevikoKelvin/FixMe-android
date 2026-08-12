@@ -123,22 +123,65 @@ class AcTaskAdapter(
                     else -> item.itemStatus
                 }
                 tvAcCode.text = item.acCode
-                tvLocation.text = item.location ?: "-"
-                tvDetail.text = item.detail ?: "-"
-                tvArea.text = item.area ?: "-"
-                tvFloor.text =
-                    if (context.getString(R.string.lang) == "en")
-                        "Fl. ${item.floor ?: "-"}"
-                    else
-                        "Lantai. ${item.floor ?: "-"}"
-                tvBrand.text = item.brand ?: "-"
-                tvDeadline.text = "Deadline: ${item.dateEnd}"
+
+                row(rowLocation, R.string.location, item.location)
+                row(rowDetail, R.string.detail, item.detail)
+                row(rowArea, R.string.area, item.area)
+                row(rowFloor, R.string.floor, item.floor)
+                row(rowBrand, R.string.brand, item.brand)
+                row(rowModel, R.string.model_type, item.modelType)
+                // Trailing ".0" reads wrong for a 1.5 PK unit; drop it only when whole.
+                row(
+                    rowCapacity, R.string.capacity,
+                    item.capacityPk?.let { pk ->
+                        val trimmed = if (pk % 1.0 == 0.0) pk.toInt().toString() else pk.toString()
+                        "$trimmed PK"
+                    }
+                )
+                // Always shown, even unassigned: since the list started including every
+                // technician's items, "whose job is this" is the thing that was missing.
+                row(
+                    rowTechnician, R.string.technician,
+                    item.assignedTechnician?.trim()?.takeIf { it.isNotEmpty() }
+                        ?: context.getString(R.string.unassigned),
+                )
+                row(rowLastMaintenance, R.string.last_maintenance, formatDate(item.lastMaintenanceAt))
+
+                val note = item.scheduleNotes?.trim()
+                noteBlock.visibility = if (note.isNullOrEmpty()) View.GONE else View.VISIBLE
+                tvScheduleNote.text = note.orEmpty()
+
+                tvDeadline.text = "${context.getString(R.string.deadline)} ${item.dateEnd}"
 
                 root.setOnClickListener {
                     onItemClick(item)
                 }
             }
         }
+    }
+
+    /**
+     * Fills one included row, or hides it when there is nothing to say. Views are recycled, so
+     * the visibility has to be set on both branches — not just the hiding one.
+     */
+    private fun row(
+        binding: com.erela.fixme.databinding.PartialAcTaskRowBinding,
+        labelRes: Int,
+        value: String?
+    ) {
+        val text = value?.trim()?.takeIf { it.isNotEmpty() }
+        binding.root.visibility = if (text == null) View.GONE else View.VISIBLE
+        if (text != null) {
+            binding.rowLabel.setText(labelRes)
+            binding.rowValue.text = text
+        }
+    }
+
+    /** "2026-05-12 08:30:00" -> "12/05/2026". Left as-is if it is not a date we recognise. */
+    private fun formatDate(raw: String?): String? {
+        val datePart = raw?.trim()?.takeIf { it.isNotEmpty() }?.substringBefore(' ') ?: return null
+        val parts = datePart.split('-')
+        return if (parts.size == 3) "${parts[2]}/${parts[1]}/${parts[0]}" else datePart
     }
 
     private fun setRoundedBackground(view: View, drawableId: Int) {
