@@ -5,7 +5,7 @@ gms = "4.5.0"
 
 # Dependencies
 coreKtx = "1.19.0"
-appcompat = "1.7.1"
+appcompat = "1.8.0"
 activity = "1.13.0"
 material = "1.14.0"
 design = "28.0.0"
