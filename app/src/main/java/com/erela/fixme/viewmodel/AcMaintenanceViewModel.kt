@@ -16,28 +16,20 @@ import java.io.File
 
 class AcMaintenanceViewModel(application: Application) : AndroidViewModel(application) {
     private val repository = AcRepository(application)
-
     private val _scanResult = MutableLiveData<AcScanResponse>()
     val scanResult: LiveData<AcScanResponse> = _scanResult
-
     private val _checkInResult = MutableLiveData<AcCheckInResponse>()
     val checkInResult: LiveData<AcCheckInResponse> = _checkInResult
-
     private val _taskListResult = MutableLiveData<AcTaskListResponse>()
     val taskListResult: LiveData<AcTaskListResponse> = _taskListResult
-
     private val _actionResult = MutableLiveData<AcSimpleResponse>()
     val actionResult: LiveData<AcSimpleResponse> = _actionResult
-
     private val _sessionParticipants = MutableLiveData<SupervisorTechnicianListResponse>()
     val sessionParticipants: LiveData<SupervisorTechnicianListResponse> = _sessionParticipants
-
     private val _isLoading = MutableLiveData<Boolean>()
     val isLoading: LiveData<Boolean> = _isLoading
-
     private val _error = MutableLiveData<String>()
     val error: LiveData<String> = _error
-
     fun onQrScanned(acCode: String, userId: Int) {
         // does NOT touch _isLoading — scan runs in the background without
         // hiding the task list; result surfaces via scanResult LiveData
@@ -119,13 +111,16 @@ class AcMaintenanceViewModel(application: Application) : AndroidViewModel(applic
         findings: String?,
         actionsTaken: String?,
         lat: Double?,
-        lng: Double?
+        lng: Double?,
+        witnessName: String? = null,
+        witnessSignature: File? = null
     ) {
         _isLoading.value = true
         viewModelScope.launch {
             repository.checkOut(
                 logId, userId, acCondition, photo,
-                findings, actionsTaken, lat, lng
+                findings, actionsTaken, lat, lng,
+                witnessName, witnessSignature
             )
                 .onSuccess {
                     _isLoading.value = false

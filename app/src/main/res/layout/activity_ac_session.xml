@@ -52,7 +52,8 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:paddingBottom="75dp">
 
             <!-- Lead view: manage assist technicians (only visible to session lead) -->
             <LinearLayout
@@ -66,9 +67,9 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="@dimen/activity_horizontal_margin"
                     android:layout_marginTop="@dimen/user_info_item_margin_top"
                     android:text="@string/assistant_technician"
-                    android:layout_marginHorizontal="@dimen/activity_horizontal_margin"
                     android:textColor="@color/black"
                     android:textSize="@dimen/text_size_small"
                     android:textStyle="bold" />
@@ -97,18 +98,18 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="@dimen/activity_horizontal_margin"
                     android:text="@string/session_team"
                     android:textColor="@color/black"
                     android:textSize="@dimen/text_size_small"
-                    android:layout_marginHorizontal="@dimen/activity_horizontal_margin"
                     android:textStyle="bold" />
 
                 <com.google.android.material.card.MaterialCardView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
                     android:layout_marginHorizontal="@dimen/activity_horizontal_margin"
                     android:layout_marginVertical="@dimen/list_item_progress_header_padding_vertical"
+                    android:layout_marginTop="8dp"
                     app:cardCornerRadius="@dimen/dialog_corner_radius"
                     app:cardElevation="2dp"
                     app:strokeWidth="0dp">
@@ -165,18 +166,18 @@
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
-                android:layout_marginTop="@dimen/user_info_item_margin_top"
                 android:layout_marginHorizontal="@dimen/activity_horizontal_margin"
+                android:layout_marginTop="@dimen/user_info_item_margin_top"
                 android:background="#E0E0E0" />
 
             <!-- AC Condition -->
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginHorizontal="@dimen/activity_horizontal_margin"
                 android:layout_marginTop="@dimen/user_info_item_margin_top"
                 android:text="@string/ac_condition"
                 android:textColor="@color/black"
-                android:layout_marginHorizontal="@dimen/activity_horizontal_margin"
                 android:textSize="@dimen/text_size_small"
                 android:textStyle="bold" />
 
@@ -213,11 +214,11 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginHorizontal="@dimen/activity_horizontal_margin"
                 android:layout_marginTop="@dimen/user_info_item_margin_top"
                 android:text="@string/findings"
                 android:textColor="@color/black"
                 android:textSize="@dimen/text_size_small"
-                android:layout_marginHorizontal="@dimen/activity_horizontal_margin"
                 android:textStyle="bold" />
 
             <com.google.android.material.textfield.TextInputLayout
@@ -225,6 +226,7 @@
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginHorizontal="@dimen/activity_horizontal_margin"
                 android:layout_marginTop="@dimen/user_info_item_margin_top"
                 android:hint="@string/case_description"
                 app:boxCornerRadiusBottomEnd="@dimen/login_field_corner_radius"
@@ -235,7 +237,6 @@
                 app:boxStrokeWidth="@dimen/login_field_stroke_width"
                 app:expandedHintEnabled="true"
                 app:hintAnimationEnabled="true"
-                android:layout_marginHorizontal="@dimen/activity_horizontal_margin"
                 app:hintTextColor="@color/black">
 
                 <com.google.android.material.textfield.TextInputEditText
@@ -251,10 +252,10 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginHorizontal="@dimen/activity_horizontal_margin"
                 android:layout_marginTop="@dimen/user_info_item_margin_top"
                 android:text="@string/action_taken"
                 android:textColor="@color/black"
-                android:layout_marginHorizontal="@dimen/activity_horizontal_margin"
                 android:textSize="@dimen/text_size_small"
                 android:textStyle="bold" />
 
@@ -263,6 +264,7 @@
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginHorizontal="@dimen/activity_horizontal_margin"
                 android:layout_marginTop="@dimen/user_info_item_margin_top"
                 android:hint="@string/case_description"
                 app:boxCornerRadiusBottomEnd="@dimen/login_field_corner_radius"
@@ -271,7 +273,6 @@
                 app:boxCornerRadiusTopStart="@dimen/login_field_corner_radius"
                 app:boxStrokeColor="@color/black"
                 app:boxStrokeWidth="@dimen/login_field_stroke_width"
-                android:layout_marginHorizontal="@dimen/activity_horizontal_margin"
                 app:expandedHintEnabled="true"
                 app:hintAnimationEnabled="true"
                 app:hintTextColor="@color/black">
@@ -289,19 +290,19 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginHorizontal="@dimen/activity_horizontal_margin"
                 android:layout_marginTop="@dimen/user_info_item_margin_top"
                 android:text="@string/photos_required"
                 android:textColor="@color/black"
                 android:textSize="@dimen/text_size_small"
-                android:layout_marginHorizontal="@dimen/activity_horizontal_margin"
                 android:textStyle="bold" />
 
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginHorizontal="@dimen/activity_horizontal_margin"
                 android:layout_marginTop="8dp"
                 android:gravity="center"
-                android:layout_marginHorizontal="@dimen/activity_horizontal_margin"
                 android:orientation="vertical">
 
                 <com.google.android.material.card.MaterialCardView
@@ -330,6 +331,105 @@
                     android:text="@string/during"
                     android:textSize="12sp" />
             </LinearLayout>
+
+            <!-- Witness (room PIC) — signs that the maintenance was actually performed -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="@dimen/activity_horizontal_margin"
+                android:layout_marginTop="@dimen/user_info_item_margin_top"
+                android:text="@string/witness_section"
+                android:textColor="@color/black"
+                android:textSize="@dimen/text_size_small"
+                android:textStyle="bold" />
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/etWitnessNameLayout"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="@dimen/activity_horizontal_margin"
+                android:layout_marginTop="@dimen/user_info_item_margin_top"
+                android:hint="@string/witness_name_hint"
+                app:boxCornerRadiusBottomEnd="@dimen/login_field_corner_radius"
+                app:boxCornerRadiusBottomStart="@dimen/login_field_corner_radius"
+                app:boxCornerRadiusTopEnd="@dimen/login_field_corner_radius"
+                app:boxCornerRadiusTopStart="@dimen/login_field_corner_radius"
+                app:boxStrokeColor="@color/black"
+                app:boxStrokeWidth="@dimen/login_field_stroke_width"
+                app:expandedHintEnabled="true"
+                app:hintAnimationEnabled="true"
+                app:hintTextColor="@color/black">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/etWitnessName"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="textPersonName|textCapWords"
+                    android:textSize="@dimen/text_size_small" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="@dimen/activity_horizontal_margin"
+                android:layout_marginTop="@dimen/user_info_item_margin_top"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/witness_signature"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/text_size_small"
+                    android:textStyle="bold" />
+
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/btnClearSignature"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:layout_gravity="center"
+                    app:cardBackgroundColor="@android:color/transparent"
+                    app:cardCornerRadius="8dp"
+                    app:cardElevation="0dp"
+                    app:contentPadding="8dp">
+
+                    <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:contentDescription="@string/clear_signature"
+                        android:src="@drawable/clear_icon" />
+                </com.google.android.material.card.MaterialCardView>
+            </LinearLayout>
+
+            <!-- White, bordered, and fixed height: the pad has to look like somewhere to sign, and
+                 the export is the view's own pixels so its aspect ratio is the signature's. -->
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                android:layout_marginHorizontal="@dimen/activity_horizontal_margin"
+                android:layout_marginTop="4dp"
+                app:cardBackgroundColor="@color/white"
+                app:cardCornerRadius="@dimen/login_field_corner_radius"
+                app:cardElevation="0dp"
+                app:strokeColor="@color/black"
+                app:strokeWidth="@dimen/login_field_stroke_width">
+
+                <com.erela.fixme.custom_views.SignaturePadView
+                    android:id="@+id/signaturePad"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" />
+            </com.google.android.material.card.MaterialCardView>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="@dimen/activity_horizontal_margin"
+                android:layout_marginTop="4dp"
+                android:text="@string/witness_hint"
+                android:textSize="12sp" />
         </LinearLayout>
     </ScrollView>
 

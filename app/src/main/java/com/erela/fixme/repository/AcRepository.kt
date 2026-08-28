@@ -44,7 +44,9 @@ class AcRepository(
         findings: String?,
         actionsTaken: String?,
         lat: Double?,
-        lng: Double?
+        lng: Double?,
+        witnessName: String?,
+        witnessSignature: File?
     ): Result<AcSimpleResponse> = runCatching {
         fun String.toBody() = toRequestBody("text/plain".toMediaTypeOrNull())
         fun Double?.toBodyOrNull() =
@@ -53,12 +55,20 @@ class AcRepository(
         val photoPart = MultipartBody.Part.createFormData(
             "photo", photo.name, photo.asRequestBody("image/*".toMediaTypeOrNull())
         )
+        // image/png, not image/*: the pad exports PNG, and the server matches on the real mime.
+        val signaturePart = witnessSignature?.let { file ->
+            MultipartBody.Part.createFormData(
+                "witness_signature", file.name, file.asRequestBody("image/png".toMediaTypeOrNull())
+            )
+        }
 
         api.acCheckOut(
             logId = logId.toString().toBody(),
             userId = userId.toString().toBody(),
             acCondition = acCondition.toBody(),
             photo = photoPart,
+            witnessName = witnessName?.takeIf { it.isNotBlank() }?.toBody(),
+            witnessSignature = signaturePart,
             findings = findings?.toBody(),
             actionsTaken = actionsTaken?.toBody(),
             lat = lat.toBodyOrNull(),
@@ -66,5 +76,4 @@ class AcRepository(
             lang = lang.toBody()
         )
     }
-
 }

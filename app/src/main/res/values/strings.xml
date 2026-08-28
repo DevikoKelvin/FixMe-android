@@ -195,6 +195,11 @@
     <string name="during">During</string>
     <string name="after">After</string>
     <string name="complete_check_out">Complete &amp; Check Out</string>
+    <string name="witness_section">Witness (Room PIC)</string>
+    <string name="witness_name_hint">Witness name</string>
+    <string name="witness_signature">Signature</string>
+    <string name="clear_signature">Clear</string>
+    <string name="witness_hint">Ask the person in charge of the room to sign as a witness that the maintenance was carried out.</string>
 
     <string name="app_settings_title">Settings</string>
     <string name="about">About app</string>

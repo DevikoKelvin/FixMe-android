@@ -356,6 +356,11 @@ interface GetEndpoint {
         @Part("user_id") userId: RequestBody,
         @Part("ac_condition") acCondition: RequestBody,
         @Part photo: MultipartBody.Part,
+        // Room PIC signing as witness that the maintenance happened. Nullable so a build without
+        // the signature pad still checks out - the server validates both as optional for the same
+        // reason, until the forced app update has gone out.
+        @Part("witness_name") witnessName: RequestBody?,
+        @Part witnessSignature: MultipartBody.Part?,
         @Part("findings") findings: RequestBody?,
         @Part("actions_taken") actionsTaken: RequestBody?,
         @Part("lat") lat: RequestBody?,

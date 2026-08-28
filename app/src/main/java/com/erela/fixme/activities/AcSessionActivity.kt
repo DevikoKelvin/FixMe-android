@@ -10,7 +10,6 @@ import android.view.MotionEvent
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
-import com.erela.fixme.helpers.enableEdgeToEdgeOpaqueNav
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
@@ -25,6 +24,7 @@ import com.erela.fixme.bottom_sheets.AcSelectTechnicianBottomSheet
 import com.erela.fixme.custom_views.CustomToast
 import com.erela.fixme.databinding.ActivityAcSessionBinding
 import com.erela.fixme.helpers.UserDataHelper
+import com.erela.fixme.helpers.enableEdgeToEdgeOpaqueNav
 import com.erela.fixme.objects.SubmissionDetailResponse
 import com.erela.fixme.objects.SupervisorTechnician
 import com.erela.fixme.objects.UserData
@@ -48,17 +48,12 @@ class AcSessionActivity : AppCompatActivity(),
         UserDataHelper(this@AcSessionActivity).getUserData()
     }
     private val viewModel: AcMaintenanceViewModel by viewModels()
-
     private val selectedTechniciansArrayList: ArrayList<SupervisorTechnician> = ArrayList()
     private lateinit var techniciansRvAdapter: SelectedSupervisorTechniciansRvAdapter
-
     private var logId: Int = -1
-
     private var photoDuringFile: File? = null
-
     private var currentPhotoUri: Uri? = null
     private var currentPhotoFile: File? = null
-
     private val takePictureLauncher =
         registerForActivityResult(ActivityResultContracts.TakePicture()) { success ->
             binding.apply {
@@ -115,7 +110,6 @@ class AcSessionActivity : AppCompatActivity(),
     private fun setupTechnician() {
         binding.apply {
             selectedTechniciansArrayList.clear()
-
             // "+" placeholder is always the last chip — tapping it opens the user picker
             selectedTechniciansArrayList.add(plusPlaceholder())
 
@@ -137,7 +131,6 @@ class AcSessionActivity : AppCompatActivity(),
                             selectedTechniciansArrayList.remove(data)
                             selectedTechniciansArrayList.add(plusPlaceholder())
                             techniciansRvAdapter.notifyDataSetChanged()
-
                             val userId = data.userId ?: return
                             viewModel.removeTechnician(logId, userId)
                         }
@@ -159,6 +152,8 @@ class AcSessionActivity : AppCompatActivity(),
 
             ivPhotoDuring.setOnClickListener { openCamera() }
 
+            btnClearSignature.setOnClickListener { signaturePad.clear() }
+
             btnCheckOut.setOnClickListener {
                 val condition = when (rgCondition.checkedRadioButtonId) {
                     rbGood.id -> "good"
@@ -168,49 +163,43 @@ class AcSessionActivity : AppCompatActivity(),
                 }
 
                 if (condition.isEmpty()) {
-                    CustomToast.getInstance(this@AcSessionActivity)
-                        .setMessage(
-                            if (getString(R.string.lang) == "en")
-                                "Please select an AC condition"
-                            else
-                                "Pilih kondisi AC"
-                        )
-                        .setBackgroundColor(
-                            ResourcesCompat.getColor(
-                                resources, R.color.custom_toast_background_failed, theme
-                            )
-                        )
-                        .setFontColor(
-                            ResourcesCompat.getColor(
-                                resources, R.color.custom_toast_font_failed, theme
-                            )
-                        )
-                        .show()
+                    showFailure("Please select an AC condition", "Pilih kondisi AC")
                     return@setOnClickListener
                 }
 
                 if (photoDuringFile == null) {
-                    CustomToast.getInstance(this@AcSessionActivity)
-                        .setMessage(
-                            if (getString(R.string.lang) == "en")
-                                "Please capture a photo of the maintenance in progress"
-                            else
-                                "Mohon ambil foto saat sedang melakukan perawatan."
-                        )
-                        .setBackgroundColor(
-                            ResourcesCompat.getColor(
-                                resources, R.color.custom_toast_background_failed, theme
-                            )
-                        )
-                        .setFontColor(
-                            ResourcesCompat.getColor(
-                                resources, R.color.custom_toast_font_failed, theme
-                            )
-                        )
-                        .show()
+                    showFailure(
+                        "Please capture a photo of the maintenance in progress",
+                        "Mohon ambil foto saat sedang melakukan perawatan."
+                    )
+                    return@setOnClickListener
+                }
+                val witnessName = etWitnessName.text.toString().trim()
+                if (witnessName.isEmpty()) {
+                    showFailure(
+                        "Please enter the name of the room PIC witnessing the work",
+                        "Mohon isi nama PIC ruangan sebagai saksi."
+                    )
                     return@setOnClickListener
                 }
 
+                if (signaturePad.isEmpty) {
+                    showFailure(
+                        "Please ask the room PIC to sign",
+                        "Mohon minta PIC ruangan untuk menandatangani."
+                    )
+                    return@setOnClickListener
+                }
+                // Exported here rather than on every stroke: one write per check-out, and a
+                // failure is reportable before anything is sent.
+                val signatureFile = File(externalCacheDir, "AC_sign_${UUID.randomUUID()}.png")
+                if (!signaturePad.saveAsPng(signatureFile)) {
+                    showFailure(
+                        "Could not save the signature. Please sign again.",
+                        "Tanda tangan gagal disimpan. Mohon tanda tangani ulang."
+                    )
+                    return@setOnClickListener
+                }
                 val userId = UserDataHelper(this@AcSessionActivity).getUserData().id
                 viewModel.checkOut(
                     logId = logId,
@@ -220,7 +209,9 @@ class AcSessionActivity : AppCompatActivity(),
                     findings = etFindings.text.toString(),
                     actionsTaken = etActions.text.toString(),
                     lat = null,
-                    lng = null
+                    lng = null,
+                    witnessName = witnessName,
+                    witnessSignature = signatureFile
                 )
             }
         }
@@ -296,8 +287,27 @@ class AcSessionActivity : AppCompatActivity(),
             }
         }
     }
-
     // ── Helpers ──────────────────────────────────────────────────────────────
+    /**
+     * A failed-validation toast. Was copied out in full per check; there are five checks now, and
+     * the colour lookups were identical in every copy.
+     */
+    private fun showFailure(english: String, indonesian: String) {
+        CustomToast.getInstance(this@AcSessionActivity)
+            .setMessage(if (getString(R.string.lang) == "en") english else indonesian)
+            .setBackgroundColor(
+                ResourcesCompat.getColor(
+                    resources, R.color.custom_toast_background_failed, theme
+                )
+            )
+            .setFontColor(
+                ResourcesCompat.getColor(
+                    resources, R.color.custom_toast_font_failed, theme
+                )
+            )
+            .show()
+    }
+
     private fun plusPlaceholder() = SupervisorTechnician(
         null, null, null, null, null, null, "+", null
     )
