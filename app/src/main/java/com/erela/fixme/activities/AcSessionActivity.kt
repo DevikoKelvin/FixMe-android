@@ -1,6 +1,7 @@
 package com.erela.fixme.activities
 
 import android.annotation.SuppressLint
+import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.Rect
@@ -23,6 +24,8 @@ import com.erela.fixme.adapters.recycler_view.SelectedSupervisorTechniciansRvAda
 import com.erela.fixme.bottom_sheets.AcSelectTechnicianBottomSheet
 import com.erela.fixme.custom_views.CustomToast
 import com.erela.fixme.databinding.ActivityAcSessionBinding
+import com.erela.fixme.dialogs.SignaturePadDialog
+import com.erela.fixme.helpers.PermissionHelper
 import com.erela.fixme.helpers.UserDataHelper
 import com.erela.fixme.helpers.enableEdgeToEdgeOpaqueNav
 import com.erela.fixme.objects.SubmissionDetailResponse
@@ -52,6 +55,9 @@ class AcSessionActivity : AppCompatActivity(),
     private lateinit var techniciansRvAdapter: SelectedSupervisorTechniciansRvAdapter
     private var logId: Int = -1
     private var photoDuringFile: File? = null
+
+    /** The committed witness signature. Written only by SignaturePadDialog's Save. */
+    private var witnessSignatureFile: File? = null
     private var currentPhotoUri: Uri? = null
     private var currentPhotoFile: File? = null
     private val takePictureLauncher =
@@ -150,9 +156,13 @@ class AcSessionActivity : AppCompatActivity(),
         binding.apply {
             toolBar.setNavigationOnClickListener { finish() }
 
-            ivPhotoDuring.setOnClickListener { openCamera() }
+            ivPhotoDuring.setOnClickListener { requestCameraThenOpen() }
 
-            btnClearSignature.setOnClickListener { signaturePad.clear() }
+            signaturePreviewContainer.setOnClickListener { showSignaturePad() }
+            btnClearSignature.setOnClickListener {
+                witnessSignatureFile = null
+                showSignature(null)
+            }
 
             btnCheckOut.setOnClickListener {
                 val condition = when (rgCondition.checkedRadioButtonId) {
@@ -183,20 +193,13 @@ class AcSessionActivity : AppCompatActivity(),
                     return@setOnClickListener
                 }
 
-                if (signaturePad.isEmpty) {
+                // Already a written PNG by this point: SignaturePadDialog exports on Save, so
+                // there is nothing left to rasterise or to fail here.
+                val signatureFile = witnessSignatureFile
+                if (signatureFile == null) {
                     showFailure(
                         "Please ask the room PIC to sign",
                         "Mohon minta PIC ruangan untuk menandatangani."
-                    )
-                    return@setOnClickListener
-                }
-                // Exported here rather than on every stroke: one write per check-out, and a
-                // failure is reportable before anything is sent.
-                val signatureFile = File(externalCacheDir, "AC_sign_${UUID.randomUUID()}.png")
-                if (!signaturePad.saveAsPng(signatureFile)) {
-                    showFailure(
-                        "Could not save the signature. Please sign again.",
-                        "Tanda tangan gagal disimpan. Mohon tanda tangani ulang."
                     )
                     return@setOnClickListener
                 }
@@ -269,6 +272,20 @@ class AcSessionActivity : AppCompatActivity(),
                     }
                 }
 
+                // 403 is MobileAcController.validateCaller refusing the account — it is inactive
+                // or gone, so nothing on this screen can succeed and the form is dead. Leave the
+                // way the back button would, rather than sitting on it.
+                //
+                // Matched on the status rather than the message: "HTTP 403 Forbidden" is Retrofit's
+                // wording and would silently stop matching if that ever changed.
+                errorCode.observe(this@AcSessionActivity) { code ->
+                    if (code == 403) {
+                        // Delayed so the message is readable first; finishing immediately closes
+                        // the screen with no explanation, which reads as a crash.
+                        binding.root.postDelayed({ finish() }, ERROR_EXIT_DELAY_MS)
+                    }
+                }
+
                 error.observe(this@AcSessionActivity) { errorMsg ->
                     CustomToast.getInstance(this@AcSessionActivity)
                         .setMessage(errorMsg)
@@ -312,6 +329,70 @@ class AcSessionActivity : AppCompatActivity(),
         null, null, null, null, null, null, "+", null
     )
 
+    /** Opens the signing dialog. Only its Save path writes back to witnessSignatureFile. */
+    private fun showSignaturePad() {
+        SignaturePadDialog(this@AcSessionActivity).apply {
+            setOnSignatureSavedListener(object : SignaturePadDialog.OnSignatureSavedListener {
+                override fun onSignatureSaved(file: File) {
+                    witnessSignatureFile = file
+                    showSignature(file)
+                }
+            })
+        }.show()
+    }
+
+    /** Preview when signed, prompt when not. Null also covers the clear button. */
+    private fun showSignature(file: File?) {
+        binding.apply {
+            val signed = file != null
+            imgSignaturePreview.visibility = if (signed) View.VISIBLE else View.GONE
+            tvSignaturePlaceholder.visibility = if (signed) View.GONE else View.VISIBLE
+            btnClearSignature.visibility = if (signed) View.VISIBLE else View.GONE
+            /*tvSignatureHint.visibility = if (signed) View.GONE else View.VISIBLE*/
+
+            if (file != null) {
+                imgSignaturePreview.setImageBitmap(BitmapFactory.decodeFile(file.absolutePath))
+            } else {
+                imgSignaturePreview.setImageDrawable(null)
+            }
+        }
+    }
+
+    /**
+     * The manifest declares CAMERA — zxing-android-embedded's manifest contributes it too, for QR
+     * scanning — and once it is declared the system enforces it on ACTION_IMAGE_CAPTURE as well,
+     * even though the camera app is the one actually taking the photo. Without the grant the
+     * launch is refused with "Permission Denial ... with revoked permission android.permission
+     * .CAMERA" and nothing happens on screen.
+     *
+     * Same check ProgressDoneFormActivity already does before its own openCamera().
+     */
+    private fun requestCameraThenOpen() {
+        if (PermissionHelper.isPermissionGranted(this, PermissionHelper.CAMERA)) {
+            openCamera()
+        } else {
+            PermissionHelper.requestPermission(
+                this, arrayOf(PermissionHelper.CAMERA), PermissionHelper.REQUEST_CODE_CAMERA
+            )
+        }
+    }
+
+    override fun onRequestPermissionsResult(
+        requestCode: Int, permissions: Array<out String>, grantResults: IntArray
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        if (requestCode == PermissionHelper.REQUEST_CODE_CAMERA) {
+            if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                openCamera()
+            } else {
+                showFailure(
+                    "Camera permission is required to take the maintenance photo",
+                    "Izin kamera diperlukan untuk mengambil foto perawatan."
+                )
+            }
+        }
+    }
+
     private fun openCamera() {
         val filename = "AC_during_${UUID.randomUUID()}.jpg"
         currentPhotoFile = File(externalCacheDir, filename)
@@ -346,6 +427,11 @@ class AcSessionActivity : AppCompatActivity(),
         techniciansRvAdapter.notifyDataSetChanged()
         val userId = data.userId ?: return
         viewModel.removeTechnician(logId, userId)
+    }
+
+    private companion object {
+        /** Long enough to read the refusal before the screen closes. */
+        const val ERROR_EXIT_DELAY_MS = 1500L
     }
 
     private fun compressImage(file: File): File {

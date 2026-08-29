@@ -195,11 +195,15 @@
     <string name="during">During</string>
     <string name="after">After</string>
     <string name="complete_check_out">Complete &amp; Check Out</string>
-    <string name="witness_section">Witness (Room PIC)</string>
+    <string name="witness_section">Witness (Room PIC) name</string>
     <string name="witness_name_hint">Witness name</string>
     <string name="witness_signature">Signature</string>
-    <string name="clear_signature">Clear</string>
+    <string name="clear_signature">Clear Signature</string>
     <string name="witness_hint">Ask the person in charge of the room to sign as a witness that the maintenance was carried out.</string>
+    <string name="witness_sign_dialog_title">Witness Signature</string>
+    <string name="witness_sign_save">Save</string>
+    <string name="witness_sign_button">Tap to Sign</string>
+    <string name="witness_resign">Sign Again</string>
 
     <string name="app_settings_title">Settings</string>
     <string name="about">About app</string>
@@ -239,5 +243,5 @@
          resources, so a literal newline in this XML compiles to a space — verified by
          `aapt2 dump strings` reporting zero newlines when this was written across lines. -->
     <string name="changelog_title">What\'s New in v%1$s</string>
-    <string name="changelog_current">NEW\n• Witness signature on AC Maintenance check-out: enter the name of the room PIC and have them sign on screen, as proof the maintenance was carried out.\n• Clear button to redo the signature if it did not come out cleanly.\n\nNOTES\n• The witness name and signature are required, the same as the photo. Check-out cannot be completed without both, so make sure the room PIC is present when the work finishes.\n• The name and signature are saved to the unit\'s maintenance history and can be seen on the AC dashboard on the web.</string>
+    <string name="changelog_current">NEW\n• The witness signature now opens in its own window when you tap the signature box, giving a larger area to sign in. Clear and redo it there, then Save — or Cancel to keep the previous signature.\n\nFIXES\n• Scrolling the check-out form could leave stray marks on the signature box. Signing no longer shares the page with the scroll.\n\nNOTES\n• The witness name and signature are still required, the same as the photo. Check-out cannot be completed without both, so make sure the room PIC is present when the work finishes.\n• The name and signature are saved to the unit\'s maintenance history and can be seen on the AC dashboard on the web.</string>
 </resources>

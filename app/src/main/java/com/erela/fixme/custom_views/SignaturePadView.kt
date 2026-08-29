@@ -46,11 +46,21 @@ class SignaturePadView @JvmOverloads constructor(
     val isEmpty: Boolean
         get() = strokes.isEmpty() && active == null
 
+    /**
+     * Called whenever the pad gains or loses its first stroke, so a host can show or hide controls
+     * that only make sense once something is drawn.
+     *
+     * Fired at the end of a stroke rather than on every move: a caller reacting to this is changing
+     * layout, and doing that on each touch sample would fight the drawing for frames.
+     */
+    var onEmptyStateChanged: ((isEmpty: Boolean) -> Unit)? = null
+
     fun clear() {
         strokes.clear()
         active = null
         moved = false
         invalidate()
+        onEmptyStateChanged?.invoke(isEmpty)
     }
 
     override fun onDraw(canvas: Canvas) {
@@ -92,6 +102,7 @@ class SignaturePadView @JvmOverloads constructor(
                 }
                 active = null
                 parent?.requestDisallowInterceptTouchEvent(false)
+                onEmptyStateChanged?.invoke(isEmpty)
             }
 
             else -> return false

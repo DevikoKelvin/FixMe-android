@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+    White fill with a visible edge, so the pad reads as somewhere to sign. Matches what
+    SignaturePadView exports, which is a PNG on opaque white.
+-->
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="rectangle">
+    <solid android:color="@color/white" />
+    <stroke
+        android:width="2dp"
+        android:color="@color/form_field_stroke" />
+    <corners android:radius="@dimen/login_field_corner_radius" />
+</shape>

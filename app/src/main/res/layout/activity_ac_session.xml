@@ -211,7 +211,7 @@
             </RadioGroup>
 
             <!-- Findings -->
-            <TextView
+            <!--<TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="@dimen/activity_horizontal_margin"
@@ -219,7 +219,7 @@
                 android:text="@string/findings"
                 android:textColor="@color/black"
                 android:textSize="@dimen/text_size_small"
-                android:textStyle="bold" />
+                android:textStyle="bold" />-->
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/etFindingsLayout"
@@ -228,7 +228,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="@dimen/activity_horizontal_margin"
                 android:layout_marginTop="@dimen/user_info_item_margin_top"
-                android:hint="@string/case_description"
+                android:hint="@string/findings"
                 app:boxCornerRadiusBottomEnd="@dimen/login_field_corner_radius"
                 app:boxCornerRadiusBottomStart="@dimen/login_field_corner_radius"
                 app:boxCornerRadiusTopEnd="@dimen/login_field_corner_radius"
@@ -249,7 +249,7 @@
             </com.google.android.material.textfield.TextInputLayout>
 
             <!-- Actions Taken -->
-            <TextView
+            <!--<TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="@dimen/activity_horizontal_margin"
@@ -257,7 +257,7 @@
                 android:text="@string/action_taken"
                 android:textColor="@color/black"
                 android:textSize="@dimen/text_size_small"
-                android:textStyle="bold" />
+                android:textStyle="bold" />-->
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/etActionsLayout"
@@ -266,7 +266,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="@dimen/activity_horizontal_margin"
                 android:layout_marginTop="@dimen/user_info_item_margin_top"
-                android:hint="@string/case_description"
+                android:hint="@string/action_taken"
                 app:boxCornerRadiusBottomEnd="@dimen/login_field_corner_radius"
                 app:boxCornerRadiusBottomStart="@dimen/login_field_corner_radius"
                 app:boxCornerRadiusTopEnd="@dimen/login_field_corner_radius"
@@ -333,7 +333,7 @@
             </LinearLayout>
 
             <!-- Witness (room PIC) — signs that the maintenance was actually performed -->
-            <TextView
+            <!--<TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="@dimen/activity_horizontal_margin"
@@ -341,7 +341,7 @@
                 android:text="@string/witness_section"
                 android:textColor="@color/black"
                 android:textSize="@dimen/text_size_small"
-                android:textStyle="bold" />
+                android:textStyle="bold" />-->
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/etWitnessNameLayout"
@@ -350,7 +350,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="@dimen/activity_horizontal_margin"
                 android:layout_marginTop="@dimen/user_info_item_margin_top"
-                android:hint="@string/witness_name_hint"
+                android:hint="@string/witness_section"
                 app:boxCornerRadiusBottomEnd="@dimen/login_field_corner_radius"
                 app:boxCornerRadiusBottomStart="@dimen/login_field_corner_radius"
                 app:boxCornerRadiusTopEnd="@dimen/login_field_corner_radius"
@@ -374,62 +374,123 @@
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="@dimen/activity_horizontal_margin"
                 android:layout_marginTop="@dimen/user_info_item_margin_top"
-                android:gravity="center_vertical"
                 android:orientation="horizontal">
 
                 <TextView
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:layout_gravity="center"
                     android:layout_weight="1"
                     android:text="@string/witness_signature"
                     android:textColor="@color/black"
                     android:textSize="@dimen/text_size_small"
                     android:textStyle="bold" />
 
+                <!-- Clears the saved signature. The pad's own clear button lives in the dialog. -->
                 <com.google.android.material.card.MaterialCardView
                     android:id="@+id/btnClearSignature"
-                    android:layout_width="48dp"
-                    android:layout_height="48dp"
-                    android:layout_gravity="center"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:visibility="gone"
                     app:cardBackgroundColor="@android:color/transparent"
                     app:cardCornerRadius="8dp"
                     app:cardElevation="0dp"
-                    app:contentPadding="8dp">
+                    app:strokeWidth="0dp"
+                    tools:visibility="visible">
 
-                    <ImageView
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:contentDescription="@string/clear_signature"
-                        android:src="@drawable/clear_icon" />
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:paddingHorizontal="8dp"
+                        tools:ignore="UseCompoundDrawables">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:layout_marginEnd="4dp"
+                            android:text="@string/clear_signature"
+                            android:textColor="@color/black"
+                            android:textSize="@dimen/text_size_small" />
+
+                        <ImageView
+                            android:layout_width="32dp"
+                            android:layout_height="32dp"
+                            android:contentDescription="@string/clear_signature"
+                            android:padding="4dp"
+                            android:src="@drawable/clear_icon" />
+                    </LinearLayout>
                 </com.google.android.material.card.MaterialCardView>
             </LinearLayout>
 
-            <!-- White, bordered, and fixed height: the pad has to look like somewhere to sign, and
-                 the export is the view's own pixels so its aspect ratio is the signature's. -->
-            <com.google.android.material.card.MaterialCardView
+            <!-- Preview only. Signing happens in SignaturePadDialog: drawing inline, inside this
+                 ScrollView, let a finger landing mid-scroll leave a stray mark, and committed every
+                 stroke straight to the signature that would be submitted. -->
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
-                android:layout_height="200dp"
+                android:layout_height="wrap_content"
                 android:layout_marginHorizontal="@dimen/activity_horizontal_margin"
-                android:layout_marginTop="4dp"
-                app:cardBackgroundColor="@color/white"
-                app:cardCornerRadius="@dimen/login_field_corner_radius"
-                app:cardElevation="0dp"
-                app:strokeColor="@color/black"
-                app:strokeWidth="@dimen/login_field_stroke_width">
+                android:layout_marginTop="@dimen/user_info_item_margin_top">
 
-                <com.erela.fixme.custom_views.SignaturePadView
-                    android:id="@+id/signaturePad"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent" />
-            </com.google.android.material.card.MaterialCardView>
+                <!-- Same 16:9 as the signing pad, so the preview is the shape of what was signed
+                     rather than a squashed version of it. -->
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/signaturePreviewContainer"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    app:cardBackgroundColor="@color/white"
+                    app:cardCornerRadius="25dp"
+                    app:cardElevation="0dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintDimensionRatio="H,16:9"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:strokeColor="@color/form_field_stroke"
+                    app:strokeWidth="3dp">
 
-            <TextView
+                    <ImageView
+                        android:id="@+id/imgSignaturePreview"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_margin="12dp"
+                        android:contentDescription="@string/witness_signature"
+                        android:scaleType="centerCrop"
+                        android:visibility="gone"
+                        tools:visibility="visible" />
+
+                    <!-- Shown until something is signed; the container is tappable either way, so
+                         re-signing needs no separate button. -->
+                    <TextView
+                        android:id="@+id/tvSignaturePlaceholder"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="center"
+                        android:paddingHorizontal="24dp"
+                        android:text="@string/witness_sign_button"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/text_size_small"
+                        android:textStyle="bold" />
+                </com.google.android.material.card.MaterialCardView>
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="@dimen/activity_horizontal_margin"
                 android:layout_marginTop="4dp"
-                android:text="@string/witness_hint"
-                android:textSize="12sp" />
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/tvSignatureHint"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/witness_hint"
+                    android:textSize="12sp" />
+            </LinearLayout>
         </LinearLayout>
     </ScrollView>
 

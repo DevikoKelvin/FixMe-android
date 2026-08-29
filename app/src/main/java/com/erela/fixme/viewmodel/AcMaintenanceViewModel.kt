@@ -12,6 +12,7 @@ import com.erela.fixme.objects.ac.AcSimpleResponse
 import com.erela.fixme.objects.ac.AcTaskListResponse
 import com.erela.fixme.repository.AcRepository
 import kotlinx.coroutines.launch
+import retrofit2.HttpException
 import java.io.File
 
 class AcMaintenanceViewModel(application: Application) : AndroidViewModel(application) {
@@ -30,13 +31,27 @@ class AcMaintenanceViewModel(application: Application) : AndroidViewModel(applic
     val isLoading: LiveData<Boolean> = _isLoading
     private val _error = MutableLiveData<String>()
     val error: LiveData<String> = _error
+
+    /**
+     * HTTP status of the last failure, or null when it was not an HTTP error at all (no network,
+     * parse failure). Kept separate from [error] so screens can react to a status without matching
+     * on message text — "HTTP 403 Forbidden" is Retrofit's wording, not ours, and it changes.
+     */
+    private val _errorCode = MutableLiveData<Int?>()
+    val errorCode: LiveData<Int?> = _errorCode
+
+    /** Records a failure once, so every call site reports the status the same way. */
+    private fun fail(throwable: Throwable) {
+        _errorCode.value = (throwable as? HttpException)?.code()
+        _error.value = throwable.message
+    }
     fun onQrScanned(acCode: String, userId: Int) {
         // does NOT touch _isLoading — scan runs in the background without
         // hiding the task list; result surfaces via scanResult LiveData
         viewModelScope.launch {
             repository.scan(acCode, userId)
                 .onSuccess { _scanResult.value = it }
-                .onFailure { _error.value = it.message }
+                .onFailure { fail(it) }
         }
     }
 
@@ -46,7 +61,7 @@ class AcMaintenanceViewModel(application: Application) : AndroidViewModel(applic
         viewModelScope.launch {
             repository.checkIn(itemId, userId, lat, lng)
                 .onSuccess { _checkInResult.value = it }
-                .onFailure { _error.value = it.message }
+                .onFailure { fail(it) }
         }
     }
 
@@ -60,7 +75,7 @@ class AcMaintenanceViewModel(application: Application) : AndroidViewModel(applic
                 }
                 .onFailure {
                     _isLoading.value = false
-                    _error.value = it.message
+                    fail(it)
                 }
         }
     }
@@ -69,7 +84,7 @@ class AcMaintenanceViewModel(application: Application) : AndroidViewModel(applic
         viewModelScope.launch {
             repository.sessionParticipants(logId, userId)
                 .onSuccess { _sessionParticipants.value = it }
-                .onFailure { _error.value = it.message }
+                .onFailure { fail(it) }
         }
     }
 
@@ -83,7 +98,7 @@ class AcMaintenanceViewModel(application: Application) : AndroidViewModel(applic
                 }
                 .onFailure {
                     _isLoading.value = false
-                    _error.value = it.message
+                    fail(it)
                 }
         }
     }
@@ -98,7 +113,7 @@ class AcMaintenanceViewModel(application: Application) : AndroidViewModel(applic
                 }
                 .onFailure {
                     _isLoading.value = false
-                    _error.value = it.message
+                    fail(it)
                 }
         }
     }
@@ -128,7 +143,7 @@ class AcMaintenanceViewModel(application: Application) : AndroidViewModel(applic
                 }
                 .onFailure {
                     _isLoading.value = false
-                    _error.value = it.message
+                    fail(it)
                 }
         }
     }

@@ -195,11 +195,15 @@
     <string name="during">Selama</string>
     <string name="after">Setelah</string>
     <string name="complete_check_out">Selesai &amp; Pemeriksaan Akhir</string>
-    <string name="witness_section">Saksi (PIC Ruangan)</string>
+    <string name="witness_section">Nama saksi (PIC Ruangan)</string>
     <string name="witness_name_hint">Nama saksi</string>
     <string name="witness_signature">Tanda Tangan</string>
-    <string name="clear_signature">Hapus</string>
+    <string name="clear_signature">Hapus Tanda Tangan</string>
     <string name="witness_hint">Minta penanggung jawab ruangan untuk menandatangani sebagai saksi bahwa perawatan telah dilakukan.</string>
+    <string name="witness_sign_dialog_title">Tanda Tangan Saksi</string>
+    <string name="witness_sign_save">Simpan</string>
+    <string name="witness_sign_button">Ketuk untuk Tanda Tangan</string>
+    <string name="witness_resign">Tanda Tangan Ulang</string>
 
     <string name="app_settings_title">Pengaturan</string>
     <string name="about">Tentang aplikasi</string>
@@ -235,5 +239,5 @@
          kali rilis. Pemisah baris WAJIB memakai \n, bukan baris baru asli — AAPT mengubah
          baris baru di dalam string resource menjadi spasi. -->
     <string name="changelog_title">Yang Baru di v%1$s</string>
-    <string name="changelog_current">BARU\n• Tanda tangan saksi pada Check-out Perawatan AC: isi nama PIC ruangan dan minta tanda tangan langsung di layar, sebagai bukti perawatan telah dilakukan.\n• Tombol hapus untuk mengulang tanda tangan bila hasilnya kurang jelas.\n\nCATATAN\n• Nama saksi dan tanda tangan wajib diisi, sama seperti foto. Check-out tidak dapat diselesaikan tanpa keduanya, jadi pastikan PIC ruangan ada di tempat saat perawatan selesai.\n• Nama dan tanda tangan tersimpan pada riwayat perawatan unit dan dapat dilihat pada dashboard AC di web.</string>
+    <string name="changelog_current">BARU\n• Tanda tangan saksi kini terbuka pada jendela tersendiri saat kotak tanda tangan diketuk, sehingga area untuk menandatangani lebih luas. Hapus dan ulangi di sana, lalu Simpan — atau Batal untuk mempertahankan tanda tangan sebelumnya.\n\nPERBAIKAN\n• Menggulir formulir Check-out dapat meninggalkan coretan pada kotak tanda tangan. Kini menandatangani tidak lagi berbagi halaman dengan gulir.\n\nCATATAN\n• Nama saksi dan tanda tangan tetap wajib diisi, sama seperti foto. Check-out tidak dapat diselesaikan tanpa keduanya, jadi pastikan PIC ruangan ada di tempat saat perawatan selesai.\n• Nama dan tanda tangan tersimpan pada riwayat perawatan unit dan dapat dilihat pada dashboard AC di web.</string>
 </resources>
