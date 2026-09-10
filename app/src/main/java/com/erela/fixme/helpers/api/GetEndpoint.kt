@@ -21,6 +21,12 @@ import com.erela.fixme.objects.ac.AcTaskListResponse
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import retrofit2.Call
+import com.erela.fixme.objects.laundry.LaundryCheckInRequest
+import com.erela.fixme.objects.laundry.LaundryCheckInResponse
+import com.erela.fixme.objects.laundry.LaundryCounterResponse
+import com.erela.fixme.objects.laundry.LaundryMyCheckInsResponse
+import com.erela.fixme.objects.laundry.LaundryScanResponse
+import retrofit2.http.Body
 import retrofit2.http.Field
 import retrofit2.http.FormUrlEncoded
 import retrofit2.http.GET
@@ -314,6 +320,43 @@ interface GetEndpoint {
         @Field("case_id") caseId: Int,
         @Field("user_id") userId: Int
     ): Call<GenericSimpleResponse>
+
+    // ---------------------------------------------------------------------------------------
+    // Smart Wash counter check-in.
+    //
+    // THESE FOUR REQUIRE THE BEARER TOKEN, and they are the only apimobile routes that do. The
+    // rest of the group has no auth:sanctum so released 1.4.0f keeps working, which means a body
+    // `user_id` is the identity there. For check-in that would undo the server's guard - the
+    // deliverer is the CALLER, never the body - so the routes ask for the token this app's
+    // InitAPI interceptor already sends. `user_id` is therefore NOT a parameter here: the server
+    // overwrites it from the token, and passing it would only invite the belief that it matters.
+    // ---------------------------------------------------------------------------------------
+
+    @FormUrlEncoded
+    @POST("laundryCounter")
+    suspend fun laundryCounter(
+        @Field("code") code: String,
+        @Field("lang") lang: String
+    ): LaundryCounterResponse
+
+    @FormUrlEncoded
+    @POST("laundryScan")
+    suspend fun laundryScan(
+        @Field("qr_code") qrCode: String,
+        @Field("lang") lang: String
+    ): LaundryScanResponse
+
+    /** JSON body: `items` is a list of objects, which form encoding cannot express cleanly. */
+    @POST("laundryCheckIn")
+    suspend fun laundryCheckIn(
+        @Body request: LaundryCheckInRequest
+    ): LaundryCheckInResponse
+
+    @FormUrlEncoded
+    @POST("laundryMyCheckIns")
+    suspend fun laundryMyCheckIns(
+        @Field("lang") lang: String
+    ): LaundryMyCheckInsResponse
 
     @FormUrlEncoded
     @POST("acScan")

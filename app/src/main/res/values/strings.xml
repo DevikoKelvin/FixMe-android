@@ -244,4 +244,25 @@
          `aapt2 dump strings` reporting zero newlines when this was written across lines. -->
     <string name="changelog_title">What\'s New in v%1$s</string>
     <string name="changelog_current">NEW\n• The witness signature now opens in its own window when you tap the signature box, giving a larger area to sign in. Clear and redo it there, then Save — or Cancel to keep the previous signature.\n\nFIXES\n• Scrolling the check-out form could leave stray marks on the signature box. Signing no longer shares the page with the scroll.\n\nNOTES\n• The witness name and signature are still required, the same as the photo. Check-out cannot be completed without both, so make sure the room PIC is present when the work finishes.\n• The name and signature are saved to the unit\'s maintenance history and can be seen on the AC dashboard on the web.</string>
+
+    <!-- Smart Wash counter check-in [D-14]. The phone is where the camera is. -->
+    <string name="laundry_check_in_title">Laundry Hand-over</string>
+    <string name="laundry_menu_title">Laundry Hand-over</string>
+    <string name="laundry_counter_label">Counter</string>
+    <string name="laundry_counter_not_scanned">Not scanned yet</string>
+    <string name="laundry_scan_counter">Scan</string>
+    <string name="laundry_scan_counter_prompt">Scan the laundry counter QR</string>
+    <string name="laundry_scan_patch">Scan a uniform patch</string>
+    <string name="laundry_scan_patch_prompt">Scan the QR on the uniform tag</string>
+    <string name="laundry_bundle_empty">Scan the counter QR first, then scan each uniform.</string>
+    <string name="laundry_bundle_count">%1$d item(s)</string>
+    <string name="laundry_clear_bundle">Clear</string>
+    <string name="laundry_clear_confirm">Remove all %1$d item(s) from this list?</string>
+    <string name="laundry_submit">Save hand-over</string>
+    <string name="laundry_item_note_hint">Item note (optional)</string>
+    <string name="laundry_batch_note_hint">Hand-over note (optional)</string>
+    <string name="laundry_mixed_owner_warning">Belongs to another department — it will be held at the laundry</string>
+    <string name="laundry_duplicate_code">Code %1$s is already in this list.</string>
+    <string name="laundry_counter_required">Scan the counter QR first.</string>
+    <string name="laundry_condition_note">Condition is judged by the laundry at receipt, not here.</string>
 </resources>

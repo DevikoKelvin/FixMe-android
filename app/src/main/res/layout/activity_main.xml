@@ -309,6 +309,52 @@
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
 
+            <!--
+                Serah Terima Laundry - the mobile counter check-in [D-14].
+
+                NO CLIENT-SIDE GATE, unlike the AC card above. Who may hand laundry in is "any
+                user whose DEPARTMENT is on the laundry list", a list this app cannot see without
+                asking - and the AC card's hardcoded department and sub-department names are
+                exactly the kind of thing that breaks when General Affair renames a sub-dept.
+                So the card is always visible and the counter scan answers `may_check_in`, which
+                is the same answer the web screen gives by opening and showing a warning.
+            -->
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/laundryCheckInMenu"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/main_menu_item_margin"
+                android:layout_weight="1"
+                app:cardCornerRadius="@dimen/card_corner_radius"
+                app:cardElevation="@dimen/card_elevation"
+                app:strokeWidth="0dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/gradient_card_color"
+                    android:gravity="center"
+                    android:orientation="horizontal"
+                    android:padding="@dimen/activity_horizontal_margin"
+                    tools:ignore="UseCompoundDrawables">
+
+                    <ImageView
+                        android:layout_width="@dimen/main_menu_item_icon_size"
+                        android:layout_height="@dimen/main_menu_item_icon_size"
+                        android:src="@drawable/laundry_icon"
+                        tools:ignore="ContentDescription" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginHorizontal="@dimen/button_padding"
+                        android:text="@string/laundry_menu_title"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/text_size_large"
+                        android:textStyle="bold" />
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/settingsMenu"
                 android:layout_width="match_parent"

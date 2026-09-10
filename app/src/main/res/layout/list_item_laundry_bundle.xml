@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+    One scanned garment in the bundle being built.
+
+    A ROW IS A GARMENT, NOT A COUNT. The slip prints quantities per type; the courier building the
+    bundle needs each patch visible, because spotting a garment they did not mean to pick up is the
+    whole reason the scan is resolved at all.
+-->
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mainContainer"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginHorizontal="@dimen/list_item_submission_margin_horizontal"
+    android:layout_marginVertical="@dimen/list_item_submission_margin_vertical"
+    app:cardBackgroundColor="#FBFBFB"
+    app:cardCornerRadius="@dimen/list_item_progress_card_corner_radius"
+    app:cardElevation="@dimen/list_item_progress_card_elevation"
+    app:strokeWidth="0dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="12dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/tvOrdinal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:textColor="@color/custom_toast_font_normal_gray"
+                android:textSize="@dimen/text_size_medium"
+                tools:text="1." />
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/tvCode"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="monospace"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/text_size_large"
+                    android:textStyle="bold"
+                    tools:text="000123" />
+
+                <TextView
+                    android:id="@+id/tvItemType"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/text_size_medium"
+                    tools:text="Seragam Produksi" />
+
+                <TextView
+                    android:id="@+id/tvOwner"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/custom_toast_font_normal_gray"
+                    android:textSize="@dimen/text_size_small"
+                    tools:text="Budi Santoso · Produksi" />
+            </LinearLayout>
+
+            <ImageButton
+                android:id="@+id/removeButton"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:src="@drawable/baseline_close_24"
+                app:tint="@color/status_rejected"
+                tools:ignore="ContentDescription" />
+        </LinearLayout>
+
+        <!-- Shown only for a garment belonging to another department. It is still accepted: the
+             garment is washed with this bundle and becomes a held item, and the courier is the
+             last person who can notice before walking away. -->
+        <TextView
+            android:id="@+id/tvMixedWarning"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:drawablePadding="4dp"
+            android:textColor="@color/status_hold"
+            android:textSize="@dimen/text_size_small"
+            android:textStyle="bold"
+            android:visibility="gone"
+            tools:text="Milik departemen lain — akan ditahan di laundry"
+            tools:visibility="visible" />
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:hint="@string/laundry_item_note_hint"
+            app:boxBackgroundMode="outline">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/etNote"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:imeOptions="actionDone"
+                android:inputType="text"
+                android:maxLength="500"
+                android:textSize="@dimen/text_size_medium" />
+        </com.google.android.material.textfield.TextInputLayout>
+    </LinearLayout>
+</com.google.android.material.card.MaterialCardView>

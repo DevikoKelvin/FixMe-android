@@ -240,4 +240,25 @@
          baris baru di dalam string resource menjadi spasi. -->
     <string name="changelog_title">Yang Baru di v%1$s</string>
     <string name="changelog_current">BARU\n• Tanda tangan saksi kini terbuka pada jendela tersendiri saat kotak tanda tangan diketuk, sehingga area untuk menandatangani lebih luas. Hapus dan ulangi di sana, lalu Simpan — atau Batal untuk mempertahankan tanda tangan sebelumnya.\n\nPERBAIKAN\n• Menggulir formulir Check-out dapat meninggalkan coretan pada kotak tanda tangan. Kini menandatangani tidak lagi berbagi halaman dengan gulir.\n\nCATATAN\n• Nama saksi dan tanda tangan tetap wajib diisi, sama seperti foto. Check-out tidak dapat diselesaikan tanpa keduanya, jadi pastikan PIC ruangan ada di tempat saat perawatan selesai.\n• Nama dan tanda tangan tersimpan pada riwayat perawatan unit dan dapat dilihat pada dashboard AC di web.</string>
+
+    <!-- Serah terima laundry di counter [D-14]. Kamera hanya ada di aplikasi mobile. -->
+    <string name="laundry_check_in_title">Serah Terima Laundry</string>
+    <string name="laundry_menu_title">Serah Terima Laundry</string>
+    <string name="laundry_counter_label">Counter</string>
+    <string name="laundry_counter_not_scanned">Belum discan</string>
+    <string name="laundry_scan_counter">Scan</string>
+    <string name="laundry_scan_counter_prompt">Scan QR counter laundry</string>
+    <string name="laundry_scan_patch">Scan patch seragam</string>
+    <string name="laundry_scan_patch_prompt">Scan QR pada tag seragam</string>
+    <string name="laundry_bundle_empty">Scan QR counter dulu, lalu scan tiap seragam.</string>
+    <string name="laundry_bundle_count">%1$d item</string>
+    <string name="laundry_clear_bundle">Kosongkan</string>
+    <string name="laundry_clear_confirm">Kosongkan %1$d item dari daftar ini?</string>
+    <string name="laundry_submit">Simpan Serah Terima</string>
+    <string name="laundry_item_note_hint">Catatan item (opsional)</string>
+    <string name="laundry_batch_note_hint">Catatan serah terima (opsional)</string>
+    <string name="laundry_mixed_owner_warning">Milik departemen lain — akan ditahan di laundry</string>
+    <string name="laundry_duplicate_code">Kode %1$s sudah ada di daftar ini.</string>
+    <string name="laundry_counter_required">Scan QR counter dulu.</string>
+    <string name="laundry_condition_note">Kondisi seragam dinilai petugas laundry saat penerimaan, bukan di sini.</string>
 </resources>

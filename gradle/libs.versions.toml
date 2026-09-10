@@ -1,6 +1,6 @@
 [versions]
 # Plugins
-agp = "9.3.2"
+agp = "9.4.0"
 gms = "4.5.0"
 
 # Dependencies
@@ -26,12 +26,15 @@ swipeRefreshLayout = "1.2.0"
 circleIndicator = "2.1.6"
 appxupdater = "v2.0.20"
 pusherJavaClient = "2.4.4"
+# 2.0.0 requires Kotlin 2.4: balloon-android:2.0.0 depends on kotlin-stdlib:2.4.10, which
+# wins conflict resolution over 2.2.10 and then cannot be read by the compiler AGP embeds
+# (metadata 2.4.0, expected 2.2.0). Held at 1.7.6 until the Kotlin toolchain moves.
 balloon = "1.7.6"
 shimmer = "0.5.0"
 qr-code = "4.3.0"
 
-firebaseBom = "34.18.0"
-firebaseMessaging = "25.1.2"
+firebaseBom = "34.19.0"
+firebaseMessaging = "25.1.3"
 playServicesMaps = "20.0.0"
 playServicesLocation = "21.4.0"
 activityKtx = "1.13.0"

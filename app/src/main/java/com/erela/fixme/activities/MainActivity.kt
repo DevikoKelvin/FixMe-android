@@ -381,6 +381,10 @@ class MainActivity : AppCompatActivity() {
                 startActivity(Intent(this@MainActivity, AcTaskListActivity::class.java))
             }
 
+            laundryCheckInMenu.setOnClickListener {
+                startActivity(Intent(this@MainActivity, LaundryCheckInActivity::class.java))
+            }
+
             settingsMenu.setOnClickListener {
                 startActivity(Intent(this@MainActivity, SettingsActivity::class.java))
             }
