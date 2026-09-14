@@ -29,5 +29,14 @@ data class LoginResponse(
     val lockoutSeconds: Int? = null,
     // Sanctum bearer token. Nullable so a server that predates token auth still parses.
     @field:SerializedName("token")
-    val token: String? = null
+    val token: String? = null,
+    // Does this person work the laundry counter. Decides which Smart Wash screen they get: the
+    // counter operator scans garments, everyone else is a courier who only scans the counter.
+    //
+    // NOT the web access level. That one hands every super user the management pages, which is
+    // correct on the web and wrong here - IT hands uniforms in like anybody else.
+    //
+    // Nullable for the same reason as the token - an older server simply omits it.
+    @field:SerializedName("laundry_counter")
+    val isLaundryCounter: Boolean? = null
 )

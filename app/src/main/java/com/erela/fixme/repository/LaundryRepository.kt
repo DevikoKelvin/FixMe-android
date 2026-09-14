@@ -4,8 +4,8 @@ import android.content.Context
 import com.erela.fixme.R
 import com.erela.fixme.helpers.api.GetEndpoint
 import com.erela.fixme.helpers.api.InitAPI
+import com.erela.fixme.objects.laundry.LaundryAddItemsRequest
 import com.erela.fixme.objects.laundry.LaundryCheckInItem
-import com.erela.fixme.objects.laundry.LaundryCheckInRequest
 
 /**
  * Smart Wash counter check-in, as `AcRepository` does it: `runCatching` around each call.
@@ -22,19 +22,21 @@ class LaundryRepository(
     private val lang: String
         get() = context.getString(R.string.lang)
 
-    /** The counter sticker. Also answers whether this courier's department may hand laundry in. */
-    suspend fun counter(code: String) =
-        runCatching { api.laundryCounter(code, lang) }
+    /** The courier: "I am here with a bundle". Opens a transaction with no lines. */
+    suspend fun arrive(counterCode: String) =
+        runCatching { api.laundryArrive(counterCode, lang) }
+
+    /** The operator: couriers waiting to be served, oldest first. */
+    suspend fun arrivals() =
+        runCatching { api.laundryArrivals(lang) }
+
+    /** The operator: write scanned garments onto a courier's arrival. */
+    suspend fun addItems(idTrx: Int, note: String?, items: List<LaundryCheckInItem>) =
+        runCatching { api.laundryAddItems(LaundryAddItemsRequest(idTrx, note, items)) }
 
     /** One patch, resolved before it joins the bundle. */
     suspend fun scan(qrCode: String) =
         runCatching { api.laundryScan(qrCode, lang) }
-
-    /** The whole bundle, together or not at all. */
-    suspend fun checkIn(counterCode: String, note: String?, items: List<LaundryCheckInItem>) =
-        runCatching {
-            api.laundryCheckIn(LaundryCheckInRequest(counterCode, note, items))
-        }
 
     suspend fun myCheckIns() =
         runCatching { api.laundryMyCheckIns(lang) }

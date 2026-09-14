@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+    One courier waiting at the counter, in the operator's queue.
+
+    THE WHOLE ROW IS THE BUTTON. Picking a courier is the only thing that can be done to a row, so
+    a separate "select" control would be a second tap target for the one action.
+
+    THE DEPARTMENT IS NOT DECORATION. It is what the mixed-owner warning on every garment scanned
+    afterwards is compared against, so it has to be visible at the moment of picking.
+-->
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mainContainer"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginHorizontal="@dimen/list_item_submission_margin_horizontal"
+    android:layout_marginVertical="@dimen/list_item_submission_margin_vertical"
+    android:clickable="true"
+    android:focusable="true"
+    android:foreground="?attr/selectableItemBackground"
+    app:cardBackgroundColor="#FBFBFB"
+    app:cardCornerRadius="@dimen/list_item_progress_card_corner_radius"
+    app:cardElevation="@dimen/list_item_progress_card_elevation"
+    app:strokeWidth="0dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:padding="12dp">
+
+        <TextView
+            android:id="@+id/tvOrdinal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:textColor="@color/custom_toast_font_normal_gray"
+            android:textSize="@dimen/text_size_medium"
+            tools:text="1." />
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/tvCourier"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/black"
+                android:textSize="@dimen/text_size_medium"
+                android:textStyle="bold"
+                tools:text="Budi Santoso" />
+
+            <TextView
+                android:id="@+id/tvDept"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/black"
+                android:textSize="@dimen/text_size_small"
+                tools:text="Produksi · Assembly" />
+
+            <TextView
+                android:id="@+id/tvWaitingSince"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/custom_toast_font_normal_gray"
+                android:textSize="@dimen/text_size_small"
+                tools:text="Menunggu sejak 08:14" />
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/tvTrxNo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:fontFamily="monospace"
+            android:textColor="@color/custom_toast_font_normal_gray"
+            android:textSize="@dimen/text_size_small"
+            tools:text="2026/09/12/LDY/0001" />
+    </LinearLayout>
+</com.google.android.material.card.MaterialCardView>

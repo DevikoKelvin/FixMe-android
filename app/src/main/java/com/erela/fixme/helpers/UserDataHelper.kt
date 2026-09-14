@@ -15,12 +15,14 @@ class UserDataHelper(private val context: Context) {
     private val keySubDept = "key.sub.dept"
     private val keyEmail = "key.email"
     private val keyToken = "key.token"
+    private val keyLaundryCounter = "key.laundry.counter"
 
     /*private val notificationKey = "key.notification"*/
 
     fun setUserData(
         id: Int, idStarConnect: Int, username: String, name: String, privilege: Int, idDept: Int,
-        dept: String, subDept: String, email: String = ""
+        dept: String, subDept: String, email: String = "",
+        isLaundryCounter: Boolean = false
     ) {
         SharedPreferencesHelper.getSharedPreferences(context).edit {
             also {
@@ -34,6 +36,7 @@ class UserDataHelper(private val context: Context) {
                     putString(keyDept, dept)
                     putString(keySubDept, subDept)
                     putString(keyEmail, email)
+                    putBoolean(keyLaundryCounter, isLaundryCounter)
                 }
             }
         }
@@ -52,7 +55,8 @@ class UserDataHelper(private val context: Context) {
                     getInt(keyIdDept, 0),
                     getString(keyDept, "").toString(),
                     getString(keySubDept, "").toString(),
-                    getString(keyEmail, "").toString()
+                    getString(keyEmail, "").toString(),
+                    getBoolean(keyLaundryCounter, false)
                 )
             }
         }

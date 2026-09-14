@@ -14,28 +14,6 @@ import com.google.gson.annotations.SerializedName
  * success test.
  */
 
-/** The counter sticker: says WHERE the courier is standing, never WHO they are. */
-data class LaundryCounterResponse(
-    @SerializedName("code") val code: Int,
-    @SerializedName("message") val message: String,
-    @SerializedName("data") val data: LaundryCounter?
-) {
-    val isSuccess get() = code == 1
-}
-
-data class LaundryCounter(
-    @SerializedName("counter_code") val counterCode: String,
-    @SerializedName("name") val name: String,
-    /**
-     * Whether this courier's DEPARTMENT is on the laundry list.
-     *
-     * Answered here so the courier finds out before scanning twenty patches, rather than at
-     * submit. `isSuccess` can be true while this is false — the counter is real, the department
-     * is not yet registered — so the two must be read separately.
-     */
-    @SerializedName("may_check_in") val mayCheckIn: Boolean
-)
-
 /**
  * One scanned patch, resolved before it joins the bundle.
  *
@@ -67,20 +45,27 @@ data class LaundryGarment(
 }
 
 /**
- * The bundle, as a JSON body rather than form fields.
+ * One garment in a saved batch.
  *
- * `items` is a list of objects, which form encoding cannot express without `items[0][qr_code]`
- * key-building by hand. Gson is already installed and configured on this Retrofit instance.
+ * A list of objects is why [LaundryAddItemsRequest] goes out as a JSON body: form encoding cannot
+ * express it without building `items[0][qr_code]` keys by hand, and Gson is already configured on
+ * this Retrofit instance.
  */
-data class LaundryCheckInRequest(
-    @SerializedName("counter_code") val counterCode: String,
-    @SerializedName("note") val note: String?,
-    @SerializedName("items") val items: List<LaundryCheckInItem>
-)
-
 data class LaundryCheckInItem(
     @SerializedName("qr_code") val qrCode: String,
     @SerializedName("note") val note: String?
+)
+
+/**
+ * The operator's scanned garments, written onto a courier's arrival.
+ *
+ * No counter code: the arrival already knows which counter it was opened at, and re-sending it
+ * would let the two disagree.
+ */
+data class LaundryAddItemsRequest(
+    @SerializedName("id_trx") val idTrx: Int,
+    @SerializedName("note") val note: String?,
+    @SerializedName("items") val items: List<LaundryCheckInItem>
 )
 
 data class LaundryCheckInResponse(
@@ -106,6 +91,52 @@ data class LaundryTransaction(
      * will show each of these as `+1`.
      */
     @SerializedName("attached_count") val attachedCount: Int
+)
+
+/**
+ * The courier's arrival: "I am here with a bundle".
+ *
+ * NO ITEMS. GA split check-in on 12 Sep 2026 - the courier scans the counter and stops there, and
+ * the counter operator scans the garments onto this transaction afterwards.
+ */
+data class LaundryArrivalResponse(
+    @SerializedName("code") val code: Int,
+    @SerializedName("message") val message: String,
+    @SerializedName("data") val data: LaundryArrival?
+) {
+    val isSuccess get() = code == 1
+}
+
+data class LaundryArrival(
+    @SerializedName("id_trx") val idTrx: Int,
+    @SerializedName("trx_no") val trxNo: String,
+    @SerializedName("item_count") val itemCount: Int,
+    /**
+     * True when this arrival already existed.
+     *
+     * Scanning the counter twice is an ordinary slip - the phone is in their hand and the sticker
+     * is right there - so the server returns the SAME arrival rather than opening a second empty
+     * one. The screen says "already registered" instead of implying a fresh one was made.
+     */
+    @SerializedName("already_open") val alreadyOpen: Boolean = false
+)
+
+/** The operator's queue: couriers waiting for their bundle to be scanned, oldest first. */
+data class LaundryArrivalsResponse(
+    @SerializedName("code") val code: Int,
+    @SerializedName("message") val message: String,
+    @SerializedName("data") val data: List<LaundryWaitingCourier>?
+) {
+    val isSuccess get() = code == 1
+}
+
+data class LaundryWaitingCourier(
+    @SerializedName("id") val id: Int,
+    @SerializedName("trx_no") val trxNo: String,
+    @SerializedName("checked_in_at") val checkedInAt: String?,
+    @SerializedName("nama_dept") val namaDept: String?,
+    @SerializedName("sub_dept") val subDept: String?,
+    @SerializedName("pengantar") val pengantar: String?
 )
 
 /** The caller's own recent hand-overs, so the app can confirm one landed. */

@@ -18,13 +18,20 @@ import com.erela.fixme.objects.laundry.LaundryGarment
  * garment they did not mean to pick up, and a total of "12" hides exactly that.
  *
  * THE MIXED-OWNER WARNING IS THE REASON THE OWNER IS SHOWN AT ALL. A garment belonging to another
- * department is accepted — it is washed and becomes a held item [T-02] — but the courier is the
- * last person who can notice before walking away, so the row says so plainly rather than leaving
- * it to the slip.
+ * department is accepted — it is washed and becomes a held item [T-02] — but the counter is the
+ * last place anyone can notice before the courier walks away, so the row says so plainly rather
+ * than leaving it to the slip.
  */
 class LaundryBundleAdapter(
     private val context: Context,
-    private val ownDept: String?,
+    /**
+     * The department the bundle belongs to — the ARRIVING one, not the operator's.
+     *
+     * A `var` because the operator serves one courier after another on the same screen, and the
+     * department to compare against changes with each. Left as the operator's own it would be GA
+     * every time, which would flag every garment in every bundle as mixed.
+     */
+    var ownDept: String?,
     private val onRemove: (LaundryGarment) -> Unit,
     private val onNoteChanged: (LaundryGarment, String?) -> Unit
 ) : RecyclerView.Adapter<LaundryBundleAdapter.ViewHolder>() {

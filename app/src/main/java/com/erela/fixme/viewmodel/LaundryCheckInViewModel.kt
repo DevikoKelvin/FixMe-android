@@ -5,38 +5,48 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
+import com.erela.fixme.objects.laundry.LaundryArrivalResponse
+import com.erela.fixme.objects.laundry.LaundryArrivalsResponse
 import com.erela.fixme.objects.laundry.LaundryCheckInItem
 import com.erela.fixme.objects.laundry.LaundryCheckInResponse
-import com.erela.fixme.objects.laundry.LaundryCounterResponse
 import com.erela.fixme.objects.laundry.LaundryGarment
 import com.erela.fixme.objects.laundry.LaundryMyCheckInsResponse
 import com.erela.fixme.objects.laundry.LaundryScanResponse
+import com.erela.fixme.objects.laundry.LaundryWaitingCourier
 import com.erela.fixme.repository.LaundryRepository
 import kotlinx.coroutines.launch
 import retrofit2.HttpException
 
 /**
+ * Both halves of the counter flow: the courier's arrival, and the operator's scanning.
+ *
+ * ONE VIEWMODEL FOR TWO ROLES because they share everything that matters - the same repository,
+ * the same error handling, and the operator's bundle is the same bundle the courier's used to be.
+ * The two screens observe different halves of it. Split it the day a third role appears.
+ *
  * The bundle lives here, not in the Activity.
  *
- * NOTHING IS SENT UNTIL SUBMIT, exactly as on the web: a hand-over is one event, and a
- * half-written transaction is worse than none. So the scanned garments accumulate in this
- * ViewModel and survive rotation — a courier a dozen patches into a bundle must not lose it to a
- * screen turn, which is precisely when they would be holding the phone loosely.
+ * NOTHING IS SENT UNTIL SAVE. The scanned garments accumulate here and survive rotation — an
+ * operator a dozen patches into a bundle must not lose them to a screen turn, which is precisely
+ * when they would be holding the phone loosely.
  *
  * KEYED BY CODE, so scanning the same patch twice is caught here rather than by the server after
- * the courier has walked away. The server checks it too; this only makes the answer immediate.
+ * the bundle is done. The server checks it too; this only makes the answer immediate.
  */
 class LaundryCheckInViewModel(application: Application) : AndroidViewModel(application) {
     private val repository = LaundryRepository(application)
 
-    /** The bundle, in scan order. `LinkedHashMap` because the order is what the courier sees. */
+    /** The bundle, in scan order. `LinkedHashMap` because the order is what the operator sees. */
     private val bundle = LinkedHashMap<String, LaundryGarment>()
 
     private val _items = MutableLiveData<List<LaundryGarment>>(emptyList())
     val items: LiveData<List<LaundryGarment>> = _items
 
-    private val _counterResult = MutableLiveData<LaundryCounterResponse>()
-    val counterResult: LiveData<LaundryCounterResponse> = _counterResult
+    private val _arrivalResult = MutableLiveData<LaundryArrivalResponse>()
+    val arrivalResult: LiveData<LaundryArrivalResponse> = _arrivalResult
+
+    private val _arrivals = MutableLiveData<LaundryArrivalsResponse>()
+    val arrivals: LiveData<LaundryArrivalsResponse> = _arrivals
 
     private val _scanResult = MutableLiveData<LaundryScanResponse>()
     val scanResult: LiveData<LaundryScanResponse> = _scanResult
@@ -66,15 +76,16 @@ class LaundryCheckInViewModel(application: Application) : AndroidViewModel(appli
     private val _errorCode = MutableLiveData<Int?>()
     val errorCode: LiveData<Int?> = _errorCode
 
-    /** The counter this bundle is being handed in at. Set by a successful counter scan. */
-    var counterCode: String? = null
+    /**
+     * The arrival the OPERATOR is filling. Null until they pick a courier off the queue.
+     *
+     * Held here rather than passed through an Intent so a rotation mid-bundle does not strand the
+     * scans against no transaction.
+     */
+    var workingIdTrx: Int? = null
         private set
 
-    var counterName: String? = null
-        private set
-
-    /** False until a counter scan says this courier's department is on the laundry list. */
-    var mayCheckIn: Boolean = false
+    var workingCourier: String? = null
         private set
 
     private fun fail(throwable: Throwable) {
@@ -82,20 +93,31 @@ class LaundryCheckInViewModel(application: Application) : AndroidViewModel(appli
         _error.value = throwable.message
     }
 
-    fun scanCounter(code: String) {
+    /**
+     * The courier's whole job: say they have arrived at this counter.
+     *
+     * No bundle is enumerated here. The operator scans the garments afterwards, so all this needs
+     * to carry is the counter - the server takes the courier from the token.
+     */
+    fun arrive(counterCode: String) {
+        _isSubmitting.value = true
+
+        viewModelScope.launch {
+            repository.arrive(counterCode)
+                .onSuccess { _arrivalResult.value = it }
+                .onFailure { fail(it) }
+
+            _isSubmitting.value = false
+        }
+    }
+
+    /** The operator's queue of waiting couriers. */
+    fun loadArrivals() {
         _isLoading.value = true
 
         viewModelScope.launch {
-            repository.counter(code)
-                .onSuccess { response ->
-                    if (response.isSuccess && response.data != null) {
-                        counterCode = response.data.counterCode
-                        counterName = response.data.name
-                        mayCheckIn = response.data.mayCheckIn
-                    }
-
-                    _counterResult.value = response
-                }
+            repository.arrivals()
+                .onSuccess { _arrivals.value = it }
                 .onFailure { fail(it) }
 
             _isLoading.value = false
@@ -103,11 +125,62 @@ class LaundryCheckInViewModel(application: Application) : AndroidViewModel(appli
     }
 
     /**
+     * The arriving courier's DEPARTMENT, which the bundle rows compare each garment against.
+     *
+     * Not the operator's own: theirs is GA, and comparing against it would mark every garment in
+     * every bundle as belonging to another department.
+     */
+    var workingDept: String? = null
+        private set
+
+    /** The operator picks a courier off the queue; scanning then applies to their arrival. */
+    fun workOn(arrival: LaundryWaitingCourier) {
+        workingIdTrx = arrival.id
+        workingCourier = arrival.pengantar
+        workingDept = arrival.namaDept
+        clearBundle()
+    }
+
+    /**
+     * Write the scanned garments onto the arrival being worked on.
+     *
+     * The server allows this more than once for the same arrival, so the bundle is cleared on
+     * success and the operator can keep going rather than starting the batch again.
+     */
+    fun saveItems(note: String?) {
+        val idTrx = workingIdTrx
+
+        if (idTrx == null || bundle.isEmpty()) {
+            return
+        }
+
+        _isSubmitting.value = true
+
+        val items = bundle.values.map { LaundryCheckInItem(it.qrCode, it.note) }
+
+        viewModelScope.launch {
+            repository.addItems(idTrx, note, items)
+                .onSuccess { response ->
+                    // Cleared only on success. A failed save must leave the bundle intact, or the
+                    // operator rescans thirty garments because the network blinked.
+                    if (response.isSuccess) {
+                        clearBundle()
+                    }
+
+                    _checkInResult.value = response
+                }
+                .onFailure { fail(it) }
+
+            _isSubmitting.value = false
+        }
+    }
+
+    /**
      * Resolve one scanned patch, then add it.
      *
-     * The duplicate check happens BEFORE the request: a courier who scans the same tag twice gets
-     * an immediate answer instead of a round trip that would have succeeded and then been
-     * rejected at submit.
+     * The duplicate check happens BEFORE the request: an operator who scans the same tag twice
+     * gets an immediate answer instead of a round trip that would have succeeded and then been
+     * rejected on save.
      */
     fun onQrScanned(qrCode: String) {
         val code = qrCode.trim()
@@ -150,41 +223,6 @@ class LaundryCheckInViewModel(application: Application) : AndroidViewModel(appli
     }
 
     fun count(): Int = bundle.size
-
-    /**
-     * Hand the bundle over.
-     *
-     * The counter code is the one the scan established, never one the screen holds: if no counter
-     * has been scanned there is nothing to submit to, and guessing would file the hand-over
-     * against the wrong drop point.
-     */
-    fun submit(note: String?) {
-        val counter = counterCode
-
-        if (counter.isNullOrBlank() || bundle.isEmpty()) {
-            return
-        }
-
-        _isSubmitting.value = true
-
-        val items = bundle.values.map { LaundryCheckInItem(it.qrCode, it.note) }
-
-        viewModelScope.launch {
-            repository.checkIn(counter, note, items)
-                .onSuccess { response ->
-                    // Cleared only on success. A failed submit must leave the bundle intact, or
-                    // the courier rebuilds thirty scans because the network blinked.
-                    if (response.isSuccess) {
-                        clearBundle()
-                    }
-
-                    _checkInResult.value = response
-                }
-                .onFailure { fail(it) }
-
-            _isSubmitting.value = false
-        }
-    }
 
     fun loadRecent() {
         viewModelScope.launch {

@@ -384,7 +384,8 @@ class LoginActivity : AppCompatActivity() {
                                                     result.deptId!!,
                                                     result.deptName!!,
                                                     result.subDept!!,
-                                                    result.email ?: ""
+                                                    result.email ?: "",
+                                                    result.isLaundryCounter == true
                                                 )
                                             FirebaseMessaging.getInstance().token.addOnCompleteListener { task ->
                                                 if (!task.isSuccessful) {

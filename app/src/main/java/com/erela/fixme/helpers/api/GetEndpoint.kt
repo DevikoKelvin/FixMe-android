@@ -21,9 +21,10 @@ import com.erela.fixme.objects.ac.AcTaskListResponse
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import retrofit2.Call
-import com.erela.fixme.objects.laundry.LaundryCheckInRequest
+import com.erela.fixme.objects.laundry.LaundryArrivalResponse
+import com.erela.fixme.objects.laundry.LaundryArrivalsResponse
+import com.erela.fixme.objects.laundry.LaundryAddItemsRequest
 import com.erela.fixme.objects.laundry.LaundryCheckInResponse
-import com.erela.fixme.objects.laundry.LaundryCounterResponse
 import com.erela.fixme.objects.laundry.LaundryMyCheckInsResponse
 import com.erela.fixme.objects.laundry.LaundryScanResponse
 import retrofit2.http.Body
@@ -324,7 +325,7 @@ interface GetEndpoint {
     // ---------------------------------------------------------------------------------------
     // Smart Wash counter check-in.
     //
-    // THESE FOUR REQUIRE THE BEARER TOKEN, and they are the only apimobile routes that do. The
+    // THESE ALL REQUIRE THE BEARER TOKEN, and they are the only apimobile routes that do. The
     // rest of the group has no auth:sanctum so released 1.4.0f keeps working, which means a body
     // `user_id` is the identity there. For check-in that would undo the server's guard - the
     // deliverer is the CALLER, never the body - so the routes ask for the token this app's
@@ -333,11 +334,23 @@ interface GetEndpoint {
     // ---------------------------------------------------------------------------------------
 
     @FormUrlEncoded
-    @POST("laundryCounter")
-    suspend fun laundryCounter(
-        @Field("code") code: String,
+    @POST("laundryArrive")
+    suspend fun laundryArrive(
+        @Field("counter_code") counterCode: String,
         @Field("lang") lang: String
-    ): LaundryCounterResponse
+    ): LaundryArrivalResponse
+
+    @FormUrlEncoded
+    @POST("laundryArrivals")
+    suspend fun laundryArrivals(
+        @Field("lang") lang: String
+    ): LaundryArrivalsResponse
+
+    /** JSON body: `items` is a list of objects, which form encoding cannot express cleanly. */
+    @POST("laundryAddItems")
+    suspend fun laundryAddItems(
+        @Body request: LaundryAddItemsRequest
+    ): LaundryCheckInResponse
 
     @FormUrlEncoded
     @POST("laundryScan")
@@ -345,12 +358,6 @@ interface GetEndpoint {
         @Field("qr_code") qrCode: String,
         @Field("lang") lang: String
     ): LaundryScanResponse
-
-    /** JSON body: `items` is a list of objects, which form encoding cannot express cleanly. */
-    @POST("laundryCheckIn")
-    suspend fun laundryCheckIn(
-        @Body request: LaundryCheckInRequest
-    ): LaundryCheckInResponse
 
     @FormUrlEncoded
     @POST("laundryMyCheckIns")

@@ -1,18 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?><!--
-    Serah Terima Laundry — a courier hands a bundle of uniforms in at the counter.
+    Kedatangan Laundry — the COURIER, and one scan is their whole job.
 
-    SCAN-DRIVEN, NOT FORM-DRIVEN. The only primary action is the camera: scan the counter sticker
-    once, then scan patch after patch. Nothing here is typed except the notes, because the web
-    screen is the typed path and this one exists because the phone has a camera [D-14, TG-02].
+    ONE ACTION ON THE WHOLE SCREEN. GA split check-in on 12 Sep 2026 [via Rosita Secoadi]: the
+    courier scans the counter sticker, and the counter operator scans the uniforms on their own
+    phone. So everything the old version of this screen had — the bundle list, the patch scanner,
+    the clear button, the hand-over note — moved to activity_laundry_counter.xml, and what is left
+    is a button and the confirmation it produces.
 
-    THE COUNTER GATE IS AT THE TOP AND EVERYTHING ELSE IS DISABLED UNTIL IT PASSES. A bundle
-    scanned against no counter has nowhere to be filed, and finding that out at submit — after
-    thirty scans — is the failure this ordering prevents.
+    NO COUNTER LOOKUP FIRST. laundryArrive checks the sticker and the department itself and answers
+    in one round trip, so calling laundryCounter beforehand would be a second request to learn what
+    the first one already says.
 
-    NOTHING IS SAVED UNTIL SUBMIT. A hand-over is one event; a half-written transaction is worse
-    than none.
+    HOUSE WIDGETS THROUGHOUT: no MaterialButton and no FloatingActionButton anywhere in this app —
+    a button is a MaterialCardView holding a gradient background and a centred TextView.
 -->
-<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main"
@@ -20,188 +22,149 @@
     android:layout_height="match_parent"
     android:background="@color/white">
 
-    <LinearLayout
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolBar"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:layout_height="?attr/actionBarSize"
+        android:background="@color/white"
+        android:elevation="4dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:navigationIcon="@drawable/baseline_arrow_back_ios_new_24">
 
-        <com.google.android.material.appbar.MaterialToolbar
-            android:id="@+id/toolBar"
-            android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            android:background="@color/white"
-            app:navigationIcon="@drawable/baseline_arrow_back_ios_new_24"
-            app:title="@string/laundry_check_in_title"
-            app:titleTextColor="@color/black" />
-
-        <!-- Step 1 · the counter. -->
-        <com.google.android.material.card.MaterialCardView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginHorizontal="@dimen/list_item_submission_margin_horizontal"
-            android:layout_marginTop="@dimen/list_item_submission_margin_vertical"
-            app:cardBackgroundColor="#FBFBFB"
-            app:cardCornerRadius="@dimen/list_item_progress_card_corner_radius"
-            app:cardElevation="@dimen/list_item_progress_card_elevation"
-            app:strokeWidth="0dp">
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center_vertical"
-                android:orientation="horizontal"
-                android:padding="12dp">
-
-                <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:orientation="vertical">
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="@string/laundry_counter_label"
-                        android:textColor="@color/custom_toast_font_normal_gray"
-                        android:textSize="@dimen/text_size_small" />
-
-                    <TextView
-                        android:id="@+id/tvCounter"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="@string/laundry_counter_not_scanned"
-                        android:textColor="@color/black"
-                        android:textSize="@dimen/text_size_medium"
-                        android:textStyle="bold"
-                        tools:text="Counter GA 01" />
-                </LinearLayout>
-
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/scanCounterButton"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/laundry_scan_counter" />
-            </LinearLayout>
-        </com.google.android.material.card.MaterialCardView>
-
-        <!-- Shown when the courier's department is not on the laundry list. Said here rather than
-             at submit, which is the whole reason laundryCounter answers may_check_in. -->
         <TextView
-            android:id="@+id/tvNotRegistered"
+            android:id="@+id/title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="@string/laundry_check_in_title"
+            android:textColor="@color/black"
+            android:textSize="@dimen/text_size_medium"
+            android:textStyle="bold" />
+    </androidx.appcompat.widget.Toolbar>
+
+    <!-- Before the scan: what to do, and nothing else. -->
+    <LinearLayout
+        android:id="@+id/instructionContainer"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="16dp"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:padding="24dp"
+        app:layout_constraintBottom_toTopOf="@+id/scanCounterButton"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/toolBar"
+        tools:visibility="gone">
+
+        <com.airbnb.lottie.LottieAnimationView
+            android:id="@+id/instructionAnimation"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:padding="@dimen/login_logo_margin"
+            app:lottie_autoPlay="true"
+            app:lottie_loop="true"
+            app:lottie_rawRes="@raw/empty_list_animation" />
+
+        <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginHorizontal="@dimen/list_item_submission_margin_horizontal"
-            android:layout_marginTop="8dp"
-            android:background="@color/custom_toast_background_warning"
-            android:padding="12dp"
-            android:textColor="@color/custom_toast_font_warning"
-            android:textSize="@dimen/text_size_small"
-            android:visibility="gone"
-            tools:text="Departemen Anda belum terdaftar pada daftar laundry."
-            tools:visibility="visible" />
+            android:layout_marginTop="12dp"
+            android:gravity="center"
+            android:text="@string/laundry_arrive_instruction"
+            android:textColor="@color/custom_toast_font_normal_gray"
+            android:textSize="@dimen/text_size_medium" />
+    </LinearLayout>
 
-        <!-- Step 2 · the bundle. -->
+    <!-- After the scan: the transaction number, which is what the operator will call out. Left on
+         screen rather than finishing the activity, because a courier who walks away and is then
+         asked "which number?" has nothing to show otherwise. -->
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/arrivalCard"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/list_item_submission_margin_horizontal"
+        android:visibility="gone"
+        app:cardBackgroundColor="#FBFBFB"
+        app:cardCornerRadius="@dimen/list_item_progress_card_corner_radius"
+        app:cardElevation="@dimen/list_item_progress_card_elevation"
+        app:layout_constraintBottom_toTopOf="@+id/scanCounterButton"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/toolBar"
+        app:strokeWidth="0dp"
+        tools:visibility="visible">
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginHorizontal="@dimen/list_item_submission_margin_horizontal"
-            android:layout_marginTop="12dp"
-            android:gravity="center_vertical"
-            android:orientation="horizontal">
+            android:orientation="vertical"
+            android:padding="16dp">
 
             <TextView
-                android:id="@+id/tvBundleCount"
-                android:layout_width="0dp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
+                android:text="@string/laundry_arrival_registered"
+                android:textColor="@color/custom_toast_font_normal_gray"
+                android:textSize="@dimen/text_size_small" />
+
+            <TextView
+                android:id="@+id/tvTrxNo"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="monospace"
+                android:textColor="@color/black"
+                android:textSize="@dimen/text_size_large"
+                android:textStyle="bold"
+                tools:text="2026/09/12/LDY/0001" />
+
+            <TextView
+                android:id="@+id/tvArrivalMessage"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
                 android:textColor="@color/black"
                 android:textSize="@dimen/text_size_medium"
-                android:textStyle="bold"
-                tools:text="12 item" />
-
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/clearButton"
-                style="@style/Widget.MaterialComponents.Button.TextButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:enabled="false"
-                android:text="@string/laundry_clear_bundle" />
+                tools:text="Serahkan seragam ke petugas counter untuk dipindai." />
         </LinearLayout>
+    </com.google.android.material.card.MaterialCardView>
 
-        <FrameLayout
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/scanCounterButton"
+        android:layout_width="0dp"
+        android:layout_height="@dimen/button_height"
+        android:layout_marginHorizontal="@dimen/list_item_submission_margin_horizontal"
+        android:layout_marginBottom="16dp"
+        app:cardCornerRadius="@dimen/login_button_corner_radius"
+        app:cardElevation="@dimen/card_elevation"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:strokeWidth="0dp">
+
+        <TextView
+            android:id="@+id/scanCounterText"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1">
+            android:layout_height="match_parent"
+            android:background="@drawable/gradient_accent_color"
+            android:gravity="center"
+            android:text="@string/laundry_scan_counter"
+            android:textColor="@color/white"
+            android:textSize="@dimen/text_size_medium"
+            android:textStyle="bold" />
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/rvBundle"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:clipToPadding="false"
-                android:paddingBottom="96dp"
-                tools:itemCount="3"
-                tools:listitem="@layout/list_item_laundry_bundle" />
-
-            <LinearLayout
-                android:id="@+id/emptyBundleContainer"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:gravity="center"
-                android:orientation="vertical"
-                android:padding="24dp">
-
-                <ImageView
-                    android:layout_width="96dp"
-                    android:layout_height="96dp"
-                    android:alpha="0.4"
-                    android:src="@drawable/qr_scan_icon"
-                    tools:ignore="ContentDescription" />
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="12dp"
-                    android:gravity="center"
-                    android:text="@string/laundry_bundle_empty"
-                    android:textColor="@color/custom_toast_font_normal_gray"
-                    android:textSize="@dimen/text_size_medium" />
-            </LinearLayout>
-        </FrameLayout>
-
-        <!-- Step 3 · the hand-over note and submit. -->
-        <com.google.android.material.textfield.TextInputLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginHorizontal="@dimen/list_item_submission_margin_horizontal"
-            android:hint="@string/laundry_batch_note_hint"
-            app:boxBackgroundMode="outline">
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/etBatchNote"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:imeOptions="actionDone"
-                android:inputType="text"
-                android:maxLength="2000"
-                android:textSize="@dimen/text_size_medium" />
-        </com.google.android.material.textfield.TextInputLayout>
-
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/submitButton"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="@dimen/list_item_submission_margin_horizontal"
-            android:enabled="false"
-            android:text="@string/laundry_submit" />
-    </LinearLayout>
-
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/fabScanPatch"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom|end"
-        android:layout_margin="16dp"
-        android:contentDescription="@string/laundry_scan_patch"
-        android:src="@drawable/qr_scan_icon"
-        app:layout_anchorGravity="bottom|end" />
-</androidx.coordinatorlayout.widget.CoordinatorLayout>
+        <ProgressBar
+            android:id="@+id/scanLoadingBar"
+            android:layout_width="@dimen/login_progress_bar_size"
+            android:layout_height="match_parent"
+            android:layout_gravity="center_vertical"
+            android:layout_marginStart="8dp"
+            android:indeterminateTint="@color/white"
+            android:visibility="gone"
+            tools:visibility="visible" />
+    </com.google.android.material.card.MaterialCardView>
+</androidx.constraintlayout.widget.ConstraintLayout>

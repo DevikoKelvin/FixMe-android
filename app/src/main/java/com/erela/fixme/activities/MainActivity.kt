@@ -382,7 +382,21 @@ class MainActivity : AppCompatActivity() {
             }
 
             laundryCheckInMenu.setOnClickListener {
-                startActivity(Intent(this@MainActivity, LaundryCheckInActivity::class.java))
+                // ONE MENU, TWO SCREENS. GA split check-in on 12 Sep 2026 [via Rosita Secoadi]:
+                // the courier scans the counter, the counter operator scans the garments. Which of
+                // the two a person gets is the server's `laundry_counter`, sent at login as the
+                // DECISION rather than the inputs - the AC menu above re-derives its own gate from
+                // hardcoded department names, and that is the drift this avoids.
+                //
+                // NOT the web's access level: that hands every super user the management pages,
+                // which is right there and wrong here - IT hands uniforms in like anybody else.
+                startActivity(
+                    Intent(
+                        this@MainActivity,
+                        if (userData.isLaundryCounter) LaundryCounterActivity::class.java
+                        else LaundryCheckInActivity::class.java
+                    )
+                )
             }
 
             settingsMenu.setOnClickListener {
