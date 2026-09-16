@@ -1,5 +1,6 @@
 package com.erela.fixme.activities
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import androidx.activity.viewModels
@@ -7,6 +8,8 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.erela.fixme.R
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.erela.fixme.adapters.recycler_view.LaundryBatchAdapter
 import com.erela.fixme.custom_views.CustomToast
 import com.erela.fixme.databinding.ActivityLaundryCheckInBinding
 import com.erela.fixme.helpers.enableEdgeToEdgeOpaqueNav
@@ -34,12 +37,19 @@ import com.journeyapps.barcodescanner.ScanOptions
  * THE CONFIRMATION STAYS ON SCREEN rather than finishing the activity. The transaction number is
  * what the operator calls out, and a courier who has already walked away from it has nothing to
  * show when asked.
+ *
+ * A LIST, NOT A BARE SCAN BUTTON [GA, 15 Sep 2026]. Until today this answered "how do I hand this
+ * in" and nothing else: a courier could not see whether last week's bundle was washed, ready, or
+ * already collected by a colleague. The list is their DEPARTMENT's [T-08], because any active
+ * account of it may collect - a list of their own hand-overs would hide the batch they were sent
+ * to fetch.
  */
 class LaundryCheckInActivity : AppCompatActivity() {
     private val binding: ActivityLaundryCheckInBinding by lazy {
         ActivityLaundryCheckInBinding.inflate(layoutInflater)
     }
     private val viewModel: LaundryCheckInViewModel by viewModels()
+    private lateinit var batchAdapter: LaundryBatchAdapter
 
     /**
      * Enable or disable a card acting as a button.
@@ -58,6 +68,14 @@ class LaundryCheckInActivity : AppCompatActivity() {
         result.contents?.let { viewModel.arrive(it) }
     }
 
+    override fun onResume() {
+        super.onResume()
+        // Reloaded on every return, not only on create: a colleague from the same department may
+        // have collected while this screen was in the background, and the batch detail hands back
+        // here after a collection.
+        viewModel.loadBatches()
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
@@ -74,12 +92,65 @@ class LaundryCheckInActivity : AppCompatActivity() {
         binding.apply {
             toolBar.setNavigationOnClickListener { finish() }
 
+            batchAdapter = LaundryBatchAdapter(this@LaundryCheckInActivity) { batch ->
+                startActivity(
+                    Intent(this@LaundryCheckInActivity, LaundryBatchActivity::class.java)
+                        .putExtra(LaundryBatchActivity.EXTRA_ID_TRX, batch.id)
+                )
+            }
+
+            rvBatches.apply {
+                layoutManager = LinearLayoutManager(this@LaundryCheckInActivity)
+                adapter = batchAdapter
+            }
+
+            // The answer to "are my uniforms back yet" changes while the courier is looking at it,
+            // and `onResume` only helps if they leave the screen and come back.
+            swipeRefreshLayout.setOnRefreshListener { viewModel.loadBatches() }
+
             scanCounterButton.setOnClickListener {
                 counterLauncher.launch(scanOptions())
+            }
+
+            // The banner has no timeout on purpose - it holds the transaction number - so it needs
+            // a way out. Closing it can uncover the empty state, hence the re-render.
+            arrivalDismiss.setOnClickListener {
+                arrivalCard.visibility = View.GONE
+                renderEmptyState()
             }
         }
 
         setupObservers()
+    }
+
+    /**
+     * The instruction doubles as the empty state, and it is allowed to say so only once.
+     *
+     * THREE THINGS HAVE TO BE TRUE: the load has finished, the list really is empty, and no
+     * arrival is on screen. It used to be decided in the batches observer alone, which fires only
+     * when a response ARRIVES - so before the first one, and during every refresh after it, the
+     * screen asserted "you have nothing at the laundry" on no evidence.
+     *
+     * A FAILED LOAD LANDS HERE TOO, by way of `isLoading`: the batches observer returns early on a
+     * refusal, and without this the courier would be left with a toast and a blank screen.
+     *
+     * The animation is started and stopped with it, as the task list does: a looping Lottie behind
+     * a hidden container still renders every frame.
+     */
+    private fun renderEmptyState() {
+        binding.apply {
+            val show = viewModel.isLoading.value != true &&
+                batchAdapter.itemCount == 0 &&
+                arrivalCard.visibility != View.VISIBLE
+
+            instructionContainer.visibility = if (show) View.VISIBLE else View.GONE
+
+            if (show) {
+                instructionAnimation.playAnimation()
+            } else {
+                instructionAnimation.pauseAnimation()
+            }
+        }
     }
 
     private fun scanOptions() = ScanOptions().apply {
@@ -94,6 +165,19 @@ class LaundryCheckInActivity : AppCompatActivity() {
     private fun setupObservers() {
         viewModel.apply {
             binding.apply {
+                batches.observe(this@LaundryCheckInActivity) { response ->
+                    if (!response.isSuccess) {
+                        toast(response.message, warning = true)
+                        return@observe
+                    }
+
+                    val rows = response.data.orEmpty()
+                    batchAdapter.submitList(rows)
+
+                    rvBatches.visibility = if (rows.isEmpty()) View.GONE else View.VISIBLE
+                    renderEmptyState()
+                }
+
                 arrivalResult.observe(this@LaundryCheckInActivity) { response ->
                     if (!response.isSuccess) {
                         toast(response.message, warning = true)
@@ -108,9 +192,21 @@ class LaundryCheckInActivity : AppCompatActivity() {
                     tvTrxNo.text = response.data?.trxNo ?: "-"
                     tvArrivalMessage.text = response.message
 
-                    instructionContainer.visibility = View.GONE
-                    instructionAnimation.pauseAnimation()
                     arrivalCard.visibility = View.VISIBLE
+                    renderEmptyState()
+
+                    // The new batch belongs on the list straight away.
+                    viewModel.loadBatches()
+                }
+
+                // `isLoading` belongs to the LIST on this screen - `arrive()` reports through
+                // `isSubmitting` instead - so binding the spinner to it cannot leave it turning
+                // through a counter scan. Bound to the flag rather than cleared in the success
+                // handler, because that handler returns early on a refusal, and a failed refresh
+                // is when a stuck spinner misleads most.
+                isLoading.observe(this@LaundryCheckInActivity) { loading ->
+                    swipeRefreshLayout.isRefreshing = loading
+                    renderEmptyState()
                 }
 
                 isSubmitting.observe(this@LaundryCheckInActivity) { submitting ->

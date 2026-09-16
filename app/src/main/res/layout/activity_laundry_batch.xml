@@ -1,0 +1,301 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+    One batch, as the COURIER sees it — and the button that collects it.
+
+    THE COLLECT BUTTON IS GATED ON `ready_count`, NOT ON THE HEADER STATUS. A batch reads `ready`
+    until its last line moves, so a colleague from the same department can have taken everything
+    while the header still says collectable [T-08]. The server counts the lines; this trusts it.
+
+    COLLECTING IS A SCAN. The counter QR proves the courier is standing at the counter, their token
+    proves who they are — the same split check-in rests on, and why a photographable sticker
+    authorises nothing on its own.
+
+    NO GARMENT PICKING. The server derives what this department may take, so there is nothing to
+    tick. A partial pickup still happens [T-07]; it is decided by what is `ready`.
+-->
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white">
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolBar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="@color/white"
+        android:elevation="4dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:navigationIcon="@drawable/baseline_arrow_back_ios_new_24">
+
+        <TextView
+            android:id="@+id/title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="@string/laundry_batch_title"
+            android:textColor="@color/black"
+            android:textSize="@dimen/text_size_medium"
+            android:textStyle="bold" />
+    </androidx.appcompat.widget.Toolbar>
+
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/swipeRefreshLayout"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/toolBar">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/headerCard"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="@dimen/list_item_submission_margin_horizontal"
+                android:layout_marginTop="16dp"
+                app:cardBackgroundColor="#FBFBFB"
+                app:cardCornerRadius="@dimen/list_item_progress_card_corner_radius"
+                app:cardElevation="@dimen/list_item_progress_card_elevation"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:strokeWidth="0dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="16dp">
+
+                    <TextView
+                        android:id="@+id/tvTrxNo"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="monospace"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/text_size_large"
+                        android:textStyle="bold"
+                        tools:text="2026/09/15/LDY/0002" />
+
+                    <TextView
+                        android:id="@+id/tvStatus"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/text_size_medium"
+                        android:textStyle="bold"
+                        tools:text="Siap diambil" />
+
+                    <!-- THE FOUR STAMPS, EACH WITH ITS OWN NAME.
+
+                         They were one line - "Masuk 08:10 · Mulai dicuci 09:00 · Siap 14:02" -
+                         which is readable at three and unreadable at four, wraps differently on
+                         every phone, and made an absent stamp vanish silently: a batch that had
+                         never started washing simply had one fewer word, and nothing said which.
+
+                         READ ACROSS, THEN DOWN. Check-in and Wash started on the top row, Ready
+                         and Completed below, so the reading order is the order the batch actually
+                         moves through. A column-major fill would put Ready next to Check-in.
+
+                         A DASH FOR A STAMP THAT HAS NOT HAPPENED, rather than an empty cell: the
+                         shape of the card stays the same whatever stage the batch is at, and
+                         "not yet" is a fact worth showing. -->
+                    <GridLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:columnCount="2">
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_columnWeight="1"
+                            android:layout_marginTop="0dp"
+                            android:layout_marginEnd="8dp"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="@string/laundry_stage_checked_in"
+                                android:textColor="@color/custom_toast_font_normal_gray"
+                                android:textSize="@dimen/text_size_small" />
+
+                            <TextView
+                                android:id="@+id/tvCheckedIn"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:textColor="@color/black"
+                                android:textSize="@dimen/text_size_small"
+                                android:textStyle="bold"
+                                tools:text="2026-09-15 08:10" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_columnWeight="1"
+                            android:layout_marginTop="0dp"
+                            android:layout_marginEnd="0dp"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="@string/laundry_stage_wash_started"
+                                android:textColor="@color/custom_toast_font_normal_gray"
+                                android:textSize="@dimen/text_size_small" />
+
+                            <TextView
+                                android:id="@+id/tvWashStarted"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:textColor="@color/black"
+                                android:textSize="@dimen/text_size_small"
+                                android:textStyle="bold"
+                                tools:text="2026-09-15 09:00" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_columnWeight="1"
+                            android:layout_marginTop="10dp"
+                            android:layout_marginEnd="8dp"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="@string/laundry_stage_ready"
+                                android:textColor="@color/custom_toast_font_normal_gray"
+                                android:textSize="@dimen/text_size_small" />
+
+                            <TextView
+                                android:id="@+id/tvReady"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:textColor="@color/black"
+                                android:textSize="@dimen/text_size_small"
+                                android:textStyle="bold"
+                                tools:text="2026-09-15 14:02" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_columnWeight="1"
+                            android:layout_marginTop="10dp"
+                            android:layout_marginEnd="0dp"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="@string/laundry_stage_completed"
+                                android:textColor="@color/custom_toast_font_normal_gray"
+                                android:textSize="@dimen/text_size_small" />
+
+                            <TextView
+                                android:id="@+id/tvCompleted"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:textColor="@color/black"
+                                android:textSize="@dimen/text_size_small"
+                                android:textStyle="bold"
+                                tools:text="—" />
+                        </LinearLayout>
+                    </GridLayout>
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <TextView
+                android:id="@+id/tvItemHeader"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:text="@string/laundry_batch_item"
+                android:textColor="@color/black"
+                android:textSize="@dimen/text_size_medium"
+                android:textStyle="bold"
+                app:layout_constraintStart_toStartOf="@+id/headerCard"
+                app:layout_constraintTop_toBottomOf="@+id/headerCard" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rvItems"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="16dp"
+                android:clipToPadding="false"
+                android:nestedScrollingEnabled="true"
+                app:layout_constraintBottom_toTopOf="@+id/collectButton"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tvItemHeader"
+                tools:itemCount="2"
+                tools:listitem="@layout/list_item_laundry_batch_line" />
+
+            <TextView
+                android:id="@+id/tvEmpty"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="32dp"
+                android:gravity="center"
+                android:text="@string/laundry_batch_empty"
+                android:textColor="@color/custom_toast_font_normal_gray"
+                android:textSize="@dimen/text_size_medium"
+                android:visibility="gone"
+                app:layout_constraintBottom_toBottomOf="@+id/rvItems"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/rvItems"
+                tools:visibility="visible" />
+
+            <!-- Hidden until there is something to take: `ready_count`, not the header status. -->
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/collectButton"
+                android:layout_width="0dp"
+                android:layout_height="@dimen/button_height"
+                android:layout_marginHorizontal="@dimen/list_item_submission_margin_horizontal"
+                android:layout_marginVertical="@dimen/list_item_submission_margin_horizontal"
+                android:visibility="gone"
+                app:cardCornerRadius="@dimen/login_button_corner_radius"
+                app:cardElevation="@dimen/card_elevation"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:strokeWidth="0dp"
+                tools:visibility="visible">
+
+                <ProgressBar
+                    android:id="@+id/collectLoadingBar"
+                    android:layout_width="@dimen/login_progress_bar_size"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginStart="8dp"
+                    android:indeterminateTint="@color/white"
+                    android:visibility="gone" />
+
+                <TextView
+                    android:id="@+id/collectText"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/gradient_accent_color"
+                    android:gravity="center"
+                    android:text="@string/laundry_collect"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/text_size_medium"
+                    android:textStyle="bold" />
+            </com.google.android.material.card.MaterialCardView>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

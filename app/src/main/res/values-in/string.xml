@@ -258,9 +258,35 @@
     <string name="laundry_duplicate_code">Kode %1$s sudah ada di daftar ini.</string>
     <!-- Bagian petugas counter. GA memisah check-in pada 12 Sep 2026: kurir scan counter,
          petugas counter yang scan seragamnya. -->
+    <string name="laundry_batch_title">Smart Wash: Batch</string>
+    <string name="laundry_batches_empty">Belum ada batch. Scan QR counter untuk menitipkan seragam.</string>
+    <string name="laundry_batch_summary">%1$d item · diantar %2$s</string>
+    <string name="laundry_ready_to_collect">%1$d siap</string>
+    <string name="laundry_collect">Ambil Seragam</string>
+    <string name="laundry_collect_prompt">Scan QR counter untuk mengambil batch ini</string>
+    <string name="laundry_batch_item">Daftar barang</string>
+    <string name="laundry_batch_empty">Belum ada seragam yang dipindai pada batch ini.</string>
+    <string name="laundry_status_waiting">Menunggu di counter</string>
+    <string name="laundry_status_accepted">Sedang dicuci</string>
+    <string name="laundry_status_ready">Siap diambil</string>
+    <string name="laundry_refresh">Muat ulang</string>
+    <string name="laundry_item_waiting">Menunggu</string>
+    <string name="laundry_item_accepted">Diterima</string>
+    <string name="laundry_item_ready">Siap diambil</string>
+    <string name="laundry_item_picked_up">Sudah diambil</string>
+    <string name="laundry_item_lost">Hilang</string>
+    <string name="laundry_item_held">Ditahan di laundry</string>
+    <string name="laundry_item_repaired">Sudah diperbaiki</string>
+    <string name="laundry_stage_checked_in">Masuk</string>
+    <string name="laundry_stage_wash_started">Mulai dicuci</string>
+    <string name="laundry_stage_ready">Siap diambil</string>
+    <string name="laundry_stage_completed">Sudah diambil</string>
+    <string name="laundry_status_awaiting_counter">Menunggu counter memeriksa</string>
+    <string name="laundry_status_completed">Sudah diambil</string>
     <string name="laundry_counter_title">Smart Wash: Counter</string>
     <string name="laundry_hand_in_action">Antar</string>
     <string name="laundry_arrive_instruction">Scan QR counter laundry untuk mencatat kedatangan Anda. Petugas counter yang akan memindai seragamnya.</string>
+    <string name="laundry_arrival_dismiss">Tutup</string>
     <string name="laundry_arrival_registered">Kedatangan tercatat</string>
     <string name="laundry_serving_label">Melayani</string>
     <string name="laundry_no_courier_selected">Belum ada kurir dipilih</string>
@@ -268,5 +294,16 @@
     <string name="laundry_pick_courier_required">Pilih kurir dari antrean dulu.</string>
     <string name="laundry_queue_title">Kurir menunggu</string>
     <string name="laundry_queue_empty">Belum ada kurir menunggu. Kurir masuk antrean dengan scan QR counter.</string>
+    <string name="laundry_handover_title">Smart Wash: Serah Terima</string>
+    <string name="laundry_handover_action">Keluar</string>
+    <string name="laundry_handover_queue_empty">Tidak ada serah terima yang menunggu diambil.</string>
+    <string name="laundry_handover_bundle_empty">Pilih serah terima, lalu pindai setiap seragam yang keluar.</string>
+    <string name="laundry_handover_submit">Tandai siap diserahkan</string>
+    <string name="laundry_scan_out_prompt">Pindai seragam yang keluar</string>
+    <string name="laundry_pick_batch_required">Pilih serah terima dulu.</string>
+    <string name="laundry_ready_since">%1$d siap · sejak %2$s</string>
+    <string name="laundry_already_marked">Sudah ditandai siap diserahkan %1$s</string>
+    <string name="laundry_remove_scan">Hapus</string>
+    <string name="laundry_clear_out_confirm">Hapus semua %1$d seragam yang sudah dipindai?</string>
     <string name="laundry_waiting_since">Menunggu sejak %1$s</string>
 </resources>

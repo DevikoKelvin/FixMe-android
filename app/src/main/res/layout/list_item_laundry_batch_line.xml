@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+    One garment on the courier's batch screen. Read-only: the courier judges nothing, the counter
+    already did. `ready` is the only line state they can act on, so it is the only one highlighted.
+-->
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginHorizontal="@dimen/list_item_submission_margin_horizontal"
+    android:layout_marginVertical="@dimen/list_item_submission_margin_vertical"
+    app:cardBackgroundColor="#FBFBFB"
+    app:cardCornerRadius="@dimen/list_item_progress_card_corner_radius"
+    app:cardElevation="@dimen/list_item_progress_card_elevation"
+    app:strokeWidth="0dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:padding="12dp">
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/tvCode"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="monospace"
+                android:textColor="@color/black"
+                android:textSize="@dimen/text_size_large"
+                android:textStyle="bold"
+                tools:text="000001" />
+
+            <TextView
+                android:id="@+id/tvItemType"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/black"
+                android:textSize="@dimen/text_size_medium"
+                tools:text="Overall" />
+
+            <TextView
+                android:id="@+id/tvOwner"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/custom_toast_font_normal_gray"
+                android:textSize="@dimen/text_size_small"
+                tools:text="Agus Rusdy Kriesnanto" />
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/tvLineStatus"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:textColor="@color/custom_toast_font_normal_gray"
+            android:textSize="@dimen/text_size_small"
+            android:textStyle="bold"
+            tools:text="ready" />
+    </LinearLayout>
+</com.google.android.material.card.MaterialCardView>

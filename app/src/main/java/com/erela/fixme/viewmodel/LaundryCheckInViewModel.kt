@@ -7,9 +7,15 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.erela.fixme.objects.laundry.LaundryArrivalResponse
 import com.erela.fixme.objects.laundry.LaundryArrivalsResponse
+import com.erela.fixme.objects.laundry.LaundryBatchDetailResponse
+import com.erela.fixme.objects.laundry.LaundryBatchesResponse
+import com.erela.fixme.objects.laundry.LaundryCollectResponse
 import com.erela.fixme.objects.laundry.LaundryCheckInItem
 import com.erela.fixme.objects.laundry.LaundryCheckInResponse
 import com.erela.fixme.objects.laundry.LaundryGarment
+import com.erela.fixme.objects.laundry.LaundryHandoverMarkResponse
+import com.erela.fixme.objects.laundry.LaundryHandoverQueueResponse
+import com.erela.fixme.objects.laundry.LaundryReadyBatch
 import com.erela.fixme.objects.laundry.LaundryMyCheckInsResponse
 import com.erela.fixme.objects.laundry.LaundryScanResponse
 import com.erela.fixme.objects.laundry.LaundryWaitingCourier
@@ -47,6 +53,34 @@ class LaundryCheckInViewModel(application: Application) : AndroidViewModel(appli
 
     private val _arrivals = MutableLiveData<LaundryArrivalsResponse>()
     val arrivals: LiveData<LaundryArrivalsResponse> = _arrivals
+
+    private val _batches = MutableLiveData<LaundryBatchesResponse>()
+    val batches: LiveData<LaundryBatchesResponse> = _batches
+
+    private val _batchDetail = MutableLiveData<LaundryBatchDetailResponse>()
+    val batchDetail: LiveData<LaundryBatchDetailResponse> = _batchDetail
+
+    private val _collectResult = MutableLiveData<LaundryCollectResponse>()
+    val collectResult: LiveData<LaundryCollectResponse> = _collectResult
+
+    private val _handoverQueue = MutableLiveData<LaundryHandoverQueueResponse>()
+    val handoverQueue: LiveData<LaundryHandoverQueueResponse> = _handoverQueue
+
+    private val _markResult = MutableLiveData<LaundryHandoverMarkResponse>()
+    val markResult: LiveData<LaundryHandoverMarkResponse> = _markResult
+
+    /**
+     * The codes scanned OUT, in scan order.
+     *
+     * A PLAIN SET OF CODES, not resolved garments. `laundryScan` answers "is this a registered
+     * uniform" against the master register, which cannot say whether it belongs to THIS batch -
+     * the only thing the operator needs to know here. The server answers that on submit and names
+     * the offender, so a round trip per garment would buy a slower scan and no more truth.
+     */
+    private val outScanned = LinkedHashSet<String>()
+
+    private val _outItems = MutableLiveData<List<String>>(emptyList())
+    val outItems: LiveData<List<String>> = _outItems
 
     private val _scanResult = MutableLiveData<LaundryScanResponse>()
     val scanResult: LiveData<LaundryScanResponse> = _scanResult
@@ -105,6 +139,57 @@ class LaundryCheckInViewModel(application: Application) : AndroidViewModel(appli
         viewModelScope.launch {
             repository.arrive(counterCode)
                 .onSuccess { _arrivalResult.value = it }
+                .onFailure { fail(it) }
+
+            _isSubmitting.value = false
+        }
+    }
+
+    /** The courier's list. Reloaded on every return: a colleague may have collected since. */
+    fun loadBatches() {
+        _isLoading.value = true
+
+        viewModelScope.launch {
+            repository.myBatches()
+                .onSuccess { _batches.value = it }
+                .onFailure { fail(it) }
+
+            _isLoading.value = false
+        }
+    }
+
+    fun loadBatch(idTrx: Int) {
+        _isLoading.value = true
+
+        viewModelScope.launch {
+            repository.batch(idTrx)
+                .onSuccess { _batchDetail.value = it }
+                .onFailure { fail(it) }
+
+            _isLoading.value = false
+        }
+    }
+
+    /**
+     * Collect this batch, by scanning the counter sticker.
+     *
+     * NO ITEM LIST GOES OUT. The server derives what this department may take from the transaction
+     * itself, so nothing the phone sends can name somebody else's garment, and a partial pickup is
+     * decided by what is `ready` [T-07].
+     */
+    fun collect(counterCode: String, idTrx: Int) {
+        _isSubmitting.value = true
+
+        viewModelScope.launch {
+            repository.collect(counterCode, idTrx)
+                .onSuccess { response ->
+                    // Reloaded rather than patched in memory: the server decides what is left.
+                    if (response.isSuccess) {
+                        loadBatch(idTrx)
+                    }
+
+                    _collectResult.value = response
+                }
                 .onFailure { fail(it) }
 
             _isSubmitting.value = false
@@ -223,6 +308,80 @@ class LaundryCheckInViewModel(application: Application) : AndroidViewModel(appli
     }
 
     fun count(): Int = bundle.size
+
+    fun loadHandoverQueue() {
+        _isLoading.value = true
+
+        viewModelScope.launch {
+            repository.handoverQueue()
+                .onSuccess { _handoverQueue.value = it }
+                .onFailure { fail(it) }
+
+            _isLoading.value = false
+        }
+    }
+
+    /** Start a scan-out. The list is cleared, because it belongs to one batch. */
+    fun beginHandover(batch: LaundryReadyBatch) {
+        workingIdTrx = batch.id
+        workingCourier = batch.pengantar
+        workingDept = batch.namaDept
+        clearOutScan()
+    }
+
+    /** Local duplicate check, the same courtesy the check-in scanner does. */
+    fun onOutScanned(qrCode: String) {
+        val code = qrCode.trim()
+
+        if (!outScanned.add(code)) {
+            _error.value = DUPLICATE_PREFIX + code
+            return
+        }
+
+        _outItems.value = outScanned.toList()
+    }
+
+    fun removeOutScan(qrCode: String) {
+        outScanned.remove(qrCode)
+        _outItems.value = outScanned.toList()
+    }
+
+    fun clearOutScan() {
+        outScanned.clear()
+        _outItems.value = emptyList()
+    }
+
+    fun outCount(): Int = outScanned.size
+
+    /**
+     * Mark the working batch ready to hand over.
+     *
+     * CLEARED ONLY ON SUCCESS, like `saveItems`: a failed submit must leave twelve scans intact,
+     * or the network blinking costs the operator the whole bundle again.
+     */
+    fun markHandover() {
+        val idTrx = workingIdTrx
+
+        if (idTrx == null || outScanned.isEmpty()) {
+            return
+        }
+
+        _isSubmitting.value = true
+
+        viewModelScope.launch {
+            repository.markHandover(idTrx, outScanned.toList())
+                .onSuccess { response ->
+                    if (response.isSuccess) {
+                        clearOutScan()
+                    }
+
+                    _markResult.value = response
+                }
+                .onFailure { fail(it) }
+
+            _isSubmitting.value = false
+        }
+    }
 
     fun loadRecent() {
         viewModelScope.launch {

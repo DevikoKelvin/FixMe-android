@@ -262,9 +262,35 @@
     <string name="laundry_duplicate_code">Code %1$s is already in this list.</string>
     <!-- The counter operator's half. GA split check-in on 12 Sep 2026: the courier scans the
          counter, the operator scans the garments. -->
+    <string name="laundry_batch_title">Smart Wash: Batch</string>
+    <string name="laundry_batches_empty">No batches yet. Scan the counter QR to hand one in.</string>
+    <string name="laundry_batch_summary">%1$d item(s) · handed in %2$s</string>
+    <string name="laundry_ready_to_collect">%1$d ready</string>
+    <string name="laundry_collect">Collect uniforms</string>
+    <string name="laundry_collect_prompt">Scan the counter QR to collect this batch</string>
+    <string name="laundry_batch_item">Item list</string>
+    <string name="laundry_batch_empty">Nothing has been scanned onto this batch yet.</string>
+    <string name="laundry_status_waiting">Waiting at the counter</string>
+    <string name="laundry_status_accepted">Being washed</string>
+    <string name="laundry_status_ready">Ready to collect</string>
+    <string name="laundry_refresh">Refresh</string>
+    <string name="laundry_item_waiting">Waiting</string>
+    <string name="laundry_item_accepted">Received</string>
+    <string name="laundry_item_ready">Ready to collect</string>
+    <string name="laundry_item_picked_up">Picked up</string>
+    <string name="laundry_item_lost">Lost</string>
+    <string name="laundry_item_held">Held at the laundry</string>
+    <string name="laundry_item_repaired">Repaired</string>
+    <string name="laundry_stage_checked_in">Checked in</string>
+    <string name="laundry_stage_wash_started">Wash started</string>
+    <string name="laundry_stage_ready">Ready</string>
+    <string name="laundry_stage_completed">Completed</string>
+    <string name="laundry_status_awaiting_counter">Waiting for the counter to check it out</string>
+    <string name="laundry_status_completed">Collected</string>
     <string name="laundry_counter_title">Smart Wash: Counter</string>
     <string name="laundry_hand_in_action">Deliver</string>
     <string name="laundry_arrive_instruction">Scan the laundry counter QR to register your arrival. The counter operator scans the uniforms.</string>
+    <string name="laundry_arrival_dismiss">Dismiss</string>
     <string name="laundry_arrival_registered">Arrival registered</string>
     <string name="laundry_serving_label">Serving</string>
     <string name="laundry_no_courier_selected">No courier picked yet</string>
@@ -272,5 +298,16 @@
     <string name="laundry_pick_courier_required">Pick a courier from the queue first.</string>
     <string name="laundry_queue_title">Waiting couriers</string>
     <string name="laundry_queue_empty">Nobody is waiting. A courier joins this queue by scanning the counter QR.</string>
+    <string name="laundry_handover_title">Smart Wash: Hand Over</string>
+    <string name="laundry_handover_action">Out</string>
+    <string name="laundry_handover_queue_empty">No batches are waiting to be handed back.</string>
+    <string name="laundry_handover_bundle_empty">Pick a batch, then scan every uniform going out.</string>
+    <string name="laundry_handover_submit">Mark ready to hand over</string>
+    <string name="laundry_scan_out_prompt">Scan the uniform going out</string>
+    <string name="laundry_pick_batch_required">Pick a batch first.</string>
+    <string name="laundry_ready_since">%1$d ready · since %2$s</string>
+    <string name="laundry_already_marked">Already marked for hand over %1$s</string>
+    <string name="laundry_remove_scan">Remove</string>
+    <string name="laundry_clear_out_confirm">Remove all %1$d scanned uniform(s)?</string>
     <string name="laundry_waiting_since">Waiting since %1$s</string>
 </resources>

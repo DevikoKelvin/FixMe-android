@@ -156,3 +156,167 @@ data class LaundryRecentTransaction(
     @SerializedName("note") val note: String?,
     @SerializedName("item_count") val itemCount: Int
 )
+
+/**
+ * The courier's own screen: their DEPARTMENT's batches, open ones first.
+ *
+ * SCOPED BY DEPARTMENT, NOT BY WHO CARRIED IT IN [T-08]. Any active account of the department may
+ * collect, so a list of only this person's own hand-overs would hide the batch they were sent to
+ * fetch. `pengantar` travels as a field instead - who brought it is still worth seeing.
+ */
+data class LaundryBatchesResponse(
+    @SerializedName("code") val code: Int,
+    @SerializedName("message") val message: String,
+    @SerializedName("data") val data: List<LaundryBatch>?
+) {
+    val isSuccess get() = code == 1
+}
+
+data class LaundryBatch(
+    @SerializedName("id") val id: Int,
+    @SerializedName("trx_no") val trxNo: String,
+    @SerializedName("status") val status: String,
+    @SerializedName("checked_in_at") val checkedInAt: String?,
+    @SerializedName("ready_at") val readyAt: String?,
+    @SerializedName("completed_at") val completedAt: String?,
+    @SerializedName("note") val note: String?,
+    @SerializedName("pengantar") val pengantar: String?,
+    @SerializedName("item_count") val itemCount: Int,
+    /**
+     * When the counter finished checking this batch back out, or null.
+     *
+     * The gate is the SERVER'S - scanning the counter sticker is refused until this is set. What
+     * it buys the screen is the difference between "wait for the counter" and sending a courier
+     * across the factory to be told no.
+     */
+    @SerializedName("handover_marked_at") val handoverMarkedAt: String? = null,
+    /**
+     * Garments still collectable - what the Collect button is enabled by.
+     *
+     * NOT DERIVED FROM `status` on the phone. A batch reads `ready` until its LAST line moves, so
+     * a colleague from the same department can have taken everything while the header still says
+     * collectable. The server counts the lines; the screen trusts the count.
+     */
+    @SerializedName("ready_count") val readyCount: Int
+)
+
+/** One batch with its garments - the courier's detail screen. */
+data class LaundryBatchDetailResponse(
+    @SerializedName("code") val code: Int,
+    @SerializedName("message") val message: String,
+    @SerializedName("data") val data: LaundryBatchDetail?
+) {
+    val isSuccess get() = code == 1
+}
+
+data class LaundryBatchDetail(
+    @SerializedName("transaction") val transaction: LaundryBatchHeader,
+    @SerializedName("items") val items: List<LaundryBatchLine>,
+    @SerializedName("ready_count") val readyCount: Int
+)
+
+data class LaundryBatchHeader(
+    @SerializedName("id") val id: Int,
+    @SerializedName("trx_no") val trxNo: String,
+    @SerializedName("status") val status: String,
+    @SerializedName("checked_in_at") val checkedInAt: String?,
+    @SerializedName("accepted_at") val acceptedAt: String?,
+    @SerializedName("washing_started_at") val washingStartedAt: String?,
+    @SerializedName("ready_at") val readyAt: String?,
+    @SerializedName("handover_marked_at") val handoverMarkedAt: String? = null,
+    @SerializedName("completed_at") val completedAt: String?,
+    @SerializedName("note") val note: String?,
+    @SerializedName("pengantar") val pengantar: String?
+)
+
+data class LaundryBatchLine(
+    @SerializedName("id") val id: Int,
+    @SerializedName("qr_code") val qrCode: String?,
+    @SerializedName("nama_item_type") val itemType: String?,
+    @SerializedName("owner_name") val ownerName: String?,
+    @SerializedName("item_status") val itemStatus: String,
+    @SerializedName("condition_in") val conditionIn: String?,
+    @SerializedName("condition_out") val conditionOut: String?,
+    @SerializedName("note") val note: String?,
+    @SerializedName("source") val source: String?
+)
+
+/**
+ * The courier collecting, by scanning the counter sticker.
+ *
+ * NO LINE LIST GOES OUT. The server derives what this department may take from the transaction
+ * itself, so the request cannot name a garment belonging to somebody else - and a partial pickup
+ * is decided by what is `ready` rather than by anything the phone chose [T-07].
+ */
+data class LaundryCollectResponse(
+    @SerializedName("code") val code: Int,
+    @SerializedName("message") val message: String,
+    @SerializedName("data") val data: LaundryCollected?
+) {
+    val isSuccess get() = code == 1
+}
+
+data class LaundryCollected(
+    @SerializedName("id_trx") val idTrx: Int,
+    @SerializedName("trx_no") val trxNo: String,
+    @SerializedName("collected") val collected: Int,
+    @SerializedName("left") val left: Int,
+    @SerializedName("held") val held: Int,
+    @SerializedName("completed") val completed: Boolean
+)
+
+/**
+ * The OPERATOR'S queue for collection: every batch waiting to be handed back, oldest ready first.
+ *
+ * NOT [LaundryBatchesResponse]. That one is the courier's and is scoped to their department
+ * [T-08]; this is the counter's and is scoped to nothing, because the counter is holding all of
+ * them. Two scopes behind one model is how the two would quietly start disagreeing.
+ */
+data class LaundryHandoverQueueResponse(
+    @SerializedName("code") val code: Int,
+    @SerializedName("message") val message: String,
+    @SerializedName("data") val data: List<LaundryReadyBatch>?
+) {
+    val isSuccess get() = code == 1
+}
+
+data class LaundryReadyBatch(
+    @SerializedName("id") val id: Int,
+    @SerializedName("trx_no") val trxNo: String,
+    @SerializedName("ready_at") val readyAt: String?,
+    /** Set once this operator, or another, has scanned the bundle back out. */
+    @SerializedName("handover_marked_at") val handoverMarkedAt: String?,
+    @SerializedName("nama_dept") val namaDept: String?,
+    @SerializedName("sub_dept") val subDept: String?,
+    @SerializedName("pengantar") val pengantar: String?,
+    /** What is actually collectable, which is not the item count once a partial pickup [T-07]. */
+    @SerializedName("ready_count") val readyCount: Int
+)
+
+/**
+ * The counter's scan-out: every collectable garment, checked back out before anybody may take it.
+ *
+ * A JSON BODY for the same reason [LaundryAddItemsRequest] is one - a list cannot be form-encoded
+ * without hand-building `qr_codes[0]` keys.
+ *
+ * ALL OF THEM. The server refuses a short scan with the number missing rather than staging a
+ * subset, because a partial stage hands the courier a bundle nobody finished checking.
+ */
+data class LaundryHandoverMarkRequest(
+    @SerializedName("id_trx") val idTrx: Int,
+    @SerializedName("qr_codes") val qrCodes: List<String>
+)
+
+data class LaundryHandoverMarkResponse(
+    @SerializedName("code") val code: Int,
+    @SerializedName("message") val message: String,
+    @SerializedName("data") val data: LaundryHandoverMarked?
+) {
+    val isSuccess get() = code == 1
+}
+
+data class LaundryHandoverMarked(
+    @SerializedName("id_trx") val idTrx: Int,
+    @SerializedName("trx_no") val trxNo: String,
+    @SerializedName("marked") val marked: Int
+)

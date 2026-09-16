@@ -22,6 +22,12 @@ import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import retrofit2.Call
 import com.erela.fixme.objects.laundry.LaundryArrivalResponse
+import com.erela.fixme.objects.laundry.LaundryBatchDetailResponse
+import com.erela.fixme.objects.laundry.LaundryBatchesResponse
+import com.erela.fixme.objects.laundry.LaundryCollectResponse
+import com.erela.fixme.objects.laundry.LaundryHandoverMarkRequest
+import com.erela.fixme.objects.laundry.LaundryHandoverMarkResponse
+import com.erela.fixme.objects.laundry.LaundryHandoverQueueResponse
 import com.erela.fixme.objects.laundry.LaundryArrivalsResponse
 import com.erela.fixme.objects.laundry.LaundryAddItemsRequest
 import com.erela.fixme.objects.laundry.LaundryCheckInResponse
@@ -351,6 +357,52 @@ interface GetEndpoint {
     suspend fun laundryAddItems(
         @Body request: LaundryAddItemsRequest
     ): LaundryCheckInResponse
+
+    /** The courier's own screen: their department's batches, open ones first. */
+    @FormUrlEncoded
+    @POST("laundryMyBatches")
+    suspend fun laundryMyBatches(
+        @Field("lang") lang: String
+    ): LaundryBatchesResponse
+
+    /** One of those batches, with its garments. */
+    @FormUrlEncoded
+    @POST("laundryBatch")
+    suspend fun laundryBatch(
+        @Field("id_trx") idTrx: Int,
+        @Field("lang") lang: String
+    ): LaundryBatchDetailResponse
+
+    /**
+     * Collect, by scanning the counter sticker.
+     *
+     * NO ITEM LIST: the server derives what this department may take, so nothing the phone sends
+     * can name somebody else's garment.
+     */
+    @FormUrlEncoded
+    @POST("laundryCollect")
+    suspend fun laundryCollect(
+        @Field("counter_code") counterCode: String,
+        @Field("id_trx") idTrx: Int,
+        @Field("lang") lang: String
+    ): LaundryCollectResponse
+
+    /** The operator's side of collection: batches waiting to be handed back. */
+    @FormUrlEncoded
+    @POST("laundryHandoverQueue")
+    suspend fun laundryHandoverQueue(
+        @Field("lang") lang: String
+    ): LaundryHandoverQueueResponse
+
+    /**
+     * The operator checks the bundle back out and marks it ready to hand over.
+     *
+     * JSON body: `qr_codes` is a list, which form encoding cannot express cleanly.
+     */
+    @POST("laundryHandoverMark")
+    suspend fun laundryHandoverMark(
+        @Body request: LaundryHandoverMarkRequest
+    ): LaundryHandoverMarkResponse
 
     @FormUrlEncoded
     @POST("laundryScan")

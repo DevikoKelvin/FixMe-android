@@ -16,7 +16,9 @@ import androidx.core.view.WindowInsetsCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.erela.fixme.R
 import com.erela.fixme.adapters.recycler_view.LaundryBundleAdapter
+import com.erela.fixme.adapters.recycler_view.LaundryOutScanAdapter
 import com.erela.fixme.adapters.recycler_view.LaundryQueueAdapter
+import com.erela.fixme.adapters.recycler_view.LaundryReadyAdapter
 import com.erela.fixme.custom_views.CustomToast
 import com.erela.fixme.databinding.ActivityLaundryCounterBinding
 import com.erela.fixme.dialogs.ConfirmationDialog
@@ -50,6 +52,16 @@ import com.journeyapps.barcodescanner.ScanOptions
  * `isEnabled` on a MaterialCardView neither blocks the click nor changes how it looks. Every
  * enable/disable here goes through [enable] instead, which sets clickability AND dims — miss that
  * and a disabled-looking button still fires, or a live one looks dead.
+ *
+ * TWO FLOWS, ONE SCREEN — GA, 15 September 2026. Collection was split the same way check-in was:
+ * the operator scans the bundle back OUT and marks it ready, and only then may a courier collect.
+ * That is this screen again with four decisions changed — which queue loads, which adapter the
+ * list gets, what the scanner feeds, and what the save button calls — so it is [Flow] on this
+ * activity rather than three hundred lines of near-identical second activity. Launched at itself
+ * with [EXTRA_FLOW], so Back walks out of the outgoing flow into the incoming one.
+ *
+ * The OUT flow has no note field: a note belongs to a bundle being received, and the garments
+ * going out already carry the condition the laundry recorded for each of them.
  */
 class LaundryCounterActivity : AppCompatActivity() {
     private val binding: ActivityLaundryCounterBinding by lazy {
@@ -58,9 +70,14 @@ class LaundryCounterActivity : AppCompatActivity() {
     private val viewModel: LaundryCheckInViewModel by viewModels()
     private lateinit var bundleAdapter: LaundryBundleAdapter
     private lateinit var queueAdapter: LaundryQueueAdapter
+    private lateinit var outScanAdapter: LaundryOutScanAdapter
+    private lateinit var readyAdapter: LaundryReadyAdapter
 
     /** True while the queue is on screen, false while a bundle is being scanned. */
     private var queueMode = true
+
+    /** Which end of the day this is: garments arriving, or garments leaving. */
+    private val outgoing: Boolean by lazy { intent.getBooleanExtra(EXTRA_FLOW_OUT, false) }
 
     private fun MaterialCardView.enable(on: Boolean) {
         isClickable = on
@@ -68,9 +85,18 @@ class LaundryCounterActivity : AppCompatActivity() {
         alpha = if (on) 1f else 0.4f
     }
 
-    /** A uniform patch. Resolved by the server before it joins the bundle. */
+    /**
+     * A uniform patch.
+     *
+     * ON THE WAY IN the server resolves it before it joins the bundle, because the operator cannot
+     * tell a wrong garment from a right one by looking at six digits. ON THE WAY OUT there is
+     * nothing to resolve: the question is whether the code belongs to THIS batch, which the master
+     * register cannot answer and the server checks on submit.
+     */
     private val patchLauncher = registerForActivityResult(ScanContract()) { result ->
-        result.contents?.let { viewModel.onQrScanned(it) }
+        result.contents?.let {
+            if (outgoing) viewModel.onOutScanned(it) else viewModel.onQrScanned(it)
+        }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -122,8 +148,13 @@ class LaundryCounterActivity : AppCompatActivity() {
         // Refreshed on every return, not only on create: couriers join the queue while the
         // operator is mid-bundle, and the camera activity comes back through here too.
         if (queueMode) {
-            viewModel.loadArrivals()
+            loadQueue()
         }
+    }
+
+    /** The queue this flow works from. */
+    private fun loadQueue() {
+        if (outgoing) viewModel.loadHandoverQueue() else viewModel.loadArrivals()
     }
 
     override fun dispatchTouchEvent(motionEvent: MotionEvent): Boolean {
@@ -161,9 +192,24 @@ class LaundryCounterActivity : AppCompatActivity() {
             // The menu opens ONE of the two screens; it does not say which role a person may
             // play. Counter staff wear uniforms and hand them in like anybody else, so the
             // operator screen carries a door to the courier one rather than being a dead end.
+            title.text = getString(
+                if (outgoing) R.string.laundry_handover_title else R.string.laundry_counter_title
+            )
+
             handInButton.setOnClickListener {
                 startActivity(
                     Intent(this@LaundryCounterActivity, LaundryCheckInActivity::class.java)
+                )
+            }
+
+            // Only from the incoming flow, and only one level deep: two screens that each open
+            // the other is a stack the operator cannot reason about after four taps.
+            handoverButton.visibility = if (outgoing) View.GONE else View.VISIBLE
+
+            handoverButton.setOnClickListener {
+                startActivity(
+                    Intent(this@LaundryCounterActivity, LaundryCounterActivity::class.java)
+                        .putExtra(EXTRA_FLOW_OUT, true)
                 )
             }
 
@@ -173,6 +219,18 @@ class LaundryCounterActivity : AppCompatActivity() {
                     viewModel.workOn(arrival)
                     showBundle()
                 }
+            )
+
+            readyAdapter = LaundryReadyAdapter(
+                context = this@LaundryCounterActivity,
+                onPick = { batch ->
+                    viewModel.beginHandover(batch)
+                    showBundle()
+                }
+            )
+
+            outScanAdapter = LaundryOutScanAdapter(
+                onRemove = { code -> viewModel.removeOutScan(code) }
             )
 
             bundleAdapter = LaundryBundleAdapter(
@@ -193,15 +251,28 @@ class LaundryCounterActivity : AppCompatActivity() {
                 // Refused here rather than by the server, because the operator needs the
                 // instruction ("pick a courier first"), not a rejection.
                 if (viewModel.workingIdTrx == null) {
-                    toast(getString(R.string.laundry_pick_courier_required), warning = true)
+                    toast(
+                        getString(
+                            if (outgoing) R.string.laundry_pick_batch_required
+                            else R.string.laundry_pick_courier_required
+                        ),
+                        warning = true
+                    )
                     return@setOnClickListener
                 }
 
-                patchLauncher.launch(scanOptions(getString(R.string.laundry_scan_patch_prompt)))
+                patchLauncher.launch(
+                    scanOptions(
+                        getString(
+                            if (outgoing) R.string.laundry_scan_out_prompt
+                            else R.string.laundry_scan_patch_prompt
+                        )
+                    )
+                )
             }
 
             clearButton.setOnClickListener {
-                val count = viewModel.count()
+                val count = if (outgoing) viewModel.outCount() else viewModel.count()
 
                 if (count == 0) {
                     return@setOnClickListener
@@ -209,13 +280,17 @@ class LaundryCounterActivity : AppCompatActivity() {
 
                 ConfirmationDialog(
                     this@LaundryCounterActivity,
-                    getString(R.string.laundry_clear_confirm, count),
+                    getString(
+                        if (outgoing) R.string.laundry_clear_out_confirm
+                        else R.string.laundry_clear_confirm,
+                        count
+                    ),
                     if (getString(R.string.lang) == "in") "Ya" else "Yes"
                 ).also { dialog ->
                     dialog.setConfirmationDialogListener(
                         object : ConfirmationDialog.ConfirmationDialogListener {
                             override fun onConfirm() {
-                                viewModel.clearBundle()
+                                if (outgoing) viewModel.clearOutScan() else viewModel.clearBundle()
                             }
                         }
                     )
@@ -227,7 +302,11 @@ class LaundryCounterActivity : AppCompatActivity() {
             }
 
             submitButton.setOnClickListener {
-                viewModel.saveItems(etBatchNote.text?.toString()?.trim()?.ifBlank { null })
+                if (outgoing) {
+                    viewModel.markHandover()
+                } else {
+                    viewModel.saveItems(etBatchNote.text?.toString()?.trim()?.ifBlank { null })
+                }
             }
         }
     }
@@ -235,7 +314,7 @@ class LaundryCounterActivity : AppCompatActivity() {
     /** Out of a bundle and back to the queue, refreshed — couriers arrive while one is served. */
     private fun back() {
         showQueue()
-        viewModel.loadArrivals()
+        loadQueue()
     }
 
     /** Queue mode: the waiting couriers, and nothing that acts on a bundle. */
@@ -243,11 +322,18 @@ class LaundryCounterActivity : AppCompatActivity() {
         queueMode = true
 
         binding.apply {
-            rvList.adapter = queueAdapter
+            rvList.adapter = if (outgoing) readyAdapter else queueAdapter
 
             tvServing.text = getString(R.string.laundry_no_courier_selected)
             tvServingTrxNo.visibility = View.GONE
-            tvEmptyMessage.text = getString(R.string.laundry_queue_empty)
+            tvEmptyMessage.text = getString(
+                if (outgoing) R.string.laundry_handover_queue_empty
+                else R.string.laundry_queue_empty
+            )
+
+            // The two ways OUT of this screen belong to the queue, where the operator is
+            // between tasks. Mid-bundle they are navigation offered at the worst moment.
+            actionRow.visibility = View.VISIBLE
 
             tvBundleCount.visibility = View.GONE
             clearButton.visibility = View.GONE
@@ -255,7 +341,7 @@ class LaundryCounterActivity : AppCompatActivity() {
             submitButton.visibility = View.GONE
             fabScanPatch.visibility = View.GONE
 
-            renderEmptyState(queueAdapter.itemCount)
+            renderEmptyState(if (outgoing) readyAdapter.itemCount else queueAdapter.itemCount)
         }
     }
 
@@ -266,18 +352,29 @@ class LaundryCounterActivity : AppCompatActivity() {
 
         binding.apply {
             bundleAdapter.ownDept = viewModel.workingDept
-            rvList.adapter = bundleAdapter
+            rvList.adapter = if (outgoing) outScanAdapter else bundleAdapter
 
             tvServing.text = listOfNotNull(
                 viewModel.workingCourier,
                 viewModel.workingDept
             ).joinToString(" · ").ifBlank { "-" }
 
-            tvEmptyMessage.text = getString(R.string.laundry_bundle_empty)
+            tvEmptyMessage.text = getString(
+                if (outgoing) R.string.laundry_handover_bundle_empty
+                else R.string.laundry_bundle_empty
+            )
+
+            submitText.text = getString(
+                if (outgoing) R.string.laundry_handover_submit else R.string.laundry_submit
+            )
+
+            actionRow.visibility = View.GONE
 
             tvBundleCount.visibility = View.VISIBLE
             clearButton.visibility = View.VISIBLE
-            noteField.visibility = View.VISIBLE
+            // No note going out: a note belongs to a bundle being RECEIVED, and every garment
+            // leaving already carries the condition the laundry recorded for it.
+            noteField.visibility = if (outgoing) View.GONE else View.VISIBLE
             submitButton.visibility = View.VISIBLE
             fabScanPatch.visibility = View.VISIBLE
 
@@ -287,10 +384,12 @@ class LaundryCounterActivity : AppCompatActivity() {
             // queue is on screen - so entering bundle mode with an empty bundle would otherwise
             // leave both buttons looking live. Neither would do anything, which is worse than
             // being refused: it reads as a broken screen rather than a step not yet taken.
-            clearButton.enable(viewModel.count() > 0)
-            submitButton.enable(viewModel.count() > 0)
+            val count = if (outgoing) viewModel.outCount() else viewModel.count()
 
-            renderEmptyState(viewModel.count())
+            clearButton.enable(count > 0)
+            submitButton.enable(count > 0)
+
+            renderEmptyState(count)
         }
     }
 
@@ -317,7 +416,7 @@ class LaundryCounterActivity : AppCompatActivity() {
                 items.observe(this@LaundryCounterActivity) { list ->
                     bundleAdapter.submitList(list)
 
-                    if (queueMode) {
+                    if (queueMode || outgoing) {
                         return@observe
                     }
 
@@ -326,6 +425,47 @@ class LaundryCounterActivity : AppCompatActivity() {
 
                     clearButton.enable(list.isNotEmpty())
                     submitButton.enable(list.isNotEmpty())
+                }
+
+                outItems.observe(this@LaundryCounterActivity) { list ->
+                    outScanAdapter.submitList(list)
+
+                    if (queueMode || !outgoing) {
+                        return@observe
+                    }
+
+                    tvBundleCount.text = getString(R.string.laundry_bundle_count, list.size)
+                    renderEmptyState(list.size)
+
+                    clearButton.enable(list.isNotEmpty())
+                    submitButton.enable(list.isNotEmpty())
+                }
+
+                handoverQueue.observe(this@LaundryCounterActivity) { response ->
+                    if (!response.isSuccess) {
+                        toast(response.message, warning = true)
+                        return@observe
+                    }
+
+                    val waiting = response.data.orEmpty()
+                    readyAdapter.submitList(waiting)
+
+                    if (queueMode) {
+                        renderEmptyState(waiting.size)
+                    }
+                }
+
+                markResult.observe(this@LaundryCounterActivity) { response ->
+                    if (!response.isSuccess) {
+                        toast(response.message, warning = true)
+                        return@observe
+                    }
+
+                    // The server's message names the count and the transaction. Back to the queue
+                    // rather than staying on a batch that is now finished: the operator's next act
+                    // is the next batch, and leaving them on a cleared list reads as a failed save.
+                    toast(response.message, warning = false)
+                    back()
                 }
 
                 arrivals.observe(this@LaundryCounterActivity) { response ->
@@ -378,7 +518,9 @@ class LaundryCounterActivity : AppCompatActivity() {
                     submitLoadingBar.visibility = if (submitting) View.VISIBLE else View.GONE
                     submitText.visibility = if (submitting) View.INVISIBLE else View.VISIBLE
 
-                    submitButton.enable(!submitting && viewModel.count() > 0)
+                    val count = if (outgoing) viewModel.outCount() else viewModel.count()
+
+                    submitButton.enable(!submitting && count > 0)
                 }
 
                 error.observe(this@LaundryCounterActivity) { message ->
@@ -411,5 +553,10 @@ class LaundryCounterActivity : AppCompatActivity() {
                 )
             )
             .show()
+    }
+
+    companion object {
+        /** True for the OUTGOING flow: scan the bundle back out and mark it ready to hand over. */
+        const val EXTRA_FLOW_OUT = "extra.laundry.flow.out"
     }
 }

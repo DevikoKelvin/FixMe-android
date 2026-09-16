@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+    One batch on the courier's list.
+
+    THE STATUS IS THE POINT OF THE ROW. A courier opens this screen to answer one question — are my
+    uniforms back yet — so the state comes before the counts, in their words rather than the
+    counter's: `accepted` reads "sedang dicuci", because "diterima" describes a step they never see.
+
+    THE READY COUNT IS SEPARATE FROM THE STATUS, and deliberately so. A batch reads `ready` until
+    its LAST line moves, so a colleague from the same department can have taken everything while
+    the header still says collectable [T-08].
+-->
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mainContainer"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginHorizontal="@dimen/list_item_submission_margin_horizontal"
+    android:layout_marginVertical="@dimen/list_item_submission_margin_vertical"
+    android:clickable="true"
+    android:focusable="true"
+    android:foreground="?attr/selectableItemBackground"
+    app:cardBackgroundColor="#FBFBFB"
+    app:cardCornerRadius="@dimen/list_item_progress_card_corner_radius"
+    app:cardElevation="@dimen/list_item_progress_card_elevation"
+    app:strokeWidth="0dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:padding="12dp">
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/tvTrxNo"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="monospace"
+                android:textColor="@color/black"
+                android:textSize="@dimen/text_size_medium"
+                android:textStyle="bold"
+                tools:text="2026/09/15/LDY/0002" />
+
+            <TextView
+                android:id="@+id/tvStatus"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/black"
+                android:textSize="@dimen/text_size_medium"
+                android:textStyle="bold"
+                tools:text="Siap diambil" />
+
+            <TextView
+                android:id="@+id/tvSummary"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/custom_toast_font_normal_gray"
+                android:textSize="@dimen/text_size_small"
+                tools:text="5 item · diantar 2026-09-15 08:10:00" />
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/tvReady"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:textColor="@color/status_hold"
+            android:textSize="@dimen/text_size_small"
+            android:textStyle="bold"
+            android:visibility="gone"
+            tools:text="5 siap"
+            tools:visibility="visible" />
+    </LinearLayout>
+</com.google.android.material.card.MaterialCardView>

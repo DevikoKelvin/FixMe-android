@@ -44,7 +44,15 @@
             android:textStyle="bold" />
     </androidx.appcompat.widget.Toolbar>
 
-    <!-- Before the scan: what to do, and nothing else. -->
+    <!-- Before the scan: what to do, and nothing else.
+
+         GONE UNTIL A LOAD SAYS OTHERWISE. It had no `android:visibility` at all, so it defaulted
+         to visible and was the first thing a courier saw - "you have nothing at the laundry",
+         asserted before anyone had asked the server. `tools:visibility` only ever dressed the IDE
+         preview. The activity turns it on when a finished load comes back empty.
+
+         AND THE ANIMATION DOES NOT AUTOPLAY, for the same reason the task list pauses its own: a
+         looping Lottie behind a hidden container still renders every frame. -->
     <LinearLayout
         android:id="@+id/instructionContainer"
         android:layout_width="0dp"
@@ -54,11 +62,13 @@
         android:gravity="center"
         android:orientation="vertical"
         android:padding="24dp"
+        android:visibility="gone"
         app:layout_constraintBottom_toTopOf="@+id/scanCounterButton"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/toolBar"
-        tools:visibility="gone">
+        app:layout_constraintTop_toBottomOf="@+id/arrivalCard"
+        app:layout_goneMarginTop="0dp"
+        tools:visibility="visible">
 
         <com.airbnb.lottie.LottieAnimationView
             android:id="@+id/instructionAnimation"
@@ -66,7 +76,7 @@
             android:layout_height="0dp"
             android:layout_weight="1"
             android:padding="@dimen/login_logo_margin"
-            app:lottie_autoPlay="true"
+            app:lottie_autoPlay="false"
             app:lottie_loop="true"
             app:lottie_rawRes="@raw/empty_list_animation" />
 
@@ -80,19 +90,61 @@
             android:textSize="@dimen/text_size_medium" />
     </LinearLayout>
 
-    <!-- After the scan: the transaction number, which is what the operator will call out. Left on
-         screen rather than finishing the activity, because a courier who walks away and is then
-         asked "which number?" has nothing to show otherwise. -->
+    <!-- The courier's batches. A list, not a bare scan button [GA, 15 Sep 2026]: handing in is
+         one of the two things they do here, and the other is fetching - which starts by finding
+         the batch and seeing whether it is back yet. -->
+    <!-- THE RECYCLERVIEW IS THE DIRECT CHILD, which is the whole trick. SwipeRefreshLayout asks
+         its direct child whether the content can scroll up; hand it a ConstraintLayout and the
+         answer is always no, so every downward drag becomes a refresh - including one meant to
+         scroll back up the list. With the list itself as the child, that question answers itself
+         and no callback is needed.
+
+         THE WRAPPER STAYS VISIBLE WHEN THE LIST IS EMPTY. A courier whose batches have all been
+         collected is exactly the person who wants to pull and check again, and toggling the
+         wrapper instead of the list would take the gesture away at that moment. It draws nothing
+         of its own, and the instruction underneath is declared before it. -->
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/swipeRefreshLayout"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="16dp"
+        app:layout_constraintBottom_toTopOf="@+id/scanCounterButton"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/arrivalCard"
+        app:layout_goneMarginTop="0dp">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvBatches"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:clipToPadding="false"
+            tools:itemCount="2"
+            tools:listitem="@layout/list_item_laundry_batch" />
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
+    <!-- A BANNER, NOT A PAGE. After the scan this used to take the whole area between the toolbar
+         and the button - the same slot as the list - so registering an arrival HID the courier's
+         batches at the exact moment a new one had just been added to them.
+
+         IT STAYS RATHER THAN FADING, which is why it is not a snackbar. The toast already carries
+         the server's sentence; what only this can carry is the transaction NUMBER, and a courier
+         asked "which number?" three minutes later has nothing to show if it has timed out. The
+         close button is how it goes away.
+
+         NOT A SECOND COPY OF THE MESSAGE either: the line under the number is the server's own
+         wording, the same text the toast showed, kept where it can be read twice. -->
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/arrivalCard"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="@dimen/list_item_submission_margin_horizontal"
+        android:layout_marginTop="12dp"
         android:visibility="gone"
-        app:cardBackgroundColor="#FBFBFB"
+        app:cardBackgroundColor="@color/custom_toast_background_success"
         app:cardCornerRadius="@dimen/list_item_progress_card_corner_radius"
         app:cardElevation="@dimen/list_item_progress_card_elevation"
-        app:layout_constraintBottom_toTopOf="@+id/scanCounterButton"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/toolBar"
@@ -102,34 +154,54 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:padding="16dp">
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:paddingHorizontal="14dp"
+            android:paddingVertical="10dp">
 
-            <TextView
-                android:layout_width="match_parent"
+            <LinearLayout
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:text="@string/laundry_arrival_registered"
-                android:textColor="@color/custom_toast_font_normal_gray"
-                android:textSize="@dimen/text_size_small" />
+                android:layout_weight="1"
+                android:orientation="vertical">
 
-            <TextView
-                android:id="@+id/tvTrxNo"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:fontFamily="monospace"
-                android:textColor="@color/black"
-                android:textSize="@dimen/text_size_large"
-                android:textStyle="bold"
-                tools:text="2026/09/12/LDY/0001" />
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/laundry_arrival_registered"
+                    android:textColor="@color/custom_toast_font_success"
+                    android:textSize="@dimen/text_size_small" />
 
-            <TextView
-                android:id="@+id/tvArrivalMessage"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:textColor="@color/black"
-                android:textSize="@dimen/text_size_medium"
-                tools:text="Serahkan seragam ke petugas counter untuk dipindai." />
+                <TextView
+                    android:id="@+id/tvTrxNo"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="monospace"
+                    android:textColor="@color/custom_toast_font_success"
+                    android:textSize="@dimen/text_size_medium"
+                    android:textStyle="bold"
+                    tools:text="2026/09/12/LDY/0001" />
+
+                <TextView
+                    android:id="@+id/tvArrivalMessage"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:textColor="@color/custom_toast_font_success"
+                    android:textSize="@dimen/text_size_small"
+                    tools:text="Serahkan seragam ke petugas counter untuk dipindai." />
+            </LinearLayout>
+
+            <ImageView
+                android:id="@+id/arrivalDismiss"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_marginStart="10dp"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:contentDescription="@string/laundry_arrival_dismiss"
+                android:padding="2dp"
+                android:src="@drawable/baseline_close_24"
+                app:tint="@color/custom_toast_font_success" />
         </LinearLayout>
     </com.google.android.material.card.MaterialCardView>
 
