@@ -85,8 +85,6 @@ object ThermalPrinter {
     private fun adapter(context: Context): BluetoothAdapter? =
         context.getSystemService<BluetoothManager>()?.adapter
 
-    fun isReady(context: Context): Boolean = adapter(context)?.isEnabled == true
-
     /**
      * Everything already paired with this phone.
      *
@@ -136,7 +134,7 @@ object ThermalPrinter {
             try {
                 socket = device.createRfcommSocketToServiceRecord(SPP)
 
-                // NO `cancelDiscovery()` HERE, AND THAT IS THE POINT [GA, 18 Sep 2026]. It was
+                // NO `cancelDiscovery()` HERE, AND THAT IS THE POINT [GA, 17 Sep 2026]. It was
                 // called to free the radio in case another app had a scan running - and it is
                 // annotated `@RequiresPermission(BLUETOOTH_SCAN)`, which this app deliberately
                 // never asks for. So on Android 12 and up it threw SecurityException the instant
@@ -170,9 +168,9 @@ object ThermalPrinter {
                 out.flush()
 
                 null
-            } catch (e: IOException) {
+            } catch (_: IOException) {
                 context.getString(R.string.printer_connect_failed)
-            } catch (e: SecurityException) {
+            } catch (_: SecurityException) {
                 context.getString(R.string.printer_no_permission)
             } finally {
                 runCatching { socket?.close() }
@@ -190,7 +188,7 @@ object ThermalPrinter {
      * size, set the error correction, store the payload, print what was stored.
      *
      * MODULE SIZE 5 AND ECC M. The payload here is either a 19-character transaction number or a
-     * signed URL of about 120; both fit an 80mm head at size 5 with room to spare, and M is what
+     * signed URL of about 120; both fit a 80mm head at size 5 with room to spare, and M is what
      * the paper slip uses - clean paper scanned once, unlike a patch laundered for years.
      */
     private fun qrCommands(payload: String): ByteArray {

@@ -19,7 +19,7 @@ import com.erela.fixme.objects.laundry.LaundryWaitingCourier
  * NOT `LaundryQueueAdapter` WITH A FLAG. That one exists to pick a courier to SERVE - it opens a
  * bundle for scanning. These rows open a batch to look at.
  *
- * BOTH LISTS OPEN [GA, 18 Sep 2026]. History rows were inert on the reasoning that a finished
+ * BOTH LISTS OPEN [GA, 17 Sep 2026]. History rows were inert on the reasoning that a finished
  * batch is a record rather than a task. But a record is exactly the thing somebody opens - to see
  * what was in it, and to reprint the slip - and the process screen already shows a completed batch
  * with no action buttons and the print button live. The row was the only thing in the way.

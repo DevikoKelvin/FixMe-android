@@ -6,7 +6,7 @@
     A column of five buttons, four of them refusals waiting to happen, is the same information
     arranged to be got wrong.
 
-    THE HOUSE VOCABULARY, NOT MATERIAL'S DEFAULTS [18 Sep 2026]. The header is a card like the
+    THE HOUSE VOCABULARY, NOT MATERIAL'S DEFAULTS [17 Sep 2026]. The header is a card like the
     batch screen's, the primary action is a gradient card like Collect and Submit, the secondary is
     a plain card like Clear, and the empty state is the same Lottie every other list uses. This
     screen arrived with `MaterialButton` and a bare TextView, which is a different app's design

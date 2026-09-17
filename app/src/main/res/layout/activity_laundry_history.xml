@@ -8,7 +8,7 @@
     NULL IS A VALUE HERE, and it is the default: any date. The clear button exists because a range
     that cannot be undone traps the operator in a window they set by accident.
 
-    THE HOUSE VOCABULARY [18 Sep 2026]: the date buttons are plain cards like Clear on the counter
+    THE HOUSE VOCABULARY [17 Sep 2026]: the date buttons are plain cards like Clear on the counter
     screen, and the empty state is the same Lottie every other list uses. This screen arrived with
     `MaterialButton` and a bare TextView, which belongs to a different app.
 -->
