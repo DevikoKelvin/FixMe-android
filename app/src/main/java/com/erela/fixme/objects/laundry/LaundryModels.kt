@@ -136,7 +136,17 @@ data class LaundryWaitingCourier(
     @SerializedName("checked_in_at") val checkedInAt: String?,
     @SerializedName("nama_dept") val namaDept: String?,
     @SerializedName("sub_dept") val subDept: String?,
-    @SerializedName("pengantar") val pengantar: String?
+    @SerializedName("pengantar") val pengantar: String?,
+    /**
+     * How many garments are on it - 0 for a courier still waiting, by definition.
+     *
+     * `laundryArrivals` returns arrivals with NO lines, so the field is absent there and 0 is the
+     * truth rather than a fallback. The active and history lists send the same row shape with a
+     * real count, which is the only thing that makes those rows worth reading.
+     */
+    @SerializedName("item_count") val itemCount: Int = 0,
+    /** Only the history sends this: the moment the last garment left. */
+    @SerializedName("completed_at") val completedAt: String? = null
 )
 
 /** The caller's own recent hand-overs, so the app can confirm one landed. */
@@ -212,7 +222,15 @@ data class LaundryBatchDetailResponse(
 data class LaundryBatchDetail(
     @SerializedName("transaction") val transaction: LaundryBatchHeader,
     @SerializedName("items") val items: List<LaundryBatchLine>,
-    @SerializedName("ready_count") val readyCount: Int
+    @SerializedName("ready_count") val readyCount: Int,
+    /**
+     * What the courier claimed, and how much of it the counter has checked.
+     *
+     * ONLY `laundryCounterBatch` SENDS THESE, so both default to 0 and the courier's screen never
+     * reads them. They are what the Accept button turns on: equal counts mean the bundle matches.
+     */
+    @SerializedName("claimed") val claimed: Int = 0,
+    @SerializedName("verified") val verified: Int = 0
 )
 
 data class LaundryBatchHeader(
@@ -302,6 +320,85 @@ data class LaundryReadyBatch(
  * ALL OF THEM. The server refuses a short scan with the number missing rather than staging a
  * subset, because a partial stage hands the courier a bundle nobody finished checking.
  */
+/**
+ * A plain yes/no from the counter's process actions.
+ *
+ * ONE SHAPE FOR ALL SIX, because the server speaks one: `LaundryProcess` answers
+ * `{ok, message, data?}` and the mobile controller maps it to `{code, message}` for every action.
+ */
+data class LaundryActionResponse(
+    @SerializedName("code") val code: Int,
+    @SerializedName("message") val message: String
+) {
+    val isSuccess get() = code == 1
+}
+
+/** One account that may sign for a batch. */
+data class LaundryCollector(
+    @SerializedName("id_user") val idUser: Int,
+    @SerializedName("usern") val usern: String?,
+    /** `COALESCE(MEMNAME, usern)` - the name the operator reads off somebody across a counter. */
+    @SerializedName("full_name") val fullName: String?,
+    @SerializedName("nama_dept") val namaDept: String?,
+    @SerializedName("sub_dept") val subDept: String?
+)
+
+data class LaundryCollectorsResponse(
+    @SerializedName("code") val code: Int,
+    @SerializedName("message") val message: String,
+    @SerializedName("data") val data: List<LaundryCollector>?
+) {
+    val isSuccess get() = code == 1
+}
+
+/** JSON bodies: a list of ids is not something form encoding expresses cleanly. */
+data class LaundryConditionOutRequest(
+    @SerializedName("id_lines") val idLines: List<Int>,
+    @SerializedName("condition_out") val conditionOut: String,
+    @SerializedName("note") val note: String? = null
+)
+
+data class LaundryPickupRequest(
+    @SerializedName("id_trx") val idTrx: Int,
+    @SerializedName("id_collector") val idCollector: Int,
+    @SerializedName("item_ids") val itemIds: List<Int>
+)
+
+/** One slip, already laid out to the paper's width by the server. */
+/**
+ * One row of a slip: `t` is "text" or "qr", `v` is the characters or the payload.
+ *
+ * TYPED BY THE SERVER, WHICH OWNS THE LAYOUT. The phone never decides what belongs on a slip or
+ * where it goes - the web template and this come from one renderer.
+ */
+data class LaundrySlipRow(
+    @SerializedName("t") val type: String,
+    @SerializedName("v") val value: String
+) {
+    val isQr get() = type == "qr"
+}
+
+data class LaundrySlipLines(
+    @SerializedName("trx_no") val trxNo: String?,
+    @SerializedName("lines") val lines: List<LaundrySlipRow>?,
+    /**
+     * The server refused because this slip has been printed before [3e].
+     *
+     * A FLAG, NOT A MESSAGE MATCH. The refusal sentence is Indonesian, written server-side and
+     * translated per caller - an app that decided what to do by reading it would break the day
+     * somebody rewords it.
+     */
+    @SerializedName("needs_reason") val needsReason: Boolean = false
+)
+
+data class LaundrySlipResponse(
+    @SerializedName("code") val code: Int,
+    @SerializedName("message") val message: String,
+    @SerializedName("data") val data: LaundrySlipLines?
+) {
+    val isSuccess get() = code == 1
+}
+
 data class LaundryHandoverMarkRequest(
     @SerializedName("id_trx") val idTrx: Int,
     @SerializedName("qr_codes") val qrCodes: List<String>

@@ -5,6 +5,8 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
+import com.erela.fixme.objects.laundry.LaundryActionResponse
+import com.erela.fixme.objects.laundry.LaundryCollector
 import com.erela.fixme.objects.laundry.LaundryArrivalResponse
 import com.erela.fixme.objects.laundry.LaundryArrivalsResponse
 import com.erela.fixme.objects.laundry.LaundryBatchDetailResponse
@@ -17,6 +19,7 @@ import com.erela.fixme.objects.laundry.LaundryHandoverMarkResponse
 import com.erela.fixme.objects.laundry.LaundryHandoverQueueResponse
 import com.erela.fixme.objects.laundry.LaundryReadyBatch
 import com.erela.fixme.objects.laundry.LaundryMyCheckInsResponse
+import com.erela.fixme.objects.laundry.LaundrySlipRow
 import com.erela.fixme.objects.laundry.LaundryScanResponse
 import com.erela.fixme.objects.laundry.LaundryWaitingCourier
 import com.erela.fixme.repository.LaundryRepository
@@ -56,6 +59,54 @@ class LaundryCheckInViewModel(application: Application) : AndroidViewModel(appli
 
     private val _batches = MutableLiveData<LaundryBatchesResponse>()
     val batches: LiveData<LaundryBatchesResponse> = _batches
+
+    /**
+     * The counter's own view of a batch, and the five things they can do to it.
+     *
+     * A SEPARATE LiveData FROM `batchDetail`, which the COURIER's screen observes. The two come
+     * from different endpoints - the courier's is scoped to their department, the counter's is
+     * not - and one stream feeding both screens is how a stale reply lands on the wrong one.
+     */
+    private val _counterBatch = MutableLiveData<LaundryBatchDetailResponse>()
+    val counterBatch: LiveData<LaundryBatchDetailResponse> = _counterBatch
+
+    private val _actionResult = MutableLiveData<LaundryActionResponse>()
+    val actionResult: LiveData<LaundryActionResponse> = _actionResult
+
+    private val _collectors = MutableLiveData<List<LaundryCollector>>(emptyList())
+    val collectors: LiveData<List<LaundryCollector>> = _collectors
+
+    /**
+     * Two lists of the same row shape, and two fields rather than one with a mode.
+     *
+     * `active` is work in the building; `history` is what is finished. One screen shows one of
+     * them at a time, but a single field would let a slow reply from the list you just left
+     * render as the list you are looking at.
+     */
+    private val _active = MutableLiveData<LaundryArrivalsResponse>()
+    val active: LiveData<LaundryArrivalsResponse> = _active
+
+    private val _history = MutableLiveData<LaundryArrivalsResponse>()
+    val history: LiveData<LaundryArrivalsResponse> = _history
+
+    /**
+     * The slip the phone is holding, waiting for a printer to be chosen.
+     *
+     * FETCHED ONCE, PRINTED AS OFTEN AS THE SOCKET NEEDS. The server counts the fetch as the
+     * print, so a failed connection must not re-fetch - that would log a reprint for a slip that
+     * never reached paper, and the retry would then be refused for want of a reason.
+     */
+    private val _slip = MutableLiveData<List<LaundrySlipRow>>(emptyList())
+    val slip: LiveData<List<LaundrySlipRow>> = _slip
+
+    /**
+     * The server wants a reason before it will print this slip again.
+     *
+     * ITS OWN SIGNAL, not a toast. A reprint is refused until somebody says why [3e], and a
+     * refusal with no way to answer it is a dead end - which is exactly what the operator hit.
+     */
+    private val _slipNeedsReason = MutableLiveData<String>()
+    val slipNeedsReason: LiveData<String> = _slipNeedsReason
 
     private val _batchDetail = MutableLiveData<LaundryBatchDetailResponse>()
     val batchDetail: LiveData<LaundryBatchDetailResponse> = _batchDetail
@@ -189,6 +240,125 @@ class LaundryCheckInViewModel(application: Application) : AndroidViewModel(appli
                     }
 
                     _collectResult.value = response
+                }
+                .onFailure { fail(it) }
+
+            _isSubmitting.value = false
+        }
+    }
+
+    /** The counter's door onto a batch - any department's, unlike [loadBatch]. */
+    fun loadCounterBatch(idTrx: Int) {
+        _isLoading.value = true
+
+        viewModelScope.launch {
+            repository.counterBatch(idTrx)
+                .onSuccess { _counterBatch.value = it }
+                .onFailure { fail(it) }
+
+            _isLoading.value = false
+        }
+    }
+
+    /**
+     * The counter's five process actions, each the same four lines: run it, say what happened,
+     * reload the batch so the buttons match the new truth.
+     *
+     * RELOADING IS NOT OPTIONAL. Every one of these changes which button is legal next - accepting
+     * turns on Mulai Cuci, the wash start turns on the condition ticks - and a screen left holding
+     * the previous payload offers an action the server will refuse.
+     */
+    private fun act(idTrx: Int, run: suspend () -> Result<LaundryActionResponse>) {
+        _isSubmitting.value = true
+
+        viewModelScope.launch {
+            run()
+                .onSuccess { response ->
+                    _actionResult.value = response
+                    loadCounterBatch(idTrx)
+                }
+                .onFailure { fail(it) }
+
+            _isSubmitting.value = false
+        }
+    }
+
+    fun verifyGarment(idTrx: Int, qrCode: String, conditionIn: String, note: String? = null) =
+        act(idTrx) { repository.verify(idTrx, qrCode, conditionIn, note) }
+
+    fun acceptBatch(idTrx: Int) = act(idTrx) { repository.accept(idTrx) }
+
+    fun startWash(idTrx: Int) = act(idTrx) { repository.washStart(idTrx) }
+
+    fun recordConditionOut(idTrx: Int, idLines: List<Int>, condition: String, note: String? = null) =
+        act(idTrx) { repository.conditionOut(idLines, condition, note) }
+
+    fun markReady(idTrx: Int) = act(idTrx) { repository.markReady(idTrx) }
+
+    fun handOverTo(idTrx: Int, idCollector: Int, itemIds: List<Int>) =
+        act(idTrx) { repository.pickup(idTrx, idCollector, itemIds) }
+
+    /** Who may sign for this batch. Loaded when the picker opens, not with the batch. */
+    fun loadCollectors(idTrx: Int) {
+        viewModelScope.launch {
+            repository.collectors(idTrx)
+                .onSuccess { _collectors.value = it.data.orEmpty() }
+                .onFailure { _collectors.value = emptyList() }
+        }
+    }
+
+    /** Bundles in the building: banked, not yet collectable. */
+    fun loadActiveQueue() {
+        _isLoading.value = true
+
+        viewModelScope.launch {
+            repository.activeQueue()
+                .onSuccess { _active.value = it }
+                .onFailure { fail(it) }
+
+            _isLoading.value = false
+        }
+    }
+
+    /** Finished batches, optionally within a date range. */
+    fun loadHistory(from: String? = null, to: String? = null) {
+        _isLoading.value = true
+
+        viewModelScope.launch {
+            repository.history(from, to)
+                .onSuccess { _history.value = it }
+                .onFailure { fail(it) }
+
+            _isLoading.value = false
+        }
+    }
+
+    fun clearSlip() {
+        _slip.value = emptyList()
+    }
+
+    /**
+     * Ask for a slip. `reason` is required only when this transaction has been printed before,
+     * which the server decides and says.
+     */
+    fun loadSlip(idTrx: Int, out: List<Int>? = null, reason: String? = null, cols: Int = 48) {
+        _isSubmitting.value = true
+
+        viewModelScope.launch {
+            repository.slip(idTrx, out?.joinToString(","), reason, cols)
+                .onSuccess { response ->
+                    val data = response.data
+
+                    val lines = data?.lines
+
+                    when {
+                        response.isSuccess && lines != null -> _slip.value = lines
+
+                        // Answerable: ask for the reason and come back with it.
+                        data?.needsReason == true -> _slipNeedsReason.value = response.message
+
+                        else -> _actionResult.value = LaundryActionResponse(0, response.message)
+                    }
                 }
                 .onFailure { fail(it) }
 

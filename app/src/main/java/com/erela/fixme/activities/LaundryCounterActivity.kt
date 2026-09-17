@@ -213,6 +213,29 @@ class LaundryCounterActivity : AppCompatActivity() {
                 )
             }
 
+            // THE MIDDLE AND THE END OF THE DAY [17 Sep 2026]. Between the arrivals queue and the
+            // handover queue sat every bundle actually in the building, and after the handover
+            // sat everything already finished - neither had a screen at all. Both are lists of
+            // the same row, so they are one activity with a flag.
+            //
+            // Incoming flow only, same as the handover door above: two screens that each open the
+            // other is a stack nobody can reason about after four taps.
+            processButton.visibility = if (outgoing) View.GONE else View.VISIBLE
+            historyButton.visibility = if (outgoing) View.GONE else View.VISIBLE
+
+            processButton.setOnClickListener {
+                startActivity(
+                    Intent(this@LaundryCounterActivity, LaundryHistoryActivity::class.java)
+                        .putExtra(LaundryHistoryActivity.EXTRA_ACTIVE, true)
+                )
+            }
+
+            historyButton.setOnClickListener {
+                startActivity(
+                    Intent(this@LaundryCounterActivity, LaundryHistoryActivity::class.java)
+                )
+            }
+
             queueAdapter = LaundryQueueAdapter(
                 context = this@LaundryCounterActivity,
                 onPick = { arrival ->

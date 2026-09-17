@@ -310,4 +310,51 @@
     <string name="laundry_remove_scan">Remove</string>
     <string name="laundry_clear_out_confirm">Remove all %1$d scanned uniform(s)?</string>
     <string name="laundry_waiting_since">Waiting since %1$s</string>
+    <!-- The counter's process screen, ported from the Compose app on 17 Sep 2026. -->
+    <string name="laundry_process_title">Process</string>
+    <string name="laundry_process_pick">Select this garment</string>
+    <string name="laundry_verify">Check in a garment</string>
+    <string name="laundry_verify_progress">%1$d of %2$d checked</string>
+    <string name="laundry_accept">Accept handover</string>
+    <string name="laundry_wash_start">Start the wash</string>
+    <string name="laundry_condition_out">Record condition out</string>
+    <string name="laundry_mark_ready">Ready to collect</string>
+    <string name="laundry_hand_over">Hand over</string>
+    <string name="laundry_condition_title">Condition</string>
+    <string name="laundry_condition_good">Good</string>
+    <string name="laundry_condition_needs_repair">Needs repair</string>
+    <string name="laundry_condition_damaged">Damaged</string>
+    <string name="laundry_condition_lost">Lost</string>
+    <string name="laundry_note_hint">Note</string>
+    <string name="laundry_note_required">A note is required when the condition is not Good.</string>
+    <string name="laundry_pick_collector">Who is collecting?</string>
+    <string name="laundry_selected_count">%1$d selected</string>
+    <string name="laundry_nothing_selected">Tick the garments first.</string>
+    <string name="laundry_print_slip">Print the slip</string>
+    <string name="laundry_print_pick">Which printer?</string>
+    <string name="laundry_print_none">No paired printer. Pair one in Bluetooth settings first.</string>
+    <string name="laundry_print_done">Sent to the printer.</string>
+    <string name="laundry_history_title">History</string>
+    <string name="laundry_history_empty">Nothing finished in this range.</string>
+    <string name="laundry_history_finished">%1$d items · finished %2$s</string>
+    <string name="laundry_date_from">From</string>
+    <string name="laundry_date_to">To</string>
+    <string name="laundry_date_clear">Clear dates</string>
+    <string name="laundry_condition_pair">%1$s → %2$s</string>
+    <string name="laundry_in_progress">In wash</string>
+    <string name="laundry_washing_since">%1$d items · in since %2$s</string>
+    <string name="laundry_in_progress_empty">Nothing is in the wash right now.</string>
+    <string name="laundry_reprint_title">Reprint this slip</string>
+    <string name="laundry_reprint_reason">Why is it being reprinted?</string>
+    <string name="laundry_reprint_reason_required">A reprint needs a reason.</string>
+    <string name="laundry_bluetooth_needed">Bluetooth access is needed to reach the printer.</string>
+    <string name="laundry_bluetooth_blocked">Android will not ask again. Allow Bluetooth in app settings to print.</string>
+    <string name="laundry_open_settings">Open settings</string>
+    <!-- What the slip printer says when it cannot print. Every one is something the person
+         holding the phone can act on. -->
+    <string name="printer_no_permission">Bluetooth access has not been granted.</string>
+    <string name="printer_no_bluetooth">This device has no Bluetooth.</string>
+    <string name="printer_bluetooth_off">Bluetooth is off. Turn it on first.</string>
+    <string name="printer_unknown">Printer not recognised. Pair it again.</string>
+    <string name="printer_connect_failed">Could not reach the printer. Check it is on and in range.</string>
 </resources>

@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+    One row in an option dialog. A collector's name over their department, a condition on its own.
+-->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/optionRow"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="?attr/selectableItemBackground"
+    android:clickable="true"
+    android:focusable="true"
+    android:orientation="vertical"
+    android:paddingHorizontal="@dimen/activity_horizontal_margin"
+    android:paddingVertical="14dp">
+
+    <TextView
+        android:id="@+id/optionLabel"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="@color/black"
+        android:textSize="@dimen/text_size_medium"
+        android:textStyle="bold"
+        tools:text="Agus Rusdy Kriesnanto" />
+
+    <TextView
+        android:id="@+id/optionSubtitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="@color/custom_toast_font_normal_gray"
+        android:textSize="@dimen/text_size_small"
+        android:visibility="gone"
+        tools:text="Information Technology · Software"
+        tools:visibility="visible" />
+</LinearLayout>

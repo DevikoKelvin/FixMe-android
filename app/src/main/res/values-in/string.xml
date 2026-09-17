@@ -306,4 +306,51 @@
     <string name="laundry_remove_scan">Hapus</string>
     <string name="laundry_clear_out_confirm">Hapus semua %1$d seragam yang sudah dipindai?</string>
     <string name="laundry_waiting_since">Menunggu sejak %1$s</string>
+    <!-- Layar proses counter, hasil port dari aplikasi Compose, 17 Sep 2026. -->
+    <string name="laundry_process_title">Proses</string>
+    <string name="laundry_process_pick">Pilih seragam ini</string>
+    <string name="laundry_verify">Periksa seragam</string>
+    <string name="laundry_verify_progress">%1$d dari %2$d diperiksa</string>
+    <string name="laundry_accept">Terima serah terima</string>
+    <string name="laundry_wash_start">Mulai cuci</string>
+    <string name="laundry_condition_out">Catat kondisi keluar</string>
+    <string name="laundry_mark_ready">Siap diambil</string>
+    <string name="laundry_hand_over">Serahkan</string>
+    <string name="laundry_condition_title">Kondisi</string>
+    <string name="laundry_condition_good">Baik</string>
+    <string name="laundry_condition_needs_repair">Perlu perbaikan</string>
+    <string name="laundry_condition_damaged">Rusak</string>
+    <string name="laundry_condition_lost">Hilang</string>
+    <string name="laundry_note_hint">Catatan</string>
+    <string name="laundry_note_required">Catatan wajib diisi jika kondisi bukan Baik.</string>
+    <string name="laundry_pick_collector">Siapa yang mengambil?</string>
+    <string name="laundry_selected_count">%1$d dipilih</string>
+    <string name="laundry_nothing_selected">Centang seragamnya dulu.</string>
+    <string name="laundry_print_slip">Cetak slip</string>
+    <string name="laundry_print_pick">Printer yang mana?</string>
+    <string name="laundry_print_none">Belum ada printer terpasang. Pasangkan dulu di pengaturan Bluetooth.</string>
+    <string name="laundry_print_done">Terkirim ke printer.</string>
+    <string name="laundry_history_title">Riwayat</string>
+    <string name="laundry_history_empty">Tidak ada transaksi selesai pada rentang ini.</string>
+    <string name="laundry_history_finished">%1$d item · selesai %2$s</string>
+    <string name="laundry_date_from">Dari</string>
+    <string name="laundry_date_to">Sampai</string>
+    <string name="laundry_date_clear">Hapus tanggal</string>
+    <string name="laundry_condition_pair">%1$s → %2$s</string>
+    <string name="laundry_in_progress">Proses</string>
+    <string name="laundry_washing_since">%1$d item · masuk %2$s</string>
+    <string name="laundry_in_progress_empty">Tidak ada seragam yang sedang diproses.</string>
+    <string name="laundry_reprint_title">Cetak ulang slip</string>
+    <string name="laundry_reprint_reason">Alasan cetak ulang</string>
+    <string name="laundry_reprint_reason_required">Cetak ulang wajib disertai alasan.</string>
+    <string name="laundry_bluetooth_needed">Akses Bluetooth diperlukan untuk menyambung ke printer.</string>
+    <string name="laundry_bluetooth_blocked">Android tidak akan bertanya lagi. Izinkan Bluetooth di pengaturan aplikasi untuk mencetak.</string>
+    <string name="laundry_open_settings">Buka pengaturan</string>
+    <!-- Yang dikatakan printer slip ketika gagal mencetak. Semuanya hal yang bisa ditindaklanjuti
+         oleh orang yang sedang memegang ponselnya. -->
+    <string name="printer_no_permission">Izin Bluetooth belum diberikan.</string>
+    <string name="printer_no_bluetooth">Perangkat ini tidak punya Bluetooth.</string>
+    <string name="printer_bluetooth_off">Bluetooth mati. Nyalakan dulu.</string>
+    <string name="printer_unknown">Printer tidak dikenal. Pasangkan ulang.</string>
+    <string name="printer_connect_failed">Gagal menyambung ke printer. Pastikan printer menyala dan dalam jangkauan.</string>
 </resources>

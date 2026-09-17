@@ -186,4 +186,5 @@
     
     <dimen name="submission_detail_image_height">425dp</dimen>
     <dimen name="submission_detail_bottom_margin">150dp</dimen>
+    <dimen name="dialog_option_list_max_height">320dp</dimen>
 </resources>

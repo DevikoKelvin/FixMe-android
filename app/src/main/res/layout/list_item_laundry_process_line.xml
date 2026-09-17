@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+    One garment on the COUNTER's process screen.
+
+    THE SAME CARD AS EVERY OTHER ROW IN THIS APP — `#FBFBFB`, the progress-card radius and
+    elevation, 12dp padding — so a list of garments here reads as the same kind of thing as a list
+    of garments on the batch screen one tap away.
+
+    THE TICK IS THE WHOLE ROW. A 20dp checkbox is the wrong target for somebody standing at a
+    machine holding a garment, so the card carries the click and the box only reports it — hence
+    `clickable="false"` on the box, which stops the two fighting over the same tap. The ripple and
+    `foreground` come from the card, the way the queue rows already do it.
+
+    THE PAIR, SIDE BY SIDE. `masuk → keluar` is the damage attribution [D-3]: an exit condition
+    means nothing without the one the garment arrived in.
+-->
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mainContainer"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginHorizontal="@dimen/list_item_submission_margin_horizontal"
+    android:layout_marginVertical="@dimen/list_item_submission_margin_vertical"
+    android:clickable="true"
+    android:focusable="true"
+    android:foreground="?attr/selectableItemBackground"
+    app:cardBackgroundColor="#FBFBFB"
+    app:cardCornerRadius="@dimen/list_item_progress_card_corner_radius"
+    app:cardElevation="@dimen/list_item_progress_card_elevation"
+    app:strokeWidth="0dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:padding="12dp">
+
+        <CheckBox
+            android:id="@+id/cbPick"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:clickable="false"
+            android:contentDescription="@string/laundry_process_pick"
+            android:focusable="false" />
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/tvCode"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="monospace"
+                android:textColor="@color/black"
+                android:textSize="@dimen/text_size_medium"
+                android:textStyle="bold"
+                tools:text="000981" />
+
+            <TextView
+                android:id="@+id/tvItemType"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/black"
+                android:textSize="@dimen/text_size_small"
+                tools:text="Overall · Agus Rusdy Kriesnanto" />
+
+            <TextView
+                android:id="@+id/tvConditions"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/custom_toast_font_normal_gray"
+                android:textSize="@dimen/text_size_small"
+                tools:text="good → —" />
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/tvLineStatus"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:textColor="@color/custom_toast_font_normal_gray"
+            android:textSize="@dimen/text_size_small"
+            android:textStyle="bold"
+            tools:text="Diterima" />
+    </LinearLayout>
+</com.google.android.material.card.MaterialCardView>

@@ -6,6 +6,8 @@ import com.erela.fixme.helpers.api.GetEndpoint
 import com.erela.fixme.helpers.api.InitAPI
 import com.erela.fixme.objects.laundry.LaundryAddItemsRequest
 import com.erela.fixme.objects.laundry.LaundryCheckInItem
+import com.erela.fixme.objects.laundry.LaundryConditionOutRequest
+import com.erela.fixme.objects.laundry.LaundryPickupRequest
 import com.erela.fixme.objects.laundry.LaundryHandoverMarkRequest
 
 /**
@@ -51,6 +53,39 @@ class LaundryRepository(
     /** The courier: collect, by scanning the counter sticker. */
     suspend fun collect(counterCode: String, idTrx: Int) =
         runCatching { api.laundryCollect(counterCode, idTrx, lang) }
+
+    /** The counter: bundles already scanned in, not yet ready to collect. */
+    suspend fun activeQueue() = runCatching { api.laundryActiveQueue(lang) }
+
+    /** The counter: any batch, with the two counts the Accept button turns on. */
+    suspend fun counterBatch(idTrx: Int) = runCatching { api.laundryCounterBatch(idTrx, lang) }
+
+    /** The counter's process actions. Rules server-side; these only carry the request. */
+    suspend fun verify(idTrx: Int, qrCode: String, conditionIn: String, note: String?) =
+        runCatching { api.laundryVerify(idTrx, qrCode, conditionIn, note, lang) }
+
+    suspend fun accept(idTrx: Int, override: Boolean = false, reason: String? = null) =
+        runCatching { api.laundryAccept(idTrx, override, reason, lang) }
+
+    suspend fun washStart(idTrx: Int) = runCatching { api.laundryWashStart(idTrx, lang) }
+
+    suspend fun conditionOut(idLines: List<Int>, condition: String, note: String?) =
+        runCatching { api.laundryConditionOut(LaundryConditionOutRequest(idLines, condition, note)) }
+
+    suspend fun markReady(idTrx: Int) = runCatching { api.laundryReady(idTrx, lang) }
+
+    suspend fun collectors(idTrx: Int) = runCatching { api.laundryCollectors(idTrx, lang) }
+
+    suspend fun pickup(idTrx: Int, idCollector: Int, itemIds: List<Int>) =
+        runCatching { api.laundryPickup(LaundryPickupRequest(idTrx, idCollector, itemIds)) }
+
+    /** The counter: finished batches, optionally within a date range. */
+    suspend fun history(from: String? = null, to: String? = null) =
+        runCatching { api.laundryHistory(from, to, lang) }
+
+    /** The counter: one slip as printable lines. The server logs the print. */
+    suspend fun slip(idTrx: Int, out: String? = null, reason: String? = null, cols: Int = 48) =
+        runCatching { api.laundrySlip(idTrx, out, reason, cols, lang) }
 
     /** One patch, resolved before it joins the bundle. */
     suspend fun scan(qrCode: String) =

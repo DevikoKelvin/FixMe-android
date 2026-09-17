@@ -21,6 +21,11 @@ import com.erela.fixme.objects.ac.AcTaskListResponse
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import retrofit2.Call
+import com.erela.fixme.objects.laundry.LaundryActionResponse
+import com.erela.fixme.objects.laundry.LaundryCollectorsResponse
+import com.erela.fixme.objects.laundry.LaundryConditionOutRequest
+import com.erela.fixme.objects.laundry.LaundryPickupRequest
+import com.erela.fixme.objects.laundry.LaundrySlipResponse
 import com.erela.fixme.objects.laundry.LaundryArrivalResponse
 import com.erela.fixme.objects.laundry.LaundryBatchDetailResponse
 import com.erela.fixme.objects.laundry.LaundryBatchesResponse
@@ -403,6 +408,113 @@ interface GetEndpoint {
     suspend fun laundryHandoverMark(
         @Body request: LaundryHandoverMarkRequest
     ): LaundryHandoverMarkResponse
+
+    // ── The counter's process actions, ported from the Compose app on 17 Sep 2026 ─────────
+    //
+    // Every one of these lands on the same server service the web screens call, so a rule changed
+    // in one place changes for all three clients. The app's job is the screen, not the rules.
+
+    /**
+     * Bundles banked but not yet collectable - the middle of the counter's day.
+     *
+     * Between `laundryArrivals` (nothing scanned yet) and `laundryHandoverQueue` (ready to go
+     * back) there was nothing, and a bundle in that gap showed on no mobile list at all.
+     */
+    @FormUrlEncoded
+    @POST("laundryActiveQueue")
+    suspend fun laundryActiveQueue(
+        @Field("lang") lang: String
+    ): LaundryArrivalsResponse
+
+    /** Any batch, for the counter - not `laundryBatch`, whose department test is the courier's. */
+    @FormUrlEncoded
+    @POST("laundryCounterBatch")
+    suspend fun laundryCounterBatch(
+        @Field("id_trx") idTrx: Int,
+        @Field("lang") lang: String
+    ): LaundryBatchDetailResponse
+
+    /** One garment verified on the way in. */
+    @FormUrlEncoded
+    @POST("laundryVerify")
+    suspend fun laundryVerify(
+        @Field("id_trx") idTrx: Int,
+        @Field("qr_code") qrCode: String,
+        @Field("condition_in") conditionIn: String,
+        @Field("note") note: String?,
+        @Field("lang") lang: String
+    ): LaundryActionResponse
+
+    /** Accept the handover. Supervisor only - the server refuses anybody else. */
+    @FormUrlEncoded
+    @POST("laundryAccept")
+    suspend fun laundryAccept(
+        @Field("id_trx") idTrx: Int,
+        @Field("override") override: Boolean,
+        @Field("override_reason") overrideReason: String?,
+        @Field("lang") lang: String
+    ): LaundryActionResponse
+
+    /** Start the wash. The moment the department lead time is measured from. */
+    @FormUrlEncoded
+    @POST("laundryWashStart")
+    suspend fun laundryWashStart(
+        @Field("id_trx") idTrx: Int,
+        @Field("lang") lang: String
+    ): LaundryActionResponse
+
+    /** What came out of the machine, for one garment or a selection. */
+    @POST("laundryConditionOut")
+    suspend fun laundryConditionOut(
+        @Body request: LaundryConditionOutRequest
+    ): LaundryActionResponse
+
+    /** Sign the batch off as collectable. Supervisor only. */
+    @FormUrlEncoded
+    @POST("laundryReady")
+    suspend fun laundryReady(
+        @Field("id_trx") idTrx: Int,
+        @Field("lang") lang: String
+    ): LaundryActionResponse
+
+    /** Who may sign for this batch. */
+    @FormUrlEncoded
+    @POST("laundryCollectors")
+    suspend fun laundryCollectors(
+        @Field("id_trx") idTrx: Int,
+        @Field("lang") lang: String
+    ): LaundryCollectorsResponse
+
+    /** The counter hands the batch over, to somebody it names. */
+    @POST("laundryPickup")
+    suspend fun laundryPickup(
+        @Body request: LaundryPickupRequest
+    ): LaundryActionResponse
+
+    /** Finished batches, optionally within a date range. Same row shape as the other lists. */
+    @FormUrlEncoded
+    @POST("laundryHistory")
+    suspend fun laundryHistory(
+        @Field("from") from: String?,
+        @Field("to") to: String?,
+        @Field("lang") lang: String
+    ): LaundryArrivalsResponse
+
+    /**
+     * The slip, as lines of text for a thermal printer.
+     *
+     * ASKING FOR IT IS PRINTING IT. The server logs the print on this call and refuses a second
+     * one without a reason, exactly as the web does - so this is not called to preview anything.
+     */
+    @FormUrlEncoded
+    @POST("laundrySlip")
+    suspend fun laundrySlip(
+        @Field("id_trx") idTrx: Int,
+        @Field("out") out: String?,
+        @Field("reason") reason: String?,
+        @Field("cols") cols: Int,
+        @Field("lang") lang: String
+    ): LaundrySlipResponse
 
     @FormUrlEncoded
     @POST("laundryScan")

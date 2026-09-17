@@ -64,7 +64,6 @@
         android:id="@+id/actionRow"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginHorizontal="@dimen/list_item_submission_margin_horizontal"
         android:layout_marginTop="12dp"
         android:baselineAligned="false"
         android:orientation="horizontal"
@@ -76,6 +75,7 @@
             android:id="@+id/handoverButton"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/list_item_submission_margin_horizontal"
             android:layout_marginEnd="8dp"
             android:layout_weight="1"
             app:cardCornerRadius="@dimen/card_corner_radius"
@@ -135,6 +135,63 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/laundry_hand_in_action"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/text_size_small"
+                    android:textStyle="bold" />
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/processButton"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_weight="1"
+            app:cardCornerRadius="@dimen/card_corner_radius"
+            app:cardElevation="@dimen/card_elevation"
+            app:strokeWidth="0dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:orientation="horizontal"
+                android:paddingHorizontal="8dp"
+                android:paddingVertical="10dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/laundry_in_progress"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/text_size_small"
+                    android:textStyle="bold" />
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/historyButton"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="@dimen/list_item_submission_margin_horizontal"
+            android:layout_weight="1"
+            app:cardCornerRadius="@dimen/card_corner_radius"
+            app:cardElevation="@dimen/card_elevation"
+            app:strokeWidth="0dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:orientation="horizontal"
+                android:paddingHorizontal="8dp"
+                android:paddingVertical="10dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/laundry_history_title"
                     android:textColor="@color/black"
                     android:textSize="@dimen/text_size_small"
                     android:textStyle="bold" />
@@ -373,7 +430,6 @@
         android:id="@+id/footerButtonContainer"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="16dp"
         android:orientation="horizontal"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -384,7 +440,7 @@
             android:layout_width="0dp"
             android:layout_height="@dimen/button_height"
             android:layout_marginHorizontal="@dimen/list_item_submission_margin_horizontal"
-            android:layout_marginVertical="@dimen/list_item_submission_margin_vertical"
+            android:layout_marginVertical="@dimen/list_item_submission_margin_horizontal"
             android:layout_weight="1"
             app:cardCornerRadius="@dimen/login_button_corner_radius"
             app:cardElevation="@dimen/card_elevation"
@@ -416,7 +472,7 @@
             android:id="@+id/fabScanPatch"
             android:layout_width="@dimen/button_height"
             android:layout_height="@dimen/button_height"
-            android:layout_marginVertical="@dimen/list_item_submission_margin_vertical"
+            android:layout_marginVertical="@dimen/list_item_submission_margin_horizontal"
             android:layout_marginEnd="@dimen/list_item_submission_margin_horizontal"
             app:cardCornerRadius="@dimen/dialog_corner_radius"
             app:cardElevation="@dimen/card_elevation"
