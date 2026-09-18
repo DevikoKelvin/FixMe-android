@@ -334,7 +334,7 @@
     <string name="laundry_print_pick">Which printer?</string>
     <string name="laundry_print_none">No paired printer. Pair one in Bluetooth settings first.</string>
     <string name="laundry_print_done">Sent to the printer.</string>
-    <string name="laundry_history_title">History</string>
+    <string name="laundry_history_title">Completed</string>
     <string name="laundry_history_empty">Nothing finished in this range.</string>
     <string name="laundry_history_finished">%1$d items · finished %2$s</string>
     <string name="laundry_date_from">From</string>
@@ -357,4 +357,13 @@
     <string name="printer_bluetooth_off">Bluetooth is off. Turn it on first.</string>
     <string name="printer_unknown">Printer not recognised. Pair it again.</string>
     <string name="printer_connect_failed">Could not reach the printer. Check it is on and in range.</string>
+    <!-- The counter's four flows, as tabs. Same four lists the Compose app shows, in the same
+         order: what arrived, what is washing, what is ready, what is done. -->
+    <string name="laundry_tab_incoming">Incoming</string>
+    <string name="laundry_counter_subtitle">Scan the bundle a courier brought</string>
+    <string name="laundry_in_progress_subtitle">Checked in, not ready to collect yet</string>
+    <string name="laundry_handover_subtitle">Check the bundle back out before it leaves</string>
+    <string name="laundry_history_subtitle">Batches that are finished</string>
+    <string name="laundry_search_hint">Number, courier, department</string>
+    <string name="laundry_search_empty">Nothing here matches that search.</string>
 </resources>

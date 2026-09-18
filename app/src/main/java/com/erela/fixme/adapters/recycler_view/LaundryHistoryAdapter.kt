@@ -26,8 +26,13 @@ import com.erela.fixme.objects.laundry.LaundryWaitingCourier
  */
 class LaundryHistoryAdapter(
     private val context: Context,
-    /** The archive says when it finished; the in-progress list says when it came in. */
-    private val showCompletedAt: Boolean = true,
+    /**
+     * The archive says when it finished; the in-progress list says when it came in.
+     *
+     * A `var` since 18 Sep 2026: both lists are tabs of one screen now, sharing one adapter, so
+     * which caption to draw is answered per submit rather than per construction.
+     */
+    var showCompletedAt: Boolean = true,
     private val onPick: (LaundryWaitingCourier) -> Unit = {}
 ) : RecyclerView.Adapter<LaundryHistoryAdapter.ViewHolder>() {
     private val items = mutableListOf<LaundryWaitingCourier>()

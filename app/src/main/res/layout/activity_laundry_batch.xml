@@ -72,6 +72,7 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:background="@drawable/gradient_card_color"
                     android:orientation="vertical"
                     android:padding="16dp">
 
@@ -235,6 +236,7 @@
                 android:layout_height="0dp"
                 android:layout_marginTop="8dp"
                 android:layout_marginBottom="16dp"
+                android:layout_marginHorizontal="@dimen/dropdown_item_padding_vertical"
                 android:clipToPadding="false"
                 android:nestedScrollingEnabled="true"
                 app:layout_constraintBottom_toTopOf="@+id/collectButton"
@@ -258,7 +260,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="@+id/rvItems"
-                tools:visibility="visible" />
+                tools:visibility="gone" />
 
             <!-- Hidden until there is something to take: `ready_count`, not the header status. -->
             <com.google.android.material.card.MaterialCardView

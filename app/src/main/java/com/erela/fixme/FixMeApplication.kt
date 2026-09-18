@@ -24,7 +24,7 @@ class FixMeApplication : Application() {
 
         InitAPI.onUnauthorized = {
             // Server rejected the token: expired, revoked, or the account signed in on
-            // another device. Drop local state and send the user back to login.
+            // another device. Drop local state and send the user back to log in.
             userData.purgeUserData()
             stopService(Intent(this, SseService::class.java))
 

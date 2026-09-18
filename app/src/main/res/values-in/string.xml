@@ -330,7 +330,7 @@
     <string name="laundry_print_pick">Printer yang mana?</string>
     <string name="laundry_print_none">Belum ada printer terpasang. Pasangkan dulu di pengaturan Bluetooth.</string>
     <string name="laundry_print_done">Terkirim ke printer.</string>
-    <string name="laundry_history_title">Riwayat</string>
+    <string name="laundry_history_title">Selesai</string>
     <string name="laundry_history_empty">Tidak ada transaksi selesai pada rentang ini.</string>
     <string name="laundry_history_finished">%1$d item · selesai %2$s</string>
     <string name="laundry_date_from">Dari</string>
@@ -353,4 +353,13 @@
     <string name="printer_bluetooth_off">Bluetooth mati. Nyalakan dulu.</string>
     <string name="printer_unknown">Printer tidak dikenal. Pasangkan ulang.</string>
     <string name="printer_connect_failed">Gagal menyambung ke printer. Pastikan printer menyala dan dalam jangkauan.</string>
+    <!-- Empat alur counter, sebagai tab. Empat daftar yang sama dengan aplikasi Compose, dalam
+         urutan yang sama: yang datang, yang dicuci, yang siap, yang selesai. -->
+    <string name="laundry_tab_incoming">Masuk</string>
+    <string name="laundry_counter_subtitle">Pindai seragam yang dibawa kurir</string>
+    <string name="laundry_in_progress_subtitle">Sudah dicatat, belum siap diambil</string>
+    <string name="laundry_handover_subtitle">Periksa seragam sebelum diserahkan</string>
+    <string name="laundry_history_subtitle">Transaksi yang sudah selesai</string>
+    <string name="laundry_search_hint">Nomor, kurir, departemen</string>
+    <string name="laundry_search_empty">Tidak ada yang cocok dengan pencarian itu.</string>
 </resources>

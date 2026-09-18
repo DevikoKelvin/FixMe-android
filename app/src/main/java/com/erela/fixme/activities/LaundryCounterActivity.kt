@@ -1,6 +1,7 @@
 package com.erela.fixme.activities
 
 import android.annotation.SuppressLint
+import android.app.DatePickerDialog
 import android.content.Intent
 import android.graphics.Rect
 import android.os.Bundle
@@ -14,8 +15,12 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.transition.AutoTransition
+import androidx.transition.TransitionManager
 import com.erela.fixme.R
+import androidx.core.widget.doAfterTextChanged
 import com.erela.fixme.adapters.recycler_view.LaundryBundleAdapter
+import com.erela.fixme.adapters.recycler_view.LaundryHistoryAdapter
 import com.erela.fixme.adapters.recycler_view.LaundryOutScanAdapter
 import com.erela.fixme.adapters.recycler_view.LaundryQueueAdapter
 import com.erela.fixme.adapters.recycler_view.LaundryReadyAdapter
@@ -23,11 +28,17 @@ import com.erela.fixme.custom_views.CustomToast
 import com.erela.fixme.databinding.ActivityLaundryCounterBinding
 import com.erela.fixme.dialogs.ConfirmationDialog
 import com.erela.fixme.helpers.enableEdgeToEdgeOpaqueNav
+import com.erela.fixme.objects.laundry.LaundryReadyBatch
+import com.erela.fixme.objects.laundry.LaundryWaitingCourier
 import com.erela.fixme.viewmodel.LaundryCheckInViewModel
 import com.google.android.material.card.MaterialCardView
+import com.google.android.material.tabs.TabLayout
 import com.google.android.material.textfield.TextInputEditText
 import com.journeyapps.barcodescanner.ScanContract
 import com.journeyapps.barcodescanner.ScanOptions
+import java.text.SimpleDateFormat
+import java.util.Calendar
+import java.util.Locale
 
 /**
  * Counter Laundry — the OPERATOR scans the bundle a courier has brought.
@@ -72,13 +83,42 @@ class LaundryCounterActivity : AppCompatActivity() {
     private lateinit var queueAdapter: LaundryQueueAdapter
     private lateinit var outScanAdapter: LaundryOutScanAdapter
     private lateinit var readyAdapter: LaundryReadyAdapter
+    private lateinit var historyAdapter: LaundryHistoryAdapter
 
-    /** True while the queue is on screen, false while a bundle is being scanned. */
+    /** True while a list is on screen, false while a bundle is being scanned. */
     private var queueMode = true
 
-    /** Which end of the day this is: garments arriving, or garments leaving. */
-    private val outgoing: Boolean by lazy { intent.getBooleanExtra(EXTRA_FLOW_OUT, false) }
+    /**
+     * The counter's four lists, in the order the tabs show them and the Compose app shows them.
+     *
+     * A TAB, NOT FOUR ACTIVITIES [GA, 18 Sep 2026]. Two of these used to relaunch this activity
+     * with a flag and two opened a second activity; all four are the same rows read for
+     * different reasons, and the operator's job is comparing them. Leaving the screen to answer
+     * "is it washed yet" was the cost of that arrangement.
+     */
+    private enum class Flow { INCOMING, ACTIVE, OUTGOING, HISTORY }
 
+    private var flow = Flow.INCOMING
+
+    /** Which end of the day this is: garments arriving, or garments leaving. */
+    private val outgoing: Boolean get() = flow == Flow.OUTGOING
+
+    /** Whether this tab's rows act on anything, or are a record being read. */
+    private val readOnly: Boolean get() = flow == Flow.ACTIVE || flow == Flow.HISTORY
+
+    // WHAT THE SERVER SENT, kept beside what is on screen: the search box filters a list rather
+    // than re-fetching it, so the unfiltered rows have to survive somewhere. Four fields rather
+    // than one of a common type - two of these lists are a different shape.
+    private var rawArrivals = emptyList<LaundryWaitingCourier>()
+    private var rawActive = emptyList<LaundryWaitingCourier>()
+    private var rawReady = emptyList<LaundryReadyBatch>()
+    private var rawHistory = emptyList<LaundryWaitingCourier>()
+    private var query = ""
+
+    /** `YYYY-MM-DD`, or null for "any date" - the default, and it has to stay reachable. */
+    private var from: String? = null
+    private var to: String? = null
+    private val formatter = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
     private fun MaterialCardView.enable(on: Boolean) {
         isClickable = on
         isFocusable = on
@@ -126,8 +166,8 @@ class LaundryCounterActivity : AppCompatActivity() {
         setupUI()
         setupObservers()
 
+        renderRange()
         showQueue()
-
         // A half-scanned bundle is worth a step back rather than losing the screen: Back returns
         // to the queue, and only leaves from there. Through the dispatcher rather than an
         // onBackPressed() override, which is deprecated and inert once a predictive-back
@@ -152,9 +192,53 @@ class LaundryCounterActivity : AppCompatActivity() {
         }
     }
 
-    /** The queue this flow works from. */
+    /** The list this tab works from. */
     private fun loadQueue() {
-        if (outgoing) viewModel.loadHandoverQueue() else viewModel.loadArrivals()
+        when (flow) {
+            Flow.INCOMING -> viewModel.loadArrivals()
+            Flow.ACTIVE -> viewModel.loadActiveQueue()
+            Flow.OUTGOING -> viewModel.loadHandoverQueue()
+            Flow.HISTORY -> viewModel.loadHistory(from, to)
+        }
+    }
+
+    /**
+     * Whether one row survives the search box.
+     *
+     * EVERY TERM MUST HIT, ANY FIELD MAY ANSWER IT. "produksi 0003" is how somebody actually
+     * narrows fifty rows, and a single `contains` of the whole phrase finds nothing - the
+     * department and the number live in different fields. The Compose app splits it the same way.
+     */
+    private fun matches(vararg fields: String?): Boolean {
+        val terms = query.trim().split(Regex("\\s+")).filter { it.isNotEmpty() }
+
+        return terms.all { term -> fields.any { it?.contains(term, ignoreCase = true) == true } }
+    }
+
+    /** The current tab's rows, filtered, into the adapter that draws them. */
+    private fun renderList() {
+        if (!queueMode) {
+            return
+        }
+        val count = when (flow) {
+            Flow.INCOMING -> rawArrivals
+                .filter { matches(it.trxNo, it.pengantar, it.namaDept, it.subDept) }
+                .also { queueAdapter.submitList(it) }.size
+
+            Flow.ACTIVE -> rawActive
+                .filter { matches(it.trxNo, it.pengantar, it.namaDept, it.subDept) }
+                .also { historyAdapter.submitList(it) }.size
+
+            Flow.OUTGOING -> rawReady
+                .filter { matches(it.trxNo, it.pengantar, it.namaDept, it.subDept) }
+                .also { readyAdapter.submitList(it) }.size
+
+            Flow.HISTORY -> rawHistory
+                .filter { matches(it.trxNo, it.pengantar, it.namaDept, it.subDept) }
+                .also { historyAdapter.submitList(it) }.size
+        }
+
+        renderEmptyState(count)
     }
 
     override fun dispatchTouchEvent(motionEvent: MotionEvent): Boolean {
@@ -188,51 +272,94 @@ class LaundryCounterActivity : AppCompatActivity() {
             toolBar.setNavigationOnClickListener {
                 if (queueMode) finish() else back()
             }
+            // The title stays put and the subtitle carries the tab, which is how the Compose
+            // header reads: four one-word tabs cannot say whether "Masuk" means couriers waiting
+            // or garments arriving.
+            title.text = getString(R.string.laundry_counter_title)
 
-            // The menu opens ONE of the two screens; it does not say which role a person may
-            // play. Counter staff wear uniforms and hand them in like anybody else, so the
-            // operator screen carries a door to the courier one rather than being a dead end.
-            title.text = getString(
-                if (outgoing) R.string.laundry_handover_title else R.string.laundry_counter_title
-            )
+            listOf(
+                R.string.laundry_tab_incoming,
+                R.string.laundry_in_progress,
+                R.string.laundry_handover_action,
+                R.string.laundry_history_title
+            ).forEach { label ->
+                tabLayout.addTab(tabLayout.newTab().setText(getString(label)))
+            }
 
-            handInButton.setOnClickListener {
+            tabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
+                override fun onTabSelected(tab: TabLayout.Tab) {
+                    flow = Flow.entries[tab.position]
+                    // Out of a half-scanned bundle, because the tab is a different list: staying
+                    // in bundle mode would leave the save button acting on the batch behind it.
+                    showQueue()
+                    loadQueue()
+                }
+
+                override fun onTabUnselected(tab: TabLayout.Tab) = Unit
+
+                // Re-tapping the tab you are on is how somebody asks for the list again.
+                override fun onTabReselected(tab: TabLayout.Tab) {
+                    if (!queueMode) back() else loadQueue()
+                }
+            })
+            // AN ICON UNTIL IT IS WANTED, like the Compose header: a field across the top of a
+            // phone leaves no room for the title, and the operator searches on the day the queue
+            // is long - not on the twenty days it holds two rows.
+            searchButton.setOnClickListener {
+                val opening = searchField.visibility != View.VISIBLE
+
+                // The field fades, and the tabs and the list slide to meet it. `AutoTransition`
+                // is Fade + ChangeBounds, which is both halves of that in one line and the same
+                // call the splash screen and the submission footer already use.
+                //
+                // ONLY ON THE TAP. showQueue/showBundle set the same visibility without this:
+                // those are a whole screen changing mode, and animating one field in the middle
+                // of it draws the eye to the wrong thing.
+                TransitionManager.beginDelayedTransition(main, AutoTransition())
+
+                searchField.visibility = if (opening) View.VISIBLE else View.GONE
+                // Closing clears: a hidden filter silently holding rows back is the bug report
+                // "the batch is not in the list".
+                if (!opening) {
+                    etSearch.setText("")
+                }
+            }
+
+            etSearch.doAfterTextChanged { text ->
+                query = text?.toString().orEmpty()
+                renderList()
+            }
+
+            refreshButton.setOnClickListener { loadQueue() }
+            // The courier's door, as a floating button in the bottom-left corner - where the
+            // Compose app puts it. Counter staff wear uniforms and hand them in like anybody
+            // else, so this screen is not a dead end for them.
+            fabHandIn.setOnClickListener {
                 startActivity(
                     Intent(this@LaundryCounterActivity, LaundryCheckInActivity::class.java)
                 )
             }
 
-            // Only from the incoming flow, and only one level deep: two screens that each open
-            // the other is a stack the operator cannot reason about after four taps.
-            handoverButton.visibility = if (outgoing) View.GONE else View.VISIBLE
+            fromButton.setOnClickListener { pickDate(isFrom = true) }
+            toButton.setOnClickListener { pickDate(isFrom = false) }
 
-            handoverButton.setOnClickListener {
-                startActivity(
-                    Intent(this@LaundryCounterActivity, LaundryCounterActivity::class.java)
-                        .putExtra(EXTRA_FLOW_OUT, true)
-                )
+            rangeClearButton.setOnClickListener {
+                from = null
+                to = null
+                renderRange()
+                loadQueue()
             }
-
-            // THE MIDDLE AND THE END OF THE DAY [17 Sep 2026]. Between the arrivals queue and the
-            // handover queue sat every bundle actually in the building, and after the handover
-            // sat everything already finished - neither had a screen at all. Both are lists of
-            // the same row, so they are one activity with a flag.
-            //
-            // Incoming flow only, same as the handover door above: two screens that each open the
-            // other is a stack nobody can reason about after four taps.
-            processButton.visibility = if (outgoing) View.GONE else View.VISIBLE
-            historyButton.visibility = if (outgoing) View.GONE else View.VISIBLE
-
-            processButton.setOnClickListener {
+            // THE TWO READ-ONLY TABS share one adapter and one destination. On a finished batch
+            // the process screen has no action buttons - the `when` over the status has no branch
+            // for `completed` - so what is left is what somebody opening a record came for: what
+            // was in it, and the button that reprints its slip.
+            historyAdapter = LaundryHistoryAdapter(
+                context = this@LaundryCounterActivity,
+                showCompletedAt = false
+            ) { batch ->
                 startActivity(
-                    Intent(this@LaundryCounterActivity, LaundryHistoryActivity::class.java)
-                        .putExtra(LaundryHistoryActivity.EXTRA_ACTIVE, true)
-                )
-            }
-
-            historyButton.setOnClickListener {
-                startActivity(
-                    Intent(this@LaundryCounterActivity, LaundryHistoryActivity::class.java)
+                    Intent(this@LaundryCounterActivity, LaundryProcessActivity::class.java)
+                        .putExtra(LaundryProcessActivity.EXTRA_ID_TRX, batch.id)
                 )
             }
 
@@ -340,31 +467,48 @@ class LaundryCounterActivity : AppCompatActivity() {
         loadQueue()
     }
 
-    /** Queue mode: the waiting couriers, and nothing that acts on a bundle. */
+    /** List mode: whichever tab is open, and nothing that acts on a bundle. */
     private fun showQueue() {
         queueMode = true
 
         binding.apply {
-            rvList.adapter = if (outgoing) readyAdapter else queueAdapter
+            historyAdapter.showCompletedAt = flow == Flow.HISTORY
+
+            rvList.adapter = when (flow) {
+                Flow.INCOMING -> queueAdapter
+                Flow.OUTGOING -> readyAdapter
+                Flow.ACTIVE, Flow.HISTORY -> historyAdapter
+            }
+
+            subtitle.setText(
+                when (flow) {
+                    Flow.INCOMING -> R.string.laundry_counter_subtitle
+                    Flow.ACTIVE -> R.string.laundry_in_progress_subtitle
+                    Flow.OUTGOING -> R.string.laundry_handover_subtitle
+                    Flow.HISTORY -> R.string.laundry_history_subtitle
+                }
+            )
 
             tvServing.text = getString(R.string.laundry_no_courier_selected)
             tvServingTrxNo.visibility = View.GONE
-            tvEmptyMessage.text = getString(
-                if (outgoing) R.string.laundry_handover_queue_empty
-                else R.string.laundry_queue_empty
-            )
+            // Today's work carries no date filter: it could only hide something still to do.
+            rangeRow.visibility = if (flow == Flow.HISTORY) View.VISIBLE else View.GONE
+            // The tabs and the search belong to the lists, where the operator is between tasks.
+            // Mid-bundle they are navigation offered at the worst moment.
+            tabLayout.visibility = View.VISIBLE
+            searchButton.visibility = View.VISIBLE
+            refreshButton.visibility = View.VISIBLE
+            searchField.visibility = if (query.isBlank()) View.GONE else View.VISIBLE
+            fabHandIn.visibility = View.VISIBLE
 
-            // The two ways OUT of this screen belong to the queue, where the operator is
-            // between tasks. Mid-bundle they are navigation offered at the worst moment.
-            actionRow.visibility = View.VISIBLE
-
+            arrivalCard.visibility = View.GONE
             tvBundleCount.visibility = View.GONE
             clearButton.visibility = View.GONE
             noteField.visibility = View.GONE
             submitButton.visibility = View.GONE
             fabScanPatch.visibility = View.GONE
 
-            renderEmptyState(if (outgoing) readyAdapter.itemCount else queueAdapter.itemCount)
+            renderList()
         }
     }
 
@@ -391,8 +535,14 @@ class LaundryCounterActivity : AppCompatActivity() {
                 if (outgoing) R.string.laundry_handover_submit else R.string.laundry_submit
             )
 
-            actionRow.visibility = View.GONE
+            tabLayout.visibility = View.GONE
+            searchButton.visibility = View.GONE
+            refreshButton.visibility = View.GONE
+            searchField.visibility = View.GONE
+            rangeRow.visibility = View.GONE
+            fabHandIn.visibility = View.GONE
 
+            arrivalCard.visibility = View.VISIBLE
             tvBundleCount.visibility = View.VISIBLE
             clearButton.visibility = View.VISIBLE
             // No note going out: a note belongs to a bundle being RECEIVED, and every garment
@@ -402,7 +552,6 @@ class LaundryCounterActivity : AppCompatActivity() {
             fabScanPatch.visibility = View.VISIBLE
 
             etBatchNote.setText("")
-
             // Set here as well as in the observer, because the observer returns early while the
             // queue is on screen - so entering bundle mode with an empty bundle would otherwise
             // leave both buttons looking live. Neither would do anything, which is worse than
@@ -419,9 +568,22 @@ class LaundryCounterActivity : AppCompatActivity() {
     /** The list or the animation, never both. */
     private fun renderEmptyState(count: Int) {
         binding.apply {
+            if (queueMode) {
+                // Before the list's own sentence: "nobody is waiting" is a lie when three
+                // couriers are waiting and the filter hid them.
+                tvEmptyMessage.setText(
+                    when {
+                        query.isNotBlank() -> R.string.laundry_search_empty
+                        flow == Flow.ACTIVE -> R.string.laundry_in_progress_empty
+                        flow == Flow.OUTGOING -> R.string.laundry_handover_queue_empty
+                        flow == Flow.HISTORY -> R.string.laundry_history_empty
+                        else -> R.string.laundry_queue_empty
+                    }
+                )
+            }
+
             rvList.visibility = if (count == 0) View.GONE else View.VISIBLE
             emptyContainer.visibility = if (count == 0) View.VISIBLE else View.GONE
-
             // Paused when hidden, as the task list does it: a Lottie left running behind a full
             // list still renders every frame.
             if (count == 0) {
@@ -470,11 +632,10 @@ class LaundryCounterActivity : AppCompatActivity() {
                         return@observe
                     }
 
-                    val waiting = response.data.orEmpty()
-                    readyAdapter.submitList(waiting)
+                    rawReady = response.data.orEmpty()
 
-                    if (queueMode) {
-                        renderEmptyState(waiting.size)
+                    if (flow == Flow.OUTGOING) {
+                        renderList()
                     }
                 }
 
@@ -483,7 +644,6 @@ class LaundryCounterActivity : AppCompatActivity() {
                         toast(response.message, warning = true)
                         return@observe
                     }
-
                     // The server's message names the count and the transaction. Back to the queue
                     // rather than staying on a batch that is now finished: the operator's next act
                     // is the next batch, and leaving them on a cleared list reads as a failed save.
@@ -497,11 +657,38 @@ class LaundryCounterActivity : AppCompatActivity() {
                         return@observe
                     }
 
-                    val waiting = response.data.orEmpty()
-                    queueAdapter.submitList(waiting)
+                    rawArrivals = response.data.orEmpty()
 
-                    if (queueMode) {
-                        renderEmptyState(waiting.size)
+                    if (flow == Flow.INCOMING) {
+                        renderList()
+                    }
+                }
+                // THE TWO READ-ONLY TABS. Two fields rather than one, because only one of them
+                // is ever asked for and the other stays silent - a shared field would redraw the
+                // open tab with the other tab's rows.
+                active.observe(this@LaundryCounterActivity) { response ->
+                    if (!response.isSuccess) {
+                        toast(response.message, warning = true)
+                        return@observe
+                    }
+
+                    rawActive = response.data.orEmpty()
+
+                    if (flow == Flow.ACTIVE) {
+                        renderList()
+                    }
+                }
+
+                history.observe(this@LaundryCounterActivity) { response ->
+                    if (!response.isSuccess) {
+                        toast(response.message, warning = true)
+                        return@observe
+                    }
+
+                    rawHistory = response.data.orEmpty()
+
+                    if (flow == Flow.HISTORY) {
+                        renderList()
                     }
                 }
 
@@ -522,7 +709,6 @@ class LaundryCounterActivity : AppCompatActivity() {
                     // belonging to other departments, and any held items that joined the bundle.
                     // Repeating it here in our own words would be a second version to keep in step.
                     toast(response.message, warning = false)
-
                     // The courier stays selected: the same bundle may be saved in stages, and an
                     // operator who has more garments in hand should not have to pick them again.
                     etBatchNote.setText("")
@@ -540,7 +726,6 @@ class LaundryCounterActivity : AppCompatActivity() {
                     // dialog over the screen: the operator can still see the bundle while it saves.
                     submitLoadingBar.visibility = if (submitting) View.VISIBLE else View.GONE
                     submitText.visibility = if (submitting) View.INVISIBLE else View.VISIBLE
-
                     val count = if (outgoing) viewModel.outCount() else viewModel.count()
 
                     submitButton.enable(!submitting && count > 0)
@@ -560,6 +745,46 @@ class LaundryCounterActivity : AppCompatActivity() {
         }
     }
 
+    /**
+     * The platform's own picker.
+     *
+     * Opens on the date already chosen, or today. Typing `2026-09-18` on a phone is how a range
+     * ends up empty for a reason nobody can see.
+     */
+    private fun pickDate(isFrom: Boolean) {
+        val calendar = Calendar.getInstance()
+
+        (if (isFrom) from else to)?.let { existing ->
+            runCatching { formatter.parse(existing) }.getOrNull()?.let { calendar.time = it }
+        }
+
+        DatePickerDialog(
+            this,
+            { _, year, month, day ->
+                val picked = Calendar.getInstance().apply { set(year, month, day, 0, 0, 0) }
+
+                if (isFrom) {
+                    from = formatter.format(picked.time)
+                } else {
+                    to = formatter.format(picked.time)
+                }
+
+                renderRange()
+                loadQueue()
+            },
+            calendar.get(Calendar.YEAR),
+            calendar.get(Calendar.MONTH),
+            calendar.get(Calendar.DAY_OF_MONTH)
+        ).show()
+    }
+
+    private fun renderRange() {
+        binding.fromText.text = from ?: getString(R.string.laundry_date_from)
+        binding.toText.text = to ?: getString(R.string.laundry_date_to)
+        binding.rangeClearButton.visibility =
+            if (from == null && to == null) View.GONE else View.VISIBLE
+    }
+
     private fun toast(message: String, warning: Boolean) {
         CustomToast.getInstance(this)
             .setMessage(message)
@@ -576,10 +801,5 @@ class LaundryCounterActivity : AppCompatActivity() {
                 )
             )
             .show()
-    }
-
-    companion object {
-        /** True for the OUTGOING flow: scan the bundle back out and mark it ready to hand over. */
-        const val EXTRA_FLOW_OUT = "extra.laundry.flow.out"
     }
 }

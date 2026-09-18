@@ -1,20 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?><!--
-    Counter Laundry — the OPERATOR scans the bundle a courier has brought.
+    Smart Wash Counter — the OPERATOR'S ONE SCREEN, arranged to match the Compose app.
+
+    FOUR TABS, NOT FOUR DOORS [GA, 18 Sep 2026]. The four lists used to be four cards under the
+    toolbar that each STARTED SOMETHING: two relaunched this activity with a flag, two opened a
+    second activity. Four lists of the same rows, reachable only by leaving the screen you were
+    on — and the operator's whole job is comparing them. A TabLayout is the platform's own answer
+    to what the Compose app draws as a tab strip, so the two apps now hold the same shape.
+
+    PLATFORM, NOT PAINT. The Compose screen is liquid glass over a wallpaper; this is the house
+    card-and-toolbar vocabulary. What is matched is the ARRANGEMENT: title and subtitle at the top
+    with search and refresh beside them, the tab strip under it, the date range only on the
+    archive, the list filling the rest, and the hand-in door as a floating button in the bottom-
+    left corner.
+
+    ONE LIST, EVERY MODE. `rvList` is still the only RecyclerView and the adapter is still swapped,
+    which is what makes four tabs plus a bundle affordable: a second list would be a second empty
+    state and a second scroll position, times five.
 
     WHO SCANS WHAT [GA via Rosita Secoadi, 12 Sep 2026]: the courier scans the counter sticker and
-    stops there; scanning the garments is this screen's job. The two acts land on one transaction —
-    the courier's arrival opens it, this fills it.
+    stops there; scanning the garments is this screen's job.
 
-    ONE LIST, TWO MODES, rather than two RecyclerViews stacked in the same ConstraintLayout. The
-    operator is never reading the queue and a bundle at once: they pick a courier, then scan. A
-    second list would be a second empty state, a second scroll position and a second thing to keep
-    in step, for a screen that shows one of them at a time.
-
-    PICK A COURIER FIRST, THEN SCAN. The top card is which arrival is being worked on rather than
-    which counter they are standing at — they are standing at their own counter all day.
-
-    SAVE MAY BE PRESSED MORE THAN ONCE for the same arrival: thirty garments is a long time to hold
-    a phone steady, and the server takes them in stages rather than demanding one perfect pass.
+    SAVE MAY BE PRESSED MORE THAN ONCE for the same arrival: thirty garments is a long time to
+    hold a phone steady, and the server takes them in stages rather than one perfect pass.
 -->
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -24,6 +31,13 @@
     android:layout_height="match_parent"
     android:background="@color/white">
 
+    <!-- TITLE, SUBTITLE AND TWO ACTIONS, like the Compose header. The subtitle is what tells the
+         four tabs apart in words - "Masuk" alone does not say whether these are couriers waiting
+         or garments arriving - and it changes with the tab, as it does over there.
+
+         SEARCH AND REFRESH IN THE TOOLBAR, which is where an XML app puts an action; the Compose
+         app has no toolbar to put them in and draws them as glass circles instead. Same two
+         controls, same order, each platform's own furniture. -->
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolBar"
         android:layout_width="match_parent"
@@ -35,184 +49,223 @@
         app:layout_constraintTop_toTopOf="parent"
         app:navigationIcon="@drawable/baseline_arrow_back_ios_new_24">
 
-        <TextView
-            android:id="@+id/title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:text="@string/laundry_counter_title"
-            android:textColor="@color/black"
-            android:textSize="@dimen/text_size_medium"
-            android:textStyle="bold" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:baselineAligned="false"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
 
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/title"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:ellipsize="end"
+                    android:maxLines="1"
+                    android:text="@string/laundry_counter_title"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/text_size_medium"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/subtitle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:ellipsize="end"
+                    android:maxLines="1"
+                    android:text="@string/laundry_counter_subtitle"
+                    android:textColor="@color/custom_toast_font_normal_gray"
+                    android:textSize="@dimen/text_size_small" />
+            </LinearLayout>
+
+            <ImageView
+                android:id="@+id/searchButton"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:contentDescription="@string/laundry_search_hint"
+                android:padding="8dp"
+                android:src="@drawable/baseline_search_24" />
+
+            <ImageView
+                android:id="@+id/refreshButton"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_marginEnd="8dp"
+                android:contentDescription="@string/laundry_refresh"
+                android:padding="8dp"
+                android:src="@drawable/refresh_icon" />
+        </LinearLayout>
     </androidx.appcompat.widget.Toolbar>
 
-    <!-- THE TWO WAYS OUT OF THIS SCREEN, under the toolbar rather than in it.
-
-         Both lived in the Toolbar until 16 Sep 2026, each pinned `end|center_vertical` with its
-         own margin - which is two views laying claim to the same corner, kept apart by a number
-         somebody has to maintain. A title, a back arrow and two actions is more than a toolbar
-         should be asked to arrange.
-
-         LABELLED, now that there is room for it. As bare icons they were a guess: a delivery van
-         and a checkout arrow do not say "hand in a bundle of my own" and "serve the collection
-         queue" on their own, and these are the two acts most likely to be tapped by mistake.
-
-         HIDDEN WHILE A BUNDLE IS OPEN. They navigate away; a screen mid-scan is not the moment to
-         offer that, and the space belongs to the garments. -->
-    <LinearLayout
-        android:id="@+id/actionRow"
+    <!-- ABOVE THE TABS, because it filters whichever one is open - one query, four lists. Hidden
+         until asked for: the operator searches on the day the queue is long, not on the twenty
+         days it holds two rows. -->
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/searchField"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="12dp"
-        android:baselineAligned="false"
-        android:orientation="horizontal"
+        android:layout_marginHorizontal="@dimen/list_item_submission_margin_horizontal"
+        android:layout_marginTop="8dp"
+        android:hint="@string/laundry_search_hint"
+        android:visibility="gone"
+        app:boxCornerRadiusBottomEnd="@dimen/login_field_corner_radius"
+        app:boxCornerRadiusBottomStart="@dimen/login_field_corner_radius"
+        app:boxCornerRadiusTopEnd="@dimen/login_field_corner_radius"
+        app:boxCornerRadiusTopStart="@dimen/login_field_corner_radius"
+        app:boxStrokeColor="@color/black"
+        app:boxStrokeWidth="@dimen/login_field_stroke_width"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/toolBar">
+        app:layout_constraintTop_toBottomOf="@+id/toolBar"
+        tools:visibility="visible">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/etSearch"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:imeOptions="actionSearch"
+            android:inputType="text"
+            android:maxLength="120"
+            android:textSize="@dimen/text_size_medium" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <!-- The four flows, in the Compose order: what arrived, what is washing, what is ready, what
+         is done. Scrollable because "Completed" in English is wider than a quarter of a small
+         phone, and a clipped tab label is worse than a strip that slides. -->
+    <com.google.android.material.tabs.TabLayout
+        android:id="@+id/tabLayout"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/searchField"
+        app:tabGravity="fill"
+        app:tabIndicatorColor="@color/button_color"
+        app:tabIndicatorFullWidth="false"
+        app:tabMode="scrollable"
+        app:tabSelectedTextColor="@color/black"
+        app:tabTextColor="@color/custom_toast_font_normal_gray" />
+
+    <!-- ONLY ON THE ARCHIVE, exactly as in Compose: the other three lists are today's work, and a
+         date range on them is a control that can only ever hide something still to be dealt
+         with. -->
+    <LinearLayout
+        android:id="@+id/rangeRow"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:baselineAligned="false"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tabLayout"
+        tools:visibility="visible">
 
         <com.google.android.material.card.MaterialCardView
-            android:id="@+id/handoverButton"
+            android:id="@+id/fromButton"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginVertical="@dimen/list_item_submission_margin_horizontal"
             android:layout_marginStart="@dimen/list_item_submission_margin_horizontal"
             android:layout_marginEnd="8dp"
             android:layout_weight="1"
-            app:cardCornerRadius="@dimen/card_corner_radius"
+            app:cardCornerRadius="@dimen/login_button_corner_radius"
             app:cardElevation="@dimen/card_elevation"
             app:strokeWidth="0dp">
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center_vertical"
-                android:orientation="horizontal"
-                android:paddingHorizontal="12dp"
-                android:paddingVertical="10dp">
-
-                <ImageView
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
-                    android:layout_marginEnd="8dp"
-                    android:contentDescription="@string/laundry_handover_action"
-                    android:src="@drawable/checkout_icon" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/laundry_handover_action"
-                    android:textColor="@color/black"
-                    android:textSize="@dimen/text_size_small"
-                    android:textStyle="bold" />
-            </LinearLayout>
-        </com.google.android.material.card.MaterialCardView>
-
-        <com.google.android.material.card.MaterialCardView
-            android:id="@+id/handInButton"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            app:cardCornerRadius="@dimen/card_corner_radius"
-            app:cardElevation="@dimen/card_elevation"
-            app:strokeWidth="0dp">
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center_vertical"
-                android:orientation="horizontal"
-                android:paddingHorizontal="12dp"
-                android:paddingVertical="10dp">
-
-                <ImageView
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
-                    android:layout_marginEnd="8dp"
-                    android:contentDescription="@string/laundry_hand_in_action"
-                    android:src="@drawable/delivery_icon" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/laundry_hand_in_action"
-                    android:textColor="@color/black"
-                    android:textSize="@dimen/text_size_small"
-                    android:textStyle="bold" />
-            </LinearLayout>
-        </com.google.android.material.card.MaterialCardView>
-
-        <com.google.android.material.card.MaterialCardView
-            android:id="@+id/processButton"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_weight="1"
-            app:cardCornerRadius="@dimen/card_corner_radius"
-            app:cardElevation="@dimen/card_elevation"
-            app:strokeWidth="0dp">
-
-            <LinearLayout
+            <TextView
+                android:id="@+id/fromText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center"
-                android:orientation="horizontal"
-                android:paddingHorizontal="8dp"
-                android:paddingVertical="10dp">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/laundry_in_progress"
-                    android:textColor="@color/black"
-                    android:textSize="@dimen/text_size_small"
-                    android:textStyle="bold" />
-            </LinearLayout>
+                android:paddingHorizontal="12dp"
+                android:paddingVertical="10dp"
+                android:text="@string/laundry_date_from"
+                android:textColor="@color/black"
+                android:textSize="@dimen/text_size_small"
+                android:textStyle="bold" />
         </com.google.android.material.card.MaterialCardView>
 
         <com.google.android.material.card.MaterialCardView
-            android:id="@+id/historyButton"
+            android:id="@+id/toButton"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
+            android:layout_marginHorizontal="@dimen/list_item_submission_margin_horizontal"
+            android:layout_marginVertical="@dimen/list_item_submission_margin_horizontal"
+            android:layout_weight="1"
+            app:cardCornerRadius="@dimen/login_button_corner_radius"
+            app:cardElevation="@dimen/card_elevation"
+            app:strokeWidth="0dp">
+
+            <TextView
+                android:id="@+id/toText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:paddingHorizontal="12dp"
+                android:paddingVertical="10dp"
+                android:text="@string/laundry_date_to"
+                android:textColor="@color/black"
+                android:textSize="@dimen/text_size_small"
+                android:textStyle="bold" />
+        </com.google.android.material.card.MaterialCardView>
+
+        <!-- NOT `clearButton`: that id already belongs to the one that empties a bundle, and two
+             views with one name in a binding is a bug that compiles. -->
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/rangeClearButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginVertical="@dimen/list_item_submission_margin_vertical"
             android:layout_marginEnd="@dimen/list_item_submission_margin_horizontal"
-            android:layout_weight="1"
+            android:visibility="gone"
             app:cardCornerRadius="@dimen/card_corner_radius"
-            app:cardElevation="@dimen/card_elevation"
-            app:strokeWidth="0dp">
+            app:cardElevation="0dp"
+            tools:visibility="visible">
 
             <LinearLayout
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:gravity="center"
-                android:orientation="horizontal"
-                android:paddingHorizontal="8dp"
-                android:paddingVertical="10dp">
+                android:background="@drawable/gradient_rejected_color"
+                android:orientation="horizontal">
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/laundry_history_title"
-                    android:textColor="@color/black"
-                    android:textSize="@dimen/text_size_small"
-                    android:textStyle="bold" />
+                <ImageView
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:contentDescription="@string/laundry_date_clear"
+                    android:padding="8dp"
+                    android:src="@drawable/baseline_close_24"
+                    app:tint="@color/white" />
             </LinearLayout>
         </com.google.android.material.card.MaterialCardView>
     </LinearLayout>
 
-    <!-- Step 1 · whose bundle this is. -->
+    <!-- Step 1 · whose bundle this is. Bundle mode only; on the four lists there is nothing being
+         served yet. -->
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/arrivalCard"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="@dimen/list_item_submission_margin_horizontal"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="8dp"
+        android:visibility="gone"
         app:cardBackgroundColor="#FBFBFB"
         app:cardCornerRadius="@dimen/list_item_progress_card_corner_radius"
         app:cardElevation="@dimen/list_item_progress_card_elevation"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/actionRow"
-        app:strokeWidth="0dp">
+        app:layout_constraintTop_toBottomOf="@+id/rangeRow"
+        app:strokeWidth="0dp"
+        tools:visibility="visible">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -283,8 +336,8 @@
         </LinearLayout>
     </com.google.android.material.card.MaterialCardView>
 
-    <!-- Step 2 · the bundle. Hidden in queue mode, where the count and the clear button would
-         both be describing a list that is not on screen. -->
+    <!-- Step 2 · the bundle. Hidden on the lists, where the count and the clear button would both
+         be describing something that is not on screen. -->
     <TextView
         android:id="@+id/tvBundleCount"
         android:layout_width="0dp"
@@ -307,11 +360,13 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="@dimen/list_item_submission_margin_horizontal"
+        android:visibility="gone"
         app:cardCornerRadius="@dimen/login_button_corner_radius"
         app:cardElevation="@dimen/list_item_progress_card_elevation"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/arrivalCard"
-        app:strokeWidth="0dp">
+        app:strokeWidth="0dp"
+        tools:visibility="visible">
 
         <LinearLayout
             android:layout_width="wrap_content"
@@ -340,13 +395,13 @@
         </LinearLayout>
     </com.google.android.material.card.MaterialCardView>
 
-    <!-- The queue in one mode, the bundle in the other. The adapter is swapped, not the view. -->
+    <!-- Whichever of the five lists is open. The adapter is swapped, not the view. -->
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvList"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginTop="8dp"
-        android:layout_marginBottom="16dp"
+        android:layout_marginBottom="8dp"
         android:clipToPadding="false"
         android:paddingBottom="@dimen/fab_size"
         app:layout_constraintBottom_toTopOf="@+id/noteField"
@@ -354,8 +409,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/clearButton"
         tools:itemCount="3"
-        tools:listitem="@layout/list_item_laundry_bundle"
-        tools:visibility="gone" />
+        tools:listitem="@layout/list_item_laundry_queue" />
 
     <LinearLayout
         android:id="@+id/emptyContainer"
@@ -370,11 +424,11 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/clearButton"
-        tools:visibility="visible">
+        tools:visibility="gone">
 
         <!-- The house empty state, same animation the task and submission lists use. The line of
-             text under it carries the mode: an empty queue and an empty bundle look identical
-             otherwise, and they call for opposite actions. -->
+             text under it carries the tab: five empty lists look identical otherwise, and they
+             call for different things. -->
         <com.airbnb.lottie.LottieAnimationView
             android:id="@+id/emptyAnimation"
             android:layout_width="match_parent"
@@ -396,6 +450,32 @@
             android:textSize="@dimen/text_size_medium" />
     </LinearLayout>
 
+    <!-- HAND IN, AS A FLOATING BUTTON IN THE BOTTOM-LEFT CORNER, which is where the Compose app
+         puts it. Counter staff wear uniforms and hand them in like anybody else, so their screen
+         carries a door to the courier one - the menu routes on role and would otherwise leave
+         them no entrance. It was one of four cards under the toolbar, which is where a primary
+         action goes to be mistaken for a setting.
+
+         Bottom-START, not end: the other hand is holding a garment. -->
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/fabHandIn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="16dp"
+        android:contentDescription="@string/laundry_hand_in_action"
+        app:cardCornerRadius="@dimen/login_button_corner_radius"
+        app:cardElevation="@dimen/card_elevation"
+        app:contentPadding="@dimen/button_padding"
+        app:layout_constraintBottom_toTopOf="@+id/noteField"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <ImageView
+            android:layout_width="28dp"
+            android:layout_height="28dp"
+            android:src="@drawable/delivery_icon" />
+    </com.google.android.material.card.MaterialCardView>
+
     <!-- Step 3 · the hand-over note and save. -->
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/noteField"
@@ -405,6 +485,7 @@
         android:layout_marginHorizontal="@dimen/list_item_submission_margin_horizontal"
         android:layout_marginBottom="8dp"
         android:hint="@string/laundry_batch_note_hint"
+        android:visibility="gone"
         app:boxCornerRadiusBottomEnd="@dimen/login_field_corner_radius"
         app:boxCornerRadiusBottomStart="@dimen/login_field_corner_radius"
         app:boxCornerRadiusTopEnd="@dimen/login_field_corner_radius"
@@ -414,7 +495,8 @@
         app:expandedHintEnabled="true"
         app:layout_constraintBottom_toTopOf="@+id/footerButtonContainer"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent">
+        app:layout_constraintStart_toStartOf="parent"
+        tools:visibility="visible">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/etBatchNote"
@@ -442,9 +524,11 @@
             android:layout_marginHorizontal="@dimen/list_item_submission_margin_horizontal"
             android:layout_marginVertical="@dimen/list_item_submission_margin_horizontal"
             android:layout_weight="1"
+            android:visibility="gone"
             app:cardCornerRadius="@dimen/login_button_corner_radius"
             app:cardElevation="@dimen/card_elevation"
-            app:strokeWidth="0dp">
+            app:strokeWidth="0dp"
+            tools:visibility="visible">
 
             <ProgressBar
                 android:id="@+id/submitLoadingBar"
@@ -474,11 +558,13 @@
             android:layout_height="@dimen/button_height"
             android:layout_marginVertical="@dimen/list_item_submission_margin_horizontal"
             android:layout_marginEnd="@dimen/list_item_submission_margin_horizontal"
+            android:visibility="gone"
             app:cardCornerRadius="@dimen/dialog_corner_radius"
             app:cardElevation="@dimen/card_elevation"
             app:contentPadding="12dp"
             app:strokeColor="@color/black"
-            app:strokeWidth="1dp">
+            app:strokeWidth="1dp"
+            tools:visibility="visible">
 
             <ImageView
                 android:layout_width="match_parent"
