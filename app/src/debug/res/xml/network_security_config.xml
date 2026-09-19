@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Debug-only override of main/res/xml/network_security_config.xml.
+  Any dev machine / LAN IP works over HTTP without editing an allowlist.
+  Release builds still use the strict per-domain list in main/.
+-->
+<network-security-config>
+    <base-config cleartextTrafficPermitted="true" />
+</network-security-config>
