@@ -361,7 +361,8 @@
          order: what arrived, what is washing, what is ready, what is done. -->
     <string name="laundry_tab_incoming">Incoming</string>
     <string name="laundry_counter_subtitle">Scan the bundle a courier brought</string>
-    <string name="laundry_in_progress_subtitle">Checked in, not ready to collect yet</string>
+    <string name="laundry_in_progress_subtitle">Verify, wash, then sign off</string>
+    <string name="laundry_needs_verify">%1$d of %2$d still to verify</string>
     <string name="laundry_handover_subtitle">Check the bundle back out before it leaves</string>
     <string name="laundry_history_subtitle">Batches that are finished</string>
     <string name="laundry_search_hint">Number, courier, department</string>

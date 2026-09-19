@@ -80,6 +80,15 @@ class LaundryHistoryAdapter(
                         item.itemCount,
                         item.completedAt ?: "-"
                     )
+                } else if (item.status == "waiting") {
+                    // THE ROW SAYS WHOSE MOVE IT IS. A bundle nobody has verified reads as one
+                    // already washing otherwise, and the operator goes to the web for a step this
+                    // screen has had all along.
+                    context.getString(
+                        R.string.laundry_needs_verify,
+                        item.unverified,
+                        item.itemCount
+                    )
                 } else {
                     context.getString(
                         R.string.laundry_washing_since,

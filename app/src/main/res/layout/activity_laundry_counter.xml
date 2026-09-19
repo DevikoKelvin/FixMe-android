@@ -317,6 +317,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginVertical="@dimen/dialog_message_margin_vertical"
                 android:layout_marginEnd="@dimen/dropdown_item_padding_horizontal"
+                android:visibility="gone"
                 app:cardCornerRadius="@dimen/login_button_corner_radius"
                 app:cardElevation="@dimen/card_elevation"
                 app:strokeWidth="0dp">

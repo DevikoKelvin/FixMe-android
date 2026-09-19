@@ -145,6 +145,17 @@ data class LaundryWaitingCourier(
      * real count, which is the only thing that makes those rows worth reading.
      */
     @SerializedName("item_count") val itemCount: Int = 0,
+    /**
+     * `waiting` or `accepted`, on the active queue only.
+     *
+     * WHAT THE COUNTER STILL OWES THIS BATCH [GA, 19 Sep 2026]. A `waiting` bundle has garments on
+     * it that nobody has verified; an `accepted` one is in the wash and wants nothing. Without
+     * this the two drew the same caption under a tab called "In wash", so receipt and verification
+     * looked like something only the web could do.
+     */
+    @SerializedName("status") val status: String? = null,
+    /** Garments with no `condition_in` yet - the verification that is left. */
+    @SerializedName("unverified") val unverified: Int = 0,
     /** Only the history sends this: the moment the last garment left. */
     @SerializedName("completed_at") val completedAt: String? = null
 )

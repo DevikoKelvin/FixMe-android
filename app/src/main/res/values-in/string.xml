@@ -357,7 +357,8 @@
          urutan yang sama: yang datang, yang dicuci, yang siap, yang selesai. -->
     <string name="laundry_tab_incoming">Masuk</string>
     <string name="laundry_counter_subtitle">Pindai seragam yang dibawa kurir</string>
-    <string name="laundry_in_progress_subtitle">Sudah dicatat, belum siap diambil</string>
+    <string name="laundry_in_progress_subtitle">Periksa, cuci, lalu selesaikan</string>
+    <string name="laundry_needs_verify">%1$d dari %2$d belum diperiksa</string>
     <string name="laundry_handover_subtitle">Periksa seragam sebelum diserahkan</string>
     <string name="laundry_history_subtitle">Transaksi yang sudah selesai</string>
     <string name="laundry_search_hint">Nomor, kurir, departemen</string>
