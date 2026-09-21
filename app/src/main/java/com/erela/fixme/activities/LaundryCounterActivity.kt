@@ -85,8 +85,16 @@ class LaundryCounterActivity : AppCompatActivity() {
     private lateinit var readyAdapter: LaundryReadyAdapter
     private lateinit var historyAdapter: LaundryHistoryAdapter
 
+    // ALL FIVE LIVE IN THE VIEW MODEL, which survives a rotation [GA, 21 Sep 2026]. Read
+     // through rather than moved wholesale: every use below is unchanged, and the names still say
+     // what they mean at the point of use.
+
     /** True while a list is on screen, false while a bundle is being scanned. */
-    private var queueMode = true
+    private var queueMode: Boolean
+        get() = viewModel.counterQueueMode
+        set(value) {
+            viewModel.counterQueueMode = value
+        }
 
     /**
      * The counter's four lists, in the order the tabs show them and the Compose app shows them.
@@ -98,7 +106,11 @@ class LaundryCounterActivity : AppCompatActivity() {
      */
     private enum class Flow { INCOMING, ACTIVE, OUTGOING, HISTORY }
 
-    private var flow = Flow.INCOMING
+    private var flow: Flow
+        get() = Flow.entries[viewModel.counterTab]
+        set(value) {
+            viewModel.counterTab = value.ordinal
+        }
 
     /** Which end of the day this is: garments arriving, or garments leaving. */
     private val outgoing: Boolean get() = flow == Flow.OUTGOING
@@ -113,11 +125,24 @@ class LaundryCounterActivity : AppCompatActivity() {
     private var rawActive = emptyList<LaundryWaitingCourier>()
     private var rawReady = emptyList<LaundryReadyBatch>()
     private var rawHistory = emptyList<LaundryWaitingCourier>()
-    private var query = ""
+    private var query: String
+        get() = viewModel.counterQuery
+        set(value) {
+            viewModel.counterQuery = value
+        }
 
     /** `YYYY-MM-DD`, or null for "any date" - the default, and it has to stay reachable. */
-    private var from: String? = null
-    private var to: String? = null
+    private var from: String?
+        get() = viewModel.counterFrom
+        set(value) {
+            viewModel.counterFrom = value
+        }
+
+    private var to: String?
+        get() = viewModel.counterTo
+        set(value) {
+            viewModel.counterTo = value
+        }
     private val formatter = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
     private fun MaterialCardView.enable(on: Boolean) {
         isClickable = on
@@ -167,7 +192,11 @@ class LaundryCounterActivity : AppCompatActivity() {
         setupObservers()
 
         renderRange()
-        showQueue()
+
+        // BACK WHERE THE OPERATOR LEFT IT. A rotation recreates the Activity; the bundle in the
+        // ViewModel is untouched, so re-entering queue mode unconditionally was the only reason
+        // it disappeared.
+        if (queueMode) showQueue() else showBundle()
         // A half-scanned bundle is worth a step back rather than losing the screen: Back returns
         // to the queue, and only leaves from there. Through the dispatcher rather than an
         // onBackPressed() override, which is deprecated and inert once a predictive-back
@@ -285,6 +314,11 @@ class LaundryCounterActivity : AppCompatActivity() {
             ).forEach { label ->
                 tabLayout.addTab(tabLayout.newTab().setText(getString(label)))
             }
+
+            // SELECTED BEFORE THE LISTENER EXISTS, deliberately. Re-selecting the saved tab after
+            // a rotation would otherwise fire onTabSelected, which calls showQueue() - throwing
+            // away the bundle this whole restore is here to keep.
+            tabLayout.getTabAt(viewModel.counterTab)?.select()
 
             tabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
                 override fun onTabSelected(tab: TabLayout.Tab) {
@@ -454,8 +488,10 @@ class LaundryCounterActivity : AppCompatActivity() {
             submitButton.setOnClickListener {
                 if (outgoing) {
                     viewModel.markHandover()
+                    back()
                 } else {
                     viewModel.saveItems(etBatchNote.text?.toString()?.trim()?.ifBlank { null })
+                    back()
                 }
             }
         }
@@ -467,9 +503,19 @@ class LaundryCounterActivity : AppCompatActivity() {
         loadQueue()
     }
 
-    /** List mode: whichever tab is open, and nothing that acts on a bundle. */
+    /**
+     * List mode: whichever tab is open, and nothing that acts on a bundle.
+     *
+     * ANIMATED BECAUSE NOTHING ELSE WILL [GA, 21 Sep 2026]. The bundle is a mode of this activity
+     * rather than a second one, so no activity transition ever runs and the screen used to change
+     * in a single frame - which reads as a redraw glitch rather than as going somewhere. This is
+     * the same `AutoTransition` the search field uses: Fade for what appears and disappears,
+     * ChangeBounds for the list resizing around it.
+     */
     private fun showQueue() {
         queueMode = true
+
+        TransitionManager.beginDelayedTransition(binding.main, AutoTransition())
 
         binding.apply {
             historyAdapter.showCompletedAt = flow == Flow.HISTORY
@@ -516,6 +562,9 @@ class LaundryCounterActivity : AppCompatActivity() {
     @SuppressLint("SetTextI18n")
     private fun showBundle() {
         queueMode = false
+
+        // The other half of the mode change; see [showQueue].
+        TransitionManager.beginDelayedTransition(binding.main, AutoTransition())
 
         binding.apply {
             bundleAdapter.ownDept = viewModel.workingDept

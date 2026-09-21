@@ -219,7 +219,8 @@ class LaundryProcessActivity : AppCompatActivity() {
 
                 renderActions(
                     head,
-                    data.items.none { it.source == "scan" && it.conditionOut == null })
+                    data.items.none { it.source == "scan" && it.conditionOut == null },
+                    data.mayReject)
                 renderSelection()
             }
 
@@ -266,7 +267,11 @@ class LaundryProcessActivity : AppCompatActivity() {
      * `washing_started_at` IS A TIMESTAMP, NOT A STATUS [3e], so "accepted" covers both the bundle
      * waiting for a machine and the one turning in it - and those two offer different actions.
      */
-    private fun renderActions(head: LaundryBatchHeader, allJudged: Boolean) {
+    private fun renderActions(
+        head: LaundryBatchHeader,
+        allJudged: Boolean,
+        mayReject: Boolean
+    ) {
         val secondary = binding.secondaryButton
         val primary = binding.primaryButton
         // NOT `readyToCollectText`. The card is the batch screen's, but its label here is
@@ -276,6 +281,7 @@ class LaundryProcessActivity : AppCompatActivity() {
 
         secondary.visibility = View.GONE
         primary.visibility = View.GONE
+        binding.rejectButton.visibility = View.GONE
         primary.enable(true)
 
         when (head.status) {
@@ -287,6 +293,14 @@ class LaundryProcessActivity : AppCompatActivity() {
                 primary.visibility = View.VISIBLE
                 primaryText.text = getString(R.string.laundry_accept)
                 primary.setOnClickListener { viewModel.acceptBatch(idTrx) }
+
+                // ONLY WHERE IT WOULD WORK. Accepting is every laundry account's; rejecting is
+                // the Supervisor's [GA, 21 Sep 2026], and the server says which this caller is
+                // rather than the screen guessing from a role it does not hold.
+                binding.rejectButton.visibility =
+                    if (mayReject) View.VISIBLE else View.GONE
+
+                binding.rejectButton.setOnClickListener { askRejectReason(idTrx) }
             }
 
             "accepted" if head.washingStartedAt == null -> {
@@ -403,6 +417,24 @@ class LaundryProcessActivity : AppCompatActivity() {
             getString(R.string.laundry_note_required)
         ).also { dialog ->
             dialog.setInputDialogListener { value -> onNote(value) }
+        }.show()
+    }
+
+    /**
+     * Why the bundle is going back.
+     *
+     * A REASON IS NOT OPTIONAL, and the server refuses an empty one - so asking for it here is
+     * the difference between a rejection somebody can explain next week and a refusal toast.
+     */
+    private fun askRejectReason(idTrx: Int) {
+        InputDialog(
+            this,
+            getString(R.string.laundry_reject_title),
+            getString(R.string.laundry_reject_reason),
+            getString(R.string.laundry_reject),
+            getString(R.string.laundry_reject_reason_required)
+        ).also { dialog ->
+            dialog.setInputDialogListener { reason -> viewModel.rejectBatch(idTrx, reason) }
         }.show()
     }
 

@@ -363,4 +363,9 @@
     <string name="laundry_history_subtitle">Transaksi yang sudah selesai</string>
     <string name="laundry_search_hint">Nomor, kurir, departemen</string>
     <string name="laundry_search_empty">Tidak ada yang cocok dengan pencarian itu.</string>
+    <!-- Menolak serah terima. Hanya Supervisor; alasannya wajib dan tercatat. -->
+    <string name="laundry_reject">Tolak Serah Terima</string>
+    <string name="laundry_reject_title">Tolak serah terima ini?</string>
+    <string name="laundry_reject_reason">Kenapa dikembalikan?</string>
+    <string name="laundry_reject_reason_required">Penolakan wajib disertai alasan.</string>
 </resources>

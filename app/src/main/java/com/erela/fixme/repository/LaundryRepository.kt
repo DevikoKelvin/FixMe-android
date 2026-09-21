@@ -67,6 +67,9 @@ class LaundryRepository(
     suspend fun accept(idTrx: Int, override: Boolean = false, reason: String? = null) =
         runCatching { api.laundryAccept(idTrx, override, reason, lang) }
 
+    suspend fun reject(idTrx: Int, reason: String) =
+        runCatching { api.laundryReject(idTrx, reason, lang) }
+
     suspend fun washStart(idTrx: Int) = runCatching { api.laundryWashStart(idTrx, lang) }
 
     suspend fun conditionOut(idLines: List<Int>, condition: String, note: String?) =

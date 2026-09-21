@@ -241,7 +241,15 @@ data class LaundryBatchDetail(
      * reads them. They are what the Accept button turns on: equal counts mean the bundle matches.
      */
     @SerializedName("claimed") val claimed: Int = 0,
-    @SerializedName("verified") val verified: Int = 0
+    @SerializedName("verified") val verified: Int = 0,
+    /**
+     * Whether the person holding the phone may send this hand-over back.
+     *
+     * ANSWERED BY THE SERVER [GA, 21 Sep 2026]. Accepting is every laundry account's; rejecting is
+     * the Supervisor's, and a Tolak button that only ever refuses reads as a broken screen rather
+     * than a rule. Absent on the courier's own batch endpoint, so `false` is the honest default.
+     */
+    @SerializedName("may_reject") val mayReject: Boolean = false
 )
 
 data class LaundryBatchHeader(

@@ -167,6 +167,25 @@ class LaundryCheckInViewModel(application: Application) : AndroidViewModel(appli
      * Held here rather than passed through an Intent so a rotation mid-bundle does not strand the
      * scans against no transaction.
      */
+    /**
+     * WHAT THE COUNTER SCREEN WAS SHOWING, kept here because a ViewModel outlives a rotation and
+     * an Activity field does not  [GA, 21 Sep 2026].
+     *
+     * Every activity is locked to portrait, so this looked academic - until a tablet, where the
+     * system rotates anyway. The bundle itself already survived: `workingIdTrx`, the courier and
+     * the scanned garments below are all here. Only the four numbers describing WHICH SCREEN was
+     * open lived on the Activity, so a rotation mid-bundle threw the operator back to the queue
+     * with their thirty scans still in memory and nothing on screen to show it.
+     *
+     * The tab is an Int rather than the Activity's private `Flow`, so the enum stays where it is
+     * read instead of moving into a ViewModel that has no use for its names.
+     */
+    var counterQueueMode = true
+    var counterTab = 0
+    var counterQuery = ""
+    var counterFrom: String? = null
+    var counterTo: String? = null
+
     var workingIdTrx: Int? = null
         private set
 
@@ -287,6 +306,8 @@ class LaundryCheckInViewModel(application: Application) : AndroidViewModel(appli
         act(idTrx) { repository.verify(idTrx, qrCode, conditionIn, note) }
 
     fun acceptBatch(idTrx: Int) = act(idTrx) { repository.accept(idTrx) }
+
+    fun rejectBatch(idTrx: Int, reason: String) = act(idTrx) { repository.reject(idTrx, reason) }
 
     fun startWash(idTrx: Int) = act(idTrx) { repository.washStart(idTrx) }
 

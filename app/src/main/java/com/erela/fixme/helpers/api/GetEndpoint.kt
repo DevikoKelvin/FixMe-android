@@ -455,6 +455,15 @@ interface GetEndpoint {
         @Field("lang") lang: String
     ): LaundryActionResponse
 
+    /** Send the hand-over back, with a mandatory reason. Supervisor only. */
+    @FormUrlEncoded
+    @POST("laundryReject")
+    suspend fun laundryReject(
+        @Field("id_trx") idTrx: Int,
+        @Field("reason") reason: String,
+        @Field("lang") lang: String
+    ): LaundryActionResponse
+
     /** Start the wash. The moment the department lead time is measured from. */
     @FormUrlEncoded
     @POST("laundryWashStart")

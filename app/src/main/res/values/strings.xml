@@ -367,4 +367,9 @@
     <string name="laundry_history_subtitle">Batches that are finished</string>
     <string name="laundry_search_hint">Number, courier, department</string>
     <string name="laundry_search_empty">Nothing here matches that search.</string>
+    <!-- Sending a hand-over back. The Supervisor's alone; the reason is mandatory and recorded. -->
+    <string name="laundry_reject">Reject handover</string>
+    <string name="laundry_reject_title">Reject this handover?</string>
+    <string name="laundry_reject_reason">Why is it being sent back?</string>
+    <string name="laundry_reject_reason_required">A rejection needs a reason.</string>
 </resources>
