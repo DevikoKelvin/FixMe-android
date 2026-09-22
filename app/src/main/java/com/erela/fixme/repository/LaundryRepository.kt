@@ -8,6 +8,7 @@ import com.erela.fixme.objects.laundry.LaundryAddItemsRequest
 import com.erela.fixme.objects.laundry.LaundryCheckInItem
 import com.erela.fixme.objects.laundry.LaundryConditionOutRequest
 import com.erela.fixme.objects.laundry.LaundryPickupRequest
+import com.erela.fixme.objects.laundry.LaundryRetrieveRequest
 import com.erela.fixme.objects.laundry.LaundryHandoverMarkRequest
 
 /**
@@ -66,6 +67,11 @@ class LaundryRepository(
 
     suspend fun accept(idTrx: Int, override: Boolean = false, reason: String? = null) =
         runCatching { api.laundryAccept(idTrx, override, reason, lang) }
+
+    suspend fun heldItems() = runCatching { api.laundryHeldItems(lang) }
+
+    suspend fun retrieve(idCollector: Int, itemIds: List<Int>) =
+        runCatching { api.laundryRetrieve(LaundryRetrieveRequest(idCollector, itemIds)) }
 
     suspend fun reject(idTrx: Int, reason: String) =
         runCatching { api.laundryReject(idTrx, reason, lang) }

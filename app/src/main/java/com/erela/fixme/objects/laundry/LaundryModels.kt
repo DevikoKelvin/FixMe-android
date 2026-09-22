@@ -362,6 +362,74 @@ data class LaundryCollector(
     @SerializedName("sub_dept") val subDept: String?
 )
 
+
+/**
+ * The picker's labels, with the login appended ONLY where two accounts share a name.
+ *
+ * ONE PERSON, TWO ACCOUNTS [GA, 22 September 2026]. `full_name` is `COALESCE(MEMNAME, usern)`, and
+ * `devikokelvin` and `devikokelvin_tech` are the same employee - so the collector list showed the
+ * same name twice and the operator signed a hand-over against whichever they guessed.
+ *
+ * ON COLLISION, NOT ALWAYS, which is the rule the web checkout screen already uses. Showing
+ * `rusdy_spv` beside every name would put back exactly what `full_name` was introduced to remove:
+ * a login is how FixMe knows somebody, not how the counter recognises the person in front of them.
+ *
+ * Index-aligned with the receiver, because both callers walk the two lists together.
+ */
+fun List<LaundryCollector>.pickerLabels(): List<String> {
+    val counts = groupingBy { it.fullName ?: it.usern ?: "-" }.eachCount()
+
+    return map { collector ->
+        val name = collector.fullName ?: collector.usern ?: "-"
+
+        if ((counts[name] ?: 0) > 1 && !collector.usern.isNullOrBlank()) {
+            "$name (${collector.usern})"
+        } else {
+            name
+        }
+    }
+}
+
+
+/**
+ * One garment the counter is holding for another department  [T-02].
+ *
+ * It arrived in somebody else's bundle, was washed with it, and stays on the shelf until its own
+ * department sends somebody. `ageDays` counts from the source batch's completion - the clock GA's
+ * three-day reminder runs on - not from when the wash finished.
+ */
+data class LaundryHeldItem(
+    @SerializedName("id") val id: Int,
+    @SerializedName("qr_code") val qrCode: String?,
+    @SerializedName("nama_item_type") val itemType: String?,
+    @SerializedName("owner_name") val ownerName: String?,
+    @SerializedName("owner_dept") val ownerDept: String?,
+    @SerializedName("owner_sub_dept") val ownerSubDept: String?,
+    @SerializedName("sender_dept") val senderDept: String?,
+    @SerializedName("trx_no") val trxNo: String?,
+    @SerializedName("age_days") val ageDays: Int = 0,
+    @SerializedName("id_dept_owner") val idDeptOwner: Int = 0
+)
+
+/**
+ * The shelf and the people who may empty it, in one answer.
+ *
+ * TOGETHER, NOT PER TAP - the same call the web screen makes: the held list is capped at 200 and
+ * the owning departments are few, so fetching collectors on each tick would buy nothing.
+ */
+data class LaundryHeldPayload(
+    @SerializedName("items") val items: List<LaundryHeldItem>?,
+    @SerializedName("collectors") val collectors: List<LaundryCollector>?
+)
+
+data class LaundryHeldItemsResponse(
+    @SerializedName("code") val code: Int,
+    @SerializedName("message") val message: String,
+    @SerializedName("data") val data: LaundryHeldPayload?
+) {
+    val isSuccess get() = code == 1
+}
+
 data class LaundryCollectorsResponse(
     @SerializedName("code") val code: Int,
     @SerializedName("message") val message: String,
@@ -375,6 +443,12 @@ data class LaundryConditionOutRequest(
     @SerializedName("id_lines") val idLines: List<Int>,
     @SerializedName("condition_out") val conditionOut: String,
     @SerializedName("note") val note: String? = null
+)
+
+/** Titipan handed back: who is taking them, and which lines. */
+data class LaundryRetrieveRequest(
+    @SerializedName("id_collector") val idCollector: Int,
+    @SerializedName("item_ids") val itemIds: List<Int>
 )
 
 data class LaundryPickupRequest(

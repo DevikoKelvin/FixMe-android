@@ -23,6 +23,8 @@ import okhttp3.RequestBody
 import retrofit2.Call
 import com.erela.fixme.objects.laundry.LaundryActionResponse
 import com.erela.fixme.objects.laundry.LaundryCollectorsResponse
+import com.erela.fixme.objects.laundry.LaundryHeldItemsResponse
+import com.erela.fixme.objects.laundry.LaundryRetrieveRequest
 import com.erela.fixme.objects.laundry.LaundryConditionOutRequest
 import com.erela.fixme.objects.laundry.LaundryPickupRequest
 import com.erela.fixme.objects.laundry.LaundrySlipResponse
@@ -344,6 +346,16 @@ interface GetEndpoint {
     // overwrites it from the token, and passing it would only invite the belief that it matters.
     // ---------------------------------------------------------------------------------------
 
+    /**
+     * Is this token still good? 200 yes, 401 no — the status IS the answer.
+     *
+     * The only endpoint outside Smart Wash behind `auth:sanctum`, which is the point: the rest of
+     * `apimobile` answers an unauthenticated caller rather than refusing them, so nothing else can
+     * tell the splash screen that a session has died.
+     */
+    @POST("session")
+    suspend fun session(): GenericSimpleResponse
+
     @FormUrlEncoded
     @POST("laundryArrive")
     suspend fun laundryArrive(
@@ -453,6 +465,19 @@ interface GetEndpoint {
         @Field("override") override: Boolean,
         @Field("override_reason") overrideReason: String?,
         @Field("lang") lang: String
+    ): LaundryActionResponse
+
+    /** What the counter is holding for other departments [T-02]. */
+    @FormUrlEncoded
+    @POST("laundryHeldItems")
+    suspend fun laundryHeldItems(
+        @Field("lang") lang: String
+    ): LaundryHeldItemsResponse
+
+    /** Hand held garments back on their own `pengembalian` note. */
+    @POST("laundryRetrieve")
+    suspend fun laundryRetrieve(
+        @Body body: LaundryRetrieveRequest
     ): LaundryActionResponse
 
     /** Send the hand-over back, with a mandatory reason. Supervisor only. */

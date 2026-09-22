@@ -21,15 +21,20 @@ import com.erela.fixme.R
 import androidx.core.widget.doAfterTextChanged
 import com.erela.fixme.adapters.recycler_view.LaundryBundleAdapter
 import com.erela.fixme.adapters.recycler_view.LaundryHistoryAdapter
+import com.erela.fixme.adapters.recycler_view.LaundryHeldAdapter
 import com.erela.fixme.adapters.recycler_view.LaundryOutScanAdapter
 import com.erela.fixme.adapters.recycler_view.LaundryQueueAdapter
 import com.erela.fixme.adapters.recycler_view.LaundryReadyAdapter
 import com.erela.fixme.custom_views.CustomToast
 import com.erela.fixme.databinding.ActivityLaundryCounterBinding
 import com.erela.fixme.dialogs.ConfirmationDialog
+import com.erela.fixme.dialogs.DialogOption
+import com.erela.fixme.dialogs.OptionListDialog
 import com.erela.fixme.helpers.enableEdgeToEdgeOpaqueNav
 import com.erela.fixme.objects.laundry.LaundryReadyBatch
+import com.erela.fixme.objects.laundry.LaundryHeldItem
 import com.erela.fixme.objects.laundry.LaundryWaitingCourier
+import com.erela.fixme.objects.laundry.pickerLabels
 import com.erela.fixme.viewmodel.LaundryCheckInViewModel
 import com.google.android.material.card.MaterialCardView
 import com.google.android.material.tabs.TabLayout
@@ -84,6 +89,7 @@ class LaundryCounterActivity : AppCompatActivity() {
     private lateinit var outScanAdapter: LaundryOutScanAdapter
     private lateinit var readyAdapter: LaundryReadyAdapter
     private lateinit var historyAdapter: LaundryHistoryAdapter
+    private lateinit var heldAdapter: LaundryHeldAdapter
 
     // ALL FIVE LIVE IN THE VIEW MODEL, which survives a rotation [GA, 21 Sep 2026]. Read
      // through rather than moved wholesale: every use below is unchanged, and the names still say
@@ -104,7 +110,7 @@ class LaundryCounterActivity : AppCompatActivity() {
      * different reasons, and the operator's job is comparing them. Leaving the screen to answer
      * "is it washed yet" was the cost of that arrangement.
      */
-    private enum class Flow { INCOMING, ACTIVE, OUTGOING, HISTORY }
+    private enum class Flow { INCOMING, ACTIVE, OUTGOING, HISTORY, HELD }
 
     private var flow: Flow
         get() = Flow.entries[viewModel.counterTab]
@@ -117,6 +123,9 @@ class LaundryCounterActivity : AppCompatActivity() {
 
     /** Whether this tab's rows act on anything, or are a record being read. */
     private val readOnly: Boolean get() = flow == Flow.ACTIVE || flow == Flow.HISTORY
+
+    /** Titipan, which is neither a queue nor a record: a shelf the operator empties. */
+    private var rawHeld = emptyList<LaundryHeldItem>()
 
     // WHAT THE SERVER SENT, kept beside what is on screen: the search box filters a list rather
     // than re-fetching it, so the unfiltered rows have to survive somewhere. Four fields rather
@@ -228,6 +237,7 @@ class LaundryCounterActivity : AppCompatActivity() {
             Flow.ACTIVE -> viewModel.loadActiveQueue()
             Flow.OUTGOING -> viewModel.loadHandoverQueue()
             Flow.HISTORY -> viewModel.loadHistory(from, to)
+            Flow.HELD -> viewModel.loadHeldItems()
         }
     }
 
@@ -265,9 +275,14 @@ class LaundryCounterActivity : AppCompatActivity() {
             Flow.HISTORY -> rawHistory
                 .filter { matches(it.trxNo, it.pengantar, it.namaDept, it.subDept) }
                 .also { historyAdapter.submitList(it) }.size
+
+            Flow.HELD -> rawHeld
+                .filter { matches(it.qrCode, it.ownerName, it.ownerDept, it.ownerSubDept) }
+                .also { heldAdapter.submitList(it) }.size
         }
 
         renderEmptyState(count)
+        renderHeldAction()
     }
 
     override fun dispatchTouchEvent(motionEvent: MotionEvent): Boolean {
@@ -310,7 +325,8 @@ class LaundryCounterActivity : AppCompatActivity() {
                 R.string.laundry_tab_incoming,
                 R.string.laundry_in_progress,
                 R.string.laundry_handover_action,
-                R.string.laundry_history_title
+                R.string.laundry_history_title,
+                R.string.laundry_held
             ).forEach { label ->
                 tabLayout.addTab(tabLayout.newTab().setText(getString(label)))
             }
@@ -387,6 +403,12 @@ class LaundryCounterActivity : AppCompatActivity() {
             // the process screen has no action buttons - the `when` over the status has no branch
             // for `completed` - so what is left is what somebody opening a record came for: what
             // was in it, and the button that reprints its slip.
+            // TICKED, NOT TAPPED: titipan go home in a group, so the action is at the foot of
+            // the screen rather than on each row.
+            heldAdapter = LaundryHeldAdapter(this@LaundryCounterActivity) {
+                renderHeldAction()
+            }
+
             historyAdapter = LaundryHistoryAdapter(
                 context = this@LaundryCounterActivity,
                 showCompletedAt = false
@@ -486,6 +508,12 @@ class LaundryCounterActivity : AppCompatActivity() {
             }
 
             submitButton.setOnClickListener {
+                // The footer serves two masters: a bundle being saved, and a shelf being emptied.
+                if (queueMode && flow == Flow.HELD) {
+                    askHeldCollector()
+                    return@setOnClickListener
+                }
+
                 if (outgoing) {
                     viewModel.markHandover()
                     back()
@@ -523,6 +551,7 @@ class LaundryCounterActivity : AppCompatActivity() {
             rvList.adapter = when (flow) {
                 Flow.INCOMING -> queueAdapter
                 Flow.OUTGOING -> readyAdapter
+                Flow.HELD -> heldAdapter
                 Flow.ACTIVE, Flow.HISTORY -> historyAdapter
             }
 
@@ -532,6 +561,7 @@ class LaundryCounterActivity : AppCompatActivity() {
                     Flow.ACTIVE -> R.string.laundry_in_progress_subtitle
                     Flow.OUTGOING -> R.string.laundry_handover_subtitle
                     Flow.HISTORY -> R.string.laundry_history_subtitle
+                    Flow.HELD -> R.string.laundry_held_subtitle
                 }
             )
 
@@ -614,6 +644,68 @@ class LaundryCounterActivity : AppCompatActivity() {
         }
     }
 
+    /**
+     * The hand-back button appears with a selection and leaves with it.
+     *
+     * ONE COURIER SIGNS FOR THE LOT, so this reuses the screen's own footer rather than putting a
+     * button on every row - that would be the same signature taken several times.
+     */
+    @SuppressLint("SetTextI18n")
+    private fun renderHeldAction() {
+        binding.apply {
+            val picked = if (queueMode && flow == Flow.HELD) heldAdapter.selectedIds() else
+                emptyList()
+
+            submitButton.visibility = if (picked.isEmpty()) View.GONE else View.VISIBLE
+            submitButton.enable(picked.isNotEmpty())
+
+            if (picked.isNotEmpty()) {
+                submitText.text = getString(R.string.laundry_hand_back, picked.size)
+            }
+        }
+    }
+
+    /**
+     * Who is taking the ticked titipan home.
+     *
+     * The same picker the hand-over uses, and the same rule: the login is appended only where two
+     * accounts share a name, so the common case stays clean.
+     */
+    private fun askHeldCollector() {
+        val picked = heldAdapter.selectedIds()
+
+        if (picked.isEmpty()) {
+            toast(getString(R.string.laundry_held_none_selected), warning = true)
+            return
+        }
+
+        val people = viewModel.heldCollectors.value.orEmpty()
+
+        if (people.isEmpty()) {
+            return
+        }
+
+        val labels = people.pickerLabels()
+
+        val options = people.mapIndexed { index, person ->
+            DialogOption(
+                labels[index],
+                listOfNotNull(person.namaDept, person.subDept).joinToString(" · ")
+                    .ifBlank { null }
+            )
+        }
+
+        OptionListDialog(this, getString(R.string.laundry_pick_held_collector), options)
+            .also { dialog ->
+                dialog.setOptionListDialogListener { index ->
+                    viewModel.retrieveHeld(people[index].idUser, picked)
+                    heldAdapter.clearSelection()
+                    renderHeldAction()
+                }
+            }
+            .show()
+    }
+
     /** The list or the animation, never both. */
     private fun renderEmptyState(count: Int) {
         binding.apply {
@@ -625,6 +717,7 @@ class LaundryCounterActivity : AppCompatActivity() {
                         query.isNotBlank() -> R.string.laundry_search_empty
                         flow == Flow.ACTIVE -> R.string.laundry_in_progress_empty
                         flow == Flow.OUTGOING -> R.string.laundry_handover_queue_empty
+                        flow == Flow.HELD -> R.string.laundry_held_empty
                         flow == Flow.HISTORY -> R.string.laundry_history_empty
                         else -> R.string.laundry_queue_empty
                     }
@@ -737,6 +830,14 @@ class LaundryCounterActivity : AppCompatActivity() {
                     rawHistory = response.data.orEmpty()
 
                     if (flow == Flow.HISTORY) {
+                        renderList()
+                    }
+                }
+
+                heldItems.observe(this@LaundryCounterActivity) { list ->
+                    rawHeld = list
+
+                    if (flow == Flow.HELD) {
                         renderList()
                     }
                 }

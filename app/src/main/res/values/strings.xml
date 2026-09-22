@@ -372,4 +372,12 @@
     <string name="laundry_reject_title">Reject this handover?</string>
     <string name="laundry_reject_reason">Why is it being sent back?</string>
     <string name="laundry_reject_reason_required">A rejection needs a reason.</string>
+    <!-- Titipan: garments the counter holds for another department [T-02]. -->
+    <string name="laundry_held">Held</string>
+    <string name="laundry_held_subtitle">Waiting for their own department</string>
+    <string name="laundry_held_empty">Nothing is being held right now.</string>
+    <string name="laundry_held_since">%1$s · held %2$d day(s)</string>
+    <string name="laundry_hand_back">Hand back %1$d item(s)</string>
+    <string name="laundry_pick_held_collector">Who is taking them?</string>
+    <string name="laundry_held_none_selected">Tick the garments going back first.</string>
 </resources>

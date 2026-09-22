@@ -25,6 +25,7 @@ import com.erela.fixme.helpers.ThermalPrinter
 import com.erela.fixme.helpers.enableEdgeToEdgeOpaqueNav
 import com.erela.fixme.objects.laundry.LaundryBatchHeader
 import com.erela.fixme.objects.laundry.LaundryCollector
+import com.erela.fixme.objects.laundry.pickerLabels
 import com.erela.fixme.objects.laundry.LaundrySlipRow
 import com.erela.fixme.viewmodel.LaundryCheckInViewModel
 import com.google.android.material.card.MaterialCardView
@@ -61,6 +62,19 @@ class LaundryProcessActivity : AppCompatActivity() {
     private var selected = mutableSetOf<Int>()
     private var header: LaundryBatchHeader? = null
     private var lineIds = emptyList<Int>()
+
+    /**
+     * Which actions end the operator's business with this batch  [GA, 22 September 2026].
+     *
+     * NOT EVERY TRANSITION LEAVES. Accepting a hand-over keeps them here, because the batch stays
+     * in Masuk and the very next thing they do is press Mulai Cuci on the screen they are already
+     * looking at. Starting the wash, signing it off and handing it over are the ends of a step,
+     * and staying put after them is what left operators wondering whether the tap had worked.
+     *
+     * Recording a condition does not leave either: it is one garment of several, and returning
+     * after each would make judging a bundle a trip per item.
+     */
+    private var leaveAfterAction = false
 
     /** The garment just scanned, waiting for the operator to say what condition it arrived in. */
     private val patchLauncher = registerForActivityResult(ScanContract()) { result ->
@@ -229,6 +243,16 @@ class LaundryProcessActivity : AppCompatActivity() {
                 // that was wrong, and a second wording here would be one to keep in step with
                 // five refusal paths.
                 toast(response.message, warning = !response.isSuccess)
+
+                // ONLY ONCE THE SERVER AGREED. Leaving on the tap would take the operator off the
+                // screen that explains a refusal.
+                if (leaveAfterAction) {
+                    leaveAfterAction = false
+
+                    if (response.isSuccess) {
+                        finish()
+                    }
+                }
             }
 
             slip.observe(this@LaundryProcessActivity) { rows ->
@@ -306,7 +330,10 @@ class LaundryProcessActivity : AppCompatActivity() {
             "accepted" if head.washingStartedAt == null -> {
                 primary.visibility = View.VISIBLE
                 primaryText.text = getString(R.string.laundry_wash_start)
-                primary.setOnClickListener { viewModel.startWash(idTrx) }
+                primary.setOnClickListener {
+                    leaveAfterAction = true
+                    viewModel.startWash(idTrx)
+                }
             }
 
             "accepted" -> {
@@ -330,7 +357,10 @@ class LaundryProcessActivity : AppCompatActivity() {
                 // `ready`. A live button whose only outcome is a refusal, on the screen that has
                 // just asked for thirty conditions, is worse than no button.
                 primary.enable(allJudged)
-                primary.setOnClickListener { viewModel.markReady(idTrx) }
+                primary.setOnClickListener {
+                    leaveAfterAction = true
+                    viewModel.markReady(idTrx)
+                }
             }
 
             "ready" -> {
@@ -447,9 +477,11 @@ class LaundryProcessActivity : AppCompatActivity() {
     private fun askCollector() {
         viewModel.collectors.observe(this) { people ->
             if (people.isEmpty()) return@observe
-            val options = people.map { person ->
+            val labels = people.pickerLabels()
+
+            val options = people.mapIndexed { index, person ->
                 DialogOption(
-                    person.fullName ?: person.usern ?: "-",
+                    labels[index],
                     listOfNotNull(person.namaDept, person.subDept).joinToString(" · ")
                         .ifBlank { null }
                 )
@@ -464,6 +496,8 @@ class LaundryProcessActivity : AppCompatActivity() {
     }
 
     private fun pickCollector(person: LaundryCollector) {
+        // The batch leaves the counter with the courier; so does the operator.
+        leaveAfterAction = true
         viewModel.handOverTo(idTrx, person.idUser, selected.toList())
     }
 

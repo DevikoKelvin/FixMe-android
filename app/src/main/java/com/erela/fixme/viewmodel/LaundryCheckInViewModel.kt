@@ -7,6 +7,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.erela.fixme.objects.laundry.LaundryActionResponse
 import com.erela.fixme.objects.laundry.LaundryCollector
+import com.erela.fixme.objects.laundry.LaundryHeldItem
 import com.erela.fixme.objects.laundry.LaundryArrivalResponse
 import com.erela.fixme.objects.laundry.LaundryArrivalsResponse
 import com.erela.fixme.objects.laundry.LaundryBatchDetailResponse
@@ -306,6 +307,50 @@ class LaundryCheckInViewModel(application: Application) : AndroidViewModel(appli
         act(idTrx) { repository.verify(idTrx, qrCode, conditionIn, note) }
 
     fun acceptBatch(idTrx: Int) = act(idTrx) { repository.accept(idTrx) }
+
+    /**
+     * Titipan: what the counter is holding for other departments  [T-02].
+     *
+     * The collectors arrive with the list rather than per tick - the same one answer the web
+     * screen reads, because the list is capped at 200 and the owning departments are few.
+     */
+    private val _heldItems = MutableLiveData<List<LaundryHeldItem>>(emptyList())
+    val heldItems: LiveData<List<LaundryHeldItem>> = _heldItems
+
+    private val _heldCollectors = MutableLiveData<List<LaundryCollector>>(emptyList())
+    val heldCollectors: LiveData<List<LaundryCollector>> = _heldCollectors
+
+    fun loadHeldItems() {
+        viewModelScope.launch {
+            repository.heldItems()
+                .onSuccess { response ->
+                    _heldItems.value = response.data?.items.orEmpty()
+                    _heldCollectors.value = response.data?.collectors.orEmpty()
+                }
+                .onFailure { fail(it) }
+        }
+    }
+
+    /**
+     * Hand the ticked titipan back, on their own note.
+     *
+     * The list is reloaded rather than edited here: the server decides what is still held, and a
+     * row removed on the strength of a success message is a second opinion about that.
+     */
+    fun retrieveHeld(idCollector: Int, itemIds: List<Int>) {
+        _isSubmitting.value = true
+
+        viewModelScope.launch {
+            repository.retrieve(idCollector, itemIds)
+                .onSuccess { response ->
+                    _actionResult.value = response
+                    loadHeldItems()
+                }
+                .onFailure { fail(it) }
+
+            _isSubmitting.value = false
+        }
+    }
 
     fun rejectBatch(idTrx: Int, reason: String) = act(idTrx) { repository.reject(idTrx, reason) }
 

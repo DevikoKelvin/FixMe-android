@@ -368,4 +368,12 @@
     <string name="laundry_reject_title">Tolak serah terima ini?</string>
     <string name="laundry_reject_reason">Kenapa dikembalikan?</string>
     <string name="laundry_reject_reason_required">Penolakan wajib disertai alasan.</string>
+    <!-- Titipan: seragam yang ditahan counter untuk departemen lain [T-02]. -->
+    <string name="laundry_held">Titipan</string>
+    <string name="laundry_held_subtitle">Menunggu diambil departemen pemiliknya</string>
+    <string name="laundry_held_empty">Tidak ada titipan saat ini.</string>
+    <string name="laundry_held_since">%1$s · ditahan %2$d hari</string>
+    <string name="laundry_hand_back">Serahkan %1$d titipan</string>
+    <string name="laundry_pick_held_collector">Siapa yang mengambil?</string>
+    <string name="laundry_held_none_selected">Centang dulu titipan yang akan diserahkan.</string>
 </resources>
