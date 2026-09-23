@@ -134,6 +134,9 @@ class SseService : Service() {
                         val extras = messageJson.getJSONObject("extras")
                         val notificationId = extras.getString("client:id_gaprojects").toInt()
                         val relatedUserId = extras.getString("client:id_user").toInt()
+                        // optString: every other module has published without it for a year, and
+                        // getString would throw on those, killing the notification entirely.
+                        val status = extras.optString("client:status", "")
 
                         if (UserDataHelper(applicationContext).isUserDataExist() && FCMService.lastNotificationId != notificationId) {
                             val title = messageJson.getString("title")
@@ -143,7 +146,8 @@ class SseService : Service() {
                                     title,
                                     body,
                                     applicationContext,
-                                    notificationId
+                                    notificationId,
+                                    status
                                 )
                             }
                         }
