@@ -41,7 +41,8 @@ class FCMService : FirebaseMessagingService() {
                         title,
                         body,
                         this,
-                        notificationData.caseId
+                        notificationData.caseId,
+                        notificationData.status
                     )
                 }
             }
