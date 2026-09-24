@@ -188,6 +188,26 @@ class SettingsActivity : AppCompatActivity() {
         super.onResume()
         // If a downloaded APK is waiting to be installed, show install-ready state on return
         val prefs = getSharedPreferences(DOWNLOAD_PREFS, MODE_PRIVATE)
+
+        // THE PENDING UPDATE IS THIS BUILD, so it has been installed: forget it before either
+        // restore path below can offer it again. Neither checked the version - the install-path
+        // one offered any APK still on disk, the DownloadManager one any successful download - so
+        // a phone that had just updated was shown "Install" for the build it was running. The
+        // Compose app shares these prefs and had the same gap; see its SettingsViewModel.
+        if (prefs.getString(PREF_NEW_APP_VERSION, null) == BuildConfig.VERSION_NAME) {
+            prefs.getString(PREF_INSTALL_FILE_PATH, null)?.let { File(it).delete() }
+            val savedId = prefs.getLong(PREF_DOWNLOAD_ID, 0L)
+            if (savedId != 0L) {
+                // remove() also deletes the file of a completed download.
+                (getSystemService(DOWNLOAD_SERVICE) as DownloadManager).remove(savedId)
+            }
+            prefs.edit {
+                remove(PREF_INSTALL_FILE_PATH)
+                remove(PREF_DOWNLOAD_ID)
+                remove(PREF_NEW_APP_VERSION)
+            }
+        }
+
         val installPath = prefs.getString(PREF_INSTALL_FILE_PATH, null)
         if (installPath != null) {
             if (File(installPath).exists()) {
