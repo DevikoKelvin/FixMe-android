@@ -4,4 +4,6 @@ plugins {
     alias(libs.plugins.gms.services) apply false
     // AGP 9.0+ built-in Kotlin doesn't need the kotlin-android plugin
     alias(libs.plugins.legacy.kapt) apply false
+    // Versioned so the Kotlin toolchain follows libs.versions.toml rather than AGP's bundle.
+    alias(libs.plugins.kotlin.parcelize) apply false
 }
