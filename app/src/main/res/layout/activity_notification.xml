@@ -5,14 +5,14 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#FDFDFD"
+    android:background="@color/surface_alt"
     tools:context=".activities.NotificationActivity">
 
     <RelativeLayout
         android:id="@+id/toolBar"
         android:layout_width="match_parent"
         android:layout_height="@dimen/button_height"
-        android:background="@color/white"
+        android:background="@color/surface"
         android:elevation="@dimen/login_button_elevation"
         android:theme="?attr/actionBarTheme"
         app:layout_constraintEnd_toEndOf="parent"
@@ -44,7 +44,7 @@
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
             android:text="@string/notification_title"
-            android:textColor="@color/black"
+            android:textColor="@color/ink"
             android:textSize="@dimen/text_size_medium"
             android:textStyle="bold" />
     </RelativeLayout>

@@ -24,7 +24,7 @@
     android:clickable="true"
     android:focusable="true"
     android:foreground="?attr/selectableItemBackground"
-    app:cardBackgroundColor="#FBFBFB"
+    app:cardBackgroundColor="@color/surface_card"
     app:cardCornerRadius="@dimen/list_item_progress_card_corner_radius"
     app:cardElevation="@dimen/list_item_progress_card_elevation"
     app:strokeWidth="0dp">
@@ -56,7 +56,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:fontFamily="monospace"
-                android:textColor="@color/black"
+                android:textColor="@color/ink"
                 android:textSize="@dimen/text_size_medium"
                 android:textStyle="bold"
                 tools:text="000981" />
@@ -65,7 +65,7 @@
                 android:id="@+id/tvItemType"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textColor="@color/black"
+                android:textColor="@color/ink"
                 android:textSize="@dimen/text_size_small"
                 tools:text="Overall · Agus Rusdy Kriesnanto" />
 

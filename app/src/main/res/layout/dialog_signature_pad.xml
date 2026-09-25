@@ -17,7 +17,7 @@
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="@dimen/dialog_margin"
         android:layout_marginVertical="@dimen/dialog_margin"
-        app:cardBackgroundColor="@color/white"
+        app:cardBackgroundColor="@color/surface"
         app:cardCornerRadius="@dimen/dialog_corner_radius"
         app:cardElevation="@dimen/dialog_elevation"
         app:strokeWidth="0dp">
@@ -34,7 +34,7 @@
                 android:layout_marginTop="@dimen/dialog_message_margin_vertical"
                 android:text="@string/witness_sign_dialog_title"
                 android:textAlignment="center"
-                android:textColor="@color/black"
+                android:textColor="@color/ink"
                 android:textSize="@dimen/text_size_medium"
                 android:textStyle="bold" />
 
@@ -97,7 +97,7 @@
             <com.google.android.material.card.MaterialCardView
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/dialog_divider_height"
-                app:cardBackgroundColor="@color/custom_toast_font_normal_soft_gray"
+                app:cardBackgroundColor="@color/skeleton"
                 app:cardElevation="0dp"
                 app:strokeWidth="0dp" />
 
@@ -129,7 +129,7 @@
                 <com.google.android.material.card.MaterialCardView
                     android:layout_width="@dimen/dialog_divider_height"
                     android:layout_height="match_parent"
-                    app:cardBackgroundColor="@color/custom_toast_font_normal_soft_gray"
+                    app:cardBackgroundColor="@color/skeleton"
                     app:cardElevation="0dp"
                     app:strokeWidth="0dp" />
 
@@ -148,7 +148,7 @@
                         android:layout_height="match_parent"
                         android:gravity="center"
                         android:text="@string/witness_sign_save"
-                        android:textColor="@color/black"
+                        android:textColor="@color/ink"
                         android:textSize="@dimen/text_size_small"
                         android:textStyle="bold" />
                 </com.google.android.material.card.MaterialCardView>

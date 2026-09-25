@@ -18,13 +18,13 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/white">
+    android:background="@color/surface">
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolBar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
-        android:background="@color/white"
+        android:background="@color/surface"
         android:elevation="4dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -37,7 +37,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:text="@string/laundry_batch_title"
-            android:textColor="@color/black"
+            android:textColor="@color/ink"
             android:textSize="@dimen/text_size_medium"
             android:textStyle="bold" />
     </androidx.appcompat.widget.Toolbar>
@@ -61,7 +61,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="@dimen/list_item_submission_margin_horizontal"
                 android:layout_marginTop="16dp"
-                app:cardBackgroundColor="#FBFBFB"
+                app:cardBackgroundColor="@color/surface_card"
                 app:cardCornerRadius="@dimen/list_item_progress_card_corner_radius"
                 app:cardElevation="@dimen/list_item_progress_card_elevation"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -81,7 +81,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:fontFamily="monospace"
-                        android:textColor="@color/black"
+                        android:textColor="@color/ink"
                         android:textSize="@dimen/text_size_large"
                         android:textStyle="bold"
                         tools:text="2026/09/15/LDY/0002" />
@@ -90,7 +90,7 @@
                         android:id="@+id/tvStatus"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:textColor="@color/black"
+                        android:textColor="@color/ink"
                         android:textSize="@dimen/text_size_medium"
                         android:textStyle="bold"
                         tools:text="Siap diambil" />
@@ -134,7 +134,7 @@
                                 android:id="@+id/tvCheckedIn"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:textColor="@color/black"
+                                android:textColor="@color/ink"
                                 android:textSize="@dimen/text_size_small"
                                 android:textStyle="bold"
                                 tools:text="2026-09-15 08:10" />
@@ -159,7 +159,7 @@
                                 android:id="@+id/tvWashStarted"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:textColor="@color/black"
+                                android:textColor="@color/ink"
                                 android:textSize="@dimen/text_size_small"
                                 android:textStyle="bold"
                                 tools:text="2026-09-15 09:00" />
@@ -184,7 +184,7 @@
                                 android:id="@+id/tvReady"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:textColor="@color/black"
+                                android:textColor="@color/ink"
                                 android:textSize="@dimen/text_size_small"
                                 android:textStyle="bold"
                                 tools:text="2026-09-15 14:02" />
@@ -209,7 +209,7 @@
                                 android:id="@+id/tvCompleted"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:textColor="@color/black"
+                                android:textColor="@color/ink"
                                 android:textSize="@dimen/text_size_small"
                                 android:textStyle="bold"
                                 tools:text="—" />
@@ -224,7 +224,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
                 android:text="@string/laundry_batch_item"
-                android:textColor="@color/black"
+                android:textColor="@color/ink"
                 android:textSize="@dimen/text_size_medium"
                 android:textStyle="bold"
                 app:layout_constraintStart_toStartOf="@+id/headerCard"

@@ -57,7 +57,7 @@ class SelectedSupervisorTechniciansRvAdapter(
                         R.drawable.gradient_card_color,
                         context.theme
                     )
-                    itemText.setTextColor(ContextCompat.getColorStateList(context, R.color.black))
+                    itemText.setTextColor(ContextCompat.getColorStateList(context, R.color.ink))
                 }
                 if (position == selectedSupervisorTechniciansList.size - 1) {
                     deleteButton.visibility = View.GONE

@@ -539,7 +539,7 @@ class SubmissionListActivity : AppCompatActivity(), SubmissionRvAdapter.OnSubmis
                             else
                                 "All (Finished)"
                         )
-                        setTextColor(getColor(R.color.black))
+                        setTextColor(getColor(R.color.ink))
                     }
 
                     -1 -> {
@@ -549,7 +549,7 @@ class SubmissionListActivity : AppCompatActivity(), SubmissionRvAdapter.OnSubmis
                             else
                                 "All (Unfinished)"
                         )
-                        setTextColor(getColor(R.color.black))
+                        setTextColor(getColor(R.color.ink))
                     }
 
                     100 -> {
@@ -559,7 +559,7 @@ class SubmissionListActivity : AppCompatActivity(), SubmissionRvAdapter.OnSubmis
                             else
                                 "All Case"
                         )
-                        setTextColor(getColor(R.color.black))
+                        setTextColor(getColor(R.color.ink))
                     }
 
                     0 -> {
@@ -637,7 +637,7 @@ class SubmissionListActivity : AppCompatActivity(), SubmissionRvAdapter.OnSubmis
                         R.color.custom_toast_font_failed
                     )
 
-                    else -> ContextCompat.getColor(context, R.color.black)
+                    else -> ContextCompat.getColor(context, R.color.ink)
                 }
 
                 filterText.setSpan(

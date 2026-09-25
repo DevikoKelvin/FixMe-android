@@ -35,7 +35,7 @@
                     android:id="@+id/channelName"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textColor="@color/black"
+                    android:textColor="@color/ink"
                     android:textSize="@dimen/text_size_medium"
                     android:textStyle="bold"
                     tools:text="Release" />

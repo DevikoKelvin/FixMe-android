@@ -28,7 +28,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/list_item_submission_machine_code_margin_start"
         android:layout_weight="1"
-        android:textColor="@color/black"
+        android:textColor="@color/ink"
         android:textSize="@dimen/text_size_small"
         android:textStyle="bold"
         tools:text="12 Mei 2026" />

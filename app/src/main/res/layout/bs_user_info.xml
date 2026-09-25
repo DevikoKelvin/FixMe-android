@@ -18,7 +18,7 @@
         android:layout_height="@dimen/bottom_sheet_drawer_height"
         android:layout_gravity="center"
         android:layout_marginVertical="@dimen/bottom_sheet_drawer_margin_vertical"
-        app:cardBackgroundColor="@color/custom_toast_font_normal_soft_gray"
+        app:cardBackgroundColor="@color/ink_faint"
         app:cardCornerRadius="50dp"
         app:strokeWidth="0dp" />
 
@@ -28,7 +28,7 @@
         android:layout_marginHorizontal="@dimen/activity_horizontal_margin"
         android:text="@string/user_info_title"
         android:textAlignment="center"
-        android:textColor="@color/black"
+        android:textColor="@color/ink"
         android:textSize="@dimen/text_size_medium"
         android:textStyle="bold" />
 
@@ -58,7 +58,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:textColor="@color/black"
+                android:textColor="@color/ink"
                 android:textSize="@dimen/text_size_medium"
                 android:textStyle="bold"
                 tools:text="1" />
@@ -82,7 +82,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:textColor="@color/black"
+                android:textColor="@color/ink"
                 android:textSize="@dimen/text_size_medium"
                 android:textStyle="bold"
                 tools:text="Lie, Ignatius Hendrick Soetikno" />
@@ -107,7 +107,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:textColor="@color/black"
+                android:textColor="@color/ink"
                 android:textSize="@dimen/text_size_medium"
                 android:textStyle="bold"
                 tools:text="4738" />
@@ -132,7 +132,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:textColor="@color/black"
+                android:textColor="@color/ink"
                 android:textSize="@dimen/text_size_medium"
                 android:textStyle="bold"
                 tools:text="hendrick" />
@@ -157,7 +157,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:textColor="@color/black"
+                android:textColor="@color/ink"
                 android:textSize="@dimen/text_size_medium"
                 android:textStyle="bold"
                 tools:text="Owner/App Developer &amp; Maintainer" />
@@ -182,7 +182,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:textColor="@color/black"
+                android:textColor="@color/ink"
                 android:textSize="@dimen/text_size_medium"
                 android:textStyle="bold"
                 tools:text="Information Technology" />
@@ -207,7 +207,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:textColor="@color/black"
+                android:textColor="@color/ink"
                 android:textSize="@dimen/text_size_medium"
                 android:textStyle="bold"
                 tools:text="Software Information Technology" />

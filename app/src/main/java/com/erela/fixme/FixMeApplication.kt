@@ -3,6 +3,7 @@ package com.erela.fixme
 import android.app.Application
 import android.content.Intent
 import com.erela.fixme.activities.LoginActivity
+import com.erela.fixme.helpers.ThemeHelper
 import com.erela.fixme.helpers.UserDataHelper
 import com.erela.fixme.helpers.api.InitAPI
 import com.erela.fixme.services.SseService
@@ -17,6 +18,7 @@ import com.erela.fixme.services.SseService
 class FixMeApplication : Application() {
     override fun onCreate() {
         super.onCreate()
+        ThemeHelper.apply(this)
 
         val userData = UserDataHelper(this)
 

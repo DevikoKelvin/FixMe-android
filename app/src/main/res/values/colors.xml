@@ -33,4 +33,32 @@
     <color name="status_progress_done">#9FA8DA</color>
     <color name="status_done">#0288D1</color>
     <color name="status_on_trial">#512DA8</color>
+    <!-- The two places a status colour is a FILL under white text. values-night lightens the
+         status colours for use as text on dark, which would wash out white text on a fill. -->
+    <color name="status_approved_fill">#388E3C</color>
+    <color name="status_on_trial_fill">#512DA8</color>
+
+    <!--
+        Theme-aware colours [dark mode, 25 Sep 2026]. Each light value below is the literal it
+        replaced in the layouts, so light mode is unchanged; values-night/colors.xml holds the dark
+        ones. Black and white themselves stay literal - they still paint text on coloured fills
+        (white on a status gradient, black on the amber buttons), which is the same in both modes.
+    -->
+    <color name="page">#FFFFFF</color>
+    <color name="surface">#FFFFFF</color>
+    <color name="surface_card">#FBFBFB</color>
+    <color name="surface_alt">#FDFDFD</color>
+    <color name="surface_warm">#FFFCF7</color>
+    <color name="tint_amber">#FFF8E1</color>
+    <color name="tint_red">#FFF0F0</color>
+    <color name="divider">#E0E0E0</color>
+    <color name="skeleton">#CACACA</color>
+    <color name="ink">#FF000000</color>
+    <color name="ink_faint">#CACACA</color>
+    <color name="ink_amber">#8A6D00</color>
+    <color name="field_stroke_idle">#6B000000</color>
+    <color name="watermark">#1A000000</color>
+    <color name="card_gradient_start">#DDDDDD</color>
+    <color name="card_gradient_end">#EEEEEE</color>
+    <bool name="light_system_bars">true</bool>
 </resources>

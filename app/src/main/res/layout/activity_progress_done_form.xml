@@ -5,14 +5,14 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#FDFDFD"
+    android:background="@color/surface_alt"
     tools:context=".activities.ProgressDoneFormActivity">
 
     <RelativeLayout
         android:id="@+id/toolBar"
         android:layout_width="match_parent"
         android:layout_height="@dimen/button_height"
-        android:background="@color/white"
+        android:background="@color/surface"
         android:elevation="@dimen/login_button_elevation"
         android:theme="?attr/actionBarTheme"
         app:layout_constraintEnd_toEndOf="parent"
@@ -45,7 +45,7 @@
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
             android:text="@string/mark_progress_done_title"
-            android:textColor="@color/black"
+            android:textColor="@color/ink"
             android:textSize="@dimen/text_size_medium"
             android:textStyle="bold"
             tools:ignore="RelativeOverlap" />
@@ -76,11 +76,11 @@
                 app:boxCornerRadiusBottomStart="@dimen/login_field_corner_radius"
                 app:boxCornerRadiusTopEnd="@dimen/login_field_corner_radius"
                 app:boxCornerRadiusTopStart="@dimen/login_field_corner_radius"
-                app:boxStrokeColor="@color/black"
+                app:boxStrokeColor="@color/text_field_stroke"
                 app:boxStrokeWidth="@dimen/login_field_stroke_width"
                 app:expandedHintEnabled="true"
                 app:hintAnimationEnabled="true"
-                app:hintTextColor="@color/black">
+                app:hintTextColor="@color/ink">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/descriptionField"
@@ -97,7 +97,7 @@
                 android:layout_marginHorizontal="@dimen/list_item_padding"
                 android:layout_marginTop="@dimen/user_info_item_margin_top"
                 android:text="@string/attach_photo"
-                android:textColor="@color/black"
+                android:textColor="@color/ink"
                 android:textSize="@dimen/text_size_small"
                 android:textStyle="bold" />
 
@@ -153,7 +153,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/manage_photo"
-                        android:textColor="@color/black"
+                        android:textColor="@color/ink"
                         android:textSize="@dimen/text_size_micro"
                         android:textStyle="bold" />
                 </com.google.android.material.card.MaterialCardView>
@@ -191,7 +191,7 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/bottom_sheet_padding_bottom"
         android:layout_margin="@dimen/list_item_padding"
-        app:cardBackgroundColor="@color/status_approved"
+        app:cardBackgroundColor="@color/status_approved_fill"
         app:cardCornerRadius="@dimen/login_button_corner_radius"
         app:cardElevation="0dp"
         app:layout_constraintBottom_toBottomOf="parent"

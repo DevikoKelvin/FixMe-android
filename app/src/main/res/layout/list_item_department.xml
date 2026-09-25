@@ -6,7 +6,7 @@
     android:layout_height="wrap_content"
     android:layout_marginHorizontal="@dimen/list_item_department_margin_horizontal"
     android:layout_marginVertical="@dimen/list_item_department_margin_vertical"
-    app:cardBackgroundColor="#FFFCF7"
+    app:cardBackgroundColor="@color/surface_warm"
     app:cardCornerRadius="@dimen/list_item_department_card_corner_radius"
     app:cardElevation="@dimen/list_item_department_card_elevation"
     app:contentPaddingBottom="@dimen/list_item_department_content_padding_vertical"
@@ -19,6 +19,6 @@
         android:id="@+id/departmentText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textColor="@color/black"
+        android:textColor="@color/ink"
         tools:text="Information Technology" />
 </androidx.cardview.widget.CardView>

@@ -7,7 +7,7 @@
     android:layout_height="wrap_content"
     android:layout_marginHorizontal="@dimen/list_item_submission_margin_horizontal"
     android:layout_marginVertical="@dimen/list_item_submission_margin_vertical"
-    app:cardBackgroundColor="#FBFBFB"
+    app:cardBackgroundColor="@color/surface_card"
     app:cardCornerRadius="@dimen/list_item_submission_card_corner_radius"
     app:cardElevation="@dimen/list_item_submission_card_elevation"
     app:strokeColor="@android:color/transparent"
@@ -72,7 +72,7 @@
             android:maxLines="4"
             android:paddingHorizontal="@dimen/list_item_submission_description_padding_horizontal"
             android:paddingVertical="@dimen/list_item_submission_description_padding_vertical"
-            android:textColor="@color/black"
+            android:textColor="@color/ink"
             android:textSize="@dimen/text_size_small"
             tools:text="Pintu autoclave echung bagian dalam tidak dapat menutup" />
 
@@ -114,7 +114,7 @@
                     android:id="@+id/machineCode"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textColor="@color/black"
+                    android:textColor="@color/ink"
                     android:textSize="@dimen/text_size_small"
                     android:textStyle="bold"
                     tools:text="D-14" />
@@ -123,7 +123,7 @@
                     android:id="@+id/machineName"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textColor="@color/black"
+                    android:textColor="@color/ink"
                     android:textSize="@dimen/text_size_small"
                     android:textStyle="bold"
                     tools:text="Autoclave E-Chung" />
@@ -150,7 +150,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_marginStart="@dimen/list_item_submission_location_text_margin_start"
-                android:textColor="@color/black"
+                android:textColor="@color/ink"
                 android:textSize="@dimen/text_size_small"
                 tools:text="Erela HQ" />
         </LinearLayout>
@@ -173,7 +173,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/list_item_submission_reported_by_text_margin_start"
-                android:textColor="@color/black"
+                android:textColor="@color/ink"
                 android:textSize="@dimen/text_size_small"
                 android:textStyle="bold"
                 tools:text="Hendrick" />
@@ -196,7 +196,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/list_item_submission_department_text_margin_start"
-                android:textColor="@color/black"
+                android:textColor="@color/ink"
                 android:textSize="@dimen/text_size_small"
                 android:textStyle="bold"
                 tools:text="Information Technology" />

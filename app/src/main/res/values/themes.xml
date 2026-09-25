@@ -1,24 +1,32 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
-    <style name="Base.Theme.FixMe" parent="Theme.MaterialComponents.Light.NoActionBar">
-        <!-- Customize your light theme here. -->
-        <item name="android:statusBarColor">@android:color/white</item>
-        <item name="android:windowLightStatusBar">true</item>
+    <!-- DayNight, one style for both modes [dark mode, 25 Sep 2026]: what differs lives in
+         values-night/colors.xml, so there is no second copy of this file to keep in step. -->
+    <style name="Base.Theme.FixMe" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <item name="android:statusBarColor">@color/surface</item>
+        <item name="android:windowLightStatusBar">@bool/light_system_bars</item>
         <item name="android:navigationBarColor">@android:color/black</item>
-        <item name="android:windowLightNavigationBar" tools:targetApi="o_mr1">true</item>
+        <item name="android:windowLightNavigationBar" tools:targetApi="o_mr1">@bool/light_system_bars</item>
+        <item name="android:windowBackground">@color/page</item>
+        <item name="colorSurface">@color/surface</item>
         <item name="colorPrimary">@color/button_color</item>
-        <item name="colorSecondary">@color/black</item>
+        <item name="colorSecondary">@color/ink</item>
         <item name="bottomSheetDialogTheme">@style/AppBottomSheetDialogTheme</item>
     </style>
 
     <style name="Theme.FixMe" parent="Base.Theme.FixMe" />
 
+    <!-- The dark-mode switch in the brand amber rather than colorSecondary's ink. -->
+    <style name="ThemeOverlay.FixMe.AmberSwitch" parent="">
+        <item name="colorSecondary">@color/button_color</item>
+    </style>
+
     <style name="AppBottomSheetDialogTheme"
-        parent="Theme.MaterialComponents.Light.BottomSheetDialog">
+        parent="Theme.MaterialComponents.DayNight.BottomSheetDialog">
         <item name="bottomSheetStyle">@style/AppModalStyle</item>
         <item name="cornerSizeTopLeft">25dp</item>
         <item name="cornerSizeTopRight">25dp</item>
-        <item name="colorSecondary">@color/black</item>
+        <item name="colorSecondary">@color/ink</item>
     </style>
 
     <style name="AppModalStyle"

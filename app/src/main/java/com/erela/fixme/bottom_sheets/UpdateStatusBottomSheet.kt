@@ -297,7 +297,7 @@ class UpdateStatusBottomSheet(
                                 vendorText.setTextColor(
                                     ContextCompat.getColor(
                                         context,
-                                        R.color.black
+                                        R.color.ink
                                     )
                                 )
                                 vendorNameFieldLayout.visibility = View.GONE
@@ -309,7 +309,7 @@ class UpdateStatusBottomSheet(
                                 internalText.setTextColor(
                                     ContextCompat.getColor(
                                         context,
-                                        R.color.black
+                                        R.color.ink
                                     )
                                 )
                                 vendorButton.strokeColor =
@@ -350,7 +350,7 @@ class UpdateStatusBottomSheet(
                                 vendorText.setTextColor(
                                     ContextCompat.getColor(
                                         context,
-                                        R.color.black
+                                        R.color.ink
                                     )
                                 )
                                 vendorNameFieldLayout.visibility = View.GONE
@@ -365,7 +365,7 @@ class UpdateStatusBottomSheet(
                                 internalText.setTextColor(
                                     ContextCompat.getColor(
                                         context,
-                                        R.color.black
+                                        R.color.ink
                                     )
                                 )
                                 vendorButton.strokeColor =
@@ -591,7 +591,7 @@ class UpdateStatusBottomSheet(
                         vendorButton.strokeColor =
                             ContextCompat.getColor(context, R.color.button_color)
                         vendorColor.background = null
-                        vendorText.setTextColor(ContextCompat.getColor(context, R.color.black))
+                        vendorText.setTextColor(ContextCompat.getColor(context, R.color.ink))
                         vendorNameFieldLayout.visibility = View.GONE
                         vendorNameField.setText("")
                         setupTechnician()
@@ -602,7 +602,7 @@ class UpdateStatusBottomSheet(
                         internalText.setTextColor(
                             ContextCompat.getColor(
                                 context,
-                                R.color.black
+                                R.color.ink
                             )
                         )
                         vendorButton.strokeColor =
@@ -639,7 +639,7 @@ class UpdateStatusBottomSheet(
                         vendorButton.strokeColor =
                             ContextCompat.getColor(context, R.color.button_color)
                         vendorColor.background = null
-                        vendorText.setTextColor(ContextCompat.getColor(context, R.color.black))
+                        vendorText.setTextColor(ContextCompat.getColor(context, R.color.ink))
                         vendorNameFieldLayout.visibility = View.GONE
                         vendorNameField.setText("")
                         setupTechnician()
@@ -653,7 +653,7 @@ class UpdateStatusBottomSheet(
                         internalText.setTextColor(
                             ContextCompat.getColor(
                                 context,
-                                R.color.black
+                                R.color.ink
                             )
                         )
                         vendorButton.strokeColor =

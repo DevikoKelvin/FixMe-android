@@ -12,7 +12,7 @@
         android:layout_height="@dimen/bottom_sheet_drawer_height"
         android:layout_gravity="center"
         android:layout_marginVertical="@dimen/bottom_sheet_drawer_margin_vertical"
-        app:cardBackgroundColor="@color/custom_toast_font_normal_soft_gray"
+        app:cardBackgroundColor="@color/skeleton"
         app:cardCornerRadius="@dimen/login_button_corner_radius"
         app:strokeWidth="0dp" />
 
@@ -22,7 +22,7 @@
         android:layout_marginHorizontal="@dimen/list_item_padding"
         android:text="@string/update_channel_sheet_title"
         android:textAlignment="center"
-        android:textColor="@color/black"
+        android:textColor="@color/ink"
         android:textSize="@dimen/text_size_large"
         android:textStyle="bold" />
 
@@ -40,7 +40,7 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:background="#E0E0E0" />
+        android:background="@color/divider" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/channelList"

@@ -49,7 +49,7 @@ class SubmissionRvAdapter(val context: Context, val data: ArrayList<DataItem?>?)
             }
         }
 
-        val colorRes = if (isComplete) R.color.status_approved else R.color.black
+        val colorRes = if (isComplete) R.color.status_approved else R.color.ink
         textView.setTextColor(
             ResourcesCompat.getColor(context.resources, colorRes, context.theme)
         )

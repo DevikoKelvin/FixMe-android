@@ -11,7 +11,7 @@
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="@dimen/dialog_margin"
         android:layout_marginVertical="@dimen/dialog_margin"
-        app:cardBackgroundColor="@color/white"
+        app:cardBackgroundColor="@color/surface"
         app:cardCornerRadius="@dimen/dialog_corner_radius"
         app:cardElevation="@dimen/dialog_elevation"
         app:strokeWidth="0dp">
@@ -28,14 +28,14 @@
                 android:layout_marginVertical="@dimen/dialog_message_margin_vertical"
                 android:text="@string/action_question"
                 android:textAlignment="center"
-                android:textColor="@color/black"
+                android:textColor="@color/ink"
                 android:textSize="@dimen/text_size_large"
                 android:textStyle="bold" />
 
             <com.google.android.material.card.MaterialCardView
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/dialog_divider_height"
-                app:cardBackgroundColor="@color/custom_toast_font_normal_soft_gray"
+                app:cardBackgroundColor="@color/skeleton"
                 app:cardElevation="0dp"
                 app:strokeWidth="0dp" />
 
@@ -89,7 +89,7 @@
                 <com.google.android.material.card.MaterialCardView
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/dialog_divider_height"
-                    app:cardBackgroundColor="@color/custom_toast_font_normal_soft_gray"
+                    app:cardBackgroundColor="@color/skeleton"
                     app:cardElevation="0dp"
                     app:strokeWidth="0dp" />
 
@@ -109,7 +109,7 @@
                         android:layout_height="match_parent"
                         android:gravity="center"
                         android:text="@string/edit_material"
-                        android:textColor="@color/black"
+                        android:textColor="@color/ink"
                         android:textSize="@dimen/text_size_small"
                         android:textStyle="bold" />
                 </com.google.android.material.card.MaterialCardView>
@@ -130,7 +130,7 @@
                         android:layout_height="match_parent"
                         android:gravity="center"
                         android:text="@string/edit_progress"
-                        android:textColor="@color/black"
+                        android:textColor="@color/ink"
                         android:textSize="@dimen/text_size_small"
                         android:textStyle="bold" />
                 </com.google.android.material.card.MaterialCardView>
@@ -139,7 +139,7 @@
                     android:id="@+id/divider3"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/dialog_divider_height"
-                    app:cardBackgroundColor="@color/custom_toast_font_normal_soft_gray"
+                    app:cardBackgroundColor="@color/skeleton"
                     app:cardElevation="0dp"
                     app:strokeWidth="0dp" />
 

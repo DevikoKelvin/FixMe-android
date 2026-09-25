@@ -7,7 +7,7 @@
     android:layout_height="wrap_content"
     android:layout_marginHorizontal="@dimen/list_item_progress_margin_horizontal"
     android:layout_marginVertical="@dimen/list_item_progress_margin_vertical"
-    app:cardBackgroundColor="#FBFBFB"
+    app:cardBackgroundColor="@color/surface_card"
     app:cardCornerRadius="@dimen/list_item_progress_card_corner_radius"
     app:cardElevation="@dimen/list_item_progress_card_elevation"
     app:strokeWidth="0dp">
@@ -21,7 +21,7 @@
             android:id="@+id/header"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/custom_toast_font_normal_soft_gray"
+            android:background="@color/skeleton"
             android:orientation="horizontal"
             android:paddingHorizontal="@dimen/list_item_submission_header_padding_horizontal"
             android:paddingVertical="@dimen/list_item_submission_header_padding_vertical"
@@ -55,7 +55,7 @@
                     android:id="@+id/statusColor"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:background="@color/custom_toast_font_normal_soft_gray"
+                    android:background="@color/skeleton"
                     android:paddingHorizontal="@dimen/list_item_submission_tag_content_padding_horizontal"
                     android:paddingVertical="@dimen/list_item_submission_tag_content_padding">
 
@@ -87,7 +87,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:background="@color/custom_toast_font_normal_soft_gray"
+                    android:background="@color/skeleton"
                     android:text="@string/location"
                     android:textColor="@android:color/transparent"
                     android:textSize="@dimen/text_size_small" />
@@ -96,7 +96,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="2dp"
-                    android:background="@color/custom_toast_font_normal_soft_gray"
+                    android:background="@color/skeleton"
                     android:text="@string/detail"
                     android:textColor="@android:color/transparent"
                     android:textSize="@dimen/text_size_small" />
@@ -105,7 +105,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="2dp"
-                    android:background="@color/custom_toast_font_normal_soft_gray"
+                    android:background="@color/skeleton"
                     android:text="@string/area"
                     android:textColor="@android:color/transparent"
                     android:textSize="@dimen/text_size_small" />
@@ -114,7 +114,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="2dp"
-                    android:background="@color/custom_toast_font_normal_soft_gray"
+                    android:background="@color/skeleton"
                     android:text="@string/floor"
                     android:textColor="@android:color/transparent"
                     android:textSize="@dimen/text_size_small" />
@@ -123,7 +123,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="2dp"
-                    android:background="@color/custom_toast_font_normal_soft_gray"
+                    android:background="@color/skeleton"
                     android:text="@string/brand"
                     android:textColor="@android:color/transparent"
                     android:textSize="@dimen/text_size_small" />
@@ -140,7 +140,7 @@
                     android:id="@+id/tvLocation"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="@color/custom_toast_font_normal_soft_gray"
+                    android:background="@color/skeleton"
                     android:textColor="@android:color/transparent"
                     android:textSize="@dimen/text_size_small"
                     android:textStyle="bold" />
@@ -150,7 +150,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="2dp"
-                    android:background="@color/custom_toast_font_normal_soft_gray"
+                    android:background="@color/skeleton"
                     android:textColor="@android:color/transparent"
                     android:textSize="@dimen/text_size_small"
                     android:textStyle="bold" />
@@ -160,7 +160,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="2dp"
-                    android:background="@color/custom_toast_font_normal_soft_gray"
+                    android:background="@color/skeleton"
                     android:textColor="@android:color/transparent"
                     android:textSize="@dimen/text_size_small"
                     android:textStyle="bold" />
@@ -170,7 +170,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="2dp"
-                    android:background="@color/custom_toast_font_normal_soft_gray"
+                    android:background="@color/skeleton"
                     android:textColor="@android:color/transparent"
                     android:textSize="@dimen/text_size_small"
                     android:textStyle="bold" />
@@ -180,7 +180,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="2dp"
-                    android:background="@color/custom_toast_font_normal_soft_gray"
+                    android:background="@color/skeleton"
                     android:textColor="@android:color/transparent"
                     android:textSize="@dimen/text_size_small"
                     android:textStyle="bold" />
@@ -193,7 +193,7 @@
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="@dimen/list_item_submission_description_padding_horizontal"
             android:layout_marginBottom="@dimen/list_item_submission_description_padding_vertical"
-            android:background="@color/custom_toast_font_normal_soft_gray"
+            android:background="@color/skeleton"
             android:textColor="@android:color/transparent"
             android:textSize="@dimen/text_size_small"
             tools:text="Deadline: 2024-05-01" />

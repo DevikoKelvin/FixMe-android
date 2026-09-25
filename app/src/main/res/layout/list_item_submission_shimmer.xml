@@ -6,7 +6,7 @@
     android:layout_height="wrap_content"
     android:layout_marginHorizontal="@dimen/list_item_shimmer_margin_horizontal"
     android:layout_marginVertical="@dimen/list_item_shimmer_margin_vertical"
-    app:cardBackgroundColor="#FBFBFB"
+    app:cardBackgroundColor="@color/surface_card"
     app:cardCornerRadius="@dimen/list_item_shimmer_card_corner_radius"
     app:cardElevation="@dimen/list_item_shimmer_card_elevation"
     app:strokeWidth="0dp">
@@ -19,7 +19,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/custom_toast_font_normal_soft_gray"
+            android:background="@color/skeleton"
             android:orientation="vertical"
             android:paddingHorizontal="@dimen/list_item_shimmer_header_padding_horizontal"
             android:paddingVertical="@dimen/list_item_shimmer_header_padding_vertical"
@@ -60,10 +60,10 @@
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="@dimen/list_item_shimmer_description_margin_horizontal"
             android:layout_marginVertical="@dimen/list_item_shimmer_description_margin_vertical"
-            android:background="@color/custom_toast_font_normal_soft_gray"
+            android:background="@color/skeleton"
             android:paddingHorizontal="@dimen/list_item_shimmer_description_padding_horizontal"
             android:paddingVertical="@dimen/list_item_shimmer_description_padding_vertical"
-            android:textColor="@color/black"
+            android:textColor="@color/ink"
             android:textSize="@dimen/text_size_small" />
 
         <LinearLayout
@@ -81,15 +81,15 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="@color/custom_toast_font_normal_soft_gray" />
+                    android:background="@color/skeleton" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/list_item_shimmer_machine_name_margin_top"
-                    android:background="@color/custom_toast_font_normal_soft_gray"
+                    android:background="@color/skeleton"
                     android:text="@string/machine_name"
-                    android:textColor="@color/custom_toast_font_normal_soft_gray" />
+                    android:textColor="@color/skeleton" />
             </LinearLayout>
 
             <LinearLayout
@@ -102,8 +102,8 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="@color/custom_toast_font_normal_soft_gray"
-                    android:textColor="@color/custom_toast_font_normal_soft_gray"
+                    android:background="@color/skeleton"
+                    android:textColor="@color/skeleton"
                     android:textStyle="bold"
                     tools:text="D-14" />
 
@@ -111,8 +111,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/list_item_shimmer_machine_name_margin_top"
-                    android:background="@color/custom_toast_font_normal_soft_gray"
-                    android:textColor="@color/custom_toast_font_normal_soft_gray"
+                    android:background="@color/skeleton"
+                    android:textColor="@color/skeleton"
                     android:textStyle="bold"
                     tools:text="Autoclave E-Chung" />
             </LinearLayout>
@@ -123,7 +123,7 @@
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="@dimen/list_item_shimmer_location_margin_horizontal"
             android:layout_marginTop="@dimen/list_item_shimmer_location_margin_top"
-            android:background="@color/custom_toast_font_normal_soft_gray"
+            android:background="@color/skeleton"
             android:orientation="horizontal"
             tools:ignore="UseCompoundDrawables">
 
@@ -137,7 +137,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_marginStart="@dimen/list_item_shimmer_location_text_margin_start"
-                android:textColor="@color/custom_toast_font_normal_soft_gray"
+                android:textColor="@color/skeleton"
                 tools:text="Erela HQ" />
         </LinearLayout>
 
@@ -157,15 +157,15 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="@color/custom_toast_font_normal_soft_gray" />
+                    android:background="@color/skeleton" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/list_item_shimmer_machine_name_margin_top"
-                    android:background="@color/custom_toast_font_normal_soft_gray"
+                    android:background="@color/skeleton"
                     android:text="@string/machine_name"
-                    android:textColor="@color/custom_toast_font_normal_soft_gray" />
+                    android:textColor="@color/skeleton" />
             </LinearLayout>
 
             <LinearLayout
@@ -178,8 +178,8 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="@color/custom_toast_font_normal_soft_gray"
-                    android:textColor="@color/custom_toast_font_normal_soft_gray"
+                    android:background="@color/skeleton"
+                    android:textColor="@color/skeleton"
                     android:textStyle="bold"
                     tools:text="D-14" />
 
@@ -187,8 +187,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/list_item_shimmer_machine_name_margin_top"
-                    android:background="@color/custom_toast_font_normal_soft_gray"
-                    android:textColor="@color/custom_toast_font_normal_soft_gray"
+                    android:background="@color/skeleton"
+                    android:textColor="@color/skeleton"
                     android:textStyle="bold"
                     tools:text="Autoclave E-Chung" />
             </LinearLayout>
@@ -204,8 +204,8 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/custom_toast_font_normal_soft_gray"
-                android:textColor="@color/custom_toast_font_normal_soft_gray"
+                android:background="@color/skeleton"
+                android:textColor="@color/skeleton"
                 android:textStyle="bold"
                 tools:text="Information Technology" />
         </LinearLayout>
@@ -220,16 +220,16 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:background="@color/custom_toast_font_normal_soft_gray"
+                android:background="@color/skeleton"
                 android:text="@string/reported_by"
-                android:textColor="@color/custom_toast_font_normal_soft_gray" />
+                android:textColor="@color/skeleton" />
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/list_item_shimmer_reported_by_text_margin_start"
-                android:background="@color/custom_toast_font_normal_soft_gray"
-                android:textColor="@color/custom_toast_font_normal_soft_gray"
+                android:background="@color/skeleton"
+                android:textColor="@color/skeleton"
                 android:textStyle="bold"
                 tools:text="Hendrick" />
         </LinearLayout>
@@ -254,10 +254,10 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:background="@color/custom_toast_font_normal_soft_gray"
+                    android:background="@color/skeleton"
                     android:padding="@dimen/list_item_shimmer_tag_padding"
                     android:text="Low"
-                    android:textColor="@color/custom_toast_font_normal_soft_gray"
+                    android:textColor="@color/skeleton"
                     android:textSize="@dimen/text_size_micro"
                     android:textStyle="bold" />
             </com.google.android.material.card.MaterialCardView>
@@ -274,10 +274,10 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:background="@color/custom_toast_font_normal_soft_gray"
+                    android:background="@color/skeleton"
                     android:padding="@dimen/list_item_shimmer_tag_padding"
                     android:text="On Progress"
-                    android:textColor="@color/custom_toast_font_normal_soft_gray"
+                    android:textColor="@color/skeleton"
                     android:textSize="@dimen/text_size_micro"
                     android:textStyle="bold" />
             </com.google.android.material.card.MaterialCardView>

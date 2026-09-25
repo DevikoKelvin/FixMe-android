@@ -17,7 +17,6 @@ import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.activity.addCallback
-import com.erela.fixme.helpers.enableEdgeToEdgeOpaqueNav
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationCompat
@@ -39,8 +38,9 @@ import com.erela.fixme.dialogs.ConfirmationDialog
 import com.erela.fixme.dialogs.UpdateAvailableDialog
 import com.erela.fixme.helpers.PermissionHelper
 import com.erela.fixme.helpers.UserDataHelper
-import com.erela.fixme.objects.GenericSimpleResponse
 import com.erela.fixme.helpers.api.InitAPI
+import com.erela.fixme.helpers.enableEdgeToEdgeOpaqueNav
+import com.erela.fixme.objects.GenericSimpleResponse
 import com.erela.fixme.objects.UpdateCheckResponse
 import com.erela.fixme.objects.UserData
 import com.erela.fixme.services.SseService
@@ -320,7 +320,7 @@ class MainActivity : AppCompatActivity() {
                         "Staff/Reporter"
                     privilegeText.setTextColor(
                         ContextCompat.getColor(
-                            applicationContext, R.color.black
+                            applicationContext, R.color.ink
                         )
                     )
                 }
@@ -436,14 +436,28 @@ class MainActivity : AppCompatActivity() {
                                         })
 
                                     UserDataHelper(this@MainActivity).purgeUserData()
-                                    Toast.makeText(
-                                        this@MainActivity,
-                                        if (getString(R.string.lang) == "in")
-                                            "Berhasil keluar!"
-                                        else
-                                            "Successfully logged out!",
-                                        Toast.LENGTH_SHORT
-                                    ).show()
+                                    CustomToast.getInstance(this@MainActivity)
+                                        .setMessage(
+                                            if (getString(R.string.lang) == "in")
+                                                "Berhasil keluar!"
+                                            else
+                                                "Successfully logged out!",
+                                        )
+                                        .setFontColor(
+                                            ContextCompat.getColor(
+                                                this@MainActivity, R
+                                                    .color
+                                                    .custom_toast_font_success
+                                            )
+                                        )
+                                        .setBackgroundColor(
+                                            ContextCompat.getColor(
+                                                this@MainActivity, R
+                                                    .color
+                                                    .custom_toast_background_success
+                                            )
+                                        )
+                                        .show()
                                     stopService(Intent(this@MainActivity, SseService::class.java))
                                     // Mirror of LoginActivity.goToMain(): clear the task so no
                                     // authenticated screen is left underneath for back to reach
@@ -455,7 +469,7 @@ class MainActivity : AppCompatActivity() {
                                         ).apply {
                                             addFlags(
                                                 Intent.FLAG_ACTIVITY_NEW_TASK or
-                                                    Intent.FLAG_ACTIVITY_CLEAR_TASK
+                                                        Intent.FLAG_ACTIVITY_CLEAR_TASK
                                             )
                                         }
                                     )

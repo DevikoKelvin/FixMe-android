@@ -7,7 +7,7 @@
     android:layout_height="wrap_content"
     android:layout_marginHorizontal="@dimen/list_item_progress_margin_horizontal"
     android:layout_marginVertical="@dimen/list_item_progress_margin_vertical"
-    app:cardBackgroundColor="#FBFBFB"
+    app:cardBackgroundColor="@color/surface_card"
     app:cardCornerRadius="@dimen/list_item_progress_card_corner_radius"
     app:cardElevation="@dimen/list_item_progress_card_elevation"
     app:strokeWidth="0dp">
@@ -33,7 +33,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/list_item_progress_content_margin_top"
             android:paddingHorizontal="@dimen/list_item_progress_content_padding_horizontal"
-            android:textColor="@color/black"
+            android:textColor="@color/ink"
             android:textSize="@dimen/text_size_small"
             android:textStyle="bold"
             tools:text="Progress Analysis" />
@@ -45,7 +45,7 @@
             android:layout_marginTop="@dimen/list_item_progress_content_margin_top_small"
             android:layout_marginBottom="@dimen/list_item_progress_content_margin_bottom"
             android:paddingHorizontal="@dimen/list_item_progress_content_padding_horizontal"
-            android:textColor="@color/black"
+            android:textColor="@color/ink"
             android:textSize="@dimen/text_size_micro"
             tools:text="Progress Description" />
 
@@ -55,7 +55,7 @@
             android:layout_height="wrap_content"
             android:paddingHorizontal="@dimen/list_item_progress_content_padding_horizontal"
             android:text="@string/materials"
-            android:textColor="@color/black"
+            android:textColor="@color/ink"
             android:textSize="@dimen/text_size_small"
             android:textStyle="bold"
             android:visibility="gone" />
@@ -66,7 +66,7 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="@dimen/list_item_progress_content_margin_bottom"
             android:paddingHorizontal="@dimen/list_item_progress_content_padding_horizontal"
-            android:textColor="@color/black"
+            android:textColor="@color/ink"
             android:textSize="@dimen/text_size_micro"
             android:visibility="gone"
             tools:text="No materials needed" />
@@ -111,7 +111,7 @@
             <com.google.android.material.card.MaterialCardView
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/list_item_progress_divider_height"
-                app:cardBackgroundColor="@color/custom_toast_font_normal_soft_gray"
+                app:cardBackgroundColor="@color/skeleton"
                 app:cardCornerRadius="0dp"
                 app:cardElevation="0dp" />
 
@@ -165,7 +165,7 @@
                 android:layout_marginTop="@dimen/list_item_progress_content_margin_top"
                 android:paddingHorizontal="@dimen/list_item_progress_content_padding_horizontal"
                 android:text="@string/progress_result_description"
-                android:textColor="@color/black"
+                android:textColor="@color/ink"
                 android:textSize="@dimen/text_size_small"
                 android:textStyle="bold" />
 
@@ -175,7 +175,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/list_item_progress_content_margin_top_small"
                 android:paddingHorizontal="@dimen/list_item_progress_content_padding_horizontal"
-                android:textColor="@color/black"
+                android:textColor="@color/ink"
                 android:textSize="@dimen/text_size_micro"
                 tools:text="Description" />
         </LinearLayout>

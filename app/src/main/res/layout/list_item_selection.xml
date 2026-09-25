@@ -6,7 +6,7 @@
     android:layout_height="wrap_content"
     android:layout_marginHorizontal="@dimen/list_item_selection_margin_horizontal"
     android:layout_marginVertical="@dimen/list_item_selection_margin_vertical"
-    app:cardBackgroundColor="#FFFFFF"
+    app:cardBackgroundColor="@color/surface"
     app:cardCornerRadius="@dimen/list_item_selection_card_corner_radius"
     app:cardElevation="@dimen/list_item_selection_card_elevation"
     app:contentPaddingBottom="@dimen/list_item_selection_content_padding_vertical"

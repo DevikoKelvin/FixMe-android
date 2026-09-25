@@ -11,7 +11,7 @@
         android:id="@+id/toolBar"
         android:layout_width="match_parent"
         android:layout_height="@dimen/toolbar_height"
-        android:background="@color/white"
+        android:background="@color/surface"
         android:elevation="@dimen/card_elevation"
         android:theme="?attr/actionBarTheme"
         app:layout_constraintEnd_toEndOf="parent"
@@ -43,12 +43,14 @@
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
             android:text="@string/app_settings_title"
-            android:textColor="@color/black"
+            android:textColor="@color/ink"
             android:textSize="@dimen/text_size_medium"
             android:textStyle="bold" />
     </RelativeLayout>
 
+    <!-- The id is what makes Android save the scroll position across the dark-mode recreate. -->
     <ScrollView
+        android:id="@+id/settingsScroll"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -76,7 +78,7 @@
                 android:layout_marginHorizontal="@dimen/activity_horizontal_margin"
                 android:layout_marginTop="@dimen/activity_vertical_margin"
                 android:text="@string/about"
-                android:textColor="@color/black"
+                android:textColor="@color/ink"
                 android:textSize="@dimen/text_size_large"
                 android:textStyle="bold" />
 
@@ -86,7 +88,7 @@
                 android:layout_marginHorizontal="@dimen/activity_horizontal_margin"
                 android:layout_marginTop="4dp"
                 android:text="@string/about_fixme"
-                android:textColor="@color/black"
+                android:textColor="@color/ink"
                 android:textSize="@dimen/text_size_small"
                 android:textStyle="italic" />
 
@@ -95,8 +97,55 @@
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="@dimen/activity_horizontal_margin"
                 android:layout_marginTop="@dimen/text_size_xlarge"
+                android:text="@string/appearance"
+                android:textColor="@color/ink"
+                android:textSize="@dimen/text_size_large"
+                android:textStyle="bold" />
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/darkModeButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="@dimen/activity_horizontal_margin"
+                android:layout_marginTop="@dimen/dropdown_item_padding_vertical"
+                app:cardCornerRadius="@dimen/card_corner_radius"
+                app:cardElevation="0dp"
+                app:strokeWidth="0dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:background="@drawable/gradient_card_color"
+                    android:orientation="horizontal"
+                    android:paddingHorizontal="@dimen/button_padding"
+                    android:paddingVertical="16dp"
+                    tools:ignore="UseCompoundDrawables">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="@string/dark_mode"
+                        android:textColor="@color/ink"
+                        android:textSize="@dimen/text_size_medium"
+                        android:textStyle="bold" />
+
+                    <com.google.android.material.switchmaterial.SwitchMaterial
+                        android:id="@+id/darkModeSwitch"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:theme="@style/ThemeOverlay.FixMe.AmberSwitch" />
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="@dimen/activity_horizontal_margin"
+                android:layout_marginTop="@dimen/text_size_xlarge"
                 android:text="@string/account_settings"
-                android:textColor="@color/black"
+                android:textColor="@color/ink"
                 android:textSize="@dimen/text_size_large"
                 android:textStyle="bold" />
 
@@ -128,7 +177,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="@string/change_password_title"
-                            android:textColor="@color/black"
+                            android:textColor="@color/ink"
                             android:textSize="@dimen/text_size_medium"
                             android:textStyle="bold" />
                     </LinearLayout>
@@ -157,7 +206,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="@string/change_email_title"
-                            android:textColor="@color/black"
+                            android:textColor="@color/ink"
                             android:textSize="@dimen/text_size_medium"
                             android:textStyle="bold" />
                     </LinearLayout>
@@ -170,7 +219,7 @@
                 android:layout_marginHorizontal="@dimen/activity_horizontal_margin"
                 android:layout_marginTop="@dimen/text_size_xlarge"
                 android:text="@string/app_update"
-                android:textColor="@color/black"
+                android:textColor="@color/ink"
                 android:textSize="@dimen/text_size_large"
                 android:textStyle="bold" />
 
@@ -202,7 +251,7 @@
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:text="@string/update_channel_label"
-                            android:textColor="@color/black"
+                            android:textColor="@color/ink"
                             android:textSize="@dimen/text_size_medium"
                             android:textStyle="bold" />
 
@@ -210,7 +259,7 @@
                             android:id="@+id/channelSelectorValue"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:textColor="@color/black"
+                            android:textColor="@color/ink"
                             android:textSize="@dimen/text_size_small"
                             tools:text="release" />
 
@@ -253,7 +302,7 @@
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:text="@string/check_for_update_now"
-                            android:textColor="@color/black"
+                            android:textColor="@color/ink"
                             android:textSize="@dimen/text_size_medium"
                             android:textStyle="bold" />
 
@@ -270,7 +319,7 @@
                             android:layout_width="@dimen/search_icon_size"
                             android:layout_height="@dimen/search_icon_size"
                             android:layout_gravity="center_vertical"
-                            android:indeterminateTint="@color/black"
+                            android:indeterminateTint="@color/ink"
                             android:visibility="gone" />
                     </LinearLayout>
                 </com.google.android.material.card.MaterialCardView>
@@ -282,7 +331,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="@dimen/activity_horizontal_margin"
                 android:layout_marginTop="4dp"
-                android:textColor="@color/black"
+                android:textColor="@color/ink"
                 android:textSize="@dimen/text_size_micro"
                 tools:text="Current app version: 1.1.5" />
 
@@ -292,7 +341,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="@dimen/activity_horizontal_margin"
                 android:layout_marginTop="4dp"
-                android:textColor="@color/black"
+                android:textColor="@color/ink"
                 android:textStyle="bold"
                 android:visibility="gone"
                 tools:text="Detected new app version: 1_2.0"

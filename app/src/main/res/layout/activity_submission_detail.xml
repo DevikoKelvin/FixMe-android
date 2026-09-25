@@ -5,14 +5,14 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#FDFDFD"
+    android:background="@color/surface_alt"
     tools:context=".activities.SubmissionDetailActivity">
 
     <RelativeLayout
         android:id="@+id/toolBar"
         android:layout_width="match_parent"
         android:layout_height="@dimen/toolbar_height"
-        android:background="@color/white"
+        android:background="@color/surface"
         android:elevation="@dimen/card_elevation"
         android:theme="?attr/actionBarTheme"
         app:layout_constraintEnd_toEndOf="parent"
@@ -26,7 +26,7 @@
             android:layout_centerVertical="true"
             android:gravity="center"
             android:textAlignment="center"
-            android:textColor="@color/black"
+            android:textColor="@color/ink"
             android:textSize="@dimen/text_size_medium"
             android:textStyle="bold"
             tools:ignore="RelativeOverlap"
@@ -98,7 +98,7 @@
                 android:layout_marginHorizontal="@dimen/dialog_margin"
                 android:layout_marginTop="@dimen/dialog_margin"
                 android:visibility="gone"
-                app:cardBackgroundColor="#FFF0F0"
+                app:cardBackgroundColor="@color/tint_red"
                 app:cardCornerRadius="@dimen/card_corner_radius"
                 app:cardElevation="0dp"
                 app:strokeColor="@android:color/transparent"
@@ -197,7 +197,7 @@
                                 android:layout_height="@dimen/submission_detail_image_height"
                                 android:layout_gravity="center"
                                 android:layout_margin="@dimen/dialog_margin"
-                                app:cardBackgroundColor="@color/custom_toast_font_normal_soft_gray"
+                                app:cardBackgroundColor="@color/skeleton"
                                 app:cardCornerRadius="@dimen/list_item_progress_card_corner_radius"
                                 app:cardElevation="@dimen/dialog_elevation">
 
@@ -217,8 +217,8 @@
                                 android:layout_height="wrap_content"
                                 android:layout_marginHorizontal="@dimen/activity_horizontal_margin"
                                 android:layout_marginTop="@dimen/activity_horizontal_margin"
-                                android:background="@color/custom_toast_font_normal_soft_gray"
-                                android:textColor="@color/custom_toast_font_normal_soft_gray"
+                                android:background="@color/skeleton"
+                                android:textColor="@color/ink_faint"
                                 android:textSize="@dimen/text_size_medium"
                                 android:textStyle="bold"
                                 tools:text="PINTU AUTOCLAVE ECHUNG D-14 TIDAK DAPAT MENUTUP" />
@@ -234,7 +234,7 @@
                                     android:layout_height="wrap_content"
                                     android:layout_gravity="center"
                                     android:layout_weight="1"
-                                    android:background="@color/custom_toast_font_normal_soft_gray"
+                                    android:background="@color/skeleton"
                                     android:textSize="@dimen/text_size_small" />
 
                                 <com.google.android.material.card.MaterialCardView
@@ -289,7 +289,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_marginHorizontal="@dimen/activity_horizontal_margin"
                                 android:layout_marginTop="@dimen/dialog_margin"
-                                android:background="@color/custom_toast_font_normal_soft_gray"
+                                android:background="@color/skeleton"
                                 android:textSize="@dimen/text_size_medium"
                                 android:textStyle="bold" />
 
@@ -297,7 +297,7 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_marginHorizontal="@dimen/activity_horizontal_margin"
-                                android:background="@color/custom_toast_font_normal_soft_gray" />
+                                android:background="@color/skeleton" />
 
                             <LinearLayout
                                 android:layout_width="match_parent"
@@ -315,17 +315,17 @@
                                     <TextView
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
-                                        android:background="@color/custom_toast_font_normal_soft_gray"
+                                        android:background="@color/skeleton"
                                         android:text="@string/machine_code"
-                                        android:textColor="@color/custom_toast_font_normal_soft_gray" />
+                                        android:textColor="@color/ink_faint" />
 
                                     <TextView
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
                                         android:layout_marginTop="2dp"
-                                        android:background="@color/custom_toast_font_normal_soft_gray"
+                                        android:background="@color/skeleton"
                                         android:text="@string/machine_name"
-                                        android:textColor="@color/custom_toast_font_normal_soft_gray" />
+                                        android:textColor="@color/ink_faint" />
                                 </LinearLayout>
 
                                 <LinearLayout
@@ -338,8 +338,8 @@
                                     <TextView
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
-                                        android:background="@color/custom_toast_font_normal_soft_gray"
-                                        android:textColor="@color/custom_toast_font_normal_soft_gray"
+                                        android:background="@color/skeleton"
+                                        android:textColor="@color/ink_faint"
                                         android:textStyle="bold"
                                         tools:text="D-14" />
 
@@ -347,8 +347,8 @@
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
                                         android:layout_marginTop="2dp"
-                                        android:background="@color/custom_toast_font_normal_soft_gray"
-                                        android:textColor="@color/custom_toast_font_normal_soft_gray"
+                                        android:background="@color/skeleton"
+                                        android:textColor="@color/ink_faint"
                                         android:textStyle="bold"
                                         tools:text="Autoclave E-Chung" />
                                 </LinearLayout>
@@ -365,7 +365,7 @@
                                     android:layout_width="@dimen/list_item_shimmer_location_icon_size"
                                     android:layout_height="@dimen/list_item_shimmer_location_icon_size"
                                     android:layout_gravity="center"
-                                    android:background="@color/custom_toast_font_normal_soft_gray"
+                                    android:background="@color/skeleton"
                                     tools:ignore="ContentDescription" />
 
                                 <TextView
@@ -373,8 +373,8 @@
                                     android:layout_height="wrap_content"
                                     android:layout_marginStart="@dimen/dialog_margin"
                                     android:layout_weight="1"
-                                    android:background="@color/custom_toast_font_normal_soft_gray"
-                                    android:textColor="@color/custom_toast_font_normal_soft_gray"
+                                    android:background="@color/skeleton"
+                                    android:textColor="@color/ink_faint"
                                     tools:text="Hendrick\nFrom Information Technology Department" />
                             </LinearLayout>
 
@@ -389,7 +389,7 @@
                                 <ImageView
                                     android:layout_width="@dimen/list_item_shimmer_location_icon_size"
                                     android:layout_height="@dimen/list_item_shimmer_location_icon_size"
-                                    android:background="@color/custom_toast_font_normal_soft_gray"
+                                    android:background="@color/skeleton"
                                     tools:ignore="ContentDescription" />
 
                                 <TextView
@@ -397,8 +397,8 @@
                                     android:layout_height="wrap_content"
                                     android:layout_marginStart="@dimen/dialog_margin"
                                     android:layout_weight="1"
-                                    android:background="@color/custom_toast_font_normal_soft_gray"
-                                    android:textColor="@color/custom_toast_font_normal_soft_gray"
+                                    android:background="@color/skeleton"
+                                    android:textColor="@color/ink_faint"
                                     tools:text="Engineering" />
                             </LinearLayout>
 
@@ -413,7 +413,7 @@
                                 <ImageView
                                     android:layout_width="@dimen/list_item_shimmer_location_icon_size"
                                     android:layout_height="@dimen/list_item_shimmer_location_icon_size"
-                                    android:background="@color/custom_toast_font_normal_soft_gray"
+                                    android:background="@color/skeleton"
                                     tools:ignore="ContentDescription" />
 
                                 <TextView
@@ -421,8 +421,8 @@
                                     android:layout_height="wrap_content"
                                     android:layout_marginStart="@dimen/dialog_margin"
                                     android:layout_weight="1"
-                                    android:background="@color/custom_toast_font_normal_soft_gray"
-                                    android:textColor="@color/custom_toast_font_normal_soft_gray"
+                                    android:background="@color/skeleton"
+                                    android:textColor="@color/ink_faint"
                                     tools:text="IT" />
                             </LinearLayout>
 
@@ -437,7 +437,7 @@
                                 <ImageView
                                     android:layout_width="@dimen/list_item_shimmer_location_icon_size"
                                     android:layout_height="@dimen/list_item_shimmer_location_icon_size"
-                                    android:background="@color/custom_toast_font_normal_soft_gray"
+                                    android:background="@color/skeleton"
                                     tools:ignore="ContentDescription" />
 
                                 <TextView
@@ -445,8 +445,8 @@
                                     android:layout_height="wrap_content"
                                     android:layout_marginStart="@dimen/dialog_margin"
                                     android:layout_weight="1"
-                                    android:background="@color/custom_toast_font_normal_soft_gray"
-                                    android:textColor="@color/custom_toast_font_normal_soft_gray"
+                                    android:background="@color/skeleton"
+                                    android:textColor="@color/ink_faint"
                                     tools:text="2024-07-15 11:02:03" />
                             </LinearLayout>
 
@@ -461,7 +461,7 @@
                                 <ImageView
                                     android:layout_width="@dimen/list_item_shimmer_location_icon_size"
                                     android:layout_height="@dimen/list_item_shimmer_location_icon_size"
-                                    android:background="@color/custom_toast_font_normal_soft_gray"
+                                    android:background="@color/skeleton"
                                     tools:ignore="ContentDescription" />
 
                                 <TextView
@@ -469,8 +469,8 @@
                                     android:layout_height="wrap_content"
                                     android:layout_marginStart="@dimen/dialog_margin"
                                     android:layout_weight="1"
-                                    android:background="@color/custom_toast_font_normal_soft_gray"
-                                    android:textColor="@color/custom_toast_font_normal_soft_gray"
+                                    android:background="@color/skeleton"
+                                    android:textColor="@color/ink_faint"
                                     tools:text="ERELA HQ" />
                             </LinearLayout>
 
@@ -485,7 +485,7 @@
                                     android:layout_width="@dimen/list_item_shimmer_location_icon_size"
                                     android:layout_height="@dimen/list_item_shimmer_location_icon_size"
                                     android:layout_gravity="center"
-                                    android:background="@color/custom_toast_font_normal_soft_gray"
+                                    android:background="@color/skeleton"
                                     tools:ignore="ContentDescription" />
 
                                 <LinearLayout
@@ -502,9 +502,9 @@
                                         <TextView
                                             android:layout_width="wrap_content"
                                             android:layout_height="wrap_content"
-                                            android:background="@color/custom_toast_font_normal_soft_gray"
+                                            android:background="@color/skeleton"
                                             android:text="@string/submission_report_manager_time_approve"
-                                            android:textColor="@color/custom_toast_font_normal_soft_gray"
+                                            android:textColor="@color/ink_faint"
                                             tools:ignore="TooDeepLayout" />
 
                                         <TextView
@@ -512,8 +512,8 @@
                                             android:layout_height="wrap_content"
                                             android:layout_gravity="center_vertical"
                                             android:layout_marginStart="@dimen/dialog_loading_content_padding"
-                                            android:background="@color/custom_toast_font_normal_soft_gray"
-                                            android:textColor="@color/custom_toast_font_normal_soft_gray"
+                                            android:background="@color/skeleton"
+                                            android:textColor="@color/ink_faint"
                                             tools:text="2024-07-15 10:44:00" />
                                     </LinearLayout>
 
@@ -526,9 +526,9 @@
                                             android:layout_width="wrap_content"
                                             android:layout_height="wrap_content"
                                             android:layout_marginTop="2dp"
-                                            android:background="@color/custom_toast_font_normal_soft_gray"
+                                            android:background="@color/skeleton"
                                             android:text="@string/submission_target_manager_time_approve"
-                                            android:textColor="@color/custom_toast_font_normal_soft_gray"
+                                            android:textColor="@color/ink_faint"
                                             tools:ignore="TooDeepLayout" />
 
                                         <TextView
@@ -536,8 +536,8 @@
                                             android:layout_height="wrap_content"
                                             android:layout_gravity="center_vertical"
                                             android:layout_marginStart="@dimen/dialog_loading_content_padding"
-                                            android:background="@color/custom_toast_font_normal_soft_gray"
-                                            android:textColor="@color/custom_toast_font_normal_soft_gray"
+                                            android:background="@color/skeleton"
+                                            android:textColor="@color/ink_faint"
                                             tools:text="2024-07-15 10:44:00" />
                                     </LinearLayout>
 
@@ -550,17 +550,17 @@
                                             android:layout_width="wrap_content"
                                             android:layout_height="wrap_content"
                                             android:layout_marginTop="2dp"
-                                            android:background="@color/custom_toast_font_normal_soft_gray"
+                                            android:background="@color/skeleton"
                                             android:text="@string/submission_start_working"
-                                            android:textColor="@color/custom_toast_font_normal_soft_gray" />
+                                            android:textColor="@color/ink_faint" />
 
                                         <TextView
                                             android:layout_width="wrap_content"
                                             android:layout_height="wrap_content"
                                             android:layout_marginStart="@dimen/dialog_loading_content_padding"
                                             android:layout_marginTop="2dp"
-                                            android:background="@color/custom_toast_font_normal_soft_gray"
-                                            android:textColor="@color/custom_toast_font_normal_soft_gray"
+                                            android:background="@color/skeleton"
+                                            android:textColor="@color/ink_faint"
                                             tools:text="2024-07-15 10:44:00" />
                                     </LinearLayout>
 
@@ -573,17 +573,17 @@
                                             android:layout_width="wrap_content"
                                             android:layout_height="wrap_content"
                                             android:layout_marginTop="2dp"
-                                            android:background="@color/custom_toast_font_normal_soft_gray"
+                                            android:background="@color/skeleton"
                                             android:text="@string/submission_end_working"
-                                            android:textColor="@color/custom_toast_font_normal_soft_gray" />
+                                            android:textColor="@color/ink_faint" />
 
                                         <TextView
                                             android:layout_width="wrap_content"
                                             android:layout_height="wrap_content"
                                             android:layout_marginStart="@dimen/dialog_loading_content_padding"
                                             android:layout_marginTop="2dp"
-                                            android:background="@color/custom_toast_font_normal_soft_gray"
-                                            android:textColor="@color/custom_toast_font_normal_soft_gray"
+                                            android:background="@color/skeleton"
+                                            android:textColor="@color/ink_faint"
                                             tools:text="2024-07-15 10:44:00" />
                                     </LinearLayout>
                                 </LinearLayout>
@@ -601,7 +601,7 @@
                                     android:layout_width="@dimen/list_item_shimmer_location_icon_size"
                                     android:layout_height="@dimen/list_item_shimmer_location_icon_size"
                                     android:layout_gravity="center"
-                                    android:background="@color/custom_toast_font_normal_soft_gray"
+                                    android:background="@color/skeleton"
                                     tools:ignore="ContentDescription" />
 
                                 <LinearLayout
@@ -619,8 +619,8 @@
                                         <TextView
                                             android:layout_width="match_parent"
                                             android:layout_height="wrap_content"
-                                            android:background="@color/custom_toast_font_normal_soft_gray"
-                                            android:textColor="@color/custom_toast_font_normal_soft_gray"
+                                            android:background="@color/skeleton"
+                                            android:textColor="@color/ink_faint"
                                             android:textStyle="bold"
                                             tools:text="Approved by" />
 
@@ -628,8 +628,8 @@
                                             android:layout_width="match_parent"
                                             android:layout_height="wrap_content"
                                             android:layout_marginTop="2dp"
-                                            android:background="@color/custom_toast_font_normal_soft_gray"
-                                            android:textColor="@color/custom_toast_font_normal_soft_gray"
+                                            android:background="@color/skeleton"
+                                            android:textColor="@color/ink_faint"
                                             tools:text="Yunanto Widinugroho" />
                                     </LinearLayout>
 
@@ -642,9 +642,9 @@
                                         <TextView
                                             android:layout_width="match_parent"
                                             android:layout_height="wrap_content"
-                                            android:background="@color/custom_toast_font_normal_soft_gray"
+                                            android:background="@color/skeleton"
                                             android:text="Supervisors"
-                                            android:textColor="@color/custom_toast_font_normal_soft_gray"
+                                            android:textColor="@color/ink_faint"
                                             android:textStyle="bold"
                                             tools:ignore="HardcodedText" />
 
@@ -652,8 +652,8 @@
                                             android:layout_width="match_parent"
                                             android:layout_height="wrap_content"
                                             android:layout_marginTop="2dp"
-                                            android:background="@color/custom_toast_font_normal_soft_gray"
-                                            android:textColor="@color/custom_toast_font_normal_soft_gray"
+                                            android:background="@color/skeleton"
+                                            android:textColor="@color/ink_faint"
                                             tools:text="Riky Dwi Cahya\nLianto Budi Setiawan" />
                                     </LinearLayout>
 
@@ -667,9 +667,9 @@
                                         <TextView
                                             android:layout_width="match_parent"
                                             android:layout_height="wrap_content"
-                                            android:background="@color/custom_toast_font_normal_soft_gray"
+                                            android:background="@color/skeleton"
                                             android:text="Technicians"
-                                            android:textColor="@color/custom_toast_font_normal_soft_gray"
+                                            android:textColor="@color/ink_faint"
                                             android:textStyle="bold"
                                             tools:ignore="HardcodedText" />
 
@@ -677,8 +677,8 @@
                                             android:layout_width="match_parent"
                                             android:layout_height="wrap_content"
                                             android:layout_marginTop="2dp"
-                                            android:background="@color/custom_toast_font_normal_soft_gray"
-                                            android:textColor="@color/custom_toast_font_normal_soft_gray"
+                                            android:background="@color/skeleton"
+                                            android:textColor="@color/ink_faint"
                                             tools:text="Eko Prasetyo\nFatnur Ali Ustadzi" />
                                     </LinearLayout>
                                 </LinearLayout>
@@ -701,7 +701,7 @@
                             android:layout_height="@dimen/submission_detail_image_height"
                             android:layout_gravity="center"
                             android:layout_margin="@dimen/dialog_margin"
-                            app:cardBackgroundColor="@color/white"
+                            app:cardBackgroundColor="@color/surface"
                             app:cardCornerRadius="@dimen/list_item_progress_card_corner_radius"
                             app:cardElevation="@dimen/dialog_elevation"
                             tools:visibility="gone">
@@ -736,7 +736,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginHorizontal="@dimen/activity_horizontal_margin"
                             android:layout_marginTop="@dimen/user_info_item_margin_top"
-                            android:textColor="@color/black"
+                            android:textColor="@color/ink"
                             android:textSize="@dimen/text_size_medium"
                             android:textStyle="bold"
                             tools:ignore="TooManyViews"
@@ -829,7 +829,7 @@
                             android:layout_marginHorizontal="@dimen/activity_horizontal_margin"
                             android:layout_marginTop="@dimen/dialog_margin"
                             android:text="@string/submission_description"
-                            android:textColor="@color/black"
+                            android:textColor="@color/ink"
                             android:textSize="@dimen/text_size_medium"
                             android:textStyle="bold" />
 
@@ -838,7 +838,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginHorizontal="@dimen/activity_horizontal_margin"
-                            android:textColor="@color/black"
+                            android:textColor="@color/ink"
                             android:textSize="@dimen/text_size_small"
                             tools:text="@tools:sample/lorem" />
 
@@ -881,7 +881,7 @@
                                     android:id="@+id/machineCode"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:textColor="@color/black"
+                                    android:textColor="@color/ink"
                                     android:textSize="@dimen/text_size_small"
                                     android:textStyle="bold"
                                     tools:text="D-14" />
@@ -890,7 +890,7 @@
                                     android:id="@+id/machineName"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:textColor="@color/black"
+                                    android:textColor="@color/ink"
                                     android:textSize="@dimen/text_size_small"
                                     android:textStyle="bold"
                                     tools:text="Autoclave E-Chung" />
@@ -917,7 +917,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_marginStart="@dimen/dialog_margin"
                                 android:layout_weight="1"
-                                android:textColor="@color/black"
+                                android:textColor="@color/ink"
                                 android:textSize="@dimen/text_size_small"
                                 tools:text="Hendrick\nFrom Information Technology Department" />
                         </LinearLayout>
@@ -942,7 +942,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_marginStart="@dimen/dialog_margin"
                                 android:layout_weight="1"
-                                android:textColor="@color/black"
+                                android:textColor="@color/ink"
                                 android:textSize="@dimen/text_size_small"
                                 tools:text="Engineering" />
                         </LinearLayout>
@@ -959,7 +959,7 @@
                             <ImageView
                                 android:layout_width="@dimen/list_item_shimmer_location_icon_size"
                                 android:layout_height="@dimen/list_item_shimmer_location_icon_size"
-                                android:src="@drawable/category_icon"
+                                android:src="@drawable/baseline_category_24"
                                 tools:ignore="ContentDescription" />
 
                             <TextView
@@ -968,7 +968,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_marginStart="@dimen/dialog_margin"
                                 android:layout_weight="1"
-                                android:textColor="@color/black"
+                                android:textColor="@color/ink"
                                 android:textSize="@dimen/text_size_small"
                                 tools:text="IT" />
 
@@ -1002,7 +1002,7 @@
                                         android:layout_height="wrap_content"
                                         android:layout_marginStart="4dp"
                                         android:text="@string/action_edit"
-                                        android:textColor="@color/black"
+                                        android:textColor="@color/ink"
                                         android:textSize="@dimen/text_size_small"
                                         android:textStyle="bold" />
                                 </LinearLayout>
@@ -1029,7 +1029,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_marginStart="@dimen/dialog_margin"
                                 android:layout_weight="1"
-                                android:textColor="@color/black"
+                                android:textColor="@color/ink"
                                 android:textSize="@dimen/text_size_small"
                                 tools:text="2024-07-15 11:02:03" />
                         </LinearLayout>
@@ -1054,7 +1054,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_marginStart="@dimen/dialog_margin"
                                 android:layout_weight="1"
-                                android:textColor="@color/black"
+                                android:textColor="@color/ink"
                                 android:textSize="@dimen/text_size_small"
                                 tools:text="ERELA HQ" />
                         </LinearLayout>
@@ -1133,7 +1133,7 @@
                                         android:layout_height="match_parent"
                                         android:layout_marginStart="@dimen/dialog_loading_content_padding"
                                         android:gravity="center_vertical"
-                                        android:textColor="@color/black"
+                                        android:textColor="@color/ink"
                                         android:textSize="@dimen/text_size_small"
                                         tools:text="2024-07-15 10:44:00" />
                                 </LinearLayout>
@@ -1156,7 +1156,7 @@
                                         android:layout_height="match_parent"
                                         android:layout_marginStart="@dimen/dialog_loading_content_padding"
                                         android:gravity="center_vertical"
-                                        android:textColor="@color/black"
+                                        android:textColor="@color/ink"
                                         android:textSize="@dimen/text_size_small"
                                         tools:text="2024-07-15 10:44:00" />
                                 </LinearLayout>
@@ -1177,7 +1177,7 @@
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
                                         android:layout_marginStart="@dimen/dialog_loading_content_padding"
-                                        android:textColor="@color/black"
+                                        android:textColor="@color/ink"
                                         android:textSize="@dimen/text_size_small"
                                         tools:text="2024-07-15 10:44:00" />
                                 </LinearLayout>
@@ -1198,7 +1198,7 @@
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
                                         android:layout_marginStart="@dimen/dialog_loading_content_padding"
-                                        android:textColor="@color/black"
+                                        android:textColor="@color/ink"
                                         android:textSize="@dimen/text_size_small"
                                         tools:text="2024-07-15 10:44:00" />
                                 </LinearLayout>
@@ -1217,7 +1217,7 @@
                                 android:layout_width="@dimen/list_item_shimmer_location_icon_size"
                                 android:layout_height="@dimen/list_item_shimmer_location_icon_size"
                                 android:layout_gravity="center"
-                                android:src="@drawable/pic_icon"
+                                android:src="@drawable/outline_groups_24"
                                 tools:ignore="ContentDescription" />
 
                             <LinearLayout
@@ -1236,7 +1236,7 @@
                                         android:id="@+id/userApprovedOrRejectedTitle"
                                         android:layout_width="match_parent"
                                         android:layout_height="wrap_content"
-                                        android:textColor="@color/black"
+                                        android:textColor="@color/ink"
                                         android:textSize="@dimen/text_size_small"
                                         android:textStyle="bold"
                                         tools:text="Approved by" />
@@ -1259,7 +1259,7 @@
                                         android:id="@+id/userSupervisorsTitle"
                                         android:layout_width="match_parent"
                                         android:layout_height="wrap_content"
-                                        android:textColor="@color/black"
+                                        android:textColor="@color/ink"
                                         android:textSize="@dimen/text_size_small"
                                         android:textStyle="bold"
                                         tools:text="Supervisors" />
@@ -1289,7 +1289,7 @@
                                             android:id="@+id/userTechniciansTitle"
                                             android:layout_width="match_parent"
                                             android:layout_height="wrap_content"
-                                            android:textColor="@color/black"
+                                            android:textColor="@color/ink"
                                             android:textSize="@dimen/text_size_small"
                                             android:textStyle="bold"
                                             tools:text="Technicians" />
@@ -1332,7 +1332,7 @@
                                                 android:layout_height="wrap_content"
                                                 android:layout_marginStart="4dp"
                                                 android:text="@string/action_edit"
-                                                android:textColor="@color/black"
+                                                android:textColor="@color/ink"
                                                 android:textSize="@dimen/text_size_small"
                                                 android:textStyle="bold" />
                                         </LinearLayout>
@@ -1450,7 +1450,7 @@
                 android:layout_marginVertical="@dimen/activity_horizontal_margin"
                 android:layout_marginEnd="@dimen/activity_horizontal_margin"
                 android:visibility="gone"
-                app:cardBackgroundColor="@color/status_on_trial"
+                app:cardBackgroundColor="@color/status_on_trial_fill"
                 app:cardCornerRadius="@dimen/login_button_corner_radius"
                 app:cardElevation="@dimen/card_elevation"
                 app:cardPreventCornerOverlap="false"

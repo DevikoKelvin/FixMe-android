@@ -5,14 +5,14 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#FDFDFD"
+    android:background="@color/surface_alt"
     tools:context=".activities.ChangeEmailActivity">
 
     <RelativeLayout
         android:id="@+id/toolBar"
         android:layout_width="match_parent"
         android:layout_height="@dimen/toolbar_height"
-        android:background="@color/white"
+        android:background="@color/surface"
         android:elevation="@dimen/card_elevation"
         android:theme="?attr/actionBarTheme"
         app:layout_constraintEnd_toEndOf="parent"
@@ -44,7 +44,7 @@
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
             android:text="@string/change_email_title"
-            android:textColor="@color/black"
+            android:textColor="@color/ink"
             android:textSize="@dimen/text_size_medium"
             android:textStyle="bold" />
     </RelativeLayout>
@@ -64,7 +64,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/old_email_title"
-            android:textColor="@color/black"
+            android:textColor="@color/ink"
             android:textSize="@dimen/text_size_small"
             android:textStyle="bold" />
 
@@ -89,11 +89,11 @@
             app:boxCornerRadiusBottomStart="25dp"
             app:boxCornerRadiusTopEnd="25dp"
             app:boxCornerRadiusTopStart="25dp"
-            app:boxStrokeColor="@color/black"
+            app:boxStrokeColor="@color/text_field_stroke"
             app:boxStrokeWidth="2dp"
             app:expandedHintEnabled="true"
             app:hintAnimationEnabled="true"
-            app:hintTextColor="@color/black">
+            app:hintTextColor="@color/ink">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/newEmailField"
@@ -114,11 +114,11 @@
             app:boxCornerRadiusBottomStart="25dp"
             app:boxCornerRadiusTopEnd="25dp"
             app:boxCornerRadiusTopStart="25dp"
-            app:boxStrokeColor="@color/black"
+            app:boxStrokeColor="@color/text_field_stroke"
             app:boxStrokeWidth="2dp"
             app:expandedHintEnabled="true"
             app:hintAnimationEnabled="true"
-            app:hintTextColor="@color/black"
+            app:hintTextColor="@color/ink"
             app:passwordToggleEnabled="true">
 
             <com.google.android.material.textfield.TextInputEditText

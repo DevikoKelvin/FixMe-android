@@ -5,7 +5,7 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#FDFDFD"
+    android:background="@color/surface_alt"
     tools:context=".activities.LoginActivity">
 
     <ImageView
@@ -45,7 +45,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/app_name"
-                android:textColor="@color/black"
+                android:textColor="@color/ink"
                 android:textSize="@dimen/text_size_xxlarge"
                 android:textStyle="bold"
                 app:layout_constraintBottom_toTopOf="@+id/linearLayout"
@@ -59,17 +59,17 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginVertical="@dimen/activity_vertical_margin"
-                android:background="@color/white"
+                android:background="@color/surface"
                 android:hint="@string/username_title"
                 app:boxCornerRadiusBottomEnd="@dimen/login_field_corner_radius"
                 app:boxCornerRadiusBottomStart="@dimen/login_field_corner_radius"
                 app:boxCornerRadiusTopEnd="@dimen/login_field_corner_radius"
                 app:boxCornerRadiusTopStart="@dimen/login_field_corner_radius"
-                app:boxStrokeColor="@color/black"
+                app:boxStrokeColor="@color/text_field_stroke"
                 app:boxStrokeWidth="@dimen/login_field_stroke_width"
                 app:expandedHintEnabled="true"
                 app:hintAnimationEnabled="true"
-                app:hintTextColor="@color/black">
+                app:hintTextColor="@color/ink">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/usernameField"
@@ -84,17 +84,17 @@
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/white"
+                android:background="@color/surface"
                 android:hint="@string/password_title"
                 app:boxCornerRadiusBottomEnd="@dimen/login_field_corner_radius"
                 app:boxCornerRadiusBottomStart="@dimen/login_field_corner_radius"
                 app:boxCornerRadiusTopEnd="@dimen/login_field_corner_radius"
                 app:boxCornerRadiusTopStart="@dimen/login_field_corner_radius"
-                app:boxStrokeColor="@color/black"
+                app:boxStrokeColor="@color/text_field_stroke"
                 app:boxStrokeWidth="@dimen/login_field_stroke_width"
                 app:expandedHintEnabled="true"
                 app:hintAnimationEnabled="true"
-                app:hintTextColor="@color/black"
+                app:hintTextColor="@color/ink"
                 app:passwordToggleEnabled="true">
 
                 <com.google.android.material.textfield.TextInputEditText

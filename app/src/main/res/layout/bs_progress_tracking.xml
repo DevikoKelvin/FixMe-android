@@ -14,7 +14,7 @@
         android:layout_height="@dimen/bottom_sheet_drawer_height"
         android:layout_gravity="center"
         android:layout_marginTop="@dimen/bottom_sheet_drawer_margin_vertical"
-        app:cardBackgroundColor="@color/custom_toast_font_normal_soft_gray"
+        app:cardBackgroundColor="@color/ink_faint"
         app:cardCornerRadius="@dimen/login_button_corner_radius"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -29,7 +29,7 @@
         android:layout_marginTop="@dimen/bottom_sheet_drawer_margin_vertical"
         android:text="@string/progress_tracking"
         android:textAlignment="center"
-        android:textColor="@color/black"
+        android:textColor="@color/ink"
         android:textSize="@dimen/text_size_large"
         android:textStyle="bold" />
 

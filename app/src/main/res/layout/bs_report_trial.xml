@@ -14,7 +14,7 @@
         android:layout_height="@dimen/bottom_sheet_drawer_height"
         android:layout_gravity="center"
         android:layout_marginTop="@dimen/bottom_sheet_drawer_margin_vertical"
-        app:cardBackgroundColor="@color/custom_toast_font_normal_soft_gray"
+        app:cardBackgroundColor="@color/ink_faint"
         app:cardCornerRadius="@dimen/login_button_corner_radius"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -28,7 +28,7 @@
         android:layout_marginTop="@dimen/bottom_sheet_drawer_margin_vertical"
         android:text="@string/report_trial"
         android:textAlignment="center"
-        android:textColor="@color/black"
+        android:textColor="@color/ink"
         android:textSize="@dimen/text_size_large"
         android:textStyle="bold" />
 
@@ -44,11 +44,11 @@
         app:boxCornerRadiusBottomStart="@dimen/login_field_corner_radius"
         app:boxCornerRadiusTopEnd="@dimen/login_field_corner_radius"
         app:boxCornerRadiusTopStart="@dimen/login_field_corner_radius"
-        app:boxStrokeColor="@color/black"
+        app:boxStrokeColor="@color/text_field_stroke"
         app:boxStrokeWidth="@dimen/login_field_stroke_width"
         app:expandedHintEnabled="true"
         app:hintAnimationEnabled="true"
-        app:hintTextColor="@color/black">
+        app:hintTextColor="@color/ink">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/descriptionField"
@@ -76,7 +76,7 @@
             android:layout_marginEnd="@dimen/dialog_loading_content_padding"
             android:layout_weight="1"
             android:visibility="visible"
-            app:cardBackgroundColor="@color/white"
+            app:cardBackgroundColor="@color/surface"
             app:cardCornerRadius="@dimen/login_button_corner_radius"
             app:strokeWidth="0dp">
 

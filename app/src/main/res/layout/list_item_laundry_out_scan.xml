@@ -15,7 +15,7 @@
     android:layout_height="wrap_content"
     android:layout_marginHorizontal="@dimen/list_item_submission_margin_horizontal"
     android:layout_marginVertical="@dimen/list_item_submission_margin_vertical"
-    app:cardBackgroundColor="#FBFBFB"
+    app:cardBackgroundColor="@color/surface_card"
     app:cardCornerRadius="@dimen/list_item_progress_card_corner_radius"
     app:cardElevation="@dimen/list_item_progress_card_elevation"
     app:strokeWidth="0dp">
@@ -42,7 +42,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:fontFamily="monospace"
-            android:textColor="@color/black"
+            android:textColor="@color/ink"
             android:textSize="@dimen/text_size_large"
             android:textStyle="bold"
             tools:text="000123" />

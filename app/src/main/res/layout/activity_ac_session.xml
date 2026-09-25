@@ -5,14 +5,14 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#FDFDFD"
+    android:background="@color/surface_alt"
     tools:context=".activities.AcSessionActivity">
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolBar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
-        android:background="@color/white"
+        android:background="@color/surface"
         android:elevation="4dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -25,7 +25,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:text="@string/maintenance_session_title"
-            android:textColor="@color/black"
+            android:textColor="@color/ink"
             android:textSize="18sp"
             android:textStyle="bold" />
     </androidx.appcompat.widget.Toolbar>
@@ -70,7 +70,7 @@
                     android:layout_marginHorizontal="@dimen/activity_horizontal_margin"
                     android:layout_marginTop="@dimen/user_info_item_margin_top"
                     android:text="@string/assistant_technician"
-                    android:textColor="@color/black"
+                    android:textColor="@color/ink"
                     android:textSize="@dimen/text_size_small"
                     android:textStyle="bold" />
 
@@ -100,7 +100,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginHorizontal="@dimen/activity_horizontal_margin"
                     android:text="@string/session_team"
-                    android:textColor="@color/black"
+                    android:textColor="@color/ink"
                     android:textSize="@dimen/text_size_small"
                     android:textStyle="bold" />
 
@@ -124,7 +124,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="@string/lead_technician"
-                            android:textColor="@color/black"
+                            android:textColor="@color/ink"
                             android:textSize="12sp"
                             android:textStyle="bold" />
 
@@ -133,7 +133,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="2dp"
-                            android:textColor="@color/black"
+                            android:textColor="@color/ink"
                             android:textSize="@dimen/text_size_small"
                             tools:text="John Doe" />
 
@@ -141,13 +141,13 @@
                             android:layout_width="match_parent"
                             android:layout_height="1dp"
                             android:layout_marginVertical="8dp"
-                            android:background="#E0E0E0" />
+                            android:background="@color/divider" />
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="@string/assistant_technician"
-                            android:textColor="@color/black"
+                            android:textColor="@color/ink"
                             android:textSize="12sp"
                             android:textStyle="bold" />
 
@@ -156,7 +156,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="2dp"
-                            android:textColor="@color/black"
+                            android:textColor="@color/ink"
                             android:textSize="@dimen/text_size_small"
                             tools:text="Jane Smith, Bob Lee" />
                     </LinearLayout>
@@ -168,7 +168,7 @@
                 android:layout_height="1dp"
                 android:layout_marginHorizontal="@dimen/activity_horizontal_margin"
                 android:layout_marginTop="@dimen/user_info_item_margin_top"
-                android:background="#E0E0E0" />
+                android:background="@color/divider" />
 
             <!-- AC Condition -->
             <TextView
@@ -177,7 +177,7 @@
                 android:layout_marginHorizontal="@dimen/activity_horizontal_margin"
                 android:layout_marginTop="@dimen/user_info_item_margin_top"
                 android:text="@string/ac_condition"
-                android:textColor="@color/black"
+                android:textColor="@color/ink"
                 android:textSize="@dimen/text_size_small"
                 android:textStyle="bold" />
 
@@ -233,11 +233,11 @@
                 app:boxCornerRadiusBottomStart="@dimen/login_field_corner_radius"
                 app:boxCornerRadiusTopEnd="@dimen/login_field_corner_radius"
                 app:boxCornerRadiusTopStart="@dimen/login_field_corner_radius"
-                app:boxStrokeColor="@color/black"
+                app:boxStrokeColor="@color/text_field_stroke"
                 app:boxStrokeWidth="@dimen/login_field_stroke_width"
                 app:expandedHintEnabled="true"
                 app:hintAnimationEnabled="true"
-                app:hintTextColor="@color/black">
+                app:hintTextColor="@color/ink">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/etFindings"
@@ -271,11 +271,11 @@
                 app:boxCornerRadiusBottomStart="@dimen/login_field_corner_radius"
                 app:boxCornerRadiusTopEnd="@dimen/login_field_corner_radius"
                 app:boxCornerRadiusTopStart="@dimen/login_field_corner_radius"
-                app:boxStrokeColor="@color/black"
+                app:boxStrokeColor="@color/text_field_stroke"
                 app:boxStrokeWidth="@dimen/login_field_stroke_width"
                 app:expandedHintEnabled="true"
                 app:hintAnimationEnabled="true"
-                app:hintTextColor="@color/black">
+                app:hintTextColor="@color/ink">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/etActions"
@@ -293,7 +293,7 @@
                 android:layout_marginHorizontal="@dimen/activity_horizontal_margin"
                 android:layout_marginTop="@dimen/user_info_item_margin_top"
                 android:text="@string/photos_required"
-                android:textColor="@color/black"
+                android:textColor="@color/ink"
                 android:textSize="@dimen/text_size_small"
                 android:textStyle="bold" />
 
@@ -355,11 +355,11 @@
                 app:boxCornerRadiusBottomStart="@dimen/login_field_corner_radius"
                 app:boxCornerRadiusTopEnd="@dimen/login_field_corner_radius"
                 app:boxCornerRadiusTopStart="@dimen/login_field_corner_radius"
-                app:boxStrokeColor="@color/black"
+                app:boxStrokeColor="@color/text_field_stroke"
                 app:boxStrokeWidth="@dimen/login_field_stroke_width"
                 app:expandedHintEnabled="true"
                 app:hintAnimationEnabled="true"
-                app:hintTextColor="@color/black">
+                app:hintTextColor="@color/ink">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/etWitnessName"
@@ -382,7 +382,7 @@
                     android:layout_gravity="center"
                     android:layout_weight="1"
                     android:text="@string/witness_signature"
-                    android:textColor="@color/black"
+                    android:textColor="@color/ink"
                     android:textSize="@dimen/text_size_small"
                     android:textStyle="bold" />
 
@@ -411,7 +411,7 @@
                             android:layout_gravity="center"
                             android:layout_marginEnd="4dp"
                             android:text="@string/clear_signature"
-                            android:textColor="@color/black"
+                            android:textColor="@color/ink"
                             android:textSize="@dimen/text_size_small" />
 
                         <ImageView
@@ -439,7 +439,7 @@
                     android:id="@+id/signaturePreviewContainer"
                     android:layout_width="0dp"
                     android:layout_height="0dp"
-                    app:cardBackgroundColor="@color/white"
+                    app:cardBackgroundColor="@color/surface"
                     app:cardCornerRadius="25dp"
                     app:cardElevation="0dp"
                     app:layout_constraintBottom_toBottomOf="parent"
@@ -469,7 +469,7 @@
                         android:gravity="center"
                         android:paddingHorizontal="24dp"
                         android:text="@string/witness_sign_button"
-                        android:textColor="@color/black"
+                        android:textColor="@color/ink"
                         android:textSize="@dimen/text_size_small"
                         android:textStyle="bold" />
                 </com.google.android.material.card.MaterialCardView>

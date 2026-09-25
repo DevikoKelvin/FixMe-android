@@ -6,7 +6,7 @@
     android:layout_height="wrap_content"
     android:layout_marginHorizontal="@dimen/activity_horizontal_margin"
     android:layout_marginVertical="@dimen/dialog_margin"
-    app:cardBackgroundColor="#FBFBFB"
+    app:cardBackgroundColor="@color/surface_card"
     app:cardCornerRadius="@dimen/dialog_corner_radius"
     app:cardElevation="@dimen/card_elevation"
     app:strokeWidth="0dp">
@@ -20,7 +20,7 @@
             android:id="@+id/usernameText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/custom_toast_font_normal_soft_gray"
+            android:background="@color/skeleton"
             android:paddingHorizontal="@dimen/list_item_padding"
             android:paddingVertical="@dimen/dialog_margin" />
 
@@ -30,14 +30,14 @@
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="@dimen/list_item_padding"
             android:layout_marginVertical="@dimen/dialog_margin"
-            android:background="@color/custom_toast_font_normal_soft_gray"
-            android:textColor="@color/custom_toast_font_normal_soft_gray"
+            android:background="@color/skeleton"
+            android:textColor="@color/skeleton"
             tools:text="@tools:sample/lorem" />
 
         <View
             android:layout_width="match_parent"
             android:layout_height="@dimen/dialog_divider_height"
-            android:background="@color/custom_toast_font_normal_soft_gray" />
+            android:background="@color/skeleton" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -57,9 +57,9 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="@color/custom_toast_font_normal_soft_gray"
+                    android:background="@color/skeleton"
                     android:text="@string/inbox_sent"
-                    android:textColor="@color/custom_toast_font_normal_soft_gray"
+                    android:textColor="@color/skeleton"
                     android:textStyle="bold" />
 
                 <TextView
@@ -67,8 +67,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/dialog_elevation"
-                    android:background="@color/custom_toast_font_normal_soft_gray"
-                    android:textColor="@color/custom_toast_font_normal_soft_gray"
+                    android:background="@color/skeleton"
+                    android:textColor="@color/skeleton"
                     android:textSize="@dimen/copyright_text_size" />
             </LinearLayout>
 
@@ -82,10 +82,10 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="@color/custom_toast_font_normal_soft_gray"
+                    android:background="@color/skeleton"
                     android:text="@string/inbox_read"
                     android:textAlignment="textEnd"
-                    android:textColor="@color/custom_toast_font_normal_soft_gray"
+                    android:textColor="@color/skeleton"
                     android:textStyle="bold" />
 
                 <TextView
@@ -93,9 +93,9 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/dialog_elevation"
-                    android:background="@color/custom_toast_font_normal_soft_gray"
+                    android:background="@color/skeleton"
                     android:textAlignment="textEnd"
-                    android:textColor="@color/custom_toast_font_normal_soft_gray"
+                    android:textColor="@color/skeleton"
                     android:textSize="@dimen/copyright_text_size" />
             </LinearLayout>
         </LinearLayout>

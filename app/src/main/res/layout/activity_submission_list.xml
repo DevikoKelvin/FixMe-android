@@ -5,14 +5,14 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#FDFDFD"
+    android:background="@color/surface_alt"
     tools:context=".activities.SubmissionListActivity">
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolBar"
         android:layout_width="match_parent"
         android:layout_height="@dimen/toolbar_height"
-        android:background="@color/white"
+        android:background="@color/surface"
         android:elevation="@dimen/dialog_margin"
         android:theme="?attr/actionBarTheme"
         app:buttonGravity="center_vertical"
@@ -28,7 +28,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:text="@string/submission_list_title"
-            android:textColor="@color/black"
+            android:textColor="@color/ink"
             android:textSize="@dimen/text_size_medium"
             android:textStyle="bold" />
     </androidx.appcompat.widget.Toolbar>
@@ -48,7 +48,7 @@
             android:layout_marginHorizontal="@dimen/activity_horizontal_margin"
             android:layout_marginTop="@dimen/dialog_message_margin_vertical"
             android:text="@string/department_title"
-            android:textColor="@color/black"
+            android:textColor="@color/ink"
             android:textSize="@dimen/text_size_medium"
             android:textStyle="bold" />
 
@@ -59,7 +59,7 @@
             android:layout_marginHorizontal="@dimen/activity_horizontal_margin"
             android:layout_marginTop="@dimen/dialog_margin"
             android:layout_marginBottom="@dimen/dialog_margin"
-            app:cardBackgroundColor="@color/white"
+            app:cardBackgroundColor="@color/surface"
             app:cardCornerRadius="@dimen/main_menu_item_icon_size"
             app:cardElevation="@dimen/list_item_progress_content_margin_top_small"
             app:contentPaddingBottom="@dimen/list_item_progress_content_margin_top_small"
@@ -86,7 +86,7 @@
             android:layout_marginHorizontal="@dimen/activity_horizontal_margin"
             android:layout_marginBottom="@dimen/dialog_margin"
             android:visibility="visible"
-            app:cardBackgroundColor="@color/white"
+            app:cardBackgroundColor="@color/surface"
             app:cardCornerRadius="@dimen/main_menu_item_icon_size"
             app:cardElevation="0dp"
             app:contentPaddingBottom="@dimen/list_item_progress_content_margin_top_small"

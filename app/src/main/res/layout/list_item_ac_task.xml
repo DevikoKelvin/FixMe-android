@@ -7,7 +7,7 @@
     android:layout_height="wrap_content"
     android:layout_marginHorizontal="@dimen/list_item_submission_margin_horizontal"
     android:layout_marginVertical="@dimen/list_item_submission_margin_vertical"
-    app:cardBackgroundColor="#FBFBFB"
+    app:cardBackgroundColor="@color/surface_card"
     app:cardCornerRadius="@dimen/list_item_progress_card_corner_radius"
     app:cardElevation="@dimen/list_item_progress_card_elevation"
     app:strokeWidth="0dp">
@@ -143,7 +143,7 @@
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="@dimen/list_item_submission_machine_info_padding_horizontal"
             android:layout_marginBottom="@dimen/list_item_submission_description_padding_vertical"
-            android:background="#FFF8E1"
+            android:background="@color/tint_amber"
             android:orientation="vertical"
             android:paddingHorizontal="@dimen/list_item_submission_description_padding_horizontal"
             android:paddingVertical="@dimen/list_item_submission_description_padding_vertical"
@@ -154,7 +154,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/schedule_note"
-                android:textColor="#8A6D00"
+                android:textColor="@color/ink_amber"
                 android:textSize="@dimen/text_size_micro"
                 android:textStyle="bold" />
 
@@ -162,7 +162,7 @@
                 android:id="@+id/tvScheduleNote"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textColor="@color/black"
+                android:textColor="@color/ink"
                 android:textSize="@dimen/text_size_small"
                 tools:text="Bawa tangga, unit berada di plafon tinggi." />
         </LinearLayout>

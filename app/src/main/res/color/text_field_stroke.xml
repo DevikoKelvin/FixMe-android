@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Outline of the TextInputLayouts [dark mode, 25 Sep 2026]. A plain colour in boxStrokeColor only
+    sets the FOCUSED outline; the idle one then falls back to Material's hard-coded 42% black, which
+    all but vanishes on the dark surface. field_stroke_idle is that same 42% black in light mode.
+-->
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:color="@color/ink" android:state_focused="true" />
+    <item android:alpha="0.38" android:color="@color/field_stroke_idle" android:state_enabled="false" />
+    <item android:color="@color/field_stroke_idle" />
+</selector>

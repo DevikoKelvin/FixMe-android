@@ -29,7 +29,7 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/white">
+    android:background="@color/surface">
 
     <!-- TITLE, SUBTITLE AND TWO ACTIONS, like the Compose header. The subtitle is what tells the
          four tabs apart in words - "Masuk" alone does not say whether these are couriers waiting
@@ -42,7 +42,7 @@
         android:id="@+id/toolBar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
-        android:background="@color/white"
+        android:background="@color/surface"
         android:elevation="4dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -69,7 +69,7 @@
                     android:ellipsize="end"
                     android:maxLines="1"
                     android:text="@string/laundry_counter_title"
-                    android:textColor="@color/black"
+                    android:textColor="@color/ink"
                     android:textSize="@dimen/text_size_medium"
                     android:textStyle="bold" />
 
@@ -137,7 +137,7 @@
         app:boxCornerRadiusBottomStart="@dimen/login_field_corner_radius"
         app:boxCornerRadiusTopEnd="@dimen/login_field_corner_radius"
         app:boxCornerRadiusTopStart="@dimen/login_field_corner_radius"
-        app:boxStrokeColor="@color/black"
+        app:boxStrokeColor="@color/text_field_stroke"
         app:boxStrokeWidth="@dimen/login_field_stroke_width"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -161,7 +161,7 @@
         android:id="@+id/tabLayout"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:background="@color/white"
+        android:background="@color/surface"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/searchField"
@@ -169,7 +169,7 @@
         app:tabIndicatorColor="@color/button_color"
         app:tabIndicatorFullWidth="false"
         app:tabMode="scrollable"
-        app:tabSelectedTextColor="@color/black"
+        app:tabSelectedTextColor="@color/ink"
         app:tabTextColor="@color/custom_toast_font_normal_gray" />
 
     <!-- ONLY ON THE ARCHIVE, exactly as in Compose: the other three lists are today's work, and a
@@ -208,7 +208,7 @@
                 android:paddingHorizontal="12dp"
                 android:paddingVertical="10dp"
                 android:text="@string/laundry_date_from"
-                android:textColor="@color/black"
+                android:textColor="@color/ink"
                 android:textSize="@dimen/text_size_small"
                 android:textStyle="bold" />
         </com.google.android.material.card.MaterialCardView>
@@ -232,7 +232,7 @@
                 android:paddingHorizontal="12dp"
                 android:paddingVertical="10dp"
                 android:text="@string/laundry_date_to"
-                android:textColor="@color/black"
+                android:textColor="@color/ink"
                 android:textSize="@dimen/text_size_small"
                 android:textStyle="bold" />
         </com.google.android.material.card.MaterialCardView>
@@ -276,7 +276,7 @@
         android:layout_marginHorizontal="@dimen/list_item_submission_margin_horizontal"
         android:layout_marginTop="8dp"
         android:visibility="gone"
-        app:cardBackgroundColor="#FBFBFB"
+        app:cardBackgroundColor="@color/surface_card"
         app:cardCornerRadius="@dimen/list_item_progress_card_corner_radius"
         app:cardElevation="@dimen/list_item_progress_card_elevation"
         app:layout_constraintEnd_toEndOf="parent"
@@ -312,7 +312,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="@string/laundry_no_courier_selected"
-                    android:textColor="@color/black"
+                    android:textColor="@color/ink"
                     android:textSize="@dimen/text_size_medium"
                     android:textStyle="bold"
                     tools:text="Budi Santoso · Produksi" />
@@ -362,7 +362,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/list_item_submission_margin_horizontal"
-        android:textColor="@color/black"
+        android:textColor="@color/ink"
         android:textSize="@dimen/text_size_medium"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="@+id/clearButton"
@@ -408,7 +408,7 @@
                 android:layout_marginStart="@dimen/card_corner_radius"
                 android:gravity="center"
                 android:text="@string/laundry_clear_bundle"
-                android:textColor="@color/black"
+                android:textColor="@color/ink"
                 android:textSize="@dimen/text_size_medium"
                 android:textStyle="bold" />
         </LinearLayout>
@@ -509,7 +509,7 @@
         app:boxCornerRadiusBottomStart="@dimen/login_field_corner_radius"
         app:boxCornerRadiusTopEnd="@dimen/login_field_corner_radius"
         app:boxCornerRadiusTopStart="@dimen/login_field_corner_radius"
-        app:boxStrokeColor="@color/black"
+        app:boxStrokeColor="@color/text_field_stroke"
         app:boxStrokeWidth="@dimen/login_field_stroke_width"
         app:expandedHintEnabled="true"
         app:layout_constraintBottom_toTopOf="@+id/footerButtonContainer"
@@ -581,7 +581,7 @@
             app:cardCornerRadius="@dimen/dialog_corner_radius"
             app:cardElevation="@dimen/card_elevation"
             app:contentPadding="12dp"
-            app:strokeColor="@color/black"
+            app:strokeColor="@color/ink"
             app:strokeWidth="1dp"
             tools:visibility="visible">
 

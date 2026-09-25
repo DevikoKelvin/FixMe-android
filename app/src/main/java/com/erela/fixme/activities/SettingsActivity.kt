@@ -17,6 +17,7 @@ import android.os.Looper
 import android.util.Log
 import android.view.View
 import com.erela.fixme.helpers.enableEdgeToEdgeOpaqueNav
+import com.erela.fixme.helpers.ThemeHelper
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.app.NotificationManagerCompat
@@ -161,6 +162,7 @@ class SettingsActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
+        ThemeHelper.reveal(this)
 
         enableEdgeToEdgeOpaqueNav()
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
@@ -241,6 +243,12 @@ class SettingsActivity : AppCompatActivity() {
             changeEmailButton.setOnClickListener {
                 startActivity(Intent(this@SettingsActivity, ChangeEmailActivity::class.java))
             }
+
+            darkModeSwitch.isChecked = ThemeHelper.isDark(this@SettingsActivity)
+            darkModeSwitch.setOnCheckedChangeListener { _, dark ->
+                ThemeHelper.switchTo(this@SettingsActivity, dark, darkModeSwitch)
+            }
+            darkModeButton.setOnClickListener { darkModeSwitch.toggle() }
 
             copyright.text =
                 if (getString(R.string.lang) == "in")
@@ -416,7 +424,7 @@ class SettingsActivity : AppCompatActivity() {
                                 )
                                 statusIcon.visibility = View.VISIBLE
                                 currentAppVersionText.setTextColor(
-                                    ContextCompat.getColor(this@SettingsActivity, R.color.black)
+                                    ContextCompat.getColor(this@SettingsActivity, R.color.ink)
                                 )
                                 checkDownloadInstallText.text =
                                     getString(R.string.check_for_update_now)
@@ -469,7 +477,7 @@ class SettingsActivity : AppCompatActivity() {
             currentAppVersionText.setTextColor(
                 ContextCompat.getColor(
                     this@SettingsActivity,
-                    R.color.black
+                    R.color.ink
                 )
             )
             checkDownloadInstallText.text = getString(R.string.check_for_update_now)
