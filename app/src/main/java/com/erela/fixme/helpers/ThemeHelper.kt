@@ -3,12 +3,14 @@ package com.erela.fixme.helpers
 import android.animation.ValueAnimator
 import android.annotation.SuppressLint
 import android.app.Activity
+import android.app.UiModeManager
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.graphics.Paint
 import android.graphics.PorterDuff
 import android.graphics.PorterDuffXfermode
+import android.os.Build
 import android.view.View
 import android.view.ViewGroup
 import android.view.animation.DecelerateInterpolator
@@ -42,10 +44,28 @@ object ThemeHelper {
     fun isDark(context: Context): Boolean =
         context.getSharedPreferences(PREFS, Context.MODE_PRIVATE).getBoolean(KEY_DARK, false)
 
-    /** From Application.onCreate, before any activity inflates. */
-    fun apply(context: Context) = AppCompatDelegate.setDefaultNightMode(
-        if (isDark(context)) AppCompatDelegate.MODE_NIGHT_YES else AppCompatDelegate.MODE_NIGHT_NO
-    )
+    /**
+     * From Application.onCreate, before any activity inflates, and on every switch.
+     *
+     * Android 12+ is told the mode itself (`setApplicationNightMode`, persisted by the system), and
+     * that is what makes the SPLASH follow it: the splash is drawn before any code of ours runs, so
+     * it can only read a mode the system already knows. AppCompat then just follows the system -
+     * setting both would restart every screen twice per switch and cut the reveal short. Below 12
+     * there is no such API, so there the splash follows the phone's dark setting.
+     */
+    fun apply(context: Context) {
+        val dark = isDark(context)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            context.getSystemService(UiModeManager::class.java).setApplicationNightMode(
+                if (dark) UiModeManager.MODE_NIGHT_YES else UiModeManager.MODE_NIGHT_NO
+            )
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM)
+        } else {
+            AppCompatDelegate.setDefaultNightMode(
+                if (dark) AppCompatDelegate.MODE_NIGHT_YES else AppCompatDelegate.MODE_NIGHT_NO
+            )
+        }
+    }
 
     /** [origin] is where the reveal grows from: the switch the user touched. */
     fun switchTo(activity: Activity, dark: Boolean, origin: View) {
