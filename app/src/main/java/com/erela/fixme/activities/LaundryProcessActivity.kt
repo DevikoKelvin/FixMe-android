@@ -204,6 +204,7 @@ class LaundryProcessActivity : AppCompatActivity() {
                         "waiting" -> R.string.laundry_status_waiting
                         "accepted" -> R.string.laundry_status_accepted
                         "ready" -> R.string.laundry_status_ready
+                        "rejected" -> R.string.laundry_status_rejected
                         else -> R.string.laundry_status_completed
                     }
                 )
@@ -212,9 +213,10 @@ class LaundryProcessActivity : AppCompatActivity() {
                     if (head.status == "waiting") View.VISIBLE else View.GONE
                 binding.tvProgress.text =
                     getString(R.string.laundry_verify_progress, data.verified, data.claimed)
-                // A slip only means something once there is a handover or a total to print.
+                // A slip only means something once there is a handover or a total to print, and
+                // a refused bundle has neither: it left with the courier, so an intake note lies.
                 binding.printButton.visibility =
-                    if (head.status == "waiting") View.GONE else View.VISIBLE
+                    if (head.status in setOf("waiting", "rejected")) View.GONE else View.VISIBLE
 
                 lineAdapter.submitList(data.items, canTick = tickable(head))
                 lineAdapter.setSelected(selected)

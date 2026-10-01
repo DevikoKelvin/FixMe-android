@@ -85,6 +85,7 @@ class LaundryProcessLineAdapter(
                         "picked_up" -> R.string.laundry_item_picked_up
                         "lost" -> R.string.laundry_item_lost
                         "dialihkan" -> R.string.laundry_item_held
+                        "rejected" -> R.string.laundry_item_rejected
                         else -> R.string.laundry_item_repaired
                     }
                 )

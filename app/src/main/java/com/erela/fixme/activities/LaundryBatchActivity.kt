@@ -128,6 +128,7 @@ class LaundryBatchActivity : AppCompatActivity() {
                             "waiting" -> R.string.laundry_status_waiting
                             "accepted" -> R.string.laundry_status_accepted
                             "ready" -> R.string.laundry_status_ready
+                            "rejected" -> R.string.laundry_status_rejected
                             else -> R.string.laundry_status_completed
                         }
                     )

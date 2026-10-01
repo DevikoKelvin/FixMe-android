@@ -71,6 +71,7 @@ class LaundryBatchAdapter(
                         item.status == "waiting" -> R.string.laundry_status_waiting
                         item.status == "accepted" -> R.string.laundry_status_accepted
                         item.status == "ready" -> R.string.laundry_status_ready
+                        item.status == "rejected" -> R.string.laundry_status_rejected
                         else -> R.string.laundry_status_completed
                     }
                 )

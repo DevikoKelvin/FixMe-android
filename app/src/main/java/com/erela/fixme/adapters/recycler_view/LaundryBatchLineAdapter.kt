@@ -67,6 +67,7 @@ class LaundryBatchLineAdapter(
                     "lost" -> context.getString(R.string.laundry_item_lost)
                     "dialihkan" -> context.getString(R.string.laundry_item_held)
                     "repaired" -> context.getString(R.string.laundry_item_repaired)
+                    "rejected" -> context.getString(R.string.laundry_item_rejected)
                     else -> item.itemStatus
                 }
 
