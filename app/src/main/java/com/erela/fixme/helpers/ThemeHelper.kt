@@ -5,6 +5,7 @@ import android.annotation.SuppressLint
 import android.app.Activity
 import android.app.UiModeManager
 import android.content.Context
+import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.graphics.Paint
@@ -27,8 +28,8 @@ import kotlin.math.max
  * The prefs file and key are shared with the Compose app on purpose: both install as the same
  * applicationId, so a phone moving from this app to that one keeps its choice.
  *
- * Switching recreates every activity, which on its own is an abrupt cut. [switchTo] photographs
- * the screen first; [reveal] lays that photo over the recreated screen and opens a growing circle
+ * Switching restarts every activity, which on its own is an abrupt cut. [switchTo] photographs
+ * the screen first; [reveal] lays that photo over the new screen and opens a growing circle
  * in it from the switch, so the new mode spreads out from where the finger was. Animator duration
  * scale 0 (the system's "remove animations") ends it at once, which is the reduced-motion
  * behaviour for free.
@@ -36,6 +37,7 @@ import kotlin.math.max
 object ThemeHelper {
     const val PREFS = "fixme_theme_prefs"
     const val KEY_DARK = "dark_mode"
+    private const val KEY_VIEWS = "theme_switch_views"
 
     private var snapshot: Bitmap? = null
     private var originX = 0f
@@ -69,7 +71,8 @@ object ThemeHelper {
 
     /** [origin] is where the reveal grows from: the switch the user touched. */
     fun switchTo(activity: Activity, dark: Boolean, origin: View) {
-        if (dark == isDark(activity)) return
+        // Finishing: a second tap landed on the screen that is already being replaced.
+        if (dark == isDark(activity) || activity.isFinishing) return
         activity.getSharedPreferences(PREFS, Context.MODE_PRIVATE).edit { putBoolean(KEY_DARK, dark) }
         val decor = activity.window.decorView
         if (decor.isLaidOut) {
@@ -79,22 +82,36 @@ object ThemeHelper {
             originY = at[1] + origin.height / 2f
         }
         apply(activity)
+        // REPLACED, NOT RECREATED [2 Oct 2026]. A recreate removes this window before the new one
+        // has drawn, and for that gap - four frames - the phone shows no window at all: the black
+        // flash before the reveal. Opening a new instance is an ordinary activity start, which keeps
+        // this window up until the new one's first frame, the photo, is ready. It only works because
+        // the activity declares configChanges="uiMode"; without it, apply() recreates it first.
+        activity.startActivity(
+            Intent(activity, activity.javaClass)
+                .putExtras(activity.intent)
+                .putExtra(KEY_VIEWS, activity.window.saveHierarchyState())
+                .addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION)
+        )
+        activity.finish()
     }
 
     /**
-     * Call after setContentView in an activity that can call [switchTo]. The activity must keep its
-     * scroll position across the recreate (a ScrollView needs an id for that), or the circle opens
-     * onto a different part of the page than the photo shows.
+     * Call after setContentView in an activity that can call [switchTo]: one that declares
+     * configChanges="uiMode", and whose scrolling view has an id - that is what carries the scroll
+     * position over, without which the circle opens onto a different part of the page than the
+     * photo shows.
      */
     fun reveal(activity: Activity) {
         val shot = snapshot ?: return
         snapshot = null
+        activity.intent.getBundleExtra(KEY_VIEWS)?.let { activity.window.restoreHierarchyState(it) }
         val decor = activity.window.decorView as ViewGroup
         val cover = RevealCover(activity, shot, originX, originY)
         decor.addView(cover, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT)
 
         val end = hypot(max(originX, shot.width - originX), max(originY, shot.height - originY))
-        ValueAnimator.ofFloat(0f, end).apply {
+        val grow = ValueAnimator.ofFloat(0f, end).apply {
             duration = 550
             interpolator = DecelerateInterpolator()
             addUpdateListener { cover.radius = it.animatedValue as Float }
@@ -102,8 +119,16 @@ object ThemeHelper {
                 decor.removeView(cover)
                 shot.recycle()
             }
-            start()
         }
+        // FROM WHEN IT IS ON SCREEN, NOT FROM HERE. The window is shown once it has drawn, ~190 ms
+        // after onCreate on the emulator, and a clock started here had the circle half open on the
+        // first frame anyone saw. On Android 12+ focus comes once the window is visible (earlier
+        // versions may give it sooner, which is no worse than before). The timer is for a window
+        // that never gets focus, e.g. another app focused in split screen.
+        var started = false
+        val start = { if (!started) { started = true; grow.start() } }
+        decor.viewTreeObserver.addOnWindowFocusChangeListener { if (it) start() }
+        decor.postDelayed(start, 600)
     }
 
     /**

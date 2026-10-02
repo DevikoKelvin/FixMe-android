@@ -97,8 +97,11 @@
             android:windowSoftInputMode="adjustPan"
             tools:ignore="DiscouragedApi,LockedOrientationActivity" />
 
+        <!-- uiMode: a dark-mode switch replaces this screen itself (ThemeHelper.switchTo). The
+             recreate Android would do instead leaves a black gap before the reveal. -->
         <activity
             android:name=".activities.SettingsActivity"
+            android:configChanges="uiMode"
             android:exported="false"
             android:screenOrientation="portrait"
             tools:ignore="DiscouragedApi,LockedOrientationActivity" />

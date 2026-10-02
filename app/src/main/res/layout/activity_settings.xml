@@ -48,7 +48,7 @@
             android:textStyle="bold" />
     </RelativeLayout>
 
-    <!-- The id is what makes Android save the scroll position across the dark-mode recreate. -->
+    <!-- The id is what carries the scroll position across a dark-mode switch. -->
     <ScrollView
         android:id="@+id/settingsScroll"
         android:layout_width="match_parent"
