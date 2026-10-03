@@ -119,7 +119,7 @@
                     android:background="@drawable/gradient_card_color"
                     android:orientation="horizontal"
                     android:paddingHorizontal="@dimen/button_padding"
-                    android:paddingVertical="16dp"
+                    android:paddingVertical="4dp"
                     tools:ignore="UseCompoundDrawables">
 
                     <TextView

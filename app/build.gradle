@@ -13,6 +13,10 @@ if (localPropsFile.exists()) {
     localProps.load(new FileInputStream(localPropsFile))
 }
 
+// The build type the instrumented tests run against: debug, or with -PtestBuildType=release the
+// minified, release-signed APK that phones actually get.
+def instrumentedTestBuildType = providers.gradleProperty('testBuildType').getOrElse('debug')
+
 def findKeystoreFile() {
     def projectKeystore = file("${rootDir}/keystore.jks")
     if (projectKeystore.exists()) {
@@ -101,6 +105,10 @@ android {
             minifyEnabled true
             shrinkResources true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            if (instrumentedTestBuildType == 'release') {
+                // Test runs only: keeps what the test runner borrows from the app.
+                proguardFiles 'proguard-test-rules.pro'
+            }
             signingConfig signingConfigs.release
             debuggable false
         }
@@ -118,6 +126,8 @@ android {
             signingConfig signingConfigs.release
         }
     }
+
+    testBuildType = instrumentedTestBuildType
 
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_11
