@@ -14,7 +14,6 @@ class InboxRvAdapter(val context: Context, val data: ArrayList<InboxResponse>) :
     RecyclerView.Adapter<InboxRvAdapter.ViewHolder>() {
     private lateinit var userData: UserData
     private lateinit var onItemClickListener: OnNotificationItemClickListener
-
     override fun onCreateViewHolder(
         parent: ViewGroup, viewType: Int
     ): ViewHolder = ViewHolder(
@@ -48,7 +47,6 @@ class InboxRvAdapter(val context: Context, val data: ArrayList<InboxResponse>) :
     }
 
     override fun getItemCount(): Int = data.size
-
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val binding = ListItemInboxBinding.bind(view)
     }

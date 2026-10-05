@@ -68,7 +68,6 @@ class LaundryBatchActivity : AppCompatActivity() {
             swipeRefreshLayout.setOnRefreshListener {
                 viewModel.loadBatch(idTrx)
             }
-
             // SwipeRefreshLayout ASKS ITS DIRECT CHILD whether the content can scroll up, and its
             // direct child here is a ConstraintLayout - which never can. So every downward drag
             // anywhere on the screen was read as a pull-to-refresh, including one meant to scroll
@@ -159,7 +158,6 @@ class LaundryBatchActivity : AppCompatActivity() {
                     // to keep true.
                     toast(response.message, warning = !response.isSuccess)
                 }
-
                 // NOTHING WAS STOPPING THE SPINNER. The refresh listener started a load and
                 // the activity observed `batchDetail`, `collectResult`, `isSubmitting` and
                 // `error` - but not `isLoading`, so the wheel turned until the screen was closed.

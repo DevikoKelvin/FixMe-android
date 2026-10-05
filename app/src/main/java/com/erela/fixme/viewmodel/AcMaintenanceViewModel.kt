@@ -45,6 +45,7 @@ class AcMaintenanceViewModel(application: Application) : AndroidViewModel(applic
         _errorCode.value = (throwable as? HttpException)?.code()
         _error.value = throwable.message
     }
+
     fun onQrScanned(acCode: String, userId: Int) {
         // does NOT touch _isLoading — scan runs in the background without
         // hiding the task list; result surfaces via scanResult LiveData

@@ -10,9 +10,9 @@ import android.graphics.Path
 import android.util.AttributeSet
 import android.view.MotionEvent
 import android.view.View
+import androidx.core.graphics.createBitmap
 import java.io.File
 import java.io.FileOutputStream
-import androidx.core.graphics.createBitmap
 
 /**
  * Finger-drawn signature capture.
@@ -54,7 +54,6 @@ class SignaturePadView @JvmOverloads constructor(
      * layout, and doing that on each touch sample would fight the drawing for frames.
      */
     var onEmptyStateChanged: ((isEmpty: Boolean) -> Unit)? = null
-
     fun clear() {
         strokes.clear()
         active = null

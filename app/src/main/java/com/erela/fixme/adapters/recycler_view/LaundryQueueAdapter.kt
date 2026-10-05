@@ -47,10 +47,8 @@ class LaundryQueueAdapter(
     }
 
     override fun getItemCount(): Int = items.size
-
     inner class ViewHolder(private val binding: ListItemLaundryQueueBinding) :
         RecyclerView.ViewHolder(binding.root) {
-
         @SuppressLint("SetTextI18n")
         fun bind(item: LaundryWaitingCourier, ordinal: Int) {
             binding.apply {
@@ -63,7 +61,6 @@ class LaundryQueueAdapter(
                 ).joinToString(" · ").ifBlank { "-" }
 
                 tvTrxNo.text = item.trxNo
-
                 // The whole stamp, date included, rather than just the clock. An arrival nobody
                 // ever scanned stays `waiting` with no lines and keeps its place in this queue, so
                 // rows are not all from today - and a day-old one is precisely what the operator

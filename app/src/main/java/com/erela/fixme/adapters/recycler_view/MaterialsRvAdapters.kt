@@ -16,7 +16,6 @@ class MaterialsRvAdapters(
     private val selectedMaterialsArrayList: ArrayList<MaterialListResponse>
 ) : RecyclerView.Adapter<MaterialsRvAdapters.ViewHolder>() {
     private lateinit var onMaterialsSetListener: OnMaterialsSetListener
-
     override fun onCreateViewHolder(
         parent: ViewGroup, viewType: Int
     ): ViewHolder = ViewHolder(
@@ -57,7 +56,6 @@ class MaterialsRvAdapters(
     }
 
     override fun getItemCount(): Int = materialsList.size
-
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val binding = ListItemSelectionBinding.bind(view)
     }
@@ -79,9 +77,7 @@ class MaterialDiffUtilCallback(
     private val newList: List<SelectedMaterialList>
 ) : DiffUtil.Callback() {
     override fun getOldListSize(): Int = oldList.size
-
     override fun getNewListSize(): Int = newList.size
-
     override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
         return oldList[oldItemPosition].material?.materialId == newList[newItemPosition].material?.materialId
     }

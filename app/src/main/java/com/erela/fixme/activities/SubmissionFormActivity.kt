@@ -23,7 +23,6 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.EditText
-import com.erela.fixme.helpers.enableEdgeToEdgeOpaqueNav
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
@@ -41,6 +40,7 @@ import com.erela.fixme.databinding.ActivitySubmissionFormBinding
 import com.erela.fixme.helpers.PermissionHelper
 import com.erela.fixme.helpers.UserDataHelper
 import com.erela.fixme.helpers.api.InitAPI
+import com.erela.fixme.helpers.enableEdgeToEdgeOpaqueNav
 import com.erela.fixme.objects.CategoryListResponse
 import com.erela.fixme.objects.CreationResponse
 import com.erela.fixme.objects.DepartmentListResponse
@@ -784,13 +784,10 @@ class SubmissionFormActivity : AppCompatActivity(), OnMapReadyCallback {
             }
         }
 
-        return if (requestBodyMap.isNotEmpty()) {
-            if (photoFiles.isNotEmpty())
-                true
-            else
-                true
-        } else
-            false
+        return requestBodyMap.isNotEmpty() && if (photoFiles.isNotEmpty())
+            true
+        else
+            true
     }
 
     private fun prepareSubmitForm(): Boolean {
@@ -844,13 +841,10 @@ class SubmissionFormActivity : AppCompatActivity(), OnMapReadyCallback {
             }
         }
 
-        return if (requestBodyMap.isNotEmpty()) {
-            if (photoFiles.isNotEmpty())
-                true
-            else
-                true
-        } else
-            false
+        return requestBodyMap.isNotEmpty() && if (photoFiles.isNotEmpty())
+            true
+        else
+            true
     }
 
     private fun formInput() {

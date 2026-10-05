@@ -34,7 +34,6 @@ class LaundryHeldAdapter(
     fun submitList(newItems: List<LaundryHeldItem>) {
         items.clear()
         items.addAll(newItems)
-
         // A selection that outlives the rows it pointed at would hand back a garment the operator
         // can no longer see.
         selected.retainAll(newItems.map { it.id }.toSet())
@@ -64,10 +63,8 @@ class LaundryHeldAdapter(
     }
 
     override fun getItemCount(): Int = items.size
-
     inner class ViewHolder(private val binding: ListItemLaundryHeldBinding) :
         RecyclerView.ViewHolder(binding.root) {
-
         @SuppressLint("SetTextI18n")
         fun bind(item: LaundryHeldItem) {
             binding.apply {
@@ -91,12 +88,10 @@ class LaundryHeldAdapter(
                         else R.color.custom_toast_font_normal_gray
                     )
                 )
-
                 // Set WITHOUT the listener attached: binding a recycled row fires the change
                 // callback, which would toggle the very selection being drawn.
                 checkBox.setOnCheckedChangeListener(null)
                 checkBox.isChecked = item.id in selected
-
                 val toggle = {
                     if (item.id in selected) selected.remove(item.id) else selected.add(item.id)
                     checkBox.isChecked = item.id in selected

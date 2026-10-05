@@ -18,12 +18,10 @@ import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 
 class ChannelPickerBottomSheet(context: Context) : BottomSheetDialog(context) {
-
     companion object {
         val CHANNEL_LADDER = listOf("release", "beta_prerelease", "dev", "canary")
         private const val PREFS_NAME = "fixme_download_prefs"
         private const val PREF_CHANNEL_OVERRIDE = "channel_override"
-
         fun channelLevel(channel: String): Int =
             CHANNEL_LADDER.indexOf(channel).takeIf { it >= 0 } ?: 0
 
@@ -38,7 +36,6 @@ class ChannelPickerBottomSheet(context: Context) : BottomSheetDialog(context) {
 
     var effectiveChannel: String = BuildConfig.VERSION_CHANNEL
     var onChannelSelected: ((String) -> Unit)? = null
-
     private val binding: BottomSheetChannelPickerBinding by lazy {
         BottomSheetChannelPickerBinding.inflate(layoutInflater)
     }
@@ -71,7 +68,6 @@ class ChannelPickerBottomSheet(context: Context) : BottomSheetDialog(context) {
             VH(ItemChannelOptionBinding.inflate(LayoutInflater.from(parent.context), parent, false))
 
         override fun getItemCount(): Int = CHANNEL_LADDER.size
-
         override fun onBindViewHolder(holder: VH, position: Int) {
             with(holder.binding) {
                 val channel = CHANNEL_LADDER[position]

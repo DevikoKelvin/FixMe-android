@@ -254,7 +254,9 @@ class SubmissionDetailActivity : AppCompatActivity(),
                                             "Request Number",
                                             detailData.requestNumber
                                         )
-                                        clipboard.setPrimaryClip(clip)
+                                        @Suppress("UsePropertyAccessSyntax") clipboard.setPrimaryClip(
+                                            clip
+                                        )
                                         CustomToast.getInstance(applicationContext)
                                             .setBackgroundColor(
                                                 ResourcesCompat.getColor(

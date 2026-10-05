@@ -3,8 +3,8 @@ package com.erela.fixme.activities
 import android.Manifest
 import android.content.Intent
 import android.net.Uri
-import android.provider.Settings
 import android.os.Bundle
+import android.provider.Settings
 import android.view.View
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
@@ -25,8 +25,8 @@ import com.erela.fixme.helpers.ThermalPrinter
 import com.erela.fixme.helpers.enableEdgeToEdgeOpaqueNav
 import com.erela.fixme.objects.laundry.LaundryBatchHeader
 import com.erela.fixme.objects.laundry.LaundryCollector
-import com.erela.fixme.objects.laundry.pickerLabels
 import com.erela.fixme.objects.laundry.LaundrySlipRow
+import com.erela.fixme.objects.laundry.pickerLabels
 import com.erela.fixme.viewmodel.LaundryCheckInViewModel
 import com.google.android.material.card.MaterialCardView
 import com.journeyapps.barcodescanner.ScanContract
@@ -84,6 +84,7 @@ class LaundryProcessActivity : AppCompatActivity() {
             }
         }
     }
+
     /**
      * Bluetooth, asked for the first time somebody prints.
      *
@@ -99,7 +100,6 @@ class LaundryProcessActivity : AppCompatActivity() {
     ) { granted ->
         when {
             granted -> viewModel.loadSlip(idTrx)
-
             // Android stops showing the dialog after a second refusal, and says so by returning
             // false here. Settings is then the only way back, so offer to open it.
             !shouldShowRequestPermissionRationale(Manifest.permission.BLUETOOTH_CONNECT) ->
@@ -224,7 +224,6 @@ class LaundryProcessActivity : AppCompatActivity() {
                 binding.rvItems.visibility = if (data.items.isEmpty()) View.GONE else View.VISIBLE
                 binding.emptyContainer.visibility =
                     if (data.items.isEmpty()) View.VISIBLE else View.GONE
-
                 // The house empty state is an animation, and one nobody can see should not be
                 // running - every other list in this app pauses it the same way.
                 if (data.items.isEmpty()) {
@@ -236,7 +235,8 @@ class LaundryProcessActivity : AppCompatActivity() {
                 renderActions(
                     head,
                     data.items.none { it.source == "scan" && it.conditionOut == null },
-                    data.mayReject)
+                    data.mayReject
+                )
                 renderSelection()
             }
 
@@ -245,7 +245,6 @@ class LaundryProcessActivity : AppCompatActivity() {
                 // that was wrong, and a second wording here would be one to keep in step with
                 // five refusal paths.
                 toast(response.message, warning = !response.isSuccess)
-
                 // ONLY ONCE THE SERVER AGREED. Leaving on the tap would take the operator off the
                 // screen that explains a refusal.
                 if (leaveAfterAction) {
@@ -268,7 +267,6 @@ class LaundryProcessActivity : AppCompatActivity() {
             isLoading.observe(this@LaundryProcessActivity) { loading ->
                 binding.swipeRefreshLayout.isRefreshing = loading
             }
-
             // The spinner rides inside the primary card, the way Collect and Submit already do.
             isSubmitting.observe(this@LaundryProcessActivity) { busy ->
                 binding.primaryLoadingBar.visibility = if (busy) View.VISIBLE else View.GONE
@@ -319,7 +317,6 @@ class LaundryProcessActivity : AppCompatActivity() {
                 primary.visibility = View.VISIBLE
                 primaryText.text = getString(R.string.laundry_accept)
                 primary.setOnClickListener { viewModel.acceptBatch(idTrx) }
-
                 // ONLY WHERE IT WOULD WORK. Accepting is every laundry account's; rejecting is
                 // the Supervisor's [GA, 21 Sep 2026], and the server says which this caller is
                 // rather than the screen guessing from a role it does not hold.
@@ -417,7 +414,6 @@ class LaundryProcessActivity : AppCompatActivity() {
      */
     private fun askCondition(onPick: (condition: String, note: String?) -> Unit) {
         val codes = listOf("good", "needs_repair", "damaged", "lost")
-
         val options = listOf(
             R.string.laundry_condition_good,
             R.string.laundry_condition_needs_repair,
@@ -425,7 +421,11 @@ class LaundryProcessActivity : AppCompatActivity() {
             R.string.laundry_condition_lost
         ).map { DialogOption(getString(it)) }
 
-        OptionListDialog(this, getString(R.string.laundry_condition_title), options).also { dialog ->
+        OptionListDialog(
+            this,
+            getString(R.string.laundry_condition_title),
+            options
+        ).also { dialog ->
             dialog.setOptionListDialogListener { index ->
                 val code = codes[index]
 
@@ -480,7 +480,6 @@ class LaundryProcessActivity : AppCompatActivity() {
         viewModel.collectors.observe(this) { people ->
             if (people.isEmpty()) return@observe
             val labels = people.pickerLabels()
-
             val options = people.mapIndexed { index, person ->
                 DialogOption(
                     labels[index],
@@ -539,7 +538,6 @@ class LaundryProcessActivity : AppCompatActivity() {
             viewModel.clearSlip()
             return
         }
-
         var picked = false
 
         OptionListDialog(
@@ -563,7 +561,6 @@ class LaundryProcessActivity : AppCompatActivity() {
                     if (failure == null) viewModel.clearSlip()
                 }
             }
-
             // Backing out holds no slip. The lines were fetched - and therefore logged as a print
             // - but nothing reached paper, so keeping them would offer a stale reprint later.
             dialog.setOnDismissListener { if (!picked) viewModel.clearSlip() }

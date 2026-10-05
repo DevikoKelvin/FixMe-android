@@ -41,7 +41,6 @@ class SelectMaterialsBottomSheet(
     private val materialsList: ArrayList<SelectedMaterialList> = ArrayList()
     private var materialsArrayList: ArrayList<SelectedMaterialList> = ArrayList()
     private lateinit var adapter: MaterialsRvAdapters
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)

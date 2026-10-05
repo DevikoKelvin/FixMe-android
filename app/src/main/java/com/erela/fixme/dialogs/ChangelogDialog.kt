@@ -82,7 +82,6 @@ class ChangelogDialog(context: Context, private val changelog: String) : Dialog(
             val prefs = context.getSharedPreferences(PREFS, Context.MODE_PRIVATE)
 
             if (prefs.getString(KEY_LAST_SEEN_VERSION, null) == BuildConfig.VERSION_NAME) return
-
             // No text to show is not the same as nothing to record: mark the version seen
             // either way, so a release with an empty changelog does not re-check every launch.
             val changelog = resolveChangelog(context, prefs).takeIf { it.isNotBlank() }
@@ -100,11 +99,9 @@ class ChangelogDialog(context: Context, private val changelog: String) : Dialog(
                 // through to the other language when the preferred column was left blank —
                 // in practice only one of the two is filled in for a given release.
                 val indonesian = context.getString(R.string.lang) == "in"
-
                 val preferred = prefs.getString(
                     if (indonesian) KEY_PENDING_ID else KEY_PENDING_EN, null
                 )?.takeIf { it.isNotBlank() }
-
                 val other = prefs.getString(
                     if (indonesian) KEY_PENDING_EN else KEY_PENDING_ID, null
                 )?.takeIf { it.isNotBlank() }

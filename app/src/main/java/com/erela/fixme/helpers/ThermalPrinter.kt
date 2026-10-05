@@ -8,10 +8,10 @@ import android.bluetooth.BluetoothManager
 import android.bluetooth.BluetoothSocket
 import android.content.Context
 import android.content.pm.PackageManager
-import com.erela.fixme.R
 import android.os.Build
 import androidx.core.content.ContextCompat
 import androidx.core.content.getSystemService
+import com.erela.fixme.R
 import com.erela.fixme.objects.laundry.LaundrySlipRow
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -25,7 +25,6 @@ import java.util.UUID
  * black boxes.
  */
 data class PairedPrinter(val name: String, val address: String)
-
 
 /**
  * The counter's Bluetooth slip printer — GA, 17 September 2026.
@@ -53,7 +52,6 @@ data class PairedPrinter(val name: String, val address: String)
  * the day that happens.
  */
 object ThermalPrinter {
-
     /** The Serial Port Profile. Fixed by the spec, not by the printer. */
     private val SPP: UUID = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB")
 
@@ -74,8 +72,8 @@ object ThermalPrinter {
      */
     fun hasPermission(context: Context): Boolean =
         Build.VERSION.SDK_INT < Build.VERSION_CODES.S ||
-            ContextCompat.checkSelfPermission(context, Manifest.permission.BLUETOOTH_CONNECT) ==
-            PackageManager.PERMISSION_GRANTED
+                ContextCompat.checkSelfPermission(context, Manifest.permission.BLUETOOTH_CONNECT) ==
+                PackageManager.PERMISSION_GRANTED
 
     /** The runtime permission to request, or null where the platform needs none. */
     fun permission(): String? =
@@ -118,22 +116,18 @@ object ThermalPrinter {
             if (!hasPermission(context)) {
                 return@withContext context.getString(R.string.printer_no_permission)
             }
-
             val adapter = adapter(context)
                 ?: return@withContext context.getString(R.string.printer_no_bluetooth)
 
             if (!adapter.isEnabled) {
                 return@withContext context.getString(R.string.printer_bluetooth_off)
             }
-
             val device: BluetoothDevice = runCatching { adapter.getRemoteDevice(address) }
                 .getOrNull() ?: return@withContext context.getString(R.string.printer_unknown)
-
             var socket: BluetoothSocket? = null
 
             try {
                 socket = device.createRfcommSocketToServiceRecord(SPP)
-
                 // NO `cancelDiscovery()` HERE, AND THAT IS THE POINT [GA, 17 Sep 2026]. It was
                 // called to free the radio in case another app had a scan running - and it is
                 // annotated `@RequiresPermission(BLUETOOTH_SCAN)`, which this app deliberately
@@ -146,7 +140,6 @@ object ThermalPrinter {
                 // scan would be a location-class permission bought to work around another app's
                 // behaviour.
                 socket.connect()
-
                 val out = socket.outputStream
 
                 out.write(INIT)
@@ -193,21 +186,20 @@ object ThermalPrinter {
      */
     private fun qrCommands(payload: String): ByteArray {
         val data = payload.toByteArray(Charsets.ISO_8859_1)
-
         // The store command's length covers the payload plus its own three-byte header.
         val length = data.size + 3
 
         return byteArrayOf(0x1B, 0x61, 0x01) +                                  // centre
-            byteArrayOf(0x1D, 0x28, 0x6B, 0x04, 0x00, 0x31, 0x41, 0x32, 0x00) + // model 2
-            byteArrayOf(0x1D, 0x28, 0x6B, 0x03, 0x00, 0x31, 0x43, 0x05) +       // module size 5
-            byteArrayOf(0x1D, 0x28, 0x6B, 0x03, 0x00, 0x31, 0x45, 0x31) +       // ECC M
-            byteArrayOf(
-                0x1D, 0x28, 0x6B,
-                (length and 0xFF).toByte(), (length shr 8 and 0xFF).toByte(),
-                0x31, 0x50, 0x30
-            ) + data +                                                          // store
-            byteArrayOf(0x1D, 0x28, 0x6B, 0x03, 0x00, 0x31, 0x51, 0x30) +       // print
-            byteArrayOf(0x0A) +
-            byteArrayOf(0x1B, 0x61, 0x00)                                       // back to left
+                byteArrayOf(0x1D, 0x28, 0x6B, 0x04, 0x00, 0x31, 0x41, 0x32, 0x00) + // model 2
+                byteArrayOf(0x1D, 0x28, 0x6B, 0x03, 0x00, 0x31, 0x43, 0x05) +       // module size 5
+                byteArrayOf(0x1D, 0x28, 0x6B, 0x03, 0x00, 0x31, 0x45, 0x31) +       // ECC M
+                byteArrayOf(
+                    0x1D, 0x28, 0x6B,
+                    (length and 0xFF).toByte(), (length shr 8 and 0xFF).toByte(),
+                    0x31, 0x50, 0x30
+                ) + data +                                                          // store
+                byteArrayOf(0x1D, 0x28, 0x6B, 0x03, 0x00, 0x31, 0x51, 0x30) +       // print
+                byteArrayOf(0x0A) +
+                byteArrayOf(0x1B, 0x61, 0x00)                                       // back to left
     }
 }

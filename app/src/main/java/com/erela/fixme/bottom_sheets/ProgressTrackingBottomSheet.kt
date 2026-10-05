@@ -41,7 +41,6 @@ class ProgressTrackingBottomSheet(
     private lateinit var onProgressTrackingListener: OnProgressTrackingListener
     private lateinit var onProgressItemLongTapListener: OnProgressItemLongTapListener
     private var tech = false
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)

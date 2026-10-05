@@ -12,7 +12,6 @@ import android.view.Menu
 import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
-import com.erela.fixme.helpers.enableEdgeToEdgeOpaqueNav
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
@@ -30,6 +29,7 @@ import com.erela.fixme.custom_views.CustomToast
 import com.erela.fixme.databinding.ActivitySubmissionListBinding
 import com.erela.fixme.helpers.UserDataHelper
 import com.erela.fixme.helpers.api.InitAPI
+import com.erela.fixme.helpers.enableEdgeToEdgeOpaqueNav
 import com.erela.fixme.objects.DataItem
 import com.erela.fixme.objects.DepartmentListResponse
 import com.erela.fixme.objects.SubmissionListResponse
@@ -827,17 +827,13 @@ class SubmissionListActivity : AppCompatActivity(), SubmissionRvAdapter.OnSubmis
     private fun dateChecker(date: String, startDate: String, endDate: String): Boolean {
         val simpleDateFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault())
         val dateOnlyFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
-
         val reportDate = simpleDateFormat.parse(date) ?: return false
-
         // If no date filter is selected, accept all dates
         if (startDate.isEmpty() && endDate.isEmpty()) {
             return true
         }
-
         // Convert report date to yyyy-MM-dd format for comparison
         val reportDateOnly = dateOnlyFormat.format(reportDate)
-
         // The startDate and endDate are already in yyyy-MM-dd format from the filter
         val start = startDate.ifEmpty { "1900-01-01" }
         val end = endDate.ifEmpty { "2100-12-31" }

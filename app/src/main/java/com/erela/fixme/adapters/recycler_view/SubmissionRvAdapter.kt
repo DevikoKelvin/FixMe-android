@@ -19,7 +19,6 @@ import java.util.Locale
 class SubmissionRvAdapter(val context: Context, val data: ArrayList<DataItem?>?) :
     RecyclerView.Adapter<SubmissionRvAdapter.ViewHolder>() {
     private lateinit var onSubmissionClickListener: OnSubmissionClickListener
-
     private fun setRoundedBackground(view: View, drawableId: Int) {
         view.background = ResourcesCompat.getDrawable(
             context.resources,
@@ -48,7 +47,6 @@ class SubmissionRvAdapter(val context: Context, val data: ArrayList<DataItem?>?)
                 Log.e("ERROR", exception.toString())
             }
         }
-
         val colorRes = if (isComplete) R.color.status_approved else R.color.ink
         textView.setTextColor(
             ResourcesCompat.getColor(context.resources, colorRes, context.theme)
@@ -325,7 +323,6 @@ class SubmissionRvAdapter(val context: Context, val data: ArrayList<DataItem?>?)
                 itemView.setOnClickListener {
                     onSubmissionClickListener.onSubmissionClick(item)
                 }
-
                 // Apply glowing red blink animation if item is exceeding
                 // IMPORTANT: RecyclerView can reuse ViewHolders; always cancel any running
                 // animation before applying the new item's "isExceeding" state.

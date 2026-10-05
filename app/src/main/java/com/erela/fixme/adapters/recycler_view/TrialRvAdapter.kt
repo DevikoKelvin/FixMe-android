@@ -25,7 +25,6 @@ class TrialRvAdapter(
     )
 
     override fun getItemCount(): Int = data!!.size
-
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val item = data?.get(position)
 

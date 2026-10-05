@@ -50,10 +50,8 @@ class LaundryBatchLineAdapter(
     }
 
     override fun getItemCount(): Int = items.size
-
     inner class ViewHolder(private val binding: ListItemLaundryBatchLineBinding) :
         RecyclerView.ViewHolder(binding.root) {
-
         fun bind(item: LaundryBatchLine) {
             binding.apply {
                 tvCode.text = item.qrCode ?: "-"

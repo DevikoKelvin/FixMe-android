@@ -25,7 +25,6 @@ class OldAttachmentSubmissionRvAdapter(
     )
 
     override fun getItemCount(): Int = oldData!!.size
-
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val item = oldData!![position]
 

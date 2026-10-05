@@ -19,7 +19,6 @@ class ManagePhotoBottomSheet(context: Context, val imageArrayUri: ArrayList<Uri>
     }
     private lateinit var adapter: AttachmentRvAdapter
     private lateinit var onAttachmentActionListener: OnAttachmentActionListener
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)

@@ -58,10 +58,8 @@ class LaundryBundleAdapter(
     }
 
     override fun getItemCount(): Int = items.size
-
     inner class ViewHolder(private val binding: ListItemLaundryBundleBinding) :
         RecyclerView.ViewHolder(binding.root) {
-
         @SuppressLint("SetTextI18n")
         fun bind(item: LaundryGarment, ordinal: Int) {
             binding.apply {
@@ -73,7 +71,6 @@ class LaundryBundleAdapter(
                     item.ownerName,
                     item.ownerDept
                 ).joinToString(" · ").ifBlank { "-" }
-
                 // Compared by NAME here because that is all the phone has; the server compares
                 // department IDs, which is the check that decides anything [D-17].
                 val isMixed = !item.ownerDept.isNullOrBlank() &&
@@ -85,7 +82,6 @@ class LaundryBundleAdapter(
                 if (isMixed) {
                     tvMixedWarning.text = context.getString(R.string.laundry_mixed_owner_warning)
                 }
-
                 // Set before the listener, or restoring a note fires it back as a user edit.
                 etNote.setText(item.note ?: "")
 

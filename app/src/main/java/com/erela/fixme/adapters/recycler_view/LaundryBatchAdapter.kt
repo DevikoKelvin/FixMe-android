@@ -48,14 +48,11 @@ class LaundryBatchAdapter(
     }
 
     override fun getItemCount(): Int = items.size
-
     inner class ViewHolder(private val binding: ListItemLaundryBatchBinding) :
         RecyclerView.ViewHolder(binding.root) {
-
         fun bind(item: LaundryBatch) {
             binding.apply {
                 tvTrxNo.text = item.trxNo
-
                 // The courier's words, not the counter's: `accepted` describes a step they never
                 // see, and "sedang dicuci" is the answer they came for.
                 //

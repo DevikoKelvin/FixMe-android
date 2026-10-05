@@ -29,7 +29,6 @@ object NotificationsHelper {
 
     /** True when this notification belongs to Smart Wash. */
     fun isLaundry(status: String?) = status?.startsWith(LAUNDRY_PREFIX) == true
-
     private fun createNotificationChannel(context: Context) {
         val notificationManager =
             context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
@@ -49,12 +48,9 @@ object NotificationsHelper {
         status: String? = null
     ) {
         createNotificationChannel(context)
-
         val notificationManager =
             context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-
         val notificationId = System.currentTimeMillis().toInt()
-
         val resultIntent: Intent? = if (UserDataHelper(context).isUserDataExist()) {
             when {
                 // A laundry reminder carries no case, so before this it landed on the main menu
@@ -85,7 +81,6 @@ object NotificationsHelper {
         if (caseId == 0) {
             resultIntent?.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
         }
-
         val pendingIntent: PendingIntent? = TaskStackBuilder.create(context).run {
             addNextIntentWithParentStack(resultIntent!!)
             getPendingIntent(
@@ -93,7 +88,6 @@ object NotificationsHelper {
                 PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
             )
         }
-
         val notificationBuilder =
             NotificationCompat.Builder(context, CHANNEL_ID)
                 .setSmallIcon(R.drawable.fixme_logo)

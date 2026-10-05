@@ -14,7 +14,6 @@ class UpdateAvailableDialog(
         DialogUpdateAvailableBinding.inflate(layoutInflater)
     }
     private lateinit var onDownloadListener: OnDownloadListener
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)

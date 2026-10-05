@@ -24,7 +24,6 @@ class FCMService : FirebaseMessagingService() {
     override fun onMessageReceived(remoteMessage: RemoteMessage) {
         try {
             Log.e(TAG, "Received Message Data: ${remoteMessage.data}")
-
             val notificationData =
                 Gson().fromJson(Gson().toJson(remoteMessage.data), NotificationData::class.java)
 
@@ -62,7 +61,6 @@ class FCMService : FirebaseMessagingService() {
             Log.e(TAG, "sendRegistrationToServer: token is null or empty")
             return
         }
-
         val userDataHelper = UserDataHelper(applicationContext)
         if (userDataHelper.isUserDataExist()) {
             InitAPI.getEndpoint.updateFcmToken(userData.id, token)

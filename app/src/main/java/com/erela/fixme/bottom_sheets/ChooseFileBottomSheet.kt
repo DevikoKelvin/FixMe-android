@@ -14,7 +14,6 @@ class ChooseFileBottomSheet(context: Context) : BottomSheetDialog(context) {
         BsChooseFileBinding.inflate(layoutInflater)
     }
     private lateinit var onChooseFileListener: OnChooseFileListener
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)

@@ -23,7 +23,6 @@ class DepartmentListBottomSheet(
     }
     private lateinit var onDepartmentClickListener: OnDepartmentClickListener
     private var selectedDepartment: String = ""
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)

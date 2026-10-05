@@ -38,10 +38,8 @@ class AcTaskAdapter(
     }
 
     override fun getItemCount(): Int = tasks.size
-
     inner class ViewHolder(private val binding: ListItemAcTaskBinding) :
         RecyclerView.ViewHolder(binding.root) {
-
         @SuppressLint("SetTextI18n")
         fun bind(item: AcTaskItem) {
             binding.apply {
@@ -145,8 +143,11 @@ class AcTaskAdapter(
                     item.assignedTechnician?.trim()?.takeIf { it.isNotEmpty() }
                         ?: context.getString(R.string.unassigned),
                 )
-                row(rowLastMaintenance, R.string.last_maintenance, formatDate(item.lastMaintenanceAt))
-
+                row(
+                    rowLastMaintenance,
+                    R.string.last_maintenance,
+                    formatDate(item.lastMaintenanceAt)
+                )
                 val note = item.scheduleNotes?.trim()
                 noteBlock.visibility = if (note.isNullOrEmpty()) View.GONE else View.VISIBLE
                 tvScheduleNote.text = note.orEmpty()

@@ -29,7 +29,6 @@ class SupervisorTechniciansRvAdapter(
     )
 
     override fun getItemCount(): Int = supervisorTechniciansList.size
-
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val item = supervisorTechniciansList[position]
 

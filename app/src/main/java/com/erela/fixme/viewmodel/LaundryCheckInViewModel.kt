@@ -6,22 +6,22 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.erela.fixme.objects.laundry.LaundryActionResponse
-import com.erela.fixme.objects.laundry.LaundryCollector
-import com.erela.fixme.objects.laundry.LaundryHeldItem
 import com.erela.fixme.objects.laundry.LaundryArrivalResponse
 import com.erela.fixme.objects.laundry.LaundryArrivalsResponse
 import com.erela.fixme.objects.laundry.LaundryBatchDetailResponse
 import com.erela.fixme.objects.laundry.LaundryBatchesResponse
-import com.erela.fixme.objects.laundry.LaundryCollectResponse
 import com.erela.fixme.objects.laundry.LaundryCheckInItem
 import com.erela.fixme.objects.laundry.LaundryCheckInResponse
+import com.erela.fixme.objects.laundry.LaundryCollectResponse
+import com.erela.fixme.objects.laundry.LaundryCollector
 import com.erela.fixme.objects.laundry.LaundryGarment
 import com.erela.fixme.objects.laundry.LaundryHandoverMarkResponse
 import com.erela.fixme.objects.laundry.LaundryHandoverQueueResponse
-import com.erela.fixme.objects.laundry.LaundryReadyBatch
+import com.erela.fixme.objects.laundry.LaundryHeldItem
 import com.erela.fixme.objects.laundry.LaundryMyCheckInsResponse
-import com.erela.fixme.objects.laundry.LaundrySlipRow
+import com.erela.fixme.objects.laundry.LaundryReadyBatch
 import com.erela.fixme.objects.laundry.LaundryScanResponse
+import com.erela.fixme.objects.laundry.LaundrySlipRow
 import com.erela.fixme.objects.laundry.LaundryWaitingCourier
 import com.erela.fixme.repository.LaundryRepository
 import kotlinx.coroutines.launch
@@ -48,16 +48,12 @@ class LaundryCheckInViewModel(application: Application) : AndroidViewModel(appli
 
     /** The bundle, in scan order. `LinkedHashMap` because the order is what the operator sees. */
     private val bundle = LinkedHashMap<String, LaundryGarment>()
-
     private val _items = MutableLiveData<List<LaundryGarment>>(emptyList())
     val items: LiveData<List<LaundryGarment>> = _items
-
     private val _arrivalResult = MutableLiveData<LaundryArrivalResponse>()
     val arrivalResult: LiveData<LaundryArrivalResponse> = _arrivalResult
-
     private val _arrivals = MutableLiveData<LaundryArrivalsResponse>()
     val arrivals: LiveData<LaundryArrivalsResponse> = _arrivals
-
     private val _batches = MutableLiveData<LaundryBatchesResponse>()
     val batches: LiveData<LaundryBatchesResponse> = _batches
 
@@ -70,10 +66,8 @@ class LaundryCheckInViewModel(application: Application) : AndroidViewModel(appli
      */
     private val _counterBatch = MutableLiveData<LaundryBatchDetailResponse>()
     val counterBatch: LiveData<LaundryBatchDetailResponse> = _counterBatch
-
     private val _actionResult = MutableLiveData<LaundryActionResponse>()
     val actionResult: LiveData<LaundryActionResponse> = _actionResult
-
     private val _collectors = MutableLiveData<List<LaundryCollector>>(emptyList())
     val collectors: LiveData<List<LaundryCollector>> = _collectors
 
@@ -86,7 +80,6 @@ class LaundryCheckInViewModel(application: Application) : AndroidViewModel(appli
      */
     private val _active = MutableLiveData<LaundryArrivalsResponse>()
     val active: LiveData<LaundryArrivalsResponse> = _active
-
     private val _history = MutableLiveData<LaundryArrivalsResponse>()
     val history: LiveData<LaundryArrivalsResponse> = _history
 
@@ -108,16 +101,12 @@ class LaundryCheckInViewModel(application: Application) : AndroidViewModel(appli
      */
     private val _slipNeedsReason = MutableLiveData<String>()
     val slipNeedsReason: LiveData<String> = _slipNeedsReason
-
     private val _batchDetail = MutableLiveData<LaundryBatchDetailResponse>()
     val batchDetail: LiveData<LaundryBatchDetailResponse> = _batchDetail
-
     private val _collectResult = MutableLiveData<LaundryCollectResponse>()
     val collectResult: LiveData<LaundryCollectResponse> = _collectResult
-
     private val _handoverQueue = MutableLiveData<LaundryHandoverQueueResponse>()
     val handoverQueue: LiveData<LaundryHandoverQueueResponse> = _handoverQueue
-
     private val _markResult = MutableLiveData<LaundryHandoverMarkResponse>()
     val markResult: LiveData<LaundryHandoverMarkResponse> = _markResult
 
@@ -130,25 +119,18 @@ class LaundryCheckInViewModel(application: Application) : AndroidViewModel(appli
      * the offender, so a round trip per garment would buy a slower scan and no more truth.
      */
     private val outScanned = LinkedHashSet<String>()
-
     private val _outItems = MutableLiveData<List<String>>(emptyList())
     val outItems: LiveData<List<String>> = _outItems
-
     private val _scanResult = MutableLiveData<LaundryScanResponse>()
     val scanResult: LiveData<LaundryScanResponse> = _scanResult
-
     private val _checkInResult = MutableLiveData<LaundryCheckInResponse>()
     val checkInResult: LiveData<LaundryCheckInResponse> = _checkInResult
-
     private val _recentResult = MutableLiveData<LaundryMyCheckInsResponse>()
     val recentResult: LiveData<LaundryMyCheckInsResponse> = _recentResult
-
     private val _isLoading = MutableLiveData<Boolean>()
     val isLoading: LiveData<Boolean> = _isLoading
-
     private val _isSubmitting = MutableLiveData<Boolean>()
     val isSubmitting: LiveData<Boolean> = _isSubmitting
-
     private val _error = MutableLiveData<String>()
     val error: LiveData<String> = _error
 
@@ -161,7 +143,6 @@ class LaundryCheckInViewModel(application: Application) : AndroidViewModel(appli
      */
     private val _errorCode = MutableLiveData<Int?>()
     val errorCode: LiveData<Int?> = _errorCode
-
     /**
      * The arrival the OPERATOR is filling. Null until they pick a courier off the queue.
      *
@@ -186,10 +167,8 @@ class LaundryCheckInViewModel(application: Application) : AndroidViewModel(appli
     var counterQuery = ""
     var counterFrom: String? = null
     var counterTo: String? = null
-
     var workingIdTrx: Int? = null
         private set
-
     var workingCourier: String? = null
         private set
 
@@ -316,10 +295,8 @@ class LaundryCheckInViewModel(application: Application) : AndroidViewModel(appli
      */
     private val _heldItems = MutableLiveData<List<LaundryHeldItem>>(emptyList())
     val heldItems: LiveData<List<LaundryHeldItem>> = _heldItems
-
     private val _heldCollectors = MutableLiveData<List<LaundryCollector>>(emptyList())
     val heldCollectors: LiveData<List<LaundryCollector>> = _heldCollectors
-
     fun loadHeldItems() {
         viewModelScope.launch {
             repository.heldItems()
@@ -353,14 +330,16 @@ class LaundryCheckInViewModel(application: Application) : AndroidViewModel(appli
     }
 
     fun rejectBatch(idTrx: Int, reason: String) = act(idTrx) { repository.reject(idTrx, reason) }
-
     fun startWash(idTrx: Int) = act(idTrx) { repository.washStart(idTrx) }
-
-    fun recordConditionOut(idTrx: Int, idLines: List<Int>, condition: String, note: String? = null) =
+    fun recordConditionOut(
+        idTrx: Int,
+        idLines: List<Int>,
+        condition: String,
+        note: String? = null
+    ) =
         act(idTrx) { repository.conditionOut(idLines, condition, note) }
 
     fun markReady(idTrx: Int) = act(idTrx) { repository.markReady(idTrx) }
-
     fun handOverTo(idTrx: Int, idCollector: Int, itemIds: List<Int>) =
         act(idTrx) { repository.pickup(idTrx, idCollector, itemIds) }
 
@@ -414,15 +393,12 @@ class LaundryCheckInViewModel(application: Application) : AndroidViewModel(appli
             repository.slip(idTrx, out?.joinToString(","), reason, cols)
                 .onSuccess { response ->
                     val data = response.data
-
                     val lines = data?.lines
 
                     when {
                         response.isSuccess && lines != null -> _slip.value = lines
-
                         // Answerable: ask for the reason and come back with it.
                         data?.needsReason == true -> _slipNeedsReason.value = response.message
-
                         else -> _actionResult.value = LaundryActionResponse(0, response.message)
                     }
                 }
@@ -476,7 +452,6 @@ class LaundryCheckInViewModel(application: Application) : AndroidViewModel(appli
         }
 
         _isSubmitting.value = true
-
         val items = bundle.values.map { LaundryCheckInItem(it.qrCode, it.note) }
 
         viewModelScope.launch {
@@ -544,7 +519,6 @@ class LaundryCheckInViewModel(application: Application) : AndroidViewModel(appli
     }
 
     fun count(): Int = bundle.size
-
     fun loadHandoverQueue() {
         _isLoading.value = true
 

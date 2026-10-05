@@ -54,7 +54,6 @@ class SseService : Service() {
     }
 
     private var isRunning = false
-
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         if (!isRunning) {
             initSse()
@@ -96,14 +95,12 @@ class SseService : Service() {
                             Log.d(TAG, "Received non-JSON event data: $cleanData")
                             return
                         }
-
                         val outerJson = JSONObject(cleanData)
 
                         if (!outerJson.has("message")) {
                             Log.d(TAG, "Received JSON without a message field: $cleanData")
                             return
                         }
-
                         val message = outerJson.get("message")
                         val messageJson: JSONObject = when (message) {
                             is String -> {
@@ -130,7 +127,6 @@ class SseService : Service() {
                         }
 
                         Log.e("Received notification", messageJson.toString())
-
                         val extras = messageJson.getJSONObject("extras")
                         val notificationId = extras.getString("client:id_gaprojects").toInt()
                         val relatedUserId = extras.getString("client:id_user").toInt()
@@ -152,7 +148,7 @@ class SseService : Service() {
                             }
                         }
                     } catch (e: Exception) {
-                        Log.e(TAG, "onEvent error: ${e.toString()}\nData was: $data")
+                        Log.e(TAG, "onEvent error: $e\nData was: $data")
                     }
                 }
 

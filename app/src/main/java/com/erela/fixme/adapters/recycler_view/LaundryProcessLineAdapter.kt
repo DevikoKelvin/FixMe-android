@@ -57,7 +57,6 @@ class LaundryProcessLineAdapter(
     }
 
     override fun getItemCount(): Int = items.size
-
     inner class ViewHolder(
         private val binding: ListItemLaundryProcessLineBinding
     ) : RecyclerView.ViewHolder(binding.root) {
@@ -68,7 +67,6 @@ class LaundryProcessLineAdapter(
                 tvItemType.text = listOfNotNull(line.itemType, line.ownerName)
                     .joinToString(" · ")
                     .ifBlank { "—" }
-
                 // THE PAIR, side by side. An exit condition means nothing without the one the
                 // garment arrived in - that comparison IS the damage attribution [D-3].
                 tvConditions.text = context.getString(

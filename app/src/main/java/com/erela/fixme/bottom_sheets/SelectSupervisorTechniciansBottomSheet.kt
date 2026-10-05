@@ -47,7 +47,6 @@ class SelectSupervisorTechniciansBottomSheet(
     val supervisorsList: ArrayList<SelectedSupervisorTechniciansList> = ArrayList()
     val techniciansList: ArrayList<SelectedSupervisorTechniciansList> = ArrayList()
     private lateinit var adapter: SupervisorTechniciansRvAdapter
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)

@@ -25,7 +25,6 @@ class InputDialog(context: Context) : Dialog(context) {
     private val binding: DialogInputBinding by lazy {
         DialogInputBinding.inflate(layoutInflater)
     }
-
     private lateinit var listener: InputDialogListener
     private lateinit var title: String
     private lateinit var hint: String

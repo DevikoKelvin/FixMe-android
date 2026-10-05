@@ -216,12 +216,8 @@ class ImageZoomHelper(activity: Activity, view: View) : ScaleGestureDetector.OnS
     }
 
     override fun onViewStartedZooming(view: View) {}
-
     override fun onViewEndedZooming(view: View) {}
-
     override fun onDoubleTap(view: View) {}
-
     override fun onLongPress(view: View) {}
-
     override fun onTap(view: View) {}
 }

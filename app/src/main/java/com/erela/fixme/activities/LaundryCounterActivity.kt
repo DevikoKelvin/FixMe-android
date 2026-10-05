@@ -14,14 +14,14 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.core.widget.doAfterTextChanged
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.transition.AutoTransition
 import androidx.transition.TransitionManager
 import com.erela.fixme.R
-import androidx.core.widget.doAfterTextChanged
 import com.erela.fixme.adapters.recycler_view.LaundryBundleAdapter
-import com.erela.fixme.adapters.recycler_view.LaundryHistoryAdapter
 import com.erela.fixme.adapters.recycler_view.LaundryHeldAdapter
+import com.erela.fixme.adapters.recycler_view.LaundryHistoryAdapter
 import com.erela.fixme.adapters.recycler_view.LaundryOutScanAdapter
 import com.erela.fixme.adapters.recycler_view.LaundryQueueAdapter
 import com.erela.fixme.adapters.recycler_view.LaundryReadyAdapter
@@ -31,8 +31,8 @@ import com.erela.fixme.dialogs.ConfirmationDialog
 import com.erela.fixme.dialogs.DialogOption
 import com.erela.fixme.dialogs.OptionListDialog
 import com.erela.fixme.helpers.enableEdgeToEdgeOpaqueNav
-import com.erela.fixme.objects.laundry.LaundryReadyBatch
 import com.erela.fixme.objects.laundry.LaundryHeldItem
+import com.erela.fixme.objects.laundry.LaundryReadyBatch
 import com.erela.fixme.objects.laundry.LaundryWaitingCourier
 import com.erela.fixme.objects.laundry.pickerLabels
 import com.erela.fixme.viewmodel.LaundryCheckInViewModel
@@ -90,11 +90,9 @@ class LaundryCounterActivity : AppCompatActivity() {
     private lateinit var readyAdapter: LaundryReadyAdapter
     private lateinit var historyAdapter: LaundryHistoryAdapter
     private lateinit var heldAdapter: LaundryHeldAdapter
-
     // ALL FIVE LIVE IN THE VIEW MODEL, which survives a rotation [GA, 21 Sep 2026]. Read
-     // through rather than moved wholesale: every use below is unchanged, and the names still say
-     // what they mean at the point of use.
-
+    // through rather than moved wholesale: every use below is unchanged, and the names still say
+    // what they mean at the point of use.
     /** True while a list is on screen, false while a bundle is being scanned. */
     private var queueMode: Boolean
         get() = viewModel.counterQueueMode
@@ -146,7 +144,6 @@ class LaundryCounterActivity : AppCompatActivity() {
         set(value) {
             viewModel.counterFrom = value
         }
-
     private var to: String?
         get() = viewModel.counterTo
         set(value) {
@@ -201,7 +198,6 @@ class LaundryCounterActivity : AppCompatActivity() {
         setupObservers()
 
         renderRange()
-
         // BACK WHERE THE OPERATOR LEFT IT. A rotation recreates the Activity; the bundle in the
         // ViewModel is untouched, so re-entering queue mode unconditionally was the only reason
         // it disappeared.
@@ -330,7 +326,6 @@ class LaundryCounterActivity : AppCompatActivity() {
             ).forEach { label ->
                 tabLayout.addTab(tabLayout.newTab().setText(getString(label)))
             }
-
             // SELECTED BEFORE THE LISTENER EXISTS, deliberately. Re-selecting the saved tab after
             // a rotation would otherwise fire onTabSelected, which calls showQueue() - throwing
             // away the bundle this whole restore is here to keep.
@@ -357,7 +352,6 @@ class LaundryCounterActivity : AppCompatActivity() {
             // is long - not on the twenty days it holds two rows.
             searchButton.setOnClickListener {
                 val opening = searchField.visibility != View.VISIBLE
-
                 // The field fades, and the tabs and the list slide to meet it. `AutoTransition`
                 // is Fade + ChangeBounds, which is both halves of that in one line and the same
                 // call the splash screen and the submission footer already use.
@@ -592,7 +586,6 @@ class LaundryCounterActivity : AppCompatActivity() {
     @SuppressLint("SetTextI18n")
     private fun showBundle() {
         queueMode = false
-
         // The other half of the mode change; see [showQueue].
         TransitionManager.beginDelayedTransition(binding.main, AutoTransition())
 
@@ -678,15 +671,12 @@ class LaundryCounterActivity : AppCompatActivity() {
             toast(getString(R.string.laundry_held_none_selected), warning = true)
             return
         }
-
         val people = viewModel.heldCollectors.value.orEmpty()
 
         if (people.isEmpty()) {
             return
         }
-
         val labels = people.pickerLabels()
-
         val options = people.mapIndexed { index, person ->
             DialogOption(
                 labels[index],

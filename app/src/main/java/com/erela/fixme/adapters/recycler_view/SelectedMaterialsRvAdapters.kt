@@ -22,7 +22,6 @@ class SelectedMaterialsRvAdapters(
 ) : RecyclerView.Adapter<SelectedMaterialsRvAdapters.ViewHolder>(),
     SelectMaterialsBottomSheet.OnMaterialsSetListener {
     private lateinit var onMaterialsSetListener: OnMaterialsSetListener
-
     override fun onCreateViewHolder(
         parent: ViewGroup, viewType: Int
     ): ViewHolder = ViewHolder(
@@ -110,7 +109,6 @@ class SelectedMaterialsRvAdapters(
     }
 
     override fun getItemCount(): Int = selectedMaterialsArrayList.size
-
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val binding = ListItemSelectedItemsBinding.bind(view)
     }

@@ -16,8 +16,6 @@ import android.os.Handler
 import android.os.Looper
 import android.util.Log
 import android.view.View
-import com.erela.fixme.helpers.enableEdgeToEdgeOpaqueNav
-import com.erela.fixme.helpers.ThemeHelper
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.app.NotificationManagerCompat
@@ -33,7 +31,9 @@ import com.erela.fixme.bottom_sheets.ChannelPickerBottomSheet
 import com.erela.fixme.custom_views.CustomToast
 import com.erela.fixme.databinding.ActivitySettingsBinding
 import com.erela.fixme.dialogs.ChangelogDialog
+import com.erela.fixme.helpers.ThemeHelper
 import com.erela.fixme.helpers.api.InitAPI
+import com.erela.fixme.helpers.enableEdgeToEdgeOpaqueNav
 import com.erela.fixme.objects.UpdateCheckResponse
 import retrofit2.Call
 import retrofit2.Callback
@@ -59,7 +59,6 @@ class SettingsActivity : AppCompatActivity() {
         override fun onReceive(context: Context, intent: Intent) {
             val id = intent.getLongExtra(DownloadManager.EXTRA_DOWNLOAD_ID, -1)
             if (downloadId != id) return
-
             val downloadManager = getSystemService(DOWNLOAD_SERVICE) as DownloadManager
             val cursor = downloadManager.query(DownloadManager.Query().setFilterById(downloadId))
 
@@ -67,7 +66,6 @@ class SettingsActivity : AppCompatActivity() {
                 cursor.close()
                 return
             }
-
             val statusColumnIndex = cursor.getColumnIndex(DownloadManager.COLUMN_STATUS)
             if (statusColumnIndex != -1) {
                 val status = cursor.getInt(statusColumnIndex)
@@ -122,7 +120,6 @@ class SettingsActivity : AppCompatActivity() {
     }
 
     private fun loadEffectiveChannel(): String = ChannelPickerBottomSheet.loadEffectiveChannel(this)
-
     private fun selectUpdateChannel(channel: String) {
         val bakedLevel = ChannelPickerBottomSheet.channelLevel(BuildConfig.VERSION_CHANNEL)
         if (ChannelPickerBottomSheet.channelLevel(channel) < bakedLevel) return
@@ -190,7 +187,6 @@ class SettingsActivity : AppCompatActivity() {
         super.onResume()
         // If a downloaded APK is waiting to be installed, show install-ready state on return
         val prefs = getSharedPreferences(DOWNLOAD_PREFS, MODE_PRIVATE)
-
         // THE PENDING UPDATE IS THIS BUILD, so it has been installed: forget it before either
         // restore path below can offer it again. Neither checked the version - the install-path
         // one offered any APK still on disk, the DownloadManager one any successful download - so
@@ -209,7 +205,6 @@ class SettingsActivity : AppCompatActivity() {
                 remove(PREF_NEW_APP_VERSION)
             }
         }
-
         val installPath = prefs.getString(PREF_INSTALL_FILE_PATH, null)
         if (installPath != null) {
             if (File(installPath).exists()) {
@@ -259,7 +254,6 @@ class SettingsActivity : AppCompatActivity() {
                     "@ ${
                         Calendar.getInstance().get(Calendar.YEAR)
                     } Erlangga Edi Laboratories Corporation\n All rights reserved"
-
             val channel =
                 if (
                     (BuildConfig.VERSION_CHANNEL == "release" || BuildConfig.VERSION_CHANNEL == "beta_prerelease")
@@ -384,7 +378,10 @@ class SettingsActivity : AppCompatActivity() {
                         // See MainActivity.checkNewUpdate(). This is the path most users take
                         // to update, so it is the one that usually supplies the notes.
                         ChangelogDialog.rememberPending(
-                            this@SettingsActivity, body.versionName, body.changelog, body.changelogEn
+                            this@SettingsActivity,
+                            body.versionName,
+                            body.changelog,
+                            body.changelogEn
                         )
                         when (body.code) {
                             1 -> {
@@ -596,7 +593,6 @@ class SettingsActivity : AppCompatActivity() {
                             }
                         }
                     }
-
                     // Stall timeout: ~20 s of PENDING/PAUSED with no bytes → cancel and report error
                     // (40 ticks × 500 ms = 20 000 ms)
                     if (downloadStallTicks >= 40) {
@@ -656,14 +652,11 @@ class SettingsActivity : AppCompatActivity() {
     @SuppressLint("SetTextI18n")
     private fun restoreDownloadStateIfNeeded() {
         if (progressPollingRunnable != null) return  // already running in this session
-
         val prefs = getSharedPreferences(DOWNLOAD_PREFS, MODE_PRIVATE)
         val savedId = prefs.getLong(PREF_DOWNLOAD_ID, 0L)
         if (savedId == 0L) return
-
         // Restore newAppVersion so notification helpers and UI have the correct version string
         newAppVersion = prefs.getString(PREF_NEW_APP_VERSION, null)
-
         val downloadManager = getSystemService(DOWNLOAD_SERVICE) as DownloadManager
         val cursor = downloadManager.query(DownloadManager.Query().setFilterById(savedId))
 
@@ -672,7 +665,6 @@ class SettingsActivity : AppCompatActivity() {
             clearSavedDownloadId()
             return
         }
-
         val statusIndex = cursor.getColumnIndex(DownloadManager.COLUMN_STATUS)
         val status = if (statusIndex != -1) cursor.getInt(statusIndex) else -1
 
@@ -811,7 +803,6 @@ class SettingsActivity : AppCompatActivity() {
             File(path).takeIf { it.exists() }?.delete()
         }
         prefs.edit { remove(PREF_INSTALL_FILE_PATH) }
-
         val fileName = url.substringAfterLast('/').let {
             if (it.endsWith(".apk")) it else "FixMe_update_${BuildConfig.VERSION_NAME}.apk"
         }

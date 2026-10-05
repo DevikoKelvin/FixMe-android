@@ -17,7 +17,6 @@ class CustomToast(private val context: Context) : Toast(context) {
 
     companion object {
         const val MARGIN_DEFAULT = 100
-
         fun getInstance(context: Context): CustomToast {
             return CustomToast(context)
         }

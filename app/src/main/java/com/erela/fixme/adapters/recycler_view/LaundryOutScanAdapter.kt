@@ -40,10 +40,8 @@ class LaundryOutScanAdapter(
     }
 
     override fun getItemCount(): Int = items.size
-
     inner class ViewHolder(private val binding: ListItemLaundryOutScanBinding) :
         RecyclerView.ViewHolder(binding.root) {
-
         @SuppressLint("SetTextI18n")
         fun bind(code: String, position: Int) {
             binding.apply {

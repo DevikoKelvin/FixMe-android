@@ -192,7 +192,6 @@ class AcSessionActivity : AppCompatActivity(),
                     )
                     return@setOnClickListener
                 }
-
                 // Already a written PNG by this point: SignaturePadDialog exports on Save, so
                 // there is nothing left to rasterise or to fail here.
                 val signatureFile = witnessSignatureFile
@@ -271,7 +270,6 @@ class AcSessionActivity : AppCompatActivity(),
                         }
                     }
                 }
-
                 // 403 is MobileAcController.validateCaller refusing the account — it is inactive
                 // or gone, so nothing on this screen can succeed and the form is dead. Leave the
                 // way the back button would, rather than sitting on it.

@@ -13,7 +13,6 @@ import com.google.gson.annotations.SerializedName
  * failure**, because that is what the installed 1.4.x clients parse. `code == 1` is the only
  * success test.
  */
-
 /**
  * One scanned patch, resolved before it joins the bundle.
  *
@@ -329,7 +328,6 @@ data class LaundryReadyBatch(
     /** What is actually collectable, which is not the item count once a partial pickup [T-07]. */
     @SerializedName("ready_count") val readyCount: Int
 )
-
 /**
  * The counter's scan-out: every collectable garment, checked back out before anybody may take it.
  *
@@ -362,7 +360,6 @@ data class LaundryCollector(
     @SerializedName("sub_dept") val subDept: String?
 )
 
-
 /**
  * The picker's labels, with the login appended ONLY where two accounts share a name.
  *
@@ -389,7 +386,6 @@ fun List<LaundryCollector>.pickerLabels(): List<String> {
         }
     }
 }
-
 
 /**
  * One garment the counter is holding for another department  [T-02].
@@ -456,7 +452,6 @@ data class LaundryPickupRequest(
     @SerializedName("id_collector") val idCollector: Int,
     @SerializedName("item_ids") val itemIds: List<Int>
 )
-
 /** One slip, already laid out to the paper's width by the server. */
 /**
  * One row of a slip: `t` is "text" or "qr", `v` is the characters or the payload.

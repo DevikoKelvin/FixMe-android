@@ -38,11 +38,9 @@ object ThemeHelper {
     const val PREFS = "fixme_theme_prefs"
     const val KEY_DARK = "dark_mode"
     private const val KEY_VIEWS = "theme_switch_views"
-
     private var snapshot: Bitmap? = null
     private var originX = 0f
     private var originY = 0f
-
     fun isDark(context: Context): Boolean =
         context.getSharedPreferences(PREFS, Context.MODE_PRIVATE).getBoolean(KEY_DARK, false)
 
@@ -73,7 +71,8 @@ object ThemeHelper {
     fun switchTo(activity: Activity, dark: Boolean, origin: View) {
         // Finishing: a second tap landed on the screen that is already being replaced.
         if (dark == isDark(activity) || activity.isFinishing) return
-        activity.getSharedPreferences(PREFS, Context.MODE_PRIVATE).edit { putBoolean(KEY_DARK, dark) }
+        activity.getSharedPreferences(PREFS, Context.MODE_PRIVATE)
+            .edit { putBoolean(KEY_DARK, dark) }
         val decor = activity.window.decorView
         if (decor.isLaidOut) {
             snapshot = decor.drawToBitmap()
@@ -108,8 +107,11 @@ object ThemeHelper {
         activity.intent.getBundleExtra(KEY_VIEWS)?.let { activity.window.restoreHierarchyState(it) }
         val decor = activity.window.decorView as ViewGroup
         val cover = RevealCover(activity, shot, originX, originY)
-        decor.addView(cover, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT)
-
+        decor.addView(
+            cover,
+            ViewGroup.LayoutParams.MATCH_PARENT,
+            ViewGroup.LayoutParams.MATCH_PARENT
+        )
         val end = hypot(max(originX, shot.width - originX), max(originY, shot.height - originY))
         val grow = ValueAnimator.ofFloat(0f, end).apply {
             duration = 550
@@ -126,7 +128,11 @@ object ThemeHelper {
         // versions may give it sooner, which is no worse than before). The timer is for a window
         // that never gets focus, e.g. another app focused in split screen.
         var started = false
-        val start = { if (!started) { started = true; grow.start() } }
+        val start = {
+            if (!started) {
+                started = true; grow.start()
+            }
+        }
         decor.viewTreeObserver.addOnWindowFocusChangeListener { if (it) start() }
         decor.postDelayed(start, 600)
     }
@@ -147,7 +153,6 @@ object ThemeHelper {
                 field = value
                 invalidate()
             }
-
         private val hole = Paint(Paint.ANTI_ALIAS_FLAG).apply {
             xfermode = PorterDuffXfermode(PorterDuff.Mode.CLEAR)
         }

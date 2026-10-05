@@ -28,7 +28,6 @@ class UserInfoBottomSheet(context: Context) : BottomSheetDialog(context) {
         window?.setBackgroundDrawable(Color.TRANSPARENT.toDrawable())
         window?.setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT)
         setCancelable(true)
-
         val screenHeight = context.resources.displayMetrics.heightPixels
         behavior.peekHeight = screenHeight
         behavior.state = BottomSheetBehavior.STATE_EXPANDED

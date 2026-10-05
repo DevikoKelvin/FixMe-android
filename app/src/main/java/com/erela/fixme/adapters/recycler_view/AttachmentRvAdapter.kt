@@ -13,7 +13,6 @@ import com.erela.fixme.dialogs.PhotoPreviewDialog
 class AttachmentRvAdapter(private val context: Context, val data: ArrayList<Uri>) :
     RecyclerView.Adapter<AttachmentRvAdapter.ViewHolder>() {
     private lateinit var onAttachmentItemActionListener: OnAttachmentItemActionListener
-
     override fun onCreateViewHolder(
         parent: ViewGroup, viewType: Int
     ): ViewHolder = ViewHolder(
@@ -46,7 +45,6 @@ class AttachmentRvAdapter(private val context: Context, val data: ArrayList<Uri>
     }
 
     override fun getItemCount(): Int = data.size
-
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val binding = ListItemAttachmentBinding.bind(view)
     }

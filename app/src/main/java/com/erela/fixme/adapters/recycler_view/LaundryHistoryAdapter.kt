@@ -58,10 +58,8 @@ class LaundryHistoryAdapter(
     }
 
     override fun getItemCount(): Int = items.size
-
     inner class ViewHolder(private val binding: ListItemLaundryQueueBinding) :
         RecyclerView.ViewHolder(binding.root) {
-
         @SuppressLint("SetTextI18n")
         fun bind(item: LaundryWaitingCourier, ordinal: Int) {
             binding.apply {
@@ -96,7 +94,6 @@ class LaundryHistoryAdapter(
                         item.checkedInAt ?: "-"
                     )
                 }
-
                 // CLICKABILITY IS NOT THE CAPTION'S BUSINESS. These were tied to one flag,
                 // so choosing the "finished" wording also made the row dead - two unrelated
                 // things decided by one boolean, which is how a list silently stops opening.

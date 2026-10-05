@@ -3,7 +3,6 @@ package com.erela.fixme.activities
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
-import com.erela.fixme.helpers.enableEdgeToEdgeOpaqueNav
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.res.ResourcesCompat
@@ -19,6 +18,7 @@ import com.erela.fixme.custom_views.CustomToast
 import com.erela.fixme.databinding.ActivityAcTaskListBinding
 import com.erela.fixme.dialogs.LoadingDialog
 import com.erela.fixme.helpers.UserDataHelper
+import com.erela.fixme.helpers.enableEdgeToEdgeOpaqueNav
 import com.erela.fixme.viewmodel.AcMaintenanceViewModel
 import com.journeyapps.barcodescanner.ScanContract
 import com.journeyapps.barcodescanner.ScanOptions
@@ -32,7 +32,6 @@ class AcTaskListActivity : AppCompatActivity(), AcCheckInBottomSheet.OnCheckInLi
     private val viewModel: AcMaintenanceViewModel by viewModels()
     private lateinit var taskAdapter: AcTaskAdapter
     private val loadingDialog: LoadingDialog by lazy { LoadingDialog(this) }
-
     private val barcodeLauncher = registerForActivityResult(ScanContract()) { result ->
         if (result.contents != null) {
             val userId = UserDataHelper(this).getUserData().id
@@ -53,7 +52,6 @@ class AcTaskListActivity : AppCompatActivity(), AcCheckInBottomSheet.OnCheckInLi
 
         setupUI()
         setupObservers()
-
         val userId = UserDataHelper(this).getUserData().id
         viewModel.getTaskList(userId)
     }

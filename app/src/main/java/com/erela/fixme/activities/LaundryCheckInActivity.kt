@@ -7,8 +7,8 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
-import com.erela.fixme.R
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.erela.fixme.R
 import com.erela.fixme.adapters.recycler_view.LaundryBatchAdapter
 import com.erela.fixme.custom_views.CustomToast
 import com.erela.fixme.databinding.ActivityLaundryCheckInBinding
@@ -88,7 +88,6 @@ class LaundryCheckInActivity : AppCompatActivity() {
         }
         // No IME padding here, unlike the counter screen: nothing on this screen is typed, so the
         // keyboard never opens over it.
-
         binding.apply {
             toolBar.setNavigationOnClickListener { finish() }
 
@@ -103,7 +102,6 @@ class LaundryCheckInActivity : AppCompatActivity() {
                 layoutManager = LinearLayoutManager(this@LaundryCheckInActivity)
                 adapter = batchAdapter
             }
-
             // The answer to "are my uniforms back yet" changes while the courier is looking at it,
             // and `onResume` only helps if they leave the screen and come back.
             swipeRefreshLayout.setOnRefreshListener { viewModel.loadBatches() }
@@ -111,7 +109,6 @@ class LaundryCheckInActivity : AppCompatActivity() {
             scanCounterButton.setOnClickListener {
                 counterLauncher.launch(scanOptions())
             }
-
             // The banner has no timeout on purpose - it holds the transaction number - so it needs
             // a way out. Closing it can uncover the empty state, hence the re-render.
             arrivalDismiss.setOnClickListener {
@@ -140,8 +137,8 @@ class LaundryCheckInActivity : AppCompatActivity() {
     private fun renderEmptyState() {
         binding.apply {
             val show = viewModel.isLoading.value != true &&
-                batchAdapter.itemCount == 0 &&
-                arrivalCard.visibility != View.VISIBLE
+                    batchAdapter.itemCount == 0 &&
+                    arrivalCard.visibility != View.VISIBLE
 
             instructionContainer.visibility = if (show) View.VISIBLE else View.GONE
 
@@ -170,7 +167,6 @@ class LaundryCheckInActivity : AppCompatActivity() {
                         toast(response.message, warning = true)
                         return@observe
                     }
-
                     val rows = response.data.orEmpty()
                     batchAdapter.submitList(rows)
 
@@ -183,7 +179,6 @@ class LaundryCheckInActivity : AppCompatActivity() {
                         toast(response.message, warning = true)
                         return@observe
                     }
-
                     // The server's sentence already distinguishes a fresh arrival from one that
                     // was already open, and names the transaction in both. Repeating it here in
                     // our own words would be a second version to keep in step.
@@ -194,11 +189,9 @@ class LaundryCheckInActivity : AppCompatActivity() {
 
                     arrivalCard.visibility = View.VISIBLE
                     renderEmptyState()
-
                     // The new batch belongs on the list straight away.
                     viewModel.loadBatches()
                 }
-
                 // `isLoading` belongs to the LIST on this screen - `arrive()` reports through
                 // `isSubmitting` instead - so binding the spinner to it cannot leave it turning
                 // through a counter scan. Bound to the flag rather than cleared in the success

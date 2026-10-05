@@ -18,28 +18,28 @@ import com.erela.fixme.objects.ac.AcCheckInResponse
 import com.erela.fixme.objects.ac.AcScanResponse
 import com.erela.fixme.objects.ac.AcSimpleResponse
 import com.erela.fixme.objects.ac.AcTaskListResponse
-import okhttp3.MultipartBody
-import okhttp3.RequestBody
-import retrofit2.Call
 import com.erela.fixme.objects.laundry.LaundryActionResponse
-import com.erela.fixme.objects.laundry.LaundryCollectorsResponse
-import com.erela.fixme.objects.laundry.LaundryHeldItemsResponse
-import com.erela.fixme.objects.laundry.LaundryRetrieveRequest
-import com.erela.fixme.objects.laundry.LaundryConditionOutRequest
-import com.erela.fixme.objects.laundry.LaundryPickupRequest
-import com.erela.fixme.objects.laundry.LaundrySlipResponse
+import com.erela.fixme.objects.laundry.LaundryAddItemsRequest
 import com.erela.fixme.objects.laundry.LaundryArrivalResponse
+import com.erela.fixme.objects.laundry.LaundryArrivalsResponse
 import com.erela.fixme.objects.laundry.LaundryBatchDetailResponse
 import com.erela.fixme.objects.laundry.LaundryBatchesResponse
+import com.erela.fixme.objects.laundry.LaundryCheckInResponse
 import com.erela.fixme.objects.laundry.LaundryCollectResponse
+import com.erela.fixme.objects.laundry.LaundryCollectorsResponse
+import com.erela.fixme.objects.laundry.LaundryConditionOutRequest
 import com.erela.fixme.objects.laundry.LaundryHandoverMarkRequest
 import com.erela.fixme.objects.laundry.LaundryHandoverMarkResponse
 import com.erela.fixme.objects.laundry.LaundryHandoverQueueResponse
-import com.erela.fixme.objects.laundry.LaundryArrivalsResponse
-import com.erela.fixme.objects.laundry.LaundryAddItemsRequest
-import com.erela.fixme.objects.laundry.LaundryCheckInResponse
+import com.erela.fixme.objects.laundry.LaundryHeldItemsResponse
 import com.erela.fixme.objects.laundry.LaundryMyCheckInsResponse
+import com.erela.fixme.objects.laundry.LaundryPickupRequest
+import com.erela.fixme.objects.laundry.LaundryRetrieveRequest
 import com.erela.fixme.objects.laundry.LaundryScanResponse
+import com.erela.fixme.objects.laundry.LaundrySlipResponse
+import okhttp3.MultipartBody
+import okhttp3.RequestBody
+import retrofit2.Call
 import retrofit2.http.Body
 import retrofit2.http.Field
 import retrofit2.http.FormUrlEncoded
@@ -334,7 +334,6 @@ interface GetEndpoint {
         @Field("case_id") caseId: Int,
         @Field("user_id") userId: Int
     ): Call<GenericSimpleResponse>
-
     // ---------------------------------------------------------------------------------------
     // Smart Wash counter check-in.
     //
@@ -345,7 +344,6 @@ interface GetEndpoint {
     // InitAPI interceptor already sends. `user_id` is therefore NOT a parameter here: the server
     // overwrites it from the token, and passing it would only invite the belief that it matters.
     // ---------------------------------------------------------------------------------------
-
     /**
      * Is this token still good? 200 yes, 401 no — the status IS the answer.
      *
@@ -420,12 +418,10 @@ interface GetEndpoint {
     suspend fun laundryHandoverMark(
         @Body request: LaundryHandoverMarkRequest
     ): LaundryHandoverMarkResponse
-
     // ── The counter's process actions, ported from the Compose app on 17 Sep 2026 ─────────
     //
     // Every one of these lands on the same server service the web screens call, so a rule changed
     // in one place changes for all three clients. The app's job is the screen, not the rules.
-
     /**
      * Bundles banked but not yet collectable - the middle of the counter's day.
      *
@@ -637,5 +633,4 @@ interface GetEndpoint {
         @Field("user_id") userId: Int,
         @Field("lang") lang: String
     ): SupervisorTechnicianListResponse
-
 }

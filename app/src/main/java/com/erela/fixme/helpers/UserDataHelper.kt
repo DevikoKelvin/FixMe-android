@@ -16,9 +16,7 @@ class UserDataHelper(private val context: Context) {
     private val keyEmail = "key.email"
     private val keyToken = "key.token"
     private val keyLaundryCounter = "key.laundry.counter"
-
     /*private val notificationKey = "key.notification"*/
-
     fun setUserData(
         id: Int, idStarConnect: Int, username: String, name: String, privilege: Int, idDept: Int,
         dept: String, subDept: String, email: String = "",
@@ -88,7 +86,6 @@ class UserDataHelper(private val context: Context) {
     fun purgeUserData() {
         SharedPreferencesHelper.getSharedPreferences(context).edit { clear() }
     }
-
     /*fun setNotification(value: Boolean) {
         SharedPreferencesHelper.getSharedPreferences(context).edit {
             putBoolean(notificationKey, value)

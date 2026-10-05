@@ -21,7 +21,6 @@ import android.view.MotionEvent
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
-import com.erela.fixme.helpers.enableEdgeToEdgeOpaqueNav
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationCompat
@@ -41,6 +40,7 @@ import com.erela.fixme.dialogs.ChangelogDialog
 import com.erela.fixme.dialogs.UpdateAvailableDialog
 import com.erela.fixme.helpers.UserDataHelper
 import com.erela.fixme.helpers.api.InitAPI
+import com.erela.fixme.helpers.enableEdgeToEdgeOpaqueNav
 import com.erela.fixme.objects.GenericSimpleResponse
 import com.erela.fixme.objects.LoginResponse
 import com.erela.fixme.objects.UpdateCheckResponse
@@ -219,7 +219,6 @@ class LoginActivity : AppCompatActivity() {
                 // activity that is already finishing.
                 return@apply
             }
-
             val channel =
                 if (
                     (BuildConfig.VERSION_CHANNEL == "release" || BuildConfig.VERSION_CHANNEL == "beta_prerelease")
@@ -300,7 +299,6 @@ class LoginActivity : AppCompatActivity() {
                     )
                 }
             }
-
             // Add keyboard action listeners for Enter key
             usernameField.setOnEditorActionListener { _, actionId, _ ->
                 if (actionId == android.view.inputmethod.EditorInfo.IME_ACTION_NEXT ||

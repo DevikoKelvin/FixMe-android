@@ -21,9 +21,7 @@ class AcCheckInBottomSheet(
     private val binding: BsAcCheckInBinding by lazy {
         BsAcCheckInBinding.inflate(layoutInflater)
     }
-
     private var onCheckInListener: OnCheckInListener? = null
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)

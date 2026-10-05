@@ -209,7 +209,6 @@ class ImageCarouselPagerAdapter(
     }
 
     override fun getItemPosition(`object`: Any): Int = POSITION_NONE
-
     override fun getCount(): Int =
         imageUrlArrayList?.size ?: imageArrayList!!.size
 

@@ -62,7 +62,6 @@ class SplashScreenActivity : AppCompatActivity() {
             if (!userData.getToken().isNullOrBlank()) {
                 runCatching { InitAPI.getEndpoint.session() }
             }
-
             val next = if (userData.getToken().isNullOrBlank()) {
                 LoginActivity::class.java
             } else {

@@ -8,7 +8,6 @@ import android.view.MotionEvent
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
-import com.erela.fixme.helpers.enableEdgeToEdgeOpaqueNav
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
@@ -17,6 +16,7 @@ import com.erela.fixme.custom_views.CustomToast
 import com.erela.fixme.databinding.ActivityChangePasswordBinding
 import com.erela.fixme.helpers.UserDataHelper
 import com.erela.fixme.helpers.api.InitAPI
+import com.erela.fixme.helpers.enableEdgeToEdgeOpaqueNav
 import com.erela.fixme.objects.GenericSimpleResponse
 import com.erela.fixme.objects.UserData
 import com.google.android.material.textfield.TextInputEditText
@@ -33,7 +33,6 @@ class ChangePasswordActivity : AppCompatActivity() {
     }
     private var passValid = false
     private var passMatch = false
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)

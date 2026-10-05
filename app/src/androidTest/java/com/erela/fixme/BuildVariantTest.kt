@@ -4,8 +4,7 @@ import android.content.pm.ApplicationInfo
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
 import org.junit.Assert.assertEquals
-import org.junit.Assert.assertFalse
-import org.junit.Assume.assumeFalse
+import org.junit.Assert.assertTrue
 import org.junit.Test
 import org.junit.runner.RunWith
 
@@ -33,8 +32,9 @@ class BuildVariantTest {
 
     @Test
     fun release_talks_to_the_public_server() {
-        assumeFalse("debug builds use the office dev server on purpose", BuildConfig.DEBUG)
         // A LAN address only resolves inside the office, so phones out in the field would get nothing.
-        assertFalse(BuildConfig.BASE_URL, BuildConfig.BASE_URL.contains("://192.168."))
+        // Debug builds use the office dev server on purpose, so there it passes without checking:
+        // not assumeFalse(DEBUG), which Android Studio reports as a failed test.
+        assertTrue(BuildConfig.BASE_URL, BuildConfig.DEBUG || !BuildConfig.BASE_URL.contains("://192.168."))
     }
 }

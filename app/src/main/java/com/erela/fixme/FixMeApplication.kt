@@ -19,7 +19,6 @@ class FixMeApplication : Application() {
     override fun onCreate() {
         super.onCreate()
         ThemeHelper.apply(this)
-
         val userData = UserDataHelper(this)
 
         InitAPI.tokenProvider = { userData.getToken() }

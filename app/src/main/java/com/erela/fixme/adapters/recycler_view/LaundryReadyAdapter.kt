@@ -48,10 +48,8 @@ class LaundryReadyAdapter(
     }
 
     override fun getItemCount(): Int = items.size
-
     inner class ViewHolder(private val binding: ListItemLaundryQueueBinding) :
         RecyclerView.ViewHolder(binding.root) {
-
         @SuppressLint("SetTextI18n")
         fun bind(item: LaundryReadyBatch, position: Int) {
             binding.apply {
@@ -60,7 +58,6 @@ class LaundryReadyAdapter(
 
                 tvDept.text = listOfNotNull(item.namaDept, item.subDept).joinToString(" · ")
                     .ifBlank { "-" }
-
                 // The count is what is COLLECTABLE, not what the batch holds: a partial pickup
                 // leaves the rest ready while the header still reads ready [T-07], so an item
                 // count would have the operator scanning towards a number that already left.

@@ -16,7 +16,6 @@ class ActionHoldIssueBottomSheet(context: Context) : BottomSheetDialog(context) 
         BsActionHoldIssueBinding.inflate(layoutInflater)
     }
     private lateinit var onButtonClickListener: OnHoldButtonClickListener
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)

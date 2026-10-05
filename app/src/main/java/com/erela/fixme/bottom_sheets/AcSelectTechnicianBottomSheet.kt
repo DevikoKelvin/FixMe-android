@@ -29,11 +29,9 @@ class AcSelectTechnicianBottomSheet(
     private val binding: BsSelectTechniciansBinding by lazy {
         BsSelectTechniciansBinding.inflate(layoutInflater)
     }
-
     private var onTechnicianSelectedListener: OnTechnicianSelectedListener? = null
     private val techniciansList: ArrayList<SelectedSupervisorTechniciansList> = ArrayList()
     private lateinit var adapter: SupervisorTechniciansRvAdapter
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)

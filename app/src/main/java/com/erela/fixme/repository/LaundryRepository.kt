@@ -7,9 +7,9 @@ import com.erela.fixme.helpers.api.InitAPI
 import com.erela.fixme.objects.laundry.LaundryAddItemsRequest
 import com.erela.fixme.objects.laundry.LaundryCheckInItem
 import com.erela.fixme.objects.laundry.LaundryConditionOutRequest
+import com.erela.fixme.objects.laundry.LaundryHandoverMarkRequest
 import com.erela.fixme.objects.laundry.LaundryPickupRequest
 import com.erela.fixme.objects.laundry.LaundryRetrieveRequest
-import com.erela.fixme.objects.laundry.LaundryHandoverMarkRequest
 
 /**
  * Smart Wash counter check-in, as `AcRepository` does it: `runCatching` around each call.
@@ -69,7 +69,6 @@ class LaundryRepository(
         runCatching { api.laundryAccept(idTrx, override, reason, lang) }
 
     suspend fun heldItems() = runCatching { api.laundryHeldItems(lang) }
-
     suspend fun retrieve(idCollector: Int, itemIds: List<Int>) =
         runCatching { api.laundryRetrieve(LaundryRetrieveRequest(idCollector, itemIds)) }
 
@@ -77,14 +76,19 @@ class LaundryRepository(
         runCatching { api.laundryReject(idTrx, reason, lang) }
 
     suspend fun washStart(idTrx: Int) = runCatching { api.laundryWashStart(idTrx, lang) }
-
     suspend fun conditionOut(idLines: List<Int>, condition: String, note: String?) =
-        runCatching { api.laundryConditionOut(LaundryConditionOutRequest(idLines, condition, note)) }
+        runCatching {
+            api.laundryConditionOut(
+                LaundryConditionOutRequest(
+                    idLines,
+                    condition,
+                    note
+                )
+            )
+        }
 
     suspend fun markReady(idTrx: Int) = runCatching { api.laundryReady(idTrx, lang) }
-
     suspend fun collectors(idTrx: Int) = runCatching { api.laundryCollectors(idTrx, lang) }
-
     suspend fun pickup(idTrx: Int, idCollector: Int, itemIds: List<Int>) =
         runCatching { api.laundryPickup(LaundryPickupRequest(idTrx, idCollector, itemIds)) }
 

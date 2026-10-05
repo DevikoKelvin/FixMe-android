@@ -74,7 +74,6 @@ class UpdateStatusBottomSheet(
     private var selectedCategoryId: Int = 0
     private lateinit var subDepartmentList: ArrayList<String>
     private var selectedSubDept: SubDepartmentListResponse? = null
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
@@ -109,7 +108,6 @@ class UpdateStatusBottomSheet(
             // Hide category fields by default — only shown in editCategoryComplexity mode
             selectCategoryText.visibility = View.GONE
             categoryDropdownLayout.visibility = View.GONE
-
             // Edit Category & Complexity mode
             if (editCategoryComplexity) {
                 issueTitle.text = if (context.getString(R.string.lang) == "in")
@@ -135,7 +133,6 @@ class UpdateStatusBottomSheet(
                 categoryDropdownLayout.visibility = View.VISIBLE
                 selectComplexityText.visibility = View.VISIBLE
                 complexityRadioGroup.visibility = View.VISIBLE
-
                 // Pre-populate from existing data
                 selectedCategoryId = dataDetail.categoryId ?: 0
                 if (!dataDetail.complexity.isNullOrEmpty() && dataDetail.complexity != "null") {
@@ -169,7 +166,6 @@ class UpdateStatusBottomSheet(
                 getCategoryListForEditMode()
                 return
             }
-
             // In edit mode, show different title
             if (isEdit && deployTech) {
                 issueTitle.text = if (context.getString(R.string.lang) == "in")
@@ -539,7 +535,6 @@ class UpdateStatusBottomSheet(
                 if (isEdit) {
                     // Show title for header
                     issueTitle.visibility = View.VISIBLE
-
                     // Hide all non-technician-related UI
                     descriptionFieldLayout.visibility = View.GONE
                     selectComplexityText.visibility = View.GONE
@@ -551,7 +546,6 @@ class UpdateStatusBottomSheet(
                     subDeptDropdownLayout.visibility = View.GONE
                     // Don't hide the actions button container so deployTechButton can be visible
                     actionsButtonContainer.visibility = View.VISIBLE
-
                     // Show only technicians selection
                     deployTechText.text = if (context.getString(R.string.lang) == "in")
                         "Perbarui"
@@ -560,7 +554,6 @@ class UpdateStatusBottomSheet(
                     approveButton.visibility = View.GONE
                     rejectButton.visibility = View.GONE
                     cancelButton.visibility = View.GONE
-
                     // Set up deploy button click listener
                     deployTechButton.setOnClickListener {
                         executeUpdate()
@@ -709,7 +702,6 @@ class UpdateStatusBottomSheet(
             rvTechnicians.visibility = View.VISIBLE
             deployTechButton.visibility = View.GONE
             selectedTechniciansArrayList.clear()
-
             // In edit mode, show the update button only when the selected technicians set changes.
             // Compare by `userId` (fallback to `userName`) and ignore the "+" placeholder item.
             val initialTechnicianKeys: Set<String> = if (isEdit) {
@@ -740,7 +732,6 @@ class UpdateStatusBottomSheet(
                         if (currentTechnicianKeys().isNotEmpty()) View.VISIBLE else View.GONE
                     return
                 }
-
                 val currentKeys = currentTechnicianKeys()
                 deployTechButton.visibility =
                     if (currentKeys.isNotEmpty() && currentKeys != initialTechnicianKeys) {
@@ -749,7 +740,6 @@ class UpdateStatusBottomSheet(
                         View.GONE
                     }
             }
-
             // Pre-populate technicians in edit mode
             if (isEdit && !dataDetail.techniciansUser.isNullOrEmpty()) {
                 dataDetail.techniciansUser.forEach { tech ->
@@ -868,7 +858,6 @@ class UpdateStatusBottomSheet(
             if (editCategoryComplexity) {
                 return selectedCategoryId != 0 || this@UpdateStatusBottomSheet::complexity.isInitialized
             }
-
             // In Edit Technicians mode, only check if technicians are selected
             if (deployTech && isEdit) {
                 // Filter out the "+" placeholder and check if there are any real technicians selected
@@ -921,7 +910,6 @@ class UpdateStatusBottomSheet(
                                     if (loadingDialog.window != null) loadingDialog.show()
                                     deployTechLoading.visibility = View.VISIBLE
                                     deployTechText.visibility = View.GONE
-
                                     val categoryToSend =
                                         if (selectedCategoryId != 0) selectedCategoryId else dataDetail.categoryId
                                             ?: 0
@@ -2102,7 +2090,6 @@ class UpdateStatusBottomSheet(
                                 )
                                 val categories = response.body()?.data
                                 categories?.forEach { it?.categoryName?.let { name -> names.add(name) } }
-
                                 val dropdownAdapter = ArrayAdapter(
                                     context,
                                     R.layout.general_dropdown_item,

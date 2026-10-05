@@ -40,7 +40,6 @@ class ReportTrialBottomSheet(context: Context, private val detail: SubmissionDet
         UserDataHelper(context).getUserData()
     }
     private lateinit var onReportTrialSuccessListener: OnReportTrialSuccessListener
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)

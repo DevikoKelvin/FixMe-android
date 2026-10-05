@@ -39,7 +39,6 @@ class TrialTrackingBottomSheet(
     private lateinit var onTrialTrackingListener: OnTrialTrackingListener
     private lateinit var trialData: ArrayList<TrialDataItem?>
     private var readyDone: Boolean = false
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)

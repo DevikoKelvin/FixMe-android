@@ -73,7 +73,6 @@ class SubmissionListFilterBottomSheet(
         window?.setBackgroundDrawable(Color.TRANSPARENT.toDrawable())
         window?.setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT)
         setCancelable(true)
-
         val screenHeight = context.resources.displayMetrics.heightPixels
         behavior.peekHeight = screenHeight
         behavior.state = BottomSheetBehavior.STATE_EXPANDED
@@ -156,7 +155,6 @@ class SubmissionListFilterBottomSheet(
 
                 override fun onNothingSelected(parent: AdapterView<*>?) {}
             }
-
             val dateFormat = SimpleDateFormat("dd/MM/yyyy", Locale.forLanguageTag("id-ID"))
             val serverDateFormat =
                 SimpleDateFormat("yyyy-MM-dd", Locale.forLanguageTag("id-ID")).apply {
@@ -167,7 +165,6 @@ class SubmissionListFilterBottomSheet(
                     time = serverDateFormat.parse(startDate)!!
                 }
             }
-
             // Show placeholder if startDate is empty, otherwise show formatted date
             dateFromText.text = if (startDate.isNotEmpty())
                 dateFormat.format(startCalendar.time)
@@ -194,13 +191,11 @@ class SubmissionListFilterBottomSheet(
                 }
                 datePicker.show(fragmentManager, "START")
             }
-
             val nowCalendar = Calendar.getInstance(TimeZone.getTimeZone("UTC")).apply {
                 if (endDate.isNotEmpty()) {
                     time = serverDateFormat.parse(endDate)!!
                 }
             }
-
             // Show placeholder if endDate is empty, otherwise show formatted date
             dateToText.text = if (endDate.isNotEmpty())
                 dateFormat.format(nowCalendar.time)
@@ -216,7 +211,6 @@ class SubmissionListFilterBottomSheet(
                         else
                             "Select End Date"
                     )
-
                 // If startDate is selected, set it as minimum date
                 if (startDate.isNotEmpty()) {
                     datePickerBuilder.setSelection(
@@ -228,7 +222,6 @@ class SubmissionListFilterBottomSheet(
                 } else {
                     datePickerBuilder.setSelection(nowCalendar.timeInMillis)
                 }
-
                 val datePicker = datePickerBuilder.build()
                 datePicker.addOnPositiveButtonClickListener { selection ->
                     // Validate that endDate is not before startDate

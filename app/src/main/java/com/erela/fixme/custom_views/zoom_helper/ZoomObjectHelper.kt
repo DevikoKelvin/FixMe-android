@@ -63,7 +63,6 @@ object ZoomObjectHelper {
 
         return Point(x, y)
     }
-
     /*fun viewMidPoint(point: PointF, v: View) {
         val x = v.width.toFloat()
         val y = v.height.toFloat()

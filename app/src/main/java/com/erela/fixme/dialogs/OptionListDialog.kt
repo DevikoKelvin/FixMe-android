@@ -31,7 +31,6 @@ class OptionListDialog(context: Context) : Dialog(context) {
     private val binding: DialogOptionListBinding by lazy {
         DialogOptionListBinding.inflate(layoutInflater)
     }
-
     private lateinit var listener: OptionListDialogListener
     private lateinit var title: String
     private lateinit var options: List<DialogOption>
@@ -54,7 +53,6 @@ class OptionListDialog(context: Context) : Dialog(context) {
     private fun init() {
         binding.apply {
             titleText.text = title
-
             val inflater = LayoutInflater.from(context)
 
             options.forEachIndexed { index, option ->

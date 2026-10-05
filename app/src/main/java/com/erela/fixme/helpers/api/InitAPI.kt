@@ -1,6 +1,5 @@
 package com.erela.fixme.helpers.api
 
-import android.annotation.SuppressLint
 import com.erela.fixme.BuildConfig
 import com.google.gson.GsonBuilder
 import okhttp3.HttpUrl.Companion.toHttpUrlOrNull
@@ -15,7 +14,6 @@ import java.util.concurrent.TimeUnit
 object InitAPI {
     private const val API_BASE_URL = "${BuildConfig.BASE_URL}apimobile/"
     const val IMAGE_URL = "${BuildConfig.BASE_URL}public/assets/upload/"
-
     /**
      * Plain OkHttp with the platform trust store.
      *
@@ -50,15 +48,12 @@ object InitAPI {
      */
     @Volatile
     var onUnauthorized: () -> Unit = {}
-
     private val authInterceptor = Interceptor { chain ->
         val token = tokenProvider()
-
         // Host check, not just "is there a token": SSE_URL is a different server
         // (103.96.147.242) from BASE_URL (182.23.21.202), so attaching the header
         // unconditionally would hand our Sanctum token to a third party.
         val sendToken = !token.isNullOrBlank() && chain.request().url.host == apiHost
-
         val request = if (sendToken) {
             chain.request().newBuilder()
                 .header("Authorization", "Bearer $token")
@@ -75,7 +70,6 @@ object InitAPI {
             }
         }
     }
-
     private val client =
         okHttpClientBuilder()
             .addInterceptor(HttpLoggingInterceptor().apply {
