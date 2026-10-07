@@ -48,6 +48,17 @@
     <uses-permission
         android:name="android.permission.BLUETOOTH_ADMIN"
         android:maxSdkVersion="30" />
+
+    <!--
+        CompanionDeviceManager, which draws the "pair a new printer" chooser. The system does
+        the scanning behind it, which is how that list exists without BLUETOOTH_SCAN. Not
+        required: a device without it still installs and still prints to a printer paired in
+        settings, which is what every counter does today.
+    -->
+    <uses-feature
+        android:name="android.software.companion_device_setup"
+        android:required="false" />
+
     <uses-permission android:name="android.permission.SEND_DOWNLOAD_COMPLETED_INTENTS" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />

@@ -332,7 +332,9 @@
     <string name="laundry_nothing_selected">Centang seragamnya dulu.</string>
     <string name="laundry_print_slip">Cetak slip</string>
     <string name="laundry_print_pick">Printer yang mana?</string>
-    <string name="laundry_print_none">Belum ada printer terpasang. Pasangkan dulu di pengaturan Bluetooth.</string>
+    <string name="laundry_print_pair">Pasangkan printer baru…</string>
+    <string name="laundry_print_pair_hint">Android akan menampilkan printer yang terdeteksi</string>
+    <string name="laundry_print_pairing">Konfirmasi permintaan pemasangan, lalu cetak lagi.</string>
     <string name="laundry_print_done">Terkirim ke printer.</string>
     <string name="laundry_history_title">Selesai</string>
     <string name="laundry_history_empty">Tidak ada transaksi selesai pada rentang ini.</string>
@@ -357,6 +359,7 @@
     <string name="printer_bluetooth_off">Bluetooth mati. Nyalakan dulu.</string>
     <string name="printer_unknown">Printer tidak dikenal. Pasangkan ulang.</string>
     <string name="printer_connect_failed">Gagal menyambung ke printer. Pastikan printer menyala dan dalam jangkauan.</string>
+    <string name="printer_pair_failed">Gagal memasangkan printer. Pastikan printer menyala dan dalam mode pairing.</string>
     <!-- Empat alur counter, sebagai tab. Empat daftar yang sama dengan aplikasi Compose, dalam
          urutan yang sama: yang datang, yang dicuci, yang siap, yang selesai. -->
     <string name="laundry_tab_incoming">Masuk</string>

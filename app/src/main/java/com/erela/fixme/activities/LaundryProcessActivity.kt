@@ -6,6 +6,7 @@ import android.net.Uri
 import android.os.Bundle
 import android.provider.Settings
 import android.view.View
+import androidx.activity.result.IntentSenderRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
@@ -107,6 +108,22 @@ class LaundryProcessActivity : AppCompatActivity() {
 
             else -> toast(getString(R.string.laundry_bluetooth_needed), warning = true)
         }
+    }
+
+    /**
+     * The system's own chooser of nearby printers, so pairing one never leaves FixMe.
+     *
+     * NOTHING PRINTS ON THIS PASS. Bonding is a prompt the operator has still to confirm, so the
+     * slip was already dropped before the chooser opened; they tap print again once the printer
+     * is paired. See ThermalPrinter.bondFromResult.
+     */
+    private val pairPrinter = registerForActivityResult(
+        ActivityResultContracts.StartIntentSenderForResult()
+    ) { result ->
+        if (result.resultCode != RESULT_OK) return@registerForActivityResult
+
+        val failure = ThermalPrinter.bondFromResult(this, result.data)
+        toast(failure ?: getString(R.string.laundry_print_pairing), failure != null)
     }
 
     /** The one route back once the prompt has been refused for good. */
@@ -525,28 +542,46 @@ class LaundryProcessActivity : AppCompatActivity() {
     }
 
     /**
-     * Which of the paired printers this slip goes to.
+     * Which of the paired printers this slip goes to, plus a way to pair a new one.
      *
-     * PAIRED ONLY. Discovery needs location permission on every version we ship to, and pairing a
-     * printer is a thing somebody does once in the system settings.
+     * THE LIST IS STILL THE BONDED DEVICES. Nothing here scans - see ThermalPrinter - so the last
+     * row hands that job to the system's own chooser instead.
+     *
+     * THE LAST ROW SHOWS EVEN WITH NOTHING PAIRED, and that is the case it exists for. This used
+     * to toast "pair one in Bluetooth settings first" and give up, which is the one moment an
+     * operator needs a chooser and the one moment they could not reach one.
      */
     private fun askPrinter(rows: List<LaundrySlipRow>) {
         val printers = ThermalPrinter.paired(this)
-
-        if (printers.isEmpty()) {
-            toast(getString(R.string.laundry_print_none), warning = true)
-            viewModel.clearSlip()
-            return
-        }
         var picked = false
+        val options = printers.map { DialogOption(it.name, it.address) } +
+                DialogOption(
+                    getString(R.string.laundry_print_pair),
+                    getString(R.string.laundry_print_pair_hint)
+                )
 
         OptionListDialog(
             this,
             getString(R.string.laundry_print_pick),
-            printers.map { DialogOption(it.name, it.address) }
+            options
         ).also { dialog ->
             dialog.setOptionListDialogListener { index ->
                 picked = true
+
+                // The row after the last printer is the pairing one.
+                if (index == printers.size) {
+                    // Nothing reaches paper on this pass, so the slip goes back the same way
+                    // backing out of the dialog sends it back.
+                    viewModel.clearSlip()
+                    ThermalPrinter.requestPairing(
+                        this,
+                        onPicker = { sender ->
+                            pairPrinter.launch(IntentSenderRequest.Builder(sender).build())
+                        },
+                        onFailure = { message -> toast(message, warning = true) },
+                    )
+                    return@setOptionListDialogListener
+                }
 
                 lifecycleScope.launch {
                     val failure = ThermalPrinter.print(

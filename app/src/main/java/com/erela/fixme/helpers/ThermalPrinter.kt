@@ -2,11 +2,17 @@ package com.erela.fixme.helpers
 
 import android.Manifest
 import android.annotation.SuppressLint
+import android.app.Activity
 import android.bluetooth.BluetoothAdapter
 import android.bluetooth.BluetoothDevice
 import android.bluetooth.BluetoothManager
 import android.bluetooth.BluetoothSocket
+import android.companion.AssociationRequest
+import android.companion.BluetoothDeviceFilter
+import android.companion.CompanionDeviceManager
 import android.content.Context
+import android.content.Intent
+import android.content.IntentSender
 import android.content.pm.PackageManager
 import android.os.Build
 import androidx.core.content.ContextCompat
@@ -201,5 +207,106 @@ object ThermalPrinter {
                 byteArrayOf(0x1D, 0x28, 0x6B, 0x03, 0x00, 0x31, 0x51, 0x30) +       // print
                 byteArrayOf(0x0A) +
                 byteArrayOf(0x1B, 0x61, 0x00)                                       // back to left
+    }
+    // =========================================================================
+    // Pairing a printer without leaving FixMe [GA, 07 October 2026]
+    // =========================================================================
+
+    /**
+     * Ask the SYSTEM to find a printer, and hand back the picker to show.
+     *
+     * THE WHOLE POINT IS THAT WE STILL NEVER SCAN. CompanionDeviceManager runs the scan on the
+     * app's behalf and draws its own chooser, so this buys a nearby-device list without
+     * BLUETOOTH_SCAN or location - the permissions `paired()` above refuses to ask for. The app
+     * only ever learns about the one device the operator taps.
+     *
+     * NO DEVICE FILTER, for the reason `paired()` gives: cheap ESC/POS heads report themselves as
+     * uncategorised, so filtering on device class hides exactly the hardware this is for.
+     *
+     * `onDeviceFound` IS DEPRECATED AT API 33 and replaced by `onAssociationPending`, whose
+     * default implementation on 33+ calls `onDeviceFound`. Overriding the old one alone is
+     * therefore correct on every version we ship to, and overriding both would be two names for
+     * one callback.
+     */
+    @Suppress("DEPRECATION", "OVERRIDE_DEPRECATION")
+    fun requestPairing(
+        activity: Activity,
+        onPicker: (IntentSender) -> Unit,
+        onFailure: (String) -> Unit,
+    ) {
+        val manager = activity.getSystemService<CompanionDeviceManager>()
+            ?: return onFailure(activity.getString(R.string.printer_no_bluetooth))
+
+        if (adapter(activity)?.isEnabled != true) {
+            return onFailure(activity.getString(R.string.printer_bluetooth_off))
+        }
+
+        val request = AssociationRequest.Builder()
+            .addDeviceFilter(BluetoothDeviceFilter.Builder().build())
+            .setSingleDevice(false)
+            .build()
+
+        manager.associate(
+            request,
+            object : CompanionDeviceManager.Callback() {
+                override fun onDeviceFound(chooserLauncher: IntentSender) =
+                    onPicker(chooserLauncher)
+
+                override fun onFailure(error: CharSequence?) =
+                    onFailure(activity.getString(R.string.printer_pair_failed))
+            },
+            null,
+        )
+    }
+
+    /**
+     * Start bonding with whatever the chooser returned. Null means the request went out.
+     *
+     * BONDING IS NOT WAITED FOR. `createBond()` only kicks off the system's pairing prompt, and
+     * following it to its end needs a BroadcastReceiver on ACTION_BOND_STATE_CHANGED plus its
+     * unregister. The operator confirms the prompt and taps print again, by which time the device
+     * is in `paired()`.
+     *
+     * ponytail: that second tap is the price of not owning a receiver. Register one here the day
+     * printing straight after pairing is worth it.
+     */
+    @SuppressLint("MissingPermission")
+    fun bondFromResult(context: Context, data: Intent?): String? {
+        if (!hasPermission(context)) return context.getString(R.string.printer_no_permission)
+
+        val device = pickedDevice(data)
+            ?: return context.getString(R.string.printer_pair_failed)
+
+        // Already bonded: the operator picked a printer this phone knows. Nothing to do, and
+        // createBond() would return false and read as a failure.
+        if (device.bondState == BluetoothDevice.BOND_BONDED) return null
+
+        return if (device.createBond()) null
+        else context.getString(R.string.printer_pair_failed)
+    }
+
+    /**
+     * The device the chooser returned.
+     *
+     * TWO EXTRAS, BECAUSE 33 RENAMED IT. EXTRA_DEVICE carries the BluetoothDevice on every version
+     * and is deprecated from 33, where EXTRA_ASSOCIATION carries an AssociationInfo instead. Read
+     * the new one first and fall back, so neither a new nor an old device goes home empty.
+     */
+    @Suppress("DEPRECATION")
+    private fun pickedDevice(data: Intent?): BluetoothDevice? {
+        if (data == null) return null
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            val association = data.getParcelableExtra(
+                CompanionDeviceManager.EXTRA_ASSOCIATION,
+                android.companion.AssociationInfo::class.java
+            )
+            association?.deviceMacAddress?.toString()?.let { mac ->
+                return runCatching { BluetoothAdapter.getDefaultAdapter()?.getRemoteDevice(mac) }
+                    .getOrNull()
+            }
+        }
+
+        return data.getParcelableExtra(CompanionDeviceManager.EXTRA_DEVICE)
     }
 }
