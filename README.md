@@ -114,7 +114,7 @@ app/src/main/java/com/erela/fixme/
 
 ## API
 
-The app communicates with the [FIXMe Laravel backend](../FixMe-Laravel) via a REST API at:
+The app communicates with the [FIXMe Laravel backend][web-gh] via a REST API at:
 
 ```
 {BASE_URL}apimobile/
@@ -212,6 +212,24 @@ Or open the project in Android Studio and run directly.
 ## Version
 
 Current version: **1.4.0a** (build auto-incremented via `buildNumber.properties`)
+
+---
+
+## Related Repositories
+
+Every repository is published to both hosts, and one Markdown link can only name one of them, so
+each row carries the pair. The URLs are reference-style and collected under the table: one place to
+keep right rather than six scattered through the file.
+
+| | GitHub | GitLab |
+|---|---|---|
+| Web (Laravel) | [FixMe-Laravel][web-gh] | [fixme/fixme-laravel][web-gl] |
+| Mobile (Compose) | [FixMe-Android-Compose][compose-gh] | [fixme/fixme-android-compose][compose-gl] |
+
+[web-gh]: https://github.com/PT-Erlangga-Edi-Laboratories-Erela/FixMe-Laravel
+[web-gl]: https://gitlab.erela.co.id/fixme/fixme-laravel
+[compose-gh]: https://github.com/DevikoKelvin/FixMe-Android-Compose
+[compose-gl]: https://gitlab.erela.co.id/fixme/fixme-android-compose
 
 ---
 
