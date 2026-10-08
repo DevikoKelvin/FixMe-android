@@ -69,6 +69,17 @@ The app gives field technicians, supervisors, and managers a full-featured mobil
 - View task list for the current session
 - Manage session participants (add/remove technicians)
 
+### Smart Wash — Uniform Laundry
+- Hand uniforms in by scanning the laundry counter QR code
+- Scan each garment patch into the delivery, then follow the batch: accepted, being washed,
+  ready to collect
+- Collect by scanning the counter QR again
+- For counter staff: verify a delivery and accept or reject it, record each garment's condition
+  before and after washing, mark a batch ready, and print the slip on a Bluetooth thermal printer
+- Titipan: a garment that arrived mixed in with another department's delivery gets its own tab and
+  is handed back to a named collector
+- Smart Wash notifications open the matching screen rather than the main menu
+
 ### Notifications
 - Inbox with all system notifications
 - Real-time updates via foreground SSE service
@@ -77,6 +88,7 @@ The app gives field technicians, supervisors, and managers a full-featured mobil
 ### Settings
 - Change password
 - Change email
+- Dark mode, under Appearance — per device, kept across updates
 - App version info and in-app update check
 
 ---
@@ -85,7 +97,7 @@ The app gives field technicians, supervisors, and managers a full-featured mobil
 
 ```
 app/src/main/java/com/erela/fixme/
-├── activities/         # 14 screens (one Activity per screen)
+├── activities/         # 18 screens (one Activity per screen)
 ├── adapters/
 │   ├── recycler_view/  # RecyclerView adapters for lists
 │   └── pager/          # ViewPager adapters
@@ -190,7 +202,7 @@ Or open the project in Android Studio and run directly.
 
 | Type | Base URL | Notes |
 |---|---|---|
-| `debug` | `http://192.168.3.245/fixme/` | Local dev server, debuggable, no minification |
+| `debug` | `http://localhost/fixme/` | Local dev server, debuggable, no minification |
 | `release` | `http://182.23.21.202:8282/fixme/` | Production server, minified + ProGuard |
 
 ---
@@ -211,7 +223,7 @@ Or open the project in Android Studio and run directly.
 
 ## Version
 
-Current version: **1.4.0a** (build auto-incremented via `buildNumber.properties`)
+Current version: **1.4.1c** (build auto-incremented via `buildNumber.properties`)
 
 ---
 
