@@ -1,6 +1,6 @@
-# FIXMe Android
+# FixMe Android
 
-Mobile client for the FIXMe enterprise asset & maintenance management system — PT Erlangga Edi Laboratories (Erela).
+Mobile client for the FixMe enterprise asset & maintenance management system — PT Erlangga Edi Laboratories (Erela).
 
 The app gives field technicians, supervisors, and managers a full-featured mobile interface for submitting and tracking maintenance cases, managing approvals, logging progress, and running AC preventive maintenance — with real-time notifications via SSE and Pusher.
 
@@ -128,7 +128,7 @@ app/src/main/java/com/erela/fixme/
 
 ## API
 
-The app communicates with the [FIXMe Laravel backend][web-gh] via a REST API at:
+The app communicates with the [FixMe Laravel backend][web-gh] via a REST API at:
 
 ```
 {BASE_URL}apimobile/
@@ -159,7 +159,7 @@ picks English or Indonesian. Base URLs are set per build type in `app/build.grad
 - JDK 11+
 - Android device or emulator running **Android 8.0+ (API 26)**
 - `local.properties` configured (see below)
-- Access to the FIXMe backend server
+- Access to the FixMe backend server
 - For slip printing: an 80 mm ESC/POS Bluetooth printer (Bluetooth Classic, not BLE)
 
 ---
