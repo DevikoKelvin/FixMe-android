@@ -222,6 +222,8 @@ class LaundryProcessActivity : AppCompatActivity() {
                         "accepted" -> R.string.laundry_status_accepted
                         "ready" -> R.string.laundry_status_ready
                         "rejected" -> R.string.laundry_status_rejected
+                        // Closed, but nothing was collected: every garment is still held.
+                        "completed" if head.heldOnly -> R.string.laundry_item_held
                         else -> R.string.laundry_status_completed
                     }
                 )

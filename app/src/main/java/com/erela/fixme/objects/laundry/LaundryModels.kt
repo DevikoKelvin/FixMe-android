@@ -217,7 +217,9 @@ data class LaundryBatch(
      * a colleague from the same department can have taken everything while the header still says
      * collectable. The server counts the lines; the screen trusts the count.
      */
-    @SerializedName("ready_count") val readyCount: Int
+    @SerializedName("ready_count") val readyCount: Int,
+    /** Closed with everything held at the laundry; see [LaundryBatchHeader.heldOnly]. */
+    @SerializedName("held_only") val heldOnly: Boolean = false
 )
 
 /** One batch with its garments - the courier's detail screen. */
@@ -262,7 +264,15 @@ data class LaundryBatchHeader(
     @SerializedName("handover_marked_at") val handoverMarkedAt: String? = null,
     @SerializedName("completed_at") val completedAt: String?,
     @SerializedName("note") val note: String?,
-    @SerializedName("pengantar") val pengantar: String?
+    @SerializedName("pengantar") val pengantar: String?,
+    /**
+     * Closed with every garment still held at the laundry and none picked up [UAT, 23 Oct 2026].
+     *
+     * `completed` alone cannot tell this from a batch the courier collected, and the screen named
+     * it "Sudah diambil" - so a batch of other departments' garments read as picked up while it
+     * was still on the shelf. The server works it out; the screen only words it.
+     */
+    @SerializedName("held_only") val heldOnly: Boolean = false
 )
 
 data class LaundryBatchLine(

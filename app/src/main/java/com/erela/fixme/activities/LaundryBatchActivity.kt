@@ -128,6 +128,8 @@ class LaundryBatchActivity : AppCompatActivity() {
                             "accepted" -> R.string.laundry_status_accepted
                             "ready" -> R.string.laundry_status_ready
                             "rejected" -> R.string.laundry_status_rejected
+                            // Closed, but nothing was collected: every garment is still held.
+                            "completed" if header.heldOnly -> R.string.laundry_item_held
                             else -> R.string.laundry_status_completed
                         }
                     )
@@ -142,6 +144,11 @@ class LaundryBatchActivity : AppCompatActivity() {
                     tvWashStarted.text = header.washingStartedAt ?: "—"
                     tvReady.text = header.readyAt ?: "—"
                     tvCompleted.text = header.completedAt ?: "—"
+                    // That stamp is when the batch CLOSED; when nothing was collected, "taken"
+                    // above it would be the same wrong claim as the status line.
+                    tvCompletedLabel.setText(
+                        if (header.heldOnly) R.string.laundry_item_held else R.string.laundry_stage_completed
+                    )
 
                     lineAdapter.submitList(data.items)
 

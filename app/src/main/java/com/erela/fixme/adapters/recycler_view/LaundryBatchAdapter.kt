@@ -69,6 +69,8 @@ class LaundryBatchAdapter(
                         item.status == "accepted" -> R.string.laundry_status_accepted
                         item.status == "ready" -> R.string.laundry_status_ready
                         item.status == "rejected" -> R.string.laundry_status_rejected
+                        // Closed, but nothing was collected: every garment is still at the laundry.
+                        item.status == "completed" && item.heldOnly -> R.string.laundry_item_held
                         else -> R.string.laundry_status_completed
                     }
                 )
