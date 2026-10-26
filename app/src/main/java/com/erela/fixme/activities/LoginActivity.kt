@@ -44,6 +44,7 @@ import com.erela.fixme.helpers.enableEdgeToEdgeOpaqueNav
 import com.erela.fixme.objects.GenericSimpleResponse
 import com.erela.fixme.objects.LoginResponse
 import com.erela.fixme.objects.UpdateCheckResponse
+import com.erela.fixme.services.FCMService
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.textfield.TextInputEditText
 import com.google.firebase.messaging.FirebaseMessaging
@@ -399,7 +400,8 @@ class LoginActivity : AppCompatActivity() {
 
                                                 InitAPI.getEndpoint.updateFcmToken(
                                                     result.userId,
-                                                    token
+                                                    token,
+                                                    FCMService.PUSH_LEVEL
                                                 ).enqueue(object : Callback<GenericSimpleResponse> {
                                                     override fun onResponse(
                                                         call: Call<GenericSimpleResponse>,

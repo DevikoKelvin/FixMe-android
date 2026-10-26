@@ -227,6 +227,7 @@ a newer channel's APK. Moving back down needs a reinstall.
 | Type | Base URL | Notes |
 |---|---|---|
 | `debug` | `DEBUG_BASE_URL` from `local.properties`, else the office dev server | Debuggable, no minification |
+| `staging` | `http://192.168.3.245:82/fixme/` | Staging server. Built like release (minified, not debuggable, release-signed) but installs as its own app, `com.erela.fixme.staging`, so it never touches production's data or overwrites its install. Needs a Firebase client for that package in `google-services.json`. `./gradlew assembleStableStaging` |
 | `release` | `http://182.23.21.202:8282/fixme/` | Production server, minified + ProGuard |
 
 ### Tests

@@ -43,6 +43,7 @@ import com.erela.fixme.objects.GenericSimpleResponse
 import com.erela.fixme.objects.UpdateCheckResponse
 import com.erela.fixme.objects.UserData
 import com.erela.fixme.services.SseService
+import com.google.firebase.messaging.FirebaseMessaging
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -433,6 +434,12 @@ class MainActivity : AppCompatActivity() {
                                                 t: Throwable
                                             ) = Unit
                                         })
+
+                                    // Invalidate this device's FCM token so pushes meant for the user
+                                    // who just signed out cannot reach whoever holds the phone next.
+                                    // The server drops it on the next UNREGISTERED answer; a new one
+                                    // is issued at the next login.
+                                    FirebaseMessaging.getInstance().deleteToken()
 
                                     UserDataHelper(this@MainActivity).purgeUserData()
                                     CustomToast.getInstance(this@MainActivity)

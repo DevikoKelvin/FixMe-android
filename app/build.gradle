@@ -125,6 +125,20 @@ android {
             // Sign debug with the committed keystore (not the per-machine ~/.android/debug.keystore) so every machine produces identically-signed .debug APKs → OTA channel updates install.
             signingConfig signingConfigs.release
         }
+        // Staging: what testers outside development use, against the staging server. Built like
+        // release - minified, not debuggable, release-signed - so it behaves like what ships.
+        // `applicationIdSuffix` is what keeps production's data apart: staging installs as its own
+        // app next to production and debug, with its own login, storage and push token, and can
+        // never overwrite or update production's.
+        staging {
+            initWith release
+            matchingFallbacks = ['release']
+            resValue "string", "app_name", "FixMe Staging"
+            buildConfigField 'String', 'BASE_URL', '"http://192.168.3.245:82/fixme/"'
+            // SSE is the notification feed. Not production's: dev's until the staging server has its own.
+            buildConfigField 'String', 'SSE_URL', '"http://103.96.147.242:8081/erelaMurbei_fixme25_mobile_dev/sse"'
+            applicationIdSuffix ".staging"
+        }
     }
 
     testBuildType = instrumentedTestBuildType

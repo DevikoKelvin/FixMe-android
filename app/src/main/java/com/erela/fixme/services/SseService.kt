@@ -9,6 +9,7 @@ import android.util.Log
 import com.erela.fixme.BuildConfig
 import com.erela.fixme.R
 import com.erela.fixme.helpers.NotificationsHelper
+import com.erela.fixme.helpers.RecentMessageIds
 import com.erela.fixme.helpers.UserDataHelper
 import com.erela.fixme.helpers.api.InitAPI
 import com.erela.fixme.objects.UserData
@@ -133,11 +134,18 @@ class SseService : Service() {
                         // optString: every other module has published without it for a year, and
                         // getString would throw on those, killing the notification entirely.
                         val status = extras.optString("client:status", "")
+                        // The server's id for this event, which FCM carries too. Absent from a server
+                        // that predates it, and then the case-id comparison below is all there is.
+                        val msgId = extras.optString("client:msg_id", "")
 
-                        if (UserDataHelper(applicationContext).isUserDataExist() && FCMService.lastNotificationId != notificationId) {
+                        if (UserDataHelper(applicationContext).isUserDataExist() &&
+                            (msgId.isNotEmpty() || FCMService.lastNotificationId != notificationId)
+                        ) {
                             val title = messageJson.getString("title")
                             val body = messageJson.getString("message")
-                            if (userData.id == relatedUserId) {
+                            // Checked only for OUR user's events: this topic is shared, so every
+                            // device sees everyone's, and they must not crowd ours out of the list.
+                            if (userData.id == relatedUserId && RecentMessageIds.firstTime(msgId)) {
                                 NotificationsHelper.generateNotification(
                                     title,
                                     body,

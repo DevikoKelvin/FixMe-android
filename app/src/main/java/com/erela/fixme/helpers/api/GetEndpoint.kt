@@ -79,7 +79,9 @@ interface GetEndpoint {
     @POST("updateFcmToken")
     fun updateFcmToken(
         @Field("user_id") userId: Int,
-        @Field("token") token: String
+        @Field("token") token: String,
+        // See FCMService.PUSH_LEVEL. Only honoured by the server for a signed-in (token) caller.
+        @Field("push_level") pushLevel: Int
     ): Call<GenericSimpleResponse>
 
     @FormUrlEncoded

@@ -4,6 +4,7 @@ import android.content.Intent
 import android.util.Log
 import com.erela.fixme.R
 import com.erela.fixme.helpers.NotificationsHelper
+import com.erela.fixme.helpers.RecentMessageIds
 import com.erela.fixme.helpers.UserDataHelper
 import com.erela.fixme.helpers.api.InitAPI
 import com.erela.fixme.objects.GenericSimpleResponse
@@ -27,7 +28,10 @@ class FCMService : FirebaseMessagingService() {
             val notificationData =
                 Gson().fromJson(Gson().toJson(remoteMessage.data), NotificationData::class.java)
 
-            if (notificationData.relatedUserId == userData.id) {
+            // The same event also arrives over ntfy (SseService). Whichever is first is shown.
+            val msgId = remoteMessage.data["msg_id"]
+
+            if (notificationData.relatedUserId == userData.id && RecentMessageIds.firstTime(msgId)) {
                 val title =
                     if (getString(R.string.lang) == "in") "Kamu mendapatkan notifikasi baru!" else "You have a new notification!"
                 val body = remoteMessage.notification?.body ?: remoteMessage.data["body"]
@@ -63,7 +67,7 @@ class FCMService : FirebaseMessagingService() {
         }
         val userDataHelper = UserDataHelper(applicationContext)
         if (userDataHelper.isUserDataExist()) {
-            InitAPI.getEndpoint.updateFcmToken(userData.id, token)
+            InitAPI.getEndpoint.updateFcmToken(userData.id, token, PUSH_LEVEL)
                 .enqueue(object : Callback<GenericSimpleResponse> {
                     override fun onResponse(
                         call: Call<GenericSimpleResponse>,
@@ -89,5 +93,13 @@ class FCMService : FirebaseMessagingService() {
     companion object {
         private const val TAG = "Firebase Messaging Service"
         var lastNotificationId: Int? = null
+
+        /**
+         * What this build tells the server about itself when it registers its token. 1 = "I show an
+         * event once even if it arrives over both ntfy and FCM" (RecentMessageIds). The server only
+         * pushes to tokens that say so, which is what keeps older builds, and the stale tokens they
+         * left behind, from receiving anything.
+         */
+        const val PUSH_LEVEL = 1
     }
 }
