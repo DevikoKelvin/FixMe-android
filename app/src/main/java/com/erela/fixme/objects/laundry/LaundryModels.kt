@@ -499,7 +499,8 @@ data class LaundrySlipResponse(
 
 data class LaundryHandoverMarkRequest(
     @SerializedName("id_trx") val idTrx: Int,
-    @SerializedName("qr_codes") val qrCodes: List<String>
+    // Null = nobody scanned: the server marks every collectable garment [GA Laundry, 27 Oct 2026].
+    @SerializedName("qr_codes") val qrCodes: List<String>? = null
 )
 
 data class LaundryHandoverMarkResponse(

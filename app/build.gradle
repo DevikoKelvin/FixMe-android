@@ -43,6 +43,9 @@ android {
         versionName "1.4.1c"
 
         buildConfigField "String", "BUILD_TIMESTAMP", "\"${new Date().format('yyMMdd-HHmm')}\""
+        // true = no always-on service: FCM delivers when the app is closed, SSE runs only while it is
+        // open. Off until the server it talks to pushes through FCM (see staging).
+        buildConfigField "boolean", "PUSH_ONLY", "false"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
@@ -118,6 +121,9 @@ android {
             buildConfigField 'String', 'BASE_URL', "\"${localProps['DEBUG_BASE_URL'] ?: 'http://192.168.3.245/fixme/'}\""
             buildConfigField 'String', 'SSE_URL', '"http://103.96.147.242:8081/erelaMurbei_fixme25_mobile_dev/sse"'
             buildConfigField 'String', 'MAP_API_KEY', "\"${localProps['MAPS_API_KEY']}\""
+            // Needs the dev server to push through FCM. Set PUSH_ONLY=false in local.properties to keep
+            // the always-on service against a dev server that does not.
+            buildConfigField 'boolean', 'PUSH_ONLY', "${localProps['PUSH_ONLY'] ?: 'true'}"
             minifyEnabled false
             //noinspection NotShrinkingResources
             shrinkResources false
@@ -135,9 +141,11 @@ android {
             matchingFallbacks = ['release']
             resValue "string", "app_name", "FixMe Staging"
             buildConfigField 'String', 'BASE_URL', '"http://192.168.3.245:82/fixme/"'
-            // SSE is the notification feed. Not production's: dev's until the staging server has its own.
-            buildConfigField 'String', 'SSE_URL', '"http://103.96.147.242:8081/erelaMurbei_fixme25_mobile_dev/sse"'
+            // SSE is the notification feed: staging's own topic, so debug and staging do not see each
+            // other's events. The staging server's NTFY_TOPIC_MOBILE must be the same name.
+            buildConfigField 'String', 'SSE_URL', '"http://103.96.147.242:8081/erelaMurbei_fixme25_mobile_staging/sse"'
             applicationIdSuffix ".staging"
+            buildConfigField 'boolean', 'PUSH_ONLY', 'true'
         }
     }
 

@@ -47,8 +47,8 @@ class LaundryRepository(
     /** The operator: batches waiting to be handed back, oldest ready first. */
     suspend fun handoverQueue() = runCatching { api.laundryHandoverQueue(lang) }
 
-    /** The operator: scan the bundle back out and mark it ready to hand over. */
-    suspend fun markHandover(idTrx: Int, qrCodes: List<String>) =
+    /** The operator: mark the bundle ready to hand over. No codes = every collectable garment. */
+    suspend fun markHandover(idTrx: Int, qrCodes: List<String>? = null) =
         runCatching { api.laundryHandoverMark(LaundryHandoverMarkRequest(idTrx, qrCodes)) }
 
     /** The courier: collect, by scanning the counter sticker. */

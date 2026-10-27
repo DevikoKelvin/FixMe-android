@@ -572,14 +572,15 @@ class LaundryCheckInViewModel(application: Application) : AndroidViewModel(appli
     fun markHandover() {
         val idTrx = workingIdTrx
 
-        if (idTrx == null || outScanned.isEmpty()) {
+        if (idTrx == null) {
             return
         }
 
         _isSubmitting.value = true
 
         viewModelScope.launch {
-            repository.markHandover(idTrx, outScanned.toList())
+            // Nothing scanned is the normal case now: the server marks every collectable garment.
+            repository.markHandover(idTrx, outScanned.toList().ifEmpty { null })
                 .onSuccess { response ->
                     if (response.isSuccess) {
                         clearOutScan()

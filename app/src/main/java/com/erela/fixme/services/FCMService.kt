@@ -2,6 +2,7 @@ package com.erela.fixme.services
 
 import android.content.Intent
 import android.util.Log
+import com.erela.fixme.BuildConfig
 import com.erela.fixme.R
 import com.erela.fixme.helpers.NotificationsHelper
 import com.erela.fixme.helpers.RecentMessageIds
@@ -51,7 +52,8 @@ class FCMService : FirebaseMessagingService() {
             }
         } catch (e: Exception) {
             Log.e(TAG, "onMessageReceived error: ${e.message}", e)
-            startService(Intent(this, SseService::class.java))
+            // Fallback for a push that failed to parse. Push-only builds have no background service.
+            if (!BuildConfig.PUSH_ONLY) startService(Intent(this, SseService::class.java))
         }
     }
 

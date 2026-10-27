@@ -31,8 +31,11 @@ class SseService : Service() {
 
     override fun onCreate() {
         super.onCreate()
-        createNotificationChannel()
-        startForeground(NOTIFICATION_ID, getNotification())
+        // Push-only builds run this as a plain service while the app is open: no ongoing notification.
+        if (!BuildConfig.PUSH_ONLY) {
+            createNotificationChannel()
+            startForeground(NOTIFICATION_ID, getNotification())
+        }
     }
 
     private fun createNotificationChannel() {

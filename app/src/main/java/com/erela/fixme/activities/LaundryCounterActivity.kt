@@ -423,10 +423,7 @@ class LaundryCounterActivity : AppCompatActivity() {
 
             readyAdapter = LaundryReadyAdapter(
                 context = this@LaundryCounterActivity,
-                onPick = { batch ->
-                    viewModel.beginHandover(batch)
-                    showBundle()
-                }
+                onPick = { batch -> askHandoverMark(batch) }
             )
 
             outScanAdapter = LaundryOutScanAdapter(
@@ -523,6 +520,41 @@ class LaundryCounterActivity : AppCompatActivity() {
     private fun back() {
         showQueue()
         loadQueue()
+    }
+
+    /**
+     * ONE TAP, NO SCAN [GA Laundry, 27 Oct 2026]: the operator checks the garments by eye and
+     * confirms. An already-marked batch says so instead of being marked again, which would notify
+     * the courier a second time.
+     */
+    private fun askHandoverMark(batch: LaundryReadyBatch) {
+        if (batch.handoverMarkedAt != null) {
+            toast(getString(R.string.laundry_already_marked, batch.handoverMarkedAt), warning = true)
+            return
+        }
+
+        ConfirmationDialog(
+            this,
+            getString(
+                R.string.laundry_handover_confirm,
+                batch.readyCount,
+                listOfNotNull(batch.namaDept, batch.subDept).joinToString(" · ").ifBlank { "-" }
+            ),
+            if (getString(R.string.lang) == "in") "Ya" else "Yes"
+        ).also { dialog ->
+            dialog.setConfirmationDialogListener(
+                object : ConfirmationDialog.ConfirmationDialogListener {
+                    override fun onConfirm() {
+                        viewModel.beginHandover(batch)
+                        viewModel.markHandover()
+                    }
+                }
+            )
+
+            if (dialog.window != null) {
+                dialog.show()
+            }
+        }
     }
 
     /**

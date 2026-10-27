@@ -150,7 +150,7 @@ class MainActivity : AppCompatActivity() {
                 putBoolean("first_login", false)
             }
         }
-        if (UserDataHelper(this).isUserDataExist()) {
+        if (!BuildConfig.PUSH_ONLY && UserDataHelper(this).isUserDataExist()) {
             ContextCompat.startForegroundService(this, Intent(this, SseService::class.java))
         }
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
@@ -170,6 +170,19 @@ class MainActivity : AppCompatActivity() {
     override fun onNewIntent(intent: Intent) {
         super.onNewIntent(intent)
         handleNotificationIntent(intent)
+    }
+
+    // Push-only builds: live SSE only while the screen is up. Closed or backgrounded, FCM delivers.
+    override fun onStart() {
+        super.onStart()
+        if (BuildConfig.PUSH_ONLY && UserDataHelper(this).isUserDataExist()) {
+            startService(Intent(this, SseService::class.java))
+        }
+    }
+
+    override fun onStop() {
+        super.onStop()
+        if (BuildConfig.PUSH_ONLY) stopService(Intent(this, SseService::class.java))
     }
 
     override fun onDestroy() {
