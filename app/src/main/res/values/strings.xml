@@ -245,7 +245,7 @@
          resources, so a literal newline in this XML compiles to a space — verified by
          `aapt2 dump strings` reporting zero newlines when this was written across lines. -->
     <string name="changelog_title">What\'s New in v%1$s</string>
-    <string name="changelog_current">NEW\n• Notifications when the app is closed: alerts now also arrive through Google push, so you still get them with FixMe fully closed. An alert that arrives both ways is shown only once.\n• Laundry counter: mark a batch ready to hand over with one tap and a confirmation. Garments no longer have to be scanned out again. Each garment condition is still recorded when the wash is finished.\n• Slip printer: pair the counter Bluetooth thermal printer without leaving FixMe.\n• Themed launcher icon: on Android 13 and later the app icon follows your wallpaper colours.\n\nFIXES\n• A batch closed with every garment still held now says so, instead of reading as Collected.\n• The dark mode switch no longer flashes black.\n\nNOTES\n• A batch already marked ready to hand over shows Already marked instead of being marked again, so the courier is not notified twice.\n• To receive notifications while the app is closed, keep notifications allowed for FixMe in your phone settings.</string>
+    <string name="changelog_current">NEW\n• Notifications when the app is closed: alerts now also arrive through Google push, so you still get them with FixMe fully closed. An alert that arrives both ways is shown only once.\n• Laundry counter: mark a batch ready to hand over with one tap and a confirmation. Garments no longer have to be scanned out again. Each garment condition is still recorded when the wash is finished.\n• Smart Wash scanning: when a QR sticker will not scan, type the code in the field under the camera. A typed code is checked exactly like a scan.\n• Slip printer: pair the counter Bluetooth thermal printer without leaving FixMe.\n• Themed launcher icon: on Android 13 and later the app icon follows your wallpaper colours.\n\nFIXES\n• A batch closed with every garment still held now says so, instead of reading as Collected.\n• The dark mode switch no longer flashes black.\n\nNOTES\n• A batch already marked ready to hand over shows Already marked instead of being marked again, so the courier is not notified twice.\n• To receive notifications while the app is closed, keep notifications allowed for FixMe in your phone settings.</string>
 
     <!-- Smart Wash counter check-in [D-14]. The phone is where the camera is. -->
     <string name="laundry_check_in_title">Smart Wash: Arrival</string>
@@ -308,6 +308,8 @@
     <string name="laundry_handover_bundle_empty">Pick a batch, then scan every uniform going out.</string>
     <string name="laundry_handover_submit">Mark ready to hand over</string>
     <string name="laundry_handover_confirm">Mark %1$d uniform(s) from %2$s ready to hand over?</string>
+    <string name="scan_manual_hint">Or type the code</string>
+    <string name="scan_manual_send">Send code</string>
     <string name="laundry_scan_out_prompt">Scan the uniform going out</string>
     <string name="laundry_pick_batch_required">Pick a batch first.</string>
     <string name="laundry_ready_since">%1$d ready · since %2$s</string>

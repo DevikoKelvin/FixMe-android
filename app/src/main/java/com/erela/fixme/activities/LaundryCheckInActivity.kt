@@ -151,6 +151,7 @@ class LaundryCheckInActivity : AppCompatActivity() {
     }
 
     private fun scanOptions() = ScanOptions().apply {
+        setCaptureActivity(ManualEntryCaptureActivity::class.java)
         setDesiredBarcodeFormats(ScanOptions.QR_CODE)
         setPrompt(getString(R.string.laundry_scan_counter_prompt))
         setCameraId(0)

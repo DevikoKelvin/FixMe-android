@@ -411,6 +411,7 @@ class LaundryProcessActivity : AppCompatActivity() {
     private fun scanPatch() {
         patchLauncher.launch(
             ScanOptions().apply {
+                setCaptureActivity(ManualEntryCaptureActivity::class.java)
                 setDesiredBarcodeFormats(ScanOptions.QR_CODE)
                 setPrompt(getString(R.string.laundry_scan_patch_prompt))
                 setCameraId(0)

@@ -5,7 +5,7 @@ agp = "9.4.1"
 # org.jetbrains.kotlin plugin WITH a version, at the root, puts that Kotlin Gradle Plugin on the
 # build classpath instead, and the built-in Kotlin compiles with it. Parcelize is that plugin here;
 # the Compose app does the same with its compose-compiler plugin. Keep the two apps on one version.
-kotlin = "2.4.20"
+kotlin = "2.4.21"
 gms = "4.5.0"
 
 # Dependencies
@@ -21,16 +21,16 @@ espressoCore = "3.7.0"
 
 # Third-party Dependencies
 retrofit = "3.0.0"
-okhttp3 = "5.5.0"
+okhttp3 = "5.5.1"
 converterGson = "3.0.0"
-loggingInterceptor = "5.5.0"
+loggingInterceptor = "5.5.1"
 flexbox = "3.0.0"
 lottie = "6.7.1"
 glide = "5.0.9"
 swipeRefreshLayout = "1.2.0"
 circleIndicator = "2.1.6"
 appxupdater = "v2.0.20"
-pusherJavaClient = "2.4.4"
+pusherJavaClient = "2.4.5"
 # STAY ON 1.x. Balloon 2.0 is a Compose Multiplatform rewrite, not an upgrade: the View API is
 # gone - Balloon.Builder takes no Context, sizes are Dp, and showAlignTop exists only on the
 # Compose BalloonState. View.showAlignTop(balloon) and BalloonSizeSpec were removed, not renamed.
@@ -40,9 +40,9 @@ balloon = "1.7.6"
 shimmer = "0.5.0"
 qr-code = "4.3.0"
 
-firebaseBom = "35.0.0"
-firebaseMessaging = "26.0.0"
-playServicesMaps = "20.0.0"
+firebaseBom = "35.1.0"
+firebaseMessaging = "26.0.1"
+playServicesMaps = "20.1.0"
 playServicesLocation = "21.4.0"
 activityKtx = "1.13.0"
 

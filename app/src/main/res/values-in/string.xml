@@ -241,7 +241,7 @@
          kali rilis. Pemisah baris WAJIB memakai \n, bukan baris baru asli — AAPT mengubah
          baris baru di dalam string resource menjadi spasi. -->
     <string name="changelog_title">Yang Baru di v%1$s</string>
-    <string name="changelog_current">BARU\n• Notifikasi saat aplikasi ditutup: pemberitahuan kini juga masuk lewat push Google, jadi tetap diterima walau FixMe sepenuhnya ditutup. Pemberitahuan yang tiba lewat dua jalur hanya ditampilkan sekali.\n• Counter laundry: tandai batch siap diserahkan cukup dengan satu ketukan dan konfirmasi. Seragam tidak perlu lagi dipindai keluar. Kondisi tiap seragam tetap dicatat saat pencucian selesai.\n• Printer nota: pasangkan printer termal Bluetooth counter tanpa keluar dari FixMe.\n• Ikon peluncur bertema: pada Android 13 ke atas, ikon aplikasi mengikuti warna wallpaper Anda.\n\nPERBAIKAN\n• Batch yang ditutup dengan semua seragam masih ditahan kini tertulis demikian, tidak lagi tampil sebagai Sudah diambil.\n• Sakelar mode gelap tidak lagi berkedip hitam.\n\nCATATAN\n• Batch yang sudah ditandai siap diserahkan menampilkan Sudah ditandai dan tidak ditandai ulang, sehingga pengantar tidak diberi tahu dua kali.\n• Agar notifikasi tetap diterima saat aplikasi ditutup, biarkan notifikasi FixMe diizinkan di pengaturan ponsel.</string>
+    <string name="changelog_current">BARU\n• Notifikasi saat aplikasi ditutup: pemberitahuan kini juga masuk lewat push Google, jadi tetap diterima walau FixMe sepenuhnya ditutup. Pemberitahuan yang tiba lewat dua jalur hanya ditampilkan sekali.\n• Counter laundry: tandai batch siap diserahkan cukup dengan satu ketukan dan konfirmasi. Seragam tidak perlu lagi dipindai keluar. Kondisi tiap seragam tetap dicatat saat pencucian selesai.\n• Pemindaian Smart Wash: bila stiker QR tidak terbaca, ketik kodenya di kolom di bawah kamera. Kode yang diketik diperiksa sama seperti hasil pindai.\n• Printer nota: pasangkan printer termal Bluetooth counter tanpa keluar dari FixMe.\n• Ikon peluncur bertema: pada Android 13 ke atas, ikon aplikasi mengikuti warna wallpaper Anda.\n\nPERBAIKAN\n• Batch yang ditutup dengan semua seragam masih ditahan kini tertulis demikian, tidak lagi tampil sebagai Sudah diambil.\n• Sakelar mode gelap tidak lagi berkedip hitam.\n\nCATATAN\n• Batch yang sudah ditandai siap diserahkan menampilkan Sudah ditandai dan tidak ditandai ulang, sehingga pengantar tidak diberi tahu dua kali.\n• Agar notifikasi tetap diterima saat aplikasi ditutup, biarkan notifikasi FixMe diizinkan di pengaturan ponsel.</string>
 
     <!-- Serah terima laundry di counter [D-14]. Kamera hanya ada di aplikasi mobile. -->
     <string name="laundry_check_in_title">Smart Wash: Kedatangan</string>
@@ -304,6 +304,8 @@
     <string name="laundry_handover_bundle_empty">Pilih serah terima, lalu pindai setiap seragam yang keluar.</string>
     <string name="laundry_handover_submit">Tandai siap diserahkan</string>
     <string name="laundry_handover_confirm">Tandai %1$d seragam dari %2$s siap diserahkan?</string>
+    <string name="scan_manual_hint">Atau ketik kodenya</string>
+    <string name="scan_manual_send">Kirim kode</string>
     <string name="laundry_scan_out_prompt">Pindai seragam yang keluar</string>
     <string name="laundry_pick_batch_required">Pilih serah terima dulu.</string>
     <string name="laundry_ready_since">%1$d siap · sejak %2$s</string>

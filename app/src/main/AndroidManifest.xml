@@ -202,6 +202,16 @@
             android:windowSoftInputMode="adjustResize"
             tools:ignore="DiscouragedApi,LockedOrientationActivity" />
 
+        <!-- The Smart Wash scanner: camera plus a field to type the code. Portrait, like every
+             Smart Wash screen, so the field and the keyboard fit under the preview. -->
+        <activity
+            android:name=".activities.ManualEntryCaptureActivity"
+            android:exported="false"
+            android:screenOrientation="portrait"
+            android:stateNotNeeded="true"
+            android:windowSoftInputMode="adjustResize"
+            tools:ignore="DiscouragedApi,LockedOrientationActivity" />
+
         <activity
             android:name=".activities.LaundryBatchActivity"
             android:exported="false"
