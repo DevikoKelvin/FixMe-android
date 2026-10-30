@@ -1,6 +1,6 @@
 [versions]
 # Plugins
-agp = "9.4.1"
+agp = "9.5.0"
 # AGP 9 bundles its own Kotlin (2.2.x) and needs no kotlin-android plugin. Declaring any
 # org.jetbrains.kotlin plugin WITH a version, at the root, puts that Kotlin Gradle Plugin on the
 # build classpath instead, and the built-in Kotlin compiles with it. Parcelize is that plugin here;

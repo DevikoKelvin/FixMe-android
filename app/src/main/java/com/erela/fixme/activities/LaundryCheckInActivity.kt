@@ -14,7 +14,10 @@ import com.erela.fixme.custom_views.CustomToast
 import com.erela.fixme.databinding.ActivityLaundryCheckInBinding
 import com.erela.fixme.helpers.enableEdgeToEdgeOpaqueNav
 import com.erela.fixme.viewmodel.LaundryCheckInViewModel
+import androidx.lifecycle.lifecycleScope
+import com.erela.fixme.helpers.reconcileSmartWash
 import com.google.android.material.card.MaterialCardView
+import kotlinx.coroutines.launch
 import com.journeyapps.barcodescanner.ScanContract
 import com.journeyapps.barcodescanner.ScanOptions
 
@@ -74,6 +77,8 @@ class LaundryCheckInActivity : AppCompatActivity() {
         // have collected while this screen was in the background, and the batch detail hands back
         // here after a collection.
         viewModel.loadBatches()
+        // GA may have changed the courier list since this screen opened.
+        lifecycleScope.launch { reconcileSmartWash(isCounterScreen = false) }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {

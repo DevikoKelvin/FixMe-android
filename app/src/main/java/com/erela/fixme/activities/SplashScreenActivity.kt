@@ -10,8 +10,8 @@ import androidx.lifecycle.lifecycleScope
 import androidx.transition.AutoTransition
 import androidx.transition.TransitionManager
 import com.erela.fixme.databinding.ActivitySplashScreenBinding
+import com.erela.fixme.helpers.SessionRefresh
 import com.erela.fixme.helpers.UserDataHelper
-import com.erela.fixme.helpers.api.InitAPI
 import kotlinx.coroutines.launch
 
 @SuppressLint("CustomSplashScreen")
@@ -60,7 +60,9 @@ class SplashScreenActivity : AppCompatActivity() {
 
         lifecycleScope.launch {
             if (!userData.getToken().isNullOrBlank()) {
-                runCatching { InitAPI.getEndpoint.session() }
+                // Also refreshes the Smart Wash flags, so no sign-out/sign-in is needed after GA
+                // changes the courier list. A failure (offline, 401) leaves the stored values.
+                SessionRefresh.run(this@SplashScreenActivity, force = true)
             }
             val next = if (userData.getToken().isNullOrBlank()) {
                 LoginActivity::class.java

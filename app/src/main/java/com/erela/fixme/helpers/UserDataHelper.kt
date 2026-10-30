@@ -16,11 +16,13 @@ class UserDataHelper(private val context: Context) {
     private val keyEmail = "key.email"
     private val keyToken = "key.token"
     private val keyLaundryCounter = "key.laundry.counter"
+    private val keyLaundryMenu = "key.laundry.menu"
     /*private val notificationKey = "key.notification"*/
     fun setUserData(
         id: Int, idStarConnect: Int, username: String, name: String, privilege: Int, idDept: Int,
         dept: String, subDept: String, email: String = "",
-        isLaundryCounter: Boolean = false
+        isLaundryCounter: Boolean = false,
+        showLaundryMenu: Boolean = true
     ) {
         SharedPreferencesHelper.getSharedPreferences(context).edit {
             also {
@@ -35,8 +37,17 @@ class UserDataHelper(private val context: Context) {
                     putString(keySubDept, subDept)
                     putString(keyEmail, email)
                     putBoolean(keyLaundryCounter, isLaundryCounter)
+                    putBoolean(keyLaundryMenu, showLaundryMenu)
                 }
             }
+        }
+    }
+
+    /** Refresh the Smart Wash flags from `/session`. A null (older server) leaves the stored value. */
+    fun saveLaundryFlags(isCounter: Boolean?, showMenu: Boolean?) {
+        SharedPreferencesHelper.getSharedPreferences(context).edit {
+            isCounter?.let { putBoolean(keyLaundryCounter, it) }
+            showMenu?.let { putBoolean(keyLaundryMenu, it) }
         }
     }
 
@@ -54,7 +65,8 @@ class UserDataHelper(private val context: Context) {
                     getString(keyDept, "").toString(),
                     getString(keySubDept, "").toString(),
                     getString(keyEmail, "").toString(),
-                    getBoolean(keyLaundryCounter, false)
+                    getBoolean(keyLaundryCounter, false),
+                    getBoolean(keyLaundryMenu, true)
                 )
             }
         }

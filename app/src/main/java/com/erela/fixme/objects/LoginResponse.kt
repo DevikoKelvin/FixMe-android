@@ -38,5 +38,9 @@ data class LoginResponse(
     //
     // Nullable for the same reason as the token - an older server simply omits it.
     @field:SerializedName("laundry_counter")
-    val isLaundryCounter: Boolean? = null
+    val isLaundryCounter: Boolean? = null,
+    // Does the Smart Wash menu show at all (Master Kurir). Nullable: an older server omits it, and
+    // null means "show", which is what every build did before.
+    @field:SerializedName("laundry_menu")
+    val showLaundryMenu: Boolean? = null
 )

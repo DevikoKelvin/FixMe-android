@@ -312,12 +312,9 @@
             <!--
                 Serah Terima Laundry - the mobile counter check-in [D-14].
 
-                NO CLIENT-SIDE GATE, unlike the AC card above. Who may hand laundry in is "any
-                user whose DEPARTMENT is on the laundry list", a list this app cannot see without
-                asking - and the AC card's hardcoded department and sub-department names are
-                exactly the kind of thing that breaks when General Affair renames a sub-dept.
-                So the card is always visible and the counter scan answers `may_check_in`, which
-                is the same answer the web screen gives by opening and showing a warning.
+                NO HARDCODED GATE, unlike the AC card above. Visibility is the server's decision,
+                `laundry_menu` at login (Master Kurir: appointed couriers and counter staff; everyone
+                while the restriction is off), and the counter scan still answers `may_check_in`.
             -->
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/laundryCheckInMenu"

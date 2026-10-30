@@ -35,7 +35,9 @@ import com.erela.fixme.databinding.ActivityMainBinding
 import com.erela.fixme.dialogs.ChangelogDialog
 import com.erela.fixme.dialogs.ConfirmationDialog
 import com.erela.fixme.dialogs.UpdateAvailableDialog
+import androidx.lifecycle.lifecycleScope
 import com.erela.fixme.helpers.PermissionHelper
+import com.erela.fixme.helpers.SessionRefresh
 import com.erela.fixme.helpers.UserDataHelper
 import com.erela.fixme.helpers.api.InitAPI
 import com.erela.fixme.helpers.enableEdgeToEdgeOpaqueNav
@@ -47,6 +49,7 @@ import com.google.firebase.messaging.FirebaseMessaging
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import kotlinx.coroutines.launch
 import java.io.File
 import java.time.LocalDateTime
 
@@ -177,6 +180,15 @@ class MainActivity : AppCompatActivity() {
         super.onStart()
         if (BuildConfig.PUSH_ONLY && UserDataHelper(this).isUserDataExist()) {
             startService(Intent(this, SseService::class.java))
+        }
+
+        // Back in the foreground: re-read the Smart Wash flags (throttled to once per 5 minutes) so
+        // a changed courier list shows without signing out. The splash covers a cold start.
+        lifecycleScope.launch {
+            if (SessionRefresh.run(this@MainActivity)) {
+                binding.laundryCheckInMenu.visibility =
+                    if (UserDataHelper(this@MainActivity).getUserData().showLaundryMenu) View.VISIBLE else View.GONE
+            }
         }
     }
 
@@ -378,6 +390,9 @@ class MainActivity : AppCompatActivity() {
                     acMaintenanceMenu.visibility = View.GONE
             }
 
+            // Master Kurir: only appointed couriers and the counter staff see Smart Wash.
+            laundryCheckInMenu.visibility = if (userData.showLaundryMenu) View.VISIBLE else View.GONE
+
             notificationButton.setOnClickListener {
                 startActivity(Intent(this@MainActivity, NotificationActivity::class.java))
             }
@@ -406,7 +421,7 @@ class MainActivity : AppCompatActivity() {
                 startActivity(
                     Intent(
                         this@MainActivity,
-                        if (userData.isLaundryCounter) LaundryCounterActivity::class.java
+                        if (UserDataHelper(this@MainActivity).getUserData().isLaundryCounter) LaundryCounterActivity::class.java
                         else LaundryCheckInActivity::class.java
                     )
                 )

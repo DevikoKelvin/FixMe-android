@@ -41,6 +41,9 @@ import com.google.android.material.tabs.TabLayout
 import com.google.android.material.textfield.TextInputEditText
 import com.journeyapps.barcodescanner.ScanContract
 import com.journeyapps.barcodescanner.ScanOptions
+import androidx.lifecycle.lifecycleScope
+import com.erela.fixme.helpers.reconcileSmartWash
+import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Locale
@@ -224,6 +227,8 @@ class LaundryCounterActivity : AppCompatActivity() {
         if (queueMode) {
             loadQueue()
         }
+        // GA may have changed the courier list since this screen opened.
+        lifecycleScope.launch { reconcileSmartWash(isCounterScreen = true) }
     }
 
     /** The list this tab works from. */

@@ -29,5 +29,11 @@ data class UserData(
      * Defaults to false so a client holding a login from before this field existed behaves as a
      * courier rather than opening a queue it cannot fill.
      */
-    val isLaundryCounter: Boolean = false
+    val isLaundryCounter: Boolean = false,
+    /**
+     * Does the Smart Wash menu show (Master Kurir: only the couriers GA appointed, and the counter
+     * staff). The server's decision, sent at login. Defaults to TRUE so a login stored before this
+     * field existed keeps the menu - the server refuses a non-courier either way.
+     */
+    val showLaundryMenu: Boolean = true
 )

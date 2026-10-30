@@ -354,7 +354,7 @@ interface GetEndpoint {
      * tell the splash screen that a session has died.
      */
     @POST("session")
-    suspend fun session(): GenericSimpleResponse
+    suspend fun session(): com.erela.fixme.objects.SessionResponse
 
     @FormUrlEncoded
     @POST("laundryArrive")
