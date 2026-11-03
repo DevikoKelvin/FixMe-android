@@ -246,6 +246,9 @@
     <!-- Serah terima laundry di counter [D-14]. Kamera hanya ada di aplikasi mobile. -->
     <string name="laundry_check_in_title">Smart Wash: Kedatangan</string>
     <string name="laundry_menu_title">Smart Wash</string>
+    <!-- Pemberitahuan sekali saat GA mengaktifkan Smart Wash dari server (SessionRefresh.takeSmartWashIntro). -->
+    <string name="laundry_intro_message">Smart Wash kini tersedia di FixMe. Serahkan seragam di counter laundry, pantau batch Anda di ponsel, dan ambil dengan memindai kode QR counter. Anda dapat membukanya kapan saja dari menu utama.</string>
+    <string name="laundry_intro_open">Buka Smart Wash</string>
     <string name="laundry_scan_counter">Scan QR Counter</string>
     <string name="laundry_scan_counter_prompt">Scan QR counter laundry</string>
     <string name="laundry_scan_patch_prompt">Scan QR pada tag seragam</string>

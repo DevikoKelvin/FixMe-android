@@ -250,6 +250,9 @@
     <!-- Smart Wash counter check-in [D-14]. The phone is where the camera is. -->
     <string name="laundry_check_in_title">Smart Wash: Arrival</string>
     <string name="laundry_menu_title">Smart Wash</string>
+    <!-- One-time notice when GA switches Smart Wash on from the server (SessionRefresh.takeSmartWashIntro). -->
+    <string name="laundry_intro_message">Smart Wash is now available in FixMe. Hand uniforms in at the laundry counter, follow your batch on your phone, and collect it by scanning the counter QR code. You can open it any time from the main menu.</string>
+    <string name="laundry_intro_open">Open Smart Wash</string>
     <string name="laundry_scan_counter">Scan counter QR</string>
     <string name="laundry_scan_counter_prompt">Scan the laundry counter QR</string>
     <string name="laundry_scan_patch_prompt">Scan the QR on the uniform tag</string>

@@ -6,6 +6,7 @@ import androidx.activity.ComponentActivity
 import com.erela.fixme.activities.LaundryCheckInActivity
 import com.erela.fixme.activities.LaundryCounterActivity
 import android.os.SystemClock
+import androidx.core.content.edit
 import com.erela.fixme.helpers.api.InitAPI
 
 /**
@@ -22,6 +23,30 @@ object SessionRefresh {
     private const val MIN_INTERVAL_MS = 30 * 1000L
     private var lastAt = 0L
 
+    /** True once `/session` has answered in this process, so the stored flags are the server's word and not a default. */
+    @Volatile
+    var confirmed = false
+        private set
+
+    /**
+     * Is the one-time "Smart Wash is now available" notice due for this person? Yes the first time
+     * the server has confirmed the menu is on for them; asking marks it shown. Kept in "app_prefs"
+     * (survives logout, like the changelog) and per account, so a second person on the phone is
+     * told as well. Never from the stored default: without [confirmed] an offline start of an
+     * upgraded install would announce a feature the server still refuses.
+     */
+    fun takeSmartWashIntro(context: Context): Boolean {
+        val user = UserDataHelper(context).getUserData()
+        if (!confirmed || !user.showLaundryMenu) return false
+
+        val prefs = context.getSharedPreferences("app_prefs", Context.MODE_PRIVATE)
+        val key = "key.laundry.intro.${user.id}"
+        if (prefs.getBoolean(key, false)) return false
+
+        prefs.edit { putBoolean(key, true) }
+        return true
+    }
+
     /** @return true when a menu flag changed, so the caller should redraw. */
     suspend fun run(context: Context, force: Boolean = false): Boolean {
         val helper = UserDataHelper(context)
@@ -32,6 +57,7 @@ object SessionRefresh {
         lastAt = now
 
         val data = runCatching { InitAPI.getEndpoint.session() }.getOrNull()?.data ?: return false
+        confirmed = true
         val before = helper.getUserData()
         helper.saveLaundryFlags(data.laundryCounter, data.laundryMenu)
         val after = helper.getUserData()

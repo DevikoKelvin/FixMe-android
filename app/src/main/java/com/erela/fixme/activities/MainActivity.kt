@@ -189,6 +189,30 @@ class MainActivity : AppCompatActivity() {
                 binding.laundryCheckInMenu.visibility =
                     if (UserDataHelper(this@MainActivity).getUserData().showLaundryMenu) View.VISIBLE else View.GONE
             }
+            // GA flips Smart Wash on from the server with no new APK, so tell the person once.
+            if (SessionRefresh.takeSmartWashIntro(this@MainActivity) && !isFinishing) showSmartWashIntro()
+        }
+    }
+
+    private fun showSmartWashIntro() {
+        ConfirmationDialog(
+            this,
+            getString(R.string.laundry_intro_message),
+            getString(R.string.laundry_intro_open)
+        ).also {
+            it.setConfirmationDialogListener(object : ConfirmationDialog.ConfirmationDialogListener {
+                override fun onConfirm() {
+                    // Same choice as the menu button: the counter operator and the courier get different screens.
+                    startActivity(
+                        Intent(
+                            this@MainActivity,
+                            if (UserDataHelper(this@MainActivity).getUserData().isLaundryCounter) LaundryCounterActivity::class.java
+                            else LaundryCheckInActivity::class.java
+                        )
+                    )
+                }
+            })
+            it.show()
         }
     }
 
