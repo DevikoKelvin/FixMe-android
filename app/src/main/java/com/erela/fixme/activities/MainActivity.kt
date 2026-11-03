@@ -182,7 +182,7 @@ class MainActivity : AppCompatActivity() {
             startService(Intent(this, SseService::class.java))
         }
 
-        // Back in the foreground: re-read the Smart Wash flags (throttled to once per 5 minutes) so
+        // Back in the foreground: re-read the Smart Wash flags (throttled to once per 30 seconds) so
         // a changed courier list shows without signing out. The splash covers a cold start.
         lifecycleScope.launch {
             if (SessionRefresh.run(this@MainActivity)) {

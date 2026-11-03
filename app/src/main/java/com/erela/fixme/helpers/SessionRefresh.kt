@@ -19,7 +19,7 @@ import com.erela.fixme.helpers.api.InitAPI
  * offline must not take the menu away.
  */
 object SessionRefresh {
-    private const val MIN_INTERVAL_MS = 5 * 60 * 1000L
+    private const val MIN_INTERVAL_MS = 30 * 1000L
     private var lastAt = 0L
 
     /** @return true when a menu flag changed, so the caller should redraw. */
